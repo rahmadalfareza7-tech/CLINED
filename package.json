@@ -1,8 +1,8 @@
 {
   "name": "clined",
-  "version": "36.0.0",
+  "version": "36.2.0",
   "private": true,
-  "description": "CLINED Clinical Education, online-first with resilient local study mode",
+  "description": "CLINED Clinical Education — release-polished build; UPI local question storage hardened; feature set preserved.",
   "type": "module",
   "scripts": {
     "start": "node local-server.mjs",

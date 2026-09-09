@@ -3,6 +3,8 @@
   const $=id=>document.getElementById(id);
   const escChat=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let selected=null, poll=null, users=[], loading=false, sending=false, sendSeq=0, initDone=false, messageRefreshTimer=null;
+  const pending=new Map();
+  let lastSubmitAt=0, lastSubmitBody='';
   async function api(path,options={}){
     const r=await fetch('/api/chat'+path,{credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
     const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||`Chat gagal dimuat (${r.status}).`); return data;
@@ -47,26 +49,35 @@
     box.appendChild(el); box.scrollTop=box.scrollHeight;
     return el;
   }
-  async function loadMessages(){if(!selected||!current())return;try{const d=await api('/messages/'+selected.id);renderMessages(d.messages||[]);}catch(e){if(!$('chatMessages')?.querySelector('.chat-pending'))$('chatMessages').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}}
+  async function loadMessages(){if(!selected||!current())return;try{const d=await api('/messages/'+selected.id);const server=d.messages||[];renderMessages(server);if(pending.size){for(const item of pending.values()){if(item.recipientId!==selected.id)continue;const box=$('chatMessages');if(!box)continue;box.querySelector('.chat-empty')?.remove();if(!box.querySelector(`[data-pending="${item.el?.dataset.pending||''}"]`)){box.appendChild(item.el);} }box.scrollTop=box.scrollHeight;}}catch(e){if(!$('chatMessages')?.querySelector('.chat-pending'))$('chatMessages').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}}
   async function openUser(user){if(!user)return;selected=user;renderUsers();$('chatHeader').innerHTML=`<div><b>${escChat(user.name)}</b><small>@${escChat(user.username)} • Diskusi UAB &amp; UPI</small></div>`;$('chatInput').disabled=false;$('chatInput').placeholder=`Tulis pesan untuk ${user.name}…`;$('chatComposer').querySelector('button').disabled=false;try{await loadMessages();}catch(e){if(typeof showToast==='function')showToast(e.message,true);}startPoll();maybePending();setTimeout(()=>$('chatInput')?.focus(),80);}
   function startPoll(){clearInterval(poll);poll=setInterval(()=>loadMessages(),5000);}
   async function sendText(){
-    if(!selected||sending)return;
-    const input=$('chatInput'),body=input.value.trim(); if(!body)return;
-    const recipientId=selected.id,btn=$('chatComposer').querySelector('button');
-    sending=true; btn.disabled=true; input.disabled=true;
-    const pending=appendPendingMessage(body);
+    if(!selected)return;
+    const input=$('chatInput'),body=input?.value.trim(); if(!body)return;
+    const now=Date.now();
+    // Mobile browsers can fire click + submit almost simultaneously. Ignore the
+    // same payload for a short window while still allowing rapid different messages.
+    if(now-lastSubmitAt<650 && body===lastSubmitBody)return;
+    lastSubmitAt=now; lastSubmitBody=body;
+    const recipientId=selected.id,localId=String(++sendSeq),btn=$('chatComposer').querySelector('button');
+    const pendingEl=appendPendingMessage(body);
+    pending.set(localId,{body,recipientId,el:pendingEl});
     input.value=''; input.style.height='';
+    // Do not hold the composer hostage to network latency. The message is already
+    // visible; the request continues in the background.
+    input.disabled=false; if(btn)btn.disabled=false; input.focus();
     try{
-      await api('/messages',{method:'POST',body:JSON.stringify({recipientId,messageType:'text',body})});
-      // Refresh in the background; never make the sender wait for the GET request.
+      const d=await api('/messages',{method:'POST',body:JSON.stringify({recipientId,messageType:'text',body})});
+      pending.delete(localId);
+      const el=pendingEl;
+      if(el){el.classList.remove('chat-pending');el.dataset.serverId=d.message?.id||'';const meta=el.querySelector('.chat-meta');if(meta)meta.textContent=`Kamu • ${fmt(d.message?.created_at||new Date().toISOString())}`;}
+      // Background reconciliation only; it never blocks the composer.
       clearTimeout(messageRefreshTimer);
-      messageRefreshTimer=setTimeout(()=>loadMessages(),180);
+      messageRefreshTimer=setTimeout(()=>loadMessages(),120);
     }catch(e){
-      pending?.remove();
+      pending.delete(localId); pendingEl?.remove();
       if(typeof showToast==='function')showToast(e.message,true);
-    }finally{
-      sending=false; input.disabled=false; btn.disabled=!selected; input.focus();
     }
   }
   window.CLinedChat={shareQuestion(q){

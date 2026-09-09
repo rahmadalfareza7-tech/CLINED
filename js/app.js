@@ -1560,13 +1560,25 @@ const UPI_BLOCKS=[
 ];
 const UPI_FLASHCARDS=[];
 const UPI_CUSTOM_KEY='clined_upi_custom_cards_v1';
+const UPI_CUSTOM_DB='clined-upi-custom';
+const UPI_CUSTOM_STORE='cards';
+const UPI_CUSTOM_DB_VERSION=1;
 const UPI_BLOCK_KEY='clined_upi_selected_block_v2';
 const UPI_REVIEW_PREFIX='clined_upi_flashcards_block_v2_';
 let upiSelectedBlock=localStorage.getItem(UPI_BLOCK_KEY)||'SSP';
 let upiCurrentCard=null;
 let upiCardRevealed=false;
-function upiGetCustomCards(){const raw=get(UPI_CUSTOM_KEY,[]);return Array.isArray(raw)?raw.filter(c=>c&&c.id&&c.block&&c.prompt&&c.answer&&c.image):[];}
-function upiSaveCustomCards(cards){set(UPI_CUSTOM_KEY,Array.isArray(cards)?cards:[]);}
+let upiCustomCardsCache=[];
+let upiCustomCardsReady=null;
+function upiOpenCustomDb(){return new Promise((resolve,reject)=>{if(!window.indexedDB)return reject(new Error('Penyimpanan perangkat tidak tersedia.'));const req=indexedDB.open(UPI_CUSTOM_DB,UPI_CUSTOM_DB_VERSION);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(UPI_CUSTOM_STORE))req.result.createObjectStore(UPI_CUSTOM_STORE,{keyPath:'id'});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('Gagal membuka penyimpanan lokal.'));});}
+async function upiLoadCustomCards(){if(upiCustomCardsReady)return upiCustomCardsReady;upiCustomCardsReady=(async()=>{try{const db=await upiOpenCustomDb();const rows=await new Promise((resolve,reject)=>{const req=db.transaction(UPI_CUSTOM_STORE,'readonly').objectStore(UPI_CUSTOM_STORE).getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error);});db.close();upiCustomCardsCache=rows.filter(c=>c&&c.id&&c.block&&c.prompt&&c.answer&&c.image);
+      // Migrate the old all-in-one localStorage payload once, then remove it so it can no longer hit the browser quota.
+      let legacy=[];try{const raw=localStorage.getItem(UPI_CUSTOM_KEY);legacy=raw?JSON.parse(raw):[];}catch{}
+      if(Array.isArray(legacy)&&legacy.length){const missing=legacy.filter(c=>c&&c.id&&c.block&&c.prompt&&c.answer&&c.image&&!upiCustomCardsCache.some(x=>x.id===c.id));if(missing.length){const db2=await upiOpenCustomDb();await new Promise((resolve,reject)=>{const tx=db2.transaction(UPI_CUSTOM_STORE,'readwrite'),store=tx.objectStore(UPI_CUSTOM_STORE);missing.forEach(c=>store.put(c));tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db2.close();upiCustomCardsCache=upiCustomCardsCache.concat(missing);}}
+      try{localStorage.removeItem(UPI_CUSTOM_KEY);}catch{}
+    }catch(e){console.warn('UPI custom storage load failed',e);upiCustomCardsCache=[];}return upiCustomCardsCache;})();return upiCustomCardsReady;}
+function upiGetCustomCards(){return upiCustomCardsCache.slice();}
+async function upiSaveCustomCards(cards){const next=Array.isArray(cards)?cards.filter(c=>c&&c.id&&c.block&&c.prompt&&c.answer&&c.image):[];const db=await upiOpenCustomDb();await new Promise((resolve,reject)=>{const tx=db.transaction(UPI_CUSTOM_STORE,'readwrite'),store=tx.objectStore(UPI_CUSTOM_STORE);store.clear();next.forEach(c=>store.put(c));tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error||new Error('Penyimpanan lokal penuh.'));});db.close();upiCustomCardsCache=next;try{localStorage.removeItem(UPI_CUSTOM_KEY);}catch{}return true;}
 function upiCompressImage(file,max=1800,quality=.82){return new Promise((resolve,reject)=>{if(!file){resolve(null);return;}const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const scale=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*scale));c.height=Math.max(1,Math.round(im.naturalHeight*scale));const x=c.getContext('2d');x.drawImage(im,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',quality));};im.onerror=reject;im.src=r.result;};r.onerror=reject;r.readAsDataURL(file);});}
 function upiCustomCard(card){return !!card&&String(card.id||'').startsWith('upi-custom-');}
 function upiOpenImageZoom(src,alt='Gambar flashcard'){const m=$('upiImageZoomModal'),im=$('upiZoomImage');if(!m||!im||!src)return;im.src=src;im.alt=alt;im.style.transform='translate3d(0,0,0) scale(1)';m.hidden=false;m.setAttribute('aria-hidden','false');upiZoomInit();if(typeof stageResetZoom==='function')stageResetZoom();}
@@ -1623,8 +1635,8 @@ function upiZoomInit(){
 }
 function upiOpenEditQuestion(id){const card=upiGetCustomCards().find(c=>c.id===id);const m=$('upiEditQuestionModal');if(!card||!m)return;$('upiEditId').value=card.id;$('upiEditBlock').value=card.block;$('upiEditMaterial').value=card.material||'Histology';$('upiEditQuestion').value=card.prompt;$('upiEditAnswer').value=card.answer;$('upiEditImage').value='';const pv=$('upiEditImagePreview');pv.hidden=true;pv.innerHTML='<img alt="Preview gambar">';m.hidden=false;m.setAttribute('aria-hidden','false');}
 function upiCloseEditQuestion(){const m=$('upiEditQuestionModal');if(m){m.hidden=true;m.setAttribute('aria-hidden','true');}}
-async function upiSaveEditedQuestion(){const id=$('upiEditId')?.value,question=$('upiEditQuestion')?.value.trim(),answer=$('upiEditAnswer')?.value.trim(),material=$('upiEditMaterial')?.value,file=$('upiEditImage')?.files?.[0];if(!id||!question||!answer){showToast('Question dan Answer wajib diisi.');return;}const cards=upiGetCustomCards(),i=cards.findIndex(c=>c.id===id);if(i<0){upiCloseEditQuestion();return;}const previous=cards[i];cards[i]={...cards[i],prompt:question,answer,material};if(file){try{cards[i].image=await upiCompressImage(file,900,.7);}catch(e){showToast('Gambar gagal diproses.',true);return;}}const saved=upiSaveCustomCards(cards);if(!saved){showToast('Gagal menyimpan perubahan: penyimpanan penuh di perangkat ini. Hapus beberapa Question lama lalu coba lagi.',true);return;}const verify=upiGetCustomCards().find(c=>c.id===id);if(!verify||verify.prompt!==question){showToast('Gagal menyimpan perubahan. Coba lagi.',true);return;}upiCloseEditQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));if(typeof upiBuildMaterialPage==='function'){const b=cards[i].block;['Histology','Patologi Anatomi'].forEach(mat=>{try{upiBuildMaterialPage(b,mat);}catch(e){}});}showToast('Question berhasil diperbarui.');}
-function upiDeleteQuestion(id){const card=upiGetCustomCards().find(c=>c.id===id);if(!card)return;if(!confirm(`Hapus question "${card.prompt.slice(0,70)}${card.prompt.length>70?'…':''}"?`))return;upiSaveCustomCards(upiGetCustomCards().filter(c=>c.id!==id));Object.keys(localStorage).filter(k=>k.includes(card.id)).forEach(k=>localStorage.removeItem(k));upiCloseEditQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));showToast('Question dihapus.');}
+async function upiSaveEditedQuestion(){await upiLoadCustomCards();const id=$('upiEditId')?.value,question=$('upiEditQuestion')?.value.trim(),answer=$('upiEditAnswer')?.value.trim(),material=$('upiEditMaterial')?.value,file=$('upiEditImage')?.files?.[0];if(!id||!question||!answer){showToast('Question dan Answer wajib diisi.');return;}const cards=upiGetCustomCards(),i=cards.findIndex(c=>c.id===id);if(i<0){upiCloseEditQuestion();return;}const previous=cards[i];cards[i]={...cards[i],prompt:question,answer,material};if(file){try{cards[i].image=await upiCompressImage(file,900,.7);}catch(e){showToast('Gambar gagal diproses.',true);return;}}let saved=false;try{saved=await upiSaveCustomCards(cards);}catch(e){showToast('Gagal menyimpan perubahan: penyimpanan perangkat tidak dapat menyimpan question ini. Coba gambar yang lebih kecil.',true);return;}if(!saved)return;const verify=upiGetCustomCards().find(c=>c.id===id);if(!verify||verify.prompt!==question){showToast('Gagal menyimpan perubahan. Coba lagi.',true);return;}upiCloseEditQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));if(typeof upiBuildMaterialPage==='function'){const b=cards[i].block;['Histology','Patologi Anatomi'].forEach(mat=>{try{upiBuildMaterialPage(b,mat);}catch(e){}});}showToast('Question berhasil diperbarui.');}
+async function upiDeleteQuestion(id){await upiLoadCustomCards();const card=upiGetCustomCards().find(c=>c.id===id);if(!card)return;if(!confirm(`Hapus question "${card.prompt.slice(0,70)}${card.prompt.length>70?'…':''}"?`))return;try{await upiSaveCustomCards(upiGetCustomCards().filter(c=>c.id!==id));}catch(e){showToast('Question gagal dihapus. Coba lagi.',true);return;}Object.keys(localStorage).filter(k=>k.includes(card.id)).forEach(k=>localStorage.removeItem(k));upiCloseEditQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));showToast('Question dihapus.');}
 function upiCustomManagerHTML(block){const cards=upiGetCustomCards().filter(c=>c.block===block);window.__CLINED_SHARE_QUESTIONS=window.__CLINED_SHARE_QUESTIONS||{};cards.forEach(c=>{window.__CLINED_SHARE_QUESTIONS["upi-"+c.id]={soal:c.prompt,opsi:[],block:c.block,bank:"UPI • "+(c.material||"Materi")};});if(!cards.length)return`<section class="upi-custom-manager card"><div class="section-title">Question saya</div><p class="upi-review-copy">Belum ada question custom di blok ini.</p></section>`;return`<section class="upi-custom-manager card"><div class="section-title">Question saya</div><div class="upi-custom-list">${cards.map(c=>`<div class="upi-custom-item"><button type="button" class="upi-custom-item-main" data-upi-edit-id="${esc(c.id)}"><span class="upi-custom-thumb"><img src="${esc(c.image)}" alt=""></span><span><b>${esc(c.prompt)}</b><small>${esc(c.material||'Materi')}</small></span><span class="upi-block-arrow">›</span></button><button type="button" class="chat-share-btn upi-chat-share" data-chat-share="upi-${esc(c.id)}" aria-label="Kirim soal ke chat" title="Kirim soal ke chat">💬</button><button type="button" class="upi-custom-item-delete" data-upi-del-id="${esc(c.id)}" aria-label="Hapus question" title="Hapus question">🗑</button></div>`).join('')}</div></section>`;}
 function upiCardsForBlock(block){return UPI_FLASHCARDS.filter(c=>c.block===block).concat(upiGetCustomCards().filter(c=>c.block===block));}
 function upiReviewKey(){return UPI_REVIEW_PREFIX+upiSelectedBlock;}
@@ -1712,22 +1724,22 @@ function upiReadImageAsDataUrl(file){return new Promise((resolve,reject)=>{if(!f
 function upiSaveCreatedQuestion(){
   const block=$('upiCreateBlock')?.value,material=$('upiCreateMaterial')?.value,imageFile=$('upiCreateImage')?.files?.[0],prompt=$('upiCreateQuestion')?.value.trim(),answer=$('upiCreateAnswer')?.value.trim();
   if(!block||!material||!imageFile||!prompt||!answer){showToast('Lengkapi gambar, question, dan answer.');return;}
-  upiReadImageAsDataUrl(imageFile).then(image=>{
+  upiReadImageAsDataUrl(imageFile).then(async image=>{
     const card={id:`upi-custom-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,block,material,topic:'Custom Question',image,prompt,answer,explanation:'Pertanyaan buatan pengguna.'};
+    await upiLoadCustomCards();
     const cards=upiGetCustomCards();cards.push(card);
-    const saved=upiSaveCustomCards(cards);
-    if(!saved){showToast('Gagal menyimpan: penyimpanan penuh di perangkat ini. Hapus beberapa Question lama lalu coba lagi.',true);return;}
+    try{await upiSaveCustomCards(cards);}catch(e){showToast('Gagal menyimpan question: ruang penyimpanan browser tidak cukup. Coba gambar yang lebih kecil atau hapus data situs lama.',true);return;}
     const verify=upiGetCustomCards().some(c=>c.id===card.id);
     if(!verify){showToast('Gagal menyimpan question. Coba lagi atau hapus question lama.',true);return;}
     upiCloseCreateQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>{const root=upiPageEl(b.id);if(root)upiBuildDetailPage(b);});if(upiSelectedBlock===block){const m=material;upiEnsureMaterialPagesHost();upiBuildMaterialPage(block,m);showToast('Question berhasil disimpan dan masuk ke deck '+m+'.');}else showToast('Question berhasil disimpan.');
   }).catch(err=>showToast(err?.message||'Gagal menyimpan gambar.'));
 }
-function initUpiFlashcards(){if(!$('upiPage'))return;upiRenderBlockSelector();upiEnsureDetailPages();}
+async function initUpiFlashcards(){if(!$('upiPage'))return;await upiLoadCustomCards();upiRenderBlockSelector();upiEnsureDetailPages();}
 
 if($("openUabPage"))$("openUabPage").onclick=()=>{syncUabStats();show("uabPage");if(typeof window.setFloatingNavActive==="function")window.setFloatingNavActive("uab");};
 if($("openMaterialsPage"))$("openMaterialsPage").onclick=()=>{renderMaterialsPage();show("materialsPage");};
 if($("backFromMaterials"))$("backFromMaterials").onclick=()=>show("home");
-if($("openUpiPage"))$("openUpiPage").onclick=()=>{initUpiFlashcards();show("upiPage");};
+if($("openUpiPage"))$("openUpiPage").onclick=async()=>{await initUpiFlashcards();show("upiPage");};
 if($("closeUpiCreateQuestion"))$("closeUpiCreateQuestion").onclick=upiCloseCreateQuestion;
 if($("closeUpiZoom"))$("closeUpiZoom").onclick=upiCloseImageZoom;document.querySelector('[data-close-upi-zoom]')?.addEventListener('click',upiCloseImageZoom);
 if($("closeUpiEditQuestion"))$("closeUpiEditQuestion").onclick=upiCloseEditQuestion;document.querySelector('[data-close-upi-edit]')?.addEventListener('click',upiCloseEditQuestion);
