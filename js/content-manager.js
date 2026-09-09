@@ -55,8 +55,8 @@
           <form data-admin-uab-form class="admin-content-form">
             <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
             <label>Judul paket <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: UAB KEDKOM 2026">
-            <label>File JSON</label><input name="file" type="file" accept=".json,application/json" required>
-            <div class="admin-file-meta" data-uab-file-meta>Belum ada file dipilih.</div>
+            <label>File JSON</label><div class="admin-file-picker"><input id="adminUabJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminUabJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-uab-file-meta>Belum ada file dipilih.</span></div>
+            
             <button class="account-action account-save" type="submit">Import ke Blok UAB</button>
             <p class="muted" data-content-message></p>
           </form>
@@ -68,7 +68,7 @@
             <label>Blok tujuan</label><select name="block" required>${blockOptions(UPI_BLOCKS)}</select>
             <label>Materi</label><select name="material" required><option value="Histology">Histology</option><option value="Patologi Anatomi">Patologi Anatomi</option></select>
             <label>Judul/topik <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: Histology — Jaringan epitel">
-            <label>Import image</label><input name="image" type="file" accept="image/*" required>
+            <label>Gambar soal</label><div class="admin-file-picker"><input id="adminUpiImageFile" name="image" type="file" accept="image/*" required hidden><label for="adminUpiImageFile" class="admin-file-btn" role="button">Pilih gambar</label><span class="admin-file-selected" data-upi-file-meta>Belum ada gambar dipilih.</span></div>
             <div class="upi-create-preview admin-upi-preview" data-admin-upi-preview hidden><img alt="Preview gambar"></div>
             <label>Question</label><textarea name="question" rows="4" maxlength="1000" placeholder="Tulis pertanyaan…" required></textarea>
             <label>Answer</label><textarea name="answer" rows="4" maxlength="1000" placeholder="Tulis jawaban…" required></textarea>
@@ -113,8 +113,8 @@
         }catch(err){message(box,err.message||'Import UAB gagal.',true);}
       });
 
-      const upiForm=box.querySelector('[data-admin-upi-form]'), upiImage=upiForm.elements.image, upiPreview=box.querySelector('[data-admin-upi-preview]');
-      upiImage.addEventListener('change',()=>{const f=upiImage.files?.[0];if(!f){upiPreview.hidden=true;return;}upiPreview.innerHTML=`<img alt="Preview gambar" src="${esc(URL.createObjectURL(f))}">`;upiPreview.hidden=false;});
+      const upiForm=box.querySelector('[data-admin-upi-form]'), upiImage=upiForm.elements.image, upiPreview=box.querySelector('[data-admin-upi-preview]'), upiFileMeta=box.querySelector('[data-upi-file-meta]');
+      upiImage.addEventListener('change',()=>{const f=upiImage.files?.[0];upiFileMeta.textContent=f?`${f.name} • ${(f.size/1024).toFixed(1)} KB`:'Belum ada gambar dipilih.';if(!f){upiPreview.hidden=true;return;}upiPreview.innerHTML=`<img alt="Preview gambar" src="${esc(URL.createObjectURL(f))}">`;upiPreview.hidden=false;});
       upiForm.addEventListener('submit',async e=>{
         e.preventDefault(); const f=upiForm.elements.image.files?.[0];
         try{
