@@ -3,11 +3,6 @@
   const request = async (path, options = {}) => { const r = await fetch(path, { credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, ...options }); const d = await r.json().catch(() => ({})); if (!r.ok) throw Error(d.error || 'Permintaan gagal.'); return d; };
   const message = (host, text, bad = false) => { const out = host.querySelector('[data-content-message]'); if (out) { out.textContent = text; out.style.color = bad ? '#ff3b30' : ''; } };
   function install(user) {
-    const upi = document.getElementById('upiPage');
-    if (upi && !document.getElementById('upiImportPackage')) {
-      const box = document.createElement('section'); box.id = 'upiImportPackage'; box.className = 'card'; box.innerHTML = `<div class="section-title">Import paket UPI pribadi</div><p class="muted">Paket yang kamu import hanya tersimpan dan terlihat di akunmu.</p><input type="file" accept="application/json,.json" data-upi-package-file><p class="muted" data-content-message></p>`; upi.prepend(box);
-      box.querySelector('input').addEventListener('change', async event => { const file = event.target.files?.[0]; if (!file) return; try { const parsed = JSON.parse(await file.text()); await request('/api/content/packages', { method: 'POST', body: JSON.stringify({ ...parsed, module: 'UPI' }) }); const existing = window.upiGetCustomCards?.() || []; const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="640" height="360"%3E%3Crect width="100%25" height="100%25" fill="%23007aff"/%3E%3Ctext x="50%25" y="50%25" fill="white" font-size="32" text-anchor="middle" dominant-baseline="middle"%3EUPI%3C/text%3E%3C/svg%3E'; const cards = (parsed.questions || []).map((q, index) => ({ id: `upi-import-${Date.now()}-${index}`, block: parsed.block || 'SSP', material: 'Imported UPI', topic: parsed.title || 'Imported UPI', image: q.image || fallbackImage, prompt: q.soal, answer: q.pembahasan || q.answer || 'Tidak ada pembahasan.', explanation: 'Paket UPI pribadi.' })); if (cards.length && window.upiSaveCustomCards) { window.upiSaveCustomCards(existing.concat(cards)); window.upiRenderBlockSelector?.(); } message(box, 'Paket UPI privat berhasil diimport dan siap dipelajari di akunmu.'); } catch (error) { message(box, error.message || 'File UPI tidak valid.', true); } finally { event.target.value = ''; } });
-    }
     if (user.role === 'admin' && !document.getElementById('adminUabComposer')) {
       const account = document.querySelector('#accountPage .account-form'); if (!account) return;
       const box = document.createElement('section'); box.id = 'adminUabComposer'; box.className = 'account-auth-card';
@@ -22,6 +17,21 @@
 
       const legacy = document.createElement('section'); legacy.className='account-auth-card'; legacy.innerHTML=`<div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • PAKET PUBLIK</span><h3>Input Paket UAB / UPI</h3><p>Paket tambahan publik tersimpan di server dan tersedia bagi seluruh pengguna.</p></div><span class="account-security-badge secure">ADMIN</span></div><form data-uab-form><label>Modul</label><select name="module"><option value="UAB">UAB — ujian akhir blok</option><option value="UPI">UPI — katalog publik</option></select><label>Judul paket</label><input name="title" maxlength="160" required placeholder="UAB SSP 2026"><label>Blok</label><input name="block" maxlength="80" required placeholder="SSP"><label>Daftar soal (JSON)</label><textarea name="questions" rows="8" required placeholder='[{"id":"uab-ssp-001","soal":"...","opsi":["A","B"],"jawabanBenar":0,"pembahasan":"..."}]'></textarea><button class="account-action account-save" type="submit">Publikasikan Paket</button><p class="muted" data-content-message></p></form>`; account.append(legacy);
       legacy.querySelector('form').addEventListener('submit',async event=>{event.preventDefault();const f=new FormData(event.currentTarget),module=f.get('module');try{await request('/api/content/packages',{method:'POST',body:JSON.stringify({module,title:f.get('title'),block:f.get('block'),questions:JSON.parse(f.get('questions'))})});event.currentTarget.reset();message(legacy,`${module} berhasil dipublikasikan untuk seluruh pengguna.`);}catch(error){message(legacy,error.message||'Format paket tidak valid.',true);}});
+
+      const logins = document.createElement('section'); logins.id='adminLoginsPanel'; logins.className='account-auth-card';
+      logins.innerHTML = `<div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • AKTIVITAS</span><h3>Login Hari Ini</h3><p>Daftar akun yang login hari ini (WIB). Otomatis kosong lagi besok, tidak perlu direset manual.</p></div><span class="account-security-badge secure" data-logins-count>0</span></div><div data-logins-list class="muted">Memuat…</div>`;
+      account.append(logins);
+      const renderLogins = async () => {
+        const list = logins.querySelector('[data-logins-list]'), badge = logins.querySelector('[data-logins-count]');
+        try {
+          const data = await request('/api/admin/logins');
+          badge.textContent = data.count;
+          list.innerHTML = data.count
+            ? `<table class="admin-logins-table"><thead><tr><th>Nama</th><th>Username</th><th>Role</th><th>Jam login</th></tr></thead><tbody>${data.logins.map(l => `<tr><td>${l.name}</td><td>@${l.username}</td><td>${l.role}</td><td>${new Date(l.lastLoginAt).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')}</tbody></table>`
+            : '<p class="muted">Belum ada yang login hari ini.</p>';
+        } catch (e) { list.textContent = e.message || 'Gagal memuat daftar login.'; }
+      };
+      renderLogins(); setInterval(renderLogins, 60_000);
     }
   }
   async function hydrateGlobalBanks() {

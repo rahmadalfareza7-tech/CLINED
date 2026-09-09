@@ -24,6 +24,30 @@
       "dataUrl": "./banks/pulmonis-2022.json",
       "block": "SSP",
       "schema": "1.0"
+    },
+    {
+      "id": "kedkel2022",
+      "name": "KEDKEL Juni 2022",
+      "version": 1,
+      "dataUrl": "./banks/kedkel-2022.json",
+      "block": "KEDKEL",
+      "schema": "1.0"
+    },
+    {
+      "id": "kedkel2021",
+      "name": "KEDKEL 2021",
+      "version": 1,
+      "dataUrl": "./banks/kedkel-2021.json",
+      "block": "KEDKEL",
+      "schema": "1.0"
+    },
+    {
+      "id": "kedkel2020",
+      "name": "KEDKEL 2020",
+      "version": 1,
+      "dataUrl": "./banks/kedkel-2020.json",
+      "block": "KEDKEL",
+      "schema": "1.0"
     }
   ]
 }
