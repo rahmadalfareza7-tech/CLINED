@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "banks": [
+    {
+      "id": "utama",
+      "name": "SSP GASTER 2023",
+      "version": 1,
+      "dataUrl": "./banks/gaster-2023.json",
+      "block": "SSP",
+      "schema": "1.0"
+    },
+    {
+      "id": "arsip2021",
+      "name": "SSP 2021",
+      "version": 1,
+      "dataUrl": "./banks/ssp-2021.json",
+      "block": "SSP",
+      "schema": "1.0"
+    },
+    {
+      "id": "pulmonis",
+      "name": "SSP PULMONIS 2022",
+      "version": 1,
+      "dataUrl": "./banks/pulmonis-2022.json",
+      "block": "SSP",
+      "schema": "1.0"
+    }
+  ]
+}

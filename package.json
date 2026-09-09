@@ -1,0 +1,24 @@
+{
+  "name": "clined",
+  "version": "36.0.0",
+  "private": true,
+  "description": "CLINED Clinical Education, online-first with resilient local study mode",
+  "type": "module",
+  "scripts": {
+    "start": "node local-server.mjs",
+    "dev": "node --watch local-server.mjs",
+    "db:migrate": "node db/migrate.mjs",
+    "db:seed": "node db/seed-question-banks.mjs",
+    "admin:create": "node db/create-admin.mjs",
+    "validate:banks": "node tools/validate-banks.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "pg": "^8.16.3",
+    "@neondatabase/serverless": "^0.10.4",
+    "ws": "^8.18.0"
+  }
+}

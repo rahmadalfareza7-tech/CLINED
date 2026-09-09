@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#58cc02">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CLINED">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="json/manifest.json">
+<link rel="stylesheet" href="css/style.css?v=upi-create-v1-clinedV23A16">
+<title>CLINED — Clinical Education</title>
+<script>
+// Loading screen stability fix — preserves the existing animation/style.
+(function(){
+  var finished=false;
+  function reveal(){
+    if(finished)return; finished=true;
+    var el=document.getElementById("appLoading"), content=document.getElementById("splashContent");
+    if(!el)return;
+    if(content)content.classList.add("is-exiting");
+    setTimeout(function(){el.classList.add("is-hidden");setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},520);},420);
+  }
+  if(document.readyState==="complete") setTimeout(reveal,700);
+  else window.addEventListener("load",function(){setTimeout(reveal,700);},{once:true});
+  setTimeout(reveal,2200);
+})();
+</script>
+<meta name="clined-release" content="v28-server-auth">
+<meta name="theme-color" content="#f7f7f2">
+<link rel="manifest" href="manifest.webmanifest">
+
+<style>
+.offline-external-section{margin-top:14px}.external-material-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.external-material-card,.materi-button{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:16px;text-decoration:none;font-weight:900;color:inherit;background:rgba(255,255,255,.72);border:1px solid rgba(0,0,0,.06);transition:transform .16s ease,box-shadow .16s ease}.external-material-card:active,.materi-button:active,.feedback-card:active{transform:scale(.97)}.external-note{display:block;margin-top:10px;opacity:.6;line-height:1.4}.materi-section{margin:12px 0}.materi-button{width:100%;padding:12px 16px}.offline-feedback-card{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;margin-top:14px}.feedback-content{display:flex;flex-direction:column;gap:3px;flex:1}.feedback-content small{opacity:.6}@media(max-width:520px){.external-material-grid{grid-template-columns:1fr}}
+</style>
+
+<style id="offline-profile-dashboard-fix">
+.account-page-view .account-header h2,.account-page-view .account-header .account-title{letter-spacing:.01em}
+
+/* Floating dashboard: mathematically symmetric 4-column layout */
+.floating-dashboard-nav{
+  left:50%!important; right:auto!important;
+  transform:translateX(-50%)!important;
+  width:min(calc(100vw - 24px), 430px)!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:center!important;
+  justify-items:center!important;
+  padding:7px!important;
+  gap:0!important;
+  margin:0!important;
+}
+.floating-dashboard-nav .floating-nav-slider{
+  width:calc((100% - 14px) / 4)!important;
+  left:7px!important;
+  transform:translateX(calc(var(--floating-index,0) * 100%))!important;
+}
+.floating-dashboard-nav .floating-nav-item{
+  width:100%!important; min-width:0!important;
+  display:flex!important; flex-direction:column!important;
+  align-items:center!important; justify-content:center!important;
+  text-align:center!important; box-sizing:border-box!important;
+  padding:8px 2px!important; margin:0!important;
+}
+.floating-dashboard-nav .floating-nav-icon{
+  display:flex!important; align-items:center!important; justify-content:center!important;
+  width:28px!important; height:28px!important; margin:0 auto 3px!important;
+}
+.floating-dashboard-nav .floating-nav-item span:last-child{
+  width:100%!important; text-align:center!important; white-space:nowrap!important;
+}
+@media (max-width:390px){
+  .floating-dashboard-nav{width:calc(100vw - 16px)!important}
+  .floating-dashboard-nav .floating-nav-item{font-size:10px!important}
+}
+
+.offline-profile-auth-disabled{display:none!important}
+
+/* Clinical dashboard cards: symmetric, predictable grid */
+.dashboard-stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
+.dashboard-stats>*{min-width:0!important;text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important}
+@media(max-width:560px){.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
+
+
+<style id="clined-v6-safe-area">
+/* CLINED V6 safe-area fallback */
+:root{--clined-nav-safe:env(safe-area-inset-bottom,0px)}
+html,body{overflow-x:hidden}
+@media(max-width:600px){
+  .bottom-nav,.floating-dashboard,.app-bottom-nav,.mobile-nav{
+    padding-bottom:max(10px,var(--clined-nav-safe));
+  }
+  body{padding-bottom:calc(96px + var(--clined-nav-safe))}
+}
+</style>
+<link rel="stylesheet" href="css/motion.css?v=auth-layout-v2">
+</head>
+<body class="auth-pending">
+
+<div id="appLoading" class="app-loading" aria-label="Memuat CLINED" role="status">
+  <div class="splash-content" id="splashContent">
+    <img class="splash-logo" src="assets/clined-logo.png" alt="CLINED">
+    <div class="splash-brand" aria-label="CLINED">CLINED</div>
+  </div>
+</div>
+
+<main class="app">
+<header class="header">
+  <div class="brand">
+    <div class="logo logo-image"><img src="assets/clined-logo.png" alt="CLINED"></div>
+    <div><h1>CLINED</h1><p>Clinical Education By Reza FKUY23</p></div>
+  </div>
+  <button id="soundBtn" class="icon-btn" aria-label="Suara">🔊</button>
+  <button id="headerNavBtn" class="icon-btn" aria-label="Navigasi soal" title="Navigasi soal">☷</button>
+  <button id="normalValuesHeaderBtn" class="icon-btn" aria-label="Normal Values" title="Normal Values">🧪</button>
+  <button id="themeBtn" class="icon-btn" aria-label="Mode gelap" title="Mode gelap">☾</button>
+</header>
+
+<section id="home" class="view active">
+  <section class="duo-learning-map" aria-label="Peta belajar CLINED">
+    <div class="duo-map-header">
+      <div><h3>Mulai dari sini</h3></div>
+</div>
+    <div class="duo-unit-card">
+      <div><span class="duo-unit-label">UNIT 1 • CLINICAL REASONING</span><b>Bangun fondasi klinismu</b></div>
+      <button class="duo-unit-action ui-arrow" id="duoUnitStart" type="button" aria-label="Mulai Unit 1">→</button>
+    </div>
+    <div class="duo-path" aria-label="Tahapan belajar">
+      <button class="duo-node done" type="button" id="duoNode1"><span>✓</span><small>Mulai</small></button>
+      <button class="duo-node current" type="button" id="duoNode2"><span>★</span><small>Kasus</small></button>
+      <button class="duo-node locked" type="button" id="duoNode3"><span>✦</span><small>Diagnosis</small></button>
+      <button class="duo-node locked" type="button" id="duoNode4"><span>🏆</span><small>Mastery</small></button>
+    </div>
+  </section>
+
+  <section class="duo-reward-strip" aria-label="Ringkasan progres">
+    <div class="duo-reward-item">
+      
+      <div><b id="duoHudStreak">0</b><small>Streak</small></div>
+    </div>
+    <div class="duo-reward-item">
+      <span class="duo-reward-icon xp">⚡</span>
+      <div><b id="duoHudXp">0</b><small>XP</small></div>
+    </div>
+    <div class="duo-reward-item">
+      <span class="duo-reward-icon goal">🎯</span>
+      <div><b id="duoHudGoal">0/5</b><small>Target hari ini</small></div>
+    </div>
+    <div class="duo-reward-item">
+      <span class="duo-reward-icon focus">💚</span>
+      <div><b id="duoHudFocus">5</b><small>Energi</small></div>
+    </div>
+  </section>
+
+  <div class="card player-card">
+    <div class="player-top">
+      <div>
+        <div class="eyebrow">CLINICAL PROGRESS</div>
+        <div class="player-level"><span id="levelBadge">Lv. 1</span><b id="xpTitle">Mahasiswa Pre-Klinik</b></div>
+      </div>
+      <div class="xp-total"><b id="xpTotal">0 XP</b><span>Total XP</span></div>
+    </div>
+    <div class="xp-track"><i id="xpBar"></i></div>
+    <div class="xp-meta"><span id="xpProgressText">0 / 100 XP</span><span id="xpNextText">100 XP ke Level 2</span></div>
+    <div class="player-badges" id="playerBadges"></div>
+    <div class="daily-streak-card" id="dailyStreakCard" aria-live="polite">
+      <div class="daily-streak-main">
+        <span class="streak-flame" id="streakFlame">🔥</span>
+        <div><b id="dailyStreakTitle">0 hari streak</b><small id="dailyStreakSub">Kerjakan 5 soal hari ini</small></div>
+      </div>
+      <div class="streak-progress-wrap">
+        <div class="streak-progress"><i id="dailyStreakBar"></i></div>
+        <span id="dailyStreakCount">0/5</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="resumeCard" class="card resume-card" hidden>
+    <div class="section-title">Kuis tersimpan</div>
+    <div id="resumeText" class="muted"></div>
+    <div class="resume-actions">
+      <button class="primary" id="resumeBtn">Lanjutkan →</button>
+      <button class="secondary small-btn" id="discardResumeBtn">Hapus</button>
+    </div>
+  </div>
+<section class="exam-launcher card" id="examLauncher">
+    <div class="section-title">Pilih ujian</div>
+    <div class="exam-launcher-grid">
+      <button type="button" class="exam-launch-card uab" id="openUabPage" aria-label="UAB">
+        <span class="exam-launch-icon">UAB</span>
+      </button>
+      <button type="button" class="exam-launch-card upi" id="openUpiPage" aria-label="UPI">
+        <span class="exam-launch-icon">UPI</span>
+      </button>
+    </div>
+  </section>
+
+  <button type="button" class="card home-materials-card home-materials-link" id="openMaterialsPage" aria-label="Buka Kumpulan Materi">
+    <span class="home-materials-leading"><span class="home-materials-icon">📚</span><span><b>Kumpulan Materi</b><small>Materi belajar per blok</small></span></span>
+    <span class="home-materials-arrow ui-arrow ui-arrow-caret" aria-hidden="true">›</span>
+  </button>
+
+  <div class="card daily-home-card" id="dailyHomeCard"></div>
+<div class="stats">
+    <div class="stat"><b id="totalStat">0</b><span>Total soal</span></div>
+    <div class="stat"><b id="bookmarkStat">0</b><span>Bookmark</span></div>
+    <div class="stat"><b id="historyStat">0</b><span>Riwayat</span></div>
+    <div class="stat"><b id="bestStat">0%</b><span>Nilai terbaik</span></div>
+  </div>
+<div class="card menu-card menu-collapsible" id="menuSection">
+    <button type="button" class="menu-section-toggle" id="menuSectionToggle" aria-expanded="true" aria-controls="menuSectionContent">
+      <span class="section-title">Menu</span>
+      <span class="menu-section-arrow ui-arrow ui-arrow-caret" aria-hidden="true">⌃</span>
+    </button>
+    <div class="menu-grid menu-section-content" id="menuSectionContent">
+      <button class="secondary menu-item" id="bookmarksBtn"><span class="menu-icon">🔖</span><span>Soal Bookmark</span></button>
+      <button class="secondary menu-item" id="historyBtn"><span class="menu-icon">📊</span><span>Riwayat Skor</span></button>
+      <button class="secondary menu-item" id="wrongBtn"><span class="menu-icon">❌</span><span>Soal yang Sering Salah</span></button>
+      <button class="secondary menu-item" id="analyticsBtn"><span class="menu-icon">📈</span><span>Analitik Belajar</span></button>
+      <button class="secondary menu-item" id="quickWrongBtn"><span class="menu-icon">🎯</span><span>Latihan Soal Salah</span></button>
+      <button class="secondary menu-item" id="smartReviewBtn"><span class="menu-icon">🧠</span><span>Smart Review</span></button>
+      <button class="secondary menu-item" id="studyToolsBtn"><span class="menu-icon">🧠</span><span>Study Lab</span></button>
+      <button class="secondary menu-item" id="clinicalDashboardBtn"><span class="menu-icon">🩺</span><span>Clinical Dashboard</span></button>
+      <button class="secondary menu-item" id="achievementBtn"><span class="menu-icon">🏆</span><span>Achievements</span></button>
+    </div>
+  </div>
+
+  <a class="feedback-card offline-feedback-card" id="feedback" href="#" data-google-form-url="" aria-label="Buka Google Form Pesan dan Kesan">
+    <span class="feedback-icon">📝</span>
+    <span class="feedback-content"><strong>Pesan &amp; Kesan</strong><small>Google Form • Beri masukan untuk CLINED</small></span>
+    <span class="ui-arrow" aria-hidden="true">›</span>
+  </a>
+</section>
+
+
+    </div>
+  </div>
+</section>
+
+<section id="accountPage" class="view account-page-view">
+  <div class="account-header">
+    <button class="account-back" id="backFromAccount" type="button" aria-label="Kembali"><span class="ui-arrow ui-arrow-back">←</span></button>
+    <h2>Profil</h2>
+    <span class="account-header-spacer"></span>
+  </div>
+  <div class="account-profile-hero">
+    <button type="button" class="account-avatar" id="accountAvatar" aria-label="Ganti avatar">R</button>
+    <button type="button" class="account-change-avatar" id="changeAvatarBtn">Ganti avatar</button>
+  </div>
+  <div class="account-form">
+    <section class="account-auth-card" id="accountAuthCard" aria-live="polite">
+      <div class="account-auth-top">
+        <div>
+          <span class="account-auth-kicker">CLINED ACCOUNT</span>
+          <h3 id="accountAuthTitle">Memuat akun…</h3>
+          <p id="accountAuthSubtitle">Memeriksa sesi akun kamu.</p>
+        </div>
+        <span class="account-security-badge" id="accountSecurityBadge">…</span>
+      </div>
+      <div class="account-auth-actions" id="accountAuthActions">
+        <button class="account-security-btn" id="loginAccountBtn" type="button">Masuk</button>
+        <button class="account-security-btn" id="createAccountBtn" type="button">Buat akun</button>
+      </div>
+      <div class="account-security-actions" id="accountSecurityActions" hidden>
+        <button class="account-security-btn" id="changePasswordBtn" type="button">Password</button>
+        <button class="account-security-btn" id="logoutAccountBtn" type="button">Keluar</button>
+        <button class="account-security-btn danger" id="deleteAccountBtn" type="button">Hapus akun</button>
+      </div>
+    </section>
+    <div class="account-profile-fields" id="accountProfileFields" hidden>
+      <label for="accountName">Name</label>
+      <input id="accountName" type="text" maxlength="40" autocomplete="name" placeholder="Nama kamu">
+      <label for="accountUsername">Username</label>
+      <input id="accountUsername" type="text" maxlength="24" autocomplete="username" placeholder="username">
+      <button class="account-action account-save" id="saveAccountBtn" type="button">Simpan perubahan</button>
+    </div>
+    <div class="account-data-tools">
+      <div class="account-data-tools-head"><div><b>Data &amp; Backup</b><small>Amankan progres belajar tanpa menyertakan kredensial akun.</small></div><span>OFFLINE SAFE</span></div>
+      <div class="account-data-tools-grid">
+        <button class="account-action account-export" id="exportAccountBtn" type="button">Cadangkan data</button>
+        <button class="account-action account-import" id="importAccountBtn" type="button">Pulihkan data</button>
+      </div>
+      <input id="importAccountFile" type="file" accept="application/json,.json" hidden>
+      <small class="account-data-note">Restore hanya memulihkan data aplikasi dan profil lokal yang aman.</small>
+    </div>
+
+  </div>
+</section>
+
+<section id="achievementsPage" class="view exam-page-view">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromAchievements" type="button">‹ Beranda</button>
+    <div><div class="eyebrow">ACHIEVEMENTS</div><h2>Pencapaian</h2><p>Koleksi milestone perjalanan klinismu.</p></div>
+  </div>
+  <div class="card nested-card achievement-card">
+    <div id="achievementList" class="achievement-list"></div>
+  </div>
+</section>
+
+<section id="materialsPage" class="view exam-page-view materials-page">
+  <div class="materials-page-header">
+    <button class="back-link" id="backFromMaterials" type="button">‹ Beranda</button>
+    <div><div class="eyebrow">CLINED • MATERI</div><h2>Kumpulan Materi</h2><p>Materi belajar disusun mengikuti seluruh blok UAB.</p></div>
+  </div>
+  <section class="card materials-summary-card">
+    <div class="materials-summary-icon">📚</div>
+    <div><b id="materialsBlockCount">20 Blok</b><small>Jumlah materi mengikuti jumlah blok yang tersedia di UAB.</small></div>
+  </section>
+  <div class="materials-block-grid" id="materialsBlockGrid" aria-label="Daftar materi per blok"></div>
+</section>
+
+<section id="uabPage" class="view exam-page-view uab-duo-page">
+  <div class="uab-duo-top">
+    <button class="back-link" id="backFromUab" type="button">‹ Beranda</button>
+    <div class="uab-duo-stats" aria-label="Progress UAB">
+      <span>⚡ <b id="uabXpStat">0</b></span>
+      <span>💎 <b id="uabGemStat">0</b></span>
+    </div>
+  </div>
+
+  <div class="uab-duo-banner">
+    <div class="uab-duo-mascot">🧑‍⚕️</div>
+    <div>
+      <b>Siap menaklukkan UAB?</b>
+      <span>Ikuti blok satu per satu dan bangun streak belajarmu.</span>
+    </div>
+    <span class="uab-banner-badge">GO!</span>
+  </div>
+<div class="uab-path-viewport" id="uabPathViewport" aria-label="Jalur blok UAB"><div class="uab-path" id="uabBlockList" aria-label="Pilihan blok UAB">
+    <div class="semester-divider" role="separator" aria-label="Semester 1"><span>SEMESTER 1</span></div>
+    <button type="button" class="uab-node locked-node" id="openBlokBm1" aria-label="BM1 terkunci"><span class="uab-node-icon">🦴</span><b>BM1</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokBm2" aria-label="BM2 terkunci"><span class="uab-node-icon">🧬</span><b>BM2</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokHnc" aria-label="HNC terkunci"><span class="uab-node-icon">👂</span><b>HNC</b></button>
+    <div class="semester-divider" role="separator" aria-label="Semester 2"><span>SEMESTER 2</span></div>
+    <button type="button" class="uab-node locked-node" id="openBlokMp1" aria-label="MP1 terkunci"><span class="uab-node-icon">🩺</span><b>MP1</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokMp2" aria-label="MP2 terkunci"><span class="uab-node-icon">💊</span><b>MP2</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokMpt" aria-label="MPT terkunci"><span class="uab-node-icon">🧪</span><b>MPT</b></button>
+    <div class="semester-divider" role="separator" aria-label="Semester 3"><span>SEMESTER 3</span></div>
+    <button type="button" class="uab-node active-node" id="openBlokMuskuloskeletal"><span class="uab-node-icon">🦿</span><b>MUSKULOSKELETAL</b></button>
+    <button type="button" class="uab-node active-node" id="openBlokRespiratory"><span class="uab-node-icon">🫁</span><b>RESPIRATORY</b></button>
+    <button type="button" class="uab-node active-node" id="openBlokKardiologi"><span class="uab-node-icon">❤️</span><b>KARDIOLOGI</b></button>
+    <div class="semester-divider" role="separator" aria-label="Semester 4"><span>SEMESTER 4</span></div>
+    <button type="button" class="uab-node active-node" id="openBlokHematologi"><span class="uab-node-icon">🩸</span><b>HEMATOLOGI</b></button>
+    <button type="button" class="uab-node active-node" id="openBlokGit"><span class="uab-node-icon">🫃</span><b>GIT</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokForensik" aria-label="Forensik terkunci"><span class="uab-node-icon">🔎</span><b>FORENSIK</b></button>
+    <div class="semester-divider" role="separator" aria-label="Semester 5"><span>SEMESTER 5</span></div>
+    <button type="button" class="uab-node locked-node" id="openBlokGinjal" aria-label="Ginjal terkunci"><span class="uab-node-icon">🫘</span><b>GINJAL</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokEndokrine" aria-label="Endokrine terkunci"><span class="uab-node-icon">🧪</span><b>ENDOKRINE</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokReproduksi" aria-label="Reproduksi terkunci"><span class="uab-node-icon">🧬</span><b>REPRODUKSI</b></button>
+    <div class="semester-divider" role="separator" aria-label="Semester 6"><span>SEMESTER 6</span></div>
+    <button type="button" class="uab-node active-node" id="openBlokSsp"><span class="uab-node-icon">🧠</span><b>SSP</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokPancaIndra" aria-label="Panca Indra terkunci"><span class="uab-node-icon">👁️</span><b>PANCA INDRA</b></button>
+    <div class="semester-divider" role="separator" aria-label="Semester 7"><span>SEMESTER 7</span></div>
+    <button type="button" class="uab-node locked-node" id="openBlokKedkom" aria-label="KEDKOM terkunci"><span class="uab-node-icon">🩺</span><b>KEDKOM</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokKedkel" aria-label="KEDKEL terkunci"><span class="uab-node-icon">👨‍👩‍👧‍👦</span><b>KEDKEL</b></button>
+    <button type="button" class="uab-node locked-node" id="openBlokMulsis" aria-label="MULSIS terkunci"><span class="uab-node-icon">🧬</span><b>MULSIS</b></button>
+  </div></div>
+
+  <div class="uab-duo-tip">
+    <span>💡</span><div><b>Tips belajar</b><small>Kerjakan blok untuk mendapatkan XP, streak, dan progress.</small></div>
+  </div>
+</section>
+
+<section id="blokKedkomPage" class="view exam-page-view empty-bank-block" data-block-key="kedkom">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromKedkom" type="button">‹ UAB</button>
+    <div><div class="eyebrow">UAB • BLOK KEDKOM</div><h2>BLOK KEDKOM</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
+  </div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/NEUROPSIKIATRI-3846dad3e94680bba27bdfa0450088d4?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card">
+    <div class="section-title">📚 Clinical Case Bank</div>
+    <div class="empty-bank-inline"><span class="empty-bank-icon">🩺</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK KEDKOM masih kosong. Struktur blok sudah siap.</small></div></div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="kedkomCountChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="kedkomModeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="kedkomTimeChoices"></div>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
+  </div>
+</section>
+
+<section id="blokKedkelPage" class="view exam-page-view empty-bank-block" data-block-key="kedkel">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromKedkel" type="button">‹ UAB</button>
+    <div><div class="eyebrow">UAB • BLOK KEDKEL</div><h2>BLOK KEDKEL</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
+  </div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/MUSKULOSKELETAL-20e6dad3e9468010acd0e9083337e13e?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card">
+    <div class="section-title">📚 Clinical Case Bank</div>
+    <div class="empty-bank-inline"><span class="empty-bank-icon">👨‍👩‍👧‍👦</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK KEDKEL masih kosong. Struktur blok sudah siap.</small></div></div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="kedkelCountChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="kedkelModeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="kedkelTimeChoices"></div>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
+  </div>
+</section>
+
+<section id="blokMulsisPage" class="view exam-page-view empty-bank-block" data-block-key="mulsis">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromMulsis" type="button">‹ UAB</button>
+    <div><div class="eyebrow">UAB • BLOK MULSIS</div><h2>BLOK MULSIS</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
+  </div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/KARDIOVASKULAR-2706dad3e94680719f45cf8c6c32dec9?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card">
+    <div class="section-title">📚 Clinical Case Bank</div>
+    <div class="empty-bank-inline"><span class="empty-bank-icon">🧬</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK MULSIS masih kosong. Struktur blok sudah siap.</small></div></div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="mulsisCountChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="mulsisModeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="mulsisTimeChoices"></div>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
+  </div>
+</section>
+
+<section id="upiPage" class="view exam-page-view upi-page">
+  <div class="exam-page-header upi-header">
+    <div><div class="eyebrow">UPI • ACTIVE RECALL</div><h2>Flash Card</h2><p>Pilih blok untuk latihan flashcard dan melihat progres.</p></div>
+  </div>
+  <section class="upi-block-selector card">
+    <div class="section-title">Pilih blok UPI</div>
+    <p class="upi-review-copy">Setiap blok memiliki kartu, riwayat review, dan jadwal repetisi.</p>
+    <div class="upi-block-grid" id="upiBlockGrid" role="list"></div>
+  </section>
+</section>
+
+<section id="blokMuskuloskeletalPage" class="view exam-page-view empty-bank-block">
+  <div class="exam-page-header"><button class="back-link" id="backFromMuskuloskeletal" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK MUSKULOSKELETAL</div><h2>BLOK MUSKULOSKELETAL</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/MUSKULOSKELETAL-20e6dad3e9468010acd0e9083337e13e?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🦿</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
+</section>
+<section id="blokRespiratoryPage" class="view exam-page-view empty-bank-block">
+  <div class="exam-page-header"><button class="back-link" id="backFromRespiratory" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK RESPIRATORY</div><h2>BLOK RESPIRATORY</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/RESPIRATORY-2a16dad3e94680e6824fd1aa0e6b4ee2?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🫁</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
+</section>
+<section id="blokKardiologiPage" class="view exam-page-view empty-bank-block">
+  <div class="exam-page-header"><button class="back-link" id="backFromKardiologi" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK KARDIOLOGI</div><h2>BLOK KARDIOLOGI</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/KARDIOVASKULAR-2706dad3e94680719f45cf8c6c32dec9?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">❤️</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
+</section>
+<section id="blokHematologiPage" class="view exam-page-view empty-bank-block">
+  <div class="exam-page-header"><button class="back-link" id="backFromHematologi" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK HEMATOLOGI</div><h2>BLOK HEMATOLOGI</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/HEMATOLOGI-3046dad3e946807f9eabf61028a13e0c?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🩸</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
+</section>
+<section id="blokGitPage" class="view exam-page-view empty-bank-block">
+  <div class="exam-page-header"><button class="back-link" id="backFromGit" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK GIT</div><h2>BLOK GIT</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/GIT-1d96dad3e946806084f0d01b78e2d2ab?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🫃</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
+</section>
+
+<section id="blokSspPage" class="view exam-page-view">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromSsp" type="button">‹ UAB</button>
+    <div><div class="eyebrow">UAB • BLOK SSP</div><h2>BLOK SSP</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
+  </div>
+  
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/NEUROPSIKIATRI-3846dad3e94680bba27bdfa0450088d4?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+<div class="card nested-card bank-card">
+    <div class="section-title">📚 Clinical Case Bank</div>
+    <div class="bank-grid" id="bankChoices"></div>
+    <div class="bank-note" id="bankNote"></div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="countChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="modeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="timeChoices"></div>
+    <button class="primary" id="startBtn">Mulai Kuis →</button>
+  </div>
+</section>
+
+<div id="normalValuesModal" class="modal-backdrop" hidden>
+  <div class="normal-values-modal card" role="dialog" aria-modal="true" aria-labelledby="normalValuesTitle">
+    <div class="normal-values-head">
+      <div><div class="eyebrow">QUICK REFERENCE</div><h2 id="normalValuesTitle">🧪 Normal Values</h2><p>Referensi nilai laboratorium.</p></div>
+      <button class="dashboard-mini-btn close" id="closeNormalValues" type="button" aria-label="Tutup Normal Values">×</button>
+    </div>
+    <div class="normal-values-image-wrap">
+      <img class="normal-values-image" src="assets/normal-values.jpeg" alt="Tabel Normal Lab Values" draggable="false">
+    </div>
+    <div class="normal-values-note">Referensi belajar. Rentang nilai dapat berbeda menurut laboratorium, usia, jenis kelamin, metode pemeriksaan, dan kondisi klinis.</div>
+  </div>
+</div>
+
+<section id="quiz" class="view">
+  <div class="card quiz-card">
+    <div class="topline">
+      <button class="back" id="quizBack">‹ Beranda</button>
+      <button class="bookmark" id="bookmarkBtn">☆ Simpan</button>
+    </div>
+    <div class="topline compact">
+      <span class="info" id="info">Soal 1</span>
+      <span class="live-stats"><span id="timerLive" class="timer-pill">⏱ 00:00</span><span id="streakLive"></span><span id="scoreLive" class="muted">0 benar</span><span id="xpLive" class="xp-live">⚡ 0 XP</span></span>
+    </div>
+    <div class="battle-hud" aria-label="Vitality pemain">
+      <div class="hp-head"><span>❤️ HP</span><b id="hpText">100 / 100</b></div>
+      <div class="hp-track"><i id="hpBar"></i></div>
+      <small id="damageHint">Damage dasar menyesuaikan jumlah soal</small>
+    </div>
+    <div class="progress" aria-label="Progress"><i id="progress"></i></div>
+    <div class="question-tools-row" aria-label="Alat soal">
+      <div class="question-nav-wrap" id="questionNavWrap"><button class="question-nav-toggle" id="questionNavToggle" aria-label="Buka atau tutup navigasi soal">☷ <span class="nav-label">Navigasi soal</span><span>⌄</span></button><div id="questionNav" class="question-nav" hidden></div></div>
+    </div>
+    <div class="question" id="question">Memuat soal…</div>
+    <div class="answers" id="answers"></div>
+    <div class="explain" id="explain">
+      <div id="explainText"></div>
+    </div>
+    <div class="quiz-actions">
+      <button class="secondary" id="prevBtn" style="display:none">← Soal Sebelumnya</button>
+      <button class="secondary" id="nextBtn" style="display:none">Selanjutnya →</button>
+    </div>
+    <div class="quiz-foot-actions">
+      <button class="text-btn" id="flagBtn">⚑ Tandai soal</button>
+      <span id="flagState" class="muted"></span>
+    </div>
+  </div>
+</section>
+
+<section id="result" class="view">
+  <div class="card">
+    <div class="result-score">
+      <div class="eyebrow">HASIL KUIS</div>
+      <div class="big" id="resultScore">0%</div>
+      <p id="resultDetail" class="muted">0 benar dari 0 soal</p>
+      <div class="grade-pill" id="resultGrade">—</div>
+      <div class="bar"><i id="resultBar"></i></div>
+    </div>
+    <div class="result-xp-card">
+      <div><span>⚡ XP Didapat</span><b id="resultXP">+0 XP</b></div>
+      <div><span>🏆 Level</span><b id="resultLevel">Lv. 1</b></div>
+    </div>
+    <div class="result-grid">
+      <div><b id="resultCorrect">0</b><span>Benar</span></div>
+      <div><b id="resultWrong">0</b><span>Salah</span></div>
+      <div><b id="resultTotal">0</b><span>Total</span></div>
+    </div>
+    <button class="primary" id="againBtn">Kuis Lagi</button>
+    <div class="result-actions">
+      <button class="secondary" id="reviewWrongBtn">❌ Review Soal Salah</button>
+      <button class="secondary" id="reviewQuizBtn">📚 Lihat Pembahasan</button>
+      <button class="secondary" id="resultHome">Kembali ke Beranda</button>
+    </div>
+  </div>
+</section>
+
+<section id="bookmarks" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>🔖 Bookmark</b></div>
+    <div id="bookmarkList"></div>
+  </div>
+</section>
+
+<section id="wrong" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>❌ Soal yang Sering Salah</b></div>
+    <div id="wrongSummary" class="history-summary"></div>
+    <div id="wrongList"></div>
+  </div>
+</section>
+
+<section id="review" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📚 Review Pembahasan</b></div>
+    <div id="reviewSummary" class="muted"></div>
+    <div id="reviewList"></div>
+  </div>
+</section>
+
+<section id="analytics" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📈 Analitik Belajar</b></div>
+    <div id="analyticsSummary" class="history-summary"></div>
+    <div id="analyticsCards" class="analytics-grid"></div>
+    <div class="section-title sub-title">Performa per bank</div>
+    <div id="analyticsBanks"></div>
+    <div class="section-title sub-title">Fokus belajar</div>
+    <div id="analyticsFocus"></div>
+  </div>
+</section>
+
+
+
+<section id="history" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📊 Riwayat Skor</b></div>
+    <div id="historySummary" class="history-summary"></div>
+    <div id="historyList"></div>
+    <button class="secondary" id="clearHistory">Hapus riwayat</button>
+  </div>
+</section>
+
+
+<section id="clinicalDashboard" class="view">
+  <div class="card dashboard-card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>🩺 Clinical Dashboard</b></div>
+    <div class="dashboard-scope-panel">
+      <select id="dashboardDetailStatScope" class="dashboard-stat-select" aria-label="Pilih statistik BLOK">
+        <option value="SSP">SSP</option>
+      </select>
+      <button class="secondary small-btn" id="resetDetailBlockStatsBtn" type="button">Reset statistik BLOK</button>
+    </div>
+    <div class="study-hero dashboard-hero">
+      <span class="study-kicker">DASHBOARD KLINIS</span>
+      <h2>Performa klinismu.</h2>
+    </div>
+    <div class="radar-dashboard-block">
+      <div id="dashboardRadarChart" class="radar-chart"></div>
+      <div id="dashboardRadarLegend" class="radar-legend"></div>
+    </div>
+    <div id="dashboardMission" class="daily-mission"></div>
+    <div id="dashboardStats" class="dashboard-stats"></div>
+    <div class="section-title sub-title">🎯 Rekomendasi</div>
+    <div id="dashboardRecommendations" class="dashboard-recommendations"></div>
+  </div>
+</section>
+
+<!-- Enhanced study tools: additive layer, existing features remain intact -->
+<section id="studyTools" class="view">
+  <div class="card study-tools-card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>🧠 Study Lab</b></div>
+    <div class="study-hero">
+      <span class="study-kicker">SMART STUDY</span>
+      <h2>Belajar lebih aktif, bukan cuma mengerjakan soal.</h2>
+      <p>Gunakan kartu dan soal lemah untuk memperkuat active recall.</p>
+    </div>
+    <div class="daily-mission" id="dailyMission"></div>
+    <div class="study-tool-grid">
+      <button class="study-tool" id="flashcardsBtn"><span>🃏</span><b>Flashcards</b><small>Active recall cepat</small></button>
+      <button class="study-tool" id="bookmarkDrillBtn"><span>🔖</span><b>Bookmark Drill</b><small>Ulangi soal tersimpan</small></button>
+      <button class="study-tool" id="smart10Btn"><span>⚡</span><b>Smart 10</b><small>10 soal acak</small></button>
+      <button class="study-tool" id="smartReviewToolBtn"><span>🔁</span><b>Smart Review</b><small>Prioritas soal lemah</small></button>
+      <button class="study-tool" id="libraryBtn"><span>🔎</span><b>Cari Soal</b><small>Telusuri semua arsip</small></button>
+    </div>
+  </div>
+</section>
+
+<section id="smartReview" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" id="backFromSmartReview" data-home>‹ Beranda</button><b>🧠 Smart Review</b></div>
+    <div class="study-hero"><span class="study-kicker">REVIEW TERJADWAL</span><h2>Ulangi materi yang paling perlu kamu kuasai.</h2><p>Prioritaskan soal yang sering salah dan lama belum direview.</p></div>
+    <div id="smartReviewSummary" class="history-summary"></div>
+    <div id="smartReviewList" class="smart-review-list"></div>
+    <button class="primary" id="smartReviewStartBtn" type="button">Mulai Smart Review</button>
+  </div>
+</section>
+
+<section id="flashcards" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-study-home>‹ Study Lab</button><b>🃏 Flashcards</b><span id="flashProgress" class="muted"></span></div>
+    <div class="flashcard" id="flashcard">
+      <div class="flash-front">
+        <span class="flash-label">PERTANYAAN</span>
+        <div id="flashQuestion">Memuat kartu…</div>
+      </div>
+      <div class="flash-back" id="flashBack" hidden>
+        <span class="flash-label">JAWABAN & KONSEP</span>
+        <div id="flashAnswer"></div>
+      </div>
+    </div>
+    <button class="primary" id="flashRevealBtn">Tampilkan Jawaban</button>
+    <div class="flash-actions">
+      <button class="secondary" id="flashPrevBtn">← Sebelumnya</button>
+      <button class="secondary" id="flashNextBtn">Berikutnya →</button>
+    </div>
+  </div>
+</section>
+
+<section id="library" class="view">
+  <div class="card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>🔎 Bank Soal</b></div>
+    <div class="library-controls">
+      <input id="librarySearch" class="library-search" type="search" placeholder="Cari diagnosis, obat, anatomi, gejala…" autocomplete="off">
+      <select id="libraryBank" class="library-select" aria-label="Bank soal">
+        <option value="all">Semua bank</option>
+        <option value="utama">SSP GASTER 2023</option>
+        <option value="pulmonis">SSP PULMONIS 2022</option>
+        <option value="arsip2021">SSP 2021</option>
+      </select>
+    </div>
+    <div id="librarySummary" class="muted"></div>
+    <div id="libraryResults"></div>
+  </div>
+</section>
+
+<div class="account-modal" id="upiCreateQuestionModal" hidden aria-hidden="true">
+  <div class="account-modal-backdrop" data-close-upi-question-modal></div>
+  <section class="account-modal-card upi-create-card" role="dialog" aria-modal="true" aria-labelledby="upiCreateQuestionTitle">
+    <button class="account-modal-close ui-arrow ui-arrow-back" id="closeUpiCreateQuestion" type="button" aria-label="Tutup">×</button>
+    <span class="account-auth-kicker">UPI • CUSTOM CARD</span>
+    <h2 id="upiCreateQuestionTitle">Create Question</h2>
+    <p>Buat flashcard sendiri untuk latihan active recall.</p>
+    <form id="upiCreateQuestionForm" novalidate>
+      <input id="upiCreateBlock" type="hidden" value="SSP">
+      <label for="upiCreateMaterial">Materi</label>
+      <select id="upiCreateMaterial" class="library-select" required>
+        <option value="Histology">Histology</option>
+        <option value="Patologi Anatomi">Patologi Anatomi</option>
+      </select>
+      <label for="upiCreateImage">Import image</label>
+      <input id="upiCreateImage" type="file" accept="image/*" required>
+      <div id="upiCreateImagePreview" class="upi-create-preview" hidden><img alt="Preview gambar soal"></div>
+      <label for="upiCreateQuestion">Question</label>
+      <textarea id="upiCreateQuestion" rows="4" maxlength="500" placeholder="Tulis pertanyaan…" required></textarea>
+      <label for="upiCreateAnswer">Answer</label>
+      <textarea id="upiCreateAnswer" rows="3" maxlength="300" placeholder="Tulis jawaban…" required></textarea>
+      <button class="primary" id="saveUpiCreateQuestion" type="submit">Simpan Question</button>
+    </form>
+  </section>
+</div>
+
+<div class="account-modal" id="accountAuthModal" hidden aria-hidden="true">
+  <div class="account-modal-backdrop" data-close-account-modal></div>
+  <section class="account-modal-card" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+    <button class="account-modal-close ui-arrow ui-arrow-back" id="closeAccountModal" type="button" aria-label="Tutup">×</button>
+    <span class="account-auth-kicker">CLINED ACCOUNT</span>
+    <h2 id="accountModalTitle">Buat akun</h2>
+    <p id="accountModalSubtitle">Simpan progres belajarmu dengan akun CLINED.</p>
+    <form id="accountAuthForm" data-mode="signup" novalidate>
+      <div class="account-modal-fields" id="signupFields">
+        <div><label for="authName">Nama</label><input id="authName" type="text" maxlength="40" autocomplete="name" placeholder="Nama kamu"></div>
+        <div><label for="authUsername">Username</label><input id="authUsername" type="text" maxlength="24" autocomplete="username" autocapitalize="none" placeholder="username"></div>
+      </div>
+      <label id="authLoginIdentifierLabel" for="authLoginIdentifier" hidden>Username</label>
+      <input id="authLoginIdentifier" type="text" autocomplete="username" autocapitalize="none" placeholder="Username" hidden>
+      <label for="authPassword">Password</label>
+      <div class="account-password-field"><input id="authPassword" type="password" minlength="8" autocomplete="new-password"><button type="button" class="account-password-toggle" data-password-toggle="authPassword" aria-label="Tampilkan password">Lihat</button></div>
+      <label id="authPasswordConfirmLabel" for="authPasswordConfirm">Konfirmasi password</label>
+      <div class="account-password-field" id="authPasswordConfirmField"><input id="authPasswordConfirm" type="password" minlength="8" autocomplete="new-password"><button type="button" class="account-password-toggle" data-password-toggle="authPasswordConfirm" aria-label="Tampilkan password">Lihat</button></div>
+      <div class="account-form-error" id="accountFormError" role="alert" hidden></div>
+      <button class="account-action account-save" id="submitAccountAuth" type="submit">BUAT AKUN</button>
+      <button class="account-modal-switch" id="switchAccountAuth" type="button">Sudah punya akun? Masuk</button>
+    </form>
+  </section>
+</div>
+
+<div class="account-modal" id="changePasswordModal" hidden aria-hidden="true">
+  <div class="account-modal-backdrop" data-close-password-modal></div>
+  <section class="account-modal-card" role="dialog" aria-modal="true" aria-labelledby="changePasswordTitle">
+    <button class="account-modal-close ui-arrow ui-arrow-back" id="closePasswordModal" type="button" aria-label="Tutup">×</button>
+    <span class="account-auth-kicker">SECURITY</span>
+    <h2 id="changePasswordTitle">Ganti password</h2>
+    <p>Password lama diverifikasi sebelum password baru disimpan.</p>
+    <form id="changePasswordForm" novalidate>
+      <label for="currentPassword">Password saat ini</label>
+      <div class="account-password-field"><input id="currentPassword" type="password" autocomplete="current-password"><button type="button" class="account-password-toggle" data-password-toggle="currentPassword" aria-label="Tampilkan password">Lihat</button></div>
+      <label for="newPassword">Password baru</label>
+      <div class="account-password-field"><input id="newPassword" type="password" autocomplete="new-password" minlength="8"><button type="button" class="account-password-toggle" data-password-toggle="newPassword" aria-label="Tampilkan password">Lihat</button></div>
+      <label for="newPasswordConfirm">Konfirmasi password baru</label>
+      <div class="account-password-field"><input id="newPasswordConfirm" type="password" autocomplete="new-password" minlength="8"><button type="button" class="account-password-toggle" data-password-toggle="newPasswordConfirm" aria-label="Tampilkan password">Lihat</button></div>
+      <div class="account-form-error" id="changePasswordError" role="alert" hidden></div>
+      <button class="account-action account-save" type="submit">Simpan password</button>
+    </form>
+  </section>
+</div>
+
+<nav class="floating-dashboard-nav" id="floatingDashboardNav" aria-label="Navigasi utama">
+  <span class="floating-nav-slider" aria-hidden="true"></span>
+  <button type="button" class="floating-nav-item active" data-floating-nav="home" aria-label="Beranda"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.2v-6.1H9.2V21H4a1 1 0 0 1-1-1z"/></svg></span><span>Beranda</span></button>
+  <button type="button" class="floating-nav-item" data-floating-nav="dashboard" aria-label="Clinical Dashboard"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/><path d="M3 20h18"/></svg></span><span>Dashboard</span></button>
+  <button type="button" class="floating-nav-item" data-floating-nav="uab" aria-label="UAB"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0 0 10 0V4M7 4H5m2 0v3m10-3h2m-2 0v3M12 16v3m0 0a3 3 0 0 0 3 3h1"/></svg></span><span>UAB</span></button>
+  <button type="button" class="floating-nav-item" data-floating-nav="account" aria-label="Profil"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg></span><span>Profil</span></button>
+</nav>
+
+<div class="footer clined-creator-footer" aria-label="Kredit aplikasi">Created by Reza FKUY23</div>
+</main>
+<script>
+(function(){
+  const go=()=>{const b=document.getElementById('openUabPage'); if(b)b.click();};
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#duoQuickStart,#duoUnitStart,#duoNode1,#duoNode2')) go();
+  });
+  const sync=()=>{const el=document.getElementById('duoStreakValue');const src=document.getElementById('dailyStreakCount');if(el&&src)el.textContent=(src.textContent||'0').split('/')[0]||'0';};
+  setTimeout(sync,700);window.addEventListener('pageshow',sync,{passive:true});
+})();
+</script>
+<script src="js/bank_pulmonis.js"></script>
+<script src="js/bank_2021.js"></script>
+
+<!-- UPI image viewer -->
+<div class="account-modal" id="upiImageZoomModal" hidden aria-hidden="true">
+  <div class="account-modal-backdrop" data-close-upi-zoom></div>
+  <section class="upi-image-zoom-card" role="dialog" aria-modal="true" aria-label="Perbesar gambar">
+    <button class="account-modal-close ui-arrow ui-arrow-back" id="closeUpiZoom" type="button" aria-label="Tutup">×</button>
+    <div class="upi-zoom-stage" id="upiZoomStage"><img id="upiZoomImage" alt="Gambar flashcard diperbesar"></div>
+    <div class="upi-zoom-hint">Cubit untuk zoom • Geser untuk melihat detail • Ketuk dua kali untuk reset</div>
+  </section>
+</div>
+
+<!-- UPI edit question -->
+<div class="account-modal" id="upiEditQuestionModal" hidden aria-hidden="true">
+  <div class="account-modal-backdrop" data-close-upi-edit></div>
+  <section class="account-modal-card upi-create-card" role="dialog" aria-modal="true" aria-labelledby="upiEditQuestionTitle">
+    <button class="account-modal-close ui-arrow ui-arrow-back" id="closeUpiEditQuestion" type="button" aria-label="Tutup">×</button>
+    <span class="account-auth-kicker">UPI • EDIT CARD</span>
+    <h2 id="upiEditQuestionTitle">Edit Question</h2>
+    <form id="upiEditQuestionForm" novalidate>
+      <input id="upiEditId" type="hidden">
+      <label>Blok</label><input id="upiEditBlock" type="text" readonly>
+      <label for="upiEditMaterial">Materi</label>
+      <select id="upiEditMaterial" class="library-select" required><option>Histology</option><option>Patologi Anatomi</option></select>
+      <label for="upiEditImage">Import image baru <small>(opsional)</small></label>
+      <input id="upiEditImage" type="file" accept="image/*">
+      <div id="upiEditImagePreview" class="upi-create-preview" hidden><img alt="Preview gambar"></div>
+      <label for="upiEditQuestion">Question</label>
+      <textarea id="upiEditQuestion" rows="4" maxlength="500" required></textarea>
+      <label for="upiEditAnswer">Answer</label>
+      <textarea id="upiEditAnswer" rows="3" maxlength="300" required></textarea>
+      <div class="upi-edit-actions"><button class="ghost" id="deleteUpiQuestion" type="button">Hapus Question</button><button class="primary" type="submit">Simpan Perubahan</button></div>
+    </form>
+  </section>
+</div>
+<script src="js/photo-store.js?v=1"></script>
+<script src="js/photo-compress.js?v=2"></script>
+<script src="js/app.js?v=auth-layout-v2"></script>
+<script src="js/online-sync.js?v=1"></script>
+<script src="js/auth-gate.js?v=2"></script>
+<script src="js/content-manager.js?v=2"></script>
+<script src="js/question-bank-engine.js"></script>
+
+<script>
+(() => {
+  document.querySelectorAll('#uabBlockList > button.uab-node').forEach((el, i) => {
+    el.dataset.uabIndex = i + 1;
+  });
+})();
+</script>
+</body>
+</html>
+
+
+<script>
+/* V23 UAB hard lock: continuously remove legacy inline position/transform mutations. */
+(() => {
+  const clean = (n) => {
+    if (!n || !n.matches || !n.matches('#uabBlockList > .uab-node')) return;
+    ['left','right','top','bottom','transform','translate','rotate','scale','margin-left','margin-right'].forEach(k=>n.style.removeProperty(k));
+  };
+  const run=()=>document.querySelectorAll('#uabBlockList > .uab-node').forEach(clean);
+  document.addEventListener('DOMContentLoaded', run, {once:true});
+  window.addEventListener('resize', run, {passive:true});
+  const obs=new MutationObserver(muts=>muts.forEach(m=>{if(m.type==='attributes'&&m.attributeName==='style') clean(m.target);}));
+  const start=()=>{const list=document.getElementById('uabBlockList');if(list){obs.observe(list,{subtree:true,attributes:true,attributeFilter:['style']});run();}};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true}); else start();
+})();
+</script>
+</body>
+</html>
+<style>
+.study-room-members{max-height:150px;overflow:auto}.study-room-toolbar{align-items:center}.study-room-code{font-size:15px}.study-room-join{grid-template-columns:1fr}.study-room-card{padding:15px}}
+</style>
