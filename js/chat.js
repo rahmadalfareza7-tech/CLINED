@@ -2,7 +2,7 @@
 (function(){
   const $=id=>document.getElementById(id);
   const escChat=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let selected=null, poll=null, users=[], loading=false;
+  let selected=null, poll=null, users=[], loading=false, sending=false, sendSeq=0;
   async function api(path,options={}){
     const r=await fetch('/api/chat'+path,{credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
     const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||`Chat gagal dimuat (${r.status}).`); return data;
@@ -33,16 +33,40 @@
     }finally{loading=false;}
   }
   function renderQuestion(q){if(!q)return '';const opts=(q.opsi||[]);return `<div class="chat-question"><div class="chat-question-label">📚 ${escChat(q.block||'SOAL')} • ${escChat(q.bank||'')}</div><div class="chat-question-stem">${escChat(q.soal)}</div>${opts.length?`<ol class="chat-question-options">${opts.map(o=>`<li>${escChat(o)}</li>`).join('')}</ol>`:'<div class="chat-question-options">💭 Jawaban tidak disertakan — bahas bersama di chat.</div>'}</div>`}
-  function renderMessages(messages){
+  function renderMessages(messages,keepBottom=true){
     const box=$('chatMessages'),me=current(); if(!box)return;
     if(!messages.length){box.innerHTML='<div class="chat-empty">Belum ada pesan. Kirim pertanyaan pertama untuk mulai diskusi.</div>';return;}
     box.innerHTML=messages.map(m=>{const mine=m.sender_id===me?.id;return `<div class="chat-bubble ${mine?'mine':'theirs'}">${m.message_type==='question'?renderQuestion(m.question_data):''}<div>${escChat(m.body)}</div><div class="chat-meta">${mine?'Kamu':escChat(m.sender_name||'Pengguna')} • ${fmt(m.created_at)}</div></div>`}).join('');
-    box.scrollTop=box.scrollHeight;
+    if(keepBottom) box.scrollTop=box.scrollHeight;
   }
-  async function loadMessages(){if(!selected||!current())return;try{const d=await api('/messages/'+selected.id);renderMessages(d.messages||[]);}catch(e){$('chatMessages').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}}
+  function appendPendingMessage(body){
+    const box=$('chatMessages'); if(!box)return;
+    box.querySelector('.chat-empty')?.remove();
+    const el=document.createElement('div'); el.className='chat-bubble mine chat-pending'; el.dataset.pending=String(++sendSeq);
+    el.innerHTML=`<div>${escChat(body)}</div><div class="chat-meta">Kamu • mengirim…</div>`;
+    box.appendChild(el); box.scrollTop=box.scrollHeight;
+    return el;
+  }
+  async function loadMessages(){if(!selected||!current())return;try{const d=await api('/messages/'+selected.id);renderMessages(d.messages||[]);}catch(e){if(!$('chatMessages')?.querySelector('.chat-pending'))$('chatMessages').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}}
   async function openUser(user){if(!user)return;selected=user;renderUsers();$('chatHeader').innerHTML=`<div><b>${escChat(user.name)}</b><small>@${escChat(user.username)} • Diskusi UAB &amp; UPI</small></div>`;$('chatInput').disabled=false;$('chatInput').placeholder=`Tulis pesan untuk ${user.name}…`;$('chatComposer').querySelector('button').disabled=false;try{await loadMessages();}catch(e){if(typeof showToast==='function')showToast(e.message,true);}startPoll();maybePending();setTimeout(()=>$('chatInput')?.focus(),80);}
   function startPoll(){clearInterval(poll);poll=setInterval(()=>loadMessages(),5000);}
-  async function sendText(){if(!selected)return;const input=$('chatInput'),body=input.value.trim();if(!body)return;const btn=$('chatComposer').querySelector('button');btn.disabled=true;try{await api('/messages',{method:'POST',body:JSON.stringify({recipientId:selected.id,messageType:'text',body})});input.value='';input.style.height='';await loadMessages();}catch(e){if(typeof showToast==='function')showToast(e.message,true);}finally{btn.disabled=false;input.focus();}}
+  async function sendText(){
+    if(!selected||sending)return;
+    const input=$('chatInput'),body=input.value.trim(); if(!body)return;
+    const recipientId=selected.id,btn=$('chatComposer').querySelector('button');
+    sending=true; btn.disabled=true; input.disabled=true;
+    const pending=appendPendingMessage(body);
+    input.value=''; input.style.height='';
+    try{
+      await api('/messages',{method:'POST',body:JSON.stringify({recipientId,messageType:'text',body})});
+      await loadMessages();
+    }catch(e){
+      pending?.remove();
+      if(typeof showToast==='function')showToast(e.message,true);
+    }finally{
+      sending=false; input.disabled=false; btn.disabled=!selected; input.focus();
+    }
+  }
   window.CLinedChat={shareQuestion(q){
     if(!current()){if(typeof authOpenModal==='function')authOpenModal('login');return;}
     window.__CLINED_CHAT_PENDING_QUESTION=q;show('chatPage');renderUsers();
@@ -55,7 +79,7 @@
     $('backFromChat')?.addEventListener('click',()=>show('home'));
     $('chatRefreshUsers')?.addEventListener('click',loadUsers);
     $('chatUserSearch')?.addEventListener('input',renderUsers);
-    $('chatComposer')?.addEventListener('submit',e=>{e.preventDefault();sendText();});
+    $('chatComposer')?.addEventListener('submit',e=>{e.preventDefault();if(!sending)sendText();});
     $('chatInput')?.addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px';});
     $('chatInput')?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendText();}});
     document.addEventListener('click',e=>{const b=e.target.closest('[data-chat-share]');if(!b)return;const q=window.__CLINED_SHARE_QUESTIONS?.[b.dataset.chatShare];if(q)window.CLinedChat.shareQuestion(q);});
