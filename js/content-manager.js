@@ -1,6 +1,6 @@
 /* Adds role-aware content controls without replacing CLINED's learning UI. */
 (() => {
-  const request = async (path, options = {}) => { const r = await fetch(path, { credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, ...options }); const d = await r.json().catch(() => ({})); if (!r.ok) throw Error(d.error || 'Permintaan gagal.'); return d; };
+  const request = async (path, options = {}) => { const r = await fetch(path, { credentials: 'same-origin', headers: { 'Content-Type': 'application/json', ...(options.headers||{}) }, ...options }); const text = await r.text(); let d={}; try { d=text?JSON.parse(text):{}; } catch { d={}; } if (!r.ok) throw Error(d.error || `Permintaan gagal (${r.status}).`); return d; };
   const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const message = (host, text, bad = false) => { const out = host.querySelector('[data-content-message]'); if (out) { out.textContent = text; out.style.color = bad ? '#ff3b30' : ''; } };
   function removeAdminControls() {

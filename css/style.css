@@ -187,3 +187,50 @@ html,body{max-width:100%;overflow-x:hidden}
   .admin-user-row{grid-template-columns:minmax(0,1fr) auto}
   .admin-role-select{min-width:88px}
 }
+
+/* Account header mobile hardening: centered title without clipping. */
+.account-page-view .account-header{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  grid-template-columns:40px minmax(0,1fr) 40px!important;
+  align-items:center!important;
+  padding-inline:2px!important;
+}
+.account-page-view .account-header h2{
+  min-width:0!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:center!important;
+  font-size:21px!important;
+  line-height:1.15!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+}
+.account-page-view .account-header .account-back,
+.account-page-view .account-header .account-header-spacer{
+  width:40px!important;
+  min-width:40px!important;
+  max-width:40px!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:560px){
+  .account-page-view .account-header{
+    margin-left:0!important;
+    margin-right:0!important;
+    padding-inline:0!important;
+    grid-template-columns:34px minmax(0,1fr) 34px!important;
+  }
+  .account-page-view .account-header h2{font-size:19px!important;letter-spacing:0!important}
+  .account-page-view .account-header .account-back,
+  .account-page-view .account-header .account-header-spacer{width:34px!important;min-width:34px!important;max-width:34px!important}
+}
+@media(max-width:360px){
+  .account-page-view .account-header{grid-template-columns:32px minmax(0,1fr) 32px!important}
+  .account-page-view .account-header h2{font-size:18px!important}
+  .account-page-view .account-header .account-back,
+  .account-page-view .account-header .account-header-spacer{width:32px!important;min-width:32px!important;max-width:32px!important}
+}
