@@ -578,7 +578,7 @@ function renderEmptyBlockControls(key){
   const bank=BANKS[selectedBank], max=bank.data.length;
   const choices=[10,20,50,100].filter(n=>n<=max); if(max>0)choices.push(max);
   const unique=[...new Set(choices)]; if(!unique.includes(selectedCount)||selectedCount>max)selectedCount=unique[0]||max;
-  if(inline)inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>${esc(entries.length===1?bank.name:`${entries.length} bank tersedia`)}</b><small>${entries.map(([id,b])=>`<button type="button" class="block-bank-chip ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}">${esc(b.name)} · ${(b.data||[]).length} soal</button>`).join('')}</small></div>`;
+  if(inline)inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>${esc(entries.length===1?bank.name:`${entries.length} bank tersedia`)}</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${(b.data||[]).length} soal</span><i>${id===selectedBank?'✓':''}</i></button>`).join('')}</div></div>`;
   inline?.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{selectedBank=btn.dataset.blockBank;selectedCount=10;renderEmptyBlockControls(key);});
   countBox.innerHTML=unique.map(n=>`<button type="button" class="choice ${selectedCount===n?'selected':''}" data-block-count="${n}">${n===max?'Semua':n}<small>${n===max?` (${max})`:' soal'}</small></button>`).join('');
   countBox.querySelectorAll('[data-block-count]').forEach(btn=>btn.onclick=()=>{selectedCount=Number(btn.dataset.blockCount);renderEmptyBlockControls(key);});
@@ -643,8 +643,8 @@ function renderAvailableBlockControls(key){
     <b>Bank soal tersedia</b>
     <small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small>
     <div class="bank-picker" role="group" aria-label="Pilih bank soal">
-      ${entries.map(([id,b])=>`<button type="button" class="block-bank-chip ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}">
-        ${esc(b.name)} · ${(b.data||[]).length} soal
+      ${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}">
+        <span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${(b.data||[]).length} soal</span><i>${id===selectedBank?'✓':''}</i>
       </button>`).join('')}
     </div>
   </div>`; 
