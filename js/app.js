@@ -103,7 +103,7 @@ function show(id, options={}){
   if(id==="home") renderHomeClinicalDashboard();
   if(id==="blokSspPage"){setCurrentBlockId("SSP"); if(blockForBank(selectedBank)!=='SSP'){const sspIds=Object.keys(BANKS).filter(bid=>blockForBank(bid)==='SSP');if(sspIds.length)selectedBank=sspIds[0];} try{renderBanks();renderCounts();renderModes();}catch(e){console.error("SSP render error",e);}}
   if(id==="blokKedkomPage"){setCurrentBlockId("KEDKOM"); renderEmptyBlockControls("kedkom");}
-  if(id==="blokKedkelPage"){setCurrentBlockId("KEDKEL"); renderEmptyBlockControls("kedkel");}
+  if(id==="blokKedkelPage"){setCurrentBlockId("KEDKEL"); renderAvailableBlockControls("kedkel");}
   if(id==="blokMulsisPage"){setCurrentBlockId("MULSIS"); renderEmptyBlockControls("mulsis");}
 
   const navKey=id==="clinicalDashboard"?"dashboard":id==="accountPage"?"account":id==="home"?"home":null;
@@ -578,6 +578,56 @@ function renderEmptyBlockControls(key){
   timeBox.querySelectorAll('[data-block-time]').forEach(btn=>btn.onclick=()=>{timerDuration=Number(btn.dataset.blockTime);renderEmptyBlockControls(key);});
   if(startBtn){startBtn.disabled=false;startBtn.textContent=`Mulai ${bank.name} →`;startBtn.onclick=()=>{timerSeconds=timerDuration;startQuiz();};}
   if(note)note.textContent=`${entries.length} bank aktif · ${max} soal tersedia.`;
+}
+
+function renderAvailableBlockControls(key){
+  const block=String(key||'').toUpperCase();
+  const countBox=$(key+"CountChoices"), modeBox=$(key+"ModeChoices"), timeBox=$(key+"TimeChoices");
+  const page=document.querySelector(`[data-block-key="${key}"]`);
+  if(!countBox||!modeBox||!timeBox)return;
+  const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && (b.data||[]).length);
+  const startBtn=page?.querySelector('.block-disabled-start');
+  const note=page?.querySelector('.block-empty-note');
+  const inline=page?.querySelector('.empty-bank-inline');
+  if(!entries.length){ renderEmptyBlockControls(key); return; }
+
+  const [firstId, firstBank]=entries[0];
+  if(!entries.some(([id])=>id===selectedBank)) selectedBank=firstId;
+  const bank=BANKS[selectedBank]||firstBank;
+  const max=(bank.data||[]).length;
+  const counts=[10,20,50,100].filter(n=>n<=max);
+  if(max>0 && !counts.includes(max)) counts.push(max);
+  if(!selectedCount || selectedCount>max) selectedCount=counts[0]||max;
+
+  countBox.innerHTML=counts.map(n=>`<button type="button" class="choice ${selectedCount===n?"selected":""}" data-n="${n}">${n}<small> soal</small></button>`).join("");
+  countBox.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{
+    selectedCount=Number(b.dataset.n);
+    renderAvailableBlockControls(key);
+  });
+
+  modeBox.innerHTML=[
+    ["study","📖Belajar","Pembahasan langsung setelah menjawab"],
+    ["exam","📝Ujian","Pembahasan dibuka setelah selesai"]
+  ].map(([mode,title,desc])=>`<button type="button" class="choice mode-choice ${quizMode===mode?"selected":""}" data-mode="${mode}"><b>${title}</b><small>${desc}</small></button>`).join("");
+  modeBox.querySelectorAll(".mode-choice").forEach(b=>b.onclick=()=>{
+    quizMode=b.dataset.mode;
+    renderAvailableBlockControls(key);
+  });
+
+  const times=[["Tanpa batas",0],["30 menit",1800],["60 menit",3600],["90 menit",5400]];
+  timeBox.innerHTML=times.map(([label,sec])=>`<button type="button" class="choice time-choice ${Number(timerDuration||0)===sec?"selected":""}" data-sec="${sec}">${label}</button>`).join("");
+  timeBox.querySelectorAll(".time-choice").forEach(b=>b.onclick=()=>{
+    timerDuration=Number(b.dataset.sec);
+    renderAvailableBlockControls(key);
+  });
+
+  if(startBtn){
+    startBtn.disabled=false;
+    startBtn.textContent="Mulai Kuis →";
+    startBtn.onclick=()=>startQuiz();
+  }
+  if(note) note.textContent=`${bank.name}: ${max} soal tersedia.`;
+  if(inline) inline.innerHTML=`<span class="empty-bank-icon">👨‍👩‍👧‍👦</span><div><b>Bank soal tersedia</b><small>${entries.length>1?entries.length+" bank KEDKEL tersedia. ":""}${max} soal siap digunakan.</small></div>`;
 }
 
 function renderModes(){
