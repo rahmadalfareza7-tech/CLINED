@@ -226,6 +226,7 @@ html,body{overflow-x:hidden}
       <button class="secondary menu-item" id="studyToolsBtn"><span class="menu-icon">🧠</span><span>Study Lab</span></button>
       <button class="secondary menu-item" id="clinicalDashboardBtn"><span class="menu-icon">🩺</span><span>Clinical Dashboard</span></button>
       <button class="secondary menu-item" id="achievementBtn"><span class="menu-icon">🏆</span><span>Achievements</span></button>
+      <button class="secondary menu-item" id="chatBtn"><span class="menu-icon">💬</span><span>Chat Pengguna</span></button>
     </div>
   </div>
 
@@ -288,6 +289,28 @@ html,body{overflow-x:hidden}
       <small class="account-data-note">Restore hanya memulihkan data aplikasi dan profil lokal yang aman.</small>
     </div>
 
+  </div>
+</section>
+
+<section id="chatPage" class="view exam-page-view chat-page-view">
+  <div class="exam-page-header chat-page-header">
+    <button class="back-link" id="backFromChat" type="button">‹ Beranda</button>
+    <div><div class="eyebrow">CLINED • COMMUNITY</div><h2>Chat Pengguna</h2><p>Diskusi soal UAB &amp; UPI dengan pengguna CLINED lainnya.</p></div>
+  </div>
+  <div class="chat-shell card">
+    <aside class="chat-sidebar">
+      <div class="chat-sidebar-head"><div><b>Pengguna</b><small>Pilih teman diskusi</small></div><button type="button" class="chat-refresh" id="chatRefreshUsers" aria-label="Muat ulang pengguna">↻</button></div>
+      <input id="chatUserSearch" class="chat-search" type="search" placeholder="Cari nama atau username…" autocomplete="off">
+      <div id="chatUserList" class="chat-user-list"><div class="chat-empty">Memuat pengguna…</div></div>
+    </aside>
+    <section class="chat-main">
+      <div id="chatHeader" class="chat-main-head"><div><b>Pilih pengguna</b><small>Mulai percakapan untuk berdiskusi.</small></div></div>
+      <div id="chatMessages" class="chat-messages"><div class="chat-empty">Pilih pengguna di sebelah kiri untuk mulai chat.</div></div>
+      <form id="chatComposer" class="chat-composer" autocomplete="off">
+        <textarea id="chatInput" rows="1" maxlength="5000" placeholder="Tulis pesan…" disabled></textarea>
+        <button class="chat-send" type="submit" disabled>Kirim</button>
+      </form>
+    </section>
   </div>
 </section>
 
@@ -850,6 +873,7 @@ html,body{overflow-x:hidden}
 <script src="js/app.js?v=auth-layout-v4"></script>
 <script src="js/online-sync.js?v=2"></script>
 <script src="js/auth-gate.js?v=2"></script>
+<script src="js/chat.js?v=1"></script>
 <script src="js/content-manager.js?v=8"></script>
 <script src="js/question-bank-engine.js"></script>
 
@@ -889,4 +913,10 @@ html,body{overflow-x:hidden}
 .admin-material-actions{display:flex;gap:10px;flex-wrap:wrap}
 .admin-material-actions>*{flex:1 1 180px}
 .admin-material-current{font-size:12px;line-height:1.45;word-break:break-all;opacity:.65;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.035)}
+</style>
+
+<style>
+/* CLINED Chat */
+.chat-page-view{padding-bottom:28px}.chat-shell{display:grid;grid-template-columns:minmax(230px,30%) 1fr;min-height:620px;overflow:hidden;padding:0}.chat-sidebar{border-right:1px solid rgba(20,40,60,.08);display:flex;flex-direction:column;min-width:0}.chat-sidebar-head,.chat-main-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 16px;border-bottom:1px solid rgba(20,40,60,.08)}.chat-sidebar-head b,.chat-main-head b{display:block;font-size:15px}.chat-sidebar-head small,.chat-main-head small{display:block;margin-top:3px;font-size:11px;opacity:.62}.chat-refresh{width:32px;height:32px;border:0;border-radius:50%;background:rgba(20,40,60,.06);font-size:17px;cursor:pointer}.chat-search{margin:10px 12px 8px;padding:9px 12px;border-radius:12px;border:1px solid rgba(20,40,60,.1);font:inherit;font-size:12px;outline:none}.chat-user-list{overflow:auto;min-height:0;flex:1;padding:4px 8px 10px}.chat-user{display:flex;width:100%;border:0;background:transparent;text-align:left;padding:9px 8px;border-radius:12px;gap:9px;align-items:center;cursor:pointer}.chat-user:hover,.chat-user.active{background:rgba(70,100,130,.08)}.chat-avatar{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;background:rgba(70,100,130,.1);font-weight:800;font-size:13px}.chat-user-copy{min-width:0}.chat-user-copy b,.chat-user-copy small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chat-user-copy b{font-size:12px}.chat-user-copy small{font-size:10px;opacity:.58;margin-top:2px}.chat-main{display:grid;grid-template-rows:auto 1fr auto;min-width:0;min-height:620px}.chat-messages{overflow:auto;padding:16px;display:flex;flex-direction:column;gap:8px;background:rgba(0,0,0,.012)}.chat-empty{font-size:12px;opacity:.55;text-align:center;padding:28px 12px}.chat-bubble{max-width:min(78%,620px);padding:9px 11px;border-radius:15px;line-height:1.42;font-size:12px;word-break:break-word}.chat-bubble.mine{align-self:flex-end;border-bottom-right-radius:5px;background:var(--accent,#5c7cfa);color:#fff}.chat-bubble.theirs{align-self:flex-start;border-bottom-left-radius:5px;background:rgba(20,40,60,.07)}.chat-meta{font-size:9px;opacity:.55;margin-top:4px}.chat-question{margin-bottom:7px;padding:10px;border-radius:12px;background:rgba(255,255,255,.55)}.chat-bubble.mine .chat-question{background:rgba(255,255,255,.12)}.chat-question-label{font-size:9px;font-weight:800;letter-spacing:.08em;opacity:.72;margin-bottom:5px}.chat-question-stem{font-weight:700;line-height:1.4}.chat-question-options{margin:7px 0 0;padding-left:17px;font-size:11px}.chat-composer{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(20,40,60,.08);background:inherit}.chat-composer textarea{flex:1;resize:none;min-height:38px;max-height:120px;border:1px solid rgba(20,40,60,.1);border-radius:13px;padding:10px 12px;font:inherit;font-size:12px;outline:none}.chat-send{border:0;border-radius:13px;padding:0 15px;font:inherit;font-weight:800;font-size:11px;cursor:pointer;background:var(--accent,#5c7cfa);color:#fff}.chat-send:disabled{opacity:.45;cursor:not-allowed}.chat-share-btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:7px 10px;font:inherit;font-size:10px;font-weight:800;cursor:pointer;background:rgba(70,100,130,.08)}.chat-share-btn:hover{background:rgba(70,100,130,.14)}.quiz-share-row{display:flex;justify-content:flex-end;margin-top:8px}.chat-user-badge{margin-left:auto;font-size:9px;opacity:.5}.chat-conversation-divider{font-size:9px;text-align:center;opacity:.45;margin:5px 0}
+@media(max-width:720px){.chat-shell{grid-template-columns:1fr;min-height:0}.chat-sidebar{border-right:0;border-bottom:1px solid rgba(20,40,60,.08);max-height:260px}.chat-main{min-height:500px}.chat-messages{min-height:300px}.chat-bubble{max-width:88%}}
 </style>
