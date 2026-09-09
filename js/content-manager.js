@@ -40,8 +40,12 @@
       try {
         const data = await request(`/api/banks/${encodeURIComponent(item.id)}`);
         const bank = data.bank;
-        if (bank?.questions?.length) window.CLINED_BANK_ENGINE?.registerBank({id: bank.id, name: bank.name, block: bank.block, version: bank.version, schema: bank.schema_version, data: bank.questions}, {persist:true, source:'server-global'});
-      } catch {}
+        if (bank && Array.isArray(bank.questions) && bank.questions.length) {
+          window.CLINED_BANK_ENGINE?.registerBank({id: bank.id, name: bank.name, block: bank.block, version: bank.version, schema: bank.schema_version, data: bank.questions}, {persist:true, source:'server-global'});
+        }
+      } catch (e) {
+        console.warn('Global bank sync failed:', item?.id, e);
+      }
     }
     window.renderBanks?.(); window.renderCounts?.();
   }

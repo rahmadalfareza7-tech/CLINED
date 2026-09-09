@@ -97,3 +97,18 @@ html{scroll-behavior:smooth!important}
 @keyframes popCorePulse{0%{transform:scale(1)}45%{transform:scale(1.09)}100%{transform:scale(1)}}
 @keyframes battleImpactPulse{0%{filter:brightness(1);opacity:1}45%{filter:brightness(1.35);opacity:.72}100%{filter:brightness(1);opacity:0}}
 @keyframes damageRingPulse{0%{filter:brightness(1);opacity:1}45%{filter:brightness(1.35);opacity:.7}100%{filter:brightness(1);opacity:0}}
+
+/* desktop popup pulse reinforcement */
+@media (min-width: 769px){
+  .pop-celebration.show .pop-burst{
+    animation:popBurst .68s cubic-bezier(.18,1.55,.3,1) forwards, popDesktopSignal 1.35s .25s ease-in-out infinite !important;
+    will-change:transform,opacity,filter;
+  }
+  .pop-celebration.show .pop-burst::before{
+    content:"";position:absolute;inset:-14px;border-radius:50%;border:3px solid rgba(52,199,89,.35);
+    animation:popDesktopRing 1.35s ease-out infinite;pointer-events:none;
+  }
+  .pop-burst{position:relative;}
+}
+@keyframes popDesktopSignal{0%,100%{transform:scale(1);filter:drop-shadow(0 10px 28px rgba(52,199,89,.10))}50%{transform:scale(1.055);filter:drop-shadow(0 14px 36px rgba(52,199,89,.28))}}
+@keyframes popDesktopRing{0%{transform:scale(.78);opacity:.7}75%{transform:scale(1.45);opacity:0}100%{transform:scale(1.45);opacity:0}}
