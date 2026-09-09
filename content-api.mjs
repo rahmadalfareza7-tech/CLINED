@@ -23,9 +23,11 @@ export async function contentApi({ request, response, url, user, pool, body, jso
   if (!['UAB', 'UPI'].includes(module) || !title || title.length > 160 || !Array.isArray(input.questions) || !input.questions.length || input.questions.length > 500) return fail(response, 400, 'Paket soal tidak valid.');
   const questions = input.questions.map(packageQuestion), ids = new Set(questions.map(question => question.id));
   if (ids.size !== questions.length) return fail(response, 400, 'ID soal dalam paket harus unik.');
-  if (module === 'UAB' && user.role !== 'admin') return fail(response, 403, 'Hanya admin yang dapat menambahkan UAB.');
-  const visibility = user.role === 'admin' ? 'public' : 'private';
-  const ownerId = visibility === 'private' ? user.id : null;
+  // Semua paket server yang masuk ke katalog publik hanya boleh dibuat admin.
+  // Pengguna biasa tidak boleh membuat konten publik melalui API ini.
+  if (user.role !== 'admin') return fail(response, 403, 'Hanya admin yang dapat membuat konten publik.');
+  const visibility = 'public';
+  const ownerId = null;
   const result = await pool.query(`INSERT INTO content_packages (id,module,title,block,visibility,owner_user_id,created_by,questions,published_at)
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,CASE WHEN $5='public' THEN now() ELSE NULL END) RETURNING id,module,title,block,visibility,owner_user_id,created_at`,
     [randomUUID(), module, title, block, visibility, ownerId, user.id, JSON.stringify(questions)]);
