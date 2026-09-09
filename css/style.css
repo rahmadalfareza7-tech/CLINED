@@ -83,3 +83,17 @@ html{scroll-behavior:smooth!important}
 .upi-custom-item-delete:active{transform:scale(.92)}
 .clined-toast.is-error{border-color:#ff3b30;background:#3a1414}
 .clined-toast.is-error{color:#ffd4d1}
+
+
+/* KEDKEL / desktop motion reliability fix: keep the circular feedback visibly animated. */
+.pop-celebration.show .pop-burst{
+  animation:popBurst .68s cubic-bezier(.18,1.55,.3,1) forwards, popBurstPulse 1.05s .68s ease-in-out 1;
+  will-change:transform,opacity;
+}
+.pop-celebration.show .pop-burst span{animation:popCorePulse .78s .18s ease-in-out 1;}
+.combat-fx.hit.show .battle-impact{animation:battleImpact .72s cubic-bezier(.12,.8,.2,1) both, battleImpactPulse .82s .12s ease-in-out 1;}
+.combat-fx.damage.show .battle-damage-ring{animation:damageRing .62s ease-out both, damageRingPulse .72s .08s ease-in-out 1;}
+@keyframes popBurstPulse{0%{transform:scale(1)}45%{transform:scale(1.075)}100%{transform:scale(1)}}
+@keyframes popCorePulse{0%{transform:scale(1)}45%{transform:scale(1.09)}100%{transform:scale(1)}}
+@keyframes battleImpactPulse{0%{filter:brightness(1);opacity:1}45%{filter:brightness(1.35);opacity:.72}100%{filter:brightness(1);opacity:0}}
+@keyframes damageRingPulse{0%{filter:brightness(1);opacity:1}45%{filter:brightness(1.35);opacity:.7}100%{filter:brightness(1);opacity:0}}
