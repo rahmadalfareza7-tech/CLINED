@@ -1967,13 +1967,13 @@ async function authCreateAccount(){
   const password=String($('authPassword').value||''),confirm=String($('authPasswordConfirm').value||'');
   if(password!==confirm)throw Error('Konfirmasi password tidak sama.');
   const data=await authApi('/register',{method:'POST',body:JSON.stringify({name,username,password})});
-  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);
+  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);window.dispatchEvent(new Event('clined:auth-ready'));
 }
 async function authLogin(){
   const identifier=String($('authLoginIdentifier').value||'').trim();
   const password=String($('authPassword').value||'');
   const data=await authApi('/login',{method:'POST',body:JSON.stringify({identifier,password})});
-  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);
+  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);window.dispatchEvent(new Event('clined:auth-ready'));
 }
 async function authSubmit(event){
   event.preventDefault();if(authBusy)return;authBusy=true;authSetError('accountFormError','');
@@ -2148,6 +2148,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$("normalValuesMod
     window.setTimeout(()=>btn.classList.remove('nav-pop'),520);
     if(key==='home'){show('home');if(typeof renderCounts==='function')renderCounts();setActive('home');window.scrollTo({top:0,behavior:'auto'});return;}
     if(key==='dashboard'){show('clinicalDashboard');if(typeof renderClinicalDashboard==='function')renderClinicalDashboard();setActive('dashboard');window.scrollTo({top:0,behavior:'auto'});return;}
+    if(key==='chat'){show('chatPage');if(typeof window.CLINEDChatOpen==='function')window.CLINEDChatOpen();else window.dispatchEvent(new Event('clined:chat-opened'));setActive('chat');window.scrollTo({top:0,behavior:'auto'});return;}
     if(key==='uab'){const b=document.getElementById('openUabPage');if(b){b.click();}else{show('uabPage');setActive('uab');}window.scrollTo({top:0,behavior:'auto'});return;}
     if(key==='account'){show('accountPage');renderAccount();setActive('account');window.scrollTo({top:0,behavior:'auto'});return;}
   }));

@@ -18,7 +18,19 @@
     box.querySelectorAll('[data-chat-user]').forEach(b=>b.onclick=()=>openUser(users.find(x=>x.id===b.dataset.chatUser)));
   }
   async function loadUsers(){
-    if(!current())return; try{const d=await api('/users');users=d.users||[];renderUsers();}catch(e){$('chatUserList').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}
+    const box=$('chatUserList');
+    if(!current()){if(box)box.innerHTML='<div class="chat-empty">Masuk ke akun untuk melihat pengguna.</div>';return;}
+    if(loading)return; loading=true;
+    if(box)box.innerHTML='<div class="chat-empty">Memuat pengguna…</div>';
+    try{
+      const d=await api('/users');
+      users=Array.isArray(d.users)?d.users:[];
+      renderUsers();
+      if(!users.length && box)box.innerHTML='<div class="chat-empty">Belum ada pengguna lain yang tersedia untuk diajak chat.</div>';
+    }catch(e){
+      if(box)box.innerHTML=`<div class="chat-empty">${escChat(e.message)}<br><button type="button" class="chat-inline-retry" id="chatRetryUsers">Coba lagi</button></div>`;
+      $('chatRetryUsers')?.addEventListener('click',loadUsers,{once:true});
+    }finally{loading=false;}
   }
   function renderQuestion(q){if(!q)return '';const opts=(q.opsi||[]);return `<div class="chat-question"><div class="chat-question-label">📚 ${escChat(q.block||'SOAL')} • ${escChat(q.bank||'')}</div><div class="chat-question-stem">${escChat(q.soal)}</div>${opts.length?`<ol class="chat-question-options">${opts.map(o=>`<li>${escChat(o)}</li>`).join('')}</ol>`:'<div class="chat-question-options">💭 Jawaban tidak disertakan — bahas bersama di chat.</div>'}</div>`}
   function renderMessages(messages){
@@ -59,5 +71,7 @@
   window.CLinedChatInit=init;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
   window.addEventListener('clined:chat-opened',()=>{loadUsers();});
+  window.addEventListener('clined:auth-ready',()=>{if(document.getElementById('chatPage')?.classList.contains('active'))loadUsers();});
   window.CLinedChatMaybeShare=maybePending;
+  window.CLINEDChatOpen=async function(){show('chatPage');await loadUsers();};
 })();
