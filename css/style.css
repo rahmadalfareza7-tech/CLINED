@@ -234,3 +234,28 @@ html,body{max-width:100%;overflow-x:hidden}
   .account-page-view .account-header .account-back,
   .account-page-view .account-header .account-header-spacer{width:32px!important;min-width:32px!important;max-width:32px!important}
 }
+
+
+/* Final mobile profile header hardening: title is centered to the viewport, independent of back button width. */
+.account-page-view { width:100%!important; max-width:760px!important; min-width:0!important; overflow-x:clip!important; margin-inline:auto!important; }
+.account-page-view .account-header {
+  position:relative!important; display:flex!important; align-items:center!important; justify-content:flex-start!important;
+  width:100%!important; max-width:100%!important; min-width:0!important; height:48px!important;
+  margin:0 0 10px!important; padding:0!important; box-sizing:border-box!important; overflow:visible!important;
+}
+.account-page-view .account-header h2 {
+  position:absolute!important; left:50%!important; top:50%!important; transform:translate(-50%,-50%)!important;
+  width:auto!important; max-width:calc(100% - 88px)!important; margin:0!important; padding:0!important;
+  font-size:18px!important; line-height:1!important; letter-spacing:0!important; white-space:nowrap!important;
+  text-align:center!important; overflow:hidden!important; text-overflow:ellipsis!important;
+}
+.account-page-view .account-header .account-back {
+  position:relative!important; z-index:2!important; flex:0 0 36px!important; width:36px!important; min-width:36px!important; max-width:36px!important;
+  height:36px!important; margin:0!important; padding:0!important; display:grid!important; place-items:center!important;
+}
+.account-page-view .account-header .account-header-spacer { flex:0 0 36px!important; width:36px!important; min-width:36px!important; max-width:36px!important; margin-left:auto!important; }
+@media(max-width:390px){
+  .account-page-view .account-header{height:44px!important;margin-bottom:8px!important}
+  .account-page-view .account-header h2{font-size:17px!important;max-width:calc(100% - 76px)!important}
+  .account-page-view .account-header .account-back,.account-page-view .account-header .account-header-spacer{flex-basis:32px!important;width:32px!important;min-width:32px!important;max-width:32px!important;height:32px!important}
+}
