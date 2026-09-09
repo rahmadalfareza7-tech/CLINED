@@ -1,113 +1,133 @@
-/* Adds role-aware content controls without replacing CLINED's learning UI. */
+/* Admin content controls: UAB JSON import + UPI advanced question creator. */
 (() => {
-  const request = async (path, options = {}) => { const r = await fetch(path, { credentials: 'same-origin', headers: { 'Content-Type': 'application/json', ...(options.headers||{}) }, ...options }); const text = await r.text(); let d={}; try { d=text?JSON.parse(text):{}; } catch { d={}; } if (!r.ok) throw Error(d.error || `Permintaan gagal (${r.status}).`); return d; };
+  const request = async (path, options = {}) => {
+    const r = await fetch(path, { credentials:'same-origin', headers:{'Content-Type':'application/json', ...(options.headers||{})}, ...options });
+    const text = await r.text(); let d={}; try { d=text?JSON.parse(text):{}; } catch {}
+    if (!r.ok) throw Error(d.error || `Permintaan gagal (${r.status}).`);
+    return d;
+  };
   const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const message = (host, text, bad = false) => { const out = host.querySelector('[data-content-message]'); if (out) { out.textContent = text; out.style.color = bad ? '#ff3b30' : ''; } };
-  function removeAdminControls() {
-    ['adminUabComposer','adminPublicPackageComposer','adminLoginsPanel'].forEach(id => document.getElementById(id)?.remove());
+  const message = (host,text,bad=false) => { const out=host.querySelector('[data-content-message]'); if(out){out.textContent=text;out.classList.toggle('is-error',bad);} };
+  const UAB_BLOCKS = [
+    ['BM1','BM1'],['BM2','BM2'],['HNC','HNC'],['MP1','MP1'],['MP2','MP2'],['MPT','MPT'],
+    ['MUSKULOSKELETAL','Muskuloskeletal'],['RESPIRATORY','Respiratory'],['KARDIOLOGI','Kardiologi'],['HEMATOLOGI','Hematologi'],['GIT','GIT'],['FORENSIK','Forensik'],
+    ['GINJAL','Ginjal'],['ENDOKRINE','Endokrin'],['REPRODUKSI','Reproduksi'],['SSP','SSP'],['PANCA INDRA','Panca Indra'],['KEDKOM','KEDKOM'],['KEDKEL','KEDKEL'],['MULSIS','Mulsis']
+  ];
+  const UPI_BLOCKS = [
+    ['SSP','SSP'],['KEDKOM','Kedokteran Komunitas'],['KEDKEL','Kedokteran Keluarga'],['MULSIS','Mulsis'],['MUSKULOSKELETAL','Muskuloskeletal'],['RESPIRATORY','Respiratory'],['KARDIOLOGI','Kardiologi'],['HEMATOLOGI','Hematologi'],['GIT','Gastrointestinal']
+  ];
+  const blockOptions = list => list.map(([value,label])=>`<option value="${esc(value)}">${esc(label)}</option>`).join('');
+
+  function removeAdminControls(){ ['adminContentWorkspace','adminLoginsPanel'].forEach(id=>document.getElementById(id)?.remove()); }
+
+  function parseUabJson(raw){
+    let parsed; try { parsed=JSON.parse(raw); } catch { throw Error('File JSON tidak valid.'); }
+    if(Array.isArray(parsed)) return parsed;
+    if(parsed && Array.isArray(parsed.questions)) return parsed.questions;
+    if(parsed && Array.isArray(parsed.data)) return parsed.data;
+    throw Error('Format JSON tidak dikenali. Gunakan array soal atau object dengan properti "questions".');
   }
-  function install(user) {
-    if (!user || user.role !== 'admin') { removeAdminControls(); return; }
-    if (user.role === 'admin' && !document.getElementById('adminUabComposer')) {
-      const account = document.querySelector('#accountPage .account-form'); if (!account) return;
-      const box = document.createElement('section'); box.id = 'adminUabComposer'; box.className = 'account-auth-card';
-      box.innerHTML = `<div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • KONTEN GLOBAL</span><h3>Kelola Soal untuk Semua Pengguna</h3><p>Perubahan bank global disimpan di Neon. Pengguna lain akan menerima versi terbaru saat membuka/memuat ulang CLINED.</p></div><span class="account-security-badge secure">ADMIN</span></div>
-      <form data-global-bank-form><label>Bank soal global</label><select name="bank" required></select><label>Daftar soal (JSON)</label><textarea name="questions" rows="12" required placeholder='[{"id":"q-001","soal":"...","opsi":["A","B"],"jawabanBenar":0,"pembahasan":"..."}]'></textarea><button class="account-action account-save" type="submit">Update untuk Semua Pengguna</button><p class="muted" data-content-message></p></form>`;
+
+  function imageToDataUrl(file){
+    if(!file) return Promise.reject(Error('Pilih gambar terlebih dahulu.'));
+    if(!file.type.startsWith('image/')) return Promise.reject(Error('File harus berupa gambar.'));
+    if(file.size>8*1024*1024) return Promise.reject(Error('Ukuran gambar maksimal 8 MB.'));
+    if(typeof window.upiReadImageAsDataUrl==='function') return window.upiReadImageAsDataUrl(file);
+    return new Promise((resolve,reject)=>{const r=new FileReader();r.onerror=()=>reject(Error('Gagal membaca gambar.'));r.onload=()=>resolve(r.result);r.readAsDataURL(file);});
+  }
+
+  function install(user){
+    if(!user || user.role!=='admin'){ removeAdminControls(); return; }
+    const account=document.querySelector('#accountPage .account-form'); if(!account) return;
+
+    if(!document.getElementById('adminContentWorkspace')){
+      const box=document.createElement('section'); box.id='adminContentWorkspace'; box.className='account-auth-card admin-content-workspace';
+      box.innerHTML=`
+        <div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • CONTENT MANAGER</span><h3>Kelola Konten</h3><p>UAB dan UPI dipisahkan supaya alur input sesuai jenis kontennya.</p></div><span class="account-security-badge secure">ADMIN</span></div>
+        <div class="admin-content-tabs" role="tablist" aria-label="Jenis konten admin">
+          <button type="button" class="admin-panel-tab selected" data-content-tab="uab">UAB</button>
+          <button type="button" class="admin-panel-tab" data-content-tab="upi">UPI</button>
+        </div>
+
+        <div data-content-panel="uab">
+          <div class="admin-content-intro"><b>Import Bank Soal UAB</b><span>Upload JSON yang sudah terformat, lalu tentukan soal masuk ke blok mana.</span></div>
+          <form data-admin-uab-form class="admin-content-form">
+            <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
+            <label>Judul paket <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: UAB KEDKOM 2026">
+            <label>File JSON</label><input name="file" type="file" accept=".json,application/json" required>
+            <div class="admin-file-meta" data-uab-file-meta>Belum ada file dipilih.</div>
+            <button class="account-action account-save" type="submit">Import ke Blok UAB</button>
+            <p class="muted" data-content-message></p>
+          </form>
+        </div>
+
+        <div data-content-panel="upi" hidden>
+          <div class="admin-content-intro"><b>Create Question UPI</b><span>Mode advanced untuk admin: pilih blok, materi, gambar, pertanyaan, jawaban, lalu publikasikan ke semua pengguna.</span></div>
+          <form data-admin-upi-form class="admin-content-form">
+            <label>Blok tujuan</label><select name="block" required>${blockOptions(UPI_BLOCKS)}</select>
+            <label>Materi</label><select name="material" required><option value="Histology">Histology</option><option value="Patologi Anatomi">Patologi Anatomi</option></select>
+            <label>Judul/topik <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: Histology — Jaringan epitel">
+            <label>Import image</label><input name="image" type="file" accept="image/*" required>
+            <div class="upi-create-preview admin-upi-preview" data-admin-upi-preview hidden><img alt="Preview gambar"></div>
+            <label>Question</label><textarea name="question" rows="4" maxlength="1000" placeholder="Tulis pertanyaan…" required></textarea>
+            <label>Answer</label><textarea name="answer" rows="4" maxlength="1000" placeholder="Tulis jawaban…" required></textarea>
+            <button class="account-action account-save" type="submit">Publikasikan Question UPI</button>
+            <p class="muted" data-content-message></p>
+          </form>
+        </div>`;
       account.append(box);
-      const form=box.querySelector('form'), select=form.elements.bank, textarea=form.elements.questions;
-      const loadBanks=async()=>{try{const data=await request('/api/admin/banks');select.innerHTML=(data.banks||[]).map(b=>`<option value="${b.id}">${b.name} • v${b.version}</option>`).join(''); const b=data.banks?.[0]; if(b)textarea.value=JSON.stringify(b.questions||[],null,2);}catch(e){message(box,e.message||'Bank admin gagal dimuat.',true);}};
-      select.addEventListener('change',async()=>{try{const data=await request('/api/admin/banks');const b=(data.banks||[]).find(x=>x.id===select.value);textarea.value=JSON.stringify(b?.questions||[],null,2);}catch(e){message(box,e.message||'Bank gagal dimuat.',true);}});
-      form.addEventListener('submit',async event=>{event.preventDefault();try{const questions=JSON.parse(textarea.value);const data=await request(`/api/admin/banks/${encodeURIComponent(select.value)}`,{method:'PATCH',body:JSON.stringify({questions})});message(box,`${data.bank.name} v${data.bank.version} berhasil diperbarui untuk semua pengguna.`);await hydrateGlobalBanks();await loadBanks();}catch(error){message(box,error.message||'Format soal tidak valid.',true);}});
-      loadBanks();
 
-      const legacy = document.createElement('section'); legacy.id='adminPublicPackageComposer'; legacy.className='account-auth-card'; legacy.innerHTML=`<div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • PAKET PUBLIK</span><h3>Input Paket UAB / UPI</h3><p>Paket tambahan publik tersimpan di server dan tersedia bagi seluruh pengguna.</p></div><span class="account-security-badge secure">ADMIN</span></div><form data-uab-form><label>Modul</label><select name="module"><option value="UAB">UAB — ujian akhir blok</option><option value="UPI">UPI — katalog publik</option></select><label>Judul paket</label><input name="title" maxlength="160" required placeholder="UAB SSP 2026"><label>Blok</label><input name="block" maxlength="80" required placeholder="SSP"><label>Daftar soal (JSON)</label><textarea name="questions" rows="8" required placeholder='[{"id":"uab-ssp-001","soal":"...","opsi":["A","B"],"jawabanBenar":0,"pembahasan":"..."}]'></textarea><button class="account-action account-save" type="submit">Publikasikan Paket</button><p class="muted" data-content-message></p></form>`; account.append(legacy);
-      legacy.querySelector('form').addEventListener('submit',async event=>{event.preventDefault();const f=new FormData(event.currentTarget),module=f.get('module');try{await request('/api/content/packages',{method:'POST',body:JSON.stringify({module,title:f.get('title'),block:f.get('block'),questions:JSON.parse(f.get('questions'))})});event.currentTarget.reset();message(legacy,`${module} berhasil dipublikasikan untuk seluruh pengguna.`);}catch(error){message(legacy,error.message||'Format paket tidak valid.',true);}});
+      const uabForm=box.querySelector('[data-admin-uab-form]'), uabFile=uabForm.elements.file, uabMeta=box.querySelector('[data-uab-file-meta]');
+      uabFile.addEventListener('change',()=>{const f=uabFile.files?.[0];uabMeta.textContent=f?`${f.name} • ${(f.size/1024).toFixed(1)} KB`:'Belum ada file dipilih.';});
+      uabForm.addEventListener('submit',async e=>{
+        e.preventDefault(); const f=uabForm.elements.file.files?.[0]; if(!f){message(box,'Pilih file JSON terlebih dahulu.',true);return;}
+        try{
+          const raw=await f.text(); const questions=parseUabJson(raw); const block=uabForm.elements.block.value;
+          if(!Array.isArray(questions)||!questions.length) throw Error('File JSON tidak berisi soal.');
+          const title=(uabForm.elements.title.value.trim()||`UAB ${block} — ${f.name.replace(/\.json$/i,'')}`).slice(0,160);
+          const normalized=questions.map((q,i)=>({...q,id:String(q?.id||`${block.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-${i+1}`)}));
+          const validation=window.CLINED_BANK_ENGINE?.validateBank?.(normalized); if(validation && !validation.ok) throw Error(validation.errors.slice(0,4).join(' '));
+          const data=await request('/api/content/packages',{method:'POST',body:JSON.stringify({module:'UAB',title,block,questions:normalized})});
+          message(box,`${data.package?.title||title} berhasil diimport ke blok ${block} (${normalized.length} soal).`); uabForm.reset(); uabMeta.textContent='Belum ada file dipilih.';
+          await hydrateUab();
+        }catch(err){message(box,err.message||'Import UAB gagal.',true);}
+      });
 
-      const logins = document.createElement('section'); logins.id='adminLoginsPanel'; logins.className='account-auth-card';
-      logins.innerHTML = `<div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • AKTIVITAS & PENGGUNA</span><h3>Aktivitas akun & role</h3><p>Riwayat login/logout dan perubahan role terbaru. Kamu juga bisa mengganti role akun pengguna dari sini.</p></div><span class="account-security-badge secure" data-activity-count>0</span></div>
-      <div class="admin-panel-tabs" role="tablist" aria-label="Admin activity views">
-        <button type="button" class="admin-panel-tab selected" data-admin-tab="activity">Aktivitas</button>
-        <button type="button" class="admin-panel-tab" data-admin-tab="users">Pengguna</button>
-      </div>
-      <div data-admin-panel="activity"><div data-activity-list class="muted">Memuat…</div></div><p class="muted" data-content-message></p>
-      <div data-admin-panel="users" hidden><div data-users-list class="muted">Memuat…</div></div>`;
-      account.append(logins);
+      const upiForm=box.querySelector('[data-admin-upi-form]'), upiImage=upiForm.elements.image, upiPreview=box.querySelector('[data-admin-upi-preview]');
+      upiImage.addEventListener('change',()=>{const f=upiImage.files?.[0];if(!f){upiPreview.hidden=true;return;}upiPreview.innerHTML=`<img alt="Preview gambar" src="${esc(URL.createObjectURL(f))}">`;upiPreview.hidden=false;});
+      upiForm.addEventListener('submit',async e=>{
+        e.preventDefault(); const f=upiForm.elements.image.files?.[0];
+        try{
+          const block=upiForm.elements.block.value, material=upiForm.elements.material.value, question=upiForm.elements.question.value.trim(), answer=upiForm.elements.answer.value.trim();
+          if(!f||!question||!answer) throw Error('Lengkapi gambar, question, dan answer.');
+          const image=await imageToDataUrl(f), id=`admin-upi-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+          const title=(upiForm.elements.title.value.trim()||`${material} — ${block}`).slice(0,160);
+          const q={id,soal:question,opsi:['Benar','Salah'],jawabanBenar:0,pembahasan:answer,image,material};
+          const data=await request('/api/content/packages',{method:'POST',body:JSON.stringify({module:'UPI',title,block,questions:[q]})});
+          message(box,`Question berhasil dipublikasikan ke UPI • ${block}.`); upiForm.reset(); upiPreview.hidden=true; await hydrateUpi();
+        }catch(err){message(box,err.message||'Publikasi UPI gagal.',true);}
+      });
 
-      const renderActivity = async () => {
-        const list=logins.querySelector('[data-activity-list]'), badge=logins.querySelector('[data-activity-count]');
-        try {
-          const data=await request('/api/admin/activity');
-          const rows=data.activities||[];
-          badge.textContent=rows.length;
-          const actionLabel={login:'Login',logout:'Logout',role_changed:'Role diubah'};
-          list.innerHTML=rows.length
-            ? `<div class="admin-activity-list">${rows.map(a=>`<article class="admin-activity-row">
-                <div class="admin-activity-icon">${a.action==='login'?'↪':a.action==='logout'?'↩':'⚙'}</div>
-                <div class="admin-activity-main"><b>${esc(a.user?.name||'Akun dihapus')} <small>@${esc(a.user?.username||'-')}</small></b>
-                <span>${actionLabel[a.action]||esc(a.action)}${a.action==='role_changed'&&a.metadata?.to?` • ${esc(a.metadata.from||'—')} → ${esc(a.metadata.to)}`:''}</span></div>
-                <time>${new Date(a.createdAt).toLocaleString('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</time>
-              </article>`).join('')}</div>`
-            : '<p class="muted">Belum ada aktivitas akun.</p>';
-        } catch(e) { list.textContent=e.message||'Gagal memuat aktivitas.'; }
-      };
-
-      const renderUsers = async () => {
-        const list=logins.querySelector('[data-users-list]');
-        try {
-          const data=await request('/api/admin/users');
-          const users=data.users||[];
-          list.innerHTML=users.length
-            ? `<div class="admin-users-list">${users.map(u=>`<div class="admin-user-row">
-                <div><b>${esc(u.name)}</b><small>@${esc(u.username)}</small></div>
-                <select class="admin-role-select" data-role-user="${esc(u.id)}" aria-label="Role @${esc(u.username)}">
-                  <option value="student" ${u.role==='student'?'selected':''}>Student</option>
-                  <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
-                </select>
-              </div>`).join('')}</div>`
-            : '<p class="muted">Belum ada pengguna yang tercatat.</p>';
-          list.querySelectorAll('[data-role-user]').forEach(sel=>sel.addEventListener('change',async()=>{
-            const id=sel.dataset.roleUser, role=sel.value;
-            sel.disabled=true;
-            try {
-              const data=await request(`/api/admin/users/${encodeURIComponent(id)}/role`,{method:'PATCH',body:JSON.stringify({role})});
-              message(logins, data.message||'Role berhasil diperbarui.');
-              await renderActivity(); await renderUsers();
-            } catch(e) {
-              sel.value=sel.dataset.previous||'student';
-              message(logins,e.message||'Role gagal diperbarui.',true);
-            } finally { sel.disabled=false; }
-          }));
-          list.querySelectorAll('.admin-role-select').forEach(s=>s.dataset.previous=s.value);
-        } catch(e) { list.textContent=e.message||'Gagal memuat pengguna.'; }
-      };
-
-      logins.querySelectorAll('[data-admin-tab]').forEach(tab=>tab.addEventListener('click',async()=>{
-        logins.querySelectorAll('[data-admin-tab]').forEach(x=>x.classList.toggle('selected',x===tab));
-        logins.querySelectorAll('[data-admin-panel]').forEach(x=>x.hidden=x.dataset.adminPanel!==tab.dataset.adminTab);
-        if(tab.dataset.adminTab==='users') await renderUsers();
+      box.querySelectorAll('[data-content-tab]').forEach(tab=>tab.addEventListener('click',()=>{
+        box.querySelectorAll('[data-content-tab]').forEach(x=>x.classList.toggle('selected',x===tab));
+        box.querySelectorAll('[data-content-panel]').forEach(p=>p.hidden=p.dataset.contentPanel!==tab.dataset.contentTab);
       }));
-      renderActivity(); setInterval(renderActivity,60_000);
+    }
 
+    if(!document.getElementById('adminLoginsPanel')){
+      const logins=document.createElement('section'); logins.id='adminLoginsPanel'; logins.className='account-auth-card';
+      logins.innerHTML=`<div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • AKTIVITAS & PENGGUNA</span><h3>Aktivitas akun & role</h3><p>Riwayat login/logout dan perubahan role pengguna.</p></div><span class="account-security-badge secure" data-activity-count>0</span></div><div class="admin-panel-tabs" role="tablist"><button type="button" class="admin-panel-tab selected" data-admin-tab="activity">Aktivitas</button><button type="button" class="admin-panel-tab" data-admin-tab="users">Pengguna</button></div><div data-admin-panel="activity"><div data-activity-list class="muted">Memuat…</div></div><p class="muted" data-content-message></p><div data-admin-panel="users" hidden><div data-users-list class="muted">Memuat…</div></div>`;
+      account.append(logins);
+      const renderActivity=async()=>{const list=logins.querySelector('[data-activity-list]'),badge=logins.querySelector('[data-activity-count]');try{const d=await request('/api/admin/activity');const rows=d.activities||[];badge.textContent=rows.length;const labels={login:'Login',logout:'Logout',role_changed:'Role diubah'};list.innerHTML=rows.length?`<div class="admin-activity-list">${rows.map(a=>`<article class="admin-activity-row"><div class="admin-activity-icon">${a.action==='login'?'↪':a.action==='logout'?'↩':'⚙'}</div><div class="admin-activity-main"><b>${esc(a.user?.name||'Akun dihapus')} <small>@${esc(a.user?.username||'-')}</small></b><span>${labels[a.action]||esc(a.action)}${a.action==='role_changed'&&a.metadata?.to?` • ${esc(a.metadata.from||'—')} → ${esc(a.metadata.to)}`:''}</span></div><time>${new Date(a.createdAt).toLocaleString('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</time></article>`).join('')}</div>`:'<p class="muted">Belum ada aktivitas akun.</p>';}catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
+      const renderUsers=async()=>{const list=logins.querySelector('[data-users-list]');try{const d=await request('/api/admin/users');const users=d.users||[];list.innerHTML=users.length?`<div class="admin-users-list">${users.map(u=>`<div class="admin-user-row"><div><b>${esc(u.name)}</b><small>@${esc(u.username)}</small></div><select class="admin-role-select" data-role-user="${esc(u.id)}"><option value="student" ${u.role==='student'?'selected':''}>Student</option><option value="admin" ${u.role==='admin'?'selected':''}>Admin</option></select></div>`).join('')}</div>`:'<p class="muted">Belum ada pengguna.</p>';list.querySelectorAll('[data-role-user]').forEach(sel=>sel.addEventListener('change',async()=>{const old=sel.dataset.previous||sel.value;sel.disabled=true;try{const d=await request(`/api/admin/users/${encodeURIComponent(sel.dataset.roleUser)}/role`,{method:'PATCH',body:JSON.stringify({role:sel.value})});message(logins,d.message||'Role berhasil diperbarui.');await renderActivity();await renderUsers();}catch(e){sel.value=old;message(logins,e.message||'Role gagal diperbarui.',true);}finally{sel.disabled=false;}}));list.querySelectorAll('.admin-role-select').forEach(s=>s.dataset.previous=s.value);}catch(e){list.textContent=e.message||'Gagal memuat pengguna.';}};
+      logins.querySelectorAll('[data-admin-tab]').forEach(tab=>tab.addEventListener('click',async()=>{logins.querySelectorAll('[data-admin-tab]').forEach(x=>x.classList.toggle('selected',x===tab));logins.querySelectorAll('[data-admin-panel]').forEach(x=>x.hidden=x.dataset.adminPanel!==tab.dataset.adminTab);if(tab.dataset.adminTab==='users')await renderUsers();}));
+      renderActivity(); setInterval(renderActivity,60000);
     }
   }
-  async function hydrateGlobalBanks() {
-    const catalog = await request('/api/banks');
-    for (const item of catalog.banks || []) {
-      try {
-        const data = await request(`/api/banks/${encodeURIComponent(item.id)}`);
-        const bank = data.bank;
-        if (bank && Array.isArray(bank.questions) && bank.questions.length) {
-          window.CLINED_BANK_ENGINE?.registerBank({id: bank.id, name: bank.name, block: bank.block, version: bank.version, schema: bank.schema_version, data: bank.questions}, {persist:true, source:'server-global'});
-        }
-      } catch (e) {
-        console.warn('Global bank sync failed:', item?.id, e);
-      }
-    }
-    window.renderBanks?.(); window.renderCounts?.();
-  }
 
-  async function hydrateUpi() { const data = await request('/api/content/packages?module=UPI'), existing = window.upiGetCustomCards?.() || []; const known = new Set(existing.map(card => card.id)); const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="640" height="360"%3E%3Crect width="100%25" height="100%25" fill="%23007aff"/%3E%3Ctext x="50%25" y="50%25" fill="white" font-size="32" text-anchor="middle" dominant-baseline="middle"%3EUPI%3C/text%3E%3C/svg%3E'; const additions = []; for (const pack of data.packages || []) for (const question of pack.questions || []) { const id = `server-upi-${pack.id}-${question.id}`; if (!known.has(id)) additions.push({ id, block: pack.block || 'SSP', material: 'Imported UPI', topic: pack.title, image: question.image || fallbackImage, prompt: question.soal, answer: question.pembahasan || question.answer || 'Tidak ada pembahasan.', explanation: pack.visibility === 'public' ? 'Paket UPI publik.' : 'Paket UPI pribadi.' }); } if (additions.length && window.upiSaveCustomCards) { window.upiSaveCustomCards(existing.concat(additions)); window.upiRenderBlockSelector?.(); } }
-  async function hydrateUab() { const data = await request('/api/content/packages?module=UAB'); for (const pack of data.packages || []) { try { window.CLINED_BANK_ENGINE?.registerBank({ id: `server-uab-${pack.id}`, name: pack.title, block: pack.block || 'UAB', version: 1, schema: pack.schema_version || '1.0', data: pack.questions }, { persist: true, source: 'server-admin' }); } catch {} } window.renderBanks?.(); window.renderCounts?.(); }
-  async function boot() { try { const data = await request('/api/auth/me'); if (data.user) { install(data.user); await Promise.all([hydrateGlobalBanks(), hydrateUpi(), hydrateUab()]); } else { removeAdminControls(); } } catch {} }
-  window.addEventListener('load', boot, { once: true }); setInterval(boot, 15_000);
+  async function hydrateGlobalBanks(){try{const catalog=await request('/api/banks');for(const item of catalog.banks||[]){try{const d=await request(`/api/banks/${encodeURIComponent(item.id)}`),b=d.bank;if(b&&Array.isArray(b.questions)&&b.questions.length)window.CLINED_BANK_ENGINE?.registerBank({id:b.id,name:b.name,block:b.block,version:b.version,schema:b.schema_version,data:b.questions},{persist:true,source:'server-global'});}catch(e){console.warn('Global bank sync failed:',item?.id,e);}}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('Global bank catalog unavailable',e);}}
+  async function hydrateUpi(){try{const data=await request('/api/content/packages?module=UPI'),existing=window.upiGetCustomCards?.()||[],known=new Set(existing.map(c=>c.id));const fallback='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="640" height="360"%3E%3Crect width="100%25" height="100%25" fill="%23007aff"/%3E%3Ctext x="50%25" y="50%25" fill="white" font-size="32" text-anchor="middle" dominant-baseline="middle"%3EUPI%3C/text%3E%3C/svg%3E';const additions=[];for(const p of data.packages||[])for(const q of p.questions||[]){const id=`server-upi-${p.id}-${q.id}`;if(!known.has(id))additions.push({id,block:p.block||'SSP',material:q.material||'Histology',topic:p.title,image:q.image||fallback,prompt:q.soal,answer:q.pembahasan||q.answer||'Tidak ada pembahasan.',explanation:p.visibility==='public'?'Paket UPI publik.':'Paket UPI pribadi.'});}if(additions.length&&window.upiSaveCustomCards){window.upiSaveCustomCards(existing.concat(additions));window.upiRenderBlockSelector?.();}}catch(e){console.warn('UPI sync failed',e);}}
+  async function hydrateUab(){try{const data=await request('/api/content/packages?module=UAB');for(const p of data.packages||[])try{window.CLINED_BANK_ENGINE?.registerBank({id:`server-uab-${p.id}`,name:p.title,block:p.block||'UAB',version:1,schema:p.schema_version||'1.0',data:p.questions},{persist:true,source:'server-admin'});}catch{}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('UAB sync failed',e);}}
+  async function boot(){try{const d=await request('/api/auth/me');if(d.user){install(d.user);await Promise.all([hydrateGlobalBanks(),hydrateUpi(),hydrateUab()]);}else removeAdminControls();}catch(e){removeAdminControls();}}
+  window.addEventListener('load',boot,{once:true}); setInterval(boot,15000);
 })();
