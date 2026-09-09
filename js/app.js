@@ -1535,15 +1535,26 @@ function syncUabStats(){
 
 /* UPI Flash Card — per-block active recall + spaced repetition. */
 const UPI_BLOCKS=[
-  {id:'SSP',name:'SSP',icon:'🧠',desc:'Sistem saraf & perilaku'},
-  {id:'KEDKOM',name:'Kedokteran Komunitas',icon:'🏥',desc:'Kesehatan masyarakat'},
-  {id:'KEDKEL',name:'Kedokteran Keluarga',icon:'👨‍👩‍👧',desc:'Keluarga & layanan primer'},
-  {id:'MULSIS',name:'Mulsis',icon:'🧩',desc:'Muskuloskeletal & sistemik'},
+  {id:'BM1',name:'BM1',icon:'📘',desc:'Blok BM1'},
+  {id:'BM2',name:'BM2',icon:'📗',desc:'Blok BM2'},
+  {id:'HNC',name:'HNC',icon:'🧠',desc:'Head & Neck'},
+  {id:'MP1',name:'MP1',icon:'🔬',desc:'Blok MP1'},
+  {id:'MP2',name:'MP2',icon:'🔬',desc:'Blok MP2'},
+  {id:'MPT',name:'MPT',icon:'🧪',desc:'Blok MPT'},
   {id:'MUSKULOSKELETAL',name:'Muskuloskeletal',icon:'🦴',desc:'Tulang, sendi & otot'},
   {id:'RESPIRATORY',name:'Respiratory',icon:'🫁',desc:'Sistem pernapasan'},
   {id:'KARDIOLOGI',name:'Kardiologi',icon:'❤️',desc:'Jantung & pembuluh darah'},
   {id:'HEMATOLOGI',name:'Hematologi',icon:'🩸',desc:'Darah & kelainan hematologi'},
-  {id:'GIT',name:'Gastrointestinal',icon:'🫃',desc:'Saluran cerna & hati'}
+  {id:'GIT',name:'Gastrointestinal',icon:'🫃',desc:'Saluran cerna & hati'},
+  {id:'FORENSIK',name:'Forensik',icon:'⚕️',desc:'Ilmu kedokteran forensik'},
+  {id:'GINJAL',name:'Ginjal',icon:'🫘',desc:'Ginjal & saluran kemih'},
+  {id:'ENDOKRINE',name:'Endokrin',icon:'🧪',desc:'Sistem endokrin'},
+  {id:'REPRODUKSI',name:'Reproduksi',icon:'🧬',desc:'Sistem reproduksi'},
+  {id:'SSP',name:'SSP',icon:'🧠',desc:'Sistem saraf & perilaku'},
+  {id:'PANCA INDRA',name:'Panca Indra',icon:'👁️',desc:'Sistem sensorik'},
+  {id:'KEDKOM',name:'Kedokteran Komunitas',icon:'🏥',desc:'Kesehatan masyarakat'},
+  {id:'KEDKEL',name:'Kedokteran Keluarga',icon:'👨‍👩‍👧',desc:'Keluarga & layanan primer'},
+  {id:'MULSIS',name:'Mulsis',icon:'🧩',desc:'Muskuloskeletal & sistemik'}
 ];
 const UPI_FLASHCARDS=[];
 const UPI_CUSTOM_KEY='clined_upi_custom_cards_v1';

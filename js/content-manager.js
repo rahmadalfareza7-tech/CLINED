@@ -14,7 +14,9 @@
     ['GINJAL','Ginjal'],['ENDOKRINE','Endokrin'],['REPRODUKSI','Reproduksi'],['SSP','SSP'],['PANCA INDRA','Panca Indra'],['KEDKOM','KEDKOM'],['KEDKEL','KEDKEL'],['MULSIS','Mulsis']
   ];
   const UPI_BLOCKS = [
-    ['SSP','SSP'],['KEDKOM','Kedokteran Komunitas'],['KEDKEL','Kedokteran Keluarga'],['MULSIS','Mulsis'],['MUSKULOSKELETAL','Muskuloskeletal'],['RESPIRATORY','Respiratory'],['KARDIOLOGI','Kardiologi'],['HEMATOLOGI','Hematologi'],['GIT','Gastrointestinal']
+    ['BM1','BM1'],['BM2','BM2'],['HNC','HNC'],['MP1','MP1'],['MP2','MP2'],['MPT','MPT'],
+    ['MUSKULOSKELETAL','Muskuloskeletal'],['RESPIRATORY','Respiratory'],['KARDIOLOGI','Kardiologi'],['HEMATOLOGI','Hematologi'],['GIT','Gastrointestinal'],['FORENSIK','Forensik'],
+    ['GINJAL','Ginjal'],['ENDOKRINE','Endokrin'],['REPRODUKSI','Reproduksi'],['SSP','SSP'],['PANCA INDRA','Panca Indra'],['KEDKOM','Kedokteran Komunitas'],['KEDKEL','Kedokteran Keluarga'],['MULSIS','Mulsis']
   ];
   const blockOptions = list => list.map(([value,label])=>`<option value="${esc(value)}">${esc(label)}</option>`).join('');
 
