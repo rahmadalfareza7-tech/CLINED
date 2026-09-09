@@ -2,7 +2,7 @@
 (function(){
   const $=id=>document.getElementById(id);
   const escChat=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let selected=null, poll=null, users=[], loading=false, sending=false, sendSeq=0;
+  let selected=null, poll=null, users=[], loading=false, sending=false, sendSeq=0, initDone=false, messageRefreshTimer=null;
   async function api(path,options={}){
     const r=await fetch('/api/chat'+path,{credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
     const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||`Chat gagal dimuat (${r.status}).`); return data;
@@ -59,7 +59,9 @@
     input.value=''; input.style.height='';
     try{
       await api('/messages',{method:'POST',body:JSON.stringify({recipientId,messageType:'text',body})});
-      await loadMessages();
+      // Refresh in the background; never make the sender wait for the GET request.
+      clearTimeout(messageRefreshTimer);
+      messageRefreshTimer=setTimeout(()=>loadMessages(),180);
     }catch(e){
       pending?.remove();
       if(typeof showToast==='function')showToast(e.message,true);
@@ -75,6 +77,7 @@
   async function shareToSelected(q){if(!selected)return;if(!q?.soal)return;try{await api('/messages',{method:'POST',body:JSON.stringify({recipientId:selected.id,messageType:'question',body:'Bisa bantu bahas soal ini? Menurutmu jawabannya apa?',question:{block:q.block||'',bank:q.bank||selectedBank||'',soal:q.soal,opsi:q.opsi}})});await loadMessages();}catch(e){if(typeof showToast==='function')showToast(e.message,true);}}
   function maybePending(){const q=window.__CLINED_CHAT_PENDING_QUESTION;if(!q||!selected)return;window.__CLINED_CHAT_PENDING_QUESTION=null;shareToSelected(q);}
   function init(){
+    if(initDone)return; initDone=true;
     $('chatBtn')?.addEventListener('click',async()=>{show('chatPage');await loadUsers();});
     $('backFromChat')?.addEventListener('click',()=>show('home'));
     $('chatRefreshUsers')?.addEventListener('click',loadUsers);
