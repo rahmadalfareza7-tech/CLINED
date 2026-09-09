@@ -10,7 +10,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="json/manifest.json">
-<link rel="stylesheet" href="css/style.css?v=profile-admin-route-fix-v3">
+<link rel="stylesheet" href="css/style.css?v=profile-admin-route-fix-v4">
 <title>CLINED — Clinical Education</title>
 <script>
 // Loading screen stability fix — preserves the existing animation/style.
@@ -46,7 +46,7 @@
   width:min(calc(100vw - 24px), 430px)!important;
   box-sizing:border-box!important;
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
   align-items:center!important;
   justify-items:center!important;
   padding:7px!important;
@@ -54,7 +54,7 @@
   margin:0!important;
 }
 .floating-dashboard-nav .floating-nav-slider{
-  width:calc((100% - 14px) / 4)!important;
+  width:calc((100% - 14px) / 5)!important;
   left:7px!important;
   transform:translateX(calc(var(--floating-index,0) * 100%))!important;
 }
@@ -874,7 +874,7 @@ html,body{overflow-x:hidden}
 <script src="js/app.js?v=auth-layout-v4"></script>
 <script src="js/online-sync.js?v=2"></script>
 <script src="js/auth-gate.js?v=2"></script>
-<script src="js/chat.js?v=2"></script>
+<script src="js/chat.js?v=3"></script>
 <script src="js/content-manager.js?v=8"></script>
 <script src="js/question-bank-engine.js"></script>
 

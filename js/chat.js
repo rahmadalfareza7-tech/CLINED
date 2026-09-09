@@ -28,7 +28,7 @@
       renderUsers();
       if(!users.length && box)box.innerHTML='<div class="chat-empty">Belum ada pengguna lain yang tersedia untuk diajak chat.</div>';
     }catch(e){
-      if(box)box.innerHTML=`<div class="chat-empty">${escChat(e.message)}<br><button type="button" class="chat-inline-retry" id="chatRetryUsers">Coba lagi</button></div>`;
+      if(box)box.innerHTML=`<div class="chat-empty">Tidak dapat memuat pengguna: ${escChat(e.message)}<br><button type="button" class="chat-inline-retry" id="chatRetryUsers">Coba lagi</button></div>`;
       $('chatRetryUsers')?.addEventListener('click',loadUsers,{once:true});
     }finally{loading=false;}
   }
