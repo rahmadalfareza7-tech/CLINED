@@ -4,7 +4,7 @@
 | --- | --- | --- | --- |
 | UAB | Admin | Publik | Semua pengguna yang sudah login |
 | UPI | Admin | Publik | Semua pengguna yang sudah login |
-| UPI | User | Privat | Hanya pemilik `owner_user_id` |
+| UPI | User | Privat/lokal | Hanya pemilik atau perangkat pengguna; **tidak masuk katalog publik** |
 
 Tidak ada jalur untuk membuat UAB oleh user biasa. Database menolak UAB privat dan UPI privat tanpa pemilik. Endpoint server harus menurunkan scope berdasarkan role sesi—bukan berdasarkan nilai role/visibility yang dikirim browser.
 
@@ -24,4 +24,4 @@ Tidak ada jalur untuk membuat UAB oleh user biasa. Database menolak UAB privat d
 }
 ```
 
-Setiap `id` harus unik dalam paket; `opsi` minimal dua; `jawabanBenar` harus berupa indeks opsi yang valid. UPI memakai struktur flashcard/package yang sama, namun hasil import user selalu diberi `owner_user_id` dari session server.
+Setiap `id` harus unik dalam paket; `opsi` minimal dua; `jawabanBenar` harus berupa indeks opsi yang valid. UPI yang dibuat pengguna biasa bersifat privat dan tidak dapat dipublikasikan melalui API. Semua paket publik UAB/UPI wajib dibuat oleh session dengan role `admin`; server mengabaikan nilai visibility dari browser.
