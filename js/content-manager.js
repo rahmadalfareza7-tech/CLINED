@@ -75,8 +75,27 @@
             <button class="account-action account-save" type="submit">Publikasikan Question UPI</button>
             <p class="muted" data-content-message></p>
           </form>
+        </div>
+
+        <div class="admin-materials-section">
+          <div class="admin-content-intro"><b>Link Materi UAB per Blok</b><span>Atur link materi yang akan muncul pada tombol MATERI di setiap blok.</span></div>
+          <form data-admin-material-form class="admin-content-form admin-material-form">
+            <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
+            <label>Link materi</label><input name="url" type="url" inputmode="url" placeholder="https://..." required>
+            <div class="admin-material-current" data-material-current>Belum ada link tersimpan.</div>
+            <div class="admin-material-actions"><button class="account-action account-save" type="submit">Simpan Link Materi</button><button class="admin-delete-btn danger" data-delete-material type="button">Hapus Link</button></div>
+            <p class="muted" data-material-message></p>
+          </form>
         </div>`;
       account.append(box);
+
+      const materialForm=box.querySelector('[data-admin-material-form]'), materialCurrent=box.querySelector('[data-material-current]'), materialMessage=box.querySelector('[data-material-message]'), materialDelete=box.querySelector('[data-delete-material]');
+      let materialMap={};
+      const loadMaterials=async()=>{try{const d=await request('/api/materials');materialMap=Object.fromEntries((d.materials||[]).map(x=>[String(x.block).toUpperCase(),x.url]));const b=materialForm.elements.block.value.toUpperCase(),url=materialMap[b]||'';materialForm.elements.url.value=url;materialCurrent.textContent=url?`Tersimpan: ${url}`:'Belum ada link tersimpan.';}catch(e){materialMessage.textContent=e.message||'Gagal memuat link materi.';}};
+      materialForm.elements.block.addEventListener('change',loadMaterials);
+      materialForm.addEventListener('submit',async e=>{e.preventDefault();try{const block=materialForm.elements.block.value,url=materialForm.elements.url.value.trim();const d=await request(`/api/admin/materials/${encodeURIComponent(block)}`,{method:'PUT',body:JSON.stringify({url})});materialMessage.textContent=d.message||'Link materi tersimpan.';await loadMaterials();await hydrateMaterials();}catch(e){materialMessage.textContent=e.message||'Gagal menyimpan link materi.';}});
+      materialDelete.addEventListener('click',async()=>{const block=materialForm.elements.block.value;if(!confirm(`Hapus link materi ${block}?`))return;try{const d=await request(`/api/admin/materials/${encodeURIComponent(block)}`,{method:'DELETE'});materialMessage.textContent=d.message||'Link materi dihapus.';await loadMaterials();await hydrateMaterials();}catch(e){materialMessage.textContent=e.message||'Gagal menghapus link materi.';}});
+      loadMaterials();
 
       const uabForm=box.querySelector('[data-admin-uab-form]'), uabFile=uabForm.elements.file, uabMeta=box.querySelector('[data-uab-file-meta]');
       uabFile.addEventListener('change',()=>{const f=uabFile.files?.[0];uabMeta.textContent=f?`${f.name} • ${(f.size/1024).toFixed(1)} KB`:'Belum ada file dipilih.';});
@@ -129,9 +148,10 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
     }
   }
 
+  async function hydrateMaterials(){try{const d=await request('/api/materials');const map=Object.fromEntries((d.materials||[]).map(x=>[String(x.block).toLowerCase(),x.url]));document.querySelectorAll('[data-external-material]').forEach(a=>{const section=a.closest('[data-block-key]');if(!section)return;const block=String(section.dataset.blockKey||'').toLowerCase();if(map[block])a.href=map[block];a.target='_blank';a.rel='noopener noreferrer';});}catch(e){console.warn('Material links unavailable',e);}}
   async function hydrateGlobalBanks(){try{const catalog=await request('/api/banks');for(const item of catalog.banks||[]){try{const d=await request(`/api/banks/${encodeURIComponent(item.id)}`),b=d.bank;if(b&&Array.isArray(b.questions)&&b.questions.length)window.CLINED_BANK_ENGINE?.registerBank({id:b.id,name:b.name,block:b.block,version:b.version,schema:b.schema_version,data:b.questions},{persist:true,source:'server-global'});}catch(e){console.warn('Global bank sync failed:',item?.id,e);}}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('Global bank catalog unavailable',e);}}
   async function hydrateUpi(){try{const data=await request('/api/content/packages?module=UPI'),existing=window.upiGetCustomCards?.()||[],known=new Set(existing.map(c=>c.id));const fallback='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="640" height="360"%3E%3Crect width="100%25" height="100%25" fill="%23007aff"/%3E%3Ctext x="50%25" y="50%25" fill="white" font-size="32" text-anchor="middle" dominant-baseline="middle"%3EUPI%3C/text%3E%3C/svg%3E';const additions=[];for(const p of data.packages||[])for(const q of p.questions||[]){const id=`server-upi-${p.id}-${q.id}`;if(!known.has(id))additions.push({id,block:p.block||'SSP',material:q.material||'Histology',topic:p.title,image:q.image||fallback,prompt:q.soal,answer:q.pembahasan||q.answer||'Tidak ada pembahasan.',explanation:p.visibility==='public'?'Paket UPI publik.':'Paket UPI pribadi.'});}if(additions.length&&window.upiSaveCustomCards){window.upiSaveCustomCards(existing.concat(additions));window.upiRenderBlockSelector?.();}}catch(e){console.warn('UPI sync failed',e);}}
   async function hydrateUab(){try{const data=await request('/api/content/packages?module=UAB');for(const p of data.packages||[])try{window.CLINED_BANK_ENGINE?.registerBank({id:`server-uab-${p.id}`,name:p.title,block:p.block||'UAB',version:1,schema:p.schema_version||'1.0',data:p.questions},{persist:true,source:'server-admin'});}catch{}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('UAB sync failed',e);}}
-  async function boot(){try{const d=await request('/api/auth/me');if(d.user){install(d.user);await Promise.all([hydrateGlobalBanks(),hydrateUpi(),hydrateUab()]);}else removeAdminControls();}catch(e){removeAdminControls();}}
+  async function boot(){try{const d=await request('/api/auth/me');if(d.user){install(d.user);await Promise.all([hydrateMaterials(),hydrateGlobalBanks(),hydrateUpi(),hydrateUab()]);}else removeAdminControls();}catch(e){removeAdminControls();}}
   window.addEventListener('load',boot,{once:true}); setInterval(boot,15000);
 })();
