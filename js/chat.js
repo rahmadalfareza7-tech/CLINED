@@ -4,8 +4,8 @@
   const escChat=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let selected=null, poll=null, users=[], loading=false;
   async function api(path,options={}){
-    const r=await fetch('/api/chat'+path,{credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
-    const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||'Chat gagal dimuat.'); return data;
+    const r=await fetch('/api/chat'+path,{credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
+    const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||`Chat gagal dimuat (${r.status}).`); return data;
   }
   function current(){return typeof authCurrentUser==='function'?authCurrentUser():null;}
   function initials(name){return String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'?';}
@@ -40,7 +40,7 @@
     box.scrollTop=box.scrollHeight;
   }
   async function loadMessages(){if(!selected||!current())return;try{const d=await api('/messages/'+selected.id);renderMessages(d.messages||[]);}catch(e){$('chatMessages').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}}
-  async function openUser(user){if(!user)return;selected=user;renderUsers();$('chatHeader').innerHTML=`<div><b>${escChat(user.name)}</b><small>@${escChat(user.username)} • Diskusi UAB &amp; UPI</small></div>`;$('chatInput').disabled=false;$('chatInput').placeholder=`Tulis pesan untuk ${user.name}…`;$('chatComposer').querySelector('button').disabled=false;await loadMessages();startPoll();maybePending();}
+  async function openUser(user){if(!user)return;selected=user;renderUsers();$('chatHeader').innerHTML=`<div><b>${escChat(user.name)}</b><small>@${escChat(user.username)} • Diskusi UAB &amp; UPI</small></div>`;$('chatInput').disabled=false;$('chatInput').placeholder=`Tulis pesan untuk ${user.name}…`;$('chatComposer').querySelector('button').disabled=false;try{await loadMessages();}catch(e){if(typeof showToast==='function')showToast(e.message,true);}startPoll();maybePending();setTimeout(()=>$('chatInput')?.focus(),80);}
   function startPoll(){clearInterval(poll);poll=setInterval(()=>loadMessages(),5000);}
   async function sendText(){if(!selected)return;const input=$('chatInput'),body=input.value.trim();if(!body)return;const btn=$('chatComposer').querySelector('button');btn.disabled=true;try{await api('/messages',{method:'POST',body:JSON.stringify({recipientId:selected.id,messageType:'text',body})});input.value='';input.style.height='';await loadMessages();}catch(e){if(typeof showToast==='function')showToast(e.message,true);}finally{btn.disabled=false;input.focus();}}
   window.CLinedChat={shareQuestion(q){

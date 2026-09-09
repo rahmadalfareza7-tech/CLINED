@@ -294,3 +294,49 @@ html,body{max-width:100%;overflow-x:hidden}
 
 /* CLINED 134: compact admin controls */
 .admin-file-btn,.admin-delete-btn{min-height:34px!important;height:34px!important;padding:6px 10px!important;border-radius:10px!important;font-size:10px!important;line-height:1!important}.admin-file-btn{font-weight:800!important}.admin-delete-btn{font-weight:800!important}.admin-file-selected{font-size:10px!important}.admin-user-actions .admin-delete-btn{height:32px!important;min-height:32px!important;padding:5px 9px!important}.admin-role-select{min-height:32px!important;height:32px!important;padding:6px 8px!important;font-size:10px!important}
+
+/* CLINED 141 — mobile ergonomics + chat usability */
+@media (max-width: 600px){
+  .app{padding-left:10px!important;padding-right:10px!important;padding-bottom:calc(94px + env(safe-area-inset-bottom))!important}
+  .header{padding:5px 1px 13px!important}
+  .brand{gap:8px!important}.logo{width:38px!important;height:38px!important;flex-basis:38px!important;border-radius:12px!important}
+  .brand h1{font-size:15px!important}.brand p{font-size:9px!important;max-width:125px!important}
+  .header .icon-btn{width:38px!important;height:38px!important;flex-basis:38px!important;border-radius:12px!important}
+  .hero{padding:17px 2px 14px!important}.hero h2{font-size:28px!important}.hero p{font-size:13px!important}
+  .card{padding:13px!important;border-radius:20px!important;margin-bottom:10px!important}
+  .menu-grid{grid-template-columns:1fr!important;gap:8px!important}.menu-item{min-height:56px!important}
+  .choice{min-height:48px!important;padding:10px 7px!important}.answer{min-height:50px!important;padding:12px!important}
+  .quiz-actions{flex-direction:column!important}.quiz-actions button{width:100%!important}
+
+  /* Chat becomes a compact people rail + dedicated conversation area. */
+  .chat-page-view{padding-bottom:8px!important}
+  .chat-page-header{padding:8px 2px 12px!important}
+  .chat-page-header h2{font-size:25px!important;margin:3px 0 5px!important}
+  .chat-page-header p{font-size:12px!important;line-height:1.4!important}
+  .chat-shell{display:flex!important;flex-direction:column!important;min-height:0!important;height:calc(100dvh - 168px)!important;max-height:760px!important;padding:0!important;border-radius:20px!important;overflow:hidden!important}
+  .chat-sidebar{display:flex!important;flex:0 0 auto!important;max-height:none!important;border:0!important;border-bottom:1px solid rgba(20,40,60,.08)!important;padding-bottom:7px!important}
+  .chat-sidebar-head{padding:11px 12px 7px!important;border:0!important}
+  .chat-sidebar-head small{display:none!important}.chat-refresh{width:30px!important;height:30px!important}
+  .chat-search{margin:0 10px 7px!important;height:38px!important;font-size:13px!important;border-radius:12px!important}
+  .chat-user-list{display:flex!important;gap:7px!important;overflow-x:auto!important;overflow-y:hidden!important;min-height:74px!important;max-height:74px!important;padding:2px 9px 5px!important;flex:none!important}
+  .chat-user{flex:0 0 68px!important;width:68px!important;min-width:68px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:3px!important;padding:5px 3px!important;border-radius:13px!important;text-align:center!important}
+  .chat-avatar{width:35px!important;height:35px!important;flex-basis:35px!important;font-size:12px!important;margin:auto!important}
+  .chat-user-copy{width:100%!important}.chat-user-copy b{font-size:9px!important}.chat-user-copy small{font-size:8px!important}
+  .chat-main{display:grid!important;grid-template-rows:auto 1fr auto!important;min-height:0!important;flex:1 1 auto!important}
+  .chat-main-head{padding:10px 12px!important;min-height:50px!important}.chat-main-head b{font-size:14px!important}.chat-main-head small{font-size:9px!important}
+  .chat-messages{min-height:0!important;padding:10px!important;gap:7px!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important}
+  .chat-bubble{max-width:88%!important;padding:9px 10px!important;font-size:12px!important;border-radius:14px!important}
+  .chat-composer{padding:8px!important;gap:6px!important;align-items:flex-end!important;padding-bottom:calc(8px + env(safe-area-inset-bottom))!important}
+  .chat-composer textarea{min-height:40px!important;max-height:90px!important;padding:10px!important;font-size:13px!important;border-radius:13px!important}
+  .chat-send{min-width:58px!important;min-height:40px!important;padding:0 11px!important;border-radius:12px!important;font-size:11px!important}
+  .chat-empty{padding:20px 10px!important;font-size:11px!important}
+}
+@media (max-width:380px){
+  .app{padding-left:8px!important;padding-right:8px!important}
+  .floating-dashboard-nav{width:calc(100vw - 12px)!important;bottom:calc(7px + env(safe-area-inset-bottom))!important}
+  .floating-dashboard-nav .floating-nav-item{min-height:50px!important;padding:5px 0!important}
+  .floating-dashboard-nav .floating-nav-icon{width:24px!important;height:24px!important}
+  .floating-dashboard-nav .floating-nav-item span:last-child{font-size:8px!important}
+  .chat-shell{height:calc(100dvh - 155px)!important}
+  .chat-user{flex-basis:62px!important;width:62px!important;min-width:62px!important}
+}
