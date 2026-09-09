@@ -5,7 +5,7 @@
   let selected=null, poll=null, users=[], loading=false;
   async function api(path,options={}){
     const r=await fetch('/api/chat'+path,{credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
-    const data=await r.json().catch(()=>({})); if(!r.ok){const err=new Error(data.error||`Chat gagal dimuat (${r.status}).`);err.status=r.status;throw err;} return data;
+    const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||'Chat gagal dimuat.'); return data;
   }
   function current(){return typeof authCurrentUser==='function'?authCurrentUser():null;}
   function initials(name){return String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'?';}
@@ -19,15 +19,11 @@
   }
   async function loadUsers(){
     const box=$('chatUserList');
-    let me=current();
-    if(!me){
-      try{const r=await fetch('/api/auth/me',{credentials:'same-origin'});const d=await r.json().catch(()=>({}));me=d.user||null;}catch{}
-    }
-    if(!me){if(box)box.innerHTML='<div class="chat-empty">Masuk ke akun untuk melihat pengguna.</div>';return;}
+    if(!current()){if(box)box.innerHTML='<div class="chat-empty">Masuk ke akun untuk melihat pengguna.</div>';return;}
     if(loading)return; loading=true;
     if(box)box.innerHTML='<div class="chat-empty">Memuat pengguna…</div>';
     try{
-      const d=await api('/users');
+      let d; try { d=await api('/users'); } catch(first){ d=await api('/users?q='); }
       users=Array.isArray(d.users)?d.users:[];
       renderUsers();
       if(!users.length && box)box.innerHTML='<div class="chat-empty">Belum ada pengguna lain yang tersedia untuk diajak chat.</div>';
@@ -77,12 +73,5 @@
   window.addEventListener('clined:chat-opened',()=>{loadUsers();});
   window.addEventListener('clined:auth-ready',()=>{if(document.getElementById('chatPage')?.classList.contains('active'))loadUsers();});
   window.CLinedChatMaybeShare=maybePending;
-  window.CLINEDChatOpen=async function(){
-    show('chatPage',{force:true});
-    if(typeof window.CLinedChatInit==='function' && !$('chatPage')?.dataset.chatReady){
-      window.CLinedChatInit();$('chatPage').dataset.chatReady='1';
-    }
-    await loadUsers();
-    window.dispatchEvent(new Event('clined:chat-opened'));
-  };
+  window.CLINEDChatOpen=async function(){show('chatPage');document.getElementById('chatPage')?.scrollIntoView({block:'start',behavior:'auto'});await loadUsers();};
 })();

@@ -2127,7 +2127,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$("normalValuesMod
 
 
 
-/* Floating dashboard navigation — 5 destinations */
+/* Floating dashboard navigation — 4 destinations */
 (function initFloatingDashboardNav(){
   const nav=document.getElementById('floatingDashboardNav');
   if(!nav) return;
