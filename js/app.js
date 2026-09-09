@@ -69,6 +69,18 @@ const BANKS={
   kedkel2021:{name:"KEDKEL 2021",data:dataKuisKedkel2021,block:"KEDKEL"},
   kedkel2020:{name:"KEDKEL 2020",data:dataKuisKedkel2020,block:"KEDKEL"}
 };
+
+// Bank soal baru/soal baru yang diinput lewat Question Bank Engine langsung menyegarkan
+// pilihan bank dan jumlah soal, tanpa perlu mengubah UI secara manual.
+window.addEventListener("clined:bank-updated",()=>{
+  document.querySelectorAll("[data-block-key]").forEach(page=>{
+    const key=page.dataset.blockKey;
+    if(key && typeof renderAvailableBlockControls==="function"){
+      const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===String(key).toUpperCase() && (b.data||[]).length);
+      if(entries.length) renderAvailableBlockControls(key);
+    }
+  });
+});
 let __spaHistoryLock=false;
 let __spaCurrentView="home";
 let __spaNavFrame=0;
@@ -627,7 +639,21 @@ function renderAvailableBlockControls(key){
     startBtn.onclick=()=>startQuiz();
   }
   if(note) note.textContent=`${bank.name}: ${max} soal tersedia.`;
-  if(inline) inline.innerHTML=`<span class="empty-bank-icon">👨‍👩‍👧‍👦</span><div><b>Bank soal tersedia</b><small>${entries.length>1?entries.length+" bank KEDKEL tersedia. ":""}${max} soal siap digunakan.</small></div>`;
+  if(inline) inline.innerHTML=`<span class="empty-bank-icon">👨‍👩‍👧‍👦</span><div>
+    <b>Bank soal tersedia</b>
+    <small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small>
+    <div class="bank-picker" role="group" aria-label="Pilih bank soal">
+      ${entries.map(([id,b])=>`<button type="button" class="block-bank-chip ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}">
+        ${esc(b.name)} · ${(b.data||[]).length} soal
+      </button>`).join('')}
+    </div>
+  </div>`; 
+  inline?.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{
+    if(btn.dataset.blockBank===selectedBank)return;
+    selectedBank=btn.dataset.blockBank;
+    selectedCount=0;
+    renderAvailableBlockControls(key);
+  });
 }
 
 function renderModes(){
