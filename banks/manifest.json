@@ -48,6 +48,22 @@
       "dataUrl": "./banks/kedkel-2020.json",
       "block": "KEDKEL",
       "schema": "1.0"
+    },
+    {
+      "id": "kedkom2020",
+      "name": "KEDKOM 2020",
+      "version": 1,
+      "dataUrl": "./banks/kedkom-2020.json",
+      "block": "KEDKOM",
+      "schema": "1.0"
+    },
+    {
+      "id": "kedkom2021",
+      "name": "KEDKOM 2021",
+      "version": 1,
+      "dataUrl": "./banks/kedkom-2021.json",
+      "block": "KEDKOM",
+      "schema": "1.0"
     }
   ]
 }

@@ -67,7 +67,9 @@ const BANKS={
   arsip2021:{name:"SSP 2021",data:dataKuis2021},
   kedkel2022:{name:"KEDKEL Juni 2022",data:dataKuisKedkel2022,block:"KEDKEL"},
   kedkel2021:{name:"KEDKEL 2021",data:dataKuisKedkel2021,block:"KEDKEL"},
-  kedkel2020:{name:"KEDKEL 2020",data:dataKuisKedkel2020,block:"KEDKEL"}
+  kedkel2020:{name:"KEDKEL 2020",data:dataKuisKedkel2020,block:"KEDKEL"},
+  kedkom2020:{name:"KEDKOM 2020",data:dataKuisKedkom2020,block:"KEDKOM"},
+  kedkom2021:{name:"KEDKOM 2021",data:dataKuisKedkom2021,block:"KEDKOM"}
 };
 
 // Bank soal baru/soal baru yang diinput lewat Question Bank Engine langsung menyegarkan
