@@ -21,11 +21,11 @@
     var el=document.getElementById("appLoading"), content=document.getElementById("splashContent");
     if(!el)return;
     if(content)content.classList.add("is-exiting");
-    setTimeout(function(){el.classList.add("is-hidden");setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},520);},420);
+    setTimeout(function(){el.classList.add("is-hidden");setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},620);},560);
   }
-  if(document.readyState==="complete") setTimeout(reveal,700);
-  else window.addEventListener("load",function(){setTimeout(reveal,700);},{once:true});
-  setTimeout(reveal,2200);
+  if(document.readyState==="complete") setTimeout(reveal,1450);
+  else window.addEventListener("load",function(){setTimeout(reveal,1450);},{once:true});
+  setTimeout(reveal,3000);
 })();
 </script>
 <meta name="clined-release" content="v28-server-auth">
@@ -105,6 +105,31 @@ html,body{overflow-x:hidden}
 @media(max-width:600px){.floating-dashboard-nav{bottom:calc(10px + env(safe-area-inset-bottom))!important;width:calc(100vw - 18px)!important;max-width:430px!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;}.floating-dashboard-nav .floating-nav-item{min-height:52px!important;padding:6px 1px!important;}.floating-dashboard-nav .floating-nav-icon{width:26px!important;height:26px!important;}.floating-dashboard-nav .floating-nav-item span:last-child{font-size:9px!important;}}
 .admin-panel-tab{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;}
 .admin-tab-count{display:inline-grid!important;place-items:center!important;min-width:20px!important;height:20px!important;padding:0 5px!important;border-radius:999px!important;background:rgba(0,122,255,.10)!important;font-size:10px!important;font-weight:900!important;line-height:1!important;}
+</style>
+<style id="clined-loading-bounce-final">
+/* Loading: short playful bounce/settle, then a smooth full-screen logo expansion. */
+#appLoading .splash-logo{
+  animation:splashLogoBounceThenSettle 1.45s cubic-bezier(.2,.85,.2,1) both!important;
+}
+#appLoading .splash-content.is-exiting .splash-logo{
+  animation:splashLogoCoverCentered 900ms cubic-bezier(.72,0,.18,1) forwards!important;
+}
+#appLoading .splash-content.is-exiting .splash-brand{
+  animation:splashBrandExitCentered 420ms ease forwards!important;
+}
+@keyframes splashLogoBounceThenSettle{
+  0%{transform:translate(-50%,-50%) scale(.72);opacity:0}
+  22%{transform:translate(-50%,-50%) scale(1.06);opacity:1}
+  38%{transform:translate(-50%,-50%) scale(.94)}
+  52%{transform:translate(-50%,-50%) scale(1.025)}
+  66%{transform:translate(-50%,-50%) scale(.985)}
+  78%{transform:translate(-50%,-50%) scale(1.008)}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  #appLoading .splash-logo{animation:none!important;transform:translate(-50%,-50%) scale(1)!important;opacity:1!important}
+  #appLoading .splash-content.is-exiting .splash-logo{animation:splashLogoCoverCentered 650ms ease forwards!important}
+}
 </style>
 </head>
 <body class="auth-pending">

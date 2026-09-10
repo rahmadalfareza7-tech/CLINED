@@ -1,8 +1,8 @@
 {
   "name": "clined",
-  "version": "36.2.0",
+  "version": "36.3.0",
   "private": true,
-  "description": "CLINED Clinical Education — release-polished build; UPI local question storage hardened; feature set preserved.",
+  "description": "CLINED Clinical Education — loading animation polish; feature set preserved.",
   "type": "module",
   "scripts": {
     "start": "node local-server.mjs",
