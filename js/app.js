@@ -796,8 +796,10 @@ function renderQuestion(resume=false){
     <span class="answer-letter">${letter(i)}</span><span>${esc(o)}</span>
   </button>`).join("");
   $("explain").style.display="none";
+  $("nextBtn").hidden=!answered;
   $("nextBtn").style.display=answered?"block":"none";
   $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
+  $("prevBtn").hidden=!(pos>0);
   $("prevBtn").style.display=pos>0?"block":"none";
   const b=get(KEY.book,[]);
   $("bookmarkBtn").textContent=b.includes(q.id)?"★Tersimpan":"☆Simpan";
@@ -820,6 +822,7 @@ function applyAnsweredState(){
     $("explainText").innerHTML=allExplanations(q);
     $("explain").style.display="block";
   }
+  $("nextBtn").hidden=false;
   $("nextBtn").style.display="block";
   $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
 }
@@ -868,7 +871,7 @@ function answer(i){
     q.selectedAnswer=i;
     document.querySelectorAll(".answer").forEach(b=>b.disabled=true);
     if(quizMode==="study"){$("explainText").innerHTML=allExplanations(q);$("explain").style.display="block";}
-    $("nextBtn").style.display="block";$("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
+    $("nextBtn").hidden=false;$("nextBtn").style.display="block";$("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
     saveSession();return;
   }
   const good=i===q.jawabanBenar;
@@ -898,6 +901,7 @@ function answer(i){
     $("explainText").innerHTML=allExplanations(q);
     $("explain").style.display="block";
   }
+  $("nextBtn").hidden=false;
   $("nextBtn").style.display="block";
   $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
   saveSession();

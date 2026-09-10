@@ -505,7 +505,7 @@ html.dark button.exam-launch-card,html.dark button.block-card,html.dark button.e
 .empty-bank-inline small{display:block;margin-top:4px;color:var(--ios-secondary);font-size:11px;line-height:1.45}
 .empty-bank-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:rgba(52,199,89,.12);font-size:22px;flex:none}
 .disabled-choice{opacity:.48!important;cursor:not-allowed!important;filter:none!important}
-.block-disabled-start{opacity:.45!important;cursor:not-allowed!important}
+.block-disabled-start:disabled{opacity:.45!important;cursor:not-allowed!important}
 .block-empty-note{text-align:center;color:var(--ios-secondary);font-size:11px;margin-top:9px}
 .daily-streak-card{margin-top:10px;padding:10px 11px;border:2px solid #ffe0ad!important;border-radius:16px!important;background:#fff8e8!important;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#5f4b00!important;box-shadow:none!important}
 .daily-streak-main{display:flex;align-items:center;gap:9px;min-width:0}
