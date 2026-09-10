@@ -12,22 +12,6 @@
 <link rel="manifest" href="json/manifest.json">
 <link rel="stylesheet" href="css/style.css?v=profile-admin-route-fix-v4">
 <title>CLINED — Clinical Education</title>
-<script>
-// Loading screen stability fix — preserves the existing animation/style.
-(function(){
-  var finished=false;
-  function reveal(){
-    if(finished)return; finished=true;
-    var el=document.getElementById("appLoading"), content=document.getElementById("splashContent");
-    if(!el)return;
-    if(content)content.classList.add("is-exiting");
-    setTimeout(function(){el.classList.add("is-hidden");setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},620);},560);
-  }
-  if(document.readyState==="complete") setTimeout(reveal,1450);
-  else window.addEventListener("load",function(){setTimeout(reveal,1450);},{once:true});
-  setTimeout(reveal,3000);
-})();
-</script>
 <meta name="clined-release" content="v28-server-auth">
 <meta name="theme-color" content="#f7f7f2">
 <link rel="manifest" href="manifest.webmanifest">
@@ -593,8 +577,8 @@ html,body{overflow-x:hidden}
       <div id="explainText"></div>
     </div>
     <div class="quiz-actions">
-      <button class="secondary" id="prevBtn" style="display:none">← Soal Sebelumnya</button>
-      <button class="secondary" id="nextBtn" style="display:none">Selanjutnya →</button>
+      <button class="secondary" id="prevBtn" hidden>← Soal Sebelumnya</button>
+      <button class="secondary" id="nextBtn" hidden>Selanjutnya →</button>
     </div>
     <div class="quiz-foot-actions">
       <button class="text-btn" id="flagBtn">⚑ Tandai soal</button>
@@ -851,16 +835,6 @@ html,body{overflow-x:hidden}
 
 <div class="footer clined-creator-footer" aria-label="Kredit aplikasi">Created by Reza FKUY23</div>
 </main>
-<script>
-(function(){
-  const go=()=>{const b=document.getElementById('openUabPage'); if(b)b.click();};
-  document.addEventListener('click',e=>{
-    if(e.target.closest('#duoQuickStart,#duoUnitStart,#duoNode1,#duoNode2')) go();
-  });
-  const sync=()=>{const el=document.getElementById('duoStreakValue');const src=document.getElementById('dailyStreakCount');if(el&&src)el.textContent=(src.textContent||'0').split('/')[0]||'0';};
-  setTimeout(sync,700);window.addEventListener('pageshow',sync,{passive:true});
-})();
-</script>
 <script src="js/bank_pulmonis.js"></script>
 <script src="js/bank_2021.js"></script>
 <script src="js/bank_kedkel2022.js"></script>
@@ -910,33 +884,7 @@ html,body{overflow-x:hidden}
 <script src="js/chat.js?v=4"></script>
 <script src="js/content-manager.js?v=8"></script>
 <script src="js/question-bank-engine.js"></script>
-
-<script>
-(() => {
-  document.querySelectorAll('#uabBlockList > button.uab-node').forEach((el, i) => {
-    el.dataset.uabIndex = i + 1;
-  });
-})();
-</script>
-</body>
-</html>
-
-
-<script>
-/* V23 UAB hard lock: continuously remove legacy inline position/transform mutations. */
-(() => {
-  const clean = (n) => {
-    if (!n || !n.matches || !n.matches('#uabBlockList > .uab-node')) return;
-    ['left','right','top','bottom','transform','translate','rotate','scale','margin-left','margin-right'].forEach(k=>n.style.removeProperty(k));
-  };
-  const run=()=>document.querySelectorAll('#uabBlockList > .uab-node').forEach(clean);
-  document.addEventListener('DOMContentLoaded', run, {once:true});
-  window.addEventListener('resize', run, {passive:true});
-  const obs=new MutationObserver(muts=>muts.forEach(m=>{if(m.type==='attributes'&&m.attributeName==='style') clean(m.target);}));
-  const start=()=>{const list=document.getElementById('uabBlockList');if(list){obs.observe(list,{subtree:true,attributes:true,attributeFilter:['style']});run();}};
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true}); else start();
-})();
-</script>
+<script src="js/inline-boot.js"></script>
 </body>
 </html>
 <style>
