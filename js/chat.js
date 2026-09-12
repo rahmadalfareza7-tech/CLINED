@@ -2,12 +2,21 @@
 (function(){
   const $=id=>document.getElementById(id);
   const escChat=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let selected=null, poll=null, users=[], loading=false, sending=false, sendSeq=0, initDone=false, messageRefreshTimer=null;
+  let selected=null, poll=null, users=[], loading=false, sending=false, sendSeq=0, initDone=false, messageRefreshTimer=null, usersLoadedAt=0, messagesLoading=false;
   const pending=new Map();
   let lastSubmitAt=0, lastSubmitBody='';
   async function api(path,options={}){
-    const r=await fetch('/api/chat'+path,{credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
-    const data=await r.json().catch(()=>({})); if(!r.ok)throw Error(data.error||`Chat gagal dimuat (${r.status}).`); return data;
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),8000);
+    try{
+      const r=await fetch('/api/chat'+path,{credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},signal:controller.signal,...options});
+      const data=await r.json().catch(()=>({}));
+      if(!r.ok)throw Error(data.error||`Chat gagal dimuat (${r.status}).`);
+      return data;
+    }catch(e){
+      if(e?.name==='AbortError') throw Error('Koneksi chat terlalu lama. Coba lagi.');
+      throw e;
+    }finally{clearTimeout(timeout);}
   }
   function current(){return typeof authCurrentUser==='function'?authCurrentUser():null;}
   function initials(name){return String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'?';}
@@ -19,14 +28,16 @@
     box.innerHTML=filtered.length?filtered.map(x=>`<button class="chat-user ${selected?.id===x.id?'active':''}" data-chat-user="${x.id}"><span class="chat-avatar">${escChat(initials(x.name))}</span><span class="chat-user-copy"><b>${escChat(x.name)}</b><small>@${escChat(x.username)}</small></span></button>`).join(''):'<div class="chat-empty">Pengguna tidak ditemukan.</div>';
     box.querySelectorAll('[data-chat-user]').forEach(b=>b.onclick=()=>openUser(users.find(x=>x.id===b.dataset.chatUser)));
   }
-  async function loadUsers(){
+  async function loadUsers(force=false){
     const box=$('chatUserList');
     if(!current()){if(box)box.innerHTML='<div class="chat-empty">Masuk ke akun untuk melihat pengguna.</div>';return;}
+    if(!force && users.length && Date.now()-usersLoadedAt<30000){renderUsers();return;}
     if(loading)return; loading=true;
     if(box)box.innerHTML='<div class="chat-empty">Memuat pengguna…</div>';
     try{
       let d; try { d=await api('/users'); } catch(first){ d=await api('/users?q='); }
       users=Array.isArray(d.users)?d.users:[];
+      usersLoadedAt=Date.now();
       renderUsers();
       if(!users.length && box)box.innerHTML='<div class="chat-empty">Belum ada pengguna lain yang tersedia untuk diajak chat.</div>';
     }catch(e){
@@ -49,9 +60,12 @@
     box.appendChild(el); box.scrollTop=box.scrollHeight;
     return el;
   }
-  async function loadMessages(){if(!selected||!current())return;try{const d=await api('/messages/'+selected.id);const server=d.messages||[];renderMessages(server);if(pending.size){for(const item of pending.values()){if(item.recipientId!==selected.id)continue;const box=$('chatMessages');if(!box)continue;box.querySelector('.chat-empty')?.remove();if(!box.querySelector(`[data-pending="${item.el?.dataset.pending||''}"]`)){box.appendChild(item.el);} }box.scrollTop=box.scrollHeight;}}catch(e){if(!$('chatMessages')?.querySelector('.chat-pending'))$('chatMessages').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}}
+  async function loadMessages(){
+    if(!selected||!current()||messagesLoading)return;
+    messagesLoading=true;
+    try{const d=await api('/messages/'+selected.id);const server=d.messages||[];renderMessages(server);if(pending.size){for(const item of pending.values()){if(item.recipientId!==selected.id)continue;const box=$('chatMessages');if(!box)continue;box.querySelector('.chat-empty')?.remove();if(!box.querySelector(`[data-pending="${item.el?.dataset.pending||''}"]`)){box.appendChild(item.el);} }box.scrollTop=box.scrollHeight;}}catch(e){if(!$('chatMessages')?.querySelector('.chat-pending'))$('chatMessages').innerHTML=`<div class="chat-empty">${escChat(e.message)}</div>`;}}
   async function openUser(user){if(!user)return;selected=user;renderUsers();$('chatHeader').innerHTML=`<div><b>${escChat(user.name)}</b><small>@${escChat(user.username)} • Diskusi UAB &amp; UPI</small></div>`;$('chatInput').disabled=false;$('chatInput').placeholder=`Tulis pesan untuk ${user.name}…`;$('chatComposer').querySelector('button').disabled=false;const box=$('chatMessages');if(box)box.innerHTML='<div class="chat-empty">Memuat pesan…</div>';try{await loadMessages();}catch(e){if(typeof showToast==='function')showToast(e.message,true);}startPoll();maybePending();setTimeout(()=>$('chatInput')?.focus(),80);}
-  function startPoll(){clearInterval(poll);poll=setInterval(()=>loadMessages(),5000);}
+  function startPoll(){clearInterval(poll);poll=setInterval(()=>loadMessages(),4000);}
   async function sendText(){
     if(!selected)return;
     const input=$('chatInput'),body=input?.value.trim(); if(!body)return;
@@ -91,7 +105,7 @@
     if(initDone)return; initDone=true;
     $('chatBtn')?.addEventListener('click',async()=>{show('chatPage');await loadUsers();});
     $('backFromChat')?.addEventListener('click',()=>show('home'));
-    $('chatRefreshUsers')?.addEventListener('click',loadUsers);
+    $('chatRefreshUsers')?.addEventListener('click',()=>loadUsers(true));
     $('chatUserSearch')?.addEventListener('input',renderUsers);
     $('chatComposer')?.addEventListener('submit',e=>{e.preventDefault();if(!sending)sendText();});
     $('chatInput')?.addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px';});

@@ -2245,3 +2245,85 @@ textarea{line-height:1.4}
   .menu-grid { grid-template-columns: 1fr !important; }
   .admin-stats-row { grid-template-columns: 1fr 1fr; }
 }
+
+
+/* ── CLINED POLISH PASS • unified controls / admin form / mobile fit ─────── */
+:root{
+  --clined-control-font:12px;
+  --clined-control-radius:14px;
+  --clined-control-shadow:0 3px 0 rgba(31,42,35,.12);
+}
+button.primary,button.secondary,button.account-action,button.admin-panel-tab,
+button.admin-delete-btn,button.small-btn,button.clined-compact-action{
+  min-height:var(--clined-control-h);
+  border-radius:var(--clined-control-radius);
+  font-family:var(--clined-font);
+  font-size:var(--clined-control-font);
+  line-height:1.15;
+  font-weight:900;
+  letter-spacing:0;
+  padding:10px 15px;
+  transition:transform var(--motion-fast) ease,box-shadow var(--motion-fast) ease,filter var(--motion-fast) ease;
+}
+button.primary,button.account-save{box-shadow:var(--clined-control-shadow,var(--clined-shadow));}
+button.primary:not(:disabled):active,button.secondary:not(:disabled):active,
+button.account-action:not(:disabled):active,button.admin-panel-tab:not(:disabled):active,
+button.admin-delete-btn:not(:disabled):active,button.small-btn:not(:disabled):active{
+  transform:translateY(2px);
+}
+button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
+
+/* "Langsung publikasikan" is a compact option, never a large CTA. */
+.admin-ann-publish-check,label.admin-ann-publish-check,
+.admin-ann-publish-check *{
+  font-family:var(--clined-font)!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  text-transform:none!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+}
+.admin-ann-publish-check{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%;
+  margin:0!important;
+  padding:5px 8px!important;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--surface);
+}
+.admin-ann-publish-check input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;
+  width:16px!important;height:16px!important;min-width:16px!important;
+  margin:0!important;border:2px solid var(--muted);border-radius:5px;
+  background:var(--card);display:grid;place-items:center;
+}
+.admin-ann-publish-check input[type="checkbox"]:checked{border-color:var(--brand);background:var(--brand);}
+.admin-ann-publish-check input[type="checkbox"]:checked::after{
+  content:"";width:7px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:rotate(-45deg) translateY(-1px);
+}
+.admin-new-announce-form input[type=text],
+.admin-new-announce-form textarea,
+.admin-new-announce-form select{font-size:12px!important;}
+.admin-new-announce-form textarea{min-height:88px;}
+.admin-section-head h3{font-size:17px!important;}
+.admin-section-head p{font-size:11px!important;line-height:1.45!important;}
+@media (max-width:640px){
+  .app{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important;}
+  button.primary,button.secondary,button.account-action,button.admin-panel-tab,
+  button.admin-delete-btn,button.small-btn,button.clined-compact-action{
+    min-height:44px;padding:9px 12px;font-size:11px;
+  }
+  .admin-new-announce-form{padding:12px!important;}
+  .admin-ann-meta-row{gap:7px!important;}
+  .admin-ann-publish-check{font-size:10px!important;padding:5px 7px!important;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    scroll-behavior:auto!important;transition-duration:.01ms!important;
+  }
+}
