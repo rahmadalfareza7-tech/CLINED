@@ -279,13 +279,13 @@ window.CLINED_AdminAnnouncements = (function () {
     const title = document.getElementById('newAnnTitle')?.value?.trim();
     const body = document.getElementById('newAnnBody')?.value?.trim();
     const priority = document.getElementById('newAnnPriority')?.value || 'normal';
-    const published = document.getElementById('newAnnPublished')?.checked;
+    const published = false;
     if (!title || !body) { alert('Judul dan isi pengumuman harus diisi.'); return; }
     const r = await fetch('/api/admin/announcements', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, body, priority, published }), credentials: 'include' });
     if (r.ok) {
       document.getElementById('newAnnTitle').value = '';
       document.getElementById('newAnnBody').value = '';
-      document.getElementById('newAnnPublished').checked = false;
+      
       load();
       if (typeof showToast === 'function') showToast('Pengumuman berhasil disimpan.', false);
     } else { alert('Gagal menyimpan pengumuman.'); }
@@ -338,7 +338,7 @@ window.CLINED_AdminAnnouncements = (function () {
             <option value="high">High</option>
             <option value="urgent">Urgent</option>
           </select>
-          <label class="admin-ann-publish-check"><input type="checkbox" id="newAnnPublished"> Langsung publikasikan</label>
+          
         </div>
         <button class="primary" type="button" onclick="CLINED_AdminAnnouncements.createAnn()">Simpan Pengumuman</button>
       </div>
