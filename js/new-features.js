@@ -265,8 +265,18 @@ window.CLINED_AdminAnnouncements = (function () {
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
   async function togglePublish(id, published) {
-    await fetch(`/api/admin/announcements/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ published }), credentials: 'include' });
-    load();
+    const r = await fetch('/api/admin/announcements', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, published }),
+      credentials: 'include'
+    });
+    if (!r.ok) {
+      let d = {};
+      try { d = await r.json(); } catch {}
+      throw new Error(d.error || d.message || `Permintaan gagal (${r.status})`);
+    }
+    await load();
   }
 
   async function deleteAnn(id) {
