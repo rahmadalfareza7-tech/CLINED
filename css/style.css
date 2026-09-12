@@ -2201,9 +2201,9 @@ textarea{line-height:1.4}
   transition: transform .14s ease, box-shadow .14s ease;
 }
 .exam-launch-card:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line) !important; }
-.exam-launch-card.uab { background: linear-gradient(145deg, #3d9e0a 0%, #58cc02 100%) !important; border-color: #46a900 !important; color: #fff !important; border-bottom-color: #3c9300 !important; box-shadow: 0 4px 0 #3c9300 !important; }
+.exam-launch-card.uab { background: linear-gradient(145deg, #4aad10 0%, #5ec204 100%) !important; border-color: #4aa800 !important; color: #fff !important; border-bottom-color: #3d8e00 !important; box-shadow: 0 4px 0 #3d8e00 !important; }
 .exam-launch-card.uab b, .exam-launch-card.uab small, .exam-launch-card.uab em { color: rgba(255,255,255,.92) !important; }
-.exam-launch-card.upi { background: linear-gradient(145deg, #0c93d0 0%, #1cb0f6 100%) !important; border-color: #0c91cf !important; color: #fff !important; border-bottom-color: #0877aa !important; box-shadow: 0 4px 0 #0877aa !important; }
+.exam-launch-card.upi { background: linear-gradient(145deg, #1398c8 0%, #29aee8 100%) !important; border-color: #1190be !important; color: #fff !important; border-bottom-color: #0d7aa0 !important; box-shadow: 0 4px 0 #0d7aa0 !important; }
 .exam-launch-card.upi b, .exam-launch-card.upi small, .exam-launch-card.upi em { color: rgba(255,255,255,.92) !important; }
 
 /* Admin stats summary card */
