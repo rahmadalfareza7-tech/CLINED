@@ -2081,18 +2081,25 @@ textarea{line-height:1.4}
   align-items: center;
   gap: 12px;
   margin: 10px 0;
+  flex-wrap: wrap;
 }
 .admin-ann-meta-row select { width: auto; flex: 0 0 auto; }
 .admin-ann-publish-check {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
 }
 .admin-ann-publish-check input[type="checkbox"] {
-  width: 14px;
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  cursor: pointer;
+  accent-color: var(--brand, #5c7cfa);
+}
   height: 14px;
   flex: 0 0 14px;
   cursor: pointer;
