@@ -1,6 +1,6 @@
 {
   "name": "clined",
-  "version": "36.4.0",
+  "version": "36.4.1",
   "private": true,
   "description": "CLINED Clinical Education — unified UI polish and chat/backend performance hardening; feature set preserved.",
   "type": "module",
