@@ -118,6 +118,15 @@ html,body{overflow-x:hidden}
 </head>
 <body class="auth-pending">
 
+<!-- Announcement Banner -->
+<div id="announcementBanner" class="announcement-banner" hidden aria-live="polite">
+  <div class="announcement-inner">
+    <span class="announcement-priority-dot" id="announcementDot"></span>
+    <span id="announcementText" class="announcement-text"></span>
+    <button class="announcement-close" id="closeAnnouncement" aria-label="Tutup pengumuman">×</button>
+  </div>
+</div>
+
 <div id="appLoading" class="app-loading" aria-label="Memuat CLINED" role="status">
   <div class="splash-content" id="splashContent">
     <img class="splash-logo" src="assets/clined-logo.png" alt="CLINED">
@@ -173,7 +182,18 @@ html,body{overflow-x:hidden}
     </div>
   </section>
 
-  <div class="card player-card">
+  <!-- Leaderboard teaser -->
+<div class="card leaderboard-teaser-card" id="leaderboardTeaserCard">
+  <div class="leaderboard-teaser-head">
+    <span>🏆 <b>Papan Peringkat Minggu Ini</b></span>
+    <button class="leaderboard-see-all" id="openLeaderboardBtn" type="button">Lihat semua →</button>
+  </div>
+  <div id="leaderboardTeaser" class="leaderboard-teaser-list">
+    <div class="leaderboard-loading">Memuat…</div>
+  </div>
+</div>
+
+<div class="card player-card">
     <div class="player-top">
       <div>
         <div class="eyebrow">CLINICAL PROGRESS</div>
@@ -244,6 +264,8 @@ html,body{overflow-x:hidden}
       <button class="secondary menu-item" id="clinicalDashboardBtn"><span class="menu-icon">🩺</span><span>Clinical Dashboard</span></button>
       <button class="secondary menu-item" id="achievementBtn"><span class="menu-icon">🏆</span><span>Achievements</span></button>
       <button class="secondary menu-item" id="chatBtn"><span class="menu-icon">💬</span><span>Chat Pengguna</span></button>
+      <button class="secondary menu-item" id="leaderboardMenuBtn"><span class="menu-icon">🏆</span><span>Papan Peringkat</span></button>
+      <button class="secondary menu-item" id="studyTimerMenuBtn"><span class="menu-icon">⏱</span><span>Study Timer</span></button>
     </div>
   </div>
 
@@ -833,6 +855,60 @@ html,body{overflow-x:hidden}
   <button type="button" class="floating-nav-item" data-floating-nav="account" aria-label="Profil"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg></span><span>Profil</span></button>
 </nav>
 
+<!-- LEADERBOARD PAGE -->
+<section id="leaderboardPage" class="view exam-page-view">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromLeaderboard" type="button">‹ Beranda</button>
+    <div><div class="eyebrow">CLINED • KOMPETISI</div><h2>🏆 Papan Peringkat</h2><p>XP mingguan dimulai setiap Senin. Kerjakan soal sebanyak mungkin!</p></div>
+  </div>
+  <div class="card nested-card leaderboard-tabs-card">
+    <div class="leaderboard-tabs" role="tablist">
+      <button class="lb-tab active" data-lb-tab="weekly" role="tab" aria-selected="true">Minggu Ini</button>
+      <button class="lb-tab" data-lb-tab="alltime" role="tab" aria-selected="false">All Time</button>
+    </div>
+    <div id="leaderboardList" class="leaderboard-list" aria-live="polite">
+      <div class="leaderboard-loading">Memuat…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN PANEL: ANNOUNCEMENTS TAB -->
+<section id="adminAnnouncePage" class="view exam-page-view" hidden>
+</section>
+
+<!-- STUDY TIMER PAGE -->
+<section id="studyTimerPage" class="view exam-page-view">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromStudyTimer" type="button">‹ Beranda</button>
+    <div><div class="eyebrow">CLINED • FOKUS</div><h2>⏱ Study Timer</h2><p>Metode Pomodoro — 25 menit belajar, 5 menit istirahat.</p></div>
+  </div>
+  <div class="card nested-card study-timer-card">
+    <div class="timer-display" id="timerDisplay">
+      <div class="timer-mode-label" id="timerModeLabel">BELAJAR</div>
+      <div class="timer-clock" id="timerClock" aria-live="polite" aria-atomic="true">25:00</div>
+      <div class="timer-session-count"><span id="timerSessionCount">0</span> sesi selesai hari ini</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn timer-start" id="timerStartBtn" type="button">▶ Mulai</button>
+      <button class="timer-btn timer-reset" id="timerResetBtn" type="button">↺ Reset</button>
+    </div>
+    <div class="timer-mode-grid">
+      <button class="timer-mode-choice active" data-timer-mode="pomodoro" type="button">🍅 Pomodoro<small>25 / 5 mnt</small></button>
+      <button class="timer-mode-choice" data-timer-mode="short" type="button">⚡ Fokus Singkat<small>15 / 3 mnt</small></button>
+      <button class="timer-mode-choice" data-timer-mode="long" type="button">🧠 Deep Work<small>50 / 10 mnt</small></button>
+    </div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Tips belajar efektif</div>
+    <ul class="timer-tips">
+      <li>Singkirkan HP dan notifikasi selama sesi belajar.</li>
+      <li>Tulis target soal sebelum mulai timer.</li>
+      <li>Istirahat benar-benar: jalan, minum air, peregangan.</li>
+      <li>Setelah 4 sesi, ambil istirahat panjang 20–30 menit.</li>
+    </ul>
+  </div>
+</section>
+
 <div class="footer clined-creator-footer" aria-label="Kredit aplikasi">Created by Reza FKUY23</div>
 </main>
 <script src="js/bank_pulmonis.js"></script>
@@ -885,6 +961,7 @@ html,body{overflow-x:hidden}
 <script src="js/content-manager.js?v=8"></script>
 <script src="js/question-bank-engine.js"></script>
 <script src="js/inline-boot.js"></script>
+<script src="js/new-features.js?v=1"></script>
 </body>
 </html>
 <style>
