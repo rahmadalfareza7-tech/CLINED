@@ -2092,6 +2092,10 @@ textarea{line-height:1.4}
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  color: var(--text) !important;
+  margin: 0 !important;
 }
 .admin-ann-publish-check input[type="checkbox"] {
   width: 13px;
