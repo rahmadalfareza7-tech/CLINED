@@ -4,38 +4,47 @@
 // ── ANNOUNCEMENTS ─────────────────────────────────────────────────────────
 (function initAnnouncements() {
   const banner = document.getElementById('announcementBanner');
+  const title = document.getElementById('announcementTitle');
   const text = document.getElementById('announcementText');
   const dot = document.getElementById('announcementDot');
   const closeBtn = document.getElementById('closeAnnouncement');
   if (!banner) return;
 
-  const dismissed = JSON.parse(localStorage.getItem('clined_dismissed_announcements') || '[]');
+  let dismissed = [];
+  try { dismissed = JSON.parse(localStorage.getItem('clined_dismissed_announcements') || '[]'); } catch { dismissed = []; }
 
   async function loadAnnouncements() {
     try {
-      const r = await fetch('/api/announcements');
+      const r = await fetch('/api/announcements', { credentials: 'same-origin', cache: 'no-store' });
       if (!r.ok) return;
-      const { announcements } = await r.json();
-      if (!announcements || !announcements.length) return;
+      const data = await r.json();
+      const announcements = Array.isArray(data.announcements) ? data.announcements : [];
       const ann = announcements.find(a => !dismissed.includes(a.id));
-      if (!ann) return;
-      text.textContent = `${ann.title}: ${ann.body}`;
-      dot.dataset.priority = ann.priority;
-      dot.className = `announcement-priority-dot priority-${ann.priority}`;
+      if (!ann) { banner.hidden = true; return; }
+      if (title) title.textContent = ann.title || 'Pengumuman';
+      if (text) text.textContent = ann.body || '';
+      if (dot) {
+        dot.dataset.priority = ann.priority || 'normal';
+        dot.className = `announcement-priority-dot priority-${ann.priority || 'normal'}`;
+      }
       banner._currentId = ann.id;
       banner.hidden = false;
     } catch {}
   }
 
-  closeBtn.addEventListener('click', () => {
-    if (banner._currentId) {
+  closeBtn?.addEventListener('click', () => {
+    if (banner._currentId && !dismissed.includes(banner._currentId)) {
       dismissed.push(banner._currentId);
       localStorage.setItem('clined_dismissed_announcements', JSON.stringify(dismissed));
     }
     banner.hidden = true;
   });
 
+  // Expose a direct refresh so admin publish/delete is reflected immediately.
+  window.CLINED_refreshAnnouncements = loadAnnouncements;
   loadAnnouncements();
+  // Keep published announcements in sync without requiring a page refresh.
+  setInterval(loadAnnouncements, 8000);
 })();
 
 // ── LEADERBOARD ───────────────────────────────────────────────────────────
