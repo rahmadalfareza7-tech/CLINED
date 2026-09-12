@@ -85,7 +85,7 @@
             <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
             <label>Link materi</label><input name="url" type="url" inputmode="url" placeholder="https://..." required>
             <div class="admin-material-current" data-material-current>Belum ada link tersimpan.</div>
-            <div class="admin-material-actions"><button class="account-action account-save" type="submit">Simpan Link Materi</button><button class="admin-delete-btn danger clined-compact-action" data-delete-material type="button">Hapus Link</button></div>
+            <div class="admin-material-actions"><button class="account-action account-save" type="submit">Simpan Link Materi</button><button class="account-action material-delete-action" data-delete-material type="button">Hapus Link</button></div>
             <p class="muted" data-material-message></p>
           </form>
         </div>`;
