@@ -1,0 +1,2017 @@
+[
+  {
+    "id": "pulmonis-2022-1",
+    "no": 1,
+    "soal": "Seorang pria usia 35 tahun datang ke IGD dengan trauma fraktur tertutup femur kanan, rencana akan dilakukan operasi open reduction internal fixation. Kondisi hemodinamik stabil dengan Hb pre-operasi 10 g/dL. Anastesi subarachnoid dipengaruhi beberapa hal kecuali?",
+    "opsi": [
+      "Dosis",
+      "Kesadaran",
+      "Konsesntrasi",
+      "Lokasi penyuntikan",
+      "Volume"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Anestesi spinal dipengaruhi oleh dosis, konsentrasi, volume, dan lokasi penyuntikan. Kesadaran pasien bukan faktor farmakokinetik utama yang menentukan penyebaran blok.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR hanya jika yang ditanya faktor penentu spread adalah dosis; kesadaran pasien sendiri tidak menentukan level blok spinal.",
+      "BENAR. Anestesi spinal dipengaruhi oleh dosis, konsentrasi, volume, dan lokasi penyuntikan. Kesadaran pasien bukan faktor farmakokinetik utama yang menentukan penyebaran blok.",
+      "SALAH. Konsentrasi memengaruhi dosis total dan karakter blok; bersama barisitas serta volume, ini memengaruhi penyebaran anestetik lokal.",
+      "SALAH. Level penyuntikan menentukan dermatom blok karena obat ditempatkan langsung ke ruang subaraknoid pada ketinggian tertentu.",
+      "SALAH. Volume intratekal memengaruhi penyebaran terutama bila dikombinasikan dengan barisitas dan posisi pasien."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-2",
+    "no": 2,
+    "soal": "Ada seseorang dengan Sindrom Wallenberg/Lateral Medullary Syndrome, mana pernyataan yang tidak benar?",
+    "opsi": [
+      "Hilang sensasi nyeri dan suhu kontralateral",
+      "Gangguan gerakan tangan dan kaki ipsilateral",
+      "Sindrom horner pada ipsilateral mata",
+      "Hilang sensasi nyeri dan suhu di ipsilateral wajah",
+      "Semua benar"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Wallenberg mengenai medula lateral dan biasanya menyebabkan hilangnya nyeri/suhu wajah ipsilateral, tubuh kontralateral, serta Horner ipsilateral. Gangguan motorik ekstremitas ipsilateral bukan gambaran khas.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Lesi medula lateral mengenai traktus spinotalamik sehingga nyeri/suhu tubuh hilang kontralateral.",
+      "BENAR. Wallenberg mengenai medula lateral dan biasanya menyebabkan hilangnya nyeri/suhu wajah ipsilateral, tubuh kontralateral, serta Horner ipsilateral. Gangguan motorik ekstremitas ipsilateral bukan gambaran khas.",
+      "BENAR. Jalur simpatis desenden terkena sehingga muncul Horner ipsilateral berupa miosis/ptosis dan anhidrosis.",
+      "BENAR. Nukleus/traktus spinal trigeminal terkena sehingga nyeri dan suhu wajah hilang ipsilateral.",
+      "SALAH. Karena satu pernyataan di atas—gangguan motorik ekstremitas ipsilateral—tidak khas, pilihan “semua benar” tidak dapat dipakai."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-3",
+    "no": 3,
+    "soal": "Apa obat pilihan untuk bangkitan lena?",
+    "opsi": [
+      "diazepam",
+      "topiramat",
+      "etsuksimid",
+      "klomazepam",
+      "Carbamazepin"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Ethosuximide adalah pilihan klasik untuk absence seizure karena efektif pada kejang lena tanpa komponen tonik-klonik.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Diazepam efektif menghentikan kejang akut, tetapi bukan pilihan pemeliharaan absence seizure karena sedasi dan toleransi.",
+      "SALAH. Topiramate adalah antikejang spektrum luas, tetapi bukan pilihan klasik pertama untuk absence seizure murni.",
+      "BENAR. Ethosuximide adalah pilihan klasik untuk absence seizure karena efektif pada kejang lena tanpa komponen tonik-klonik.",
+      "SALAH. Clonazepam dapat menekan kejang tetapi bukan terapi pilihan jangka panjang untuk absence karena toleransi dan sedasi.",
+      "SALAH. Carbamazepine efektif untuk kejang fokal tetapi dapat memperburuk absence seizure."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-4",
+    "no": 4,
+    "soal": "Apakah salah satu nama kelainan kongenital pada bayi baru lahir berupa benjolan di punggung belakang di daerah lumbosakral, yang apabila tidak segera ditangani dapat menimbulkan komplikasi berupa kelumpuhan?",
+    "opsi": [
+      "Siringomyeloma",
+      "Meningochele",
+      "Spina bifida oculta",
+      "Myelomeningochele",
+      "Meningitis"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Myelomeningocele adalah bentuk spina bifida terbuka yang berisi meninges dan jaringan saraf serta dapat menyebabkan defisit neurologis/paralisis.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Syringomyelia adalah kavitas patologis di medula spinalis, bukan massa kongenital lumbosakral terbuka pada bayi baru lahir.",
+      "SALAH. Meningocele hanya berisi meninges dan CSF; jaringan saraf tidak berada di dalam kantong sehingga defisit motorik biasanya lebih ringan.",
+      "SALAH. Spina bifida occulta tertutup kulit dan sering tidak menimbulkan massa terbuka atau defisit berat sejak lahir.",
+      "BENAR. Myelomeningocele adalah bentuk spina bifida terbuka yang berisi meninges dan jaringan saraf serta dapat menyebabkan defisit neurologis/paralisis.",
+      "SALAH. Meningitis adalah infeksi meningen dan tidak menjelaskan benjolan kongenital lumbosakral."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-5",
+    "no": 5,
+    "soal": "Seorang wanita 42 tahun mengalami berbagai keluhan neurologis. Apa keluhan sensoriknya?",
+    "opsi": [
+      "Hiperestesk",
+      "Paresis N. VII",
+      "Hemiparesis",
+      "Disartia",
+      "Paresis N. XII"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Hiperestesia adalah keluhan sensorik. Paresis, hemiparesis, dan disartria merupakan gangguan motorik/bicara.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Hiperestesia adalah keluhan sensorik. Paresis, hemiparesis, dan disartria merupakan gangguan motorik/bicara.",
+      "SALAH. Paresis N VII adalah gangguan motorik nervus fasialis, bukan keluhan sensorik.",
+      "SALAH. Hemiparesis berarti kelemahan motorik satu sisi tubuh, bukan gangguan sensasi.",
+      "SALAH. Disartria adalah gangguan artikulasi akibat masalah motorik bicara, bukan modalitas sensorik.",
+      "SALAH. Paresis N XII menyebabkan kelemahan gerak lidah, termasuk defisit motorik."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-6",
+    "no": 6,
+    "soal": "Seorang laki laki berusia 30 tahun di bawa ke UGD oleh temannya dengan riwayat pingsan selama 5 menit setelah kepala terbentur akibat terjatuh dari motor 1 jam yang lalu. Saat ini pasien mengeluh sakit kepala terutama di bagian belakang. Tidak ada muntah pandangan ganda, kelemahan atau baal. Pasien tidak ingat saat sadar setelah pingsan sampai di bawa ke RS, namun ingat kejadian sebelum kecelakaan. Apakah diagnosis cedera kepala pada pasien?",
+    "opsi": [
+      "Cedera kepala difus",
+      "Cedera kepala berat",
+      "Cedera kepala ringan",
+      "Cedera kepala sedang",
+      "Cedera kepala minimal"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Kehilangan kesadaran singkat dengan amnesia pascatrauma dan tanpa defisit fokal sesuai cedera kepala ringan (concussion) dalam klasifikasi klinis umum.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. “Cedera difus” bukan klasifikasi derajat berdasarkan GCS; stem menggambarkan cedera kepala dengan GCS klinis yang tidak berat.",
+      "SALAH. Cedera kepala berat umumnya GCS 3–8 atau gangguan kesadaran berat; kasus ini tidak menunjukkan keadaan tersebut.",
+      "BENAR. Kehilangan kesadaran singkat dengan amnesia pascatrauma dan tanpa defisit fokal sesuai cedera kepala ringan (concussion) dalam klasifikasi klinis umum.",
+      "SALAH. Cedera sedang biasanya GCS 9–12; tidak ada data yang mendukung derajat tersebut.",
+      "SALAH. “Minimal” bukan kategori utama yang dipakai untuk klasifikasi derajat cedera kepala berbasis GCS."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-7",
+    "no": 7,
+    "soal": "Cairan serebrospinal berada diantara 2 lapisan yaitu",
+    "opsi": [
+      "Arachnoid, dan durameter",
+      "Durameter dan piameter",
+      "Piameter dan arachnoid",
+      "Arachnoid dan durametet",
+      "Falx dan tonterium"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "LCS terutama berada di ruang subaraknoid, yaitu antara arachnoid mater dan pia mater.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Ruang antara dura dan arachnoid adalah ruang subdural, bukan lokasi normal utama LCS.",
+      "SALAH. Dura adalah lapisan terluar dan pia melekat pada permukaan otak; LCS tidak berada di antara keduanya sebagai ruang utama.",
+      "BENAR. LCS terutama berada di ruang subaraknoid, yaitu antara arachnoid mater dan pia mater.",
+      "SALAH. Penulisan ini pada dasarnya menyebut dua lapisan yang benar tetapi terbalik; secara anatomi LCS berada di ruang subaraknoid antara arachnoid dan pia.",
+      "SALAH. Falx dan tentorium adalah lipatan dura mater, bukan dua batas ruang LCS."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-8",
+    "no": 8,
+    "soal": "Seorang wanita usia 88 tahun dengan penyakit Alzheimer meninggal karena gagal jantung kongestif. Pemeriksaan dari otopsi otak menunjukkan atrofi girus bilateral, sebagian di daerah frontal dan korteks hippokampus. Apakah kemungkinan lain yang diduga dapat terjadi di otak pasien ini?",
+    "opsi": [
+      "Periventricular patches of demyelination",
+      "Hydrocephalus ex vacuo",
+      "Cerebritis",
+      "Pachygyria",
+      "Lissencephaly"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Atrofi otak pada Alzheimer dapat menyebabkan pembesaran ventrikel secara pasif tanpa peningkatan tekanan, disebut hydrocephalus ex vacuo.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Periventricular demyelinating plaques lebih khas multiple sclerosis daripada Alzheimer.",
+      "BENAR. Atrofi otak pada Alzheimer dapat menyebabkan pembesaran ventrikel secara pasif tanpa peningkatan tekanan, disebut hydrocephalus ex vacuo.",
+      "SALAH. Cerebritis adalah proses inflamasi/inisiasi abses otak, bukan konsekuensi khas atrofi Alzheimer.",
+      "SALAH. Pachygyria adalah kelainan migrasi kortikal kongenital dengan girus lebar dan sedikit, bukan perubahan degeneratif usia lanjut.",
+      "SALAH. Lissencephaly adalah kegagalan pembentukan girus korteks sejak perkembangan embrionik."
+    ],
+    "komponenStatistik": "Histology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-9",
+    "no": 9,
+    "soal": "Seorang wanita 34 thn terkena rabies (diagnosisnya). Hal yang benar terkait mikroorganisme penyebab tersebut adalah?",
+    "opsi": [
+      "sensitif interferon",
+      "sensitif antibiotik",
+      "resisten ether",
+      "fakultatif intraselular",
+      "laten di ganglion terminal"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Virus rabies adalah virus RNA beramplop dan respons terhadap interferon berperan dalam pertahanan antivirus. Antibiotik tidak efektif terhadap virus.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Virus rabies adalah virus RNA beramplop dan respons terhadap interferon berperan dalam pertahanan antivirus. Antibiotik tidak efektif terhadap virus.",
+      "SALAH. Antibiotik menargetkan bakteri, sedangkan rabies disebabkan Lyssavirus.",
+      "SALAH. Virus rabies beramplop sehingga relatif mudah diinaktivasi oleh pelarut lipid seperti ether; bukan resisten ether.",
+      "SALAH. Rabies adalah virus obligat intraseluler, bukan “fakultatif” seperti klasifikasi mikroorganisme seluler.",
+      "SALAH. Virus rabies bereplikasi terutama di jaringan saraf dan bermigrasi retrograd; bukan menetap laten di ganglion terminal."
+    ],
+    "komponenStatistik": "Recall",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-11",
+    "no": 11,
+    "soal": "Kekurangan melatonin dapat menimbulkan gejala pada manusia, apa gejala tersebut?",
+    "opsi": [
+      "Cemas",
+      "Insomnia",
+      "Malas",
+      "Sakit kepala",
+      "Gemetar"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Melatonin membantu mengatur ritme sirkadian dan tidur. Kekurangan melatonin dapat berhubungan dengan gangguan tidur/insomnia.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Cemas bukan konsekuensi paling spesifik dari penurunan melatonin; efek utama yang dicari dalam soal adalah gangguan tidur.",
+      "BENAR. Melatonin membantu mengatur ritme sirkadian dan tidur. Kekurangan melatonin dapat berhubungan dengan gangguan tidur/insomnia.",
+      "SALAH. “Malas” terlalu nonspesifik dan tidak merupakan diagnosis/efek khas defisiensi melatonin.",
+      "SALAH. Sakit kepala dapat muncul pada banyak kondisi, tetapi bukan konsekuensi khas utama defisiensi melatonin.",
+      "SALAH. Tremor bukan manifestasi utama gangguan melatonin."
+    ],
+    "komponenStatistik": "Physiology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-12",
+    "no": 12,
+    "soal": "laki-laki 45 tahun tidak bisa menggerakan tungkai seblah kiri. Keluhan dialami setelah jatuh dari pohon setinggi 4 meter. setelah jatuh, masih bangun dan tidak mengalami mual muntah tetapi tidak bisa menggerakkan tungkai kiri. apa farmakoterapa nya?",
+    "opsi": [
+      "metilprednisolon 6x125 mg/kgBB iv",
+      "metilprednisolon 30 mg/kgBb iv",
+      "metilprednisolon 30 mg/kgbb dilanjutkan 5,4 mg/kgBB/jam selama 23 jam",
+      "metilprednisolon 30 mg/kgbb dilanjutkan 6x125 mg/kgbb/jam iv",
+      "metilprednisolon 30 mg/kgbb dilanjutkan 5,4 mg/kgBB selama 23 jam"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Skema methylprednisolone 30 mg/kg bolus diikuti 5,4 mg/kg/jam selama 23 jam merupakan regimen NASCIS yang secara historis sering muncul dalam soal cedera medula spinalis. Catatan: penggunaan steroid dosis tinggi pada cedera medula kini tidak rutin dan bergantung pedoman/risiko.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Dosis 30 mg/kg adalah bolus awal; tanpa infus lanjutan regimen ini tidak lengkap.",
+      "SALAH. Bolus saja tidak sesuai regimen NASCIS yang dimaksud soal.",
+      "BENAR. Skema methylprednisolone 30 mg/kg bolus diikuti 5,4 mg/kg/jam selama 23 jam merupakan regimen NASCIS yang secara historis sering muncul dalam soal cedera medula spinalis. Catatan: penggunaan steroid dosis tinggi pada cedera medula kini tidak rutin dan bergantung pedoman/risiko.",
+      "SALAH. 6×125 mg/kg/jam adalah dosis yang tidak masuk akal dan jauh melebihi regimen standar.",
+      "SALAH. Setelah bolus, dosis harus dinyatakan per kg per jam; opsi ini menghilangkan satuan per jam."
+    ],
+    "catatanKlinis": "⚠️ Catatan: high-dose methylprednisolone regimen ini berasal dari NASCIS dan sering muncul di soal lama. Penggunaan steroid dosis tinggi pada acute spinal cord injury sekarang kontroversial dan tidak rutin menurut banyak pedoman modern.",
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-13",
+    "no": 13,
+    "soal": "Medulla spinalis merupakan bagian dari susunan saraf pusat. Oleh karena itu, medula spinalis juga diperdarahi dari cabang pembulih darah yang juga memperdarahi otak. Darimanakah asal perdarahan medulla spinalis?",
+    "opsi": [
+      "Spinalis anterior cabang dari A. Basilaris",
+      "Spinalis anterior cabang dari A. Vertebralis",
+      "Spinalis anterior cabang dari A. Cerebelaris Inferior Posterior",
+      "Spinalis posterior cabang dari A. Basilaris",
+      "Spinalis posterior cabang dari A. Spinalis anterior"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Arteri spinalis anterior terutama berasal dari cabang arteri vertebralis dan berjalan di fisura median anterior medula spinalis.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Arteri spinalis anterior bukan cabang langsung utama dari basilaris.",
+      "BENAR. Arteri spinalis anterior terutama berasal dari cabang arteri vertebralis dan berjalan di fisura median anterior medula spinalis.",
+      "SALAH. PICA terutama menyuplai serebelum dan medula lateral, bukan sumber utama ASA.",
+      "SALAH. Arteri spinalis posterior berasal terutama dari vertebral/PICA, bukan langsung dari basilaris sebagai aturan utama.",
+      "SALAH. Arteri spinalis anterior dan posterior merupakan arteri yang berbeda; posterior bukan cabang dari ASA."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-14",
+    "no": 14,
+    "soal": "Seorang perempuan, usia 26 tahun, mengatakan bahwa dirinya positif hamil berdasarkan hasil pemeriksaan urin di rumah. Dia khawatir terhadap perkembangan janin karena sebelumnya tidak memperhatikan makanan, minuman, maupun obat-obatan yang telah dikonsumsi, sebab perkembangan saraf janin terjadi sejak usia embrio 3 minggu. Struktur apakah yang menginduksi perkembangan sistem saraf pusat pada masa embrionik?",
+    "opsi": [
+      "Notochord",
+      "Crista neuralis",
+      "Neural tube",
+      "Plica neuralis",
+      "Somite"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Notochord menginduksi ektoderm di atasnya untuk membentuk neural plate, yang kemudian berkembang menjadi neural tube.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Notochord menginduksi ektoderm di atasnya untuk membentuk neural plate, yang kemudian berkembang menjadi neural tube.",
+      "SALAH. Neural crest terbentuk dari tepi neural plate dan bermigrasi membentuk PNS, melanosit, dan struktur lain; bukan penginduksi awal neural plate.",
+      "SALAH. Neural tube adalah hasil pelipatan neural plate, bukan struktur yang menginduksi pembentukannya.",
+      "SALAH. Neural folds/plica neuralis adalah bagian proses neurulasi, bukan penginduksi primer.",
+      "SALAH. Somite membentuk sebagian besar vertebra, otot rangka, dan dermis; bukan penginduksi utama SSP."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-15",
+    "no": 15,
+    "soal": "Seorang laki-laki dengan keluhan kelemahan anggota gerak Dokter mendiagnosis parkinson. Neurotransmitter apa yang berperan?",
+    "opsi": [
+      "GABA",
+      "Dopamine",
+      "Serotonin",
+      "Glutamate",
+      "Asetilkolin"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Parkinson berkaitan dengan degenerasi neuron dopaminergik di substantia nigra pars compacta sehingga dopamin di striatum menurun.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. GABA adalah neurotransmiter inhibitorik utama; bukan defisit neurotransmiter inti Parkinson.",
+      "BENAR. Parkinson berkaitan dengan degenerasi neuron dopaminergik di substantia nigra pars compacta sehingga dopamin di striatum menurun.",
+      "SALAH. Serotonin berperan pada mood dan fungsi lain, tetapi bukan neurotransmiter utama yang hilang pada Parkinson.",
+      "SALAH. Glutamat penting dalam sirkuit basal ganglia, tetapi bukan defisit primer Parkinson.",
+      "SALAH. Asetilkolin berperan dalam keseimbangan sirkuit striatal; pada Parkinson masalah utamanya adalah penurunan dopamin."
+    ],
+    "komponenStatistik": "Physiology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-16",
+    "no": 16,
+    "soal": "[SKENARIO ORANG SISWA SUKA NGINTIPIN TEMEN NYA] apa nama gangguan nya?",
+    "opsi": [
+      "Frottoriesme",
+      "Voyeurisme",
+      "Ekshibisionisme",
+      "Fetishme",
+      "fedofilia"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Voyeurisme adalah ketertarikan/aktivitas seksual yang melibatkan mengintip orang lain yang tidak menyadari atau tidak menyetujui pengamatan tersebut.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Frotteurisme melibatkan menggosok/menyentuhkan tubuh atau genital ke orang yang tidak menyetujui, bukan mengintip.",
+      "BENAR. Voyeurisme adalah ketertarikan/aktivitas seksual yang melibatkan mengintip orang lain yang tidak menyadari atau tidak menyetujui pengamatan tersebut.",
+      "SALAH. Ekshibisionisme adalah memamerkan genital kepada orang lain, bukan mengamati diam-diam.",
+      "SALAH. Fetishisme berfokus pada objek nonhidup atau bagian tubuh tertentu sebagai sumber rangsangan seksual.",
+      "SALAH. Pedofilia adalah ketertarikan seksual persisten pada anak prapubertas; mengintip teman sebaya tidak otomatis memenuhi kriteria itu."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-17",
+    "no": 17,
+    "soal": "Seorang perempuan berusia 21 tahun datang ke poliklinik RS dengan keluhan kejang berulang. Menurut keluarga pasien terlihat tatapan kosong sambil menepuk-nepuk tangan dengan berulang-ulang, mata mendelik ke atas, mengompol, dan ... Pemeriksaan fisik tanda vital pasien normal dan tidak didapatkan defisit neurologis. Manakah mekanisme automatisme pada pasien?",
+    "opsi": [
+      "Tatapan kosong",
+      "Menepuk tangan berulang",
+      "Mata mendelik ke atas",
+      "Bangkitan kejang",
+      "Pandangan Gelap"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Automatisme adalah aktivitas motorik kompleks yang tampak otomatis selama bangkitan, misalnya gerakan menepuk tangan berulang.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Tatapan kosong adalah manifestasi gangguan kesadaran atau absence/focal seizure, tetapi bukan gerakan otomatis yang dimaksud.",
+      "BENAR. Automatisme adalah aktivitas motorik kompleks yang tampak otomatis selama bangkitan, misalnya gerakan menepuk tangan berulang.",
+      "SALAH. Mata mendelik ke atas merupakan deviasi tonik, bukan automatisme.",
+      "SALAH. Bangkitan adalah episode aktivitas listrik abnormal; automatisme adalah perilaku yang muncul di dalam bangkitan.",
+      "SALAH. Pandangan gelap menggambarkan gangguan visual/presinkop, bukan automatisme."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-18",
+    "no": 18,
+    "soal": "Seorang laki laki 45 tahun jatuh dari pohon dengan ketinggian 4 m dengan posisi terlentang dan bagian pugung yang menyentuh tanah terlebih dahulu, pada saat jatuh pasien posisi sadar tidak terdapat muntah pasien tidak bisa menggerakkan ke 2 tungkai namun bisa merasakan sentuhan, menurut ASIA SCALE?",
+    "opsi": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "ASIA B berarti cedera medula inkomplet dengan fungsi sensorik masih ada tetapi fungsi motorik di bawah tingkat neurologis tidak ada.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. ASIA A berarti complete injury: tidak ada fungsi sensorik maupun motorik di segmen sakral.",
+      "BENAR. ASIA B berarti cedera medula inkomplet dengan fungsi sensorik masih ada tetapi fungsi motorik di bawah tingkat neurologis tidak ada.",
+      "SALAH. ASIA C masih memiliki fungsi motorik di bawah level neurologis, meskipun sebagian besar otot utama lemah.",
+      "SALAH. ASIA D berarti mayoritas otot kunci di bawah level neurologis memiliki kekuatan ≥3/5; tidak sesuai bila kedua tungkai tidak bergerak.",
+      "SALAH. ASIA E berarti fungsi motorik dan sensorik normal."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-19",
+    "no": 19,
+    "soal": "Laki-laki 55 tahun datang ke UGD dengan keluhan demam tinggi, nafsu makan turun dan kesadaran menurun. Dokter menduga pasien menderita radang selaput otak. Pemeriksaan LCS hasilnya kerus dan banyak sel radang serta didapatkan bakteri diplokokus gram positif. Bakteri apa yang sering dijumpai pada penyakit ini?",
+    "opsi": [
+      "Neisseria hemophilia",
+      "Neisseria meningitidis",
+      "Streptococcus pneumonia",
+      "Haemophilus pneumonia",
+      "Streptococcus pyogenes"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Diplokokus Gram-positif yang paling khas sebagai penyebab meningitis bakterial adalah Streptococcus pneumoniae.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. “Neisseria hemophilia” bukan nama bakteri penyebab meningitis yang valid; H. influenzae adalah bakteri berbeda.",
+      "SALAH. N. meningitidis memang penyebab meningitis penting, tetapi bentuknya diplokokus Gram-negatif, bukan Gram-positif.",
+      "BENAR. Diplokokus Gram-positif yang paling khas sebagai penyebab meningitis bakterial adalah Streptococcus pneumoniae.",
+      "SALAH. “Haemophilus pneumonia” bukan nama spesies bakteri; H. influenzae adalah kokobasil Gram-negatif.",
+      "SALAH. S. pyogenes adalah kokus Gram-positif beta-hemolitik, tetapi bukan diplokokus khas meningitis pada stem."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-20",
+    "no": 20,
+    "soal": "Soal cerita anak kejang demam, bb anak 18 kg. Sebelumnya sudah dikasih diazepam 10mg, apa tatalaksana selanjutnya?",
+    "opsi": [
+      "Diazepam per rectal 10 mg",
+      "Diazepam per oral 10 mg",
+      "Diazepam per rectal 5 mg",
+      "Fenitoin 15–20 mg/kgBB",
+      "Fenobarbital 10–20 mg/kgBB"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Bila kejang masih berlanjut setelah benzodiazepin awal, terapi lini berikutnya adalah obat antikejang parenteral seperti fosfenitoin/fenitoin, valproat, atau levetiracetam sesuai protokol. Pilihan arsip mengarah ke fenitoin.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Mengulang diazepam rektal tanpa mengevaluasi dosis/rute dan airway bukan langkah terbaik setelah benzodiazepin gagal.",
+      "SALAH. Diazepam oral tidak dapat diandalkan pada status kejang karena onset lambat dan risiko aspirasi.",
+      "SALAH. Pengulangan diazepam rektal dapat meningkatkan depresi napas dan bukan pilihan lini kedua utama setelah kegagalan dosis awal.",
+      "BENAR. Bila kejang masih berlanjut setelah benzodiazepin awal, terapi lini berikutnya adalah obat antikejang parenteral seperti fosfenitoin/fenitoin, valproat, atau levetiracetam sesuai protokol. Pilihan arsip mengarah ke fenitoin.",
+      "SALAH. Fenobarbital dapat digunakan pada situasi tertentu, tetapi bukan pilihan utama pada opsi ini setelah benzodiazepin gagal."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-21",
+    "no": 21,
+    "soal": "Dalam Al-Qur’an, istilah Ulil Albab merujuk kepada orang-orang yang…",
+    "opsi": [
+      "Orang yang beriman",
+      "Orang yang Bertakwa",
+      "Orang yang Berakal",
+      "Orang yang Saleh",
+      "Orang yang Fasik"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Ulil Albab secara umum merujuk kepada orang-orang yang menggunakan akal/pemikiran secara mendalam dan mengambil pelajaran.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Iman berarti keyakinan; istilah Ulil Albab lebih spesifik menunjuk orang yang menggunakan akal dan mengambil pelajaran.",
+      "SALAH. Taqwa berarti menjalankan ketaatan dan menjauhi larangan; bukan arti literal utama Ulil Albab.",
+      "BENAR. Ulil Albab secara umum merujuk kepada orang-orang yang menggunakan akal/pemikiran secara mendalam dan mengambil pelajaran.",
+      "SALAH. Saleh menggambarkan kebaikan amal, bukan makna literal istilah tersebut.",
+      "SALAH. Fasik justru berarti keluar dari ketaatan; berlawanan dengan makna yang dimaksud."
+    ],
+    "komponenStatistik": "Recall",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-22",
+    "no": 22,
+    "soal": "Seorang laki-laki 28 tahun datang ke IGD RS mengeluhkan nyeri kepala yang semakin lama semakin memberat selama 1 minggu. Status generalis: Tampak kurus seperti kurang gizi. pasien mengeluhkan demam malam hari dan batuk selama 3 bulan. apa terapi kausatif dari kasus tersebut?",
+    "opsi": [
+      "Isoniazid & rifampicin",
+      "Pembedahan",
+      "Ampicillin dan sefalosporin",
+      "... & sulfadiazine"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Gambaran mengarah ke tuberkulosis dengan keterlibatan susunan saraf pusat; terapi kausatif memerlukan regimen antituberkulosis kombinasi. Pilihan arsip paling sesuai adalah isoniazid dan rifampisin, meski regimen lengkap biasanya lebih dari dua obat.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Gambaran mengarah ke tuberkulosis dengan keterlibatan susunan saraf pusat; terapi kausatif memerlukan regimen antituberkulosis kombinasi. Pilihan arsip paling sesuai adalah isoniazid dan rifampisin, meski regimen lengkap biasanya lebih dari dua obat.",
+      "SALAH. Pembedahan bukan terapi kausatif utama TB meningitis; operasi hanya untuk komplikasi tertentu seperti hidrosefalus/abses terpilih.",
+      "SALAH. Ampisilin-sefalosporin digunakan pada meningitis bakteri tertentu, bukan untuk TB yang berlangsung kronis dengan gejala sistemik seperti ini.",
+      "SALAH. Sulfadiazin-pirimetamin lebih khas terapi toksoplasmosis; tidak sesuai dengan gambaran TB kronis pada stem."
+    ],
+    "catatanKlinis": "⚠️ Catatan: terapi TB meningitis secara klinis membutuhkan regimen kombinasi (umumnya HRZE pada fase awal + kortikosteroid), bukan hanya dua obat. Opsi A adalah jawaban yang dimaksud karena pilihan lain lebih tidak sesuai.",
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-23",
+    "no": 23,
+    "soal": "Seorang laki-laki berusia 35 tahun dibawa ke IGD RS oleh warga sekitar setelah kecelakaan lalu lintas dan kepala pasien terkena aspal sejak 1 jam yang lalu. Setelah pemeriksaan fisik dan penunjang, dokter menduga pasien mengalami gangguan pada blood brain barrier sehingga edema. Apakah nama neuroglia yang berperan pada kasus tersebut?",
+    "opsi": [
+      "Sel schwann",
+      "Mikroglia",
+      "Oligodendroglia",
+      "Astrosit",
+      "Sel Ependim"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Astrosit berperan penting pada blood-brain barrier, termasuk dukungan terhadap endotel kapiler dan homeostasis lingkungan saraf.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Sel Schwann membentuk mielin di sistem saraf perifer; tidak menjadi komponen utama blood-brain barrier.",
+      "SALAH. Mikroglia adalah makrofag/residen imun SSP, bukan pembentuk utama sawar darah-otak.",
+      "SALAH. Oligodendroglia membentuk mielin di SSP, bukan komponen utama tight junction BBB.",
+      "BENAR. Astrosit berperan penting pada blood-brain barrier, termasuk dukungan terhadap endotel kapiler dan homeostasis lingkungan saraf.",
+      "SALAH. Sel ependim melapisi ventrikel dan berhubungan dengan CSF, bukan komponen utama BBB."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-24",
+    "no": 24,
+    "soal": "Seorang perempuan (lupa umur berapa) remaja sering marah-marah. Sering selfharm/melukai diri, ia juga mengalami mood yang … trs tbtb hampa kosong. Dari kecil orangtuanya gapernah peduli sama dia. TTV nya aman. Diagnosisnya apa?",
+    "opsi": [
+      "Narsistik",
+      "Historinik",
+      "PTSD",
+      "Borderline",
+      "Skizoid"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Self-harm, ketidakstabilan emosi, rasa kosong, dan pola relasi/riwayat pengasuhan yang bermasalah sangat mengarah ke borderline personality disorder.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Narsistik ditandai grandiositas, kebutuhan akan kekaguman, dan kurang empati; self-harm serta rasa kosong lebih khas borderline.",
+      "SALAH. Histrionik menonjolkan pencarian perhatian dan ekspresi dramatis; pola self-harm dan emptiness tidak sekuat borderline.",
+      "SALAH. PTSD membutuhkan paparan trauma dan gejala intrusi/avoidance/hyperarousal; riwayat pengasuhan buruk saja tidak cukup.",
+      "BENAR. Self-harm, ketidakstabilan emosi, rasa kosong, dan pola relasi/riwayat pengasuhan yang bermasalah sangat mengarah ke borderline personality disorder.",
+      "SALAH. Skizoid ditandai detachment sosial dan afek terbatas, bukan pola impulsif/self-harm yang dominan."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-25",
+    "no": 25,
+    "soal": "Setiap axon pada susunan perifer diliputi oleh selubung yg berhubungan langsung dengan selubung myelin. Apa nama selubung jaringan ikat ini?",
+    "opsi": [
+      "endoneurium",
+      "perineurium",
+      "epineurium",
+      "eksoneurium",
+      "myelin"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Endoneurium membungkus masing-masing serabut/akson saraf perifer, sedangkan perineurium membungkus fascicle dan epineurium membungkus seluruh saraf.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Endoneurium membungkus masing-masing serabut/akson saraf perifer, sedangkan perineurium membungkus fascicle dan epineurium membungkus seluruh saraf.",
+      "SALAH. Perineurium membungkus satu fascicle, bukan satu akson.",
+      "SALAH. Epineurium membungkus seluruh saraf perifer, bukan setiap serabut.",
+      "SALAH. Eksoneurium bukan istilah standar untuk lapisan ikat utama saraf perifer.",
+      "SALAH. Myelin adalah selubung lipid yang dibentuk Schwann/oligodendrosit; bukan jaringan ikat."
+    ],
+    "komponenStatistik": "Histology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-26",
+    "no": 26,
+    "soal": "Laki laki 40 tahun Diagnosis Bovine Spongiform Ensepalophaty (BSE) atau berupa creutzfeldt jakob. bagaimana sifat mikroorganisme penyebab infeksi tersebut",
+    "opsi": [
+      "Memiliki ribosom",
+      "Memiliki kapsid ikosahedral",
+      "Resisten terhadap enzim nuklease",
+      "Mikroaerofikik",
+      "Memiliki genom RNA & DNA"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Prion penyebab CJD tidak memiliki asam nukleat dan sangat resisten terhadap berbagai proses inaktivasi; ia juga resisten terhadap nuklease karena tidak memiliki genom.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Prion tidak memiliki ribosom karena bukan sel atau organisme seluler.",
+      "SALAH. Kapsid ikosahedral adalah struktur virus; prion tidak memiliki kapsid maupun asam nukleat.",
+      "BENAR. Prion penyebab CJD tidak memiliki asam nukleat dan sangat resisten terhadap berbagai proses inaktivasi; ia juga resisten terhadap nuklease karena tidak memiliki genom.",
+      "SALAH. Mikroaerofilik adalah karakter beberapa bakteri, bukan agen prion.",
+      "SALAH. Prion tidak membawa genom DNA maupun RNA."
+    ],
+    "komponenStatistik": "Histology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-27",
+    "no": 27,
+    "soal": "Seorang laki-laki berusia 60 tahun dibawa oleh anaknya ke poliklinik karena tiba-tiba tidak dapat dimengerti pembicaraannya sejak 2 jam yang lalu. Ia masih dapat mengucap kata-kata, namun tidak dapat dimengerti, tidak bisa mengikuti perintah, serta tidak dapat mengulang kata-kata. Tidak ada bicara ditemukan cadel/pelo, nyeri kepala, dan muntah. Riwayat sakit jantung sejak 1 tahun yang lalu, berobat di puskesmas. Tanda vital: tekanan darah 150/100 mmHg, nadi 110 x/m ireguler, nafas 20 x/m, temperatur 37⁰C. Apa gejala yang terjadi pada pasien?",
+    "opsi": [
+      "Afasia global",
+      "Afasia anomik",
+      "Afasia motorik",
+      "Afasia transkortikal sensorik",
+      "Afasia transkortikal motorik"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Tidak dapat memahami, mengulang, dan menghasilkan bahasa yang bermakna menunjukkan gangguan bahasa luas pada beberapa komponen—sesuai afasia global.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Tidak dapat memahami, mengulang, dan menghasilkan bahasa yang bermakna menunjukkan gangguan bahasa luas pada beberapa komponen—sesuai afasia global.",
+      "SALAH. Afasia anomik terutama kesulitan menemukan kata dengan pemahaman dan repetisi relatif lebih baik.",
+      "SALAH. Afasia motorik/Broca terutama mengganggu produksi bahasa, sedangkan pemahaman relatif terjaga.",
+      "SALAH. Transkortikal sensorik biasanya pemahaman buruk tetapi repetisi relatif dipertahankan; stem justru tidak dapat mengulang.",
+      "SALAH. Transkortikal motorik mempertahankan repetisi dan lebih dominan gangguan inisiasi bicara."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-28",
+    "no": 28,
+    "soal": "seorang wanita umur 35 tahun di bawa keluarganya dikarenakan merasa di mata matai FBI, pasien merasa dimata matai karena dirinya merupakan calon ahli waris presiden yang bisa menyatukan dunia,keluarga pasien mengeluhkan pasien sudah berbiacara aneh sejak pulang dari bekerja dari luar negri 6 bulan lalu, pasien menyangkal adanya bisikan dan kesedihan mendalam, apakah kemungkinan diagnosisnya?",
+    "opsi": [
+      "gangguan waham",
+      "skizofrenia paranoid",
+      "skizoaktif manik",
+      "skizoaktif depresi",
+      "sikoaktif tidak terperinci"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Jika delusi menetap tanpa gejala mood atau halusinasi menonjol, gangguan waham lebih sesuai daripada skizofrenia. Redaksi soal menyebut delusi menetap sekitar 6 bulan.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Jika delusi menetap tanpa gejala mood atau halusinasi menonjol, gangguan waham lebih sesuai daripada skizofrenia. Redaksi soal menyebut delusi menetap sekitar 6 bulan.",
+      "SALAH. Skizofrenia membutuhkan kombinasi gejala psikotik khas dan gangguan fungsi dengan durasi ≥6 bulan; stem tidak menunjukkan halusinasi atau gejala disorganisasi yang jelas.",
+      "SALAH. Skizoafektif membutuhkan episode mood yang jelas bersamaan dengan gejala psikotik; stem menyangkal kesedihan mendalam dan tidak memberi episode manik.",
+      "SALAH. Tipe depresi membutuhkan episode depresi yang memenuhi kriteria, yang tidak ada di stem.",
+      "SALAH. Tipe tidak terperinci bukan pilihan terbaik bila pola delusi menetap dapat diklasifikasikan sebagai gangguan waham."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-29",
+    "no": 29,
+    "soal": "Seorang wanita 36 tahun datang ke poli saraf dengan keluhan sering merasa pusing. Pusing dirasakan sudah 1 bulan yang lalu dengan gejala yang semakin memburuk. Kemudian dilakukan pemeriksaan MSCT Scan kepala tanpa kontras. Dari pemeriksaan radiologi didapatkan adanya tumor intra axial pada region supra tentorial dextra. diagnosis nya apa?",
+    "opsi": [
+      "ependimoma",
+      "hemangioblastoma",
+      "meningioma",
+      "oligodendroglioma",
+      "gatau maafin"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Tumor intra-aksial supratentorial pada dewasa paling sesuai dengan oligodendroglioma di antara pilihan yang tersedia; meningioma biasanya ekstra-aksial.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Ependimoma lebih sering berasal dari sistem ventrikel dan pada dewasa dapat muncul spinal; bukan pilihan paling sesuai untuk tumor intra-aksial supratentorial dewasa ini.",
+      "SALAH. Hemangioblastoma paling khas di serebelum dan terkait VHL, bukan tumor intra-aksial supratentorial yang tipikal.",
+      "SALAH. Meningioma umumnya ekstra-aksial, berasal dari sel arachnoid cap, sehingga bertentangan dengan kata “intra axial”.",
+      "BENAR. Tumor intra-aksial supratentorial pada dewasa paling sesuai dengan oligodendroglioma di antara pilihan yang tersedia; meningioma biasanya ekstra-aksial.",
+      "SALAH. “Gatau” tidak dapat dijadikan diagnosis; soal tetap harus dipilih berdasarkan lokasi dan pola tumor."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-30",
+    "no": 30,
+    "soal": "PR 30th, kel: nyeri kepala berdenyut sisi dext sjk 2 hari yg lalu, disertai mual muntah dan diperberat ketika beraktifitas, GCS komposmentis, status neurologis normal, TTV (TD 130/70mmhg, HR, RR, Suhu normal), berdasarkan klarifikasinya, termasuk kategori manakah nyeri kepala tersebut?",
+    "opsi": [
+      "Status migrain",
+      "Migrain kronis",
+      "Probably migrain",
+      "Migrain dengan aura",
+      "Migrain tanpa aura"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Nyeri kepala berdenyut, mual-muntah, memburuk dengan aktivitas, tanpa gejala aura yang disebutkan, paling sesuai migrain tanpa aura.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Status migrainus adalah serangan migrain yang berlangsung >72 jam; durasi 2 hari belum memenuhi.",
+      "SALAH. Migrain kronis memerlukan ≥15 hari sakit kepala/bulan selama >3 bulan, dengan karakter migrain pada sebagian hari; stem tidak demikian.",
+      "SALAH. Probable migraine digunakan bila belum memenuhi seluruh kriteria migrain; stem sudah memberi pola khas unilateral berdenyut, mual-muntah, aktivitas memperberat.",
+      "SALAH. Tidak ada gejala neurologis aura seperti fotopsia, skotoma, parestesia, atau gangguan bahasa sebelum nyeri.",
+      "BENAR. Nyeri kepala berdenyut, mual-muntah, memburuk dengan aktivitas, tanpa gejala aura yang disebutkan, paling sesuai migrain tanpa aura."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-31",
+    "no": 31,
+    "soal": "Peneliti ingin meneliti terkait obat neuroleptik pada penderita gangguan kepribadian skizofrenia dengan cara melakukan membandingkan ukuran nucelus caudatus caput dan cauda, bentuk potongan apakah yang dapat menunjukkan caput dan cauda nucelus caudatus",
+    "opsi": [
+      "potongan horizontal sejajar dengan ventrikel tertius",
+      "potongan horizontal sejajar dengan ventrikel lateral",
+      "potongan mid sagital",
+      "potongan frontal sejajar dengan thalamus",
+      "potongan frontal sejajar dengan quartus"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Caput dan cauda nucleus caudatus mengikuti lengkung ventrikel lateral; potongan horizontal yang sejajar dengan ventrikel lateral dapat memperlihatkan keduanya.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Potongan horizontal sejajar ventrikel III tidak paling optimal untuk mengikuti caput dan cauda nucleus caudatus.",
+      "BENAR. Caput dan cauda nucleus caudatus mengikuti lengkung ventrikel lateral; potongan horizontal yang sejajar dengan ventrikel lateral dapat memperlihatkan keduanya.",
+      "SALAH. Mid-sagittal tidak menampilkan kedua bagian caudate sepanjang jalurnya dengan baik.",
+      "SALAH. Potongan frontal tertentu dapat melihat caput, tetapi tidak paling baik mengikuti keseluruhan caput–cauda.",
+      "SALAH. Ventrikel IV berada di fossa posterior dan tidak relevan untuk menilai nucleus caudatus."
+    ],
+    "komponenStatistik": "Histology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-32",
+    "no": 32,
+    "soal": "Seorang perempuan berusia 25 tahun dibawa temennya ke praktik dokter umum karena Ia sering mengikuti ucapan temennya. la sering meniru perkataan orang. Psikopatologi yang ditemukan adalah?",
+    "opsi": [
+      "Eksentrik",
+      "Ekolalia",
+      "Katalepsia",
+      "Ekopraksia",
+      "Katapleksia"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Ekolalia adalah pengulangan kata atau frasa yang baru saja diucapkan orang lain.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Eksentrik adalah ciri perilaku/kepribadian, bukan pengulangan ucapan orang lain.",
+      "BENAR. Ekolalia adalah pengulangan kata atau frasa yang baru saja diucapkan orang lain.",
+      "SALAH. Katalepsia adalah mempertahankan posisi tubuh secara kaku, bukan meniru ucapan.",
+      "SALAH. Ekopraksia adalah meniru gerakan orang lain, sedangkan kasusnya meniru kata-kata.",
+      "SALAH. Katapleksia adalah hilangnya tonus otot mendadak terkait narkolepsi, bukan imitasi ucapan."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-33",
+    "no": 33,
+    "soal": "Seorang laki2 berumur 50 tahun datang ke poliklinik RS membawa hasil CT scan, dokter menyimpulkan terdapat massa disebelah kiri, pasien mengeluh akhir2 ini pandangan buram, dokter menyarankan melakukan lumbal pungsi, tetapi pasien akhir2 ini demam & sepsis. Bagaimana yang harus dilakukan?",
+    "opsi": [
+      "Melakukan lumbal pungsi sesuai prosedur",
+      "Lumbal pungsi untuk pemeriksaan LCS saja.",
+      "Menunda lumbal pungsi",
+      "Melakukan lumbal pungsi dgn spinal anastesi.",
+      "Semua Benar"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Massa intrakranial dan kondisi sepsis merupakan alasan untuk menilai ulang keamanan pungsi lumbal. Dengan kecurigaan peningkatan tekanan intrakranial, pungsi perlu ditunda sampai aman.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. LP pada pasien dengan massa intrakranial/dugaan peningkatan TIK dapat memicu herniasi dan tidak boleh dilakukan begitu saja.",
+      "SALAH. Membatasi LP hanya untuk “LCS saja” tidak menghilangkan risiko herniasi pada massa/peningkatan TIK.",
+      "BENAR. Massa intrakranial dan kondisi sepsis merupakan alasan untuk menilai ulang keamanan pungsi lumbal. Dengan kecurigaan peningkatan tekanan intrakranial, pungsi perlu ditunda sampai aman.",
+      "SALAH. Spinal anesthesia justru memasukkan jarum ke ruang intratekal dan tidak menyelesaikan risiko peningkatan TIK.",
+      "SALAH. Karena beberapa opsi di atas berbahaya, “semua benar” jelas tidak mungkin."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-35",
+    "no": 35,
+    "soal": "Seorang perempuan umur 25 tahun datang ke rs untuk kontrol epilepsi. Pasien sudah menjalani 1 tahun pengobatan epilepsi. Pasien merasa nyeri perut dan sebah seminggu. Pasien ingin mengganti obat karna bbnya naik, obat apa yg menimbulkan gejala tersebut?",
+    "opsi": [
+      "Asam valproat",
+      "Vigadrone",
+      "Diazepam",
+      "Topiramat",
+      "Haloperidol"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Asam valproat dapat menyebabkan peningkatan berat badan dan keluhan gastrointestinal seperti mual/nyeri perut.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Asam valproat dapat menyebabkan peningkatan berat badan dan keluhan gastrointestinal seperti mual/nyeri perut.",
+      "SALAH. Vigabatrin lebih khas menyebabkan defek lapang pandang permanen; bukan kombinasi kenaikan BB dan keluhan GI yang paling khas.",
+      "SALAH. Diazepam dapat menyebabkan sedasi dan ketergantungan, tetapi bukan penyebab khas kenaikan BB kronis pada terapi epilepsi.",
+      "SALAH. Topiramate justru sering menyebabkan penurunan berat badan dan dapat menurunkan nafsu makan.",
+      "SALAH. Haloperidol bukan terapi epilepsi dan dapat menurunkan ambang kejang; tidak menjelaskan konteks terapi ini."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-36",
+    "no": 36,
+    "soal": "Seorang perempuan usia 62 tahun dibawa ke IGD karena mendadak tidak dapat bicara saat sedang duduk didepan rumah 7 jam yang lalu. Pasien juga tidak dapat menggerakkan anggota tubuh kanannya. Dari pemeriksaan didapatkan kesadaran compos mentis, Tekanan darah 150/90 mmHg, hemiplegia dextra. Dilakukan pemeriksaan CTScan kepala non kontras didapatkan gambaran hipodens pada lobus frontoparietal sinistra. Pemeriksaan rekam jantung didapatkan atrial fibrilasi rapid ventricular response. Apakah tatalaksana yang paling sesuai untuk kasus tersebut? Ini stroke iskemik",
+    "opsi": [
+      "Pemberian antihipertensi intravena",
+      "Pemberian antiplatelet oral",
+      "Trombolisis intravena",
+      "Pemberian antikoagulan subkutan",
+      "Pemberian anti fibrinolitik intravena"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Pada stroke iskemik dengan onset 7 jam dan sudah terdapat hipodensitas, pasien berada di luar jendela trombolisis IV standar. Antiplatelet adalah pilihan awal bila tidak ada kontraindikasi perdarahan.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Menurunkan tekanan darah secara agresif pada stroke iskemik akut dapat menurunkan perfusi penumbra; target bergantung pada kandidat reperfusi.",
+      "BENAR. Pada stroke iskemik dengan onset 7 jam dan sudah terdapat hipodensitas, pasien berada di luar jendela trombolisis IV standar. Antiplatelet adalah pilihan awal bila tidak ada kontraindikasi perdarahan.",
+      "SALAH. Trombolisis IV standar tidak diberikan hanya berdasarkan onset 7 jam; perlu kriteria extended window khusus dan pencitraan perfusi pada kasus terpilih.",
+      "SALAH. Antikoagulan akut rutin untuk stroke iskemik tidak dianjurkan hanya karena AF; risiko perdarahan harus dipertimbangkan.",
+      "SALAH. Antifibrinolitik seperti traneksamat digunakan untuk membantu menghentikan perdarahan, bukan membuka arteri yang tersumbat."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-38",
+    "no": 38,
+    "soal": "Seorang wanita berusia 30 tahun diantar oleh keluarganya ke IGD RS karena tidak mampu menggerakkan lengan kanan dan tungkai kanannya sejak 2 jam yang lalu. Tekanan darah 170/120 mmHg. Kesadaran composmentis. CT scan kepala tanpa kontras didapatkan lesi hipodens pada thalamus sinistra. HU : 18. Tidak tampak pergeseran garis tengah. Sistem ventrikel tampak normal. Apa diagnosis untuk kasus diatas?",
+    "opsi": [
+      "Stroke hemoragik",
+      "Meningitis",
+      "Infark cerebri hemisfer sinistra",
+      "Perdarahan subdural hemisfer sinistra",
+      "Tumor intra cerebral hemisphere sinistra"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Lesi hipodens pada CT nonkontras paling sesuai infark iskemik. Defisit kanan menunjuk ke hemisfer kiri.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Hemoragik pada CT nonkontras biasanya hiperdens/putih, sedangkan lesi ini hipodens.",
+      "SALAH. Meningitis tidak menyebabkan fokus hipodens thalamus dengan hemiplegia akut.",
+      "BENAR. Lesi hipodens pada CT nonkontras paling sesuai infark iskemik. Defisit kanan menunjuk ke hemisfer kiri.",
+      "SALAH. Subdural berbentuk crescent di sepanjang konveksitas, bukan lesi intraparenkim thalamus.",
+      "SALAH. Tumor biasanya memiliki efek massa/edema dan perjalanan lebih lama, bukan onset defisit akut dengan hipodensitas yang khas infark."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-39",
+    "no": 39,
+    "soal": "Seorang laki-laki 50 tahun datang ke IGD RS dengan keluhan nyeri hebat di wajah terutama pada bagian hidung dan mata sejak 2 jam yang lalu. keluhan berlangsung terus menerus. dokter menduga adanya kerusakan pada cabang saraf cranialis. apa nama lubang yang dilalui oleh saraf cranialis tersebut",
+    "opsi": [
+      "foramen jugularis",
+      "foramen opticus",
+      "foramen rotundum",
+      "meatus acusticus internus",
+      "foramen (lupaa)"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Cabang maksilaris nervus trigeminus (V2) melewati foramen rotundum dan mempersarafi area wajah tengah termasuk sekitar hidung.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Foramen jugulare dilalui IX, X, XI, bukan cabang V2 yang mempersarafi area hidung/wajah tengah.",
+      "SALAH. Foramen opticum dilalui nervus opticus dan arteri ophthalmica, bukan V2.",
+      "BENAR. Cabang maksilaris nervus trigeminus (V2) melewati foramen rotundum dan mempersarafi area wajah tengah termasuk sekitar hidung.",
+      "SALAH. Meatus acusticus internus dilalui VII dan VIII.",
+      "SALAH. Opsi tidak spesifik; dari anatomi yang tersedia, foramen rotundum adalah jawaban yang dapat dipertanggungjawabkan."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-40",
+    "no": 40,
+    "soal": "Seorang wanita 80 tahun diantar suaminya ke ugd rs dikarenakan berbicara cadel sejak 2 jam lalu, keluhan disertai wajah mereng, pemeriksaan fisik saat menjulukan lidah tidak terdapat atropi, lidah kanan lebih lemah dari lidah kiri, apa diagnosis pada pasien",
+    "opsi": [
+      "Parese n.VII sentral bilateral",
+      "Parese n.VII sinistra sentral",
+      "Parese n.VII sinistra perifer",
+      "Parese n.VII dextra sentral",
+      "Parese n.VII dextra perifer"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Kelemahan lidah kanan tanpa atrofi menunjukkan lesi supranuklear/kortikobulbar kontralateral. Dari pilihan yang tersedia, paresis N VII sentral dextra paling sesuai dengan sisi wajah yang terkena.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Tidak ada alasan menyebut bilateral bila defisit wajah hanya sisi kanan.",
+      "SALAH. Sisi yang lemah pada stem adalah kanan, bukan kiri.",
+      "SALAH. Parese perifer akan mengenai seluruh hemiface ipsilateral dan biasanya disertai kelemahan penutupan mata; pola akut sentral lebih sesuai pilihan D.",
+      "BENAR. Kelemahan lidah kanan tanpa atrofi menunjukkan lesi supranuklear/kortikobulbar kontralateral. Dari pilihan yang tersedia, paresis N VII sentral dextra paling sesuai dengan sisi wajah yang terkena.",
+      "SALAH. Parese perifer dextra seharusnya mengenai seluruh sisi wajah dan tidak dijelaskan oleh pola sentral."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-41",
+    "no": 41,
+    "soal": "Wanita 45 tahun dibawa ke IGD oleh keluarganya karena mengalami kejang seluruh badan. Pemeriksaan X-Ray kepala menunjukkan adanya massa tumor. Pemeriksaan darah lengkap dalam batas normal. Selanjutnya, dilakukan operasi pengangkatan massa tumor tersebut. Pemeriksaan mikroskopis dari tumor tersebut menggambarkan sel-sel hiperplastik tersusun whorl. Apakah diagnosa yang paling tepat?",
+    "opsi": [
+      "Glioblastoma multiforme",
+      "Medulloblastoma",
+      "Astrositoma",
+      "Oligodendroglioma",
+      "Meningioma"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Sel tumor tersusun membentuk whorl adalah gambaran khas meningioma.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Glioblastoma menunjukkan pleomorfisme, nekrosis pseudopalisading, dan proliferasi mikrovaskular, bukan whorls.",
+      "SALAH. Medulloblastoma adalah tumor embrional yang terutama di cerebellum anak, bukan pola whorl.",
+      "SALAH. Astrositoma berasal dari astrosit dan memiliki pola histologis berbeda; whorl bukan gambaran khas.",
+      "SALAH. Oligodendroglioma memiliki sel “fried-egg” dan chicken-wire vessels, bukan whorls.",
+      "BENAR. Sel tumor tersusun membentuk whorl adalah gambaran khas meningioma."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-43",
+    "no": 43,
+    "soal": "Seorang perempuan usia 56 tahun datang ke ke RS dengan keluhan kesemutan dan terbakar di kedua tangan dan kaki sejak 2 bulan. tidak ada keluhan kelemahan dan baal di kedua tangan dan kaki. Pasien memiliki riwayat DM tipe 2 sejak 2 tahun lalu. Pasien jarang minum obat dan kontrol. letak sistem saraf yang kena..",
+    "opsi": [
+      "N.Cranialis",
+      "Sistem Saraf Tepi",
+      "Medulla Spinalis",
+      "Otak",
+      "traktus kortikospinalis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Kesemutan dan rasa terbakar simetris distal pada pasien diabetes merupakan pola neuropati perifer, terutama polineuropati distal simetris.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. N. cranialis tidak menjelaskan pola kesemutan dan terbakar simetris pada keempat ekstremitas.",
+      "BENAR. Kesemutan dan rasa terbakar simetris distal pada pasien diabetes merupakan pola neuropati perifer, terutama polineuropati distal simetris.",
+      "SALAH. Lesi medula spinalis biasanya memberi pola dermatomal atau level sensorik, bukan stocking-glove distal simetris.",
+      "SALAH. Lesi otak biasanya menimbulkan defisit sensorik/motorik kontralateral, bukan neuropati distal simetris.",
+      "SALAH. Traktus kortikospinal adalah jalur motorik; tidak menjelaskan parestesia distal khas neuropati perifer."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-44",
+    "no": 44,
+    "soal": "Seorang laki2 45 tahun, mengalami kecelakaan sepeda dan terjatuh dengan dagu terbentur stang sepeda dengan keras, kedua kaki lemas, dan kedua tangan bisa di gerakkan , TD 80/50 mmhg, N 60x/mnt, RR 20x/mnt, .. terjadi syok apa",
+    "opsi": [
+      "syok hemoragik",
+      "syok kardiogenik",
+      "syok spinal",
+      "syok neurogenik",
+      "syok anafilatik"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Hipotensi dengan bradikardia setelah trauma tulang belakang servikal mengarah ke syok neurogenik akibat hilangnya tonus simpatis.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Syok hemoragik menyebabkan takikardia dan vasokonstriksi kompensatorik lebih sering, bukan bradikardia dengan hipotensi setelah cedera medula.",
+      "SALAH. Syok kardiogenik memerlukan bukti kegagalan pompa jantung, tidak ada di stem.",
+      "SALAH. Spinal shock adalah keadaan neurologis dengan flaksiditas/arefleksia setelah cedera medula; hipotensi-bradikardia adalah neurogenic shock.",
+      "BENAR. Hipotensi dengan bradikardia setelah trauma tulang belakang servikal mengarah ke syok neurogenik akibat hilangnya tonus simpatis.",
+      "SALAH. Anafilaksis membutuhkan paparan alergen dan biasanya disertai urtikaria/bronchospasm; tidak sesuai trauma medula."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-45",
+    "no": 45,
+    "soal": "Cairan cerebrospinal, ada di ventriculus lateralis. Saluran apa yang menghubungkan struktur tersebut?",
+    "opsi": [
+      "Foramen interventriculare",
+      "Aqueductus cerebri",
+      "Canalis centralis",
+      "Foramen magendie",
+      "Foramen luschka"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Ventrikel lateral berhubungan dengan ventrikel III melalui foramen interventriculare (Monro).",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Ventrikel lateral berhubungan dengan ventrikel III melalui foramen interventriculare (Monro).",
+      "SALAH. Aqueductus cerebri menghubungkan ventrikel III dan IV.",
+      "SALAH. Canalis centralis merupakan kelanjutan sistem ventrikel IV ke medula spinalis.",
+      "SALAH. Foramen Magendie menghubungkan ventrikel IV dengan cisterna magna.",
+      "SALAH. Foramen Luschka menghubungkan ventrikel IV dengan ruang subaraknoid di lateral."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-46",
+    "no": 46,
+    "soal": "Laki laki 20 tahun terhuyung2, telinga berdering, sudah 2 hari, ada gangguan pendengaran. dari trias tersebut bentuk jinak/beningnya diagnosisnya adalah?",
+    "opsi": [
+      "Sindrom cogan",
+      "Sindrom moya moya",
+      "Sindrom lermoyez",
+      "Morbus meniere",
+      "Neuritis Vestibularis"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Trias vertigo, tinnitus, dan gangguan pendengaran khas penyakit Ménière.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Cogan syndrome berkaitan dengan keratitis interstisial dan gangguan audiovestibular, bukan triad klasik vertigo-tinnitus-hearing loss.",
+      "SALAH. Moyamoya adalah penyakit vaskulopati serebral progresif, bukan gangguan telinga dalam.",
+      "SALAH. Lermoyez adalah varian fenomena hidrops endolimfatik dengan pola gejala berbeda; pilihan klasik untuk triad ini tetap Ménière.",
+      "BENAR. Trias vertigo, tinnitus, dan gangguan pendengaran khas penyakit Ménière.",
+      "SALAH. Neuritis vestibular menyebabkan vertigo tanpa tinnitus dan tanpa hearing loss yang menonjol."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-47",
+    "no": 47,
+    "soal": "Laki-laki 3 tahun gaya jalannya tidak stabil keseimbangan tubuh baik. hasil MRI: penurunan kepadatan parenkim cerebellum lobus anterior. apa nama struktur cerebellum?",
+    "opsi": [
+      "lobulus quadrangularis posterior & lingula cerebelli",
+      "floculus & lingula cerebelli",
+      "lobulus semilunaris superior & folium vermis",
+      "lobulus quadrangularis anterior & lobulus centralis",
+      "lobulus simplex & declive"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Lobus anterior cerebellum mencakup struktur seperti lingula dan lobulus quadrangularis anterior; dari pilihan, kombinasi D paling sesuai.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Lingula termasuk lobus anterior, tetapi kombinasi dengan quadrangular posterior tidak tepat.",
+      "SALAH. Flocculus berada pada vestibulocerebellum dan lingula pada vermis anterior; kombinasi ini tidak menggambarkan dua struktur utama lobus anterior yang dimaksud.",
+      "SALAH. Semilunar superior dan folium lebih terkait lobus posterior.",
+      "BENAR. Lobus anterior cerebellum mencakup struktur seperti lingula dan lobulus quadrangularis anterior; dari pilihan, kombinasi D paling sesuai.",
+      "SALAH. Simplex dan declive merupakan bagian lobus posterior, bukan kombinasi lobus anterior."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-48",
+    "no": 48,
+    "soal": "Arteri meningea media terletak pada salah satu lapisan di otak. Lapisan manakah yang mengapit lapisan tempat arteri tersebut berada?",
+    "opsi": [
+      "Arachnoid dan pia mater",
+      "Dura mater dan arachnoid",
+      "Dura mater dan pia mater",
+      "Pia mater dan subarachnoid",
+      "Cranium dan duramater"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Arteri meningea media berjalan di antara lapisan duramater, dan secara anatomi dura berada di luar arachnoid. Pilihan yang mengapit dura adalah dura mater dan arachnoid.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Pia dan arachnoid mengapit ruang subaraknoid; bukan lokasi arteri meningea media.",
+      "BENAR. Arteri meningea media berjalan di antara lapisan duramater, dan secara anatomi dura berada di luar arachnoid. Pilihan yang mengapit dura adalah dura mater dan arachnoid.",
+      "SALAH. Pia melekat pada otak dan tidak mengapit dura.",
+      "SALAH. Subarachnoid adalah ruang, bukan lapisan yang mengapit arteri meningea media.",
+      "SALAH. Arteri meningea media berada di dalam dura, bukan sekadar di antara kranium dan dura sebagai ruang epidural sejati."
+    ],
+    "catatanKlinis": "⚠️ Catatan anatomi: middle meningeal artery berada di dalam dura mater, di antara lapisan periosteal dan meningeal. Opsi D/Arachnoid hanya menjadi pembatas luar dura pada gambaran sederhana soal.",
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-49",
+    "no": 49,
+    "soal": "seorang perempuan 30 th diantar suaminya ke poliklinik RS dengan keluhan sering menghabiskan uang dalam jumlah besar untuk keperluan yang tidak penting sejak dua minggu yang lalu. Keluhan disertai dengan sering berdandan berlebihan, menggunakan perhiasan yang cukup banyak, banyak bicara, ingin bepergian terus dan jarang tidur. Pasien mengatakan energinya banyak sehingga setiap malam setelah semua tidur, ia mengerjakan pekerjaan kantor, dilanjutkan treadmill atau mengelap semua permukaan rumah dan lemari. Pemeriksaan: Mood yang hipertim, proses pikir koheren, pembicaraan logere, psikomotor lebih aktif namun tidak disertai adanya halusinasi atau delusi. Apakah terapi yang dapat diberikan kepada pasien ini?",
+    "opsi": [
+      "litium karbonat",
+      "imipramine",
+      "rivastigmine",
+      "buprenorfin",
+      "metilfenidat"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Gambaran mood meningkat, berkurangnya kebutuhan tidur, banyak bicara, aktivitas meningkat, dan perilaku impulsif konsisten dengan episode manik; litium merupakan salah satu mood stabilizer utama.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Gambaran mood meningkat, berkurangnya kebutuhan tidur, banyak bicara, aktivitas meningkat, dan perilaku impulsif konsisten dengan episode manik; litium merupakan salah satu mood stabilizer utama.",
+      "SALAH. Imipramine adalah TCA antidepresan dan dapat memperburuk mania bila diberikan tanpa mood stabilizer.",
+      "SALAH. Rivastigmine adalah inhibitor kolinesterase untuk demensia, bukan terapi mania.",
+      "SALAH. Buprenorfin adalah opioid untuk gangguan penggunaan opioid/nyeri, bukan terapi mania.",
+      "SALAH. Metilfenidat adalah stimulan dan dapat memperburuk agitasi/mania."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-50",
+    "no": 50,
+    "soal": "Seorang laki-laki usia 20 tahun dibawa keluarga ke IGD RS karena penurunan kesadaran 1 jam yang lalu. Pemeriksaan fisik: nafas sangat dalam/berat, kulit dingin, tekanan darah 90/65, disertai miosis. Dokter menduga pasien memakai opioid. Berdasarkan manifestasi klinis, apakah kemungkinan kondisi yang pasien alami?",
+    "opsi": [
+      "Efek samping penurunan nafas berat",
+      "Adiksi",
+      "Toleransi",
+      "Intoksikasi akut",
+      "Withdrawal syndrome"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Penurunan kesadaran, depresi napas, miosis, dan hipotensi pada pengguna opioid merupakan intoksikasi opioid akut.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Depresi napas memang merupakan manifestasi toksisitas, tetapi kategori diagnosis keseluruhannya adalah intoksikasi akut.",
+      "SALAH. Adiksi adalah pola penggunaan kompulsif kronis, bukan keadaan akut dengan miosis dan koma.",
+      "SALAH. Toleransi berarti kebutuhan dosis lebih tinggi untuk efek sama, bukan penurunan kesadaran akut.",
+      "BENAR. Penurunan kesadaran, depresi napas, miosis, dan hipotensi pada pengguna opioid merupakan intoksikasi opioid akut.",
+      "SALAH. Withdrawal justru menyebabkan midriasis, agitasi, diare, lakrimasi, dan gejala simpatis—berlawanan dengan miosis/koma."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-51",
+    "no": 51,
+    "soal": "Multiple sklerosis merusak myelin, berdampak pada kondisi impuls saraf. apa dampak yang dimaksud?",
+    "opsi": [
+      "peningkatan kecepatan konduksi akibat depolarisasi lebih cepat",
+      "menghambat konduksi karena hilangnya transmisi saltori",
+      "peningkatan eksitabilitas neuron",
+      "tidak berpengaruh pada kecepatan konduksi, penurunan amplitudo potensial aksi",
+      "penurunan periode refrakter"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Hilangnya mielin pada multiple sclerosis mengganggu transmisi saltatori sehingga konduksi impuls saraf melambat atau terblok.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Demielinisasi tidak mempercepat konduksi; justru mengganggu propagasi impuls.",
+      "BENAR. Hilangnya mielin pada multiple sclerosis mengganggu transmisi saltatori sehingga konduksi impuls saraf melambat atau terblok.",
+      "SALAH. Eksitabilitas dapat berubah sekunder, tetapi masalah utama MS adalah hilangnya isolasi mielin dan saltatory conduction.",
+      "SALAH. Kecepatan konduksi jelas terpengaruh oleh hilangnya mielin; bukan hanya amplitudo.",
+      "SALAH. Periode refrakter bukan konsekuensi utama yang menjelaskan defisit konduksi pada MS."
+    ],
+    "komponenStatistik": "Physiology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-52",
+    "no": 52,
+    "soal": "Seorang pasien mengalami peningkatan area ketok refleks tanpa klonus. Dalam skala refleks, bagaimana nilai yang sesuai untuk kondisi ini?",
+    "opsi": [
+      "0",
+      "+1",
+      "+2",
+      "+3",
+      "+4"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Refleks +3 menunjukkan hiperrefleksia/brisk reflex tanpa klonus; +4 biasanya disertai klonus.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Skor 0 berarti tidak ada respons refleks.",
+      "SALAH. +1 berarti hiporefleksia, bukan brisk reflex.",
+      "SALAH. +2 adalah refleks normal.",
+      "BENAR. Refleks +3 menunjukkan hiperrefleksia/brisk reflex tanpa klonus; +4 biasanya disertai klonus.",
+      "SALAH. +4 biasanya berarti sangat hiperrefleks dengan klonus."
+    ],
+    "komponenStatistik": "Physiology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-53",
+    "no": 53,
+    "soal": "Seorang laki-laki usia 28 tahun datang ke IGD RS dengan keluhan kepala yang terasa semakin lam semakin memberat sejak dua minggu lalu. Status generalis: perawakan kurus dan sedikit kurang gizi. Pasien sering mengeluh demam malam hari dan batuk-batuk sejak tiga bulan lalu. Manakah golongan yang sesuai dengan nyeri kepala pada pasien ini?",
+    "opsi": [
+      "primer karena gangguan kontraksi otot",
+      "primer karena gangguan saraf trigeminal",
+      "sekunder karena gangguan infeksi",
+      "sekunder karena gangguan autoimun",
+      "sekunder karena gangguan vaskular"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Nyeri kepala dengan demam malam dan batuk kronis mengarah pada penyebab sekunder, khususnya infeksi seperti tuberkulosis.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Nyeri primer tipe tension dapat berkaitan dengan mekanisme miofasial, tetapi demam dan batuk kronis memberi red flag penyebab sekunder.",
+      "SALAH. Migrain/trigeminal autonomic headache adalah diagnosis primer; gejala infeksi sistemik mengarah ke penyebab sekunder.",
+      "BENAR. Nyeri kepala dengan demam malam dan batuk kronis mengarah pada penyebab sekunder, khususnya infeksi seperti tuberkulosis.",
+      "SALAH. Tidak ada petunjuk penyakit autoimun pada stem.",
+      "SALAH. Tidak ada gejala vaskular akut seperti thunderclap headache atau defisit fokal yang menunjang penyebab vaskular."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-54",
+    "no": 54,
+    "soal": "Opioid memiliki efek antitusif dan sering digunakan untuk menekan batuk. Namun, ada satu jenis opioid yang tidak efektif sebagai antitusif dan tidak digunakan untuk mengobati batuk. Opioid tersebut adalah?",
+    "opsi": [
+      "Kodein",
+      "Difenoksilat",
+      "Meperidin",
+      "Morfin",
+      "Tramadol"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Difenoksilat terutama digunakan sebagai antidiare dan bukan opioid antitusif yang lazim. Kodein dan morfin dikenal memiliki efek antitusif.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Kodein adalah opioid antitusif klasik dan sering digunakan untuk menekan refleks batuk.",
+      "BENAR. Difenoksilat terutama digunakan sebagai antidiare dan bukan opioid antitusif yang lazim. Kodein dan morfin dikenal memiliki efek antitusif.",
+      "SALAH. Meperidin bukan antitusif utama, tetapi soal biasanya menguji bahwa difenoksilat memiliki penggunaan utama sebagai antidiare; opsi lain memiliki sejarah penggunaan analgesik/antitusif yang lebih relevan.",
+      "SALAH. Morfin menekan refleks batuk melalui reseptor opioid, walau efek samping membatasi penggunaannya.",
+      "SALAH. Tramadol dapat memiliki aktivitas antitusif lemah, tetapi bukan pilihan antitusif utama."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-56",
+    "no": 56,
+    "soal": "Seorang laki-laki berusia 32 tahun datang ke Praktik Dokter Umum dengan keluhan sering mengantuk saat bekerja. ia juga kerap tertidur begitu saja saat sedang duduk di kantor ataupun di kantin. Hal tersebut dirasakannya sejak 6 bulan sebelumnya. Pasien dapat tidur di malam hari sekitar 8-10 jam. Tidak ada konsumsi obat-obatan tertentu. la juga konsumsi kopi hitam satu cangkir sehari untuk atasi keluhannya. Riwayat penyakit lain disangkal. Diagnosis pada pasien ini adalah?",
+    "opsi": [
+      "Insomnia",
+      "Obstructive sleep apnea",
+      "Hipersomnia",
+      "Narkolepsi",
+      "Somnabulansi"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Keluhan utama adalah excessive daytime sleepiness dengan durasi tidur malam 8–10 jam, tanpa cataplexy, sleep paralysis, atau halusinasi hipnagogik yang khas narkolepsi. Dari opsi yang tersedia, hipersomnia paling sesuai.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Insomnia berarti kesulitan memulai/mempertahankan tidur, sedangkan masalah pasien justru mengantuk berlebihan.",
+      "SALAH. OSA biasanya disertai dengkuran keras, apnea malam, choking, dan tidur tidak restoratif; tidak ada petunjuk itu.",
+      "BENAR. Keluhan utama adalah excessive daytime sleepiness dengan durasi tidur malam 8–10 jam, tanpa cataplexy, sleep paralysis, atau halusinasi hipnagogik yang khas narkolepsi. Dari opsi yang tersedia, hipersomnia paling sesuai.",
+      "SALAH. Narkolepsi membutuhkan episode tidur tak tertahankan dengan bukti REM intrusion seperti cataplexy/sleep paralysis/hypnagogic hallucinations atau pemeriksaan MSLT; tidak disebutkan.",
+      "SALAH. Somnambulisme adalah parasomnia berupa berjalan saat tidur, bukan mengantuk siang hari."
+    ],
+    "catatanKlinis": "⚠️ Poin ujian: jangan langsung menyebut narkolepsi hanya karena pasien sering tertidur. Cari cataplexy atau tanda REM intrusion; bila tidak ada, hipersomnia lebih aman dari pilihan yang tersedia.",
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-57",
+    "no": 57,
+    "soal": "Seorang pasien suka menghamburkan uang. Dia percaya punya kekuasaan sepulau jawa. Pada malam hari suka bersih-bersih. Apa diagnosisnya?",
+    "opsi": [
+      "Gangguan afektif bipolar episode manik dengan gejala psikotik",
+      "Gangguan afektif bipolar episode manik tanpa gejala psikotik",
+      "Gangguan skizoafektif tipe manik",
+      "Gangguan delusi megalomania",
+      "Gangguan obsesif-kompulsif"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Perilaku manik disertai waham kebesaran menunjukkan episode manik dengan gejala psikotik dalam gangguan bipolar.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Perilaku manik disertai waham kebesaran menunjukkan episode manik dengan gejala psikotik dalam gangguan bipolar.",
+      "SALAH. Karena ada waham kebesaran, episode tidak lagi “tanpa gejala psikotik”.",
+      "SALAH. Skizoafektif memerlukan episode mood yang jelas sekaligus periode psikosis tanpa mood; data stem lebih konsisten dengan bipolar mania.",
+      "SALAH. Waham megalomania hanya menjelaskan satu gejala, tidak menjelaskan sindrom manik yang jelas.",
+      "SALAH. Membersihkan rumah berulang tidak cukup untuk OCD; perilaku di sini terjadi dalam konteks energi meningkat dan tidur berkurang."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-58",
+    "no": 58,
+    "soal": "Pasien setelah di PHK mengalami rasa malas dan tidak semangat.Pasien berbicara sendiri dan memiliki gejala psikotik lainnya.Gejala ini sudah lebih dari 6 bulan.Apa diagnosis?",
+    "opsi": [
+      "Skizoafektif tipe depresi",
+      "Skizo tak terorganisir",
+      "Skizo paranoid",
+      "Gangguan psikotik akut",
+      "Depresi berat dengan gejala psikotik"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Gejala psikotik menetap lebih dari 6 bulan mengarah ke spektrum skizofrenia; dari pilihan yang ada, skizofrenia paranoid paling sesuai.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Skizoafektif depresi memerlukan episode depresi yang jelas dan psikosis; stem tidak memberikan pola mood lengkap.",
+      "SALAH. Tipe tidak terorganisir/disorganized menonjolkan bicara dan perilaku sangat kacau; tidak dijelaskan.",
+      "BENAR. Gejala psikotik menetap lebih dari 6 bulan mengarah ke spektrum skizofrenia; dari pilihan yang ada, skizofrenia paranoid paling sesuai.",
+      "SALAH. Psikosis akut biasanya berlangsung <1 bulan, sehingga tidak cocok dengan durasi >6 bulan.",
+      "SALAH. Depresi dengan psikosis harus memiliki sindrom depresi berat yang dominan dan psikosis hanya dalam episode tersebut; durasi >6 bulan sendiri lebih mendukung skizofrenia."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-59",
+    "no": 59,
+    "soal": "Pasien ada gangguan cemas dan depresi. Dokter ingin mengganti antidepresan, namun pasien sudah nyaman dengan obat yang awal. Lalu pasien mengeluh berdebar, agitasi, dan lainnya. Apa kelebihan neurotransmiter yang ada?",
+    "opsi": [
+      "Dopamin",
+      "Serotonin",
+      "Glutamat",
+      "GABA",
+      "Norepinefrin"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Palpitasi, agitasi, dan gejala aktivasi adrenergik dapat berkaitan dengan peningkatan aktivitas norepinefrin.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Dopamin berhubungan dengan reward, motivasi, dan psikotik; bukan penjelasan paling langsung untuk palpitasi/agitasi setelah aktivasi adrenergik.",
+      "SALAH. Serotonin berperan pada mood dan kecemasan, tetapi gejala palpitasi dan agitasi lebih sesuai aktivitas adrenergik.",
+      "SALAH. Glutamat adalah neurotransmiter eksitatorik utama, tetapi tidak spesifik menjelaskan gejala otonom yang disebut.",
+      "SALAH. GABA bersifat inhibitorik; peningkatannya cenderung menurunkan arousal, bukan menimbulkan palpitasi/agitasi.",
+      "BENAR. Palpitasi, agitasi, dan gejala aktivasi adrenergik dapat berkaitan dengan peningkatan aktivitas norepinefrin."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-60",
+    "no": 60,
+    "soal": "Seorang petani sedang berjalan di sawah dan tidak sengaja menginjak ranting besi. Petani tersebut diberikan antitoksin dan antibiotik. Apa fungsi dari antitoksin tersebut?",
+    "opsi": [
+      "Menetralisir neurotoksin",
+      "Menghambat pengeluaran endotoksin",
+      "Mengaktifkan sel imun untuk membunuh bakteri",
+      "Menghambat replikasi bakteri anaerob",
+      "Mempercepat degradasi toksin di hati"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Antitoksin pada tetanus bekerja dengan menetralkan toksin yang masih bebas, bukan membunuh bakteri secara langsung.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Antitoksin pada tetanus bekerja dengan menetralkan toksin yang masih bebas, bukan membunuh bakteri secara langsung.",
+      "SALAH. Tetanus menghasilkan eksotoksin, bukan endotoksin.",
+      "SALAH. Antitoksin tidak membunuh C. tetani; antibiotik dan debridement menangani sumber bakterinya.",
+      "SALAH. Penghambatan pertumbuhan bakteri adalah fungsi antibiotik, bukan antitoksin.",
+      "SALAH. Antitoksin bekerja dengan binding langsung pada toksin, bukan mempercepat metabolisme hepatik."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-61",
+    "no": 61,
+    "soal": "Seorang pasien memiliki gejala demam.riwayat pergi ke amerika.pada pemeriksaan penunjang terdapat endospora dan fase spherule berisi endospora dalam jaringan.Diagnosis?",
+    "opsi": [
+      "Cryptococcus neoformans",
+      "Coccidioides immitis",
+      "Aspergillus fumigatus",
+      "Histoplasma capsulatum",
+      "Blastomyces dermatitidis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Coccidioides immitis khas membentuk spherule berisi endospora dalam jaringan dan terkait wilayah tertentu di Amerika.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Cryptococcus berbentuk yeast berkapsul, bukan spherule berisi endospora.",
+      "BENAR. Coccidioides immitis khas membentuk spherule berisi endospora dalam jaringan dan terkait wilayah tertentu di Amerika.",
+      "SALAH. Aspergillus berupa hifa bersepta dengan branching 45°, bukan spherule.",
+      "SALAH. Histoplasma adalah yeast kecil intraseluler dalam makrofag, bukan spherule besar berisi endospora.",
+      "SALAH. Blastomyces memiliki broad-based budding yeast, bukan spherule."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-62",
+    "no": 62,
+    "soal": "Pasien anak kejang BB 15 kg sejak 15 menit. Dokter memberikan antikejang rektal namun tetap kejang. Obat apa yang diberikan selanjutnya?",
+    "opsi": [
+      "Diazepam intravena 10 mg",
+      "Fenitoin 150 mg IV",
+      "Fenobarbital 150 mg IM",
+      "Diazepam rektal (dosis ulang)",
+      "Asam valproat IV 150 mg"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Status epileptikus yang tidak berhenti setelah benzodiazepin memerlukan obat antikejang lini berikutnya seperti fosfenitoin/fenitoin. Pilihan B adalah yang paling sesuai.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Setelah benzodiazepin gagal, obat lini kedua diperlukan; diazepam IV berulang meningkatkan risiko depresi napas dan bukan pilihan yang paling tepat.",
+      "BENAR. Status epileptikus yang tidak berhenti setelah benzodiazepin memerlukan obat antikejang lini berikutnya seperti fosfenitoin/fenitoin. Pilihan B adalah yang paling sesuai.",
+      "SALAH. Fenobarbital IM bukan pilihan standar utama dan onset/absorpsinya kurang dapat diprediksi untuk status epileptikus.",
+      "SALAH. Mengulang diazepam rektal setelah dosis awal gagal bukan strategi lini kedua yang baik.",
+      "SALAH. Valproat IV memang merupakan alternatif lini kedua, tetapi 150 mg pada BB 15 kg terlalu rendah untuk loading dose status epileptikus."
+    ],
+    "catatanKlinis": "⚠️ Catatan dosis: setelah benzodiazepin gagal, fosfenitoin/fenitoin adalah pilihan lini kedua; dosis loading lazim sekitar 20 mg PE/kg untuk fosfenitoin. Opsi 150 mg pada BB 15 kg hanya 10 mg/kg sehingga merupakan dosis rendah, tetapi tetap pilihan yang dimaksud dibanding opsi lain.",
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-63",
+    "no": 63,
+    "soal": "Seorang pasien mengalami nyeri kepala, muntah proyektil, dan tanda peningkatan tekanan intrakranial (TIK). Pasien juga mengalami demam dengan suhu 40°C, tetapi tekanan darah (TD) dan frekuensi napas (RR) normal. Apa diagnosis yang paling mungkin?",
+    "opsi": [
+      "Ensefalitis virus",
+      "Meningitis bakterial",
+      "Hemorrhagic stroke",
+      "Tumor otak",
+      "Abses otak"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Demam tinggi, nyeri kepala, muntah, dan tanda iritasi/peningkatan tekanan intrakranial paling mengarah pada meningitis bakterial di antara pilihan.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Ensefalitis virus lebih menonjolkan perubahan perilaku/kesadaran, kejang, dan dapat disertai demam; namun tanpa tanda khas lain, meningitis bakterial lebih sesuai di antara opsi.",
+      "BENAR. Demam tinggi, nyeri kepala, muntah, dan tanda iritasi/peningkatan tekanan intrakranial paling mengarah pada meningitis bakterial di antara pilihan.",
+      "SALAH. Stroke hemoragik biasanya onset sangat mendadak dan tidak menjelaskan demam tinggi sebagai gejala utama.",
+      "SALAH. Tumor otak dapat meningkatkan TIK tetapi demam 40°C lebih mengarah ke infeksi.",
+      "SALAH. Abses otak dapat menyebabkan demam dan TIK, tetapi biasanya ada fokus infeksi/lesi massa; pola ini lebih klasik untuk meningitis."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-64",
+    "no": 64,
+    "soal": "Seorang pria 30 tahun datang ke poliklinik RS dengan keluhan kelemahan otot progresif sejak 3 bulan lalu. Hasil elektrofisiologi : gangguan potensial membran istirahat neuron motorik. Dari pilihan dibawah ini manakah kemungkinan yang paling mungkin terjadi",
+    "opsi": [
+      "Peningkatan konsentrasi ion kalium diluar sel",
+      "Penurunan konsentrasi ion natrium diluar sel",
+      "Peningkatan permeabilitas membran terhadap ion natrium",
+      "Penurunan permeabilitas membran terhadap ion kalium",
+      "Peningkatan aktivitas pompa Na/K ATPase"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Potensial istirahat sangat dipengaruhi gradien kalium. Peningkatan kalium ekstraseluler mengurangi gradien K dan menyebabkan depolarisasi membran.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Potensial istirahat sangat dipengaruhi gradien kalium. Peningkatan kalium ekstraseluler mengurangi gradien K dan menyebabkan depolarisasi membran.",
+      "SALAH. Penurunan Na+ ekstraseluler terutama memengaruhi driving force Na+ dan tidak merupakan penjelasan utama potensial istirahat neuron motorik.",
+      "SALAH. Peningkatan permeabilitas Na+ menyebabkan depolarisasi, tetapi bukan perubahan paling langsung pada resting membrane potential yang ditanyakan.",
+      "SALAH. Penurunan permeabilitas K+ dapat memengaruhi resting potential, tetapi pilihan yang paling jelas adalah peningkatan K+ ekstraseluler.",
+      "SALAH. Peningkatan pompa Na/K ATPase cenderung mempertahankan/memperkuat gradien ion dan bukan menyebabkan depolarisasi seperti pada opsi A."
+    ],
+    "komponenStatistik": "Physiology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-65",
+    "no": 65,
+    "soal": "Seorang laki2 (50 th) mengalami stroke haemoragik. Berdasarkan hasil pemeriksaan didapatkan penekanan korteks pembuluh darah di gyrus cinguli. Dokter menduga adanya pecah pembuluh darah. Apq nama pembuluh darah yang mempercabangkan pembuluh darah yang pecah?",
+    "opsi": [
+      "Arteri cerebri posterior",
+      "Arteri communicans posterior",
+      "Arteri communicans anterior",
+      "Arteri cerebri media",
+      "Arteri cerebri anterior"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Gyrus cinguli banyak mendapat suplai dari cabang arteri cerebri anterior, terutama pericallosal/callosal marginal branches.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. PCA menyuplai korteks posterior dan bukan sumber utama cabang pericallosal yang menyuplai gyrus cinguli.",
+      "SALAH. PCom menghubungkan ICA dan PCA, bukan pembuluh utama gyrus cinguli.",
+      "SALAH. ACom menghubungkan kedua ACA, tetapi gyrus cinguli terutama menerima cabang distal ACA.",
+      "SALAH. MCA menyuplai permukaan lateral hemisfer; gyrus cinguli berada pada permukaan medial.",
+      "BENAR. Gyrus cinguli banyak mendapat suplai dari cabang arteri cerebri anterior, terutama pericallosal/callosal marginal branches."
+    ],
+    "komponenStatistik": "Anatomy",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-66",
+    "no": 66,
+    "soal": "Seorang laki laki usia 65 tahun datang ke rs dengan keluhan nyeri kepala, gangguan keseimbangan, mual dan muntah serta kesadaran masih normal. Dokter mendiagnosis sebagai stoke. Dokter ingin melakukan pemeriksaan lanjutan berupa CT scan kepala untuk mengetahui apakah ada gangguan pada vaskularosasi vertebro-basillar. Pemb darah apa yg diamati?",
+    "opsi": [
+      "A. Anterior precomunicans cerebri",
+      "A. Cerebri media",
+      "A. Cerebrelli posterior",
+      "A. Cerebri posterior",
+      "A. Anterior postcomunican scerebri"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Vaskularisasi vertebrobasilar mencakup arteri cerebri posterior dan arteri cerebellar. Dari pilihan, arteri cerebri posterior merupakan cabang utama sirkulasi posterior.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Anterior communicating artery berada pada sirkulasi anterior, bukan vertebrobasilar.",
+      "SALAH. MCA adalah cabang ICA dan menyuplai permukaan lateral hemisfer, bukan arteri utama sirkulasi posterior.",
+      "SALAH. Arteri cerebellar menyuplai cerebellum, tetapi istilah “cerebrelli posterior” tidak menunjuk arteri utama yang ditanyakan pada pilihan.",
+      "BENAR. Vaskularisasi vertebrobasilar mencakup arteri cerebri posterior dan arteri cerebellar. Dari pilihan, arteri cerebri posterior merupakan cabang utama sirkulasi posterior.",
+      "SALAH. “Anterior postcommunican” bukan pembuluh standar; posterior communicating menghubungkan ICA dengan PCA."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-67",
+    "no": 67,
+    "soal": "Seorang pria berusia 24 tahun jatuh dari pohon setinggi 3 meter dan mengalami benturan pada kepala bagian temporal. Setelah insiden, pasien mengalami kehilangan kesadaran, tetapi kemudian sadar sepenuhnya. Namun, beberapa saat kemudian, pasien mulai mengeluhkan sakit kepala dan mengalami penurunan kesadaran. Dalam dunia medis, kondisi ini dikenal dengan istilah",
+    "opsi": [
+      "Lucid Interval",
+      "Hematoma Subdural",
+      "Hematoma Epidural",
+      "Cerebri contussion",
+      "Diffuse Axon injury"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Kehilangan kesadaran lalu sadar penuh dan kemudian memburuk dengan penurunan kesadaran adalah lucid interval, klasik pada hematoma epidural.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Kehilangan kesadaran lalu sadar penuh dan kemudian memburuk dengan penurunan kesadaran adalah lucid interval, klasik pada hematoma epidural.",
+      "SALAH. Subdural hematoma dapat menyebabkan penurunan kesadaran, tetapi istilah “lucid interval” adalah fenomena klinis, bukan nama hematomanya.",
+      "SALAH. Epidural hematoma adalah penyebab klasik lucid interval, tetapi pertanyaan menanyakan istilah fenomenanya.",
+      "SALAH. Cerebral contusion adalah memar parenkim otak, bukan istilah untuk fase sadar sementara.",
+      "SALAH. Diffuse axonal injury biasanya menyebabkan penurunan kesadaran segera dan tidak khas memiliki lucid interval."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-68",
+    "no": 68,
+    "soal": "Seorang anak 17 tahun jatuh dari motor, tidak memakai helm dan kepalanya terbentur ke trotoar. Hasil CT Scan ditemukan pendarahan di temporal dextra bentuk crescent sign. HU=65. Tidak tampak pergeseran garis tengah. System ventrikel normal. Apakah diagnosisnya?",
+    "opsi": [
+      "perdarahan subarachnoid",
+      "perdarahan subdural",
+      "perdarahan epidural",
+      "infark cerebri",
+      "abses cerebri"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Bentuk crescent pada CT adalah gambaran khas hematoma subdural.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. SAH menyebar di sulkus/cisterna dan bukan koleksi berbentuk crescent.",
+      "BENAR. Bentuk crescent pada CT adalah gambaran khas hematoma subdural.",
+      "SALAH. Epidural hematoma khas lentiform/bikonveks dan dibatasi sutura, bukan crescent.",
+      "SALAH. Infark adalah hipodens parenkim akibat iskemia, bukan kumpulan darah crescent.",
+      "SALAH. Abses adalah lesi massa dengan edema/ring enhancement, bukan hematoma crescent."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-69",
+    "no": 69,
+    "soal": "seorang pria 20 tahun dibawa ke IGD RS karena sesak nafas sejak 1 yg lalu. pemeriksaan fisik : takipnea dan wheezing hampir diseluruh lapang paru, setelah diberikan nebulisasi 2x dengan beta 2 agonis keluhan sesak tidak berkurang sehingga diberikan aminofilin intravena. karne pemberiannya terlalu cepat pasien mengalami kejang. manakah obat yang diberikan untuk mengatasi keadaan pasien tersebut?",
+    "opsi": [
+      "Diazepam/Lorazepam",
+      "Papaverin HCL",
+      "Ekstrak Belladone",
+      "Metoclopramide",
+      "Atropine sulfate"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Kejang akibat toksisitas aminofilin/teofilin dapat ditangani dengan benzodiazepin seperti diazepam atau lorazepam.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Kejang akibat toksisitas aminofilin/teofilin dapat ditangani dengan benzodiazepin seperti diazepam atau lorazepam.",
+      "SALAH. Papaverin adalah vasodilator dan tidak menghentikan kejang toksik ini.",
+      "SALAH. Belladonna mengandung antikolinergik dan dapat memperburuk keadaan, bukan antikonvulsan.",
+      "SALAH. Metoklopramid adalah antiemetik dan bukan terapi kejang.",
+      "SALAH. Atropin adalah antimuskarinik dan dapat memperburuk takikardia/agitasi toksisitas xantin."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-70",
+    "no": 70,
+    "soal": "intinya ditanya bentuk selnya pyramid dan banyak dendritnya, itu lokasinya dimana?",
+    "opsi": [
+      "korteks cerebrum",
+      "substansi grisea",
+      "substansia alba",
+      "korteks cerebelli"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Sel piramidal dengan banyak dendrit merupakan neuron khas korteks cerebri, terutama lapisan piramidal korteks serebral.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Sel piramidal dengan banyak dendrit merupakan neuron khas korteks cerebri, terutama lapisan piramidal korteks serebral.",
+      "SALAH. Substansia grisea adalah istilah lokasi jaringan, bukan jawaban spesifik ketika yang ditanya struktur anatomis yang memiliki sel piramidal.",
+      "SALAH. Substansia alba didominasi akson bermielin dan tidak memiliki badan sel piramidal sebagai komponen utama.",
+      "SALAH. Korteks cerebelli didominasi sel Purkinje, granule, dan interneuron, bukan sel piramidal."
+    ],
+    "komponenStatistik": "Histology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-72",
+    "no": 72,
+    "soal": "Perempuan/anak (lupa) dikasih antibiotik terus syok anafilaktik, penanganannya disuntik obat IM, obatnya apa?",
+    "opsi": [
+      "efedrin",
+      "atropin",
+      "epinefrin",
+      "lupa",
+      "lupa"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Epinefrin intramuskular adalah terapi lini pertama anafilaksis.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Efedrin bukan terapi lini pertama anafilaksis; onset dan efeknya tidak seandal epinefrin IM.",
+      "SALAH. Atropin digunakan untuk bradikardia tertentu, bukan untuk menghentikan anafilaksis.",
+      "BENAR. Epinefrin intramuskular adalah terapi lini pertama anafilaksis.",
+      "SALAH. Opsi tidak lengkap; terapi tetap harus mengikuti prinsip ABC dan epinefrin IM segera.",
+      "SALAH. Opsi tidak lengkap; obat lain tidak menggantikan epinefrin sebagai terapi lini pertama."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-73",
+    "no": 73,
+    "soal": "Seorang anak laki - laki berusia 3 tahun di bawa ibunya ke IGD RS karena kejangberlangsung sejak 5 menit yang lalu hingga sekarang. Berdasarkan anamnesis dengan orang tua, anak mengalami demam sejak tadi pagi dan sempat kejang sebentar kemudian berhenti sendiri. Hasil pemeriksaan pada saat kejang, tidak sadar, laju pernafasan 24 x/ menit, laju denyut jantung 110 x/ menit, suhu tubuh 40*C. Apakah pemeriksaan fisik yang membuat dokter mendiagnosis anak tersebut mengalami kejang?",
+    "opsi": [
+      "Pupil mata mengalami miosis",
+      "Gerakan ekstremitas bersifat kaku",
+      "Suhu tubuh yang tinggi",
+      "Gerakan ekstremitas tonik klonik sinkron",
+      "Gerakan bola mata terpejam"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Gerakan tonik-klonik sinkron merupakan manifestasi motorik khas bangkitan kejang umum tonik-klonik.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Miosis tidak mendiagnosis kejang; itu dapat terlihat pada kondisi tertentu seperti opioid.",
+      "SALAH. Kaku dapat terjadi pada fase tonik tetapi tidak spesifik tanpa gerakan klonik.",
+      "SALAH. Demam merupakan pemicu/etiologi kejang demam, bukan tanda motorik yang membuktikan bangkitan sedang berlangsung.",
+      "BENAR. Gerakan tonik-klonik sinkron merupakan manifestasi motorik khas bangkitan kejang umum tonik-klonik.",
+      "SALAH. Mata terpejam bukan tanda diagnostik spesifik; dapat terjadi sebagai respons saat kejang."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-75",
+    "no": 75,
+    "soal": "Seorang perempuan berusia 59 tahun diantarke ig karena gelisah, marah-marah, dan berbicara sendiri sejak satu hari yang lalu, pasien rutin menjalanin hemodialisis karena gagal ginjal kronik, didapatkan keadaan pasien sedang berkabut dan fluktuatif. pasien juga sering melihat bayangan anak kecil di jendela kamarnya dan gejala ini baru sekali. dari pemeriksaan laboratorium didapatkan bahwa ureum 302 mg/dl. apa diagonsis pasien ini?",
+    "opsi": [
+      "Halusinasi organik",
+      "Delirium",
+      "Demensia vaskuler",
+      "Skizofrenia paranoid",
+      "Pseudodemensia"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Kebingungan akut yang berfluktuasi, halusinasi visual, dan gangguan metabolik berat pada pasien hemodialisis sangat khas delirium.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Halusinasi visual adalah gejala delirium, tetapi diagnosis keseluruhan harus mencakup gangguan atensi/kesadaran yang fluktuatif.",
+      "BENAR. Kebingungan akut yang berfluktuasi, halusinasi visual, dan gangguan metabolik berat pada pasien hemodialisis sangat khas delirium.",
+      "SALAH. Demensia vaskuler bersifat kronis dan progresif, bukan onset satu hari dengan fluktuasi.",
+      "SALAH. Skizofrenia tidak biasanya muncul mendadak dalam satu hari dengan gangguan kesadaran fluktuatif.",
+      "SALAH. Pseudodemensia biasanya terkait depresi dan bukan sindrom konfusi akut dengan halusinasi visual."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-76",
+    "no": 76,
+    "soal": "Pasien wanita Nn X 21 tahun datang ke poliklinik dengan keluhan kejang berulang. Pasien mengeluh kejang tubuh sebelah kanan 2 hari yang lalu. Sebelum kejang pasien merasakan kebas pada anggota gerak kanan, lalu pasien tidak sadar. Menurut keluarga pasien tiba-tiba kejang dimulai anggota gerak kanan lalu seluruh tubuh, mata mendelik keatas, mulut berbusa, mengompol dan tidak respon saat dipanggil. Durasi kejang 2 menit. Setelah kejang pasien tertidur. Riwayat kejang sebelumnya + 1-2x dalam setahun sejak usia 10 tahun dan tidak pernah berobat. dari pemeriksaan fisik tanda vital normal dan tidak didapatkan defisit neurologis. Dari Kasus diatas dapat diklasifikasikan sebagai?",
+    "opsi": [
+      "Epilepsi sekunder generalisata",
+      "Epilepsi parsial kompleks",
+      "Epilepsi Grandmall",
+      "Epilepsi Refrakter",
+      "Epilepsi Parsial Simpleks"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Kejang dimulai fokal pada satu sisi lalu menyebar menjadi bilateral tonik-klonik, sehingga termasuk kejang fokal dengan penyebaran bilateral; dari pilihan arsip, 'epilepsi sekunder generalisata' paling mendekati.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Kejang dimulai fokal pada satu sisi lalu menyebar menjadi bilateral tonik-klonik, sehingga termasuk kejang fokal dengan penyebaran bilateral; dari pilihan arsip, 'epilepsi sekunder generalisata' paling mendekati.",
+      "SALAH. Focal impaired-awareness seizure hanya menggambarkan fase fokal dengan gangguan kesadaran dan tidak menjelaskan evolusi menjadi bilateral tonik-klonik secara lengkap.",
+      "SALAH. “Grand mal” menggambarkan generalized tonic-clonic tanpa onset fokal yang jelas; pada stem ada aura sensorik dan onset unilateral.",
+      "SALAH. Refrakter memerlukan kegagalan terapi adekuat berulang, bukan hanya frekuensi 1–2 kali/tahun tanpa terapi.",
+      "SALAH. Focal aware seizure mempertahankan kesadaran; pasien akhirnya tidak sadar sehingga tidak cocok sebagai klasifikasi keseluruhan."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-77",
+    "no": 77,
+    "soal": "Seorang laki-laki usia 45 tahun dibawa ke IGD RS karena kejang otot dan tidak dapat membuka mulut sejak 3 jam yang lalu. Pasien adalah seorang petani. Pada pemeriksaan pasien sadar. Seminggu yang lalu kaki nya terluka akibat menginjak ranting yang tajam. 5 hari kemudian otot kaki sering kejang dan makin hari kejang nya semakin parah. Dokter memberikan antitoksin dan antibiotik. Apakah tujuan dari pemberian antitoksik?",
+    "opsi": [
+      "Menghambat kerja endotoksik",
+      "Mencegah terjadinya bacteremia",
+      "Mengurangi pertumbuhan neurotoksik",
+      "Menetralisir neurotoksik",
+      "Menghambat kerja neurotoksik intrasuel"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Antitoksin tetanus menetralkan neurotoksin yang masih berada dalam sirkulasi/tidak terikat jaringan.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Tetanus menghasilkan eksotoksin, bukan endotoksin.",
+      "SALAH. Antitoksin tidak mencegah bakteremia; debridement dan antibiotik menangani sumber infeksi.",
+      "SALAH. Antitoksin tidak menghambat pertumbuhan bakteri; itu tugas antibiotik.",
+      "BENAR. Antitoksin tetanus menetralkan neurotoksin yang masih berada dalam sirkulasi/tidak terikat jaringan.",
+      "SALAH. Toksin yang sudah terikat pada terminal saraf tidak dapat dinetralkan secara efektif oleh antitoksin; karena itu pemberian dini penting."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-78",
+    "no": 78,
+    "soal": "Seorang perempuan 30th dengan keluhan nyeri kepala berdenyut kanan sejak 2 hari lalu, disertai mual muntah di perberat aktivitas. Kesadaran komposmentis status neurologis normal. TD 130/70 HR 80×/menit RR 18×/menit suhu 36,5. Berdasarkan klasifikasi nya termasuk apa",
+    "opsi": [
+      "Migrain kronis",
+      "Status migrain",
+      "Probable migrain",
+      "Migrain tanpa aura",
+      "Migrain dengan aura"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Migrain berdenyut selama 2 hari, disertai mual-muntah dan memburuk dengan aktivitas, tanpa aura yang disebutkan, sesuai migrain tanpa aura.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Migrain kronis memerlukan ≥15 hari/bulan selama >3 bulan, bukan satu serangan 2 hari.",
+      "SALAH. Status migrainus berarti serangan >72 jam; durasi 2 hari belum memenuhi.",
+      "SALAH. “Probable” digunakan bila kriteria belum lengkap; gejala pada stem sudah sangat khas migrain.",
+      "BENAR. Migrain berdenyut selama 2 hari, disertai mual-muntah dan memburuk dengan aktivitas, tanpa aura yang disebutkan, sesuai migrain tanpa aura.",
+      "SALAH. Tidak ada aura neurologis reversibel yang mendahului nyeri pada stem."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-79",
+    "no": 79,
+    "soal": "seorang anak 1 tahun dibawa ke UGD karena kejang seluruh tubuh 15 menit. Sebelumnya kejang. Sudah diberikan obat kejang tapi kambuh lagi. PF: TD 80/60 mmhg, HR 120x/menit, RR 30x/menit, suhu 40, anak apatis, kaku kuduk (-), afasia (+). Diagnosisnya?",
+    "opsi": [
+      "meningoensephalitis bacteri",
+      "kejang demam kompleks",
+      "ensephalitis virus",
+      "meningitis bacterial",
+      "menjngitis tuberculosis"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Kejang berkepanjangan/berulang disertai gangguan kesadaran dan demam tinggi pada anak mengarah pada infeksi sistem saraf pusat; dari pilihan, ensefalitis virus paling sesuai dengan afasia tanpa kaku kuduk.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Meningoensefalitis bakteri biasanya lebih kuat bila ada kaku kuduk/meningismus; pada stem justru kaku kuduk negatif.",
+      "SALAH. Kejang demam kompleks adalah diagnosis bila kejang dipicu demam tanpa bukti infeksi SSP; afasia dan apatis mengarah ke keterlibatan otak/ensefalitis.",
+      "BENAR. Kejang berkepanjangan/berulang disertai gangguan kesadaran dan demam tinggi pada anak mengarah pada infeksi sistem saraf pusat; dari pilihan, ensefalitis virus paling sesuai dengan afasia tanpa kaku kuduk.",
+      "SALAH. Meningitis bakterial lebih dominan dengan meningismus; kaku kuduk negatif tidak menyingkirkan sepenuhnya, tetapi membuatnya kurang sesuai dibanding ensefalitis.",
+      "SALAH. TB meningitis biasanya subakut/kronis, bukan onset akut dengan demam tinggi dan status kejang seperti ini."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-80",
+    "no": 80,
+    "soal": "Anak laki2 usia 4th dibawa ke RS karena kejang udh 15 menit. Dia demam 1 harj sblmnya, ada batuk dan blm pernah kejang sebelumnya. Pemeriksaan ada kejang tonik klonik dan tidak sadar. Pemeriksaan RR 24 TD 120x/menit. Pasien berhenti kejang pas udah dikasih obat anti kejang. Apa diagnosisnya?",
+    "opsi": [
+      "Kejang demam sederhana",
+      "Kejang demam kompleks",
+      "Meningitis",
+      "Encephalitis",
+      "Meningoencephalitis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Kejang demam berlangsung ≥15 menit sehingga termasuk kejang demam kompleks, meskipun merupakan episode pertama.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Kejang demam sederhana biasanya generalized, <15 menit, dan tidak berulang dalam 24 jam; kasus ini berlangsung 15 menit sehingga masuk kompleks.",
+      "BENAR. Kejang demam berlangsung ≥15 menit sehingga termasuk kejang demam kompleks, meskipun merupakan episode pertama.",
+      "SALAH. Tidak ada kaku kuduk atau tanda meningitis yang diberikan; demam akut dengan kejang pada anak sebelumnya sehat lebih sesuai kejang demam.",
+      "SALAH. Ensefalitis memerlukan bukti keterlibatan parenkim otak seperti perubahan perilaku/kesadaran persisten, bukan hanya kejang demam singkat.",
+      "SALAH. Meningoensefalitis memerlukan kombinasi tanda meningeal dan ensefalitik yang tidak diberikan."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-81",
+    "no": 81,
+    "soal": "Peneliatian dilakukan untuk melihat pengaruh substansia nigra pada penyakit parkinson. setelah perlakuan, peneliti memilih mikrotom sediaan otak beku hewan coba untuk pemeriksaan mikroskopis. Peneliti akan menentukan lokasi dimana substansia nigra berada. dimana lokasi bagian otak tersebut?",
+    "opsi": [
+      "mesenchepalon",
+      "pons",
+      "thalamus",
+      "vermis cerebellu",
+      "gyrus precentralis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Substantia nigra terletak di mesensefalon (midbrain), bagian dari batang otak.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Substantia nigra terletak di mesensefalon (midbrain), bagian dari batang otak.",
+      "SALAH. Pons berada di bawah mesensefalon dan tidak mengandung substantia nigra.",
+      "SALAH. Thalamus berada di diencephalon, bukan midbrain.",
+      "SALAH. Vermis cerebelli adalah bagian cerebellum dan tidak mengandung substantia nigra.",
+      "SALAH. Gyrus precentralis adalah korteks motorik primer di lobus frontal, bukan lokasi substantia nigra."
+    ],
+    "komponenStatistik": "Histology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-82",
+    "no": 82,
+    "soal": "Status neurologis: membuka mata saat diberi rangsang nyeri dan hanya mampu mengerang, fleksi abnormal? berapa nilai GCSnya?",
+    "opsi": [
+      "8",
+      "6",
+      "7",
+      "10",
+      "9"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "GCS: membuka mata terhadap nyeri = E2, hanya mengerang = V2, fleksi abnormal = M3; total 7.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. E2V2M3 = 7, bukan 8.",
+      "SALAH. E2V2M3 bukan 6; jumlahnya 7.",
+      "BENAR. GCS: membuka mata terhadap nyeri = E2, hanya mengerang = V2, fleksi abnormal = M3; total 7.",
+      "SALAH. Total GCS tidak mencapai 10 dengan komponen yang diberikan.",
+      "SALAH. Komponen yang diberikan menjumlah 7, bukan 9."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-83",
+    "no": 83,
+    "soal": "Perempuan usia 40 tahun datang dengan keluhan tremor sejak 2 bulan lalu. Pasien merasa nyeri tapi dokter saraf mengatakan jika semua normal. Selama 9 bulan, setiap hari pasien merasakan khawatir terkait masa depan anaknya, pekerjaan, dan ekonomi (kalo gasalah). Rasa khawatir diikuti dengan gejala tremor, keringat dingin, perasaan tidak nyaman, dada berdebar. Diagnosis?",
+    "opsi": [
+      "Gangguan cemas menyeluruh",
+      "Gangguan phobia soesifik",
+      "Gangguan somatisasi",
+      "Gangguan hipokondriasis",
+      "Gangguan kecemasan"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Kekhawatiran berlebihan hampir setiap hari selama ≥6 bulan mengenai banyak bidang kehidupan dengan gejala fisik otonom sesuai gangguan cemas menyeluruh.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Kekhawatiran berlebihan hampir setiap hari selama ≥6 bulan mengenai banyak bidang kehidupan dengan gejala fisik otonom sesuai gangguan cemas menyeluruh.",
+      "SALAH. Fobia spesifik membutuhkan ketakutan terarah pada objek/situasi tertentu, bukan kekhawatiran luas mengenai banyak masalah hidup.",
+      "SALAH. Somatisasi berfokus pada keluhan fisik multipel yang menetap; stem justru menonjolkan worry yang luas.",
+      "SALAH. Hipokondriasis/illness anxiety berfokus pada keyakinan memiliki penyakit serius, bukan pekerjaan/ekonomi/anak.",
+      "SALAH. “Gangguan kecemasan” terlalu umum; stem memenuhi pola spesifik gangguan cemas menyeluruh."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-84",
+    "no": 84,
+    "soal": "Seorang laki laki 38 tahun datang ke UGD RS YARSI karena penurunan kesadaran. Pasien mengalami koma, terdapat kenaikan tekanan intraktanial dan herniasi otak. Apa yang dapat terjadi selanjutnya?",
+    "opsi": [
+      "meningitis",
+      "cervical continous",
+      "Duret hemorrhage",
+      "Encephalomalacia",
+      "pontine myelinolysis"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Herniasi otak dapat menyebabkan perdarahan Duret akibat robekan pembuluh kecil di batang otak, terutama pada herniasi transtentorial.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Herniasi tidak menyebabkan meningitis secara langsung.",
+      "SALAH. “Cervical continous” bukan komplikasi neurologis standar dari herniasi transtentorial.",
+      "BENAR. Herniasi otak dapat menyebabkan perdarahan Duret akibat robekan pembuluh kecil di batang otak, terutama pada herniasi transtentorial.",
+      "SALAH. Encephalomalacia adalah pelunakan jaringan otak akibat cedera/iskemia, bukan komplikasi akut khas herniasi.",
+      "SALAH. Pontine myelinolysis adalah demielinisasi akibat perubahan osmolalitas, bukan akibat mekanik herniasi."
+    ],
+    "komponenStatistik": "Physiology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-85",
+    "no": 85,
+    "soal": "Anak dengan status epileptik (kejang pertama 15 menit, dikasih obat terus kejang lagi), terapi rumatannya apa?",
+    "opsi": [
+      "fenitoin 5-10mg/kg dibagi 2 dosis",
+      "fenobarbital 3-5mg/kg/hari dibagi 2 dosis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Setelah status epileptikus teratasi, terapi rumatan dapat menggunakan antikejang seperti fenitoin sesuai konteks klinis; pilihan arsip menempatkan fenitoin sebagai jawaban.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Setelah status epileptikus teratasi, terapi rumatan dapat menggunakan antikejang seperti fenitoin sesuai konteks klinis; pilihan arsip menempatkan fenitoin sebagai jawaban.",
+      "SALAH. Fenobarbital juga dapat menjadi terapi maintenance pada kondisi tertentu, tetapi pilihan arsip menempatkan fenitoin sebagai regimen yang dimaksud; pemilihan modern bergantung etiologi dan jenis kejang."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-86",
+    "no": 86,
+    "soal": "Pasien dengan tanda tanda bell's palsy, tatalaksana untuk diagnosis klinisnya adalah?",
+    "opsi": [
+      "artificial tears",
+      "lupa"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Bell's palsy dapat menyebabkan paparan kornea karena penutupan mata terganggu. Artificial tears membantu melindungi permukaan kornea; terapi lengkap biasanya juga mempertimbangkan kortikosteroid dan perawatan mata.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "BENAR. Bell's palsy dapat menyebabkan paparan kornea karena penutupan mata terganggu. Artificial tears membantu melindungi permukaan kornea; terapi lengkap biasanya juga mempertimbangkan kortikosteroid dan perawatan mata.",
+      "SALAH. Opsi kedua tidak lengkap; secara klinis perlu proteksi mata dan biasanya kortikosteroid, bukan hanya terapi yang tidak disebutkan."
+    ],
+    "catatanKlinis": "⚠️ Catatan: artificial tears adalah bagian dari proteksi kornea, bukan keseluruhan terapi Bell palsy. Terapi lengkap umumnya mencakup kortikosteroid dini dan eye protection; bila hanya opsi ini yang tersedia, artificial tears adalah yang paling tepat.",
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-87",
+    "no": 87,
+    "soal": "Istri pasien mengeluh bahwa pasien cenderung mendengkur. Apa diagnosisnya?",
+    "opsi": [
+      "Insomnia",
+      "Obstructive sleep apnea",
+      "Hipersomnia",
+      "Narkolepsi",
+      "Somnabulansi"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Mendengkur keras, terutama bila disertai henti napas saat tidur, sangat mengarah ke obstructive sleep apnea.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Insomnia adalah sulit tidur, bukan mendengkur sebagai keluhan utama.",
+      "BENAR. Mendengkur keras, terutama bila disertai henti napas saat tidur, sangat mengarah ke obstructive sleep apnea.",
+      "SALAH. Hipersomnia berarti mengantuk berlebihan dan tidak menjelaskan dengkuran sebagai gejala utama.",
+      "SALAH. Narkolepsi ditandai sleep attacks/cataplexy, bukan mendengkur.",
+      "SALAH. Somnambulisme adalah berjalan saat tidur, bukan mendengkur."
+    ],
+    "komponenStatistik": "Diagnostics",
+    "version": 1
+  },
+  {
+    "id": "pulmonis-2022-88",
+    "no": 88,
+    "soal": "Seorang laki-laki usia 40 tahun dibawa ke IGD RS karena mengalami kejang diduga akibat hiperaktivasi neuronal kortikal. Dokter memberikan obat untuk memperpanjang episode refraktori absolut. Bagaimana mekanisme kerja obat tersebut?",
+    "opsi": [
+      "Memblokade kanal kalium untuk memperpanjang repolarisasi",
+      "Mempercepat inaktivasi kanal natrium voltase-gated",
+      "Menghambat pompa Na+/K ATPase",
+      "Menghambat kabal natrium setelah depolarisasi",
+      "Meningkatkan permeabilitas membran terhadap ... (lupa)"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Obat yang memperpanjang periode refrakter dengan menstabilkan kanal natrium adalah penghambat kanal Na+ voltage-gated yang bekerja terutama pada kanal terinaktivasi. Pilihan D paling sesuai.",
+    "source": "ARSIP UAB SSP PULMONIS 2022",
+    "incomplete": false,
+    "pembahasanPilihan": [
+      "SALAH. Memblok kanal K+ akan mengganggu repolarisasi tetapi bukan mekanisme utama banyak antikejang yang memperpanjang refractory period.",
+      "SALAH. Mempercepat inaktivasi kanal Na+ terlalu umum; obat antikejang bekerja dengan menstabilkan kanal Na+ dalam keadaan inaktif.",
+      "SALAH. Menghambat Na/K ATPase bukan mekanisme terapi antikejang standar dan dapat mengganggu homeostasis ion.",
+      "BENAR. Obat yang memperpanjang periode refrakter dengan menstabilkan kanal natrium adalah penghambat kanal Na+ voltage-gated yang bekerja terutama pada kanal terinaktivasi. Pilihan D paling sesuai.",
+      "SALAH. Meningkatkan permeabilitas membran secara nonspesifik justru dapat meningkatkan eksitabilitas; mekanisme yang dicari adalah stabilisasi kanal Na+."
+    ],
+    "komponenStatistik": "Pharmacology",
+    "version": 1
+  }
+]
