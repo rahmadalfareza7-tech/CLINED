@@ -1871,6 +1871,11 @@ textarea{line-height:1.4}
 /* ── Leaderboard Teaser (Home) ────────────────────────────────────────────── */
 .leaderboard-teaser-card {
   padding: 14px 16px !important;
+  background: linear-gradient(135deg, var(--surface, #f8f9fa) 0%, var(--card, #ffffff) 100%) !important;
+  border-color: var(--line, #e2e8f0) !important;
+  color: var(--text, #1e293b) !important;
+}
+:root.dark .leaderboard-teaser-card {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
   border-color: #334155 !important;
   color: #f1f5f9 !important;
@@ -1899,12 +1904,14 @@ textarea{line-height:1.4}
   gap: 8px;
   padding: 6px 8px;
   border-radius: 10px;
-  background: rgba(255,255,255,.05);
+  background: rgba(0,0,0,.04);
   font-size: 12px;
 }
+:root.dark .lb-teaser-row { background: rgba(255,255,255,.05); }
 .lb-teaser-row.leaderboard-me { background: rgba(99,102,241,.18); border: 1px solid rgba(99,102,241,.3); }
-.lb-teaser-name { flex: 1; font-weight: 700; color: #e2e8f0; }
-.lb-teaser-xp { font-weight: 900; color: #fbbf24; font-size: 11px; }
+.lb-teaser-name { flex: 1; font-weight: 700; color: var(--text, #1e293b); }
+:root.dark .lb-teaser-name { color: #e2e8f0; }
+.lb-teaser-xp { font-weight: 900; color: #f59e0b; font-size: 11px; }
 .leaderboard-loading { font-size: 12px; opacity: .55; padding: 10px; text-align: center; }
 
 /* ── Leaderboard Full Page ────────────────────────────────────────────────── */
@@ -2080,9 +2087,16 @@ textarea{line-height:1.4}
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
+}
+.admin-ann-publish-check input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  cursor: pointer;
+  accent-color: var(--brand, #5c7cfa);
 }
 .admin-announce-row {
   padding: 12px;
@@ -2206,6 +2220,7 @@ textarea{line-height:1.4}
 :root.dark .leaderboard-teaser-card {
   background: linear-gradient(135deg, #0c1122 0%, #1a2340 100%) !important;
   border-color: #1e3a5f !important;
+  color: #f1f5f9 !important;
 }
 :root.dark .announcement-banner {
   background: linear-gradient(135deg, #0a6fa0 0%, #0c93d0 100%);
