@@ -1695,23 +1695,46 @@ const CLINED_MATERIAL_URLS={
 };
 function renderMaterialsPage(){
   const grid=document.getElementById('materialsBlockGrid'); if(!grid)return;
-  const semesterGroups=[[1,0,3],[2,3,6],[3,6,9],[4,9,12],[5,12,15],[6,15,17],[7,17,20]];
-  grid.innerHTML=semesterGroups.map(([semester,start,end])=>{
-    const cards=CLINED_UAB_BLOCKS.slice(start,end).map(([name,icon],offset)=>{
-      const i=start+offset,url=CLINED_MATERIAL_URLS[name];
-      return `<button type="button" class="material-block-card${url?' has-material':''}" data-material-block="${esc(name)}" ${url?'':'aria-disabled="true"'}>
-        <span class="material-block-number">${String(i+1).padStart(2,'0')}</span><span class="material-block-icon">${icon}</span>
-        <span class="material-block-copy"><b>${esc(name)}</b><small>${url?'Materi tersedia':'Materi belum tersedia'}</small></span><span class="material-block-arrow">›</span>
-      </button>`;
+  grid.innerHTML='<p style="padding:16px;opacity:.5;font-size:13px">Memuat materi…</p>';
+  fetch('/api/materials',{credentials:'same-origin'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
+    const liveUrls=Object.fromEntries((data.materials||[]).map(x=>[String(x.block).toUpperCase(),x.url]));
+    const mergedUrls=Object.assign({},CLINED_MATERIAL_URLS,liveUrls);
+    const semesterGroups=[[1,0,3],[2,3,6],[3,6,9],[4,9,12],[5,12,15],[6,15,17],[7,17,20]];
+    grid.innerHTML=semesterGroups.map(([semester,start,end])=>{
+      const cards=CLINED_UAB_BLOCKS.slice(start,end).map(([name,icon],offset)=>{
+        const i=start+offset,url=mergedUrls[name];
+        return `<button type="button" class="material-block-card${url?' has-material':''}" data-material-block="${esc(name)}" ${url?'':'aria-disabled="true"'}>
+          <span class="material-block-number">${String(i+1).padStart(2,'0')}</span><span class="material-block-icon">${icon}</span>
+          <span class="material-block-copy"><b>${esc(name)}</b><small>${url?'Materi tersedia':'Materi belum tersedia'}</small></span><span class="material-block-arrow">›</span>
+        </button>`;
+      }).join('');
+      return `<section class="materials-semester" aria-labelledby="materialsSemester${semester}"><div class="materials-semester-divider" id="materialsSemester${semester}"><span>SEMESTER ${semester}</span></div><div class="materials-semester-track">${cards}</div></section>`;
     }).join('');
-    return `<section class="materials-semester" aria-labelledby="materialsSemester${semester}"><div class="materials-semester-divider" id="materialsSemester${semester}"><span>SEMESTER ${semester}</span></div><div class="materials-semester-track">${cards}</div></section>`;
-  }).join('');
-  document.getElementById('materialsBlockCount')?.replaceChildren(document.createTextNode(`${CLINED_UAB_BLOCKS.length} Blok`));
-  grid.querySelectorAll('[data-material-block]').forEach(btn=>btn.addEventListener('click',()=>{
-    const name=btn.dataset.materialBlock,url=CLINED_MATERIAL_URLS[name];
-    if(url){window.open(url,'_blank','noopener,noreferrer');return;}
-    showToast(`Materi ${name} belum tersedia.`);
-  }));
+    document.getElementById('materialsBlockCount')?.replaceChildren(document.createTextNode(`${CLINED_UAB_BLOCKS.length} Blok`));
+    grid.querySelectorAll('[data-material-block]').forEach(btn=>btn.addEventListener('click',()=>{
+      const name=btn.dataset.materialBlock,url=mergedUrls[name];
+      if(url){window.open(url,'_blank','noopener,noreferrer');return;}
+      showToast(`Materi ${name} belum tersedia.`);
+    }));
+  }).catch(()=>{
+    const semesterGroups=[[1,0,3],[2,3,6],[3,6,9],[4,9,12],[5,12,15],[6,15,17],[7,17,20]];
+    grid.innerHTML=semesterGroups.map(([semester,start,end])=>{
+      const cards=CLINED_UAB_BLOCKS.slice(start,end).map(([name,icon],offset)=>{
+        const i=start+offset,url=CLINED_MATERIAL_URLS[name];
+        return `<button type="button" class="material-block-card${url?' has-material':''}" data-material-block="${esc(name)}" ${url?'':'aria-disabled="true"'}>
+          <span class="material-block-number">${String(i+1).padStart(2,'0')}</span><span class="material-block-icon">${icon}</span>
+          <span class="material-block-copy"><b>${esc(name)}</b><small>${url?'Materi tersedia':'Materi belum tersedia'}</small></span><span class="material-block-arrow">›</span>
+        </button>`;
+      }).join('');
+      return `<section class="materials-semester" aria-labelledby="materialsSemester${semester}"><div class="materials-semester-divider" id="materialsSemester${semester}"><span>SEMESTER ${semester}</span></div><div class="materials-semester-track">${cards}</div></section>`;
+    }).join('');
+    document.getElementById('materialsBlockCount')?.replaceChildren(document.createTextNode(`${CLINED_UAB_BLOCKS.length} Blok`));
+    grid.querySelectorAll('[data-material-block]').forEach(btn=>btn.addEventListener('click',()=>{
+      const name=btn.dataset.materialBlock,url=CLINED_MATERIAL_URLS[name];
+      if(url){window.open(url,'_blank','noopener,noreferrer');return;}
+      showToast(`Materi ${name} belum tersedia.`);
+    }));
+  });
 }
 
 function upiOpenCreateQuestion(defaultBlock){
