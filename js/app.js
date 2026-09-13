@@ -873,9 +873,9 @@ async function askAiExplain(pertanyaan){
     const r=await fetch('/api/ai/explain',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({
       soal:q.soal,opsi:q.opsi,jawabanBenar:q.opsi?.[q.jawabanBenar]||'',jawabanUser:q.opsi?.[q.selectedAnswer??selectedAnswer]||'',pertanyaan
     })});
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok){box.innerHTML=`<div class="ai-ask-error">${esc(d.error||'Gagal mendapat jawaban AI.')}</div>`;return;}
-    box.innerHTML=`<div class="ai-ask-answer">${esc(d.answer||'').replace(/\n/g,'<br>')}</div>`;
+    const d=await r.json().catch(()=>null);
+    if(!r.ok){box.innerHTML=`<div class="ai-ask-error">${esc(d?.error||`Gagal (status ${r.status}). Cek apakah fitur AI sudah di-deploy & OPENAI_API_KEY sudah diisi.`)}</div>`;return;}
+    box.innerHTML=`<div class="ai-ask-answer">${esc(d?.answer||'').replace(/\n/g,'<br>')}</div>`;
   }catch(e){box.innerHTML='<div class="ai-ask-error">Koneksi gagal. Coba lagi.</div>';}
   finally{if(btn)btn.disabled=false;}
 }
