@@ -860,8 +860,28 @@ function allExplanations(q){
         <div class="option-truth">${truthLabel}</div>
         <div class="option-review-text">${esc(detail)}</div>
       </div>`;
-    }).join("");
+    }).join("")+
+    `<div class="ai-ask-block"><button type="button" class="ai-ask-btn" id="aiAskBtn">🤖 Tanya AI: kenapa masih bingung?</button><div id="aiAskBox" class="ai-ask-box" hidden></div></div>`;
 }
+async function askAiExplain(pertanyaan){
+  const q=quiz[pos]; if(!q)return;
+  const box=$("aiAskBox"),btn=$("aiAskBtn");
+  if(!box)return;
+  box.hidden=false; box.innerHTML='<div class="ai-ask-loading">AI sedang menjawab…</div>';
+  if(btn)btn.disabled=true;
+  try{
+    const r=await fetch('/api/ai/explain',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      soal:q.soal,opsi:q.opsi,jawabanBenar:q.opsi?.[q.jawabanBenar]||'',jawabanUser:q.opsi?.[q.selectedAnswer??selectedAnswer]||'',pertanyaan
+    })});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){box.innerHTML=`<div class="ai-ask-error">${esc(d.error||'Gagal mendapat jawaban AI.')}</div>`;return;}
+    box.innerHTML=`<div class="ai-ask-answer">${esc(d.answer||'').replace(/\n/g,'<br>')}</div>`;
+  }catch(e){box.innerHTML='<div class="ai-ask-error">Koneksi gagal. Coba lagi.</div>';}
+  finally{if(btn)btn.disabled=false;}
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('#aiAskBtn'))askAiExplain('');
+});
 function answer(i){
   if(answered)return;
   answered=true;selectedAnswer=i;

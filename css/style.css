@@ -2354,3 +2354,12 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
 .admin-material-actions .material-delete-action:active{transform:translateY(4px)!important;box-shadow:0 0 0 #d8a0a0!important;filter:brightness(.96)}
 .admin-material-actions .material-delete-action:disabled{opacity:.55!important;cursor:wait!important}
 @media(max-width:520px){.admin-material-actions .material-delete-action{min-height:var(--clined-control-h)!important;height:auto!important;padding:10px 12px!important;border-radius:20px!important}}
+
+/* AI Tanya-Jawab */
+.ai-ask-block{margin-top:14px;padding-top:14px;border-top:1px solid var(--ios-line,rgba(0,0,0,.08))}
+.ai-ask-btn{width:100%;padding:10px 14px;border-radius:12px;border:1px solid var(--ios-line,rgba(0,0,0,.12));background:var(--ios-card,#fff);font-weight:600;cursor:pointer}
+.ai-ask-btn:disabled{opacity:.6;cursor:default}
+.ai-ask-box{margin-top:10px;padding:12px;border-radius:12px;background:rgba(0,122,255,.08);font-size:14px;line-height:1.5}
+.ai-ask-loading,.ai-ask-error{opacity:.75;font-style:italic}
+.ai-ask-error{color:#ff3b30}
+body.dark .ai-ask-btn,[data-theme="dark"] .ai-ask-btn{background:rgba(44,44,46,.82);color:#f2f2f7}
