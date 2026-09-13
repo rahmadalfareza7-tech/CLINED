@@ -25,7 +25,7 @@ export async function contentApi({ request, response, url, user, pool, body, jso
   if (ids.size !== questions.length) return fail(response, 400, 'ID soal dalam paket harus unik.');
   // Semua paket server yang masuk ke katalog publik hanya boleh dibuat admin.
   // Pengguna biasa tidak boleh membuat konten publik melalui API ini.
-  if (user.role !== 'admin') return fail(response, 403, 'Hanya admin yang dapat membuat konten publik.');
+  if (user.role !== 'admin' && user.role !== 'developer') return fail(response, 403, 'Hanya admin atau developer yang dapat membuat konten publik.');
   const visibility = 'public';
   const ownerId = null;
   const result = await pool.query(`INSERT INTO content_packages (id,module,title,block,visibility,owner_user_id,created_by,questions,published_at)
