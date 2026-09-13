@@ -2189,7 +2189,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$("normalValuesMod
     if(key==='dashboard'){show('clinicalDashboard');if(typeof renderClinicalDashboard==='function')renderClinicalDashboard();setActive('dashboard');window.scrollTo({top:0,behavior:'auto'});return;}
     if(key==='chat'){show('chatPage');if(typeof window.CLINEDChatOpen==='function')window.CLINEDChatOpen();else window.dispatchEvent(new Event('clined:chat-opened'));setActive('chat');window.scrollTo({top:0,behavior:'auto'});return;}
     if(key==='uab'){const b=document.getElementById('openUabPage');if(b){b.click();}else{show('uabPage');setActive('uab');}window.scrollTo({top:0,behavior:'auto'});return;}
-    if(key==='account'){show('accountPage');renderAccount();setActive('account');window.scrollTo({top:0,behavior:'auto'});return;}
+    if(key==='account'){show('accountPage');renderAccount();setActive('account');window.scrollTo({top:0,behavior:'auto'});window.CLINED_INSTALL_ADMIN?.();return;}
   }));
   setActive('home');
 })();
