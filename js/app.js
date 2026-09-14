@@ -120,6 +120,9 @@ function show(id, options={}){
   if(id==="blokKedkelPage"){setCurrentBlockId("KEDKEL"); renderAvailableBlockControls("kedkel");}
   if(id==="blokGinjalPage"){setCurrentBlockId("GINJAL"); renderAvailableBlockControls("ginjal"); renderBlockMateri("GINJAL","blokGinjalPage");}
   if(id==="blokPancaIndraPage"){setCurrentBlockId("PANCA INDRA"); renderEmptyBlockControls("pancaIndra","PANCA INDRA"); renderBlockMateri("PANCA INDRA","blokPancaIndraPage");}
+  if(id==="blokEndokrinePage"){setCurrentBlockId("ENDOKRINE"); renderEmptyBlockControls("endokrine","ENDOKRINE"); renderBlockMateri("ENDOKRINE","blokEndokrinePage");}
+  if(id==="blokReproduksiPage"){setCurrentBlockId("REPRODUKSI"); renderEmptyBlockControls("reproduksi","REPRODUKSI"); renderBlockMateri("REPRODUKSI","blokReproduksiPage");}
+  if(id==="blokForensikPage"){setCurrentBlockId("FORENSIK"); renderEmptyBlockControls("forensik","FORENSIK"); renderBlockMateri("FORENSIK","blokForensikPage");}
   if(id==="blokMulsisPage"){setCurrentBlockId("MULSIS"); renderEmptyBlockControls("mulsis");}
 
   const navKey=id==="clinicalDashboard"?"dashboard":id==="accountPage"?"account":id==="home"?"home":null;
@@ -1824,6 +1827,12 @@ if($("openBlokSsp"))$("openBlokSsp").onclick=()=>{setCurrentBlockId("SSP");show(
 if($("backFromSsp"))$("backFromSsp").onclick=()=>show("uabPage");
 if($("openBlokPancaIndra"))$("openBlokPancaIndra").onclick=()=>{setCurrentBlockId("PANCA INDRA");show("blokPancaIndraPage");};
 if($("backFromPancaIndra"))$("backFromPancaIndra").onclick=()=>show("uabPage");
+if($("openBlokEndokrine"))$("openBlokEndokrine").onclick=()=>{setCurrentBlockId("ENDOKRINE");show("blokEndokrinePage");};
+if($("backFromEndokrine"))$("backFromEndokrine").onclick=()=>show("uabPage");
+if($("openBlokReproduksi"))$("openBlokReproduksi").onclick=()=>{setCurrentBlockId("REPRODUKSI");show("blokReproduksiPage");};
+if($("backFromReproduksi"))$("backFromReproduksi").onclick=()=>show("uabPage");
+if($("openBlokForensik"))$("openBlokForensik").onclick=()=>{setCurrentBlockId("FORENSIK");show("blokForensikPage");};
+if($("backFromForensik"))$("backFromForensik").onclick=()=>show("uabPage");
 if($("openBlokKedkom"))$("openBlokKedkom").onclick=()=>{setCurrentBlockId("KEDKOM");show("blokKedkomPage");};
 if($("backFromKedkom"))$("backFromKedkom").onclick=()=>show("uabPage");
 if($("openBlokKedkel"))$("openBlokKedkel").onclick=()=>{setCurrentBlockId("KEDKEL");show("blokKedkelPage");};

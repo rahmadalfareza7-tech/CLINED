@@ -411,11 +411,11 @@ html,body{overflow-x:hidden}
     <div class="semester-divider" role="separator" aria-label="Semester 4"><span>SEMESTER 4</span></div>
     <button type="button" class="uab-node active-node" id="openBlokHematologi"><span class="uab-node-icon">🩸</span><b>HEMATOLOGI</b></button>
     <button type="button" class="uab-node active-node" id="openBlokGit"><span class="uab-node-icon">🫃</span><b>GIT</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokForensik" aria-label="Forensik terkunci"><span class="uab-node-icon">🔎</span><b>FORENSIK</b></button>
+    <button type="button" class="uab-node" id="openBlokForensik"><span class="uab-node-icon">🔎</span><b>FORENSIK</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 5"><span>SEMESTER 5</span></div>
     <button type="button" class="uab-node active-node" id="openBlokGinjal"><span class="uab-node-icon">🫘</span><b>GINJAL</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokEndokrine" aria-label="Endokrine terkunci"><span class="uab-node-icon">🧪</span><b>ENDOKRINE</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokReproduksi" aria-label="Reproduksi terkunci"><span class="uab-node-icon">🧬</span><b>REPRODUKSI</b></button>
+    <button type="button" class="uab-node" id="openBlokEndokrine"><span class="uab-node-icon">🧪</span><b>ENDOKRINE</b></button>
+    <button type="button" class="uab-node" id="openBlokReproduksi"><span class="uab-node-icon">🧬</span><b>REPRODUKSI</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 6"><span>SEMESTER 6</span></div>
     <button type="button" class="uab-node active-node" id="openBlokSsp"><span class="uab-node-icon">🧠</span><b>SSP</b></button>
     <button type="button" class="uab-node" id="openBlokPancaIndra" aria-label="Buka Panca Indra"><span class="uab-node-icon">👁️</span><b>PANCA INDRA</b></button>
@@ -600,6 +600,72 @@ html,body{overflow-x:hidden}
     <div class="choice-grid mode-grid" id="pancaIndraModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="pancaIndraTimeChoices"></div>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
+  </div>
+</section>
+
+<section id="blokEndokrinePage" class="view exam-page-view empty-bank-block" data-block-key="ENDOKRINE">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromEndokrine" type="button">‹ UAB</button>
+    <div><div class="eyebrow">UAB • BLOK ENDOKRINE</div><h2>BLOK ENDOKRINE</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
+  </div>
+  <div class="materi-section" data-materi-section="ENDOKRINE"></div>
+  <div class="card nested-card bank-card">
+    <div class="section-title">📚 Clinical Case Bank</div>
+    <div class="empty-bank-inline"><span class="empty-bank-icon">🧪</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK ENDOKRINE masih kosong.</small></div></div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="endokrineCountChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="endokrineModeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="endokrineTimeChoices"></div>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
+  </div>
+</section>
+
+<section id="blokReproduksiPage" class="view exam-page-view empty-bank-block" data-block-key="REPRODUKSI">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromReproduksi" type="button">‹ UAB</button>
+    <div><div class="eyebrow">UAB • BLOK REPRODUKSI</div><h2>BLOK REPRODUKSI</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
+  </div>
+  <div class="materi-section" data-materi-section="REPRODUKSI"></div>
+  <div class="card nested-card bank-card">
+    <div class="section-title">📚 Clinical Case Bank</div>
+    <div class="empty-bank-inline"><span class="empty-bank-icon">🧬</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK REPRODUKSI masih kosong.</small></div></div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="reproduksiCountChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="reproduksiModeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="reproduksiTimeChoices"></div>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
+  </div>
+</section>
+
+<section id="blokForensikPage" class="view exam-page-view empty-bank-block" data-block-key="FORENSIK">
+  <div class="exam-page-header">
+    <button class="back-link" id="backFromForensik" type="button">‹ UAB</button>
+    <div><div class="eyebrow">UAB • BLOK FORENSIK</div><h2>BLOK FORENSIK</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
+  </div>
+  <div class="materi-section" data-materi-section="FORENSIK"></div>
+  <div class="card nested-card bank-card">
+    <div class="section-title">📚 Clinical Case Bank</div>
+    <div class="empty-bank-inline"><span class="empty-bank-icon">🔎</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK FORENSIK masih kosong.</small></div></div>
+  </div>
+  <div class="card nested-card">
+    <div class="section-title">Jumlah soal</div>
+    <div class="choice-grid" id="forensikCountChoices"></div>
+    <div class="section-title sub-title">Mode</div>
+    <div class="choice-grid mode-grid" id="forensikModeChoices"></div>
+    <div class="section-title sub-title">Batas waktu</div>
+    <div class="choice-grid mode-grid" id="forensikTimeChoices"></div>
     <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
