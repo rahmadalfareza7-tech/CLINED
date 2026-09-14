@@ -22,12 +22,42 @@
 
   function removeAdminControls(){ ['adminContentWorkspace','adminLoginsPanel'].forEach(id=>document.getElementById(id)?.remove()); }
 
+  const LETTERS = ['A','B','C','D','E','F'];
+
+  function normalizeRawQuestion(q){
+    if(!q || typeof q!=='object') return q;
+    // Sudah format standar (punya 'soal' + 'opsi' array) — biarkan apa adanya.
+    if(typeof q.soal==='string' && Array.isArray(q.opsi)) return q;
+    // Format alternatif: id_soal/pertanyaan/pilihan_jawaban/jawaban_benar/pembahasan_klinis
+    if(q.pertanyaan || q.pilihan_jawaban){
+      const pj = q.pilihan_jawaban || {};
+      const usedLetters = LETTERS.filter(L=>pj[L]!=null && String(pj[L]).trim()!=='');
+      const opsi = usedLetters.map(L=>`${L}. ${pj[L]}`);
+      const correctLetter = String(q.jawaban_benar||'').trim().toUpperCase();
+      const jawabanBenar = usedLetters.indexOf(correctLetter);
+      const pembahasanKlinis = q.pembahasan_klinis || {};
+      const pembahasanPilihan = usedLetters.map(L=>pembahasanKlinis[L]||'');
+      const pembahasan = pembahasanKlinis[correctLetter] || pembahasanPilihan[jawabanBenar] || '';
+      return {
+        id: String(q.id_soal ?? q.id ?? ''),
+        soal: q.pertanyaan || '',
+        opsi,
+        jawabanBenar,
+        pembahasan,
+        pembahasanPilihan
+      };
+    }
+    return q;
+  }
+
   function parseUabJson(raw){
     let parsed; try { parsed=JSON.parse(raw); } catch { throw Error('File JSON tidak valid.'); }
-    if(Array.isArray(parsed)) return parsed;
-    if(parsed && Array.isArray(parsed.questions)) return parsed.questions;
-    if(parsed && Array.isArray(parsed.data)) return parsed.data;
-    throw Error('Format JSON tidak dikenali. Gunakan array soal atau object dengan properti "questions".');
+    let list;
+    if(Array.isArray(parsed)) list=parsed;
+    else if(parsed && Array.isArray(parsed.questions)) list=parsed.questions;
+    else if(parsed && Array.isArray(parsed.data)) list=parsed.data;
+    else throw Error('Format JSON tidak dikenali. Gunakan array soal atau object dengan properti "questions".');
+    return list.map(normalizeRawQuestion);
   }
 
   function imageToDataUrl(file){
