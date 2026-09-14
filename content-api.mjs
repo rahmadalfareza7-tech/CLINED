@@ -29,7 +29,7 @@ export async function contentApi({ request, response, url, user, pool, body, jso
   const visibility = 'public';
   const ownerId = null;
   const result = await pool.query(`INSERT INTO content_packages (id,module,title,block,visibility,owner_user_id,created_by,questions,published_at)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,CASE WHEN $5='public' THEN now() ELSE NULL END) RETURNING id,module,title,block,visibility,owner_user_id,created_at`,
+    VALUES ($1,$2,$3,$4,$5::text,$6,$7,$8::jsonb,CASE WHEN $5::text='public' THEN now() ELSE NULL END) RETURNING id,module,title,block,visibility,owner_user_id,created_at`,
     [randomUUID(), module, title, block, visibility, ownerId, user.id, JSON.stringify(questions)]);
   return json(response, 201, { package: result.rows[0] });
 }
