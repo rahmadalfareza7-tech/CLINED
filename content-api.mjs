@@ -23,9 +23,9 @@ export async function contentApi({ request, response, url, user, pool, body, jso
   if (!['UAB', 'UPI'].includes(module) || !title || title.length > 160 || !Array.isArray(input.questions) || !input.questions.length || input.questions.length > 500) return fail(response, 400, 'Paket soal tidak valid.');
   const questions = input.questions.map(packageQuestion), ids = new Set(questions.map(question => question.id));
   if (ids.size !== questions.length) return fail(response, 400, 'ID soal dalam paket harus unik.');
-  // Semua paket server yang masuk ke katalog publik hanya boleh dibuat admin.
+  // Semua paket server yang masuk ke katalog publik hanya boleh dibuat admin atau helper.
   // Pengguna biasa tidak boleh membuat konten publik melalui API ini.
-  if (user.role !== 'admin') return fail(response, 403, 'Hanya admin yang dapat membuat konten publik.');
+  if (!['admin','helper'].includes(user.role)) return fail(response, 403, 'Hanya admin/helper yang dapat membuat konten publik.');
   const visibility = 'public';
   const ownerId = null;
   const result = await pool.query(`INSERT INTO content_packages (id,module,title,block,visibility,owner_user_id,created_by,questions,published_at)

@@ -2047,7 +2047,7 @@ async function authLogout(){
 function renderAccountAuthState(){
   const user=authCurrentUser(),title=$('accountAuthTitle'),sub=$('accountAuthSubtitle'),badge=$('accountSecurityBadge'),actions=$('accountAuthActions'),secure=$('accountSecurityActions');
   if(!title)return;
-  if(user){title.textContent=`Akun aktif • ${user.name}`;sub.textContent=`@${user.username}${user.role==='admin'?' • ADMIN':''}`;badge.textContent='AMAN';badge.classList.add('secure');actions.hidden=true;secure.hidden=false;}
+  if(user){title.textContent=`Akun aktif • ${user.name}`;sub.textContent=`@${user.username}${user.role==='admin'?' • ADMIN':user.role==='helper'?' • HELPER':''}`;badge.textContent='AMAN';badge.classList.add('secure');actions.hidden=true;secure.hidden=false;}
   else{title.textContent='Masuk ke akun CLINED';sub.textContent='Buat akun atau masuk untuk memakai profil yang terlindungi di website ini.';badge.textContent='LOGIN';badge.classList.remove('secure');actions.hidden=false;secure.hidden=true;}
 }
 function renderAccount(){
