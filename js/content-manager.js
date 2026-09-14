@@ -184,10 +184,36 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
     }
   }
 
-  async function hydrateMaterials(){try{const d=await request('/api/materials');const map=Object.fromEntries((d.materials||[]).map(x=>[String(x.block).toLowerCase(),x.url]));document.querySelectorAll('[data-external-material]').forEach(a=>{const section=a.closest('[data-block-key]');if(!section)return;const block=String(section.dataset.blockKey||'').toLowerCase();if(map[block])a.href=map[block];a.target='_blank';a.rel='noopener noreferrer';});}catch(e){console.warn('Material links unavailable',e);}}
+  async function hydrateMaterials(){try{
+      const d=await request('/api/materials');
+      const materials=d.materials||[];
+      const map=Object.fromEntries(materials.map(x=>[String(x.block).toLowerCase(),x.url]));
+      document.querySelectorAll('[data-external-material]').forEach(a=>{const section=a.closest('[data-block-key]');if(!section)return;const block=String(section.dataset.blockKey||'').toLowerCase();if(map[block])a.href=map[block];a.target='_blank';a.rel='noopener noreferrer';});
+      if(window.syncUabNodeUnlock) window.syncUabNodeUnlock(materials.map(x=>x.block));
+    }catch(e){console.warn('Material links unavailable',e);}}
   async function hydrateGlobalBanks(){try{const catalog=await request('/api/banks');for(const item of catalog.banks||[]){try{const d=await request(`/api/banks/${encodeURIComponent(item.id)}`),b=d.bank;if(b&&Array.isArray(b.questions)&&b.questions.length)window.CLINED_BANK_ENGINE?.registerBank({id:b.id,name:b.name,block:b.block,version:b.version,schema:b.schema_version,data:b.questions},{persist:true,source:'server-global'});}catch(e){console.warn('Global bank sync failed:',item?.id,e);}}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('Global bank catalog unavailable',e);}}
   async function hydrateUpi(){try{const data=await request('/api/content/packages?module=UPI'),existing=window.upiGetCustomCards?.()||[],known=new Set(existing.map(c=>c.id));const fallback='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="640" height="360"%3E%3Crect width="100%25" height="100%25" fill="%23007aff"/%3E%3Ctext x="50%25" y="50%25" fill="white" font-size="32" text-anchor="middle" dominant-baseline="middle"%3EUPI%3C/text%3E%3C/svg%3E';const additions=[];for(const p of data.packages||[])for(const q of p.questions||[]){const id=`server-upi-${p.id}-${q.id}`;if(!known.has(id))additions.push({id,block:p.block||'SSP',material:q.material||'Histology',topic:p.title,image:q.image||fallback,prompt:q.soal,answer:q.pembahasan||q.answer||'Tidak ada pembahasan.',explanation:p.visibility==='public'?'Paket UPI publik.':'Paket UPI pribadi.'});}if(additions.length&&window.upiSaveCustomCards){window.upiSaveCustomCards(existing.concat(additions));window.upiRenderBlockSelector?.();}}catch(e){console.warn('UPI sync failed',e);}}
-  async function hydrateUab(){try{const data=await request('/api/content/packages?module=UAB');for(const p of data.packages||[])try{window.CLINED_BANK_ENGINE?.registerBank({id:`server-uab-${p.id}`,name:p.title,block:p.block||'UAB',version:1,schema:p.schema_version||'1.0',data:p.questions},{persist:true,source:'server-admin'});}catch{}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('UAB sync failed',e);}}
-  async function boot(){try{const d=await request('/api/auth/me');if(d.user){install(d.user);await Promise.all([hydrateMaterials(),hydrateGlobalBanks(),hydrateUpi(),hydrateUab()]);}else removeAdminControls();}catch(e){removeAdminControls();}}
+  async function hydrateUab(){try{
+      const data=await request('/api/content/packages?module=UAB');
+      const packages=data.packages||[];
+      const availableBlocks=packages.map(p=>p.block).filter(Boolean);
+      for(const p of packages)try{window.CLINED_BANK_ENGINE?.registerBank({id:`server-uab-${p.id}`,name:p.title,block:p.block||'UAB',version:1,schema:p.schema_version||'1.0',data:p.questions},{persist:true,source:'server-admin'});}catch{}
+      window.renderBanks?.();window.renderCounts?.();
+      if(window.syncUabNodeUnlock) window.syncUabNodeUnlock(availableBlocks);
+    }catch(e){console.warn('UAB sync failed',e);}}
+  async function boot(){try{const d=await request('/api/auth/me');if(d.user){
+      install(d.user);
+      await Promise.all([hydrateMaterials(),hydrateGlobalBanks(),hydrateUpi(),hydrateUab()]);
+      if(window.syncUabNodeUnlock){
+        const [m,u]=await Promise.all([
+          request('/api/materials').catch(()=>({materials:[]})),
+          request('/api/content/packages?module=UAB').catch(()=>({packages:[]}))
+        ]);
+        window.syncUabNodeUnlock([
+          ...(m.materials||[]).map(x=>x.block),
+          ...(u.packages||[]).map(x=>x.block)
+        ]);
+      }
+    }else removeAdminControls();}catch(e){removeAdminControls();}}
   window.addEventListener('load',boot,{once:true}); setInterval(boot,15000);
 })();

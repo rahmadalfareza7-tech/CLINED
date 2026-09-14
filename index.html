@@ -397,32 +397,32 @@ html,body{overflow-x:hidden}
   </div>
 <div class="uab-path-viewport" id="uabPathViewport" aria-label="Jalur blok UAB"><div class="uab-path" id="uabBlockList" aria-label="Pilihan blok UAB">
     <div class="semester-divider" role="separator" aria-label="Semester 1"><span>SEMESTER 1</span></div>
-    <button type="button" class="uab-node locked-node" id="openBlokBm1" aria-label="BM1 terkunci"><span class="uab-node-icon">🦴</span><b>BM1</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokBm2" aria-label="BM2 terkunci"><span class="uab-node-icon">🧬</span><b>BM2</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokHnc" aria-label="HNC terkunci"><span class="uab-node-icon">👂</span><b>HNC</b></button>
+    <button type="button" data-block-key="BM1" class="uab-node locked-node" id="openBlokBm1" aria-label="BM1 terkunci"><span class="uab-node-icon">🦴</span><b>BM1</b></button>
+    <button type="button" data-block-key="BM2" class="uab-node locked-node" id="openBlokBm2" aria-label="BM2 terkunci"><span class="uab-node-icon">🧬</span><b>BM2</b></button>
+    <button type="button" data-block-key="HNC" class="uab-node locked-node" id="openBlokHnc" aria-label="HNC terkunci"><span class="uab-node-icon">👂</span><b>HNC</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 2"><span>SEMESTER 2</span></div>
-    <button type="button" class="uab-node locked-node" id="openBlokMp1" aria-label="MP1 terkunci"><span class="uab-node-icon">🩺</span><b>MP1</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokMp2" aria-label="MP2 terkunci"><span class="uab-node-icon">💊</span><b>MP2</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokMpt" aria-label="MPT terkunci"><span class="uab-node-icon">🧪</span><b>MPT</b></button>
+    <button type="button" data-block-key="MP1" class="uab-node locked-node" id="openBlokMp1" aria-label="MP1 terkunci"><span class="uab-node-icon">🩺</span><b>MP1</b></button>
+    <button type="button" data-block-key="MP2" class="uab-node locked-node" id="openBlokMp2" aria-label="MP2 terkunci"><span class="uab-node-icon">💊</span><b>MP2</b></button>
+    <button type="button" data-block-key="MPT" class="uab-node locked-node" id="openBlokMpt" aria-label="MPT terkunci"><span class="uab-node-icon">🧪</span><b>MPT</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 3"><span>SEMESTER 3</span></div>
-    <button type="button" class="uab-node active-node" id="openBlokMuskuloskeletal"><span class="uab-node-icon">🦿</span><b>MUSKULOSKELETAL</b></button>
-    <button type="button" class="uab-node active-node" id="openBlokRespiratory"><span class="uab-node-icon">🫁</span><b>RESPIRATORY</b></button>
-    <button type="button" class="uab-node active-node" id="openBlokKardiologi"><span class="uab-node-icon">❤️</span><b>KARDIOLOGI</b></button>
+    <button type="button" data-block-key="MUSKULOSKELETAL" class="uab-node active-node" id="openBlokMuskuloskeletal"><span class="uab-node-icon">🦿</span><b>MUSKULOSKELETAL</b></button>
+    <button type="button" data-block-key="RESPIRATORY" class="uab-node active-node" id="openBlokRespiratory"><span class="uab-node-icon">🫁</span><b>RESPIRATORY</b></button>
+    <button type="button" data-block-key="KARDIOLOGI" class="uab-node active-node" id="openBlokKardiologi"><span class="uab-node-icon">❤️</span><b>KARDIOLOGI</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 4"><span>SEMESTER 4</span></div>
-    <button type="button" class="uab-node active-node" id="openBlokHematologi"><span class="uab-node-icon">🩸</span><b>HEMATOLOGI</b></button>
-    <button type="button" class="uab-node active-node" id="openBlokGit"><span class="uab-node-icon">🫃</span><b>GIT</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokForensik" aria-label="Forensik terkunci"><span class="uab-node-icon">🔎</span><b>FORENSIK</b></button>
+    <button type="button" data-block-key="HEMATOLOGI" class="uab-node active-node" id="openBlokHematologi"><span class="uab-node-icon">🩸</span><b>HEMATOLOGI</b></button>
+    <button type="button" data-block-key="GIT" class="uab-node active-node" id="openBlokGit"><span class="uab-node-icon">🫃</span><b>GIT</b></button>
+    <button type="button" data-block-key="FORENSIK" class="uab-node locked-node" id="openBlokForensik" aria-label="Forensik terkunci"><span class="uab-node-icon">🔎</span><b>FORENSIK</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 5"><span>SEMESTER 5</span></div>
-    <button type="button" class="uab-node active-node" id="openBlokGinjal"><span class="uab-node-icon">🫘</span><b>GINJAL</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokEndokrine" aria-label="Endokrine terkunci"><span class="uab-node-icon">🧪</span><b>ENDOKRINE</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokReproduksi" aria-label="Reproduksi terkunci"><span class="uab-node-icon">🧬</span><b>REPRODUKSI</b></button>
+    <button type="button" data-block-key="GINJAL" class="uab-node active-node" id="openBlokGinjal"><span class="uab-node-icon">🫘</span><b>GINJAL</b></button>
+    <button type="button" data-block-key="ENDOKRINE" class="uab-node locked-node" id="openBlokEndokrine" aria-label="Endokrine terkunci"><span class="uab-node-icon">🧪</span><b>ENDOKRINE</b></button>
+    <button type="button" data-block-key="REPRODUKSI" class="uab-node locked-node" id="openBlokReproduksi" aria-label="Reproduksi terkunci"><span class="uab-node-icon">🧬</span><b>REPRODUKSI</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 6"><span>SEMESTER 6</span></div>
-    <button type="button" class="uab-node active-node" id="openBlokSsp"><span class="uab-node-icon">🧠</span><b>SSP</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokPancaIndra" aria-label="Panca Indra terkunci"><span class="uab-node-icon">👁️</span><b>PANCA INDRA</b></button>
+    <button type="button" data-block-key="SSP" class="uab-node active-node" id="openBlokSsp"><span class="uab-node-icon">🧠</span><b>SSP</b></button>
+    <button type="button" data-block-key="PANCA INDRA" class="uab-node locked-node" id="openBlokPancaIndra" aria-label="Panca Indra terkunci"><span class="uab-node-icon">👁️</span><b>PANCA INDRA</b></button>
     <div class="semester-divider" role="separator" aria-label="Semester 7"><span>SEMESTER 7</span></div>
-    <button type="button" class="uab-node active-node" id="openBlokKedkom"><span class="uab-node-icon">🩺</span><b>KEDKOM</b></button>
-    <button type="button" class="uab-node active-node" id="openBlokKedkel"><span class="uab-node-icon">👨‍👩‍👧‍👦</span><b>KEDKEL</b></button>
-    <button type="button" class="uab-node locked-node" id="openBlokMulsis" aria-label="MULSIS terkunci"><span class="uab-node-icon">🧬</span><b>MULSIS</b></button>
+    <button type="button" data-block-key="KEDKOM" class="uab-node active-node" id="openBlokKedkom"><span class="uab-node-icon">🩺</span><b>KEDKOM</b></button>
+    <button type="button" data-block-key="KEDKEL" class="uab-node active-node" id="openBlokKedkel"><span class="uab-node-icon">👨‍👩‍👧‍👦</span><b>KEDKEL</b></button>
+    <button type="button" data-block-key="MULSIS" class="uab-node locked-node" id="openBlokMulsis" aria-label="MULSIS terkunci"><span class="uab-node-icon">🧬</span><b>MULSIS</b></button>
   </div></div>
 
   <div class="uab-duo-tip">
@@ -436,7 +436,7 @@ html,body{overflow-x:hidden}
     <div><div class="eyebrow">UAB • BLOK KEDKOM</div><h2>BLOK KEDKOM</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
   </div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/NEUROPSIKIATRI-3846dad3e94680bba27bdfa0450088d4?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="KEDKOM"></div>
 <div class="card nested-card bank-card">
     <div class="section-title">📚 Clinical Case Bank</div>
     <div class="empty-bank-inline"><span class="empty-bank-icon">🩺</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK KEDKOM masih kosong. Struktur blok sudah siap.</small></div></div>
@@ -459,7 +459,7 @@ html,body{overflow-x:hidden}
     <div><div class="eyebrow">UAB • BLOK KEDKEL</div><h2>BLOK KEDKEL</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
   </div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/MUSKULOSKELETAL-20e6dad3e9468010acd0e9083337e13e?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="KEDKEL"></div>
 <div class="card nested-card bank-card">
     <div class="section-title">📚 Clinical Case Bank</div>
     <div class="empty-bank-inline"><span class="empty-bank-icon">👨‍👩‍👧‍👦</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK KEDKEL masih kosong. Struktur blok sudah siap.</small></div></div>
@@ -482,7 +482,7 @@ html,body{overflow-x:hidden}
     <div><div class="eyebrow">UAB • BLOK MULSIS</div><h2>BLOK MULSIS</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
   </div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/KARDIOVASKULAR-2706dad3e94680719f45cf8c6c32dec9?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="MULSIS"></div>
 <div class="card nested-card bank-card">
     <div class="section-title">📚 Clinical Case Bank</div>
     <div class="empty-bank-inline"><span class="empty-bank-icon">🧬</span><div><b>Bank soal belum tersedia</b><small>Bank soal BLOK MULSIS masih kosong. Struktur blok sudah siap.</small></div></div>
@@ -513,31 +513,31 @@ html,body{overflow-x:hidden}
 <section id="blokMuskuloskeletalPage" class="view exam-page-view" data-block-key="MUSKULOSKELETAL" empty-bank-block">
   <div class="exam-page-header"><button class="back-link" id="backFromMuskuloskeletal" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK MUSKULOSKELETAL</div><h2>BLOK MUSKULOSKELETAL</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/MUSKULOSKELETAL-20e6dad3e9468010acd0e9083337e13e?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="MUSKULOSKELETAL"></div>
 <div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🦿</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
 </section>
 <section id="blokRespiratoryPage" class="view exam-page-view" data-block-key="RESPIRATORY" empty-bank-block">
   <div class="exam-page-header"><button class="back-link" id="backFromRespiratory" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK RESPIRATORY</div><h2>BLOK RESPIRATORY</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/RESPIRATORY-2a16dad3e94680e6824fd1aa0e6b4ee2?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="RESPIRATORY"></div>
 <div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🫁</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
 </section>
 <section id="blokKardiologiPage" class="view exam-page-view" data-block-key="KARDIOLOGI" empty-bank-block">
   <div class="exam-page-header"><button class="back-link" id="backFromKardiologi" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK KARDIOLOGI</div><h2>BLOK KARDIOLOGI</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/KARDIOVASKULAR-2706dad3e94680719f45cf8c6c32dec9?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="KARDIOLOGI"></div>
 <div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">❤️</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
 </section>
 <section id="blokHematologiPage" class="view exam-page-view" data-block-key="HEMATOLOGI" empty-bank-block">
   <div class="exam-page-header"><button class="back-link" id="backFromHematologi" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK HEMATOLOGI</div><h2>BLOK HEMATOLOGI</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/HEMATOLOGI-3046dad3e946807f9eabf61028a13e0c?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="HEMATOLOGI"></div>
 <div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🩸</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
 </section>
 <section id="blokGitPage" class="view exam-page-view" data-block-key="GIT" empty-bank-block">
   <div class="exam-page-header"><button class="back-link" id="backFromGit" type="button">‹ UAB</button><div><div class="eyebrow">UAB • BLOK GIT</div><h2>BLOK GIT</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/GIT-1d96dad3e946806084f0d01b78e2d2ab?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="GIT"></div>
 <div class="card nested-card bank-card"><div class="section-title">📚 Clinical Case Bank</div><div class="empty-bank-inline"><span class="empty-bank-icon">🫃</span><div><b>Bank soal belum tersedia</b><small>Bank soal untuk blok ini belum tersedia.</small></div></div></div>
 </section>
 <section id="blokGinjalPage" class="view exam-page-view empty-bank-block" data-block-key="ginjal">
@@ -566,7 +566,7 @@ html,body{overflow-x:hidden}
     <div><div class="eyebrow">UAB • BLOK SSP</div><h2>BLOK SSP</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
   </div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/NEUROPSIKIATRI-3846dad3e94680bba27bdfa0450088d4?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section" data-materi-section="SSP"></div>
 <div class="card nested-card bank-card">
     <div class="section-title">📚 Clinical Case Bank</div>
     <div class="bank-grid" id="bankChoices"></div>
@@ -582,6 +582,25 @@ html,body{overflow-x:hidden}
     <button class="primary" id="startBtn">Mulai Kuis →</button>
   </div>
 </section>
+  <section id="blokPancaIndraPage" class="view exam-page-view empty-bank-block" data-block-key="PANCA INDRA">
+    <div class="exam-page-header"><button class="back-link" id="backFromPancaIndra" type="button">‹ UAB</button><div><div class="eyebrow">UAB • PANCA INDRA</div><h2>PANCA INDRA</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div></div>
+    <div class="materi-section" data-materi-section="PANCA INDRA"></div>
+    <div class="card nested-card bank-card">
+      <div class="section-title">📚 Clinical Case Bank</div>
+      <div class="empty-bank-inline"><span class="empty-bank-icon">👁️</span><div><b>Bank soal belum tersedia</b><small>Bank soal akan aktif otomatis saat ditambahkan.</small></div></div>
+    </div>
+    <div class="card nested-card">
+      <div class="section-title">Jumlah soal</div>
+      <div class="choice-grid" id="pancaindraCountChoices"></div>
+      <div class="section-title sub-title">Mode</div>
+      <div class="choice-grid mode-grid" id="pancaindraModeChoices"></div>
+      <div class="section-title sub-title">Batas waktu</div>
+      <div class="choice-grid mode-grid" id="pancaindraTimeChoices"></div>
+      <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+      <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
+    </div>
+  </section>
+
 
 <div id="normalValuesModal" class="modal-backdrop" hidden>
   <div class="normal-values-modal card" role="dialog" aria-modal="true" aria-labelledby="normalValuesTitle">

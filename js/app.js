@@ -115,11 +115,17 @@ function show(id, options={}){
   }
 
   if(id==="home") renderHomeClinicalDashboard();
-  if(id==="blokSspPage"){setCurrentBlockId("SSP"); if(blockForBank(selectedBank)!=='SSP'){const sspIds=Object.keys(BANKS).filter(bid=>blockForBank(bid)==='SSP');if(sspIds.length)selectedBank=sspIds[0];} try{renderBanks();renderCounts();renderModes();}catch(e){console.error("SSP render error",e);}}
-  if(id==="blokKedkomPage"){setCurrentBlockId("KEDKOM"); renderEmptyBlockControls("kedkom");}
-  if(id==="blokKedkelPage"){setCurrentBlockId("KEDKEL"); renderAvailableBlockControls("kedkel");}
+  if(id==="blokSspPage"){setCurrentBlockId("SSP"); if(blockForBank(selectedBank)!=='SSP'){const sspIds=Object.keys(BANKS).filter(bid=>blockForBank(bid)==='SSP');if(sspIds.length)selectedBank=sspIds[0];} try{renderBanks();renderCounts();renderModes();}catch(e){console.error("SSP render error",e);} renderBlockMateri("SSP","blokSspPage");}
+  if(id==="blokMuskuloskeletalPage"){setCurrentBlockId("MUSKULOSKELETAL"); renderBlockMateri("MUSKULOSKELETAL","blokMuskuloskeletalPage");}
+  if(id==="blokRespiratoryPage"){setCurrentBlockId("RESPIRATORY"); renderBlockMateri("RESPIRATORY","blokRespiratoryPage");}
+  if(id==="blokKardiologiPage"){setCurrentBlockId("KARDIOLOGI"); renderBlockMateri("KARDIOLOGI","blokKardiologiPage");}
+  if(id==="blokHematologiPage"){setCurrentBlockId("HEMATOLOGI"); renderBlockMateri("HEMATOLOGI","blokHematologiPage");}
+  if(id==="blokGitPage"){setCurrentBlockId("GIT"); renderBlockMateri("GIT","blokGitPage");}
+  if(id==="blokKedkomPage"){setCurrentBlockId("KEDKOM"); renderEmptyBlockControls("kedkom"); renderBlockMateri("KEDKOM","blokKedkomPage");}
+  if(id==="blokKedkelPage"){setCurrentBlockId("KEDKEL"); renderAvailableBlockControls("kedkel"); renderBlockMateri("KEDKEL","blokKedkelPage");}
   if(id==="blokGinjalPage"){setCurrentBlockId("GINJAL"); renderAvailableBlockControls("ginjal"); renderBlockMateri("GINJAL","blokGinjalPage");}
-  if(id==="blokMulsisPage"){setCurrentBlockId("MULSIS"); renderEmptyBlockControls("mulsis");}
+  if(id==="blokPancaIndraPage"){setCurrentBlockId("PANCA INDRA"); renderEmptyBlockControls("pancaindra"); renderBlockMateri("PANCA INDRA","blokPancaIndraPage");}
+  if(id==="blokMulsisPage"){setCurrentBlockId("MULSIS"); renderEmptyBlockControls("mulsis"); renderBlockMateri("MULSIS","blokMulsisPage");}
 
   const navKey=id==="clinicalDashboard"?"dashboard":id==="accountPage"?"account":id==="home"?"home":null;
   if(navKey && typeof window.setFloatingNavActive==='function') window.setFloatingNavActive(navKey);
@@ -557,12 +563,35 @@ $("discardResumeBtn").onclick=()=>{if(confirm("Hapus progres kuis tersimpan?"))c
 
 
 function renderBlockMateri(blockName,pageId){
-  const host=document.querySelector(`#${pageId} [data-materi-section="${blockName}"]`); if(!host)return;
+  const block=String(blockName||'').toUpperCase();
+  const host=document.querySelector(`#${pageId} [data-materi-section="${CSS.escape(block)}"]`);
+  if(!host)return;
   fetch('/api/materials',{credentials:'same-origin'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
-    const m=(data.materials||[]).find(x=>String(x.block).toUpperCase()===blockName);
+    const m=(data.materials||[]).find(x=>String(x.block).toUpperCase()===block);
     host.innerHTML=m&&m.url?`<a class="materi-button" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a>`:'';
   }).catch(()=>{host.innerHTML='';});
 }
+
+function syncUabNodeUnlock(availableBlocks){
+  const blocks=new Set((availableBlocks||[]).map(b=>String(b||'').replace(/^BLOK\s+/i,'').trim().toUpperCase()).filter(Boolean));
+  Object.entries(BANKS||{}).forEach(([id,b])=>{
+    if((b?.data||[]).length) blocks.add(blockForBank(id));
+  });
+  const pageMap={
+    'MUSKULOSKELETAL':'blokMuskuloskeletalPage','RESPIRATORY':'blokRespiratoryPage','KARDIOLOGI':'blokKardiologiPage',
+    'HEMATOLOGI':'blokHematologiPage','GIT':'blokGitPage','GINJAL':'blokGinjalPage','SSP':'blokSspPage',
+    'PANCA INDRA':'blokPancaIndraPage','KEDKOM':'blokKedkomPage','KEDKEL':'blokKedkelPage','MULSIS':'blokMulsisPage'
+  };
+  document.querySelectorAll('.uab-node[data-block-key]').forEach(node=>{
+    const block=String(node.dataset.blockKey||'').toUpperCase();
+    if(!blocks.has(block) || !pageMap[block] || !document.getElementById(pageMap[block])) return;
+    node.classList.remove('locked-node');
+    node.classList.add('active-node');
+    node.removeAttribute('aria-label');
+    node.onclick=()=>{setCurrentBlockId(block);show(pageMap[block]);};
+  });
+}
+window.syncUabNodeUnlock=syncUabNodeUnlock;
 function renderEmptyBlockControls(key){
   const block=String(key||'').toUpperCase();
   const countBox=$(key+"CountChoices"), modeBox=$(key+"ModeChoices"), timeBox=$(key+"TimeChoices");
@@ -1820,12 +1849,14 @@ if($("backFromGit"))$("backFromGit").onclick=()=>show("uabPage");
 if($("backFromGinjal"))$("backFromGinjal").onclick=()=>show("uabPage");
 if($("openBlokSsp"))$("openBlokSsp").onclick=()=>{setCurrentBlockId("SSP");show("blokSspPage");};
 if($("backFromSsp"))$("backFromSsp").onclick=()=>show("uabPage");
+if($("openBlokPancaIndra"))$("openBlokPancaIndra").onclick=()=>{setCurrentBlockId("PANCA INDRA");show("blokPancaIndraPage");};
+if($("backFromPancaIndra"))$("backFromPancaIndra").onclick=()=>show("uabPage");
 if($("openBlokKedkom"))$("openBlokKedkom").onclick=()=>{setCurrentBlockId("KEDKOM");show("blokKedkomPage");};
 if($("backFromKedkom"))$("backFromKedkom").onclick=()=>show("uabPage");
 if($("openBlokKedkel"))$("openBlokKedkel").onclick=()=>{setCurrentBlockId("KEDKEL");show("blokKedkelPage");};
 if($("backFromKedkel"))$("backFromKedkel").onclick=()=>show("uabPage");
 if($("openBlokMulsis"))$("openBlokMulsis").onclick=()=>{setCurrentBlockId("MULSIS");show("blokMulsisPage");};
-document.querySelectorAll(".uab-node.locked-node").forEach(node=>node.addEventListener("click",()=>showToast(`${node.querySelector("b")?.textContent||"Blok"} belum tersedia. Segera hadir.`)));
+document.querySelectorAll(".uab-node.locked-node").forEach(node=>node.addEventListener("click",()=>{if(!node.classList.contains("locked-node"))return;showToast(`${node.querySelector("b")?.textContent||"Blok"} belum tersedia. Segera hadir.`);}));
 if($("backFromMulsis"))$("backFromMulsis").onclick=()=>show("uabPage");
 if($("studyToolsBtn"))$("studyToolsBtn").onclick=()=>{renderDailyMission();show("studyTools")};
 if($("smartReviewBtn"))$("smartReviewBtn").onclick=()=>{renderSmartReview();show("smartReview")};
