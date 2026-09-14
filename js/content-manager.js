@@ -214,19 +214,27 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
       const activeBlocks=new Set();
       // 1. Server UAB packages
       try{const d=await request('/api/content/packages?module=UAB');(d.packages||[]).forEach(p=>{if(p.block&&(p.questions||[]).length)activeBlocks.add(String(p.block).toUpperCase());});}catch{}
-      // 2. Global banks yang sudah terdaftar di BANK_ENGINE / BANKS
+      // 2. Local BANKS object (kedkel, kedkom, SSP, dll yang hardcoded di app.js)
       try{const BANKS=window.BANKS||{};Object.values(BANKS).forEach(b=>{if(b.block&&(b.data||[]).length)activeBlocks.add(String(b.block).toUpperCase());});}catch{}
-      // Update semua node buttons
+      // 3. CLINED_BANK_ENGINE.banks (bank_*.js yang load via engine, sudah include block info)
+      try{const eb=window.CLINED_BANK_ENGINE?.banks||{};Object.values(eb).forEach(b=>{if(b.block&&b.count>0)activeBlocks.add(String(b.block).toUpperCase());});}catch{}
+      // Update semua node buttons — hanya TAMBAH active-node, tidak hapus yang sudah ada
       Object.entries(UAB_NODE_BLOCK_MAP).forEach(([nodeId,block])=>{
         const btn=document.getElementById(nodeId); if(!btn)return;
         const hasBank=activeBlocks.has(block);
-        btn.classList.toggle('active-node',hasBank);
-        btn.classList.toggle('locked-node',!hasBank);
-        if(hasBank){btn.removeAttribute('aria-label');}
-        else if(!btn.getAttribute('aria-label'))btn.setAttribute('aria-label',`${block} belum tersedia`);
+        if(hasBank){
+          btn.classList.add('active-node');
+          btn.classList.remove('locked-node');
+          btn.removeAttribute('aria-label');
+        }
+        // Kalau tidak ada bank di server, jangan sentuh class — biarkan state HTML asli
+        // (bisa saja sudah active-node dari local JS banks yang load duluan)
       });
     }catch(e){console.warn('syncUabNodeStates failed',e);}
   }
   async function boot(){try{const d=await request('/api/auth/me');if(d.user){install(d.user);await Promise.all([hydrateMaterials(),hydrateGlobalBanks(),hydrateUpi(),hydrateUab()]);}else removeAdminControls();}catch(e){removeAdminControls();}}
   window.addEventListener('load',boot,{once:true}); setInterval(boot,15000);
+  // Sync node states juga saat bank engine selesai load (local JS banks)
+  window.addEventListener('clined:bank-engine-ready',()=>syncUabNodeStates().catch(()=>{}));
+  window.addEventListener('clined:bank-updated',()=>syncUabNodeStates().catch(()=>{}));
 })();
