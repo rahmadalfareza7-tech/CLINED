@@ -192,9 +192,41 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
     // Refresh halaman Materials kalau sedang aktif
     if(typeof window.renderMaterialsPage==='function' && document.getElementById('materialsPage')?.classList.contains('active')){window.renderMaterialsPage();}
   }catch(e){console.warn('Material links unavailable',e);}}
-  async function hydrateGlobalBanks(){try{const catalog=await request('/api/banks');for(const item of catalog.banks||[]){try{const d=await request(`/api/banks/${encodeURIComponent(item.id)}`),b=d.bank;if(b&&Array.isArray(b.questions)&&b.questions.length)window.CLINED_BANK_ENGINE?.registerBank({id:b.id,name:b.name,block:b.block,version:b.version,schema:b.schema_version,data:b.questions},{persist:true,source:'server-global'});}catch(e){console.warn('Global bank sync failed:',item?.id,e);}}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('Global bank catalog unavailable',e);}}
+  async function hydrateGlobalBanks(){try{const catalog=await request('/api/banks');for(const item of catalog.banks||[]){try{const d=await request(`/api/banks/${encodeURIComponent(item.id)}`),b=d.bank;if(b&&Array.isArray(b.questions)&&b.questions.length)window.CLINED_BANK_ENGINE?.registerBank({id:b.id,name:b.name,block:b.block,version:b.version,schema:b.schema_version,data:b.questions},{persist:true,source:'server-global'});}catch(e){console.warn('Global bank sync failed:',item?.id,e);}}window.renderBanks?.();window.renderCounts?.();await syncUabNodeStates();}catch(e){console.warn('Global bank catalog unavailable',e);}}
   async function hydrateUpi(){try{const data=await request('/api/content/packages?module=UPI'),existing=window.upiGetCustomCards?.()||[],known=new Set(existing.map(c=>c.id));const fallback='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="640" height="360"%3E%3Crect width="100%25" height="100%25" fill="%23007aff"/%3E%3Ctext x="50%25" y="50%25" fill="white" font-size="32" text-anchor="middle" dominant-baseline="middle"%3EUPI%3C/text%3E%3C/svg%3E';const additions=[];for(const p of data.packages||[])for(const q of p.questions||[]){const id=`server-upi-${p.id}-${q.id}`;if(!known.has(id))additions.push({id,block:p.block||'SSP',material:q.material||'Histology',topic:p.title,image:q.image||fallback,prompt:q.soal,answer:q.pembahasan||q.answer||'Tidak ada pembahasan.',explanation:p.visibility==='public'?'Paket UPI publik.':'Paket UPI pribadi.'});}if(additions.length&&window.upiSaveCustomCards){window.upiSaveCustomCards(existing.concat(additions));window.upiRenderBlockSelector?.();}}catch(e){console.warn('UPI sync failed',e);}}
-  async function hydrateUab(){try{const data=await request('/api/content/packages?module=UAB');for(const p of data.packages||[])try{window.CLINED_BANK_ENGINE?.registerBank({id:`server-uab-${p.id}`,name:p.title,block:p.block||'UAB',version:1,schema:p.schema_version||'1.0',data:p.questions},{persist:true,source:'server-admin'});}catch{}window.renderBanks?.();window.renderCounts?.();}catch(e){console.warn('UAB sync failed',e);}}
+  async function hydrateUab(){try{const data=await request('/api/content/packages?module=UAB');for(const p of data.packages||[])try{window.CLINED_BANK_ENGINE?.registerBank({id:`server-uab-${p.id}`,name:p.title,block:p.block||'UAB',version:1,schema:p.schema_version||'1.0',data:p.questions},{persist:true,source:'server-admin'});}catch{}window.renderBanks?.();window.renderCounts?.();await syncUabNodeStates();}catch(e){console.warn('UAB sync failed',e);}}
+
+  // Map node button ID → block name (uppercase, same as BANKS block field)
+  const UAB_NODE_BLOCK_MAP={
+    'openBlokBm1':'BM1','openBlokBm2':'BM2','openBlokHnc':'HNC',
+    'openBlokMp1':'MP1','openBlokMp2':'MP2','openBlokMpt':'MPT',
+    'openBlokMuskuloskeletal':'MUSKULOSKELETAL','openBlokRespiratory':'RESPIRATORY',
+    'openBlokKardiologi':'KARDIOLOGI','openBlokHematologi':'HEMATOLOGI',
+    'openBlokGit':'GIT','openBlokForensik':'FORENSIK','openBlokGinjal':'GINJAL',
+    'openBlokEndokrine':'ENDOKRINE','openBlokReproduksi':'REPRODUKSI',
+    'openBlokSsp':'SSP','openBlokPancaIndra':'PANCA INDRA',
+    'openBlokKedkom':'KEDKOM','openBlokKedkel':'KEDKEL','openBlokMulsis':'MULSIS'
+  };
+
+  async function syncUabNodeStates(){
+    try{
+      // Kumpulkan blok yang punya soal: dari server UAB packages + global banks + local BANKS
+      const activeBlocks=new Set();
+      // 1. Server UAB packages
+      try{const d=await request('/api/content/packages?module=UAB');(d.packages||[]).forEach(p=>{if(p.block&&(p.questions||[]).length)activeBlocks.add(String(p.block).toUpperCase());});}catch{}
+      // 2. Global banks yang sudah terdaftar di BANK_ENGINE / BANKS
+      try{const BANKS=window.BANKS||{};Object.values(BANKS).forEach(b=>{if(b.block&&(b.data||[]).length)activeBlocks.add(String(b.block).toUpperCase());});}catch{}
+      // Update semua node buttons
+      Object.entries(UAB_NODE_BLOCK_MAP).forEach(([nodeId,block])=>{
+        const btn=document.getElementById(nodeId); if(!btn)return;
+        const hasBank=activeBlocks.has(block);
+        btn.classList.toggle('active-node',hasBank);
+        btn.classList.toggle('locked-node',!hasBank);
+        if(hasBank){btn.removeAttribute('aria-label');}
+        else if(!btn.getAttribute('aria-label'))btn.setAttribute('aria-label',`${block} belum tersedia`);
+      });
+    }catch(e){console.warn('syncUabNodeStates failed',e);}
+  }
   async function boot(){try{const d=await request('/api/auth/me');if(d.user){install(d.user);await Promise.all([hydrateMaterials(),hydrateGlobalBanks(),hydrateUpi(),hydrateUab()]);}else removeAdminControls();}catch(e){removeAdminControls();}}
   window.addEventListener('load',boot,{once:true}); setInterval(boot,15000);
 })();
