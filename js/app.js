@@ -564,11 +564,15 @@ $("discardResumeBtn").onclick=()=>{if(confirm("Hapus progres kuis tersimpan?"))c
 function blockUiKey(block){return String(block||'').toLowerCase().replace(/[^a-z0-9]+(.)/g,(_,c)=>String(c).toUpperCase());}
 function renderUniversalBlockControls(block,pageId){
   const page=document.getElementById(pageId); if(!page)return;
-  const key=blockUiKey(block);
+  const normalized=String(block||'').toUpperCase();
+  let key=blockUiKey(block);
+  // SSP already has its own legacy control IDs (countChoices/modeChoices/timeChoices).
+  // Reuse those controls instead of creating a second universal control card.
+  if(normalized==='SSP' && page.querySelector('#countChoices') && page.querySelector('#modeChoices') && page.querySelector('#timeChoices')) key='';
   let material=page.querySelector('[data-universal-material]')||page.querySelector('.materi-section');
   if(!material){material=document.createElement('div');material.dataset.universalMaterial='1';material.className='materi-section';material.innerHTML='<span class="materi-button" aria-hidden="true">MATERI</span>';page.insertBefore(material,page.firstElementChild?.nextElementSibling||page.firstChild);}
   let mount=page.querySelector('[data-universal-block-controls]');
-  const existingControls=page.querySelector('#'+key+'CountChoices')&&page.querySelector('#'+key+'ModeChoices')&&page.querySelector('#'+key+'TimeChoices');
+  const existingControls=key==='' ? true : (page.querySelector('#'+key+'CountChoices')&&page.querySelector('#'+key+'ModeChoices')&&page.querySelector('#'+key+'TimeChoices'));
   if(!mount&&!existingControls){
     mount=document.createElement('div'); mount.dataset.universalBlockControls='1'; mount.className='card nested-card';
     mount.innerHTML=`<div class="section-title">Jumlah soal</div><div class="choice-grid" id="${key}CountChoices"></div><div class="section-title sub-title">Mode</div><div class="choice-grid mode-grid" id="${key}ModeChoices"></div><div class="section-title sub-title">Batas waktu</div><div class="choice-grid mode-grid" id="${key}TimeChoices"></div><button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button><div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>`;
@@ -625,11 +629,14 @@ function renderEmptyBlockControls(key,blockOverride){
 
 function renderAvailableBlockControls(key,blockOverride,pageId){
   const block=String(blockOverride||key||'').toUpperCase();
-  const countBox=$(key+"CountChoices"), modeBox=$(key+"ModeChoices"), timeBox=$(key+"TimeChoices");
   const page=document.getElementById(pageId)||document.querySelector(`[data-block-key="${key}"]`)||document.querySelector(`[data-block-key="${block}"]`);
+  const isLegacySsp=block==='SSP' && page?.querySelector('#countChoices') && page?.querySelector('#modeChoices') && page?.querySelector('#timeChoices');
+  const countBox=isLegacySsp?page.querySelector('#countChoices'):$(key+"CountChoices");
+  const modeBox=isLegacySsp?page.querySelector('#modeChoices'):$(key+"ModeChoices");
+  const timeBox=isLegacySsp?page.querySelector('#timeChoices'):$(key+"TimeChoices");
   if(!countBox||!modeBox||!timeBox)return;
   const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && (b.data||[]).length);
-  const startBtn=page?.querySelector('.block-disabled-start');
+  const startBtn=page?.querySelector('.block-disabled-start,#startBtn');
   const note=page?.querySelector('.block-empty-note');
   let inline=page?.querySelector('.empty-bank-inline');
   if(!entries.length){
