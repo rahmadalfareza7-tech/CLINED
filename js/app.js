@@ -699,9 +699,14 @@ function getTimeSeconds(){
 }
 
 function confirmUabAiDisclaimer(){
-  const isUab=String(window.CLINED_ACTIVE_MODULE||'UAB').toUpperCase()==='UAB';
+  const uabBlocks=new Set(['BM1','BM2','HNC','MP1','MP2','MPT','MUSKULOSKELETAL','RESPIRATORY','KARDIOLOGI','HEMATOLOGI','GIT','FORENSIK','GINJAL','ENDOKRINE','REPRODUKSI','SSP','PANCA INDRA','KEDKOM','KEDKEL','MULSIS']);
+  const activeModule=String(window.CLINED_ACTIVE_MODULE||'').trim().toUpperCase();
+  let activeBlock='';
+  try{ activeBlock=String(blockForBank(selectedBank)||'').replace(/^BLOK\s+/i,'').trim().toUpperCase(); }catch{}
+  const isUab=activeModule==='UAB'||uabBlocks.has(activeBlock)||String(selectedBank||'').toLowerCase().includes('server-uab');
   if(!isUab)return true;
-  return window.confirm('⚠️ PERINGATAN SOAL UAB\n\nJawaban dan pembahasan pada soal ini dapat dibuat atau dibantu oleh AI. AI dapat melakukan kesalahan atau memberikan informasi yang kurang tepat.\n\nMohon periksa kembali jawaban dan pembahasannya menggunakan sumber medis tepercaya sebelum menjadikannya acuan belajar.\n\nLanjut mengerjakan soal UAB?');
+  const text='⚠️ PERINGATAN SOAL UAB\n\nJawaban dan pembahasan pada soal ini dapat dibuat atau dibantu oleh AI. AI dapat melakukan kesalahan atau memberikan informasi yang kurang tepat.\n\nMohon periksa kembali jawaban dan pembahasannya menggunakan sumber medis tepercaya sebelum menjadikannya acuan belajar.\n\nLanjut mengerjakan soal UAB?';
+  return window.confirm(text);
 }
 function startQuiz(){
   if(!confirmUabAiDisclaimer())return;

@@ -95,7 +95,9 @@
             <p class="muted" data-content-message></p>
           </form>
           <div class="admin-uab-manage" data-uab-manage>
-            <div class="admin-content-intro"><b>Kelola Soal UAB</b><span>Hapus soal yang salah atau duplikat tanpa menghapus seluruh bank.</span></div>
+            <div class="admin-content-intro"><b>Kelola Soal UAB</b><span>Pilih blok terlebih dahulu, lalu pilih bank dan hapus soal yang salah atau duplikat.</span></div>
+            <label>Blok soal</label>
+            <select data-uab-delete-block>${blockOptions(UAB_BLOCKS)}</select>
             <div data-uab-packages class="admin-uab-packages"><p class="muted">Memuat bank UAB…</p></div>
           </div>
         </div>
@@ -152,14 +154,18 @@
       });
 
       const uabPackagesHost=box.querySelector('[data-uab-packages]');
+      const uabDeleteBlock=box.querySelector('[data-uab-delete-block]');
       const renderUabPackages=async()=>{
         if(!uabPackagesHost)return;
-        try{const d=await request('/api/content/packages?module=UAB');const packages=d.packages||[];
-          if(!packages.length){uabPackagesHost.innerHTML='<p class="muted">Belum ada bank UAB dari server.</p>';return;}
+        try{const d=await request('/api/content/packages?module=UAB');const allPackages=d.packages||[];
+          const selectedBlock=String(uabDeleteBlock?.value||'').toUpperCase();
+          const packages=allPackages.filter(p=>String(p.block||'').replace(/^BLOK\s+/i,'').toUpperCase()===selectedBlock);
+          if(!packages.length){uabPackagesHost.innerHTML=`<p class="muted">Belum ada bank UAB untuk blok ${esc(selectedBlock)}.</p>`;return;}
           uabPackagesHost.innerHTML=packages.map(p=>{const qs=Array.isArray(p.questions)?p.questions:[];return `<details class="admin-uab-package"><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'—')} • ${qs.length} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-package="${esc(p.id)}">Hapus bank</button></summary><div class="admin-uab-question-list">${qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id)}</small></div><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus soal</button></div>`).join('')}</div></details>`;}).join('');
           uabPackagesHost.querySelectorAll('[data-delete-uab-question]').forEach(btn=>btn.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(!confirm('Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.'))return;btn.disabled=true;try{const d=await request(`/api/content/packages/${encodeURIComponent(btn.dataset.deleteUabQuestion)}/questions/${encodeURIComponent(btn.dataset.questionId)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Soal UAB dihapus.',false);await hydrateUab();await renderUabPackages();}catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus soal.',true);btn.disabled=false;}}));
           uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn=>btn.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(!confirm('Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.'))return;btn.disabled=true;try{const d=await request(`/api/content/packages/${encodeURIComponent(btn.dataset.deleteUabPackage)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Bank UAB dihapus.',false);await hydrateUab();await renderUabPackages();}catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus bank.',true);btn.disabled=false;}}));
         }catch(e){uabPackagesHost.innerHTML=`<p class="muted">${esc(e.message||'Gagal memuat bank UAB.')}</p>`;}};
+      uabDeleteBlock?.addEventListener('change',renderUabPackages);
       renderUabPackages();
 
       const upiForm=box.querySelector('[data-admin-upi-form]'), upiImage=upiForm.elements.image, upiPreview=box.querySelector('[data-admin-upi-preview]'), upiFileMeta=box.querySelector('[data-upi-file-meta]');
