@@ -638,7 +638,15 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
   const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && (b.data||[]).length);
   const startBtn=page?.querySelector('.block-disabled-start,#startBtn');
   const note=page?.querySelector('.block-empty-note');
+  // SSP already has a dedicated Clinical Case Bank picker (#bankChoices).
+  // Do not create the universal inline picker as a second copy on SSP.
+  const sspBankHost = block==='SSP' ? page?.querySelector('#bankChoices') : null;
   let inline=page?.querySelector('.empty-bank-inline');
+  if(block==='SSP' && sspBankHost){
+    renderBanks();
+    const note=page?.querySelector('#bankNote');
+    if(note) note.textContent = entries.length ? `${entries.length} bank aktif · pilih bank di atas.` : 'Bank soal akan muncul setelah ditambahkan.';
+  }
   if(!entries.length){
     const counts=[10,20,50,100];
     countBox.innerHTML=counts.map(n=>`<button type="button" class="choice disabled-choice" disabled>${n}<small> soal</small></button>`).join("");
@@ -653,13 +661,15 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
   const bank=BANKS[selectedBank]||entries[0][1],max=(bank.data||[]).length;
   const counts=[10,20,50,100].filter(n=>n<=max);if(max>0&&!counts.includes(max))counts.push(max);
   if(!selectedCount||selectedCount>max)selectedCount=counts[0]||max;
-  if(!inline){
-    inline=document.createElement('div');inline.className='empty-bank-inline';
-    const card=page?.querySelector('.bank-card');
-    if(card)card.appendChild(inline); else page?.prepend(inline);
+  if(block!=='SSP'){
+    if(!inline){
+      inline=document.createElement('div');inline.className='empty-bank-inline';
+      const card=page?.querySelector('.bank-card');
+      if(card)card.appendChild(inline); else page?.prepend(inline);
+    }
+    inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>Bank soal tersedia</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${(b.data||[]).length} soal</span><i>${id===selectedBank?'✓':''}</i></button>`).join('')}</div></div>`;
+    inline.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{if(btn.dataset.blockBank!==selectedBank){selectedBank=btn.dataset.blockBank;selectedCount=0;renderAvailableBlockControls(key,block,pageId);}});
   }
-  inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>Bank soal tersedia</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${(b.data||[]).length} soal</span><i>${id===selectedBank?'✓':''}</i></button>`).join('')}</div></div>`;
-  inline.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{if(btn.dataset.blockBank!==selectedBank){selectedBank=btn.dataset.blockBank;selectedCount=0;renderAvailableBlockControls(key,block,pageId);}});
   countBox.innerHTML=counts.map(n=>`<button type="button" class="choice ${selectedCount===n?'selected':''}" data-n="${n}">${n===max?'Semua':n}<small>${n===max?` (${max})`:' soal'}</small></button>`).join('');
   countBox.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{selectedCount=Number(b.dataset.n);renderAvailableBlockControls(key,block,pageId);});
   modeBox.innerHTML=[["study","📖Belajar","Pembahasan langsung setelah menjawab"],["exam","📝Ujian","Pembahasan dibuka setelah selesai"]].map(([mode,title,desc])=>`<button type="button" class="choice mode-choice ${quizMode===mode?'selected':''}" data-mode="${mode}"><b>${title}</b><small>${desc}</small></button>`).join('');
