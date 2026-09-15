@@ -64,16 +64,31 @@ function showXPPopup(gained,reason,levelUp=false){
 const BANKS={};
 let banksLoadPromise=null;
 let staticBankManifest=null;
+// Embedded metadata is a deliberate fallback: the question bank must remain visible
+// even if a hosting rewrite/CDN temporarily serves the manifest incorrectly.
+const STATIC_BANK_META=[{"id":"endo-2019","name":"ENDO 2019","block":"ENDOKRINE","version":1,"count":100},{"id":"ginjal-2018","name":"GINJAL 2018","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2019","name":"GINJAL 2019","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2020","name":"GINJAL 2020","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2021","name":"GINJAL 2021","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2022","name":"GINJAL 2022","block":"GINJAL","version":1,"count":97},{"id":"kedkel-2020","name":"KEDKEL 2020","block":"KEDKEL","version":1,"count":123},{"id":"kedkel-2021","name":"KEDKEL 2021","block":"KEDKEL","version":1,"count":100},{"id":"kedkel-2022","name":"KEDKEL 2022","block":"KEDKEL","version":1,"count":92},{"id":"kedkom-2020","name":"KEDKOM 2020","block":"KEDKOM","version":1,"count":157},{"id":"kedkom-2021","name":"KEDKOM 2021","block":"KEDKOM","version":1,"count":100}];
+function seedStaticBankCatalog(list){
+  for(const b of (list||[])){
+    const id=String(b.id);
+    if(!id)continue;
+    BANKS[id]={name:String(b.name||id),count:Number(b.count||0),block:String(b.block||'OTHER').replace(/^BLOK\s+/i,''),data:[],loaded:false,version:Number(b.version||1),staticUrl:`/seed-data/banks/${encodeURIComponent(id)}.json`,staticVersion:Number(b.version||1),serverVersion:0,source:'static'};
+  }
+}
+seedStaticBankCatalog(STATIC_BANK_META);
+// Start with a real static bank instead of the legacy placeholder "utama".
+if(!BANKS[selectedBank]) selectedBank=STATIC_BANK_META[0]?.id||"";
 async function loadStaticBankManifest(){
   if(staticBankManifest)return staticBankManifest;
-  const manifestUrl='./seed-data/manifest.json';
-  const r=await fetch(manifestUrl,{credentials:'same-origin',cache:'no-store'});
-  if(!r.ok) throw Error('Manifest bank soal lokal tidak dapat dimuat.');
-  staticBankManifest=await r.json();
-  for(const b of (staticBankManifest.banks||[])){
-    const id=String(b.id);
-    BANKS[id]={name:String(b.name||id),count:Number(b.count||0),block:String(b.block||'OTHER'),data:[],loaded:false,version:Number(b.version||1),staticUrl:b.dataUrl?new URL(String(b.dataUrl),r.url||location.href).href:'',staticVersion:Number(b.version||1),serverVersion:0,source:'static'};
-  }
+  const manifestUrl='/seed-data/manifest.json';
+  try{
+    const r=await fetch(manifestUrl,{credentials:'same-origin',cache:'no-store'});
+    if(r.ok){
+      staticBankManifest=await r.json();
+      seedStaticBankCatalog(staticBankManifest.banks||[]);
+      return staticBankManifest;
+    }
+  }catch(e){ console.warn('Static bank manifest fetch failed; using embedded catalog.',e); }
+  staticBankManifest={schemaVersion:2,banks:STATIC_BANK_META};
   return staticBankManifest;
 }
 async function loadServerBanks(){
@@ -123,7 +138,7 @@ async function ensureServerBankLoaded(id){
   // Stable baseline: load the question JSON directly from the deployment, not Neon.
   // If admin has published a newer server version, server becomes the source of truth.
   if(bank.staticUrl && Number(bank.serverVersion||0)<=Number(bank.staticVersion||1)){
-    const r=await fetch(bank.staticUrl,{credentials:'same-origin',cache:'default'});
+    const r=await fetch(bank.staticUrl,{credentials:'same-origin',cache:'no-store'});
     if(!r.ok) throw Error(`Bank ${bank.name} tidak dapat dimuat.`);
     const questions=await r.json();
     bank.data=Array.isArray(questions)?questions:[];
@@ -403,9 +418,10 @@ if($("soundBtn"))$("soundBtn").onclick=()=>{
 };
 
 function currentBank(){
-  return BANKS[selectedBank].data;
+  const bank=BANKS[selectedBank];
+  return Array.isArray(bank?.data)?bank.data:[];
 }
-function bankName(){return BANKS[selectedBank].name}
+function bankName(){return BANKS[selectedBank]?.name||"Bank Soal"}
 
 /* =========================================================
    Automatic competency analysis
