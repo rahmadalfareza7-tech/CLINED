@@ -248,7 +248,7 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
     }
   }
 
-  async function hydrateMaterials(){try{const d=await request('/api/materials');const map=Object.fromEntries((d.materials||[]).map(x=>[String(x.block).toUpperCase(),x.url]));
+  async function hydrateMaterials(){try{const d=await request('/api/materials');const defaults={GINJAL:'https://drive.google.com/drive/folders/1kLKbjFQ4Gxk3GT64FTH-CXFmuK8MrWD2?usp=drive_link',KEDKOM:'https://drive.google.com/drive/folders/19natRdSWTwk3ms0FbGlQA8Tmnv2YgwJE?usp=drive_link','PANCA INDRA':'https://app.notion.com/p/PANCA-INDRA-3846dad3e946802d8f4ad7f4c6dc042f?source=copy_link'};const map=Object.assign({},defaults,Object.fromEntries((d.materials||[]).map(x=>[String(x.block).toUpperCase(),x.url])));
     // Update [data-external-material] anchors (blok dengan link hardcoded di HTML)
     document.querySelectorAll('[data-external-material]').forEach(a=>{const section=a.closest('[data-block-key]');if(!section)return;const block=String(section.dataset.blockKey||'').toUpperCase();if(map[block]){a.href=map[block];}a.target='_blank';a.rel='noopener noreferrer';});
     // Re-render [data-materi-section] elements (blok yang fetch on-demand, mis: GINJAL, PANCA INDRA)
