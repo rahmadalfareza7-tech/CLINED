@@ -1,7 +1,7 @@
 /* Admin content controls: UAB JSON import + UPI advanced question creator. */
 (() => {
   const request = async (path, options = {}) => {
-    const r = await fetch(path, { credentials:'same-origin', headers:{'Content-Type':'application/json', ...(options.headers||{})}, ...options });
+    const r = await fetch(path, { cache:'no-store', credentials:'same-origin', headers:{'Content-Type':'application/json', ...(options.headers||{})}, ...options });
     const text = await r.text(); let d={}; try { d=text?JSON.parse(text):{}; } catch {}
     if (!r.ok) throw Error(d.error || `Permintaan gagal (${r.status}).`);
     return d;
@@ -155,16 +155,61 @@
 
       const uabPackagesHost=box.querySelector('[data-uab-packages]');
       const uabDeleteBlock=box.querySelector('[data-uab-delete-block]');
+      const normalizeBlock = value => {
+        const k=String(value||'').trim().toUpperCase().replace(/^BLOK\s+/,'').replace(/_/g,' ');
+        if(k==='ENDOKRIN')return 'ENDOKRINE';
+        if(k==='PANCAINDRA')return 'PANCA INDRA';
+        if(k==='KEDOKTERAN KOMUNITAS')return 'KEDKOM';
+        if(k==='KEDOKTERAN KELUARGA')return 'KEDKEL';
+        if(k==='GASTROINTESTINAL')return 'GIT';
+        return k;
+      };
+      const refreshUabDeleteOptions = allPackages => {
+        if(!uabDeleteBlock)return;
+        const current=String(uabDeleteBlock.value||'').toUpperCase();
+        const counts=new Map();
+        (allPackages||[]).forEach(p=>{const b=normalizeBlock(p.block);if(b)counts.set(b,(counts.get(b)||0)+1);});
+        uabDeleteBlock.innerHTML=`<option value="*">Semua blok UAB</option>`+UAB_BLOCKS.map(([value,label])=>{const n=counts.get(normalizeBlock(value))||0;return `<option value="${esc(value)}">${esc(label)}${n?` • ${n} bank`:''}</option>`;}).join('');
+        if(current==='*'||UAB_BLOCKS.some(([v])=>String(v).toUpperCase()===current))uabDeleteBlock.value=current;
+      };
       const renderUabPackages=async()=>{
         if(!uabPackagesHost)return;
-        try{const d=await request('/api/content/packages?module=UAB');const allPackages=d.packages||[];
-          const selectedBlock=String(uabDeleteBlock?.value||'').toUpperCase();
-          const packages=allPackages.filter(p=>String(p.block||'').replace(/^BLOK\s+/i,'').toUpperCase()===selectedBlock);
-          if(!packages.length){uabPackagesHost.innerHTML=`<p class="muted">Belum ada bank UAB untuk blok ${esc(selectedBlock)}.</p>`;return;}
-          uabPackagesHost.innerHTML=packages.map(p=>{const qs=Array.isArray(p.questions)?p.questions:[];return `<details class="admin-uab-package"><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'—')} • ${qs.length} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-package="${esc(p.id)}">Hapus bank</button></summary><div class="admin-uab-question-list">${qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id)}</small></div><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus soal</button></div>`).join('')}</div></details>`;}).join('');
-          uabPackagesHost.querySelectorAll('[data-delete-uab-question]').forEach(btn=>btn.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(!confirm('Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.'))return;btn.disabled=true;try{const d=await request(`/api/content/packages/${encodeURIComponent(btn.dataset.deleteUabQuestion)}/questions/${encodeURIComponent(btn.dataset.questionId)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Soal UAB dihapus.',false);await hydrateUab();await renderUabPackages();}catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus soal.',true);btn.disabled=false;}}));
-          uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn=>btn.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(!confirm('Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.'))return;btn.disabled=true;try{const d=await request(`/api/content/packages/${encodeURIComponent(btn.dataset.deleteUabPackage)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Bank UAB dihapus.',false);await hydrateUab();await renderUabPackages();}catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus bank.',true);btn.disabled=false;}}));
-        }catch(e){uabPackagesHost.innerHTML=`<p class="muted">${esc(e.message||'Gagal memuat bank UAB.')}</p>`;}};
+        try{
+          const d=await request('/api/content/packages?module=UAB');
+          const allPackages=Array.isArray(d.packages)?d.packages:[];
+          refreshUabDeleteOptions(allPackages);
+          const rawSelected=String(uabDeleteBlock?.value||'*');
+          const selectedBlock=normalizeBlock(rawSelected);
+          const showAll=rawSelected==='*';
+          const packages=showAll?allPackages:allPackages.filter(p=>normalizeBlock(p.block)===selectedBlock);
+          if(!packages.length){
+            uabPackagesHost.innerHTML=`<div class="admin-uab-empty"><b>Belum ada bank UAB di blok ini.</b><span>Kalau kamu baru selesai import, tekan refresh untuk memuat data terbaru.</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Refresh bank UAB</button></div>`;
+            uabPackagesHost.querySelector('[data-refresh-uab-delete]')?.addEventListener('click',renderUabPackages);
+            return;
+          }
+          uabPackagesHost.innerHTML=`<div class="admin-uab-result-count">${packages.length} bank ditemukan</div>`+packages.map(p=>{
+            const qs=Array.isArray(p.questions)?p.questions:[];
+            return `<details class="admin-uab-package"><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'—')} • ${qs.length} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-package="${esc(p.id)}">Hapus bank</button></summary><div class="admin-uab-question-list">${qs.length?qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id||'ID tidak tersedia')}</small></div><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus soal</button></div>`).join(''):`<p class="muted">Bank ini belum memiliki soal.</p>`}</div></details>`;
+          }).join('');
+          uabPackagesHost.querySelectorAll('[data-delete-uab-question]').forEach(btn=>btn.addEventListener('click',async e=>{
+            e.preventDefault();e.stopPropagation();
+            if(!confirm('Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.'))return;
+            btn.disabled=true;
+            try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabQuestion)}&questionId=${encodeURIComponent(btn.dataset.questionId)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Soal UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
+            catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus soal.',true);btn.disabled=false;}
+          }));
+          uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn=>btn.addEventListener('click',async e=>{
+            e.preventDefault();e.stopPropagation();
+            if(!confirm('Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.'))return;
+            btn.disabled=true;
+            try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabPackage)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Bank UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
+            catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus bank.',true);btn.disabled=false;}
+          }));
+        }catch(e){
+          uabPackagesHost.innerHTML=`<div class="admin-uab-empty is-error"><b>Gagal memuat bank UAB.</b><span>${esc(e.message||'Terjadi kesalahan.')}</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Coba lagi</button></div>`;
+          uabPackagesHost.querySelector('[data-refresh-uab-delete]')?.addEventListener('click',renderUabPackages);
+        }
+      };
       uabDeleteBlock?.addEventListener('change',renderUabPackages);
       renderUabPackages();
 

@@ -1,12 +1,13 @@
-const CACHE='clined-web-v41-announcements';
+const CACHE='clined-web-v42-content-fresh';
 const CORE=['./', './index.html', './apple-touch-icon.png', './assets/clined-logo.png', './assets/flashcards/brain.svg', './assets/flashcards/ecg.svg', './assets/flashcards/eye.svg', './assets/flashcards/heart.svg', './assets/flashcards/kidney.svg', './assets/flashcards/liver.svg', './assets/flashcards/lung.svg', './assets/flashcards/skin.svg', './assets/normal-values.jpeg', './banks/gaster-2023.json', './banks/manifest.json', './banks/pulmonis-2022.json', './banks/ssp-2021.json', './banks/kedkel-2020.json', './banks/kedkel-2021.json', './banks/kedkel-2022.json', './banks/kedkom-2020.json', './banks/kedkom-2021.json', './css/style.css', './css/motion.css', './favicon-32.png', './icon-192.png', './icon-512.png', './icon.svg', './js/app.js', './js/content-manager.js', './js/auth-gate.js', './js/photo-compress.js', './js/photo-store.js', './js/bank_2021.js', './js/bank_pulmonis.js', './js/question-bank-engine.js', './json/manifest.json', './manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 
-// Endpoint GET yang isinya "hampir statis" (bank soal, daftar paket) boleh
-// network-first + fallback cache supaya tetap kebuka offline / saat server cold-start lambat.
+// Hanya endpoint yang benar-benar statis yang boleh masuk cache.
+// /api/content/packages SENGAJA tidak di-cache karena import/hapus soal harus
+// langsung terlihat dan datanya bergantung pada akun yang sedang login.
 // Auth, sync, dan foto SENGAJA tidak pernah di-cache (data sesi/privat per user).
-const API_CACHEABLE = [/^\/api\/health$/, /^\/api\/banks(\/[a-z0-9_-]+)?$/i, /^\/api\/content\/packages$/];
+const API_CACHEABLE = [/^\/api\/health$/, /^\/api\/banks(\/[a-z0-9_-]+)?$/i];
 
 self.addEventListener('fetch',e=>{
   const req=e.request;

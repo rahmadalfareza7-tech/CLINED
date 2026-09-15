@@ -1,7 +1,7 @@
 /* Admin content controls: UAB JSON import + UPI advanced question creator. */
 (() => {
   const request = async (path, options = {}) => {
-    const r = await fetch(path, { credentials:'same-origin', headers:{'Content-Type':'application/json', ...(options.headers||{})}, ...options });
+    const r = await fetch(path, { cache:'no-store', credentials:'same-origin', headers:{'Content-Type':'application/json', ...(options.headers||{})}, ...options });
     const text = await r.text(); let d={}; try { d=text?JSON.parse(text):{}; } catch {}
     if (!r.ok) throw Error(d.error || `Permintaan gagal (${r.status}).`);
     return d;
