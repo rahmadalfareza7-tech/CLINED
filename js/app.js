@@ -1,4 +1,4 @@
-document.addEventListener('click',(event)=>{const feedback=event.target.closest('#feedback');if(!feedback)return;event.preventDefault();const url=feedback.dataset.googleFormUrl||localStorage.getItem('clined_google_form_url')||'';if(!url){alert('Link Google Form belum dikonfigurasi di paket aplikasi ini.');return;}const opened=window.open(url,'_blank','noopener,noreferrer');if(!opened)window.location.href=url;});const CLINED_SCHEMA_VERSION=4;(function migrateStorageSchema(){try{const current=Number(localStorage.getItem('clined_schema_version')||0);if(current<1){const aliases=[['xp','clined_xp'],['streak','clined_streak'],['gems','clined_gems']];aliases.forEach(([legacy,next])=>{if(localStorage.getItem(next)===null&&localStorage.getItem(legacy)!==null)localStorage.setItem(next,localStorage.getItem(legacy));});}if(current<2){if(!localStorage.getItem('clined_migrated_at'))localStorage.setItem('clined_migrated_at',new Date().toISOString());}if(current<3){}if(current<4){try{const wrong=JSON.parse(localStorage.getItem('gaster_v8_wrong_stats')||'[]');if(Array.isArray(wrong)){let changed=false;const normalized=wrong.map(item=>{if(!item||typeof item!=='object')return item;if(!item.lastWrong){item.lastWrong=item.lastSeen||new Date().toISOString();changed=true;}if(!Number.isFinite(Number(item.wrong))){item.wrong=1;changed=true;}return item;});if(changed)localStorage.setItem('gaster_v8_wrong_stats',JSON.stringify(normalized));}}catch{}}localStorage.setItem('clined_schema_version',String(CLINED_SCHEMA_VERSION));}catch(e){console.warn('CLINED storage migration skipped',e);}})();const $=id=>document.getElementById(id);const APP_VERSION="v36.7-early-entry-network-safe";const KEY={theme:"gaster_v8_theme",book:"gaster_v8_bookmarks",hist:"gaster_v8_history",session:"gaster_v8_quiz_session",sound:"gaster_v8_sound",wrong:"gaster_v8_wrong_stats",goal:"gaster_v9_daily_goal",qstats:"gaster_v22_question_performance",abilityMap:"gaster_v22_question_ability_map",xp:"gaster_v11_xp",navVisible:"medical_rpg_nav_visible_v21",navPos:"medicalRpgNavPos_v21",dailyStreak:"gaster_daily_streak_v1"};let selectedCount=20,selectedBank="utama",quiz=[],pos=0,score=0,answered=false;let soundEnabled=true;let selectedAnswer=null,streak=0,sessionStart=0,timerSeconds=0,timerDuration=0,timerDeadline=0,timerId=null;let quizMode="study",flagged=new Set();let sessionXP=0,lastXPGain=0;let playerHP=100,wrongCombo=0,enemyHP=100;const get=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("CLINED storage write failed",e);return false}};const del=k=>{try{localStorage.removeItem(k)}catch{}};function showToast(message,isError){let t=document.getElementById('clinedToast');if(!t){t=document.createElement('div');t.id='clinedToast';t.className='clined-toast';document.body.appendChild(t);}t.textContent=message;t.classList.toggle('is-error',!!isError);t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),isError?3600:1800);}const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+document.addEventListener('click',(event)=>{const feedback=event.target.closest('#feedback');if(!feedback)return;event.preventDefault();const url=feedback.dataset.googleFormUrl||localStorage.getItem('clined_google_form_url')||'';if(!url){alert('Link Google Form belum dikonfigurasi di paket aplikasi ini.');return;}const opened=window.open(url,'_blank','noopener,noreferrer');if(!opened)window.location.href=url;});const CLINED_SCHEMA_VERSION=4;(function migrateStorageSchema(){try{const current=Number(localStorage.getItem('clined_schema_version')||0);if(current<1){const aliases=[['xp','clined_xp'],['streak','clined_streak'],['gems','clined_gems']];aliases.forEach(([legacy,next])=>{if(localStorage.getItem(next)===null&&localStorage.getItem(legacy)!==null)localStorage.setItem(next,localStorage.getItem(legacy));});}if(current<2){if(!localStorage.getItem('clined_migrated_at'))localStorage.setItem('clined_migrated_at',new Date().toISOString());}if(current<3){}if(current<4){try{const wrong=JSON.parse(localStorage.getItem('gaster_v8_wrong_stats')||'[]');if(Array.isArray(wrong)){let changed=false;const normalized=wrong.map(item=>{if(!item||typeof item!=='object')return item;if(!item.lastWrong){item.lastWrong=item.lastSeen||new Date().toISOString();changed=true;}if(!Number.isFinite(Number(item.wrong))){item.wrong=1;changed=true;}return item;});if(changed)localStorage.setItem('gaster_v8_wrong_stats',JSON.stringify(normalized));}}catch{}}localStorage.setItem('clined_schema_version',String(CLINED_SCHEMA_VERSION));}catch(e){console.warn('CLINED storage migration skipped',e);}})();const $=id=>document.getElementById(id);const APP_VERSION="v36.8-static-banks-final";const KEY={theme:"gaster_v8_theme",book:"gaster_v8_bookmarks",hist:"gaster_v8_history",session:"gaster_v8_quiz_session",sound:"gaster_v8_sound",wrong:"gaster_v8_wrong_stats",goal:"gaster_v9_daily_goal",qstats:"gaster_v22_question_performance",abilityMap:"gaster_v22_question_ability_map",xp:"gaster_v11_xp",navVisible:"medical_rpg_nav_visible_v21",navPos:"medicalRpgNavPos_v21",dailyStreak:"gaster_daily_streak_v1"};let selectedCount=20,selectedBank="utama",quiz=[],pos=0,score=0,answered=false;let soundEnabled=true;let selectedAnswer=null,streak=0,sessionStart=0,timerSeconds=0,timerDuration=0,timerDeadline=0,timerId=null;let quizMode="study",flagged=new Set();let sessionXP=0,lastXPGain=0;let playerHP=100,wrongCombo=0,enemyHP=100;const get=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("CLINED storage write failed",e);return false}};const del=k=>{try{localStorage.removeItem(k)}catch{}};function showToast(message,isError){let t=document.getElementById('clinedToast');if(!t){t=document.createElement('div');t.id='clinedToast';t.className='clined-toast';document.body.appendChild(t);}t.textContent=message;t.classList.toggle('is-error',!!isError);t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),isError?3600:1800);}const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const letter=i=>String.fromCharCode(65+i);
 const qid=(bank,i,q)=>q.id || `${bank}-${q.no||i+1}`;
 // RPG progression: 100 levels, 100 XP per level.
@@ -63,17 +63,38 @@ function showXPPopup(gained,reason,levelUp=false){
 }
 const BANKS={};
 let banksLoadPromise=null;
+let staticBankManifest=null;
+async function loadStaticBankManifest(){
+  if(staticBankManifest)return staticBankManifest;
+  const r=await fetch('./seed-data/manifest.json',{credentials:'same-origin',cache:'default'});
+  if(!r.ok) throw Error('Manifest bank soal lokal tidak dapat dimuat.');
+  staticBankManifest=await r.json();
+  for(const b of (staticBankManifest.banks||[])){
+    const id=String(b.id);
+    BANKS[id]={name:String(b.name||id),count:Number(b.count||0),block:String(b.block||'OTHER'),data:[],loaded:false,version:Number(b.version||1),staticUrl:String(b.dataUrl||''),staticVersion:Number(b.version||1),serverVersion:0,source:'static'};
+  }
+  return staticBankManifest;
+}
 async function loadServerBanks(){
   if(banksLoadPromise)return banksLoadPromise;
   banksLoadPromise=(async()=>{
-    const meta=await fetch('/api/banks',{credentials:'same-origin',cache:'default'}).then(r=>{if(!r.ok)throw Error('Daftar bank soal tidak dapat dimuat.');return r.json();});
+    await loadStaticBankManifest();
+    let meta={banks:[]};
+    try{
+      meta=await fetch('/api/banks',{credentials:'same-origin',cache:'default'}).then(r=>{if(!r.ok)throw Error('Daftar bank soal server tidak dapat dimuat.');return r.json();});
+    }catch(e){
+      console.warn('Server bank catalog unavailable; using static banks.',e);
+    }
     for(const b of (meta.banks||[])){
       const id=String(b.id);
-      if(!BANKS[id])BANKS[id]={name:String(b.name||id),count:0,block:String(b.block||'OTHER'),data:[],loaded:false};
-      BANKS[id].name=String(b.name||BANKS[id].name);
-      BANKS[id].count=Number(b.count||BANKS[id].count||0);
-      BANKS[id].block=String(b.block||BANKS[id].block||'OTHER');
-      BANKS[id].version=Number(b.version||1);
+      if(!BANKS[id]) BANKS[id]={name:String(b.name||id),count:Number(b.count||0),block:String(b.block||'OTHER'),data:[],loaded:false,version:Number(b.version||1),serverVersion:Number(b.version||1),source:'server'};
+      else {
+        BANKS[id].name=String(b.name||BANKS[id].name);
+        BANKS[id].count=Number(BANKS[id].count||b.count||0);
+        BANKS[id].block=String(b.block||BANKS[id].block||'OTHER');
+        BANKS[id].serverVersion=Number(b.version||0);
+      }
+      if(!BANKS[id].staticUrl) BANKS[id].source='server';
     }
     syncAbilityCatalog();renderBanks();renderCounts();renderAvailableBlockControls?.('SSP','SSP');
     return BANKS;
@@ -83,24 +104,37 @@ async function loadServerBanks(){
 async function ensureServerBankLoaded(id){
   const key=String(id||'');
   if(!key || !BANKS[key]) return false;
-  if(BANKS[key].loaded) return true;
+  const bank=BANKS[key];
+  if(bank.loaded) return true;
+  // Stable baseline: load the question JSON directly from the deployment, not Neon.
+  // If admin has published a newer server version, server becomes the source of truth.
+  if(bank.staticUrl && Number(bank.serverVersion||0)<=Number(bank.staticVersion||1)){
+    const r=await fetch(bank.staticUrl,{credentials:'same-origin',cache:'default'});
+    if(!r.ok) throw Error(`Bank ${bank.name} tidak dapat dimuat.`);
+    const questions=await r.json();
+    bank.data=Array.isArray(questions)?questions:[];
+    bank.count=bank.data.length||bank.count;
+    bank.version=Number(bank.staticVersion||1);
+    bank.loaded=true;
+    bank.source='static';
+    return true;
+  }
   const r=await fetch(`/api/banks/${encodeURIComponent(key)}`,{credentials:'same-origin',cache:'default'});
-  if(!r.ok) throw Error(`Bank ${BANKS[key].name} tidak dapat dimuat.`);
+  if(!r.ok) throw Error(`Bank ${bank.name} tidak dapat dimuat.`);
   const payload=await r.json();
   const b=payload.bank||{};
-  BANKS[key].data=Array.isArray(b.questions)?b.questions:[];
-  BANKS[key].count=BANKS[key].data.length || BANKS[key].count;
-  BANKS[key].version=Number(b.version||BANKS[key].version||1);
-  BANKS[key].loaded=true;
+  bank.data=Array.isArray(b.questions)?b.questions:[];
+  bank.count=bank.data.length||bank.count;
+  bank.version=Number(b.version||bank.version||1);
+  bank.loaded=true;
+  bank.source='server-admin-override';
   return true;
 }
 window.CLINED_BANKS_READY=()=>loadServerBanks();
 window.CLINED_ENSURE_BANK_LOADED=ensureServerBankLoaded;
 
-// Bank soal sekarang hanya berasal dari server DB. Frontend menyimpan metadata ringan;
-// isi soal baru dimuat setelah sesi akun aktif.
-// Bank soal baru/soal baru yang diinput lewat Question Bank Engine langsung menyegarkan
-// pilihan bank dan jumlah soal, tanpa perlu mengubah UI secara manual.
+// Bank soal stabil dibaca dari static JSON deployment sehingga tidak menguras egress Neon.
+// Neon tetap menjadi source of truth untuk bank yang memiliki versi admin lebih baru.
 window.addEventListener("clined:bank-updated",()=>{
   document.querySelectorAll("[data-block-key]").forEach(page=>{
     const key=page.dataset.blockKey;

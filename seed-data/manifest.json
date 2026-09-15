@@ -1,4 +1,115 @@
 {
-  "schemaVersion": 1,
-  "banks": []
+  "schemaVersion": 2,
+  "banks": [
+    {
+      "id": "endo-2019",
+      "name": "ENDO 2019",
+      "block": "ENDOKRINE",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/endo-2019.json",
+      "sourceFile": "ENDO 2019.json"
+    },
+    {
+      "id": "ginjal-2018",
+      "name": "GINJAL 2018",
+      "block": "GINJAL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/ginjal-2018.json",
+      "sourceFile": "GINJAL 2018.json"
+    },
+    {
+      "id": "ginjal-2019",
+      "name": "GINJAL 2019",
+      "block": "GINJAL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/ginjal-2019.json",
+      "sourceFile": "GINJAL 2019(1).json"
+    },
+    {
+      "id": "ginjal-2020",
+      "name": "GINJAL 2020",
+      "block": "GINJAL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/ginjal-2020.json",
+      "sourceFile": "GINJAL 2020(1).json"
+    },
+    {
+      "id": "ginjal-2021",
+      "name": "GINJAL 2021",
+      "block": "GINJAL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/ginjal-2021.json",
+      "sourceFile": "GINJAL 2021.json"
+    },
+    {
+      "id": "ginjal-2022",
+      "name": "GINJAL 2022",
+      "block": "GINJAL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 97,
+      "dataUrl": "./banks/ginjal-2022.json",
+      "sourceFile": "GINJAL 2022.json"
+    },
+    {
+      "id": "kedkel-2020",
+      "name": "KEDKEL 2020",
+      "block": "KEDKEL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 123,
+      "dataUrl": "./banks/kedkel-2020.json",
+      "sourceFile": "KEDKEL 2020(1).json"
+    },
+    {
+      "id": "kedkel-2021",
+      "name": "KEDKEL 2021",
+      "block": "KEDKEL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/kedkel-2021.json",
+      "sourceFile": "KEDKEL 2021(1).json"
+    },
+    {
+      "id": "kedkel-2022",
+      "name": "KEDKEL 2022",
+      "block": "KEDKEL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 92,
+      "dataUrl": "./banks/kedkel-2022.json",
+      "sourceFile": "KEDKEL 2022(1).json"
+    },
+    {
+      "id": "kedkom-2020",
+      "name": "KEDKOM 2020",
+      "block": "KEDKOM",
+      "version": 1,
+      "schema": "1.0",
+      "count": 157,
+      "dataUrl": "./banks/kedkom-2020.json",
+      "sourceFile": "KEDKOM 2020(1).json"
+    },
+    {
+      "id": "kedkom-2021",
+      "name": "KEDKOM 2021",
+      "block": "KEDKOM",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/kedkom-2021.json",
+      "sourceFile": "KEDKOM 2021(1).json"
+    }
+  ]
 }

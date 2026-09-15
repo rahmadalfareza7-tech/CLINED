@@ -261,7 +261,7 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
     for(const item of catalog.banks||[]){
       const id=String(item.id);
       const existing=window.BANKS?.[id];
-      if(existing) { existing.count=Number(item.count||existing.count||0); existing.name=String(item.name||existing.name||id); existing.block=String(item.block||existing.block||'OTHER'); continue; }
+      if(existing) { existing.count=Math.max(Number(existing.count||0),Number(item.count||0)); existing.name=String(item.name||existing.name||id); existing.block=String(item.block||existing.block||'OTHER'); existing.serverVersion=Number(item.version||existing.serverVersion||0); continue; }
       // Metadata only: the question payload is fetched on demand by the quiz engine.
       if(window.BANKS) window.BANKS[id]={name:String(item.name||id),count:Number(item.count||0),block:String(item.block||'OTHER'),data:[],loaded:false,version:Number(item.version||1)};
     }
