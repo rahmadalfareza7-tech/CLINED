@@ -61,16 +61,7 @@ function showXPPopup(gained,reason,levelUp=false){
   setTimeout(()=>layer.remove(),1200);
   if(levelUp){vibrate([30,45,30,45,60]);beep("level");}
 }
-const BANKS={
-  utama:{name:"SSP GASTER 2023",count:100,block:"SSP",data:[],loaded:false},
-  pulmonis:{name:"SSP PULMONIS 2022",count:81,block:"SSP",data:[],loaded:false},
-  arsip2021:{name:"SSP 2021",count:100,block:"SSP",data:[],loaded:false},
-  kedkel2022:{name:"KEDKEL Juni 2022",count:92,block:"KEDKEL",data:[],loaded:false},
-  kedkel2021:{name:"KEDKEL 2021",count:100,block:"KEDKEL",data:[],loaded:false},
-  kedkel2020:{name:"KEDKEL 2020",count:123,block:"KEDKEL",data:[],loaded:false},
-  kedkom2020:{name:"KEDKOM 2020",count:157,block:"KEDKOM",data:[],loaded:false},
-  kedkom2021:{name:"KEDKOM 2021",count:100,block:"KEDKOM",data:[],loaded:false}
-};
+const BANKS={};
 let banksLoadPromise=null;
 async function loadServerBanks(){
   if(banksLoadPromise)return banksLoadPromise;
