@@ -2387,3 +2387,6 @@ body.dark .ai-ask-btn,[data-theme="dark"] .ai-ask-btn{background:rgba(44,44,46,.
 .floating-nav-item{pointer-events:auto!important;touch-action:manipulation!important;}
 .floating-nav-slider{pointer-events:none!important;}
 .floating-nav-item[data-floating-nav="dashboard"]{position:relative!important;z-index:20!important;cursor:pointer!important;}
+
+/* v7 loading credit */
+#appLoading .splash-brand{font-size:clamp(16px,4vw,22px)!important;font-weight:800!important;letter-spacing:.06em!important;color:#fff!important;top:calc(50% + 92px)!important;line-height:1.2!important;}
