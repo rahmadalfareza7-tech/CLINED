@@ -66,7 +66,7 @@ let banksLoadPromise=null;
 let staticBankManifest=null;
 async function loadStaticBankManifest(){
   if(staticBankManifest)return staticBankManifest;
-  const manifestUrl='/seed-data/manifest.json';
+  const manifestUrl='./seed-data/manifest.json';
   const r=await fetch(manifestUrl,{credentials:'same-origin',cache:'no-store'});
   if(!r.ok) throw Error('Manifest bank soal lokal tidak dapat dimuat.');
   staticBankManifest=await r.json();
