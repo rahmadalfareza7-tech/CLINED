@@ -115,15 +115,16 @@ function show(id, options={}){
   }
 
   if(id==="home") renderHomeClinicalDashboard();
-  if(id==="blokSspPage"){setCurrentBlockId("SSP"); if(blockForBank(selectedBank)!=='SSP'){const sspIds=Object.keys(BANKS).filter(bid=>blockForBank(bid)==='SSP');if(sspIds.length)selectedBank=sspIds[0];} try{renderBanks();renderCounts();renderModes();}catch(e){console.error("SSP render error",e);}}
-  if(id==="blokKedkomPage"){setCurrentBlockId("KEDKOM"); renderEmptyBlockControls("kedkom");}
-  if(id==="blokKedkelPage"){setCurrentBlockId("KEDKEL"); renderAvailableBlockControls("kedkel");}
-  if(id==="blokGinjalPage"){setCurrentBlockId("GINJAL"); renderAvailableBlockControls("ginjal"); renderBlockMateri("GINJAL","blokGinjalPage");}
-  if(id==="blokPancaIndraPage"){setCurrentBlockId("PANCA INDRA"); renderEmptyBlockControls("pancaIndra","PANCA INDRA"); renderBlockMateri("PANCA INDRA","blokPancaIndraPage");}
-  if(id==="blokEndokrinePage"){setCurrentBlockId("ENDOKRINE"); renderEmptyBlockControls("endokrine","ENDOKRINE"); renderBlockMateri("ENDOKRINE","blokEndokrinePage");}
-  if(id==="blokReproduksiPage"){setCurrentBlockId("REPRODUKSI"); renderEmptyBlockControls("reproduksi","REPRODUKSI"); renderBlockMateri("REPRODUKSI","blokReproduksiPage");}
-  if(id==="blokForensikPage"){setCurrentBlockId("FORENSIK"); renderEmptyBlockControls("forensik","FORENSIK"); renderBlockMateri("FORENSIK","blokForensikPage");}
-  if(id==="blokMulsisPage"){setCurrentBlockId("MULSIS"); renderEmptyBlockControls("mulsis");}
+  const __blockPages={
+    blokBm1Page:["BM1","blokBm1Page"],blokBm2Page:["BM2","blokBm2Page"],blokHncPage:["HNC","blokHncPage"],
+    blokMp1Page:["MP1","blokMp1Page"],blokMp2Page:["MP2","blokMp2Page"],blokMptPage:["MPT","blokMptPage"],
+    blokMuskuloskeletalPage:["MUSKULOSKELETAL","blokMuskuloskeletalPage"],blokRespiratoryPage:["RESPIRATORY","blokRespiratoryPage"],
+    blokKardiologiPage:["KARDIOLOGI","blokKardiologiPage"],blokHematologiPage:["HEMATOLOGI","blokHematologiPage"],blokGitPage:["GIT","blokGitPage"],
+    blokGinjalPage:["GINJAL","blokGinjalPage"],blokSspPage:["SSP","blokSspPage"],blokPancaIndraPage:["PANCA INDRA","blokPancaIndraPage"],
+    blokEndokrinePage:["ENDOKRINE","blokEndokrinePage"],blokReproduksiPage:["REPRODUKSI","blokReproduksiPage"],blokForensikPage:["FORENSIK","blokForensikPage"],
+    blokKedkomPage:["KEDKOM","blokKedkomPage"],blokKedkelPage:["KEDKEL","blokKedkelPage"],blokMulsisPage:["MULSIS","blokMulsisPage"]
+  };
+  if(__blockPages[id]){const [block,pageId]=__blockPages[id];setCurrentBlockId(block);renderUniversalBlockControls(block,pageId);renderBlockMateri(block,pageId);}
 
   const navKey=id==="clinicalDashboard"?"dashboard":id==="accountPage"?"account":id==="home"?"home":null;
   if(navKey && typeof window.setFloatingNavActive==='function') window.setFloatingNavActive(navKey);
@@ -560,8 +561,24 @@ $("resumeBtn").onclick=()=>{
 $("discardResumeBtn").onclick=()=>{if(confirm("Hapus progres kuis tersimpan?"))clearSession()};
 
 
+function blockUiKey(block){return String(block||'').toLowerCase().replace(/[^a-z0-9]+(.)/g,(_,c)=>String(c).toUpperCase());}
+function renderUniversalBlockControls(block,pageId){
+  const page=document.getElementById(pageId); if(!page)return;
+  const key=blockUiKey(block);
+  let material=page.querySelector('[data-universal-material]')||page.querySelector('.materi-section');
+  if(!material){material=document.createElement('div');material.dataset.universalMaterial='1';material.className='materi-section';material.innerHTML='<span class="materi-button" aria-hidden="true">MATERI</span>';page.insertBefore(material,page.firstElementChild?.nextElementSibling||page.firstChild);}
+  let mount=page.querySelector('[data-universal-block-controls]');
+  const existingControls=page.querySelector('#'+key+'CountChoices')&&page.querySelector('#'+key+'ModeChoices')&&page.querySelector('#'+key+'TimeChoices');
+  if(!mount&&!existingControls){
+    mount=document.createElement('div'); mount.dataset.universalBlockControls='1'; mount.className='card nested-card';
+    mount.innerHTML=`<div class="section-title">Jumlah soal</div><div class="choice-grid" id="${key}CountChoices"></div><div class="section-title sub-title">Mode</div><div class="choice-grid mode-grid" id="${key}ModeChoices"></div><div class="section-title sub-title">Batas waktu</div><div class="choice-grid mode-grid" id="${key}TimeChoices"></div><button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button><div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>`;
+    page.appendChild(mount);
+  }
+  // The same renderer is used by every UAB block, regardless of whether the page originally had controls.
+  renderAvailableBlockControls(key,block,pageId);
+}
 function renderBlockMateri(blockName,pageId){
-  const host=document.querySelector(`#${pageId} [data-materi-section="${blockName}"]`); if(!host)return;
+  const host=document.querySelector(`#${pageId} [data-materi-section="${blockName}"]`)||document.querySelector(`#${pageId} [data-universal-material]`)||document.querySelector(`#${pageId} .materi-section`); if(!host)return;
   fetch('/api/materials',{credentials:'same-origin'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
     const m=(data.materials||[]).find(x=>String(x.block).toUpperCase()===blockName);
     host.innerHTML=m&&m.url?`<a class="materi-button" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a>`:'';
@@ -570,7 +587,7 @@ function renderBlockMateri(blockName,pageId){
 function renderEmptyBlockControls(key,blockOverride){
   const block=blockOverride?String(blockOverride).toUpperCase():String(key||'').toUpperCase();
   const countBox=$(key+"CountChoices"), modeBox=$(key+"ModeChoices"), timeBox=$(key+"TimeChoices");
-  const page=document.querySelector(`[data-block-key="${key}"]`);
+  const page=document.querySelector(`[data-block-key="${key}"]`)||document.querySelector(`[data-block-key="${block}"]`);
   if(!countBox||!modeBox||!timeBox)return;
   const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && (b.data||[]).length);
   const startBtn=page?.querySelector('.block-disabled-start');
@@ -606,68 +623,44 @@ function renderEmptyBlockControls(key,blockOverride){
   if(note)note.textContent=`${entries.length} bank aktif · ${max} soal tersedia.`;
 }
 
-function renderAvailableBlockControls(key){
-  const block=String(key||'').toUpperCase();
+function renderAvailableBlockControls(key,blockOverride,pageId){
+  const block=String(blockOverride||key||'').toUpperCase();
   const countBox=$(key+"CountChoices"), modeBox=$(key+"ModeChoices"), timeBox=$(key+"TimeChoices");
-  const page=document.querySelector(`[data-block-key="${key}"]`);
+  const page=document.getElementById(pageId)||document.querySelector(`[data-block-key="${key}"]`)||document.querySelector(`[data-block-key="${block}"]`);
   if(!countBox||!modeBox||!timeBox)return;
   const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && (b.data||[]).length);
   const startBtn=page?.querySelector('.block-disabled-start');
   const note=page?.querySelector('.block-empty-note');
-  const inline=page?.querySelector('.empty-bank-inline');
-  if(!entries.length){ renderEmptyBlockControls(key); return; }
-
-  const [firstId, firstBank]=entries[0];
-  if(!entries.some(([id])=>id===selectedBank)) selectedBank=firstId;
-  const bank=BANKS[selectedBank]||firstBank;
-  const max=(bank.data||[]).length;
-  const counts=[10,20,50,100].filter(n=>n<=max);
-  if(max>0 && !counts.includes(max)) counts.push(max);
-  if(!selectedCount || selectedCount>max) selectedCount=counts[0]||max;
-
-  countBox.innerHTML=counts.map(n=>`<button type="button" class="choice ${selectedCount===n?"selected":""}" data-n="${n}">${n}<small> soal</small></button>`).join("");
-  countBox.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{
-    selectedCount=Number(b.dataset.n);
-    renderAvailableBlockControls(key);
-  });
-
-  modeBox.innerHTML=[
-    ["study","📖Belajar","Pembahasan langsung setelah menjawab"],
-    ["exam","📝Ujian","Pembahasan dibuka setelah selesai"]
-  ].map(([mode,title,desc])=>`<button type="button" class="choice mode-choice ${quizMode===mode?"selected":""}" data-mode="${mode}"><b>${title}</b><small>${desc}</small></button>`).join("");
-  modeBox.querySelectorAll(".mode-choice").forEach(b=>b.onclick=()=>{
-    quizMode=b.dataset.mode;
-    renderAvailableBlockControls(key);
-  });
-
-  const times=[["Tanpa batas",0],["30 menit",1800],["60 menit",3600],["90 menit",5400]];
-  timeBox.innerHTML=times.map(([label,sec])=>`<button type="button" class="choice time-choice ${Number(timerDuration||0)===sec?"selected":""}" data-sec="${sec}">${label}</button>`).join("");
-  timeBox.querySelectorAll(".time-choice").forEach(b=>b.onclick=()=>{
-    timerDuration=Number(b.dataset.sec);
-    renderAvailableBlockControls(key);
-  });
-
-  if(startBtn){
-    startBtn.disabled=false;
-    startBtn.textContent="Mulai Kuis →";
-    startBtn.onclick=()=>startQuiz();
+  let inline=page?.querySelector('.empty-bank-inline');
+  if(!entries.length){
+    const counts=[10,20,50,100];
+    countBox.innerHTML=counts.map(n=>`<button type="button" class="choice disabled-choice" disabled>${n}<small> soal</small></button>`).join("");
+    modeBox.innerHTML=[["study","📖Belajar","Pembahasan langsung setelah menjawab"],["exam","📝Ujian","Pembahasan dibuka setelah selesai"]].map(([id,title,desc])=>`<button type="button" class="choice mode-choice disabled-choice" disabled><b>${title}</b><small>${desc}</small></button>`).join("");
+    timeBox.innerHTML=[[0,'Tanpa batas'],[1800,'30 menit'],[3600,'60 menit'],[5400,'90 menit']].map(([sec,label])=>`<button type="button" class="choice time-choice disabled-choice" disabled>${label}</button>`).join("");
+    if(startBtn){startBtn.disabled=true;startBtn.textContent='Mulai Kuis →';}
+    if(note)note.textContent='Bank soal akan muncul setelah ditambahkan.';
+    if(inline)inline.innerHTML='<span class="empty-bank-icon">🩺</span><div><b>Bank soal belum tersedia</b><small>Bank soal akan aktif otomatis saat ditambahkan.</small></div>';
+    return;
   }
-  if(note) note.textContent=`${bank.name}: ${max} soal tersedia.`;
-  if(inline) inline.innerHTML=`<span class="empty-bank-icon">👨‍👩‍👧‍👦</span><div>
-    <b>Bank soal tersedia</b>
-    <small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small>
-    <div class="bank-picker" role="group" aria-label="Pilih bank soal">
-      ${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}">
-        <span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${(b.data||[]).length} soal</span><i>${id===selectedBank?'✓':''}</i>
-      </button>`).join('')}
-    </div>
-  </div>`; 
-  inline?.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{
-    if(btn.dataset.blockBank===selectedBank)return;
-    selectedBank=btn.dataset.blockBank;
-    selectedCount=0;
-    renderAvailableBlockControls(key);
-  });
+  if(!entries.some(([id])=>id===selectedBank))selectedBank=entries[0][0];
+  const bank=BANKS[selectedBank]||entries[0][1],max=(bank.data||[]).length;
+  const counts=[10,20,50,100].filter(n=>n<=max);if(max>0&&!counts.includes(max))counts.push(max);
+  if(!selectedCount||selectedCount>max)selectedCount=counts[0]||max;
+  if(!inline){
+    inline=document.createElement('div');inline.className='empty-bank-inline';
+    const card=page?.querySelector('.bank-card');
+    if(card)card.appendChild(inline); else page?.prepend(inline);
+  }
+  inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>Bank soal tersedia</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${(b.data||[]).length} soal</span><i>${id===selectedBank?'✓':''}</i></button>`).join('')}</div></div>`;
+  inline.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{if(btn.dataset.blockBank!==selectedBank){selectedBank=btn.dataset.blockBank;selectedCount=0;renderAvailableBlockControls(key,block,pageId);}});
+  countBox.innerHTML=counts.map(n=>`<button type="button" class="choice ${selectedCount===n?'selected':''}" data-n="${n}">${n===max?'Semua':n}<small>${n===max?` (${max})`:' soal'}</small></button>`).join('');
+  countBox.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{selectedCount=Number(b.dataset.n);renderAvailableBlockControls(key,block,pageId);});
+  modeBox.innerHTML=[["study","📖Belajar","Pembahasan langsung setelah menjawab"],["exam","📝Ujian","Pembahasan dibuka setelah selesai"]].map(([mode,title,desc])=>`<button type="button" class="choice mode-choice ${quizMode===mode?'selected':''}" data-mode="${mode}"><b>${title}</b><small>${desc}</small></button>`).join('');
+  modeBox.querySelectorAll('.mode-choice').forEach(b=>b.onclick=()=>{quizMode=b.dataset.mode;renderAvailableBlockControls(key,block,pageId);});
+  timeBox.innerHTML=[[0,'Tanpa batas'],[1800,'30 menit'],[3600,'60 menit'],[5400,'90 menit']].map(([sec,label])=>`<button type="button" class="choice time-choice ${Number(timerDuration||0)===sec?'selected':''}" data-sec="${sec}">${label}</button>`).join('');
+  timeBox.querySelectorAll('.time-choice').forEach(b=>b.onclick=()=>{timerDuration=Number(b.dataset.sec);renderAvailableBlockControls(key,block,pageId);});
+  if(startBtn){startBtn.disabled=false;startBtn.textContent='Mulai Kuis →';startBtn.onclick=()=>{timerSeconds=timerDuration;startQuiz();};}
+  if(note)note.textContent=`${entries.length} bank aktif · ${max} soal tersedia.`;
 }
 
 function renderModes(){
@@ -1811,7 +1804,19 @@ if($("upiCreateQuestionForm"))$("upiCreateQuestionForm").addEventListener('submi
 if($("upiCreateImage"))$("upiCreateImage").addEventListener('change',()=>{const file=$("upiCreateImage").files?.[0],preview=$("upiCreateImagePreview");if(!preview)return;if(!file){preview.hidden=true;return;}const url=URL.createObjectURL(file);preview.innerHTML=`<img src="${url}" alt="Preview gambar soal">`;preview.hidden=false;});
 if($("backFromUab"))$("backFromUab").onclick=()=>show("home");
 if($("backFromUpi"))$("backFromUpi").onclick=()=>show("home");
+if($("openBlokBm1"))$("openBlokBm1").onclick=()=>{setCurrentBlockId("BM1");show("blokBm1Page");};
+if($("openBlokBm2"))$("openBlokBm2").onclick=()=>{setCurrentBlockId("BM2");show("blokBm2Page");};
+if($("openBlokHnc"))$("openBlokHnc").onclick=()=>{setCurrentBlockId("HNC");show("blokHncPage");};
+if($("openBlokMp1"))$("openBlokMp1").onclick=()=>{setCurrentBlockId("MP1");show("blokMp1Page");};
+if($("openBlokMp2"))$("openBlokMp2").onclick=()=>{setCurrentBlockId("MP2");show("blokMp2Page");};
+if($("openBlokMpt"))$("openBlokMpt").onclick=()=>{setCurrentBlockId("MPT");show("blokMptPage");};
 if($("openBlokMuskuloskeletal"))$("openBlokMuskuloskeletal").onclick=()=>{setCurrentBlockId("MUSKULOSKELETAL");show("blokMuskuloskeletalPage");};
+if($("backFromBm1"))$("backFromBm1").onclick=()=>show("uabPage");
+if($("backFromBm2"))$("backFromBm2").onclick=()=>show("uabPage");
+if($("backFromHnc"))$("backFromHnc").onclick=()=>show("uabPage");
+if($("backFromMp1"))$("backFromMp1").onclick=()=>show("uabPage");
+if($("backFromMp2"))$("backFromMp2").onclick=()=>show("uabPage");
+if($("backFromMpt"))$("backFromMpt").onclick=()=>show("uabPage");
 if($("backFromMuskuloskeletal"))$("backFromMuskuloskeletal").onclick=()=>show("uabPage");
 if($("openBlokRespiratory"))$("openBlokRespiratory").onclick=()=>{setCurrentBlockId("RESPIRATORY");show("blokRespiratoryPage");};
 if($("backFromRespiratory"))$("backFromRespiratory").onclick=()=>show("uabPage");
@@ -1838,7 +1843,7 @@ if($("backFromKedkom"))$("backFromKedkom").onclick=()=>show("uabPage");
 if($("openBlokKedkel"))$("openBlokKedkel").onclick=()=>{setCurrentBlockId("KEDKEL");show("blokKedkelPage");};
 if($("backFromKedkel"))$("backFromKedkel").onclick=()=>show("uabPage");
 if($("openBlokMulsis"))$("openBlokMulsis").onclick=()=>{setCurrentBlockId("MULSIS");show("blokMulsisPage");};
-document.querySelectorAll(".uab-node.locked-node").forEach(node=>node.addEventListener("click",()=>showToast(`${node.querySelector("b")?.textContent||"Blok"} belum tersedia. Segera hadir.`)));
+document.querySelectorAll(".uab-node.locked-node").forEach(node=>node.addEventListener("click",()=>{if(!node.classList.contains("active-node"))showToast(`${node.querySelector("b")?.textContent||"Blok"} belum tersedia. Import bank soal untuk mengaktifkan blok ini.`);}));
 if($("backFromMulsis"))$("backFromMulsis").onclick=()=>show("uabPage");
 if($("studyToolsBtn"))$("studyToolsBtn").onclick=()=>{renderDailyMission();show("studyTools")};
 if($("smartReviewBtn"))$("smartReviewBtn").onclick=()=>{renderSmartReview();show("smartReview")};
