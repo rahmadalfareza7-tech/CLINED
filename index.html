@@ -1087,6 +1087,71 @@ html,body{overflow-x:hidden}
 <script src="js/question-bank-engine.js"></script>
 <script src="js/inline-boot.js"></script>
 <script src="js/new-features.js?v=3"></script>
+
+<script id="clined-floating-dashboard-hard-fix">
+(function(){
+  function boot(){
+    const nav=document.getElementById('floatingDashboardNav');
+    if(!nav || nav.dataset.hardFixBound==='1') return;
+    nav.dataset.hardFixBound='1';
+
+    const go=function(key){
+      try{
+        const items=nav.querySelectorAll('[data-floating-nav]');
+        items.forEach(function(b){b.classList.toggle('active', b.getAttribute('data-floating-nav')===key);});
+        nav.style.setProperty('--floating-index', String(
+          Array.from(items).findIndex(function(b){return b.getAttribute('data-floating-nav')===key;})
+        ));
+        if(key==='dashboard'){
+          const page=document.getElementById('clinicalDashboard');
+          if(!page) return;
+          // Do not depend on the old click chain.
+          document.querySelectorAll('.view.active').forEach(function(v){v.classList.remove('active');});
+          page.classList.add('active');
+          document.body.classList.remove('quiz-context');
+          document.body.classList.remove('home-context');
+          if(typeof window.renderClinicalDashboard==='function'){
+            try{window.renderClinicalDashboard();}catch(e){console.warn('Dashboard render:',e);}
+          }
+          try{
+            history.pushState({clinedView:'clinicalDashboard'},'', '#clinicalDashboard');
+          }catch(e){}
+          window.scrollTo(0,0);
+          return;
+        }
+        if(key==='home' && typeof window.show==='function'){window.show('home');return;}
+        if(key==='uab' && typeof window.show==='function'){window.show('uabPage');return;}
+        if(key==='account' && typeof window.show==='function'){window.show('accountPage');return;}
+      }catch(e){console.error('Floating dashboard navigation:',e);}
+    };
+
+    // Capture-phase handler is intentionally attached to the NAV itself,
+    // so unrelated document handlers cannot prevent Dashboard navigation.
+    nav.addEventListener('click',function(e){
+      const btn=e.target.closest && e.target.closest('[data-floating-nav]');
+      if(!btn || !nav.contains(btn)) return;
+      const key=btn.getAttribute('data-floating-nav');
+      if(key!=='dashboard') return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      go('dashboard');
+    },true);
+
+    // Also support touch/pointer activation on mobile/WebView.
+    nav.addEventListener('pointerup',function(e){
+      const btn=e.target.closest && e.target.closest('[data-floating-nav="dashboard"]');
+      if(!btn || !nav.contains(btn)) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      go('dashboard');
+    },true);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
+  else boot();
+  window.addEventListener('load',boot,{once:true});
+})();
+</script>
+
 </body>
 </html>
 <style>
