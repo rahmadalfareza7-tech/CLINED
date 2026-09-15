@@ -1,0 +1,1 @@
+v3: fixed floating dashboard slider from 5-column width to 4-column width and hardened dashboard button pointer events.
