@@ -2284,7 +2284,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$("normalValuesMod
     btn.classList.add('nav-pop');
     window.setTimeout(()=>btn.classList.remove('nav-pop'),520);
     if(key==='home'){show('home');if(typeof renderCounts==='function')renderCounts();setActive('home');window.scrollTo({top:0,behavior:'auto'});return;}
-    if(key==='dashboard'){show('clinicalDashboard');if(typeof renderClinicalDashboard==='function')renderClinicalDashboard();setActive('dashboard');window.scrollTo({top:0,behavior:'auto'});return;}
+    if(key==='dashboard'){const page=document.getElementById('clinicalDashboard');if(!page)return;show('clinicalDashboard');if(typeof renderClinicalDashboard==='function')renderClinicalDashboard();setActive('dashboard');window.scrollTo({top:0,behavior:'auto'});return;}
     if(key==='uab'){const b=document.getElementById('openUabPage');if(b){b.click();}else{show('uabPage');setActive('uab');}window.scrollTo({top:0,behavior:'auto'});return;}
     if(key==='account'){show('accountPage');renderAccount();setActive('account');window.scrollTo({top:0,behavior:'auto'});return;}
   }));
