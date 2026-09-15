@@ -546,8 +546,7 @@ function renderResume(){
 $("resumeBtn").onclick=()=>{
   const s=get(KEY.session,null);if(!s)return;
   quiz=s.quiz;pos=s.pos||0;score=s.score||0;selectedCount=s.selectedCount||quiz.length;
-  selectedBank=s.selectedBank||"utama";streak=s.streak||0;sessionXP=Number(s.sessionXP||0);playerHP=Number.isFinite(Number(s.playerHP))?Math.max(0,Math.min(100,Number(s.playerHP))):100;enemyHP=Number.isFinite(Number(s.enemyHP))?Math.max(0,Math.min(100,Number(s.enemyHP))):100;wrongCombo=Number(s.wrongCombo||0);answered=!!s.answered;selectedAnswer=s.selectedAnswer??null;
-  selectedBank=s.selectedBank||"utama";
+  selectedBank=(s.selectedBank&&BANKS[s.selectedBank])?s.selectedBank:(s.quiz?.[0]?.bank&&BANKS[s.quiz[0].bank])?s.quiz[0].bank:(Object.keys(BANKS)[0]||"utama");streak=s.streak||0;sessionXP=Number(s.sessionXP||0);playerHP=Number.isFinite(Number(s.playerHP))?Math.max(0,Math.min(100,Number(s.playerHP))):100;enemyHP=Number.isFinite(Number(s.enemyHP))?Math.max(0,Math.min(100,Number(s.enemyHP))):100;wrongCombo=Number(s.wrongCombo||0);answered=!!s.answered;selectedAnswer=s.selectedAnswer??null;
   setLastWorkedBlock(blockForBank(selectedBank));
   renderDashboardBlockOptions();
   quizMode=s.quizMode||"study";
