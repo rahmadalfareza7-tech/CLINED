@@ -698,7 +698,13 @@ function getTimeSeconds(){
   return el ? Number(el.dataset.sec||0) : Number(timerDuration||0);
 }
 
+function confirmUabAiDisclaimer(){
+  const isUab=String(window.CLINED_ACTIVE_MODULE||'UAB').toUpperCase()==='UAB';
+  if(!isUab)return true;
+  return window.confirm('⚠️ PERINGATAN SOAL UAB\n\nJawaban dan pembahasan pada soal ini dapat dibuat atau dibantu oleh AI. AI dapat melakukan kesalahan atau memberikan informasi yang kurang tepat.\n\nMohon periksa kembali jawaban dan pembahasannya menggunakan sumber medis tepercaya sebelum menjadikannya acuan belajar.\n\nLanjut mengerjakan soal UAB?');
+}
 function startQuiz(){
+  if(!confirmUabAiDisclaimer())return;
   if(!selectedCount || !currentBank().length){
     alert("Bank soal belum tersedia.");
     return;

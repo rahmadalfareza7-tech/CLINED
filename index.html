@@ -115,6 +115,22 @@ html,body{overflow-x:hidden}
   #appLoading .splash-content.is-exiting .splash-logo{animation:splashLogoCoverCentered 650ms ease forwards!important}
 }
 </style>
+<style id="uab-admin-manage-style">
+.admin-uab-manage{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.admin-uab-packages{display:grid;gap:9px}
+.admin-uab-package{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.admin-uab-package summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;cursor:pointer;list-style:none}
+.admin-uab-package summary::-webkit-details-marker{display:none}
+.admin-uab-package summary>span{min-width:0;display:flex;flex-direction:column;gap:3px}
+.admin-uab-package summary b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-uab-package summary small{font-size:10px;opacity:.6}
+.admin-uab-question-list{border-top:1px solid var(--line);padding:7px 10px}
+.admin-uab-question-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 3px;border-bottom:1px solid var(--line)}
+.admin-uab-question-row:last-child{border-bottom:0}
+.admin-uab-question-row>div{min-width:0}.admin-uab-question-row b{display:block;font-size:11px;line-height:1.4}.admin-uab-question-row small{display:block;font-size:9px;opacity:.5;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:560px){.admin-uab-package summary,.admin-uab-question-row{align-items:flex-start}.admin-uab-question-row .admin-delete-btn,.admin-uab-package summary .admin-delete-btn{flex:0 0 auto;font-size:9px;padding:7px 9px}}
+.uab-ai-disclaimer{max-width:520px}
+</style>
 </head>
 <body class="auth-pending">
 

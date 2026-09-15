@@ -17,6 +17,35 @@ export async function contentApi({ request, response, url, user, pool, body, jso
       ORDER BY visibility DESC, updated_at DESC`, [user.id, module]);
     return json(response, 200, { packages: result.rows });
   }
+  // Admin/helper dapat menghapus satu soal UAB tanpa menghapus seluruh paket.
+  const questionDeleteMatch = path.match(/^\/packages\/([^/]+)\/questions\/([^/]+)$/);
+  if (request.method === 'DELETE' && questionDeleteMatch) {
+    origin(request);
+    if (!['admin','helper'].includes(user.role)) return fail(response, 403, 'Hanya admin/helper yang dapat menghapus soal.');
+    const packageId = decodeURIComponent(questionDeleteMatch[1]);
+    const questionId = decodeURIComponent(questionDeleteMatch[2]);
+    const current = await pool.query('SELECT id,module,title,block,questions FROM content_packages WHERE id=$1 AND module=\'UAB\'', [packageId]);
+    if (!current.rows.length) return fail(response, 404, 'Paket UAB tidak ditemukan.');
+    const questions = Array.isArray(current.rows[0].questions) ? current.rows[0].questions : [];
+    const next = questions.filter(q => String(q?.id) !== questionId);
+    if (next.length === questions.length) return fail(response, 404, 'Soal tidak ditemukan.');
+    if (!next.length) {
+      await pool.query('DELETE FROM content_packages WHERE id=$1 AND module=\'UAB\'', [packageId]);
+      return json(response, 200, { ok:true, deletedQuestion:true, packageDeleted:true, message:'Soal terakhir dihapus; paket UAB juga dihapus.' });
+    }
+    await pool.query('UPDATE content_packages SET questions=$1::jsonb, updated_at=now() WHERE id=$2 AND module=\'UAB\'', [JSON.stringify(next), packageId]);
+    return json(response, 200, { ok:true, deletedQuestion:true, packageDeleted:false, remaining:next.length, message:'Soal UAB berhasil dihapus.' });
+  }
+  // Admin/helper dapat menghapus seluruh paket UAB dari bank.
+  const packageDeleteMatch = path.match(/^\/packages\/([^/]+)$/);
+  if (request.method === 'DELETE' && packageDeleteMatch) {
+    origin(request);
+    if (!['admin','helper'].includes(user.role)) return fail(response, 403, 'Hanya admin/helper yang dapat menghapus paket.');
+    const packageId = decodeURIComponent(packageDeleteMatch[1]);
+    const result = await pool.query('DELETE FROM content_packages WHERE id=$1 AND module=\'UAB\' RETURNING id', [packageId]);
+    if (!result.rows.length) return fail(response, 404, 'Paket UAB tidak ditemukan.');
+    return json(response, 200, { ok:true, packageDeleted:true, message:'Paket UAB berhasil dihapus.' });
+  }
   if (request.method !== 'POST' || path !== '/packages') return fail(response, 404, 'Endpoint konten tidak ditemukan.');
   origin(request);
   const input = await body(request), module = String(input.module || ''), title = String(input.title || '').trim(), block = input.block ? String(input.block).trim().slice(0, 80) : null;
