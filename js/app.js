@@ -66,12 +66,13 @@ let banksLoadPromise=null;
 let staticBankManifest=null;
 async function loadStaticBankManifest(){
   if(staticBankManifest)return staticBankManifest;
-  const r=await fetch('./seed-data/manifest.json',{credentials:'same-origin',cache:'default'});
+  const manifestUrl='/seed-data/manifest.json';
+  const r=await fetch(manifestUrl,{credentials:'same-origin',cache:'no-store'});
   if(!r.ok) throw Error('Manifest bank soal lokal tidak dapat dimuat.');
   staticBankManifest=await r.json();
   for(const b of (staticBankManifest.banks||[])){
     const id=String(b.id);
-    BANKS[id]={name:String(b.name||id),count:Number(b.count||0),block:String(b.block||'OTHER'),data:[],loaded:false,version:Number(b.version||1),staticUrl:String(b.dataUrl||''),staticVersion:Number(b.version||1),serverVersion:0,source:'static'};
+    BANKS[id]={name:String(b.name||id),count:Number(b.count||0),block:String(b.block||'OTHER'),data:[],loaded:false,version:Number(b.version||1),staticUrl:b.dataUrl?new URL(String(b.dataUrl),r.url||location.href).href:'',staticVersion:Number(b.version||1),serverVersion:0,source:'static'};
   }
   return staticBankManifest;
 }
