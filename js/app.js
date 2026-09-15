@@ -2264,30 +2264,79 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$("normalValuesMod
 
 
 
-/* Floating dashboard navigation — 4 destinations */
+/* Floating dashboard navigation — 4 destinations (stable, direct routing) */
 (function initFloatingDashboardNav(){
   const nav=document.getElementById('floatingDashboardNav');
   if(!nav) return;
   const items=[...nav.querySelectorAll('[data-floating-nav]')];
   const slider=nav.querySelector('.floating-nav-slider');
+
   const setActive=(key)=>{
     const index=items.findIndex(btn=>btn.dataset.floatingNav===key);
     items.forEach(btn=>btn.classList.toggle('active',btn.dataset.floatingNav===key));
-    if(slider && index>=0) { slider.style.transform='none'; nav.style.setProperty('--floating-index',String(index)); }
+    if(slider && index>=0){
+      nav.style.setProperty('--floating-index',String(index));
+      slider.style.transform='';
+    }
   };
   window.setFloatingNavActive=setActive;
-  items.forEach(btn=>btn.addEventListener('click',()=>{
-    const key=btn.dataset.floatingNav;
-    // Re-trigger the tactile pop animation on every tap, even when the tab is already active.
-    btn.classList.remove('nav-pop');
-    void btn.offsetWidth;
-    btn.classList.add('nav-pop');
-    window.setTimeout(()=>btn.classList.remove('nav-pop'),520);
-    if(key==='home'){show('home');if(typeof renderCounts==='function')renderCounts();setActive('home');window.scrollTo({top:0,behavior:'auto'});return;}
-    if(key==='dashboard'){const page=document.getElementById('clinicalDashboard');if(!page)return;show('clinicalDashboard');if(typeof renderClinicalDashboard==='function')renderClinicalDashboard();setActive('dashboard');window.scrollTo({top:0,behavior:'auto'});return;}
-    if(key==='uab'){const b=document.getElementById('openUabPage');if(b){b.click();}else{show('uabPage');setActive('uab');}window.scrollTo({top:0,behavior:'auto'});return;}
-    if(key==='account'){show('accountPage');renderAccount();setActive('account');window.scrollTo({top:0,behavior:'auto'});return;}
-  }));
+
+  const safeRender=(fn)=>{
+    try{ if(typeof fn==='function') fn(); }catch(err){ console.warn('[CLINED] navigation render error:',err); }
+  };
+
+  items.forEach(btn=>{
+    btn.addEventListener('click',(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const key=btn.dataset.floatingNav;
+      btn.classList.remove('nav-pop');
+      void btn.offsetWidth;
+      btn.classList.add('nav-pop');
+      window.setTimeout(()=>btn.classList.remove('nav-pop'),520);
+
+      /* Route directly. Do not click hidden/secondary buttons: those can have
+         their own handlers and can prevent the floating navigation from returning. */
+      if(key==='home'){
+        show('home');
+        setActive('home');
+        safeRender(window.renderCounts);
+        window.scrollTo({top:0,behavior:'auto'});
+        return;
+      }
+
+      if(key==='dashboard'){
+        if(document.getElementById('clinicalDashboard')){
+          show('clinicalDashboard');
+          setActive('dashboard');
+          safeRender(window.renderClinicalDashboard);
+          window.scrollTo({top:0,behavior:'auto'});
+        }
+        return;
+      }
+
+      if(key==='uab'){
+        if(document.getElementById('uabPage')){
+          show('uabPage');
+          setActive('uab');
+          safeRender(window.syncUabStats);
+          window.scrollTo({top:0,behavior:'auto'});
+        }
+        return;
+      }
+
+      if(key==='account'){
+        if(document.getElementById('accountPage')){
+          show('accountPage');
+          setActive('account');
+          safeRender(window.renderAccount);
+          window.scrollTo({top:0,behavior:'auto'});
+        }
+      }
+    }, {capture:false});
+  });
+
   setActive('home');
 })();
 
