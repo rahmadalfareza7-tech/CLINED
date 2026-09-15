@@ -96,7 +96,20 @@ async function loadServerBanks(){
       }
       if(!BANKS[id].staticUrl) BANKS[id].source='server';
     }
-    syncAbilityCatalog();renderBanks();renderCounts();renderAvailableBlockControls?.('SSP','SSP');
+    syncAbilityCatalog();
+    // Re-render the currently open block after the static manifest/server catalog
+    // finishes loading. Without this, a block page opened before the async bank
+    // load could remain in the disabled "Bank soal belum tersedia" state.
+    renderBanks();
+    renderCounts();
+    const activeView=document.querySelector('.view.active[data-block-key]');
+    if(activeView){
+      const activeBlock=String(activeView.dataset.blockKey||'').toUpperCase();
+      const pageId=activeView.id;
+      const resolved=activeBlock==='KEDKOM'?'KEDKOM':activeBlock==='KEDKEL'?'KEDKEL':activeBlock;
+      renderUniversalBlockControls(resolved,pageId);
+    }
+    renderAvailableBlockControls?.('SSP','SSP');
     return BANKS;
   })().catch(e=>{banksLoadPromise=null;showToast?.(e.message||'Bank soal gagal dimuat.',true);throw e;});
   return banksLoadPromise;
@@ -2231,6 +2244,9 @@ if($('achievementBtn'))$('achievementBtn').onclick=()=>{renderAchievements();sho
 if($('backFromAchievements'))$('backFromAchievements').onclick=()=>show('home');
 
 initSPAHistory();initTheme();renderBanks();renderCounts();renderModes();updateTimerUI();renderResume();renderXP();
+// Load the static bank manifest immediately so block pages get an enabled
+// "Mulai Kuis" button even before authentication state finishes resolving.
+loadServerBanks().catch(()=>{});
 
 document.addEventListener('click', function(e){
   const el = e.target.closest('[data-answer], .answer, .answer-btn, .option, .choice, .answer-option');
