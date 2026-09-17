@@ -307,11 +307,17 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
       const activeBlocks=new Set();
       // 1. Server UAB packages
       try{const d=await request('/api/content/packages?module=UAB&meta=1');(d.packages||[]).forEach(p=>{if(p.block&&Number(p.question_count||0)>0)activeBlocks.add(String(p.block).toUpperCase());});}catch{}
+      // 1b. A block is active when it has either a material or Ninja Nerd link.
+      // This is intentionally independent of question availability.
+      try{const [md,yd]=await Promise.all([request('/api/materials'),request('/api/youtube')]);
+        (md.materials||[]).forEach(x=>{if(x.block&&x.url)activeBlocks.add(String(x.block).toUpperCase());});
+        (yd.links||[]).forEach(x=>{if(x.block&&x.url)activeBlocks.add(String(x.block).toUpperCase());});
+      }catch{}
       // 2. Local BANKS object (kedkel, kedkom, SSP, dll yang hardcoded di app.js)
       try{const BANKS=window.BANKS||{};Object.values(BANKS).forEach(b=>{if(b.block&&(b.data||[]).length)activeBlocks.add(String(b.block).toUpperCase());});}catch{}
       // 3. CLINED_BANK_ENGINE.banks (bank_*.js yang load via engine, sudah include block info)
       try{const eb=window.CLINED_BANK_ENGINE?.banks||{};Object.values(eb).forEach(b=>{if(b.block&&b.count>0)activeBlocks.add(String(b.block).toUpperCase());});}catch{}
-      // Update semua node buttons — hanya TAMBAH active-node, tidak hapus yang sudah ada
+      // Update node state from live availability (bank soal OR materi OR Ninja Nerd).
       Object.entries(UAB_NODE_BLOCK_MAP).forEach(([nodeId,block])=>{
         const btn=document.getElementById(nodeId); if(!btn)return;
         const hasBank=activeBlocks.has(block);
@@ -319,9 +325,11 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
           btn.classList.add('active-node');
           btn.classList.remove('locked-node');
           btn.removeAttribute('aria-label');
+        }else{
+          btn.classList.remove('active-node');
+          btn.classList.add('locked-node');
+          btn.setAttribute('aria-label',`${block} terkunci`);
         }
-        // Kalau tidak ada bank di server, jangan sentuh class — biarkan state HTML asli
-        // (bisa saja sudah active-node dari local JS banks yang load duluan)
       });
     }catch(e){console.warn('syncUabNodeStates failed',e);}
   }
