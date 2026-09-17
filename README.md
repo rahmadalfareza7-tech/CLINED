@@ -52,3 +52,7 @@ Atur `DATABASE_URL`, `DATABASE_SSL` bila diperlukan, `ADMIN_EMAILS`, dan `AUTH_C
 Password di-hash pada server; browser hanya menerima cookie sesi `HttpOnly`. State belajar yang relevan tetap tersedia di perangkat saat offline dan dikirim melalui antrean idempotent ketika koneksi kembali.
 
 Lihat `AUDIT.md` untuk hasil audit source dan urutan migrasi yang disarankan.
+
+
+## Pembahasan per opsi
+Bank soal menggunakan `pembahasanPilihan` sebagai array penjelasan A/B/C/... dan `pembahasan_klinis` sebagai sumber kompatibilitas. `pembahasan` digunakan hanya untuk konsep inti/jawaban benar, bukan untuk mengulang seluruh penjelasan opsi. Migrasi `013_normalize_question_explanations.sql` memperbaiki bank yang sudah tersimpan di PostgreSQL.

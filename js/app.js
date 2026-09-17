@@ -598,6 +598,22 @@ function renderCounts(){
   if($('bestStat'))$('bestStat').textContent=hist.length?Math.max(...hist.map(x=>x.pct))+"%":"0%";
   renderBanks();renderResume();
 }
+function optionExplanation(q,index){
+  if(Array.isArray(q?.pembahasanPilihan) && q.pembahasanPilihan[index]) return String(q.pembahasanPilihan[index]).trim();
+  if(q?.pembahasan_klinis && typeof q.pembahasan_klinis==='object'){
+    const key=String.fromCharCode(65+index);
+    if(q.pembahasan_klinis[key]) return String(q.pembahasan_klinis[key]).trim();
+  }
+  return "";
+}
+function coreExplanation(q){
+  const direct=String(q?.pembahasan||"").trim();
+  if(direct && !/^[A-E]\.\s*/.test(direct)) return direct;
+  const idx=Number(q?.jawabanBenar);
+  const fromOptions=Number.isInteger(idx)?optionExplanation(q,idx):"";
+  return fromOptions || direct;
+}
+
 function buildQuiz(count){
   const bank=currentBank();
   return shuffle(bank).slice(0,count).map((q)=>{
@@ -608,8 +624,8 @@ function buildQuiz(count){
     return {
       id, bank:selectedBank, source:q.source||bankName(), no:q.no||originalIndex+1,
       soal:q.soal, opsi:order.map(i=>q.opsi[i]), jawabanBenar:correct,
-      pembahasan:q.pembahasan,
-      pembahasanPilihan:order.map(i=>(q.pembahasanPilihan&&q.pembahasanPilihan[i])||q.pembahasan||"Belum ada pembahasan khusus untuk opsi ini."),
+      pembahasan:coreExplanation(q),
+      pembahasanPilihan:order.map(i=>optionExplanation(q,i)||"Belum ada pembahasan khusus untuk opsi ini."),
       catatanKlinis:q.catatanKlinis||"", incomplete:!!q.incomplete,
       abilityProfile:questionAbilityProfile(q)
     };
@@ -1379,7 +1395,7 @@ function rawToQuiz(bankId,idx){
   const order=shuffle(q.opsi.map((_,i)=>i));
   return {id:qid(bankId,idx,q),bank:bankId,source:q.source||BANKS[bankId].name,no:q.no||idx+1,soal:q.soal,
     opsi:order.map(i=>q.opsi[i]),jawabanBenar:q.jawabanBenar==null?null:order.indexOf(q.jawabanBenar),
-    pembahasan:q.pembahasan,pembahasanPilihan:order.map(i=>(q.pembahasanPilihan&&q.pembahasanPilihan[i])||q.pembahasan||"Belum ada pembahasan khusus untuk opsi ini."),
+    pembahasan:coreExplanation(q),pembahasanPilihan:order.map(i=>optionExplanation(q,i)||"Belum ada pembahasan khusus untuk opsi ini."),
     catatanKlinis:q.catatanKlinis||"",incomplete:!!q.incomplete,selectedAnswer:null};
 }
 function resolveQuestionRef(id){
