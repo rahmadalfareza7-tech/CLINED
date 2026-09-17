@@ -314,6 +314,16 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
       const addActive=(value)=>{const b=canonicalBlock(value);if(b)activeBlocks.add(b);};
       // 1. Server UAB packages
       try{const d=await request('/api/content/packages?module=UAB&meta=1');(d.packages||[]).forEach(p=>{if(p.block&&Number(p.question_count||0)>0)addActive(p.block);});}catch{}
+      // 1a. Fallback: baca bank soal utama dari endpoint /api/banks.
+      // Ini memastikan bank lama seperti KEDKOM dan KEDKEL tetap terdeteksi.
+      try{
+        const d=await request('/api/banks');
+        (d.banks||[]).forEach(b=>{
+          const count=Number(b.count||b.question_count||b.total_questions||0);
+          if(b.block&&count>0)addActive(b.block);
+        });
+      }catch{}
+
       // 1b. A block is active when it has either a material or Ninja Nerd link.
       // This is intentionally independent of question availability.
       try{const [md,yd]=await Promise.all([request('/api/materials'),request('/api/youtube')]);
