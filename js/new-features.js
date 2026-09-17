@@ -11,7 +11,7 @@ window.CLINED_Leaderboard = (function () {
     if (!listEl) return;
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat…</div>';
     try {
-      const r = await fetch('/api/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
+      const r = await fetch('/api/leaderboard');
       if (!r.ok) { listEl.innerHTML = '<div class="leaderboard-loading">Belum bisa memuat. Masuk akun dulu.</div>'; return; }
       lbData = await r.json();
       render(listEl, lbTab);
@@ -74,9 +74,7 @@ window.CLINED_Leaderboard = (function () {
     if (!page) return;
     document.querySelectorAll('.view.active').forEach(v => v.classList.remove('active'));
     page.classList.add('active');
-    // Always refresh when opened so score/XP changes from the current session
-    // and other users are reflected immediately.
-    load();
+    if (!lbData) load();
   }
 
   document.getElementById('openLeaderboardBtn')?.addEventListener('click', openPage);

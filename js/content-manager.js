@@ -126,6 +126,17 @@
             <div class="admin-material-actions"><button class="account-action account-save" type="submit">Simpan Link Materi</button><button class="account-action material-delete-action" data-delete-material type="button">Hapus Link</button></div>
             <p class="muted" data-material-message></p>
           </form>
+        </div>
+
+        <div class="admin-materials-section">
+          <div class="admin-content-intro"><b>Link NINJA NERD UAB per Blok</b><span>Masukkan link playlist YouTube Ninja Nerd untuk setiap blok.</span></div>
+          <form data-admin-youtube-form class="admin-content-form admin-material-form">
+            <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
+            <label>Link playlist YouTube</label><input name="url" type="url" inputmode="url" placeholder="https://www.youtube.com/playlist?..." required>
+            <div class="admin-material-current" data-youtube-current>Belum ada link tersimpan.</div>
+            <div class="admin-material-actions"><button class="account-action account-save" type="submit">Simpan Link NINJA NERD</button><button class="account-action material-delete-action" data-delete-youtube type="button">Hapus Link</button></div>
+            <p class="muted" data-youtube-message></p>
+          </form>
         </div>`;
       account.append(box);
 
@@ -136,6 +147,14 @@
       materialForm.addEventListener('submit',async e=>{e.preventDefault();try{const block=materialForm.elements.block.value,url=materialForm.elements.url.value.trim();const d=await request(`/api/admin/materials/${encodeURIComponent(block)}`,{method:'PUT',body:JSON.stringify({url})});materialMessage.textContent=d.message||'Link materi tersimpan.';await loadMaterials();await hydrateMaterials();}catch(e){materialMessage.textContent=e.message||'Gagal menyimpan link materi.';}});
       materialDelete.addEventListener('click',async()=>{const block=materialForm.elements.block.value;if(!confirm(`Hapus link materi ${block}?`))return;try{const d=await request(`/api/admin/materials/${encodeURIComponent(block)}`,{method:'DELETE'});materialMessage.textContent=d.message||'Link materi dihapus.';await loadMaterials();await hydrateMaterials();}catch(e){materialMessage.textContent=e.message||'Gagal menghapus link materi.';}});
       loadMaterials();
+
+      const youtubeForm=box.querySelector('[data-admin-youtube-form]'), youtubeCurrent=box.querySelector('[data-youtube-current]'), youtubeMessage=box.querySelector('[data-youtube-message]'), youtubeDelete=box.querySelector('[data-delete-youtube]');
+      let youtubeMap={};
+      const loadYoutube=async()=>{try{const d=await request('/api/youtube');youtubeMap=Object.fromEntries((d.links||[]).map(x=>[String(x.block).toUpperCase(),x.url]));const b=youtubeForm.elements.block.value.toUpperCase(),url=youtubeMap[b]||'';youtubeForm.elements.url.value=url;youtubeCurrent.textContent=url?`Tersimpan: ${url}`:'Belum ada link tersimpan.';}catch(e){youtubeMessage.textContent=e.message||'Gagal memuat link Ninja Nerd.';}};
+      youtubeForm.elements.block.addEventListener('change',loadYoutube);
+      youtubeForm.addEventListener('submit',async e=>{e.preventDefault();try{const block=youtubeForm.elements.block.value,url=youtubeForm.elements.url.value.trim();const d=await request(`/api/admin/youtube/${encodeURIComponent(block)}`,{method:'PUT',body:JSON.stringify({url})});youtubeMessage.textContent=d.message||'Link Ninja Nerd tersimpan.';await loadYoutube();}catch(e){youtubeMessage.textContent=e.message||'Gagal menyimpan link Ninja Nerd.';}});
+      youtubeDelete.addEventListener('click',async()=>{const block=youtubeForm.elements.block.value;if(!confirm(`Hapus link Ninja Nerd ${block}?`))return;try{const d=await request(`/api/admin/youtube/${encodeURIComponent(block)}`,{method:'DELETE'});youtubeMessage.textContent=d.message||'Link Ninja Nerd dihapus.';await loadYoutube();}catch(e){youtubeMessage.textContent=e.message||'Gagal menghapus link Ninja Nerd.';}});
+      loadYoutube();
 
       const uabForm=box.querySelector('[data-admin-uab-form]'), uabFile=uabForm.elements.file, uabMeta=box.querySelector('[data-uab-file-meta]');
       uabFile.addEventListener('change',()=>{const f=uabFile.files?.[0];uabMeta.textContent=f?`${f.name} • ${(f.size/1024).toFixed(1)} KB`:'Belum ada file dipilih.';});

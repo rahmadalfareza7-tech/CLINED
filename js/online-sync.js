@@ -13,10 +13,8 @@
   function clearLocalLearningData(){suppress=true;try{for(const k of learningKeys())localStorage.removeItem(k);localStorage.removeItem(QUEUE);localStorage.removeItem(LEGACY_QUEUE);localStorage.removeItem(CURSOR);}finally{suppress=false;}}
   function switchUser(userId){const id=String(userId||''),prev=localStorage.getItem(ACTIVE_USER)||'';if(!id){clearLocalLearningData();localStorage.removeItem(ACTIVE_USER);return{changed:Boolean(prev)}}if(prev!==id){clearLocalLearningData();localStorage.setItem(ACTIVE_USER,id);dirty=true;lastPullAt=0;return{changed:true}}return{changed:false}}
   function enqueue(operation){if(suppress)return;write(QUEUE,read(QUEUE,[]).filter(x=>x.key!==operation.key).concat(operation).slice(-200));dirty=true;}
-  let syncTimer=null;
-  function scheduleSync(){clearTimeout(syncTimer);syncTimer=setTimeout(()=>sync(),1200);}
-  function markSet(key,value){if(safe(key)){enqueue({id:uuid(),type:'set',key,value,updatedAt:new Date().toISOString()});scheduleSync();}}
-  function markDelete(key){if(safe(key)){enqueue({id:uuid(),type:'delete',key,updatedAt:new Date().toISOString()});scheduleSync();}}
+  function markSet(key,value){if(safe(key))enqueue({id:uuid(),type:'set',key,value,updatedAt:new Date().toISOString()});}
+  function markDelete(key){if(safe(key))enqueue({id:uuid(),type:'delete',key,updatedAt:new Date().toISOString()});}
   const nativeSet=localStorage.setItem.bind(localStorage),nativeRemove=localStorage.removeItem.bind(localStorage);
   localStorage.setItem=(key,value)=>{nativeSet(key,String(value));if(!suppress&&safe(key))markSet(key,String(value));};
   localStorage.removeItem=key=>{const was=safe(key)&&localStorage.getItem(key)!==null;nativeRemove(key);if(was&&!suppress)markDelete(key);};

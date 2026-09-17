@@ -692,12 +692,9 @@ function renderBlockMateri(blockName,pageId){
   const block=String(blockName||'').toUpperCase();
   const host=document.querySelector(`#${pageId} [data-materi-section="${blockName}"]`)||document.querySelector(`#${pageId} [data-universal-material]`)||document.querySelector(`#${pageId} .materi-section`); if(!host)return;
   const fallback=CLINED_MATERIAL_URLS[block]||'';
-  const paint=url=>{host.innerHTML=url?`<a class="materi-button" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a>`:'';};
-  paint(fallback);
-  fetch('/api/materials',{credentials:'same-origin'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{
-    const m=(data.materials||[]).find(x=>String(x.block).toUpperCase()===block);
-    paint(m&&m.url?m.url:fallback);
-  }).catch(()=>paint(fallback));
+  const paint=(url,youtubeUrl)=>{host.innerHTML=`<div class="external-material-grid">${url?`<a class="materi-button" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a>`:''}${youtubeUrl?`<a class="materi-button" href="${esc(youtubeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buka NINJA NERD">NINJA NERD</a>`:''}</div>`;};
+  paint(fallback,'');
+  Promise.all([fetch('/api/materials',{credentials:'same-origin'}),fetch('/api/youtube',{credentials:'same-origin'})]).then(async([mr,yr])=>{const [md,yd]=await Promise.all([mr.ok?mr.json():{},yr.ok?yr.json():{}]);const m=(md.materials||[]).find(x=>String(x.block).toUpperCase()===block);const y=(yd.links||[]).find(x=>String(x.block).toUpperCase()===block);paint(m&&m.url?m.url:fallback,y&&y.url?y.url:'');}).catch(()=>paint(fallback,''));
 }
 function renderEmptyBlockControls(key,blockOverride){
   const block=blockOverride?String(blockOverride).toUpperCase():String(key||'').toUpperCase();
