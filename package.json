@@ -17,8 +17,6 @@
     "node": "22.x"
   },
   "dependencies": {
-    "pg": "^8.16.3",
-    "@neondatabase/serverless": "^0.10.4",
-    "ws": "^8.18.0"
+    "pg": "^8.16.3"
   }
 }
