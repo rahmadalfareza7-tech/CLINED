@@ -305,22 +305,35 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
     try{
       // Kumpulkan blok yang punya soal: dari server UAB packages + global banks + local BANKS
       const activeBlocks=new Set();
+      const canonicalBlock=(value)=>{
+        const v=String(value||'').trim().toUpperCase().replace(/\s+/g,' ');
+        if(v==='KEDOKTERAN KOMUNITAS'||v==='KEDOKOM')return 'KEDKOM';
+        if(v==='KEDOKTERAN KELUARGA'||v==='KEDKEL')return 'KEDKEL';
+        return v;
+      };
+      const addActive=(value)=>{const b=canonicalBlock(value);if(b)activeBlocks.add(b);};
       // 1. Server UAB packages
-      try{const d=await request('/api/content/packages?module=UAB&meta=1');(d.packages||[]).forEach(p=>{if(p.block&&Number(p.question_count||0)>0)activeBlocks.add(String(p.block).toUpperCase());});}catch{}
+      try{const d=await request('/api/content/packages?module=UAB&meta=1');(d.packages||[]).forEach(p=>{if(p.block&&Number(p.question_count||0)>0)addActive(p.block);});}catch{}
       // 1b. A block is active when it has either a material or Ninja Nerd link.
       // This is intentionally independent of question availability.
       try{const [md,yd]=await Promise.all([request('/api/materials'),request('/api/youtube')]);
-        (md.materials||[]).forEach(x=>{if(x.block&&x.url)activeBlocks.add(String(x.block).toUpperCase());});
-        (yd.links||[]).forEach(x=>{if(x.block&&x.url)activeBlocks.add(String(x.block).toUpperCase());});
+        (md.materials||[]).forEach(x=>{if(x.block&&x.url)addActive(x.block);});
+        (yd.links||[]).forEach(x=>{if(x.block&&x.url)addActive(x.block);});
       }catch{}
       // 2. Local BANKS object (kedkel, kedkom, SSP, dll yang hardcoded di app.js)
-      try{const BANKS=window.BANKS||{};Object.values(BANKS).forEach(b=>{if(b.block&&(b.data||[]).length)activeBlocks.add(String(b.block).toUpperCase());});}catch{}
+      try{const BANKS=window.BANKS||{};Object.values(BANKS).forEach(b=>{if(b.block&&(b.data||[]).length)addActive(b.block);});}catch{}
       // 3. CLINED_BANK_ENGINE.banks (bank_*.js yang load via engine, sudah include block info)
-      try{const eb=window.CLINED_BANK_ENGINE?.banks||{};Object.values(eb).forEach(b=>{if(b.block&&b.count>0)activeBlocks.add(String(b.block).toUpperCase());});}catch{}
+      try{const eb=window.CLINED_BANK_ENGINE?.banks||{};Object.values(eb).forEach(b=>{if(b.block&&b.count>0)addActive(b.block);});}catch{}
+      // Static banks may expose only an id/name rather than a normalized block field.
+      try{Object.entries(window.BANKS||{}).forEach(([id,b])=>{
+        const hint=String(id+' '+(b?.name||'')).toUpperCase();
+        if(/KEDKOM|KEDOKTERAN KOMUNITAS/.test(hint)&&Number(b?.count||b?.data?.length||0)>0)addActive('KEDKOM');
+        if(/KEDKEL|KEDOKTERAN KELUARGA/.test(hint)&&Number(b?.count||b?.data?.length||0)>0)addActive('KEDKEL');
+      });}catch{}
       // Update node state from live availability (bank soal OR materi OR Ninja Nerd).
       Object.entries(UAB_NODE_BLOCK_MAP).forEach(([nodeId,block])=>{
         const btn=document.getElementById(nodeId); if(!btn)return;
-        const hasBank=activeBlocks.has(block);
+        const hasBank=activeBlocks.has(canonicalBlock(block));
         if(hasBank){
           btn.classList.add('active-node');
           btn.classList.remove('locked-node');

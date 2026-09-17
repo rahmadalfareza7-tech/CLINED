@@ -28,6 +28,8 @@ function addXP(amount,reason=""){
   const gained=Math.max(0,Math.round(amount));
   const after=before+gained;
   set(KEY.xp,after);
+  // Push XP immediately instead of waiting for the periodic sync interval.
+  try{window.CLINED_ONLINE_SYNC?.markDirty?.();}catch(e){console.warn('XP sync trigger skipped',e);}
   lastXPGain=gained;sessionXP+=gained;
   renderXP();
   showXPPopup(gained,reason, xpLevel(after)>xpLevel(before));
@@ -2506,4 +2508,30 @@ document.addEventListener('click',e=>{
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){const now=typeof localDayKey==='function'?localDayKey():'';if(now!==day)day=now;refresh();}});
   window.addEventListener('pageshow',refresh);
   window.addEventListener('storage',e=>{if(e.key==='gaster_daily_streak_v1')refresh();});
+})();
+
+
+/* ===== SECURITY: automatic logout after 30 minutes of inactivity ===== */
+(function initInactivityLogout(){
+  const LIMIT=30*60*1000;
+  const KEY_LAST='clined_last_activity_v1';
+  let last=Date.now(), timer=0, loggingOut=false;
+  try{last=Number(sessionStorage.getItem(KEY_LAST))||Date.now();}catch{}
+  const save=()=>{try{sessionStorage.setItem(KEY_LAST,String(last));}catch{}};
+  const active=()=>{try{return typeof authCurrentUser==='function'&&!!authCurrentUser();}catch{return false;}};
+  const touch=()=>{if(document.visibilityState!=='visible')return;last=Date.now();save();};
+  const check=()=>{
+    if(!active()||loggingOut)return;
+    if(Date.now()-last<LIMIT)return;
+    loggingOut=true;
+    Promise.resolve(typeof authLogout==='function'?authLogout():null).finally(()=>{loggingOut=false;last=Date.now();save();});
+  };
+  ['pointerdown','keydown','touchstart','wheel','scroll','click'].forEach(type=>window.addEventListener(type,touch,{passive:true,capture:true}));
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='visible')check();
+    else save();
+  });
+  window.addEventListener('pageshow',check,{passive:true});
+  timer=setInterval(check,30*1000);
+  window.addEventListener('pagehide',()=>clearInterval(timer),{once:true});
 })();

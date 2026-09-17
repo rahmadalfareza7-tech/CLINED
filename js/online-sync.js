@@ -3,7 +3,7 @@
   'use strict';
   const QUEUE='clined_online_sync_queue_v3', ACTIVE_USER='clined_active_user_id_v3', CURSOR='clined_sync_cursor_v1';
   const LEGACY_QUEUE='clined_online_sync_queue_v2';
-  const safe=key=>/^(gaster_|clined_(?!account_profile|google_form_url|schema_version|migrated_at|menu|active_user_id|sync_cursor)|medicalRpg|medical_rpg|current_block|last_worked|dashboard_block|alpha5_)/.test(key)&&!/auth|password|session|token|sync_queue/i.test(key);
+  const safe=key=>/^(gaster_|clined_(?!account_profile|google_form_url|schema_version|migrated_at|menu|active_user_id|sync_cursor)|medicalRpg|medical_rpg|current_block|last_worked|dashboard_block|alpha5_)/.test(key)&&!/auth|password|session|token|sync_queue|last_activity/i.test(key);
   const learningKeys=()=>Array.from({length:localStorage.length},(_,i)=>localStorage.key(i)).filter(k=>k&&safe(k));
   let suppress=false, sending=false, dirty=true, lastPullAt=0;
   const PERIODIC_PULL_MS=10*60_000;
@@ -34,6 +34,7 @@
 }
   async function sync({force=false}={}){if(sending||!navigator.onLine)return;const id=localStorage.getItem(ACTIVE_USER);if(!id)return;const needs=force||dirty||read(QUEUE,[]).length||(Date.now()-lastPullAt>=PERIODIC_PULL_MS);if(!needs)return;sending=true;try{await pull(force);const ops=read(QUEUE,[]);if(ops.length){const saved=await request('/api/sync',{method:'POST',body:JSON.stringify({operations:ops})});write(QUEUE,[]);apply(saved.changes||{});if(saved.updatedAt)localStorage.setItem(CURSOR,saved.updatedAt);}dirty=false;lastPullAt=Date.now();}catch{}finally{sending=false;}}
   window.addEventListener('online',()=>sync({force:true}));window.addEventListener('pagehide',()=>sync());window.addEventListener('clined:auth-ready',()=>sync({force:true}));setInterval(()=>sync(),PERIODIC_PULL_MS);
-  window.CLINED_ONLINE_SYNC={sync,switchUser,clearLocalLearningData,markDirty:()=>{dirty=true;sync()}};
+  let dirtyTimer=0;
+  window.CLINED_ONLINE_SYNC={sync,switchUser,clearLocalLearningData,markDirty:()=>{dirty=true;clearTimeout(dirtyTimer);dirtyTimer=setTimeout(()=>sync({force:true}),250)}};
   window.addEventListener('load',()=>sync({force:true}),{once:true});
 })();
