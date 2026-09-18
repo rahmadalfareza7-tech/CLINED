@@ -2373,3 +2373,7 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
 
 /* v7 loading credit */
 #appLoading .splash-brand{font-size:clamp(16px,4vw,22px)!important;font-weight:800!important;letter-spacing:.06em!important;color:#fff!important;top:calc(50% + 92px)!important;line-height:1.2!important;}
+
+#dailyStreakCard{display:flex!important;visibility:visible!important;opacity:1!important;}
+
+#dailyStreakCard{display:flex!important;visibility:visible!important;opacity:1!important;}
