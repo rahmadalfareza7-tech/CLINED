@@ -62,6 +62,26 @@
       "sourceFile": "GINJAL 2022.json"
     },
     {
+      "id": "kedkel-2018",
+      "name": "KEDKEL 2018",
+      "block": "KEDKEL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 92,
+      "dataUrl": "./banks/kedkel-2018.json",
+      "sourceFile": "KEDKEL 2018.json"
+    },
+    {
+      "id": "kedkel-2019",
+      "name": "KEDKEL 2019",
+      "block": "KEDKEL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 44,
+      "dataUrl": "./banks/kedkel-2019.json",
+      "sourceFile": "KEDKEL 2019.json"
+    },
+    {
       "id": "kedkel-2020",
       "name": "KEDKEL 2020",
       "block": "KEDKEL",
@@ -92,6 +112,26 @@
       "sourceFile": "KEDKEL 2022(1).json"
     },
     {
+      "id": "kedkom-2018",
+      "name": "KEDKOM 2018",
+      "block": "KEDKOM",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/kedkom-2018.json",
+      "sourceFile": "KEDKOM 2018.json"
+    },
+    {
+      "id": "kedkom-2019",
+      "name": "KEDKOM 2019",
+      "block": "KEDKOM",
+      "version": 1,
+      "schema": "1.0",
+      "count": 41,
+      "dataUrl": "./banks/kedkom-2019.json",
+      "sourceFile": "KEDKOM 2019 (2).json"
+    },
+    {
       "id": "kedkom-2020",
       "name": "KEDKOM 2020",
       "block": "KEDKOM",
@@ -110,6 +150,46 @@
       "count": 100,
       "dataUrl": "./banks/kedkom-2021.json",
       "sourceFile": "KEDKOM 2021(1).json"
+    },
+    {
+      "id": "kedkom-2022",
+      "name": "KEDKOM 2022",
+      "block": "KEDKOM",
+      "version": 1,
+      "schema": "1.0",
+      "count": 90,
+      "dataUrl": "./banks/kedkom-2022.json",
+      "sourceFile": "KEDKOM 2022.json"
+    },
+    {
+      "id": "muskulo-2019",
+      "name": "MUSKULO 2019",
+      "block": "MUSKULO",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/muskulo-2019.json",
+      "sourceFile": "MUSKULO 2019.json"
+    },
+    {
+      "id": "muskulo-2020",
+      "name": "MUSKULO 2020",
+      "block": "MUSKULO",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/muskulo-2020.json",
+      "sourceFile": "MUSKULO 2020.json"
+    },
+    {
+      "id": "muskulo-2021",
+      "name": "MUSKULO 2021",
+      "block": "MUSKULO",
+      "version": 1,
+      "schema": "1.0",
+      "count": 99,
+      "dataUrl": "./banks/muskulo-2021.json",
+      "sourceFile": "MUSKULO 2021.json"
     }
   ]
 }
