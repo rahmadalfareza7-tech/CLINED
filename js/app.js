@@ -635,7 +635,7 @@ function buildQuiz(count){
 }
 
 function saveSession(){
-  if(!quiz.length)return;
+  if(!quiz.length || !$("quiz")?.classList.contains("active"))return;
   if(timerDuration && timerDeadline){
     timerSeconds=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));
   }
