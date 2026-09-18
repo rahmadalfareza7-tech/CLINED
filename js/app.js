@@ -703,7 +703,11 @@ function renderEmptyBlockControls(key,blockOverride){
   const countBox=$(key+"CountChoices"), modeBox=$(key+"ModeChoices"), timeBox=$(key+"TimeChoices");
   const page=document.querySelector(`[data-block-key="${key}"]`)||document.querySelector(`[data-block-key="${block}"]`);
   if(!countBox||!modeBox||!timeBox)return;
-  const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && Number(b.count||b.data?.length||0)>0);
+  const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && Number(b.count||b.data?.length||0)>0).sort((a,b)=>{
+    const ya=Number((a[0].match(/(?:19|20)\d{2}/)||['0'])[0]);
+    const yb=Number((b[0].match(/(?:19|20)\d{2}/)||['0'])[0]);
+    return yb-ya || String(a[1].name||a[0]).localeCompare(String(b[1].name||b[0]));
+  });
   const startBtn=page?.querySelector('.block-disabled-start');
   const note=page?.querySelector('.block-empty-note');
   const inline=page?.querySelector('.empty-bank-inline');
@@ -745,7 +749,11 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
   const modeBox=isLegacySsp?page.querySelector('#modeChoices'):$(key+"ModeChoices");
   const timeBox=isLegacySsp?page.querySelector('#timeChoices'):$(key+"TimeChoices");
   if(!countBox||!modeBox||!timeBox)return;
-  const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && Number(b.count||b.data?.length||0)>0);
+  const entries=Object.entries(BANKS||{}).filter(([id,b])=>blockForBank(id)===block && Number(b.count||b.data?.length||0)>0).sort((a,b)=>{
+    const ya=Number((a[0].match(/(?:19|20)\d{2}/)||['0'])[0]);
+    const yb=Number((b[0].match(/(?:19|20)\d{2}/)||['0'])[0]);
+    return yb-ya || String(a[1].name||a[0]).localeCompare(String(b[1].name||b[0]));
+  });
   const startBtn=page?.querySelector('.block-disabled-start,#startBtn');
   const note=page?.querySelector('.block-empty-note');
   // SSP already has a dedicated Clinical Case Bank picker (#bankChoices).
@@ -1517,11 +1525,12 @@ function blockForBank(bankId){
   const explicit=get('alpha5_bank_block_map_v1',{});
   if(explicit[bankId]) return explicit[bankId];
   const meta=BANKS?.[bankId]?.block;
-  if(meta) return String(meta).replace(/^BLOK\s+/i,'').toUpperCase();
+  if(meta){ const normalized=String(meta).replace(/^BLOK\s+/i,'').toUpperCase(); if(normalized==='MUSKULO') return 'MUSKULOSKELETAL'; return normalized; }
   if(['utama','pulmonis','arsip2021'].includes(bankId)) return 'SSP';
   const k=String(bankId||'').toLowerCase();
   if(k.includes('kedkom')) return 'KEDKOM';
   if(k.includes('kedkel')) return 'KEDKEL';
+  if(k.includes('muskulo')) return 'MUSKULOSKELETAL';
   if(k.includes('mulsis')) return 'MULSIS';
   if(k.includes('pancaindra')||k.includes('panca indra')||k.includes('panca_indra')) return 'PANCA INDRA';
   return 'OTHER';
