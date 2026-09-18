@@ -2386,3 +2386,6 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
 .uab-node.active-node .uab-node-icon::after {
   animation-delay: .45s !important;
 }
+
+.material-block-icon img,.uab-node-icon img{width:100%;height:100%;object-fit:contain;display:block;}
+.uab-node-icon img{width:34px;height:34px;}

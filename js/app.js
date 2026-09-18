@@ -1835,8 +1835,8 @@ function upiRate(rating){if(!upiCurrentCard||!upiCardRevealed)return;const revie
 
 const CLINED_UAB_BLOCKS=[
   ['BM1','🦴'],['BM2','🧬'],['HNC','👂'],['MP1','🩺'],['MP2','💊'],['MPT','🧪'],
-  ['MUSKULOSKELETAL','🦿'],['RESPIRATORY','🫁'],['KARDIOLOGI','❤️'],['HEMATOLOGI','🩸'],['GIT','🫃'],['FORENSIK','🔎'],
-  ['GINJAL','🫘'],['ENDOKRINE','🧪'],['REPRODUKSI','🧬'],['SSP','🧠'],['PANCA INDRA','👁️'],['KEDKOM','🩺'],['KEDKEL','👨‍👩‍👧‍👦'],['MULSIS','🧬']
+  ['MUSKULOSKELETAL','<img src="./assets/MUSKULOSKELETAL.png" alt="MUSKULOSKELETAL">'],['RESPIRATORY','<img src="./assets/RESPIRASI.png" alt="RESPIRATORY">'],['KARDIOLOGI','<img src="./assets/CARDIOLOGY.png" alt="KARDIOLOGI">'],['HEMATOLOGI','<img src="./assets/HEMATOLOGI.png" alt="HEMATOLOGI">'],['GIT','<img src="./assets/GASTRO.png" alt="GIT">'],['FORENSIK','🔎'],
+  ['GINJAL','<img src="./assets/GINJAL.png" alt="GINJAL">'],['ENDOKRINE','🧪'],['REPRODUKSI','<img src="./assets/REPRODUKSI.png" alt="REPRODUKSI">'],['SSP','🧠'],['PANCA INDRA','👁️'],['KEDKOM','🩺'],['KEDKEL','👨‍👩‍👧‍👦'],['MULSIS','🧬']
 ];
 const CLINED_MATERIAL_URLS={
   'GINJAL':'https://drive.google.com/drive/folders/1kLKbjFQ4Gxk3GT64FTH-CXFmuK8MrWD2?usp=drive_link',

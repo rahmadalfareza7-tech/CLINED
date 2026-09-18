@@ -190,6 +190,26 @@
       "count": 99,
       "dataUrl": "./banks/muskulo-2021.json",
       "sourceFile": "MUSKULO 2021.json"
+    },
+    {
+      "id": "endo-2023",
+      "name": "ENDO 2023",
+      "block": "ENDOKRINE",
+      "version": 1,
+      "schema": "1.0",
+      "count": 101,
+      "dataUrl": "./banks/endo-2023.json",
+      "sourceFile": "ENDO 2023.json"
+    },
+    {
+      "id": "kardio-2023",
+      "name": "KARDIO 2023",
+      "block": "KARDIOLOGI",
+      "version": 1,
+      "schema": "1.0",
+      "count": 93,
+      "dataUrl": "./banks/kardio-2023.json",
+      "sourceFile": "KARDIO 2023.json"
     }
   ]
 }

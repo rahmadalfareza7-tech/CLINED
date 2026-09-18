@@ -190,6 +190,46 @@
       "count": 99,
       "dataUrl": "./banks/muskulo-2021.json",
       "sourceFile": "MUSKULO 2021.json"
+    },
+    {
+      "id": "ginjal-2023",
+      "name": "GINJAL 2023",
+      "block": "GINJAL",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/ginjal-2023.json",
+      "sourceFile": "GINJAL 2023.json"
+    },
+    {
+      "id": "muskulo-2022",
+      "name": "MUSKULO 2022",
+      "block": "MUSKULO",
+      "version": 1,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/muskulo-2022.json",
+      "sourceFile": "MUSKULO 2022.json"
+    },
+    {
+      "id": "endo-2023",
+      "name": "ENDO 2023",
+      "block": "ENDOKRINE",
+      "version": 1,
+      "schema": "1.0",
+      "count": 101,
+      "dataUrl": "./banks/endo-2023.json",
+      "sourceFile": "ENDO 2023.json"
+    },
+    {
+      "id": "kardio-2023",
+      "name": "KARDIO 2023",
+      "block": "KARDIOLOGI",
+      "version": 1,
+      "schema": "1.0",
+      "count": 93,
+      "dataUrl": "./banks/kardio-2023.json",
+      "sourceFile": "KARDIO 2023.json"
     }
   ]
 }
