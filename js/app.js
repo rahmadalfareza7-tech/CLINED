@@ -271,7 +271,7 @@ function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern)}ca
       const hudStreak=document.getElementById("duoHudStreak");
       const hudGoal=document.getElementById("duoHudGoal");
       if(hudXp && xpEl) hudXp.textContent=(xpEl.textContent||"0").replace(/\\s*XP/i,"");
-      if(hudStreak) hudStreak.textContent=`🔥 ${calculateDailyStreak(streakData().counts)}`;
+      if(hudStreak) hudStreak.textContent=String(calculateDailyStreak(streakData().counts));
       if(hudGoal && dailyEl) hudGoal.textContent=dailyEl.textContent||"0/5";
     }catch(e){}
   }
