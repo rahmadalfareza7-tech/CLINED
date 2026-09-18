@@ -2377,3 +2377,12 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
 #dailyStreakCard{display:flex!important;visibility:visible!important;opacity:1!important;}
 
 #dailyStreakCard{display:flex!important;visibility:visible!important;opacity:1!important;}
+
+/* Keep UAB signal pulse active on desktop */
+.uab-node.active-node .uab-node-icon::before,
+.uab-node.active-node .uab-node-icon::after {
+  animation: clinicalSignal 2.15s cubic-bezier(.22,.72,.35,1) infinite !important;
+}
+.uab-node.active-node .uab-node-icon::after {
+  animation-delay: .45s !important;
+}
