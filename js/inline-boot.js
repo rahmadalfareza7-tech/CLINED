@@ -40,7 +40,7 @@
 
 // --- UAB node index tagging ---
 (function () {
-  document.querySelectorAll('#uabBlockList > button.uab-node').forEach(function (el, i) {
+  document.querySelectorAll('#uabPathViewport > button.uab-node').forEach(function (el, i) {
     el.dataset.uabIndex = i + 1;
   });
 })();
@@ -48,10 +48,10 @@
 // --- V23 UAB hard lock: continuously remove legacy inline position/transform mutations. ---
 (function () {
   var clean = function (n) {
-    if (!n || !n.matches || !n.matches('#uabBlockList > .uab-node')) return;
+    if (!n || !n.matches || !n.matches('#uabPathViewport > .uab-node')) return;
     ['left', 'right', 'top', 'bottom', 'transform', 'translate', 'rotate', 'scale', 'margin-left', 'margin-right'].forEach(function (k) { n.style.removeProperty(k); });
   };
-  var run = function () { document.querySelectorAll('#uabBlockList > .uab-node').forEach(clean); };
+  var run = function () { document.querySelectorAll('#uabPathViewport > .uab-node').forEach(clean); };
   document.addEventListener('DOMContentLoaded', run, { once: true });
   window.addEventListener('resize', run, { passive: true });
   var obs = new MutationObserver(function (muts) {
