@@ -2407,3 +2407,18 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
   opacity:1!important;
   pointer-events:auto!important;
 }
+
+/* Restore visible semester divider lines */
+#uabPage .uab-path-viewport .semester-divider::before,
+#uabPage .uab-path-viewport .semester-divider::after {
+  display: block !important;
+  content: "" !important;
+  height: 2px !important;
+  flex: 1 !important;
+  background: #dfe8eb !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
