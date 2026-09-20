@@ -138,6 +138,19 @@ html,body{overflow-x:hidden}
 #floatingDashboardNav .floating-nav-slider{z-index:1!important;pointer-events:none!important;}
 </style>
 
+<style id="clined-landing-auth-isolation">
+/* Landing is a standalone pre-login screen; never let the app continue below it. */
+#preLoginLanding{display:none!important;}
+body.auth-pending #preLoginLanding{display:block!important;visibility:visible;pointer-events:auto;}
+body.auth-pending .app>header,
+body.auth-pending .app>.view,
+body.auth-pending .app>.floating-dashboard,
+body.auth-pending .app>.floating-dashboard-nav,
+body.auth-pending .app>.bottom-nav,
+body.auth-pending .app>.app-bottom-nav{display:none!important;}
+body:not(.auth-pending) #preLoginLanding{display:none!important;}
+</style>
+
 <style id="clined-landing-v1">
 body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-events:auto}
 .clined-landing{position:relative;min-height:100vh;overflow:hidden;background:linear-gradient(180deg,#e9f8ff 0%,#f8fff5 48%,#fff 100%);color:var(--text,#26352d);padding:18px clamp(14px,4vw,46px) 24px;font-family:inherit}
@@ -149,11 +162,51 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
 .landing-features{max-width:1120px;margin:0 auto;position:relative;z-index:1}.landing-section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:16px}.landing-section-head h3{font-size:clamp(24px,3vw,38px);line-height:1.05;letter-spacing:-.05em;margin:10px 0 0;font-weight:950}.landing-controls{display:flex;align-items:center;gap:9px}.landing-controls button{width:39px;height:39px;padding:0;border-radius:13px}.landing-controls span{display:flex;gap:5px}.landing-dot{width:7px;height:7px;border-radius:99px;background:#c7d7cf}.landing-dot.active{width:22px;background:var(--clined-green,#58cc02)}.landing-track-wrap{overflow:hidden;cursor:grab;touch-action:pan-y}.landing-track-wrap.dragging{cursor:grabbing}.landing-track{display:flex;gap:12px;transition:transform .5s cubic-bezier(.2,.8,.2,1);will-change:transform}.landing-slide{flex:0 0 calc((100% - 24px)/3);min-height:220px;border:2px solid var(--line,#d5e4dc);border-radius:20px;padding:19px;background:#fff;transition:transform .2s,box-shadow .2s;box-sizing:border-box;box-shadow:0 4px 0 rgba(31,42,35,.1)}.landing-slide:hover{transform:translateY(-4px);box-shadow:0 7px 0 rgba(31,42,35,.13)}.slide-icon{font-size:27px;margin-bottom:20px}.landing-slide span{font-size:9px;letter-spacing:.12em;color:var(--blue,#007aff);font-weight:950}.landing-slide h4{font-size:21px;letter-spacing:-.04em;margin:9px 0;font-weight:950}.landing-slide p{font-size:12px;line-height:1.65;color:var(--muted,#718078);min-height:59px;font-weight:650}.landing-slide b{font-size:11px;color:var(--clined-green-dark,#2ea000)}.landing-slider-progress{height:8px;border:2px solid var(--line,#d5e4dc);border-radius:99px;background:#fff;margin-top:17px;overflow:hidden}.landing-slider-progress span{display:block;height:100%;width:20%;background:var(--clined-green,#58cc02);transition:width .4s}.landing-footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:1120px;margin:32px auto 0;padding-top:15px;border-top:2px solid var(--line,#d5e4dc);font-size:10px;color:var(--muted,#718078);font-weight:750}
 @media(max-width:850px){.landing-hero{grid-template-columns:1fr;margin-top:25px}.landing-hero-art{min-height:280px}.landing-copy h2{font-size:clamp(38px,9vw,60px)}.landing-section-head{align-items:start;flex-direction:column}.landing-slide{flex-basis:calc((100% - 12px)/2)}}
 @media(max-width:560px){.clined-landing{padding:14px 12px 20px}.landing-mini-brand em{display:none}.landing-hero{margin-bottom:35px}.landing-hero-art{min-height:265px;transform:scale(.9)}.landing-slide{flex-basis:100%;min-height:210px}.landing-copy p{font-size:13px}.landing-footer{margin-top:28px}}
+
+.landing-mini-brand small{display:block;font-size:9px;font-weight:900;color:var(--clined-green-dark,#2ea000);margin-top:2px}
+.art-orbit,.landing-glow{display:none!important}
+.landing-hero-art{background:transparent!important}
+.landing-track-wrap{position:relative;z-index:5;pointer-events:auto!important}
+.landing-controls,.landing-controls button,.landing-primary,.landing-login-btn,.landing-secondary{position:relative;z-index:20;pointer-events:auto!important}
 </style>
 <script id="clined-landing-slider-v1">
-(()=>{const root=document.getElementById('preLoginLanding');if(!root)return;const track=document.getElementById('landingTrack'),wrap=track?.parentElement,slides=[...root.querySelectorAll('.landing-slide')],prev=document.getElementById('landingPrev'),next=document.getElementById('landingNext'),dots=document.getElementById('landingDots'),progress=document.getElementById('landingProgress');if(!track||!wrap||!slides.length)return;let index=0,timer=null,startX=0,drag=false;const per=()=>innerWidth<=560?1:innerWidth<=850?2:3;const max=()=>Math.max(0,slides.length-per());const render=()=>{index=Math.min(index,max());const gap=16;const width=slides[0].getBoundingClientRect().width;track.style.transform=`translateX(-${index*(width+gap)}px)`;dots.innerHTML=Array.from({length:max()+1},(_,i)=>`<i class="landing-dot ${i===index?'active':''}"></i>`).join('');progress.style.width=`${((index+per())/slides.length)*100}%`;};const go=n=>{index=n<0?max():n>max()?0:n;render();restart()};const restart=()=>{clearInterval(timer);timer=setInterval(()=>go(index+1),6500)};prev?.addEventListener('click',()=>go(index-1));next?.addEventListener('click',()=>go(index+1));wrap.addEventListener('pointerdown',e=>{drag=true;startX=e.clientX;wrap.classList.add('dragging');clearInterval(timer);wrap.setPointerCapture?.(e.pointerId)});wrap.addEventListener('pointerup',e=>{if(!drag)return;drag=false;wrap.classList.remove('dragging');const dx=e.clientX-startX;if(Math.abs(dx)>45)go(index+(dx<0?1:-1));else restart()});wrap.addEventListener('pointercancel',()=>{drag=false;wrap.classList.remove('dragging');restart()});root.addEventListener('mouseenter',()=>clearInterval(timer));root.addEventListener('mouseleave',restart);root.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(b.id!=='landingPrev'&&b.id!=='landingNext')restart()}));addEventListener('resize',render);render();restart()})();
+(()=>{
+  const init=()=>{
+    const root=document.getElementById('preLoginLanding');
+    if(!root||root.dataset.sliderReady==='1')return;
+    const track=root.querySelector('#landingTrack'),wrap=root.querySelector('.landing-track-wrap'),slides=[...root.querySelectorAll('.landing-slide')];
+    const prev=root.querySelector('#landingPrev'),next=root.querySelector('#landingNext'),dots=root.querySelector('#landingDots'),progress=root.querySelector('#landingProgress');
+    if(!track||!wrap||!slides.length)return;
+    root.dataset.sliderReady='1';
+    let index=0,timer=null,startX=0,drag=false;
+    const per=()=>innerWidth<=560?1:innerWidth<=850?2:3;
+    const max=()=>Math.max(0,slides.length-per());
+    const render=()=>{
+      index=Math.max(0,Math.min(index,max()));
+      const gap=12,width=slides[0].getBoundingClientRect().width;
+      track.style.transform=`translate3d(-${index*(width+gap)}px,0,0)`;
+      if(dots)dots.innerHTML=Array.from({length:max()+1},(_,i)=>`<i class="landing-dot ${i===index?'active':''}"></i>`).join('');
+      if(progress)progress.style.width=`${Math.min(100,((index+per())/slides.length)*100)}%`;
+    };
+    const stop=()=>{if(timer)clearInterval(timer);timer=null};
+    const start=()=>{stop();timer=setInterval(()=>{index=index>=max()?0:index+1;render()},6500)};
+    const go=n=>{index=n<0?max():n>max()?0:n;render();start()};
+    prev?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();go(index-1)});
+    next?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();go(index+1)});
+    wrap.addEventListener('pointerdown',e=>{if(e.target.closest('button,a'))return;drag=true;startX=e.clientX;stop();wrap.classList.add('dragging');wrap.setPointerCapture?.(e.pointerId)});
+    wrap.addEventListener('pointerup',e=>{if(!drag)return;drag=false;wrap.classList.remove('dragging');const dx=e.clientX-startX;if(Math.abs(dx)>45)go(index+(dx<0?1:-1));else start()});
+    wrap.addEventListener('pointercancel',()=>{drag=false;wrap.classList.remove('dragging');start()});
+    root.addEventListener('mouseenter',stop);root.addEventListener('mouseleave',start);
+    addEventListener('resize',render);render();start();
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
 </script>
 
+
+<script id="clined-landing-actions">
+(()=>{const bind=()=>{document.querySelectorAll('#preLoginBtn,#landingLoginBtn').forEach(btn=>{if(btn.dataset.authBound==='1')return;btn.dataset.authBound='1';btn.addEventListener('click',e=>{e.preventDefault();if(typeof window.authOpenModal==='function')window.authOpenModal('login');else document.getElementById('loginAccountBtn')?.click();});});};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();})();
+</script>
 </head>
 <body class="auth-pending">
 
@@ -162,7 +215,7 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
 
 <section id="preLoginLanding" class="clined-landing" aria-label="Pengenalan CLINED">
   <div class="landing-glow landing-glow-one"></div><div class="landing-glow landing-glow-two"></div>
-  <div class="landing-topbar"><div class="landing-mini-brand"><img src="assets/clined-logo.png" alt="CLINED"><span>CLINED <em>Clinical Education</em></span></div><button id="preLoginBtn" class="landing-login-btn" type="button">Masuk / Daftar ↗</button></div>
+  <div class="landing-topbar"><div class="landing-mini-brand"><img src="assets/clined-logo.png" alt="CLINED"><span>CLINED <em>Clinical Education</em><small>By Reza FKUY23</small></span></div><button id="preLoginBtn" class="landing-login-btn" type="button">Masuk / Daftar ↗</button></div>
   <div class="landing-hero"><div class="landing-copy"><span class="landing-kicker">CLINED • MEDICAL LEARNING EXPERIENCE</span><h2>Belajar klinis.<br><strong>Berpikir seperti dokter.</strong></h2><p>Latih clinical reasoning melalui bank soal, materi blok, pembahasan, flashcard, dan perjalanan belajar yang terstruktur.</p><div class="landing-actions"><button class="landing-primary" id="landingLoginBtn" type="button">Mulai perjalanan <span>→</span></button><a href="#landingFeatureSlider" class="landing-secondary">Jelajahi fitur ↓</a></div><div class="landing-proof"><span>✦</span><div><b>Dirancang untuk mahasiswa kedokteran</b><small>Belajar mandiri • Terarah • Berkelanjutan</small></div></div></div><div class="landing-hero-art"><div class="art-orbit orbit-a"></div><div class="art-orbit orbit-b"></div><div class="art-panel"><span class="art-chip">LIVE LEARNING</span><div class="art-brain">🧠</div><b>Clinical<br>Reasoning</b><small>Understand • Apply • Improve</small><div class="art-stat"><span>XP</span><strong>+120</strong></div></div><div class="art-float float-one">🩺 <b>Case-based</b></div><div class="art-float float-two">⚡ <b>Smart progress</b></div></div></div>
   <div id="landingFeatureSlider" class="landing-features"><div class="landing-section-head"><div><span class="landing-kicker">ONE PLATFORM, MANY WAYS TO GROW</span><h3>Semua kebutuhan belajarmu,<br><strong>dalam satu perjalanan.</strong></h3></div><div class="landing-controls"><button id="landingPrev" type="button" aria-label="Fitur sebelumnya">←</button><span id="landingDots" aria-label="Indikator slide"></span><button id="landingNext" type="button" aria-label="Fitur berikutnya">→</button></div></div><div class="landing-track-wrap"><div class="landing-track" id="landingTrack"><article class="landing-slide"><div class="slide-icon">🧩</div><span>01 / PRACTICE</span><h4>Bank Soal UAB</h4><p>Latihan soal per blok dengan pengalaman mengerjakan yang fokus dan terarah.</p><b>Latih konsistensi →</b></article><article class="landing-slide"><div class="slide-icon">🧠</div><span>02 / UNDERSTAND</span><h4>Pembahasan Klinis</h4><p>Jangan hanya menghafal jawaban. Pahami alasan, konsep, dan cara berpikir di balik kasus.</p><b>Belajar dari setiap pilihan →</b></article><article class="landing-slide"><div class="slide-icon">📚</div><span>03 / EXPLORE</span><h4>Materi & Ninja Nerd</h4><p>Akses kumpulan materi blok dan referensi video untuk memperkuat pemahaman.</p><b>Perluas pemahaman →</b></article><article class="landing-slide"><div class="slide-icon">📈</div><span>04 / PROGRESS</span><h4>Clinical Performance</h4><p>Lihat progres, akurasi, streak, XP, dan area belajar yang perlu kamu ulangi.</p><b>Kenali progresmu →</b></article><article class="landing-slide"><div class="slide-icon">🃏</div><span>05 / REVIEW</span><h4>Flashcard & Bookmark</h4><p>Simpan hal penting dan lakukan review singkat agar ilmu lebih melekat.</p><b>Review kapan saja →</b></article></div></div><div class="landing-slider-progress"><span id="landingProgress"></span></div></div>
   <footer class="landing-footer"><span>CLINED — Clinical Education By Reza FKUY23</span><span>Build knowledge. Sharpen reasoning. Keep progressing.</span></footer>
