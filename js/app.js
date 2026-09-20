@@ -2159,7 +2159,7 @@ async function authRestoreSession(){
   catch{authServerUser=null;}
   renderAccount();renderAccountAuthState();
   if(authServerUser){window.CLINED_AUTH_GATE?.unlock?.();show('home',{force:true});}
-  else{window.CLINED_AUTH_GATE?.lock?.();authCloseModal();}
+  else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
 }
 function authSetError(id,message){const el=$(id);if(!el)return;el.textContent=message;el.hidden=!message;}
 function authOpenModal(mode='signup'){
@@ -2177,19 +2177,7 @@ function authOpenModal(mode='signup'){
   authSetError('accountFormError','');modal.hidden=false;modal.setAttribute('aria-hidden','false');
   setTimeout(()=>$(signup?'authName':'authLoginIdentifier')?.focus(),30);
 }
-function authCloseModal(){
-  const modal=$('accountAuthModal');
-  if(modal){
-    modal.hidden=true;
-    modal.setAttribute('aria-hidden','true');
-    ['display','visibility','opacity','pointer-events','position','inset','z-index'].forEach(prop=>modal.style.removeProperty(prop));
-    const card=modal.querySelector('.account-modal-card');
-    if(card){
-      ['display','visibility','opacity','pointer-events'].forEach(prop=>card.style.removeProperty(prop));
-    }
-  }
-  document.body.classList.remove('modal-open');
-}
+function authCloseModal(){const modal=$('accountAuthModal');if(modal){modal.hidden=true;modal.setAttribute('aria-hidden','true');}}
 async function authCreateAccount(){
   const name=String($('authName').value||'').trim();
   const username=String($('authUsername').value||'').trim().toLowerCase();
@@ -2555,54 +2543,4 @@ document.addEventListener('click',e=>{
   window.addEventListener('pageshow',check,{passive:true});
   timer=setInterval(check,30*1000);
   window.addEventListener('pagehide',()=>clearInterval(timer),{once:true});
-})();
-
-
-/* CLINED LOGIN HARDENING: external-script fallback (CSP-safe). */
-(function clinedLoginHardening(){
-  function forceLoginModal(){
-    const modal=document.getElementById('accountAuthModal');
-    if(!modal)return;
-    try{
-      if(typeof window.authOpenModal==='function') window.authOpenModal('login');
-    }catch(error){console.error('[CLINED] authOpenModal failed',error);}
-    modal.hidden=false;
-    modal.removeAttribute('hidden');
-    modal.setAttribute('aria-hidden','false');
-    modal.style.setProperty('display','grid','important');
-    modal.style.setProperty('visibility','visible','important');
-    modal.style.setProperty('opacity','1','important');
-    modal.style.setProperty('pointer-events','auto','important');
-    modal.style.setProperty('position','fixed','important');
-    modal.style.setProperty('inset','0','important');
-    modal.style.setProperty('z-index','2147483647','important');
-    const card=modal.querySelector('.account-modal-card');
-    if(card){
-      card.style.setProperty('display','block','important');
-      card.style.setProperty('visibility','visible','important');
-      card.style.setProperty('opacity','1','important');
-      card.style.setProperty('pointer-events','auto','important');
-    }
-    document.body.classList.add('modal-open');
-    const identifier=document.getElementById('authLoginIdentifier');
-    const password=document.getElementById('authPassword');
-    if(identifier)identifier.required=true;
-    if(password)password.required=true;
-    setTimeout(()=>identifier?.focus(),50);
-  }
-  function bind(){
-    if(window.__clinedLoginHardeningBound)return;
-    window.__clinedLoginHardeningBound=true;
-    document.addEventListener('click',function(event){
-      const button=event.target.closest?.('#preLoginBtn,#landingLoginBtn');
-      if(!button)return;
-      event.preventDefault();
-      event.stopPropagation();
-      forceLoginModal();
-    },true);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});
-  else bind();
-  window.addEventListener('load',bind,{once:true});
-  window.clinedForceLoginModal=forceLoginModal;
 })();
