@@ -2177,7 +2177,19 @@ function authOpenModal(mode='signup'){
   authSetError('accountFormError','');modal.hidden=false;modal.setAttribute('aria-hidden','false');
   setTimeout(()=>$(signup?'authName':'authLoginIdentifier')?.focus(),30);
 }
-function authCloseModal(){const modal=$('accountAuthModal');if(modal){modal.hidden=true;modal.setAttribute('aria-hidden','true');}}
+function authCloseModal(){
+  const modal=$('accountAuthModal');
+  if(modal){
+    modal.hidden=true;
+    modal.setAttribute('aria-hidden','true');
+    ['display','visibility','opacity','pointer-events','position','inset','z-index'].forEach(prop=>modal.style.removeProperty(prop));
+    const card=modal.querySelector('.account-modal-card');
+    if(card){
+      ['display','visibility','opacity','pointer-events'].forEach(prop=>card.style.removeProperty(prop));
+    }
+  }
+  document.body.classList.remove('modal-open');
+}
 async function authCreateAccount(){
   const name=String($('authName').value||'').trim();
   const username=String($('authUsername').value||'').trim().toLowerCase();
