@@ -177,27 +177,27 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
     const track=root.querySelector('#landingTrack'),wrap=root.querySelector('.landing-track-wrap'),slides=[...root.querySelectorAll('.landing-slide')];
     const prev=root.querySelector('#landingPrev'),next=root.querySelector('#landingNext'),dots=root.querySelector('#landingDots'),progress=root.querySelector('#landingProgress');
     if(!track||!wrap||!slides.length)return;
-    root.dataset.sliderReady='1';
-    let index=0,timer=null,startX=0,drag=false;
+    root.dataset.sliderReady='1'; let index=0,timer=null,startX=0,drag=false;
     const per=()=>innerWidth<=560?1:innerWidth<=850?2:3;
     const max=()=>Math.max(0,slides.length-per());
-    const render=()=>{
+    const paint=(animate=true)=>{
       index=Math.max(0,Math.min(index,max()));
-      const gap=12,width=slides[0].getBoundingClientRect().width;
+      const width=slides[0].getBoundingClientRect().width, gap=12;
+      track.style.transition=animate?'transform .72s cubic-bezier(.22,.61,.36,1)':'none';
       track.style.transform=`translate3d(-${index*(width+gap)}px,0,0)`;
       if(dots)dots.innerHTML=Array.from({length:max()+1},(_,i)=>`<i class="landing-dot ${i===index?'active':''}"></i>`).join('');
       if(progress)progress.style.width=`${Math.min(100,((index+per())/slides.length)*100)}%`;
     };
-    const stop=()=>{if(timer)clearInterval(timer);timer=null};
-    const start=()=>{stop();timer=setInterval(()=>{index=index>=max()?0:index+1;render()},6500)};
-    const go=n=>{index=n<0?max():n>max()?0:n;render();start()};
+    const stop=()=>{if(timer)clearTimeout(timer);timer=null};
+    const start=()=>{stop();timer=setTimeout(()=>{if(index>=max()){index=0;paint(false);}else{index++;paint(true);}start();},6500)};
+    const go=n=>{stop();index=n<0?max():n>max()?0:n;paint(true);start()};
     prev?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();go(index-1)});
     next?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();go(index+1)});
     wrap.addEventListener('pointerdown',e=>{if(e.target.closest('button,a'))return;drag=true;startX=e.clientX;stop();wrap.classList.add('dragging');wrap.setPointerCapture?.(e.pointerId)});
     wrap.addEventListener('pointerup',e=>{if(!drag)return;drag=false;wrap.classList.remove('dragging');const dx=e.clientX-startX;if(Math.abs(dx)>45)go(index+(dx<0?1:-1));else start()});
     wrap.addEventListener('pointercancel',()=>{drag=false;wrap.classList.remove('dragging');start()});
     root.addEventListener('mouseenter',stop);root.addEventListener('mouseleave',start);
-    addEventListener('resize',render);render();start();
+    addEventListener('resize',()=>paint(false)); paint(false);start();
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
@@ -205,7 +205,19 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
 
 
 <script id="clined-landing-actions">
-(()=>{const bind=()=>{document.querySelectorAll('#preLoginBtn,#landingLoginBtn').forEach(btn=>{if(btn.dataset.authBound==='1')return;btn.dataset.authBound='1';btn.addEventListener('click',e=>{e.preventDefault();if(typeof window.authOpenModal==='function')window.authOpenModal('login');else document.getElementById('loginAccountBtn')?.click();});});};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();})();
+(()=>{
+  const bind=()=>{
+    if(typeof authOpenModal==='function')window.authOpenModal=authOpenModal;
+    document.addEventListener('click',e=>{
+      const btn=e.target.closest('#preLoginBtn,#landingLoginBtn'); if(!btn)return;
+      e.preventDefault();e.stopImmediatePropagation();
+      if(typeof window.authOpenModal==='function')window.authOpenModal('login');
+      else if(typeof authOpenModal==='function')authOpenModal('login');
+      else document.getElementById('loginAccountBtn')?.click();
+    },true);
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+})();
 </script>
 
 <style id="clined-landing-final-polish">
