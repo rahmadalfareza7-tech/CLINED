@@ -2460,161 +2460,82 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
   opacity: 1 !important;
 }
 
-
-/* FINAL UAB LAYOUT RESET */
-#uabPage .uab-path {
+/* UAB CLEAN LINEAR LAYOUT */
+#uabPage #uabBlockList {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 0 !important;
-  padding: 18px 0 40px !important;
-  margin: 0 !important;
+  gap: 12px !important;
+  width: 100% !important;
+  min-height: auto !important;
+  padding: 20px 0 80px !important;
+  margin: 0 auto !important;
   transform: none !important;
   transform-style: flat !important;
   perspective: none !important;
-  overflow: visible !important;
+}
+
+#uabPage #uabBlockList > .uab-node,
+#uabPage #uabBlockList > .uab-node:nth-child(n) {
   position: relative !important;
-}
-
-/* Jalur vertikal */
-#uabPage .uab-path::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  top: 20px !important;
-  bottom: 45px !important;
-  left: 50% !important;
-  width: 8px !important;
-  transform: translateX(-50%) !important;
-  background: #dfe8eb !important;
-  border-radius: 99px !important;
-  z-index: 0 !important;
-}
-
-/* Node standar */
-#uabPage .uab-path > .uab-node {
   display: flex !important;
-  width: min(280px, 82%) !important;
-  min-width: 0 !important;
-  height: 112px !important;
-  min-height: 112px !important;
-  margin: 0 !important;
-  padding: 8px !important;
-  position: relative !important;
-  transform: none !important;
-  left: auto !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  z-index: 1 !important;
-}
-
-/* Pola jalur kiri-kanan yang ringan */
-#uabPage .uab-path > .uab-node:nth-of-type(odd) {
-  transform: translateX(-38px) !important;
-}
-
-#uabPage .uab-path > .uab-node:nth-of-type(even) {
-  transform: translateX(38px) !important;
-}
-
-/* Ikon */
-#uabPage .uab-path > .uab-node .uab-node-icon {
-  width: 58px !important;
-  height: 58px !important;
-  flex: 0 0 58px !important;
-  transform: none !important;
-  animation: none !important;
-}
-
-/* Label */
-#uabPage .uab-path > .uab-node b {
-  display: block !important;
-  margin-top: 8px !important;
-  font-size: 11px !important;
-  max-width: 220px !important;
-}
-
-/* Pembatas semester */
-#uabPage .uab-path > .semester-divider {
-  display: flex !important;
-  width: 90% !important;
-  height: 42px !important;
-  min-height: 42px !important;
-  margin: 8px 0 !important;
-  padding: 0 !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 10px !important;
-  position: relative !important;
-  z-index: 3 !important;
-  transform: none !important;
-  background: transparent !important;
-}
-
-#uabPage .uab-path > .semester-divider::before,
-#uabPage .uab-path > .semester-divider::after {
-  content: "" !important;
-  display: block !important;
-  flex: 1 1 auto !important;
-  height: 2px !important;
-  min-width: 20px !important;
-  background: #dfe8eb !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  opacity: 1 !important;
-}
-
-#uabPage .uab-path > .semester-divider span {
-  display: inline-flex !important;
-  width: auto !important;
-  min-width: 80px !important;
-  padding: 5px 9px !important;
-  justify-content: center !important;
-  background: #fff !important;
-  border: 1px solid #dfe8eb !important;
-  border-radius: 999px !important;
-  box-shadow: 0 2px 0 #d3dde0 !important;
-  font-size: 8px !important;
-  white-space: nowrap !important;
-}
-
-/* Hilangkan kartu hijau yang melebar */
-#uabPage .uab-path > .uab-node.active-node {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-
-/* UAB LINEAR VERTICAL LAYOUT */
-#uabPage #uabBlockList > .uab-node {
-  transform: none !important;
+  width: min(340px, 90%) !important;
+  height: 110px !important;
+  min-height: 110px !important;
+  flex: 0 0 110px !important;
+  margin: 0 !important;
   left: auto !important;
   right: auto !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  width: 280px !important;
-  max-width: 90% !important;
-  height: 112px !important;
-  min-height: 112px !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  transform: none !important;
+  translate: none !important;
+  rotate: none !important;
+  scale: 1 !important;
+  perspective: none !important;
 }
 
-#uabPage #uabBlockList > .uab-node:nth-child(n) {
-  transform: none !important;
-  left: auto !important;
+#uabPage #uabBlockList > .uab-node:hover,
+#uabPage #uabBlockList > .uab-node:active,
+#uabPage #uabBlockList > .uab-node:focus {
+  transform: translateY(-2px) !important;
 }
 
 #uabPage #uabBlockList > .semester-divider {
-  width: 90% !important;
-  margin: 10px auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: min(360px, 92%) !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  flex: 0 0 44px !important;
+  margin: 10px 0 2px !important;
+  padding: 0 !important;
   transform: none !important;
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
-#uabPage #uabBlockList > .uab-node .uab-node-icon {
-  transform: none !important;
-  animation: none !important;
+#uabPage #uabBlockList > .semester-divider::before,
+#uabPage #uabBlockList > .semester-divider::after {
+  display: block !important;
+  content: "" !important;
+  flex: 1 !important;
+  height: 2px !important;
+  min-width: 20px !important;
+  background: #dfe8eb !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
+#uabPage #uabBlockList > .semester-divider span {
+  display: inline-flex !important;
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 0 10px !important;
+  transform: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
