@@ -2159,7 +2159,7 @@ async function authRestoreSession(){
   catch{authServerUser=null;}
   renderAccount();renderAccountAuthState();
   if(authServerUser){window.CLINED_AUTH_GATE?.unlock?.();show('home',{force:true});}
-  else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
+  else{window.CLINED_AUTH_GATE?.lock?.();authCloseModal();}
 }
 function authSetError(id,message){const el=$(id);if(!el)return;el.textContent=message;el.hidden=!message;}
 function authOpenModal(mode='signup'){
