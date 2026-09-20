@@ -258,7 +258,7 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
 html:has(body.auth-pending), body.auth-pending{overflow:hidden!important;height:100%!important;}
 body.auth-pending #preLoginLanding{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;box-sizing:border-box!important;z-index:2147482000!important;padding-bottom:28px!important;}
 body.auth-pending #preLoginLanding~*:not(#accountAuthModal):not(main.app){display:none!important;}
-body.auth-pending #accountAuthModal{display:grid!important;}
+body.auth-pending #accountAuthModal:not([hidden]){display:grid!important;}
 #preLoginLanding .landing-hero-art{overflow:visible!important;}
 @media(max-width:560px){
   #preLoginLanding .landing-hero-art{transform:none!important;min-height:300px!important;margin:0 0 10px!important;}
