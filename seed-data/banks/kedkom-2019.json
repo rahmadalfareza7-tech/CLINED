@@ -1,0 +1,904 @@
+[
+  {
+    "id": "kedkom-2019-001",
+    "no": 1,
+    "soal": "Gangguan pertumbuhan dan perkembangan anak bisa dicegah bila penilaian pertumbuhan dan perkembangan dilakukan secara rutin sesuai dengan jadwal yang direkomendasikan. Bagaimanakah rekomendasi skrining perkembangan anak yang dianjurkan Kementerian Kesehatan RI?",
+    "opsi": [
+      "setiap 6 bulan sampai usia 2 tahun",
+      "setiap 3 bulan sampai usia 2 tahun",
+      "setiap bulan sampai usia 1 tahun",
+      "setiap bulan sampai usia 2 tahun",
+      "setiap 3 bulan sampai usia 1 tahun"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Opsi kurang tepat karena pemantauan tiap 6 bulan dimulai setelah usia 24 bulan hingga 72 bulan.\nB. Berdasarkan petunjuk teknis SDIDTK Kemenkes RI, pemantauan perkembangan (KPSP) dilakukan setiap 3 bulan pada usia 0-24 bulan (sampai usia 2 tahun) dan setiap 6 bulan pada usia 24-72 bulan.\nC. Pemantauan bulanan dilakukan untuk penimbangan berat badan (pertumbuhan), bukan perkembangan.\nD. Skrining perkembangan tidak dilakukan setiap bulan pada rentang usia ini.\nE. Pemantauan tiap 3 bulan berlanjut hingga usia 24 bulan (2 tahun).",
+    "pembahasan_klinis": {
+      "A": "Pemantauan tiap 6 bulan dilakukan pada rentang anak usia 24 hingga 72 bulan.",
+      "B": "Sesuai pedoman SDIDTK Kemenkes RI, jadwal skrining KPSP dilakukan setiap 3 bulan untuk usia 0-24 bulan.",
+      "C": "Penimbangan berat badan dilakukan setiap bulan, sedangkan perkembangan menggunakan kuesioner berkala.",
+      "D": "Skrining perkembangan tidak membutuhkan evaluasi formal setiap bulan.",
+      "E": "Skrining 3 bulanan berlanjut hingga usia 2 tahun (24 bulan)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-002",
+    "no": 2,
+    "soal": "Anak mengalami kecelakaan motor dan kabur dari rumah. Lembaga manakah di bawah ini yang BUKAN merupakan lembaga tempat pelaksanaan rehabilitasi kenakalan/perlindungan anak dalam sistem peradilan anak?",
+    "opsi": [
+      "Panti rehabilitasi",
+      "Panti asuhan",
+      "Rumah tinggal",
+      "Pengadilan remaja",
+      "Pengadilan umum"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Panti rehabilitasi merupakan sarana pelayanan sosial/rehabilitasi anak.\nB. Panti asuhan dapat menjadi tempat pembinaan/perlindungan sosial anak.\nC. Rumah tinggal/lembaga penjelas dapat menjadi sarana rehabilitasi berbasis keluarga/komunitas.\nD. Pengadilan anak/remaja menangani peradilan khusus anak sesuai UU SPPA No. 11 Tahun 2012.\nE. Pengadilan umum tidak dikhususkan untuk sistem peradilan pidana dan rehabilitasi anak.",
+    "pembahasan_klinis": {
+      "A": "Merupakan lembaga pembinaan dan rehabilitasi sosial anak.",
+      "B": "Merupakan wadah pengasuhan alternatif bagi anak berhadapan dengan hukum/masalah sosial.",
+      "C": "Merupakan lingkungan rehabilitasi informal/berbasis keluarga.",
+      "D": "Merupakan bagian dari Sistem Peradilan Pidana Anak (SPPA).",
+      "E": "Pengadilan umum tidak memfasilitasi rehabilitasi khusus anak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-003",
+    "no": 3,
+    "soal": "Setiap bulan komunitas lanjut usia di Kelurahan Y melakukan pemeriksaan kesehatan berupa pemeriksaan berat badan, tinggi badan, pemeriksaan gula darah, kolesterol, dan asam urat. Termasuk dalam kegiatan apakah pemeriksaan kesehatan pada komunitas lansia tersebut?",
+    "opsi": [
+      "Tanaman obat keluarga",
+      "Posyandu",
+      "Pos bina terpadu",
+      "Pos pelayanan terpadu",
+      "Bina keluarga lansia"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Tanaman Obat Keluarga (TOGA) fokus pada pemanfaatan tanaman herbal.\nB. Posyandu balita difokuskan untuk ibu dan anak.\nC. Pos Bina Terpadu (Posbindu / Posbindu PTM / Posyandu Lansia) merupakan kegiatan deteksi dini dan pemantauan faktor risiko PTM (pemeriksaan antropometri, gula darah, kolesterol, asam urat).\nD. Pos Pelayanan Terpadu bersifat umum untuk sasaran KIA/balita.\nE. Bina Keluarga Lansia (BKL) merupakan kelompok kegiatan ketahanan keluarga berbasis BKKBN.",
+    "pembahasan_klinis": {
+      "A": "Merupakan sarana kemandirian pengobatan herbal.",
+      "B": "Posyandu utama melayani KIA dan imunisasi balita.",
+      "C": "Posbindu PTM melayani skrining faktor risiko penyakit tidak menular seperti cek laboratorium sederhana dan antropometri pada populasi berisiko/lansia.",
+      "D": "Terminologi umum untuk pelayanan kesehatan dasar balita.",
+      "E": "Fokus pada pengasuhan dan pembinaan keluarga lansia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-004",
+    "no": 4,
+    "soal": "Sumber air bersih yang tercemar zat kimia akan mengganggu kesehatan penduduk yang mengonsumsinya. Pernyataan tersebut berkaitan dengan faktor lingkungan sebagai apa dalam timbulnya penyakit?",
+    "opsi": [
+      "Faktor langsung",
+      "Faktor tidak langsung",
+      "Faktor intermediet",
+      "Media",
+      "Penunjang"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Faktor langsung merujuk pada etiologi agen penyakit itu sendiri.\nB. Faktor tidak langsung adalah determinan predisposisi.\nC. Faktor intermediet adalah jalur perantara biologis.\nD. Air, udara, tanah, dan makanan bertindak sebagai media (wahana transmisi/penyebaran) pencemar atau agen penyakit lingkungan ke manusia.\nE. Penunjang merupakan kondisi yang mempermudah pajanan.",
+    "pembahasan_klinis": {
+      "A": "Agen fisika/kimia adalah etiologi langsung.",
+      "B": "Faktor sosial ekonomi sering menjadi penyebab tidak langsung.",
+      "C": "Variabel perantara dalam patomekanisme.",
+      "D": "Air berfungsi sebagai media transmisi/penyebaran bahan pencemar ke host.",
+      "E": "Faktor pendukung keparahan dampak kesehatan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-005",
+    "no": 5,
+    "soal": "Seorang wanita berusia 80 tahun adalah pasien stroke, saat ini ia tidak dapat berjalan dengan normal seperti saat sebelum sakit. Wanita tersebut sangat berharap penyakitnya bisa sembuh dan dapat beraktivitas seperti sedia kala. Apakah faktor lingkungan yang dapat mempengaruhi kesehatan wanita tersebut?",
+    "opsi": [
+      "Pola makan",
+      "Pola hidup lansia",
+      "Usia yang semakin bertambah",
+      "Akses ke fasilitas umum",
+      "Genetik"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Pola makan termasuk faktor perilaku individual.\nB. Gaya hidup termasuk determinan perilaku.\nC. Usia merupakan faktor biologis/pejamu (host factor).\nD. Akses ke fasilitas umum (ramah disabilitas/lansia) merupakan faktor lingkungan fisik dan sosial luar yang mendukung mobilisasi pasien stroke.\nE. Genetik merupakan faktor intrinsik pejamu.",
+    "pembahasan_klinis": {
+      "A": "Determinan perilaku individu.",
+      "B": "Determinan gaya hidup personal.",
+      "C": "Faktor risiko non-modifiable internal pejamu.",
+      "D": "Faktor lingkungan mencakup fasilitas fisik fisik/infrastruktur publik dan lingkungan sosial tempat tinggal lansia.",
+      "E": "Faktor hereditas intrinsik."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-006",
+    "no": 6,
+    "soal": "Petugas medis wajib melakukan pengisian rekam medis yang lengkap dan benar di semua tingkat pelayanan, serta pelacakan kematian dilakukan dengan cara otopsi verbal. Manakah di bawah ini yang merupakan implementasi dari pernyataan di atas?",
+    "opsi": [
+      "Mentoring maternal perinatal",
+      "Audit maternal perinatal",
+      "Monitoring maternal perinatal",
+      "Sensus maternal perinatal",
+      "Survey maternal perinatal"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Mentoring merupakan proses pendampingan teknis medis.\nB. Audit Maternal Perinatal (AMP) mengaji rekaman medis dan menggunakan kuesioner Otopsi Verbal Maternal/Perinatal (OVM/OVP) untuk menelusuri penyebab kematian ibu dan bayi.\nC. Monitoring merupakan pemantauan rutin indikator kinerja program.\nD. Sensus merupakan pendataan cacah jiwa populasi secara menyeluruh.\nE. Survei merupakan pengumpulan sampel data kuantitatif.",
+    "pembahasan_klinis": {
+      "A": "Metode peningkatan kapasitas klinis.",
+      "B": "AMP memanfaatkan otopsi verbal dan pengkajian rekam medis untuk identifikasi faktor penyebab kematian maternal dan neonatal.",
+      "C": "Evaluasi berkala terhadap pelaksanaan kegiatan kesehatan.",
+      "D": "Pengumpulan data demografi agregat.",
+      "E": "Studi epidemiologi sampel populasi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-007",
+    "no": 7,
+    "soal": "Dokter di Fasilitas Kesehatan Tingkat Pertama (FKTP) berfungsi sebagai pintu skrining pasien yang dapat diobati di FKTP dan yang perlu dirujuk ke layanan sekunder. Disebut apakah fungsi dokter ini?",
+    "opsi": [
+      "Manager",
+      "Care provider",
+      "Gatekeeper",
+      "Educator",
+      "Community Leader"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Manager bertugas mengelola manajemen fasilitas layanan kesehatan.\nB. Care provider berfokus memberikan pelayanan klinis medis.\nC. Gatekeeper adalah peran dokter layanan primer sebagai penapis pertama pelayanan kesehatan dan pengatur rujukan berjenjang.\nD. Educator bertugas memberikan edukasi kesehatan kepada pasien dan masyarakat.\nE. Community Leader bertugas menjadi penggerak kesehatan di masyarakat.",
+    "pembahasan_klinis": {
+      "A": "Fungsi pengorganisasian klinis/Puskesmas.",
+      "B": "Fungsi penyediaan asuhan medis langsung.",
+      "C": "Fungsi Gatekeeper memastikan tata kelola rujukan efisien dan selektif sesuai indikasi medis.",
+      "D": "Fungsi penyuluhan dan konseling.",
+      "E": "Fungsi kepemimpinan pemberdayaan masyarakat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-008",
+    "no": 8,
+    "soal": "Pilar pembangunan SDGs terdiri dari pilar sosial, lingkungan, ekonomi, serta hukum dan tata kelola. Tujuan SDG nomor 3 (Kehidupan Sehat dan Sejahtera) termasuk dalam pilar apa?",
+    "opsi": [
+      "Lingkungan",
+      "Sosial",
+      "Ekonomi",
+      "Hukum tata kelola",
+      "Semua benar"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Pilar Lingkungan mencakup SDG 6, 11, 12, 13, 14, dan 15.\nB. Pilar Pembangunan Sosial mencakup SDG 1 (Tanpa Kemiskinan), SDG 2 (Tanpa Kelaparan), SDG 3 (Kehidupan Sehat dan Sejahtera), SDG 4 (Pendidikan Berkualitas), dan SDG 5 (Kesetaraan Gender).\nC. Pilar Ekonomi mencakup SDG 7, 8, 9, 10, dan 17.\nD. Pilar Hukum & Tata Kelola mencakup SDG 16.\nE. Setiap pilar memiliki pengelompokan indikator tersendiri.",
+    "pembahasan_klinis": {
+      "A": "Fokus pada kelestarian ekosistem dan iklim.",
+      "B": "Pilar Sosial bertujuan menjamin pemenuhan hak dasar manusia seperti kesehatan (SDG 3) dan pendidikan.",
+      "C": "Fokus pada pertumbuhan ekonomi dan infrastruktur.",
+      "D": "Fokus pada perdamaian dan keadilan lembaga.",
+      "E": "SDG 3 secara khusus dikelompokkan pada Pilar Sosial."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-009",
+    "no": 9,
+    "soal": "Seorang perempuan berusia 48 tahun P0A1 datang ke bidan dengan keluhan perdarahan. Kondisi saat datang tampak sakit sedang, pucat, dan nadi meningkat. Dari anamnesis didapatkan pasien mengalami keputihan berbau kurang lebih 1 tahun dan mengalami perdarahan pasca sanggama (kontak). Tindakan apakah yang sesuai untuk tatalaksana kasus ini?",
+    "opsi": [
+      "Saran: perbaikan nutrisi",
+      "Kemoterapi",
+      "Bedrest",
+      "Observasi",
+      "Rujuk ke RS"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Nutrisi hanya pendukung penanganan anemia.\nB. Kemoterapi dilakukan di fasilitas sekunder/tersier setelah diagnosis pasti histopatologi.\nC. Bedrest tidak mengatasi etiologi kecurigaan keganasan serviks.\nD. Observasi menunda penanganan kegawatdaruratan kecurigaan keganasan.\nE. Pasien dengan gejala kecurigaan Kanker Serviks (contact bleeding, discharge berbau) di FKTP/praktik bidan wajib dirujuk ke Rumah Sakit untuk pemeriksaan penunjang lanjutan (biopsi/pemeriksaan ginekologi oncology).",
+    "pembahasan_klinis": {
+      "A": "Terapi suportif tidak menghilangkan faktor etiologi.",
+      "B": "Tatalaksana spesialis setelah staging diagnosis.",
+      "C": "Tindakan konservatif yang kurang tepat.",
+      "D": "Observasi berisiko memperburuk progresivitas lesi.",
+      "E": "Tatalaksana standar FKTP untuk tanda bahaya ginekologi/kecurigaan kanker serviks adalah rujukan ke RS sekunder/spesialis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-010",
+    "no": 10,
+    "soal": "Berdasarkan laporan yang dimiliki oleh Dinas Kesehatan Daerah X, Kepala Dinas Kesehatan melakukan surveilans dengan mengompilasi data yang bersumber dari laporan rutin bulanan dan mingguan fasilitas kesehatan (LB1, LB3, STP, W2). Apakah jenis surveilans yang dilakukan oleh Kepala Dinas Kesehatan tersebut?",
+    "opsi": [
+      "Surveilans aktif",
+      "Surveilans terpadu",
+      "Surveilans sentinel",
+      "Surveilans khusus",
+      "Surveilans pasif"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Surveilans aktif dilakukan jika petugas mendatangi langsung sumber data secara berkala.\nB. Surveilans terpadu mengombinasikan berbagai sistem surveilans penyakit.\nC. Surveilans sentinel menggunakan sampel unit pelapor khusus.\nD. Surveilans khusus fokus pada ancaman penyakit/kejadian tertentu dalam periode terbatas.\nE. Surveilans pasif adalah sistem surveilans di mana unit kesehatan penerima (Dinas Kesehatan) mengumpulkan data yang dilaporkan secara rutin oleh unit pelayanan kesehatan tanpa turun langsung mengumpulkan data.",
+    "pembahasan_klinis": {
+      "A": "Memerlukan petugas yang turun aktif menjaring kasus ke lapangan.",
+      "B": "Penggabungan sistem pengamatan berbagai program kesehatan.",
+      "C": "Pemantauan pada populasi/stasiun terpilih.",
+      "D": "Pengamatan berjangka pada KLB atau penyakit spesifik.",
+      "E": "Mengandalkan laporan berkala pasif dari faskes pelayanan dasar."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-011",
+    "no": 11,
+    "soal": "Kecamatan A di Jakarta Barat rawan banjir. BMKG memprediksi minggu ini terjadi hujan dengan curah hujan tinggi. Pemerintah Daerah telah berupaya melakukan revitalisasi aliran sungai, memperbaiki serta membersihkan selokan di jalan utama. Upaya Pemda dalam melakukan revitalisasi aliran sungai termasuk kegiatan apa?",
+    "opsi": [
+      "Kesiapsiagaan",
+      "Tanggap darurat krisis",
+      "Transisi darurat krisis",
+      "Mitigasi pasif",
+      "Mitigasi aktif"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Kesiapsiagaan melibatkan penyiapan sumber daya, pelatihan, dan logistik sebelum bencana.\nB. Tanggap darurat dilakukan saat kejadian bencana berlangsung.\nC. Transisi darurat dilakukan saat pemulihan awal pascabencana.\nD. Mitigasi pasif meliputi pembuatan regulasi, penyusunan tata ruang, dan tata guna lahan.\nE. Mitigasi aktif meliputi tindakan fisik/infrastruktur nyata sebelum bencana seperti revitalisasi sungai, pengerukan selokan, dan pembangunan tanggul.",
+    "pembahasan_klinis": {
+      "A": "Penyediaan tim dan logistik obat/perahu karet.",
+      "B": "Penyelamatan dan penanganan korban banjir.",
+      "C": "Tahap pemulihan layanan kesehatan dasar pascabencana.",
+      "D": "Penyusunan peraturan daerah zonasi rawan banjir.",
+      "E": "Intervensi fisik infrastruktur untuk mengurangi dampak kerugian krisis/bencana."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-012",
+    "no": 12,
+    "soal": "Memberikan bayi ASI yang disertai dengan pemberian makanan/minuman lain seperti susu formula sebelum bayi berusia 6 bulan disebut dengan pola pemberian ASI apa?",
+    "opsi": [
+      "Predominan",
+      "Eksklusif plus",
+      "Eksklusif parsial",
+      "Eksklusif",
+      "Parsial"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Menyusui predominan: ASI sebagai sumber utama tetapi pernah memberi sedikit air tajin/minuman berbasis air sebelum ASI keluar.\nB. Term bukan merupakan kriteria standar WHO/Kemenkes.\nC. Istilah non-standar bakuWHO.\nD. Menyusui eksklusif: hanya memberikan ASI saja tanpa makanan/minuman lain selama 6 bulan.\nE. Menyusui parsial: memberikan ASI bersamaan dengan makanan/minuman tambahan lain (seperti susu formula atau MPASI dini) sebelum usia 6 bulan.",
+    "pembahasan_klinis": {
+      "A": "ASI dominan dengan sedikit cairan berbasis air.",
+      "B": "Bukan definisi epidemiologis.",
+      "C": "Istilah kombinasi tidak baku.",
+      "D": "Hanya ASI tanpa tambahan cairan/makanan padat.",
+      "E": "Pemberian ASI dikombinasikan dengan formula/tambahan cairan sebelum 6 bulan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-013",
+    "no": 13,
+    "soal": "Faktor risiko penyakit tidak menular maupun menular yang dapat diubah atau dihindari (modifiable risk factor) adalah...",
+    "opsi": [
+      "merokok",
+      "hipertensi",
+      "geriatri",
+      "komorbiditas",
+      "balita"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Merokok adalah faktor risiko perilaku yang dapat diubah/dihindari (modifiable risk factor).\nB. Hipertensi adalah penyakit/kondisi medis klinis.\nC. Usia lanjut (geriatri) merupakan faktor risiko yang tidak dapat diubah (non-modifiable).\nD. Komorbiditas merupakan kondisi klinis penyakit penyerta.\nE. Kelompok usia balita merupakan faktor biologis/non-modifiable.",
+    "pembahasan_klinis": {
+      "A": "Perilaku merokok dapat diintervensi melalui modifikasi gaya hidup.",
+      "B": "Merupakan outcome manifestasi klinik.",
+      "C": "Faktor intrinsik demografi usia.",
+      "D": "Kondisi patologis ko-eksisten.",
+      "E": "Faktor kerentanan usia perkembangan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-014",
+    "no": 14,
+    "soal": "Seorang pasien yang menjalani metode KB kalender datang ke tempat bidan mengatakan tadi malam melakukan hubungan seksual pada masa subur. Pasien tidak mau hamil lagi karena anaknya sudah 3. Apakah pilihan kontrasepsi darurat yang tepat diberikan untuk mencegah kehamilan?",
+    "opsi": [
+      "Memasang AKDR setelah 2 minggu pasca coitus",
+      "Memberi intravaginal tissue dalam jumlah banyak",
+      "Memberi pil kombinasi dosis 30 mcg (metode Yuzpe) 2x4 tablet",
+      "Segera diberikan suntik KB",
+      "Tidak ada metode KB yang dapat digunakan"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Pemasangan AKDR Cu sebagai kondar maksimal dilakukan 5 hari (120 jam) pasca senggama, bukan 2 minggu.\nB. Intravaginal tissue/spermisida tidak efektif pasca coitus.\nC. Kontrasepsi darurat regimen pil kombinasi (metode Yuzpe: EE 30 mcg + levonorgestrel 0.15 mg, 4 tablet segera dan 4 tablet 12 jam kemudian) efektif jika diberikan dalam < 72 jam pasca senggama tanpa pelindung.\nD. Suntik KB membutuhkan rentang waktu untuk mencapai efektivitas pencegahan dan bukan indikasi kontrasepsi darurat.\nE. Terdapat pilihan kontrasepsi darurat yang efektif.",
+    "pembahasan_klinis": {
+      "A": "Batas efektif AKDR sebagai kondar adalah <= 5 hari.",
+      "B": "Merupakan metode barrier lokal pra-senggama.",
+      "C": "Metode Yuzpe menggunakan pil kontrasepsi kombinasi dosis rendah sebagai pilihan alternatif kontrasepsi darurat pencegah implantasi.",
+      "D": "Tidak efektif mencegah konsepsi pasca coitus langsung.",
+      "E": "Tersedia pilihan pil kontrasepsi darurat (Kondar)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-015",
+    "no": 15,
+    "soal": "Diketahui data cakupan imunisasi TT pada beberapa Puskesmas: Puskesmas A (Sasaran 100, Capaian 60), Puskesmas B (Sasaran 135, Capaian 50), Puskesmas C (Sasaran 125, Capaian 60), Puskesmas D (Sasaran 140, Capaian 90), dan Puskesmas E (Sasaran 95, Capaian 60). Berdasarkan persentase cakupan, Puskesmas manakah yang memiliki kinerja vaksinasi terbaik?",
+    "opsi": [
+      "Puskesmas A",
+      "Puskesmas B",
+      "Puskesmas C",
+      "Puskesmas D",
+      "Puskesmas E"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Cakupan Puskesmas A = 60/100 = 60,0%.\nB. Cakupan Puskesmas B = 50/135 = 37,0%.\nC. Cakupan Puskesmas C = 60/125 = 48,0%.\nD. Cakupan Puskesmas D = 90/140 = 64,3% (Persentase capaian tertinggi).\nE. Cakupan Puskesmas E = 60/95 = 63,1%.",
+    "pembahasan_klinis": {
+      "A": "Persentase cakupan 60,0%.",
+      "B": "Persentase cakupan 37,0%.",
+      "C": "Persentase cakupan 48,0%.",
+      "D": "Puskesmas D memiliki persentase keberhasilan tertinggi terhadap target sasaran (64,28%).",
+      "E": "Persentase cakupan 63,15%."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-016",
+    "no": 16,
+    "soal": "Menjaga eksistensi akal/pikiran dengan meninggalkan segala kegiatan yang dilarang oleh agama seperti minuman keras, mabuk, dan konsumsi zat adiktif merupakan penerapan Maqashid Syari'ah dalam bidang apa?",
+    "opsi": [
+      "Hifzhul Mal",
+      "Hifzhun Nafs",
+      "Hifzud Din",
+      "Hifzhun Nasl",
+      "Hifzal 'Aql"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Hifzhul Mal: memelihara harta.\nB. Hifzhun Nafs: memelihara jiwa/nyawa.\nC. Hifzud Din: memelihara agama.\nD. Hifzhun Nasl: memelihara keturunan.\nE. Hifzal 'Aql: memelihara akal pikiran dari kerusuhan/kerusakan akibat zat adiktif dan miras.",
+    "pembahasan_klinis": {
+      "A": "Perlindungan terhadap kepemilikan harta.",
+      "B": "Perlindungan terhadap keselamatan jiwa.",
+      "C": "Perlindungan terhadap keyakinan beragama.",
+      "D": "Perlindungan terhadap keberlangsungan keturunan.",
+      "E": "Upaya menjaga fungsi kognitif dan kesehatan mental akal manusia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-017",
+    "no": 17,
+    "soal": "Di wilayah kerja Puskesmas A terjadi kasus kematian bayi dan sedang dilakukan Audit Maternal Perinatal (AMP). Siapakah petugas yang bertanggung jawab mengisi formulir Otopsi Verbal Perinatal (OVP)?",
+    "opsi": [
+      "Bidan puskesmas",
+      "Keluarga pasien",
+      "Petugas Dinas Kesehatan",
+      "Bidan rumah sakit",
+      "Dokter kandungan di RS"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Pengisian formulir otopsi verbal (OVM/OVP) di tingkat komunitas/wilayah kerja menjadi tugas Bidan Koordinator / Bidan Puskesmas setempat.\nB. Keluarga pasien merupakan informan/narasumber, bukan pengisi formulir.\nC. Petugas Dinas Kesehatan bertugas melakukan pengolahan/rekapitulasi AMP tingkat kabupaten/kota.\nD. Bidan RS menangani formulir rekam medis internal RS.\nE. Dokter spesialis ginekologi bertugas pada penelusuran medis RS.",
+    "pembahasan_klinis": {
+      "A": "Sesuai pedoman AMP Kemenkes, otopsi verbal kematian masyarakat ditelusuri dan diisi oleh Bidan Puskesmas wilayah tempat domisili kasus.",
+      "B": "Responden wawancara penelusuran kronologis.",
+      "C": "Penyelenggara dan tim pengkaji AMP komite kabupaten.",
+      "D": "Pengisi formulir kematian faskes rujukan.",
+      "E": "Tim pengkaji medis kasus kematian di RS."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-018",
+    "no": 18,
+    "soal": "Skrining perkembangan anak sederhana yang umum digunakan di fasilitas pelayanan kesehatan dasar (Puskesmas) atau oleh petugas lapangan menggunakan alat:",
+    "opsi": [
+      "Kuesioner KPSP",
+      "Kuesioner GPPH",
+      "Kuesioner Bayley-II",
+      "Kuesioner PEDS",
+      "Kuesioner Denver"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. KPSP (Kuesioner Pra Skrining Perkembangan) adalah instrumen resmi baku Kemenkes RI untuk skrining perkembangan anak umur 0-72 bulan di pelayanan kesehatan primer.\nB. GPPH instrumen khusus gangguan pemusatan perhatian dan hiperaktivitas.\nC. Bayley Scale merupakan alat diagnostik perkembangan komprehensif tingkat lanjut.\nD. PEDS kuesioner keluhan orang tua.\nE. Denver II alat skrining spesifik klinis yang membutuhkan lembar tes observasi perawat/dokter spesialis.",
+    "pembahasan_klinis": {
+      "A": "Instrumen lini pertama pelayanan kesehatan primer Indonesia untuk mendeteksi penyimpangan perkembangan anak.",
+      "B": "Instrumen skrining perilaku kognitif spesifik.",
+      "C": "Uji diagnostik perkembangan formal.",
+      "D": "Instrumen persepsi orang tua terhadap tumbuh kembang.",
+      "E": "Skala penilaian perilaku klinis terstandardisasi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-019",
+    "no": 19,
+    "soal": "Dari evaluasi data kecamatan didapatkan angka kematian neonatus karena Tetanus Neonatorum. Dari 120 bayi yang ditolong tenaga medis, terdapat 20 bayi terkena tetanus. Dari 80 bayi yang ditolong paraji, terdapat 40 bayi terkena tetanus. Berapakah nilai Risiko Relatif (Relative Risk) kejadian tetanus neonatorum pada kelompok persalinan paraji dibandingkan tenaga medis?",
+    "opsi": [
+      "5",
+      "0,3",
+      "3",
+      "0,2",
+      "2,3"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Nilai bukan hasil perhitungan RR yang tepat.\nB. Nilai 0,33 adalah invers risiko (tenaga medis vs paraji).\nC. Insidensi Paraji = 40/80 = 0,5 (50%). Insidensi Tenaga Medis = 20/120 = 1/6 (16,7%). Relative Risk (RR) = Insidensi Paraji / Insidensi Medis = 0,5 / (1/6) = 3,0.\nD. Nilai kalkulasi yang tidak sesuai.\nE. Nilai kalkulasi yang salah.",
+    "pembahasan_klinis": {
+      "A": "Angka kalkulasi keliru.",
+      "B": "Invers perbandingan risiko relatif.",
+      "C": "RR = 3 menunjukkan bayi yang ditolong paraji memiliki risiko 3 kali lebih tinggi mengalami Tetanus Neonatorum dibandingkan yang ditolong tenaga medis.",
+      "D": "Hasil kalkulasi tidak sesuai.",
+      "E": "Hasil kalkulasi salah."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-020",
+    "no": 20,
+    "soal": "Seorang pasien datang membawa surat rujukan dengan keluhan demam 3 hari, menggigil, dan berkeringat. Pasien dirujuk karena Puskesmas asal tidak dapat melakukan pemeriksaan spesimen darah mikroskopis akibat reagen malaria habis. Tipe rujukan apakah yang dilakukan untuk penanganan pasien ini?",
+    "opsi": [
+      "Rujukan tenaga kesehatan",
+      "Rujukan vertikal",
+      "Rujukan spesimen",
+      "Rujukan horizontal",
+      "Rujukan parsial"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Rujukan tenaga kesehatan dilakukan bila tenaga ahli didatangkan ke faskes asal.\nB. Rujukan vertikal dilakukan antar jenjang fasilitas kesehatan yang berbeda tingkatannya.\nC. Rujukan spesimen dilakukan apabila hanya sampel darah yang dikirim tanpa menghadirkan pasien.\nD. Rujukan horizontal dilakukan antar faskes setingkat secara penuh.\nE. Rujukan parsial dilakukan apabila pengiriman pasien/spesimen bertujuan untuk penunjang pemeriksaan/terapi sementara yang merupakan satu rangkaian perawatan, kemudian pasien kembali ke faskes perujuk.",
+    "pembahasan_klinis": {
+      "A": "Transfer konsultasi ahli ke faskes.",
+      "B": "Rujukan perpindahan jenjang faskes tingkat lanjut.",
+      "C": "Pengiriman bahan sampel tanpa orangnya.",
+      "D": "Alih rawat pasien antar tingkatan faskes yang sederajat.",
+      "E": "Sesuai regulasi rujukan UKP, rujukan penunjang sementara akibat kendala reagen/alat dikategorikan sebagai rujukan parsial."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-021",
+    "no": 21,
+    "soal": "Apakah kondisi utama yang dapat menyebabkan suatu masalah kesehatan dapat diangkat menjadi prioritas masalah dalam masyarakat binaan?",
+    "opsi": [
+      "tidak melakukan presurvey",
+      "adanya kesenjangan antara harapan dan kenyataan",
+      "mempunyai diagnosis klinis",
+      "metode yang dilakukan metode delphi",
+      "masalah kesehatan yang sedang terjadi di masyarakat"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Presurvei justru diperlukan untuk identifikasi.\nB. Masalah didefinisikan secara epidemiologi/manajemen sebagai adanya kesenjangan (gap) antara target/harapan (expected) dengan pencapaian aktual di lapangan (observed).\nC. Diagnosis klinis bersifat individual, bukan diagnosis komunitas.\nD. Metode Delphi merupakan salah satu teknik penetapan prioritas, bukan definisi masalah.\nE. Masalah kesehatan merupakan fenomena umum, namun penetapan masalah didasarkan pada besarnya kesenjangan indikator.",
+    "pembahasan_klinis": {
+      "A": "Tahapan pra-perencanaan.",
+      "B": "Definisi operasional masalah dalam manajemen kesehatan masyarakat adalah kesenjangan antara apa yang seharusnya dicapai dengan kenyataan yang terjadi.",
+      "C": "Pendekatan kuratif personal.",
+      "D": "Teknik kesepakatan pakar.",
+      "E": "Keadaan empiris populasi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-022",
+    "no": 22,
+    "soal": "Ny. R melahirkan anak pertamanya. Setelah bayi lahir dan dibersihkan, bayi diletakkan di dada/perut ibu untuk Inisiasi Menyusu Dini (IMD). Apakah manfaat psikologis dan fisiologis utama yang didapatkan Ny. R dari pelaksanaan IMD tersebut?",
+    "opsi": [
+      "Membangun emosional ibu dan puskesmas",
+      "Membangun rasa dan ikatan kasih sayang ibu dan anak",
+      "Meningkatkan progesteron",
+      "Meningkatkan rasa sayang kepada petugas",
+      "Melaksanakan kebijakan"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. IMD tidak bertujuan membina emosional dengan institusi.\nB. IMD merangsang ikatan batin (bounding attachment) antara ibu dan anak serta merangsang pelepasan hormon oksitosin untuk kontraksi uterus ibu.\nC. IMD justru menstimulasi refleks oksitosin dan prolaktin, bukan progesteron.\nD. Hubungan interpersonal difokuskan pada bayi.\nE. Kepatuhan regulasi bukan manfaat kesehatan klinis.",
+    "pembahasan_klinis": {
+      "A": "Tidak relevan dengan keintiman klinis.",
+      "B": "Sentuhan kulit ke kulit (skin-to-skin contact) IMD meningkatkan bounding ikatan emosional ibu-bayi dan menurunkan risiko perdarahan postpartum.",
+      "C": "Hormon yang berperan adalah oksitosin.",
+      "D": "Tidak relevan.",
+      "E": "Aspek administratif."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-023",
+    "no": 23,
+    "soal": "Dokter di Klinik YARSI bekerja sama dengan BPJS Kesehatan melayani peserta sebanyak 3.000 jiwa. Bagaimanakah metode pembayaran proaktif pra-upaya dari BPJS ke Klinik YARSI tersebut?",
+    "opsi": [
+      "salary",
+      "out of pocket",
+      "fee for service",
+      "kapitasi",
+      "case based"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Gaji (Salary) adalah pembayaran tetap terlepas dari jumlah peserta terdaftar.\nB. Out of pocket adalah pembayaran langsung secara tunai oleh pasien.\nC. Fee for service adalah pembayaran berdasarkan jumlah tindakan/pelayanan yang diberikan.\nD. Kapitasi adalah metode pembayaran pra-upaya dimuka berdasar jumlah jiwa peserta terdaftar per bulan di FKTP tanpa memedulikan frekuensi kunjungan pasien.\nE. Case based (INA-CBGs) digunakan pada pembayaran faskes rujukan sekunder/RS.",
+    "pembahasan_klinis": {
+      "A": "Sistem gaji pegawai.",
+      "B": "Sistem pembiayaan mandiri non-asuransi.",
+      "C": "Retribusi layanan per item tindakan.",
+      "D": "Sistem pembayaran prospektif kapitasi merupakan pola pembayaran standar BPJS untuk FKTP.",
+      "E": "Sistem prospektif berbasis kelompok diagnosis paket RS."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-024",
+    "no": 24,
+    "soal": "Kesehatan Remaja masih menjadi masalah utama di Indonesia karena masyarakat masih menganggap tabu edukasi kesehatan reproduksi. Upaya promotif-preventif yang paling tepat dilakukan untuk menanggulangi masalah ini adalah:",
+    "opsi": [
+      "memberikan kondom gratis untuk remaja",
+      "perkawinan dini",
+      "menyediakan layanan aborsi",
+      "mengadakan program kesehatan remaja di sekolah",
+      "melarang pendidikan seks"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Pembagian kondom bebas berisiko memicu kontroversi moral dan bukan edukasi komprehensif.\nB. Perkawinan dini meningkatkan risiko kehamilan remaja dan angka kematian ibu.\nC. Aborsi tanpa indikasi medis melanggar hukum dan UU Kesehatan.\nD. Pelaksanaan Pelayanan Kesehatan Peduli Remaja (PKPR) dan edukasi reproduksi terintegrasi melalui program sekolah (UKS) merupakan strategi efektif formal.\nE. Pembatasan edukasi justru memperburuk kebodohan informasi reproduksi.",
+    "pembahasan_klinis": {
+      "A": "Pendekatan kontroversial tanpa pengawasan edukatif.",
+      "B": "Faktor risiko gangguan obstetri dan sosial.",
+      "C": "Tindakan ilegal tanpa indikasi medis mendesak.",
+      "D": "Program PKPR di sekolah memberi pemahaman kesehatan reproduksi yang aman, terstruktur, dan berbasis bukti.",
+      "E": "Meningkatkan risiko perilaku seks tidak aman."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-025",
+    "no": 25,
+    "soal": "Kehadiran masyarakat di Posyandu mengalami penurunan signifikan hingga di bawah 30% pada masa pandemi. Konseling/pendekatan manakah yang paling tepat dilakukan oleh petugas kesehatan setempat?",
+    "opsi": [
+      "Pertemuan dengan puskesmas agar sementara waktu tidak melakukan kunjungan",
+      "Konseling kelompok berdasarkan kelompok kebutuhan program agar lebih spesifik",
+      "Pertemuan aturan baru posyandu agar anggota hadir, memberikan rewards dan sanksi",
+      "Konseling individu untuk menggali masalah mengapa anggota tidak hadir",
+      "Konseling kelompok seluruh anggota agar tahu alasan terbanyak mengapa anggota tidak hadir"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Menghentikan kunjungan memperburuk cakupan imunisasi dan gizi.\nB. Konseling kelompok kurang efektif menggali kendala spesifik keluarga individual.\nC. Pemberian sanksi dapat memicu penolakan warga.\nD. Konseling individu (home visit / pemantauan mandiri) paling efektif untuk mengenali hambatan personal, kekhawatiran spesifik pasien/ibu, serta mencari solusi yang tepat.\nE. Konseling kelompok besar tidak menjaga kerahasiaan dan kurang mendalam.",
+    "pembahasan_klinis": {
+      "A": "Tindakan pasif yang menurunkan status kesehatan populasi.",
+      "B": "Kurang efektif eksplorasi faktor penyebab drop-out individual.",
+      "C": "Metode pemaksaan tidak membina kesadaran.",
+      "D": "Pendekatan persuasif individual memungkinkan identifikasi hambatan spesifik (seperti ketakutan tertular infeksi) dan edukasi terfokus.",
+      "E": "Kurang efektif mengurai kendala personal."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-026",
+    "no": 26,
+    "soal": "Kecamatan A merupakan daerah rawan banjir. Menurut BMKG minggu ini curah hujan tinggi. Puskesmas telah siap siaga jika terjadi banjir dan menyediakan buffer stock obat-obatan. Kegiatan menyediakan persediaan obat-obatan yang dilakukan Puskesmas termasuk dalam kegiatan apa?",
+    "opsi": [
+      "Mitigasi aktif",
+      "Mitigasi pasif",
+      "Kesiapsiagaan",
+      "Tanggap darurat krisis",
+      "Transisi darurat krisis"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Mitigasi aktif fokus pada pembangunan fisik struktur peredam bencana.\nB. Mitigasi pasif fokus pada regulasi dan tata ruang.\nC. Kesiapsiagaan (Preparedness) adalah serangkaian kegiatan yang dilakukan untuk mengantisipasi bencana melalui pengorganisasian serta penyiapan sarana, perahu evakuasi, dan buffer stock obat-obatan sebelum bencana terjadi.\nD. Tanggap darurat dilakukan saat bencana menggejala/berlangsung.\nE. Transisi darurat pasca kejadian krisis.",
+    "pembahasan_klinis": {
+      "A": "Pembangunan sarana rekayasa fisik.",
+      "B": "Penerapan aturan zonasi aman.",
+      "C": "Kesiapsiagaan pra-bencana memastikan ketersediaan logistik medis saat ancaman timbul.",
+      "D": "Tindakan evakuasi dan pengobatan saat bencana terjadi.",
+      "E": "Tindakan pemulihan jangka pendek."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-027",
+    "no": 27,
+    "soal": "Bagaimanakah urutan tahapan yang benar dalam melakukan Diagnosis Komunitas (Community Diagnosis)?",
+    "opsi": [
+      "Menentukan area masalah, membuat instrumen, memperoleh data, analisis, intervensi",
+      "Menentukan area masalah, membuat kuesioner, mengumpulkan data, analisis, menyusun intervensi",
+      "Menentukan area masalah, membuat instrumen, mengumpulkan data, analisis, intervensi",
+      "Menentukan area masalah, membuat instrumen, mengumpulkan data, menganalisis data, menyusun dan melakukan intervensi",
+      "Menentukan area masalah, membuat kuesioner, memperoleh data, analisis, intervensi"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Tidak mencantumkan penyusunan rencana intervensi secara lengkap.\nB. Kuesioner hanya salah satu bentuk instrumen.\nC. Kurang lengkap pada tahapan implementasi dan penyusunan intervensi.\nD. Tahapan komprehensif diagnosis komunitas meliputi: (1) Menentukan area masalah, (2) Menyusun instrumen pengumpulan data, (3) Mengumpulkan data, (4) Menganalisis data, (5) Menyusun rencana intervensi pemecahan masalah, dan (6) Melaksanakan intervensi.\nE. Opsi tahapannya belum mencakup perencanaan intervensi.",
+    "pembahasan_klinis": {
+      "A": "Tahapan perencanaan kurang detail.",
+      "B": "Instrumen pengumpulan data lebih luas dari sekadar kuesioner.",
+      "C": "Tidak memisahkan tahapan formulasi dan aksi intervensi.",
+      "D": "Sesuai alur siklus pemecahan masalah kesehatan masyarakat (problem solving cycle).",
+      "E": "Kurang sistematis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-028",
+    "no": 28,
+    "soal": "Dalam rangka membantu pemerintah menyukseskan vaksinasi, RS YARSI mengadakan kegiatan vaksinasi masyarakat. Untuk pemenuhan logistik vaksin tersebut, RS YARSI bekerja sama dengan Puskesmas Cempaka Putih dan Dinas Kesehatan. Disebut apakah jenis rujukan tersebut?",
+    "opsi": [
+      "Rujukan sarana dan logistik",
+      "Rujukan operasional",
+      "Rujukan kasus",
+      "Rujukan tenaga",
+      "Rujukan bahan pemeriksaan"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Rujukan sarana dan logistik (bagian rujukan Kesehatan Masyarakat / UKM) meliputi bantuan pengadaan obat, vaksin, alat kesehatan, dan sarana operasional.\nB. Rujukan operasional mencakup bantuan penanggulangan masalah kesehatan lapangan.\nC. Rujukan kasus mencakup rujukan pasien (UKP).\nD. Rujukan tenaga mencakup bantuan pendampingan dokter ahli/tenaga medis.\nE. Rujukan bahan pemeriksaan mencakup spesimen laboratorium.",
+    "pembahasan_klinis": {
+      "A": "Pengadaan suplai vaksin dan logistik medis antar-lembaga kesehatan termasuk rujukan sarana/logistik UKM.",
+      "B": "Pelaksanaan program kesehatan di lapangan.",
+      "C": "Rujukan perorangan medis.",
+      "D": "Pengiriman tenaga medis perbantuan.",
+      "E": "Pengiriman spesimen pemeriksaan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-029",
+    "no": 29,
+    "soal": "Dari data Puskesmas, diketahui jumlah pasien TB meningkat dari 56 menjadi 75 pasien. Data tersebut diperoleh dari laporan kader kesehatan yang melakukan penelusuran secara aktif dan terus-menerus setiap bulan. Termasuk dalam jenis surveilans apakah kegiatan ini?",
+    "opsi": [
+      "Surveilans penyakit",
+      "Surveilans terpadu",
+      "Surveilans sentinel",
+      "Surveilans pasif",
+      "Surveilans aktif"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Surveilans penyakit merupakan pengamatan umum menurut jenis penyakit.\nB. Surveilans terpadu mengkombinasikan banyak data program.\nC. Surveilans sentinel pengamatan sampel terpilih.\nD. Surveilans pasif hanya menerima laporan yang dikirim faskes secara berkala.\nE. Surveilans aktif dilakukan bila petugas/kader secara proaktif mencari, mendatangi, dan mengumpulkan data kasus di masyarakat secara berkala.",
+    "pembahasan_klinis": {
+      "A": "Kategori umum subjek surveilans.",
+      "B": "Integrasi indikator berbagai penyakit.",
+      "C": "Pengamatan berbasis lokasi percontohan.",
+      "D": "Pengumpulan data sekunder secara pasif.",
+      "E": "Penjangkauan aktif oleh kader di lapangan merupakan bentuk aktif surveilans berbasis masyarakat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-030",
+    "no": 30,
+    "soal": "Sustainable Development Goals (SDGs) secara spesifik menyasar kelompok masyarakat paling rentan agar tidak ada satu orang pun yang terlewatkan dari manfaat pembangunan. Prinsip utama apakah ini?",
+    "opsi": [
+      "No one left behind",
+      "No poverty",
+      "Zero hunger",
+      "Good health and well-being",
+      "Gender equality"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. \"No one left behind\" (Tidak meninggalkan satu orang pun) adalah prinsip utama dari Dokumen Agenda Pembangunan Berkelanjutan (SDGs) 2030.\nB. \"No poverty\" merupakan Goal 1 SDGs.\nC. \"Zero hunger\" merupakan Goal 2 SDGs.\nD. \"Good health and well-being\" merupakan Goal 3 SDGs.\nE. \"Gender equality\" merupakan Goal 5 SDGs.",
+    "pembahasan_klinis": {
+      "A": "Prinsip inklusivitas SDGs untuk menjamin keadilan sosial bagi seluruh populasi marjinal dan rentan.",
+      "B": "Tujuan spesifik pengentasan kemiskinan.",
+      "C": "Tujuan ketahanan pangan.",
+      "D": "Tujuan sektor kesehatan.",
+      "E": "Tujuan kesetaraan hak gender."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-031",
+    "no": 31,
+    "soal": "Pada pengumpulan data Riskesdas, terdapat modul kuesioner Rumah Tangga dan kuesioner Individu. Data manakah di bawah ini yang dikumpulkan pada tingkat/kuesioner Rumah Tangga?",
+    "opsi": [
+      "Pengetahuan dan sikap terhadap HIV/AIDS",
+      "Pelayanan kesehatan tradisional",
+      "Akses pelayanan kesehatan",
+      "Pemberian tablet tambah darah pada remaja putri",
+      "Kesehatan Ibu"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Pengetahuan HIV dikumpulkan pada Kuesioner Individu.\nB. Pelayanan kesehatan tradisional yang dimanfaatkan individu masuk kuesioner individu.\nC. Akses terhadap pelayanan kesehatan (jarak, transportasi, sarana air minum, sanitasi) dikumpulkan pada Kuesioner Rumah Tangga.\nD. Pemberian TTD remaja putri masuk kuesioner individu.\nE. Kesehatan Ibu masuk kuesioner individu wanita usia subur.",
+    "pembahasan_klinis": {
+      "A": "Indikator pengetahuan personil individu.",
+      "B": "Pengalaman medis individual.",
+      "C": "Indikator lingkungan fisik, lokasi geografis, dan fasilitas utilitas diukur dalam agregat kuesioner rumah tangga.",
+      "D": "Intervensi gizi personal.",
+      "E": "Riwayat obstetri individual."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-032",
+    "no": 32,
+    "soal": "Universitas YARSI melakukan kerja sama dengan pihak swasta dalam pelaksanaan program percepatan penurunan stunting pada balita. Prinsip dasar utama yang harus melandasi kesepakatan kemitraan tersebut adalah:",
+    "opsi": [
+      "Kesetaraan",
+      "Kemitraan yang setara, terbuka, dan saling menguntungkan",
+      "Keterbukaan dan kemitraan",
+      "Saling menguntungkan saja",
+      "Keterbukaan dan kesetaraan"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Hanyasatu pilar kemitraan.\nB. Tiga prinsip utama dalam pembangunan kemitraan kesehatan adalah: (1) Kesetaraan (Equity), (2) Keterbukaan (Transparency), dan (3) Saling Menguntungkan (Mutual Benefit).\nC. Belum mencantumkan aspek manfaat bersama.\nD. Mengabaikan aspek kesetaraan kedudukan dan transparansi.\nE. Belum mencantumkan aspek kesamaan kemanfaatan.",
+    "pembahasan_klinis": {
+      "A": "Komponen tunggal.",
+      "B": "Trilogi prinsip kemitraan promosi kesehatan menjamin kolaborasi berkelanjutan tanpa ada dominasi antar-pihak.",
+      "C": "Formulasi tidak lengkap.",
+      "D": "Berisiko komersialisasi.",
+      "E": "Formulasi tidak lengkap."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-033",
+    "no": 33,
+    "soal": "Peran keluarga sangat menentukan keberhasilan pengobatan penderita TBC karena anggota keluarga menjadi Pengawas Menelan Obat (PMO). Dalam teori sistem budaya dan sosial kesehatan, peran keluarga dan hubungan interpersonal ini termasuk ke dalam komponen apa?",
+    "opsi": [
+      "struktur",
+      "suprastruktur",
+      "infrastruktur",
+      "instruktur",
+      "superstruktur"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Struktur mencakup hubungan interpersonal, peranan keluarga, organisasi sosial, dan dinamika keompok.\nB. Suprastruktur/Superstruktur mencakup sistem nilai, kepercayaan, dan ideologi agama.\nC. Infrastruktur mencakup lingkungan fisik, ekonomi, dan fasilitas penunjang material.\nD. Instruktur adalah pengajar/pelatih.\nE. Superstruktur merupakan elemen sistem kepercayaan kognitif.",
+    "pembahasan_klinis": {
+      "A": "Sistem sosial masyarakat mencakup pola kekerabatan dan peran keluarga sebagai pilar dukungan PMO.",
+      "B": "Domain norma dan keyakinan spiritual.",
+      "C": "Domain kondisi fasilitas material.",
+      "D": "Peran pelatih klinis.",
+      "E": "Domain pemaknaan dan kosmologi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-034",
+    "no": 34,
+    "soal": "Seorang laki-laki dan perempuan berusia 17 tahun baru lulus SMA dan berencana menikah. Manakah pernyataan yang paling tepat terkait aspek konsekuensi hukum perkawinan usia tersebut di Indonesia?",
+    "opsi": [
+      "Tidak akan mengalami dampak psikis karena mereka sudah siap",
+      "Dampak sosial tidak dikhawatirkan karena tingkat ekonomi orang tua baik",
+      "Dampak fisik negatif tidak ada karena sudah menstruasi",
+      "Pasangan bisa bebas melanjutkan pendidikan tinggi",
+      "Pernikahan ini berpotensi memiliki konsekuensi hukum karena melanggar batas usia minimal perkawinan UU Perkawinan No. 16 Tahun 2019"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Risiko dampak psikologis tetap tinggi pada emosi yang belum matang sepenuhnya.\nB. Status ekonomi tidak menghilangkan risiko sosial kehamilan usia remaja.\nC. Organ reproduksi panggul wanita usia 17 tahun belum matang sempurna untuk kehamilan.\nD. Perkawinan dini sering berisiko menghambat kelanjutan pendidikan formal.\nE. Menurut UU No. 16 Tahun 2019 tentang Perkawinan, batas usia minimal menikah untuk laki-laki dan perempuan adalah 19 tahun. Pernikahan di bawah usia 19 tahun wajib mengajukan dispensasi nikah ke Pengadilan Agama.",
+    "pembahasan_klinis": {
+      "A": "Maturitas psikososial belum optimal.",
+      "B": "Status finansial tidak menghapus faktor risiko medis maternal.",
+      "C": "Risiko panggul sempit dan penyulit persalinan tetap ada.",
+      "D": "Terdapat potensi hambatan pendidikan.",
+      "E": "Ketentuan batas usia minimal 19 tahun dilindungi oleh undang-undang untuk mencegah dampak buruk pernikahan anak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-035",
+    "no": 35,
+    "soal": "Jumlah penduduk Desa A sebesar 5.000 jiwa. Terjadi kematian ibu hamil 5 orang, kematian ibu melahirkan 10 orang, dan kematian ibu nifas 5 orang. Jika diketahui total lahir hidup pada tahun tersebut adalah 5.000 bayi, berapakah Angka Kematian Ibu / Maternal Mortality Rate (MMR) per 1.000 kelahiran hidup?",
+    "opsi": [
+      "0,75",
+      "1,0",
+      "0,25",
+      "0,50",
+      "4,0"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Kalkulasi tidak tepat.\nB. Kalkulasi tidak tepat.\nC. Kalkulasi tidak tepat.\nD. Kalkulasi tidak tepat.\nE. Total Kematian Ibu = Kematian Hamil (5) + Melahirkan (10) + Nifas (5) = 20 ibu.\nMMR per 1.000 Lahir Hidup = (Total Kematian Ibu / Jumlah Lahir Hidup) x 1.000 = (20 / 5.000) x 1.000 = 4,0.",
+    "pembahasan_klinis": {
+      "A": "Hasil tidak sesuai formula MMR.",
+      "B": "Hasil tidak sesuai formula MMR.",
+      "C": "Hasil tidak sesuai formula MMR.",
+      "D": "Hasil tidak sesuai formula MMR.",
+      "E": "Perhitungan MMR komprehensif memperhitungkan seluruh kematian ibu yang disebabkan oleh kehamilan, persalinan, dan nifas dibagi total lahir hidup pada periode tersebut."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-036",
+    "no": 36,
+    "soal": "Seorang dokter Puskesmas hendak melakukan riset dampaknya limbah pabrik plastik terhadap kualitas air sungai pemukiman warga. Sebelum memulai penelitian lingkungan di tingkat komunitas, koordinasi sosial paling awal paling tepat dilakukan kepada:",
+    "opsi": [
+      "Dinas Kesehatan",
+      "Bidan puskesmas",
+      "Bidan desa",
+      "Salah semua",
+      "Tokoh agama (Toga), Tokoh masyarakat (Toma), dan aparat wilayah setempat"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Dinas Kesehatan merupakan jalur rujukan administratif atas.\nB. Bidan puskesmas pelaksana klinis wilayah.\nC. Bidan desa pelaksana KIA tingkat desa.\nD. Pilihan E merupakan jawaban yang paling tepat.\nE. Bina suasana dan perizinan lapangan awal pada komunitas membutuhkan dukungan penggerak lokal yaitu Tokoh Agama (Toga), Tokoh Masyarakat (Toma), dan Kepala Wilayah/Kepolisian setempat agar riset berjalan kondusif.",
+    "pembahasan_klinis": {
+      "A": "Jalur birokrasi pemerintahan dinas.",
+      "B": "Pemberi pelayanan KIA primer.",
+      "C": "Pemberi pelayanan kebidanan komunitas.",
+      "D": "Opsi E benar.",
+      "E": "Advokasi dan pendekatan sosiokultural awal memerlukan pelibatan pemimpin lokal informal dan formal (Toga/Toma) untuk efektivitas intervensi komunitas."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-037",
+    "no": 37,
+    "soal": "Puskesmas dan kader butuh dukungan bantuan sarana dan pendanaan untuk kelancaran program promotif kesehatan, sehingga melakukan penggalangan komitmen dan pengajuan proposal kerja sama kepada pemangku kebijakan dan pihak swasta. Strategi utama promosi kesehatan apakah ini?",
+    "opsi": [
+      "Pemberdayaan masyarakat",
+      "Advokasi",
+      "Bina suasana",
+      "Promotif",
+      "Preventif"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Pemberdayaan masyarakat (Empowerment) menyasar masyarakat langsung agar mampu mandiri.\nB. Advokasi (Advocacy) merupakan upaya pendekatan kepada pembuat keputusan/kebijakan (stakeholders/swasta) untuk mendapatkan dukungan kebijakan, sarana, atau dana.\nC. Bina suasana (Social Support) menyasar tokoh masyarakat untuk menciptakan opini publik yang mendukung.\nD. Promotif adalah jenis tingkatan pelayanan kesehatan secara umum.\nE. Preventif adalah pencegahan penyakit.",
+    "pembahasan_klinis": {
+      "A": "Penggerakan kemandirian sasaran primer.",
+      "B": "Advokasi kesehatan bertujuan memengaruhi pembuat kebijakan/pihak swasta guna memperoleh dukungan sarana dan regulasi pendukung kesehatan.",
+      "C": "Pendekatan mitra sosiokultural sasaran sekunder.",
+      "D": "Upaya peningkatan derajat kesehatan.",
+      "E": "Upaya pencegahan spesifik."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-038",
+    "no": 38,
+    "soal": "Seorang dokter Puskesmas melakukan analisis masalah kasus anemia ibu hamil. Data yang belum berhasil dikumpulkan adalah ketersediaan data status gizi ibu hamil di setiap kelurahan. Indikator manajemen surveilans manakah yang belum terpenuhi?",
+    "opsi": [
+      "Indikator Feedback",
+      "Indikator Proses",
+      "Indikator Output",
+      "Indikator Input",
+      "Indikator Monitoring dan Evaluasi"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Feedback: umpan balik laporan ke unit bawah.\nB. Proses: pelaksanaan tahapan pencatatan dan analisis.\nC. Output: cakupan keberhasilan program.\nD. Indikator Input meliputi ketersediaan data dasar, sarana, reagen, bahan dasar, dan sumber daya awal sebelum analisis dilaksanakan.\nE. Monev: evaluasi pencapaian.",
+    "pembahasan_klinis": {
+      "A": "Umpan balik evaluasi.",
+      "B": "Pelaksanaan aktivitas sistem.",
+      "C": "Capaian cakupan layanan.",
+      "D": "Data awal populasi dan status gizi merupakan bagian dari komponen Input sistem sistem surveilans kesehatan.",
+      "E": "Pengawasan kinerja sistem."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-039",
+    "no": 39,
+    "soal": "Penanggulangan bencana meliputi pencegahan/mitigasi, kesiapsiagaan, tanggap darurat, transisi darurat, dan pascabencana. Manakah kegiatan yang paling tepat dilakukan pada fase Transisi Darurat Krisis Kesehatan?",
+    "opsi": [
+      "Mempersiapkan alat pemeriksaan lebih banyak",
+      "Inventarisasi kebutuhan pemulihan program kesehatan",
+      "Melakukan promosi kesehatan",
+      "Melakukan penilaian kekurangan sumber daya petugas kesehatan, bahan habis pakai, dan kebutuhan alat kesehatan pascakrisis",
+      "Mengaktifkan Emergency Medical Team"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Bagian dari tahap kesiapsiagaan pra-bencana.\nB. Dilakukan pada tahap pascakrisis pemulihan jangka panjang.\nC. Promkes dilakukan berkala di semua tahap.\nD. Fase Transisi Darurat Krisis Kesehatan berfokus pada penilaian cepat (rapid assessment) terhadap kekurangan sumber daya tenaga, bahan habis pakai, dan kebutuhan alkes sebelum masuk pemulihan penuh.\nE. Mengaktifkan EMT dilakukan saat fase siaga/tanggap darurat awal.",
+    "pembahasan_klinis": {
+      "A": "Persiapan logistik pra-bencana.",
+      "B": "Perencanaan rehabilitasi pascabencana.",
+      "C": "Edukasi kesehatan umum.",
+      "D": "Fase transisi merinci kebutuhan penambalan kekurangan alkes dan SDM agar pelayanan dapat segera pulih stabil.",
+      "E": "Respon taktis awal tanggap darurat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-040",
+    "no": 40,
+    "soal": "Penyakit Tidak Menular (PTM) seperti penyakit jantung dan diabetes dapat dicegah melalui modifikasi gaya hidup. Manakah tindakan di bawah ini yang BUKAN merupakan upaya pencegahan Penyakit Tidak Menular?",
+    "opsi": [
+      "Menghindari konsumsi junk food",
+      "Menghindari gaya hidup sedentari (kurang bergerak)",
+      "Berekreasi untuk mengelola stres",
+      "Melakukan aktivitas fisik dan olahraga teratur",
+      "Menghindari kontak langsung"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Pengaturan pola makan mencegah hiperlipidemia dan PTM.\nB. Menghindari sedentari mencegah obesitas dan PTM.\nC. Manajemen stres mencegah hipertensi dan PTM.\nD. Olahraga teratur menjaga kesehatan kardiovaskular.\nE. Menghindari kontak langsung merupakan metode isolasi/pencegahan Penyakit Menular (infeksi), bukan Penyakit Tidak Menular.",
+    "pembahasan_klinis": {
+      "A": "Pencegahan faktor risiko nutrisi PTM.",
+      "B": "Pencegahan faktor risiko inaktivitas fisik PTM.",
+      "C": "Pencegahan faktor risiko stresor PTM.",
+      "D": "Pencegahan kebugaran fisiologis PTM.",
+      "E": "Menghindari kontak langsung adalah proteksi transmisi agen infeksius penyakit menular."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2019-041",
+    "no": 41,
+    "soal": "Terdapat perbedaan pendapat di kalangan ulama fikih mengenai hukum aborsi sebelum ditiupkannya ruh ke dalam janin (usia kehamilan < 120 hari). Apakah dasar utama yang melatarbelakangi timbulnya perbedaan pendapat tersebut?",
+    "opsi": [
+      "Aborsi tidak pernah terjadi pada masa Nabi Muhammad SAW",
+      "Sebagian ulama masa lalu paham perkembangan janin dan sebagian lainnya tidak",
+      "Perbedaan kualifikasi dokter yang melakukan aborsi",
+      "Adanya dalil nash yang eksplisit menghalalkan di satu sisi dan mengharamkan di sisi lain",
+      "Perbedaan sudut pandang penilaian dan batasan antara potential life dengan actual life pada fase janin"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Praktik penggalan kandungan sudah ada sejak zaman dahulu.\nB. Bukti sains embriologi modern tidak menjadi pemisah tunggal.\nC. Kualifikasi penolong bukan fokus perbedaan hukum fikih klasik.\nD. Tidak ada nash Al-Qur'an yang secara langsung menghalalkan aborsi tanpa alasan medis.\nE. Kontroversi aborsi pra-peniupan ruh dipicu oleh perbedaan persepsi ulama mengenai status konsepsi janin: apakah dianggap sudah menjadi kehidupan hakiki (actual life) sejak pembuahan atau masih calon kehidupan (potential life).",
+    "pembahasan_klinis": {
+      "A": "Asumsi sejarah yang tidak tepat.",
+      "B": "Tingkat pemahaman fisiologi bukan faktor tunggal perbedaan ijtihad.",
+      "C": "Aspek kompetensi klinis penolong.",
+      "D": "Tafsir nash didasarkan pada prinsip perlindungan jiwa.",
+      "E": "Perbedaan filosofis fikih berpusat pada penentuan tahap awal penciptaan ruh dan status hukum tahapan embriogenesis."
+    },
+    "source_id": 1
+  }
+]
