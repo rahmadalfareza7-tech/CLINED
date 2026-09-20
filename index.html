@@ -210,8 +210,21 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
     const modal=document.getElementById('accountAuthModal');
     if(!modal)return;
     if(typeof window.authOpenModal==='function'){
-      window.authOpenModal('login');
-      return;
+      try{
+        window.authOpenModal('login');
+        if(modal.hidden===false){
+          modal.removeAttribute('hidden');
+          modal.setAttribute('aria-hidden','false');
+          modal.style.setProperty('display','grid','important');
+          modal.style.setProperty('visibility','visible','important');
+          modal.style.setProperty('opacity','1','important');
+          modal.style.setProperty('pointer-events','auto','important');
+          document.body.classList.add('modal-open');
+          return;
+        }
+      }catch(error){
+        console.warn('[CLINED] authOpenModal fallback:',error);
+      }
     }
     const form=document.getElementById('accountAuthForm');
     if(form)form.reset();
