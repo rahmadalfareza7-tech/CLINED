@@ -2389,3 +2389,21 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
 
 .material-block-icon img,.uab-node-icon img{width:100%;height:100%;object-fit:contain;display:block;}
 .uab-node-icon img{width:34px;height:34px;}
+
+
+/* CLINED LOGIN HARDENING: ensure auth modal is visible when opened. */
+#accountAuthModal:not([hidden]){
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483647!important;
+}
+#accountAuthModal:not([hidden]) .account-modal-card{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}

@@ -2544,3 +2544,53 @@ document.addEventListener('click',e=>{
   timer=setInterval(check,30*1000);
   window.addEventListener('pagehide',()=>clearInterval(timer),{once:true});
 })();
+
+
+/* CLINED LOGIN HARDENING: external-script fallback (CSP-safe). */
+(function clinedLoginHardening(){
+  function forceLoginModal(){
+    const modal=document.getElementById('accountAuthModal');
+    if(!modal)return;
+    try{
+      if(typeof window.authOpenModal==='function') window.authOpenModal('login');
+    }catch(error){console.error('[CLINED] authOpenModal failed',error);}
+    modal.hidden=false;
+    modal.removeAttribute('hidden');
+    modal.setAttribute('aria-hidden','false');
+    modal.style.setProperty('display','grid','important');
+    modal.style.setProperty('visibility','visible','important');
+    modal.style.setProperty('opacity','1','important');
+    modal.style.setProperty('pointer-events','auto','important');
+    modal.style.setProperty('position','fixed','important');
+    modal.style.setProperty('inset','0','important');
+    modal.style.setProperty('z-index','2147483647','important');
+    const card=modal.querySelector('.account-modal-card');
+    if(card){
+      card.style.setProperty('display','block','important');
+      card.style.setProperty('visibility','visible','important');
+      card.style.setProperty('opacity','1','important');
+      card.style.setProperty('pointer-events','auto','important');
+    }
+    document.body.classList.add('modal-open');
+    const identifier=document.getElementById('authLoginIdentifier');
+    const password=document.getElementById('authPassword');
+    if(identifier)identifier.required=true;
+    if(password)password.required=true;
+    setTimeout(()=>identifier?.focus(),50);
+  }
+  function bind(){
+    if(window.__clinedLoginHardeningBound)return;
+    window.__clinedLoginHardeningBound=true;
+    document.addEventListener('click',function(event){
+      const button=event.target.closest?.('#preLoginBtn,#landingLoginBtn');
+      if(!button)return;
+      event.preventDefault();
+      event.stopPropagation();
+      forceLoginModal();
+    },true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});
+  else bind();
+  window.addEventListener('load',bind,{once:true});
+  window.clinedForceLoginModal=forceLoginModal;
+})();
