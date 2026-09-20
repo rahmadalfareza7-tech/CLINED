@@ -2539,3 +2539,56 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
   visibility: visible !important;
   opacity: 1 !important;
 }
+
+/* UAB FIX: target actual HTML structure */
+#uabPage .uab-path-viewport {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  transform: none !important;
+  perspective: none !important;
+  transform-style: flat !important;
+  overflow: visible !important;
+}
+
+#uabPage .uab-path-viewport > .uab-node {
+  position: relative !important;
+  display: flex !important;
+  width: min(340px, 90%) !important;
+  height: 110px !important;
+  min-height: 110px !important;
+  flex: 0 0 110px !important;
+  margin: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  rotate: none !important;
+  scale: 1 !important;
+}
+
+#uabPage .uab-path-viewport > .semester-divider {
+  display: flex !important;
+  width: min(360px, 92%) !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  flex: 0 0 44px !important;
+  margin: 10px 0 2px !important;
+  transform: none !important;
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#uabPage .uab-path-viewport > .semester-divider::before,
+#uabPage .uab-path-viewport > .semester-divider::after {
+  display: block !important;
+  content: "" !important;
+  flex: 1 !important;
+  height: 2px !important;
+  background: #dfe8eb !important;
+}
+
