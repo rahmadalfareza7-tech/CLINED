@@ -206,17 +206,50 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
 
 <script id="clined-landing-actions">
 (()=>{
-  const bind=()=>{
-    if(typeof authOpenModal==='function')window.authOpenModal=authOpenModal;
-    document.addEventListener('click',e=>{
-      const btn=e.target.closest('#preLoginBtn,#landingLoginBtn'); if(!btn)return;
-      e.preventDefault();e.stopImmediatePropagation();
-      if(typeof window.authOpenModal==='function')window.authOpenModal('login');
-      else if(typeof authOpenModal==='function')authOpenModal('login');
-      else document.getElementById('loginAccountBtn')?.click();
-    },true);
-  };
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+  function openLogin(){
+    const modal=document.getElementById('accountAuthModal');
+    if(!modal)return;
+    if(typeof window.authOpenModal==='function'){
+      window.authOpenModal('login');
+      return;
+    }
+    const form=document.getElementById('accountAuthForm');
+    if(form)form.reset();
+    if(form)form.dataset.mode='login';
+    const set=(id,text)=>{const el=document.getElementById(id);if(el)el.textContent=text;};
+    set('accountModalTitle','Masuk');
+    set('accountModalSubtitle','Masuk dengan username dan password kamu.');
+    const hide=(id,val)=>{const el=document.getElementById(id);if(el)el.hidden=val;};
+    hide('signupFields',true);
+    hide('authLoginIdentifier',false);
+    hide('authLoginIdentifierLabel',false);
+    hide('authPasswordConfirmField',true);
+    hide('authPasswordConfirmLabel',true);
+    const confirm=document.getElementById('authPasswordConfirm');
+    if(confirm)confirm.required=false;
+    set('submitAccountAuth','MASUK');
+    set('switchAccountAuth','Belum punya akun? Buat akun');
+    const error=document.getElementById('accountFormError');
+    if(error){error.hidden=true;error.textContent='';}
+    modal.hidden=false;
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+    setTimeout(()=>document.getElementById('authLoginIdentifier')?.focus(),50);
+  }
+  function bind(){
+    document.querySelectorAll('#preLoginBtn,#landingLoginBtn').forEach(btn=>{
+      if(btn.dataset.directLoginBound==='1')return;
+      btn.dataset.directLoginBound='1';
+      btn.addEventListener('click',event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        openLogin();
+      },true);
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});
+  else bind();
+  window.addEventListener('load',bind,{once:true});
 })();
 </script>
 
