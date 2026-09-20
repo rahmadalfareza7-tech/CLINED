@@ -181,6 +181,7 @@
         if(k==='KEDOKTERAN KOMUNITAS')return 'KEDKOM';
         if(k==='KEDOKTERAN KELUARGA')return 'KEDKEL';
         if(k==='GASTROINTESTINAL')return 'GIT';
+        if(k==='MUSKULO')return 'MUSKULOSKELETAL';
         return k;
       };
       const refreshUabDeleteOptions = allPackages => {
@@ -309,6 +310,11 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
         const v=String(value||'').trim().toUpperCase().replace(/\s+/g,' ');
         if(v==='KEDOKTERAN KOMUNITAS'||v==='KEDOKOM')return 'KEDKOM';
         if(v==='KEDOKTERAN KELUARGA'||v==='KEDKEL')return 'KEDKEL';
+        if(v==='MUSKULO'||v==='MUSKULOSKELETAL')return 'MUSKULOSKELETAL';
+        if(v==='ENDO'||v==='ENDOKRIN')return 'ENDOKRINE';
+        if(v==='RESPIRASI')return 'RESPIRATORY';
+        if(v==='KARDIO'||v==='KARDIOVASKULAR')return 'KARDIOLOGI';
+        if(v==='GASTRO'||v==='GASTROINTESTINAL')return 'GIT';
         return v;
       };
       const addActive=(value)=>{const b=canonicalBlock(value);if(b)activeBlocks.add(b);};
