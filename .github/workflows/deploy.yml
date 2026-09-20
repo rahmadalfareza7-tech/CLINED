@@ -1,0 +1,60 @@
+name: Deploy CLINED
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: clined-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          set -e
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+
+          ssh "$VPS_USER@$VPS_HOST" << 'EOF'
+            set -e
+
+            cd /root/CLINED
+
+            OLD_COMMIT=$(git rev-parse HEAD)
+
+            git fetch origin main
+
+            if git diff --quiet "$OLD_COMMIT" origin/main -- package.json package-lock.json; then
+              DEPS_CHANGED=false
+            else
+              DEPS_CHANGED=true
+            fi
+
+            git reset --hard origin/main
+
+            if [ "$DEPS_CHANGED" = true ]; then
+              npm ci --omit=dev
+            fi
+
+            pm2 restart clined-api --update-env
+            pm2 save
+
+            echo "CLINED deployment successful"
+          EOF
+
+# Workflow reactivated
