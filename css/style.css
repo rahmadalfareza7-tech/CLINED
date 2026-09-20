@@ -2586,3 +2586,35 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
   box-shadow: none !important;
 }
 
+
+/* UAB LINEAR VERTICAL LAYOUT */
+#uabPage #uabBlockList > .uab-node {
+  transform: none !important;
+  left: auto !important;
+  right: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 280px !important;
+  max-width: 90% !important;
+  height: 112px !important;
+  min-height: 112px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#uabPage #uabBlockList > .uab-node:nth-child(n) {
+  transform: none !important;
+  left: auto !important;
+}
+
+#uabPage #uabBlockList > .semester-divider {
+  width: 90% !important;
+  margin: 10px auto !important;
+  transform: none !important;
+}
+
+#uabPage #uabBlockList > .uab-node .uab-node-icon {
+  transform: none !important;
+  animation: none !important;
+}
+
