@@ -207,6 +207,30 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
 <script id="clined-landing-actions">
 (()=>{const bind=()=>{document.querySelectorAll('#preLoginBtn,#landingLoginBtn').forEach(btn=>{if(btn.dataset.authBound==='1')return;btn.dataset.authBound='1';btn.addEventListener('click',e=>{e.preventDefault();if(typeof window.authOpenModal==='function')window.authOpenModal('login');else document.getElementById('loginAccountBtn')?.click();});});};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();})();
 </script>
+
+<style id="clined-landing-final-polish">
+/* Keep the pre-login experience isolated from the application document flow. */
+html:has(body.auth-pending), body.auth-pending{overflow:hidden!important;height:100%!important;}
+body.auth-pending #preLoginLanding{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;box-sizing:border-box!important;z-index:2147482000!important;padding-bottom:28px!important;}
+body.auth-pending #preLoginLanding~*{display:none!important;}
+#preLoginLanding .landing-hero-art{overflow:visible!important;}
+@media(max-width:560px){
+  #preLoginLanding .landing-hero-art{transform:none!important;min-height:300px!important;margin:0 0 10px!important;}
+  #preLoginLanding .art-panel{width:190px!important;height:220px!important;padding:18px!important;transform:rotate(2deg)!important;}
+  #preLoginLanding .art-brain{font-size:52px!important;margin:17px 0 7px!important;}
+  #preLoginLanding .art-panel b{font-size:22px!important;}
+  #preLoginLanding .art-stat{right:calc(50% - 135px)!important;bottom:24px!important;padding:7px 10px!important;}
+  #preLoginLanding .art-float{font-size:10px!important;padding:8px 9px!important;white-space:nowrap!important;}
+  #preLoginLanding .float-one{top:8px!important;right:calc(50% - 145px)!important;}
+  #preLoginLanding .float-two{bottom:5px!important;left:calc(50% - 145px)!important;}
+  #preLoginLanding .landing-copy h2{font-size:clamp(34px,10vw,48px)!important;line-height:1.08!important;}
+  #preLoginLanding .landing-copy p{line-height:1.6!important;}
+  #preLoginLanding .landing-features{margin-top:16px!important;}
+  #preLoginLanding .landing-section-head h3{font-size:28px!important;line-height:1.12!important;}
+  #preLoginLanding .landing-slide{padding:17px!important;min-height:205px!important;}
+  #preLoginLanding .landing-slide p{min-height:0!important;margin-bottom:16px!important;}
+}
+</style>
 </head>
 <body class="auth-pending">
 
@@ -216,7 +240,7 @@ body.auth-pending #preLoginLanding{display:block;visibility:visible;pointer-even
 <section id="preLoginLanding" class="clined-landing" aria-label="Pengenalan CLINED">
   <div class="landing-glow landing-glow-one"></div><div class="landing-glow landing-glow-two"></div>
   <div class="landing-topbar"><div class="landing-mini-brand"><img src="assets/clined-logo.png" alt="CLINED"><span>CLINED <em>Clinical Education</em><small>By Reza FKUY23</small></span></div><button id="preLoginBtn" class="landing-login-btn" type="button">Masuk / Daftar ↗</button></div>
-  <div class="landing-hero"><div class="landing-copy"><span class="landing-kicker">CLINED • MEDICAL LEARNING EXPERIENCE</span><h2>Belajar klinis.<br><strong>Berpikir seperti dokter.</strong></h2><p>Latih clinical reasoning melalui bank soal, materi blok, pembahasan, flashcard, dan perjalanan belajar yang terstruktur.</p><div class="landing-actions"><button class="landing-primary" id="landingLoginBtn" type="button">Mulai perjalanan <span>→</span></button><a href="#landingFeatureSlider" class="landing-secondary">Jelajahi fitur ↓</a></div><div class="landing-proof"><span>✦</span><div><b>Dirancang untuk mahasiswa kedokteran</b><small>Belajar mandiri • Terarah • Berkelanjutan</small></div></div></div><div class="landing-hero-art"><div class="art-orbit orbit-a"></div><div class="art-orbit orbit-b"></div><div class="art-panel"><span class="art-chip">LIVE LEARNING</span><div class="art-brain">🧠</div><b>Clinical<br>Reasoning</b><small>Understand • Apply • Improve</small><div class="art-stat"><span>XP</span><strong>+120</strong></div></div><div class="art-float float-one">🩺 <b>Case-based</b></div><div class="art-float float-two">⚡ <b>Smart progress</b></div></div></div>
+  <div class="landing-hero"><div class="landing-copy"><span class="landing-kicker">CLINED • MEDICAL LEARNING EXPERIENCE</span><h2>Belajar klinis.<br><strong>Berpikir seperti dokter.</strong></h2><p>Latih clinical reasoning melalui bank soal, materi blok, pembahasan, flashcard, dan perjalanan belajar yang terstruktur.</p><div class="landing-actions"><button class="landing-primary" id="landingLoginBtn" type="button">Mulai perjalanan <span>→</span></button></div><div class="landing-proof"><span>✦</span><div><b>Dirancang untuk mahasiswa kedokteran</b><small>Belajar mandiri • Terarah • Berkelanjutan</small></div></div></div><div class="landing-hero-art"><div class="art-orbit orbit-a"></div><div class="art-orbit orbit-b"></div><div class="art-panel"><span class="art-chip">LIVE LEARNING</span><div class="art-brain">🧠</div><b>Clinical<br>Reasoning</b><small>Understand • Apply • Improve</small><div class="art-stat"><span>XP</span><strong>+120</strong></div></div><div class="art-float float-one">🩺 <b>Case-based</b></div><div class="art-float float-two">⚡ <b>Smart progress</b></div></div></div>
   <div id="landingFeatureSlider" class="landing-features"><div class="landing-section-head"><div><span class="landing-kicker">ONE PLATFORM, MANY WAYS TO GROW</span><h3>Semua kebutuhan belajarmu,<br><strong>dalam satu perjalanan.</strong></h3></div><div class="landing-controls"><button id="landingPrev" type="button" aria-label="Fitur sebelumnya">←</button><span id="landingDots" aria-label="Indikator slide"></span><button id="landingNext" type="button" aria-label="Fitur berikutnya">→</button></div></div><div class="landing-track-wrap"><div class="landing-track" id="landingTrack"><article class="landing-slide"><div class="slide-icon">🧩</div><span>01 / PRACTICE</span><h4>Bank Soal UAB</h4><p>Latihan soal per blok dengan pengalaman mengerjakan yang fokus dan terarah.</p><b>Latih konsistensi →</b></article><article class="landing-slide"><div class="slide-icon">🧠</div><span>02 / UNDERSTAND</span><h4>Pembahasan Klinis</h4><p>Jangan hanya menghafal jawaban. Pahami alasan, konsep, dan cara berpikir di balik kasus.</p><b>Belajar dari setiap pilihan →</b></article><article class="landing-slide"><div class="slide-icon">📚</div><span>03 / EXPLORE</span><h4>Materi & Ninja Nerd</h4><p>Akses kumpulan materi blok dan referensi video untuk memperkuat pemahaman.</p><b>Perluas pemahaman →</b></article><article class="landing-slide"><div class="slide-icon">📈</div><span>04 / PROGRESS</span><h4>Clinical Performance</h4><p>Lihat progres, akurasi, streak, XP, dan area belajar yang perlu kamu ulangi.</p><b>Kenali progresmu →</b></article><article class="landing-slide"><div class="slide-icon">🃏</div><span>05 / REVIEW</span><h4>Flashcard & Bookmark</h4><p>Simpan hal penting dan lakukan review singkat agar ilmu lebih melekat.</p><b>Review kapan saja →</b></article></div></div><div class="landing-slider-progress"><span id="landingProgress"></span></div></div>
   <footer class="landing-footer"><span>CLINED — Clinical Education By Reza FKUY23</span><span>Build knowledge. Sharpen reasoning. Keep progressing.</span></footer>
 </section>
