@@ -2422,3 +2422,41 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
   opacity: 1 !important;
 }
 
+
+/* FINAL FIX: semester divider visible */
+#uabPage #uabBlockList > .semester-divider {
+  display: flex !important;
+  position: relative !important;
+  width: 92% !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  overflow: visible !important;
+}
+
+#uabPage #uabBlockList > .semester-divider::before,
+#uabPage #uabBlockList > .semester-divider::after {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  content: "" !important;
+  flex: 1 1 auto !important;
+  height: 3px !important;
+  min-width: 30px !important;
+  background: #dfe8eb !important;
+  border-radius: 99px !important;
+  box-shadow: none !important;
+}
+
+#uabPage #uabBlockList > .semester-divider span {
+  display: inline-flex !important;
+  position: relative !important;
+  z-index: 2 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
