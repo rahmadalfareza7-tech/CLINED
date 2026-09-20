@@ -1286,6 +1286,78 @@ body.auth-pending #preLoginLanding~*{display:none!important;}
 })();
 </script>
 
+
+<style id="clined-login-final-repair">
+body.auth-pending #accountAuthModal:not([hidden]){
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483647!important;
+}
+body.auth-pending #accountAuthModal:not([hidden]) .account-modal-card{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+</style>
+<script id="clined-login-final-repair-script">
+(function(){
+  function openLoginDirect(){
+    const modal=document.getElementById('accountAuthModal');
+    if(!modal)return;
+    const form=document.getElementById('accountAuthForm');
+    if(form){
+      form.reset();
+      form.dataset.mode='login';
+    }
+    const setText=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+    const setHidden=(id,value)=>{const el=document.getElementById(id);if(el)el.hidden=value;};
+    setText('accountModalTitle','Masuk');
+    setText('accountModalSubtitle','Masuk dengan username dan password kamu.');
+    setHidden('signupFields',true);
+    setHidden('authLoginIdentifier',false);
+    setHidden('authLoginIdentifierLabel',false);
+    setHidden('authPasswordConfirmField',true);
+    setHidden('authPasswordConfirmLabel',true);
+    const confirm=document.getElementById('authPasswordConfirm');
+    if(confirm)confirm.required=false;
+    const password=document.getElementById('authPassword');
+    if(password)password.autocomplete='current-password';
+    setText('submitAccountAuth','MASUK');
+    setText('switchAccountAuth','Belum punya akun? Buat akun');
+    const error=document.getElementById('accountFormError');
+    if(error){error.hidden=true;error.textContent='';}
+    modal.hidden=false;
+    modal.removeAttribute('hidden');
+    modal.setAttribute('aria-hidden','false');
+    modal.style.setProperty('display','grid','important');
+    modal.style.setProperty('visibility','visible','important');
+    modal.style.setProperty('opacity','1','important');
+    modal.style.setProperty('pointer-events','auto','important');
+    document.body.classList.add('modal-open');
+    setTimeout(()=>document.getElementById('authLoginIdentifier')?.focus(),50);
+  }
+  function bind(){
+    document.querySelectorAll('#preLoginBtn,#landingLoginBtn').forEach(btn=>{
+      if(btn.dataset.finalLoginRepair==='1')return;
+      btn.dataset.finalLoginRepair='1';
+      btn.addEventListener('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        openLoginDirect();
+      },false);
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});
+  else bind();
+  window.addEventListener('load',bind);
+})();
+</script>
+
 </body>
 </html>
 <style>
