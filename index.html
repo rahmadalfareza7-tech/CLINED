@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="stylesheet" href="css/landing.css?v=1">
+<link rel="stylesheet" href="css/landing.css?v=2">
 </head>
 <body>
 
@@ -273,6 +273,40 @@
   <button class="nav-btn nav-play" id="play" type="button" aria-label="Jeda geser otomatis" aria-pressed="false">❚❚</button>
 </nav>
 
-<script src="js/landing.js?v=1" defer></script>
+<div class="am" id="authModal" hidden>
+  <div class="am-backdrop" data-am-close></div>
+  <section class="am-card" role="dialog" aria-modal="true" aria-labelledby="amTitle" aria-describedby="amSub">
+    <button class="am-x" type="button" data-am-close aria-label="Tutup">×</button>
+    <span class="am-kicker">CLINED ACCOUNT</span>
+    <h2 id="amTitle">Masuk</h2>
+    <p class="am-sub" id="amSub">Masuk dengan username dan password kamu.</p>
+    <form id="amForm" data-mode="login" novalidate>
+      <div id="amSignup" hidden>
+        <label for="amName">Nama</label>
+        <input id="amName" type="text" maxlength="40" autocomplete="name" placeholder="Contoh: Reza FKUY23">
+        <small class="am-hint">Gunakan nama asli dan cantumkan angkatan kamu.</small>
+      </div>
+      <label for="amUser">Username</label>
+      <input id="amUser" type="text" maxlength="24" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Username">
+      <label for="amPass">Password</label>
+      <div class="am-pass">
+        <input id="amPass" type="password" minlength="8" autocomplete="current-password">
+        <button type="button" class="am-eye" data-am-eye="amPass" aria-label="Tampilkan password">Lihat</button>
+      </div>
+      <div id="amConfirmWrap" hidden>
+        <label for="amConfirm">Konfirmasi password</label>
+        <div class="am-pass">
+          <input id="amConfirm" type="password" minlength="8" autocomplete="new-password">
+          <button type="button" class="am-eye" data-am-eye="amConfirm" aria-label="Tampilkan konfirmasi password">Lihat</button>
+        </div>
+      </div>
+      <p class="am-error" id="amError" role="alert" hidden></p>
+      <button class="btn am-submit" id="amSubmit" type="submit">Masuk</button>
+      <button class="am-switch" id="amSwitch" type="button">Belum punya akun? Buat akun</button>
+    </form>
+  </section>
+</div>
+
+<script src="js/landing.js?v=2" defer></script>
 </body>
 </html>
