@@ -17,7 +17,7 @@ CLINED mempertahankan aplikasi belajar mobile existing—Bank Soal, UAB, UPI, fl
 
 Project ini sudah disiapkan agar repository dapat menjadi root project Vercel tanpa konfigurasi `builds`/`routes` legacy. Vercel akan melayani file statis dari root dan mengenali `api/[...path].mjs` sebagai Vercel Function.
 
-**Struktur repository yang benar:** `index.html`, `package.json`, `vercel.json`, `api/`, `lib/`, `css/`, `js/`, `assets/`, dan `banks/` harus berada langsung di root repository.
+**Struktur repository yang benar:** `index.html` (landing page), `app.html` (aplikasi),  `package.json`, `vercel.json`, `api/`, `lib/`, `css/`, `js/`, `assets/`, dan `banks/` harus berada langsung di root repository.
 
 Langkah deployment:
 1. Upload **isi folder project ini** ke root repository GitHub. Jangan membuat folder pembungkus `CLINED_OFFLINE_RELEASE/` di dalam repository.

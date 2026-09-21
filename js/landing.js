@@ -2,6 +2,11 @@
 (() => {
   'use strict';
 
+  // Tautan lama seperti clined.web.id/#accountPage adalah rute aplikasi: teruskan ke app.html.
+  const toApp = () => location.replace('./app.html' + location.hash);
+  if (location.hash.length > 1) { toApp(); return; }
+  addEventListener('hashchange', () => { if (location.hash.length > 1) toApp(); });
+
   const AUTO_MS = 7000;      // jeda antar slide saat geser otomatis
   const RESUME_MS = 12000;   // geser otomatis lanjut lagi setelah pengguna berhenti berinteraksi
   const $ = (s, r = document) => r.querySelector(s);
@@ -202,6 +207,16 @@
     const on = flip.classList.toggle('is-flipped');
     flip.setAttribute('aria-pressed', String(on));
   });
+
+  /* ---------- Sudah login? ubah teks tombol ---------- */
+  fetch('/api/auth/me', { credentials: 'same-origin', cache: 'no-store' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d) => {
+      if (!d || !d.user) return;
+      document.querySelectorAll('[data-cta="start"]').forEach((a) => { a.textContent = 'Lanjut belajar'; });
+      document.querySelectorAll('[data-cta="login"]').forEach((a) => { a.textContent = 'Buka aplikasi'; });
+    })
+    .catch(() => {});
 
   /* ---------- Mulai ---------- */
   setActive(0);

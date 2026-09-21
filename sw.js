@@ -1,5 +1,5 @@
-const CACHE='clined-web-v44-uab-all-blocks';
-const CORE=['./', './index.html', './apple-touch-icon.png', './assets/clined-logo.png', './assets/flashcards/brain.svg', './assets/flashcards/ecg.svg', './assets/flashcards/eye.svg', './assets/flashcards/heart.svg', './assets/flashcards/kidney.svg', './assets/flashcards/liver.svg', './assets/flashcards/lung.svg', './assets/flashcards/skin.svg', './assets/normal-values.jpeg', './css/style.css', './css/motion.css', './favicon-32.png', './icon-192.png', './icon-512.png', './icon.svg', './js/app.js', './js/content-manager.js', './js/auth-gate.js', './js/photo-compress.js', './js/photo-store.js', './js/question-bank-engine.js', './json/manifest.json', './manifest.webmanifest'];
+const CACHE='clined-web-v45-landing-root';
+const CORE=['./app.html', './index.html', './css/landing.css', './js/landing.js', './apple-touch-icon.png', './assets/clined-logo.png', './assets/flashcards/brain.svg', './assets/flashcards/ecg.svg', './assets/flashcards/eye.svg', './assets/flashcards/heart.svg', './assets/flashcards/kidney.svg', './assets/flashcards/liver.svg', './assets/flashcards/lung.svg', './assets/flashcards/skin.svg', './assets/normal-values.jpeg', './css/style.css', './css/motion.css', './favicon-32.png', './icon-192.png', './icon-512.png', './icon.svg', './js/app.js', './js/content-manager.js', './js/auth-gate.js', './js/photo-compress.js', './js/photo-store.js', './js/question-bank-engine.js', './json/manifest.json', './manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 
@@ -35,7 +35,7 @@ self.addEventListener('fetch',e=>{
       fetch(req).then(res=>{
         if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{});}
         return res;
-      }).catch(()=>caches.match(req).then(cached=>cached||caches.match('./index.html').then(fallback=>fallback||new Response('Offline',{status:503}))))
+      }).catch(()=>caches.match(req).then(cached=>cached||caches.match('./app.html').then(fallback=>fallback||new Response('Offline',{status:503}))))
     );
     return;
   }
@@ -44,5 +44,5 @@ self.addEventListener('fetch',e=>{
   e.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{
     if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{});}
     return res;
-  }).catch(()=>caches.match('./index.html'))));
+  }).catch(()=>caches.match('./app.html'))));
 });
