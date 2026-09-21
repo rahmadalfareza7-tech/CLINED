@@ -212,30 +212,30 @@
   {
     "id": "ginjal-2021-008",
     "no": 8,
-    "soal": "Dalam etika beristinja menurut ajaran Islam, manakah pernyataan berikut yang benar?\n1) Tidak menghadap/membelakangi kiblat\n2) Tidak berdiri saat buang air\n3) Menggunakan tangan kiri\n4) Boleh menggunakan air, batu, atau tisu bersuci\n5) Istinja merupakan ibadah bernilai thaharah",
+    "soal": "Etika beristinja: 1) Tidak menghadap kiblat, 2) Tidak berdiri, 3) Menggunakan tangan kiri, 4) Menggunakan air, batu, atau tisu, 5) Istinja merupakan ibadah. Manakah jawaban yang benar?",
     "opsi": [
-      "1 dan 2",
-      "2 dan 4",
-      "1, 2, dan 3",
-      "1, 2, 3, dan 4",
-      "Semua benar (1, 2, 3, 4, dan 5)"
+      "Jawaban yang benar adalah 1 dan 2",
+      "Jawaban yang benar adalah 2 dan 4",
+      "Jawaban yang benar adalah 1, 2, dan 3",
+      "Jawaban yang benar adalah 1, 2, 3, dan 4",
+      "Jawaban yang benar adalah 4 saja"
     ],
-    "jawabanBenar": 4,
-    "pembahasan": "Secara fiqih, beristinja hendaknya tidak menghadap/membelakangi kiblat di tempat terbuka, dilakukan duduk, membasuh dengan tangan kiri, memakai alat pembersih yang suci (air/batu/tisu), serta bernilai ibadah bersuci.",
+    "jawabanBenar": 3,
+    "pembahasan": "Adab istinja: tidak menghadap atau membelakangi kiblat, tidak berdiri, memakai tangan kiri, dan membersihkan dengan air, batu, atau tisu. Menurut kunci arsip, pernyataan 5 (istinja sebagai ibadah) tidak dihitung benar. (Topik fikih; sebaiknya dikonfirmasi dosen AIK.)",
     "pembahasan_klinis": {
-      "A": "Pernyataan 3, 4, dan 5 juga bernilai benar sesuai adab istinja.",
-      "B": "Pernyataan 1, 3, dan 5 juga bernilai benar.",
-      "C": "Pernyataan 4 dan 5 juga benar.",
-      "D": "Pernyataan 1 hingga 4 benar, tetapi poin 5 juga benar sebagai konsep bersuci (thaharah).",
-      "E": "Secara fiqih, beristinja hendaknya tidak menghadap/membelakangi kiblat di tempat terbuka, dilakukan duduk, membasuh dengan tangan kiri, memakai alat pembersih yang suci (air/batu/tisu), serta bernilai ibadah bersuci."
+      "A": "Pernyataan 1 dan 2 benar, tetapi pernyataan 3 dan 4 juga benar sehingga jawaban belum lengkap.",
+      "B": "Pernyataan 2 dan 4 benar, tetapi pernyataan 1 dan 3 juga benar sehingga jawaban belum lengkap.",
+      "C": "Pernyataan 1, 2, dan 3 benar, tetapi pernyataan 4 juga benar sehingga jawaban belum lengkap.",
+      "D": "Adab istinja: tidak menghadap atau membelakangi kiblat, tidak berdiri, memakai tangan kiri, dan membersihkan dengan air, batu, atau tisu. Menurut kunci arsip, pernyataan 5 (istinja sebagai ibadah) tidak dihitung benar. (Topik fikih; sebaiknya dikonfirmasi dosen AIK.)",
+      "E": "Pernyataan 4 benar, tetapi bukan satu-satunya pernyataan yang benar."
     },
     "source_id": 8,
     "pembahasanPilihan": [
-      "Pernyataan 3, 4, dan 5 juga bernilai benar sesuai adab istinja.",
-      "Pernyataan 1, 3, dan 5 juga bernilai benar.",
-      "Pernyataan 4 dan 5 juga benar.",
-      "Pernyataan 1 hingga 4 benar, tetapi poin 5 juga benar sebagai konsep bersuci (thaharah).",
-      "Secara fiqih, beristinja hendaknya tidak menghadap/membelakangi kiblat di tempat terbuka, dilakukan duduk, membasuh dengan tangan kiri, memakai alat pembersih yang suci (air/batu/tisu), serta bernilai ibadah bersuci."
+      "Pernyataan 1 dan 2 benar, tetapi pernyataan 3 dan 4 juga benar sehingga jawaban belum lengkap.",
+      "Pernyataan 2 dan 4 benar, tetapi pernyataan 1 dan 3 juga benar sehingga jawaban belum lengkap.",
+      "Pernyataan 1, 2, dan 3 benar, tetapi pernyataan 4 juga benar sehingga jawaban belum lengkap.",
+      "Adab istinja: tidak menghadap atau membelakangi kiblat, tidak berdiri, memakai tangan kiri, dan membersihkan dengan air, batu, atau tisu. Menurut kunci arsip, pernyataan 5 (istinja sebagai ibadah) tidak dihitung benar. (Topik fikih; sebaiknya dikonfirmasi dosen AIK.)",
+      "Pernyataan 4 benar, tetapi bukan satu-satunya pernyataan yang benar."
     ],
     "komponenStatistik": "Recall"
   },
@@ -362,7 +362,7 @@
   {
     "id": "ginjal-2021-013",
     "no": 13,
-    "soal": "Seorang anak berusia 2 tahun diantar ibunya ke klinik. Dokter menganjurkan pemeriksaan urin. Saat urin didiamkan beberapa jam di laboratorium, warnanya berubah menjadi gelap/hitam. Kelainan metabolik apakah yang mendasari kondisi ini?",
+    "soal": "Seorang pria berusia 20 tahun datang ke klinik. Dokter menganjurkan pemeriksaan urin, dan urin berubah menjadi hitam setelah didiamkan beberapa jam di laboratorium. Apakah kemungkinan kelainan yang mendasari?",
     "opsi": [
       "Phenylketonuria",
       "Alkaptonuria",
@@ -375,7 +375,7 @@
     "pembahasan_klinis": {
       "A": "Phenylketonuria menyebabkan bau urin seperti musty/mousy tanpa perubahan warna hitam pekat.",
       "B": "Alkaptonuria adalah kelainan autosom resesif akibat defisiensi asam homogentisat oksidase, memicu akumulasi asam homogentisat yang teroksidasi menjadi pigmen gelap saat terpapar udara.",
-      "C": "Melanuria menyebabkan urin gelap pada melanoma maligna metastasis namun sangat jarang pada anak 2 tahun.",
+      "C": "Melanuria terjadi pada melanoma maligna dengan metastasis (melanogen dioksidasi menjadi melanin) dan urin juga menghitam bila berdiri, tetapi jauh lebih jarang daripada alkaptonuria dan tidak ada tanda melanoma pada kasus ini.",
       "D": "Porfiria menyebabkan urin berwarna merah gelap/wine-red saat terpapar sinar matahari.",
       "E": "Indikanuria (Purple urine bag syndrome) terjadi pada infeksi bakteri pemecah indikan."
     },
@@ -383,11 +383,11 @@
     "pembahasanPilihan": [
       "Phenylketonuria menyebabkan bau urin seperti musty/mousy tanpa perubahan warna hitam pekat.",
       "Alkaptonuria adalah kelainan autosom resesif akibat defisiensi asam homogentisat oksidase, memicu akumulasi asam homogentisat yang teroksidasi menjadi pigmen gelap saat terpapar udara.",
-      "Melanuria menyebabkan urin gelap pada melanoma maligna metastasis namun sangat jarang pada anak 2 tahun.",
+      "Melanuria terjadi pada melanoma maligna dengan metastasis (melanogen dioksidasi menjadi melanin) dan urin juga menghitam bila berdiri, tetapi jauh lebih jarang daripada alkaptonuria dan tidak ada tanda melanoma pada kasus ini.",
       "Porfiria menyebabkan urin berwarna merah gelap/wine-red saat terpapar sinar matahari.",
       "Indikanuria (Purple urine bag syndrome) terjadi pada infeksi bakteri pemecah indikan."
     ],
-    "komponenStatistik": "Recall"
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2021-014",
@@ -570,6 +570,33 @@
     "komponenStatistik": "Diagnostics"
   },
   {
+    "id": "ginjal-2021-024",
+    "no": 24,
+    "soal": "Seorang bayi berusia 4 hari lahir dengan seksio sesarea atas indikasi ketuban pecah dini (paling sering karena infeksi) mengalami kejang saat dirawat. Pemeriksaan fisik: bayi tampak letargi, frekuensi nadi 150x/menit, frekuensi napas 62x/menit, suhu 36 °C, terdapat retraksi dinding dada, tidak ada sianosis. Laboratorium: leukositosis, rasio IT meningkat, CRP meningkat, dan bilirubin direk meningkat. Apa kemungkinan diagnosis pada bayi ini?",
+    "opsi": [
+      "Hiperbilirubinemia",
+      "Sepsis neonatorum",
+      "Meningitis",
+      "Kejang"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Ketuban pecah dini (faktor risiko infeksi), letargi, kejang, retraksi dada, dan suhu tidak stabil, disertai leukositosis, rasio IT meningkat, dan CRP naik, mengarah ke sepsis neonatorum.",
+    "pembahasan_klinis": {
+      "A": "Hiperbilirubinemia menjelaskan ikterus, tetapi tidak menjelaskan leukositosis, rasio IT yang meningkat, dan CRP tinggi. Peningkatan bilirubin direk di sini lebih tepat dipandang sebagai tanda kolestasis akibat sepsis.",
+      "B": "Ketuban pecah dini (faktor risiko infeksi), letargi, kejang, retraksi dada, dan suhu tidak stabil, disertai leukositosis, rasio IT meningkat, dan CRP naik, mengarah ke sepsis neonatorum.",
+      "C": "Meningitis dapat menyertai sepsis neonatorum dan menimbulkan kejang, tetapi diagnosisnya memerlukan pungsi lumbal dan analisis cairan serebrospinal; data yang ada baru mendukung sepsis.",
+      "D": "Kejang adalah gejala, bukan diagnosis. Penyebabnya harus dicari; pada kasus ini penyebabnya adalah infeksi sistemik."
+    },
+    "source_id": 24,
+    "pembahasanPilihan": [
+      "Hiperbilirubinemia menjelaskan ikterus, tetapi tidak menjelaskan leukositosis, rasio IT yang meningkat, dan CRP tinggi. Peningkatan bilirubin direk di sini lebih tepat dipandang sebagai tanda kolestasis akibat sepsis.",
+      "Ketuban pecah dini (faktor risiko infeksi), letargi, kejang, retraksi dada, dan suhu tidak stabil, disertai leukositosis, rasio IT meningkat, dan CRP naik, mengarah ke sepsis neonatorum.",
+      "Meningitis dapat menyertai sepsis neonatorum dan menimbulkan kejang, tetapi diagnosisnya memerlukan pungsi lumbal dan analisis cairan serebrospinal; data yang ada baru mendukung sepsis.",
+      "Kejang adalah gejala, bukan diagnosis. Penyebabnya harus dicari; pada kasus ini penyebabnya adalah infeksi sistemik."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
     "id": "ginjal-2021-025",
     "no": 25,
     "soal": "Nitrogenous waste merupakan sisa katabolisme yang diekskresikan melalui sistem urinaria. Zat manakah yang merupakan hasil katabolisme akhir dari protein dan asam amino?",
@@ -690,6 +717,36 @@
     "komponenStatistik": "Diagnostics"
   },
   {
+    "id": "ginjal-2021-042",
+    "no": 42,
+    "soal": "Sebagian besar filtrat glomerulus direabsorpsi di sepanjang tubulus ginjal. Di bagian manakah reabsorpsi paling banyak terjadi?",
+    "opsi": [
+      "Tubulus koligens",
+      "Ansa Henle pars ascendens",
+      "Tubulus distal",
+      "Tubulus proksimal",
+      "Ansa Henle pars descendens"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Tubulus proksimal mereabsorpsi sekitar 65–70% air dan Na+ yang difiltrasi, serta hampir seluruh glukosa dan asam amino, sehingga merupakan tempat reabsorpsi terbanyak. (Catatan arsip menyebut 90%; angka yang benar sekitar 65–70%.)",
+    "pembahasan_klinis": {
+      "A": "Duktus koligens hanya mereabsorpsi sebagian kecil air dan Na+, dan diatur oleh ADH serta aldosteron.",
+      "B": "Pars ascendens mereabsorpsi NaCl secara aktif (kotransporter NKCC2) tetapi impermeabel terhadap air; porsinya jauh lebih kecil daripada tubulus proksimal.",
+      "C": "Tubulus distal melakukan penyesuaian halus (fine tuning) di bawah pengaruh aldosteron dan ADH.",
+      "D": "Tubulus proksimal mereabsorpsi sekitar 65–70% air dan Na+ yang difiltrasi, serta hampir seluruh glukosa dan asam amino, sehingga merupakan tempat reabsorpsi terbanyak. (Catatan arsip menyebut 90%; angka yang benar sekitar 65–70%.)",
+      "E": "Pars descendens permeabel terhadap air tetapi hanya mereabsorpsi sekitar 15% air filtrat."
+    },
+    "source_id": 42,
+    "pembahasanPilihan": [
+      "Duktus koligens hanya mereabsorpsi sebagian kecil air dan Na+, dan diatur oleh ADH serta aldosteron.",
+      "Pars ascendens mereabsorpsi NaCl secara aktif (kotransporter NKCC2) tetapi impermeabel terhadap air; porsinya jauh lebih kecil daripada tubulus proksimal.",
+      "Tubulus distal melakukan penyesuaian halus (fine tuning) di bawah pengaruh aldosteron dan ADH.",
+      "Tubulus proksimal mereabsorpsi sekitar 65–70% air dan Na+ yang difiltrasi, serta hampir seluruh glukosa dan asam amino, sehingga merupakan tempat reabsorpsi terbanyak. (Catatan arsip menyebut 90%; angka yang benar sekitar 65–70%.)",
+      "Pars descendens permeabel terhadap air tetapi hanya mereabsorpsi sekitar 15% air filtrat."
+    ],
+    "komponenStatistik": "Anatomy"
+  },
+  {
     "id": "ginjal-2021-045",
     "no": 45,
     "soal": "Pada pemeriksaan skrining bayi baru lahir didapatkan adanya ketonuria masif disertai peningkatan asam amino rantai cabang (valin, leusin, isoleusin) dalam urin. Kelainan metabolik yang paling mungkin adalah...",
@@ -752,7 +809,7 @@
   {
     "id": "ginjal-2021-050",
     "no": 50,
-    "soal": "Hasil urinalisis seorang remaja laki-laki 15 tahun menunjukkan hematuria mikroskopik berulang. Pada pemeriksaan biopsi ginjal dengan mikroskop cahaya, glomerulus tampak normal (minimal change / gambaran normal). Diagnosis yang sesuai adalah...",
+    "soal": "Hasil urinalisis seorang anak laki-laki 15 tahun menunjukkan hematuria mikroskopik. Pada pemeriksaan histopatologi biopsi ginjal ditemukan glomerulus seperti glomerulus normal pada mikroskop cahaya. Kemungkinan kelainan pada pasien tersebut adalah...?",
     "opsi": [
       "Minimal Change Disease (MCD)",
       "Diabetic Nephropathy",
@@ -760,22 +817,52 @@
       "Focal Segmental Glomerulosclerosis",
       "Amiloidosis Ginjal"
     ],
-    "jawabanBenar": 0,
-    "pembahasan": "Minimal Change Disease (MCD) karakteristis memberikan gambaran struktur glomerulus yang tampak normal di bawah mikroskop cahaya, dengan efacement foot process podosit yang hanya terlihat pada mikroskop elektron.",
+    "jawabanBenar": 2,
+    "pembahasan": "Pada tahap awal nefropati membranosa glomerulus tampak normal atau hanya sedikit menebal pada mikroskop cahaya; penebalan kapiler (spike and dome pada pewarnaan perak) muncul kemudian. Kunci mengikuti arsip dan materi dosen; secara klinis soal ini ambigu (MCD juga bergambaran normal), sebaiknya dikonfirmasi dosen.",
     "pembahasan_klinis": {
-      "A": "Minimal Change Disease (MCD) karakteristis memberikan gambaran struktur glomerulus yang tampak normal di bawah mikroskop cahaya, dengan efacement foot process podosit yang hanya terlihat pada mikroskop elektron.",
-      "B": "Nefropati diabetik menunjukkan nodul Kimmelstiel-Wilson dan penebalan membran basalis.",
-      "C": "Nefropati membranosa menunjukkan penebalan kapiler dan gambaran spike and dome.",
+      "A": "MCD juga tampak normal pada mikroskop cahaya, tetapi khas menimbulkan sindrom nefrotik (proteinuria masif), bukan hematuria.",
+      "B": "Nefropati diabetik menunjukkan nodul Kimmelstiel-Wilson dan penebalan membran basalis; memerlukan riwayat DM lama.",
+      "C": "Pada tahap awal nefropati membranosa glomerulus tampak normal atau hanya sedikit menebal pada mikroskop cahaya; penebalan kapiler (spike and dome pada pewarnaan perak) muncul kemudian. Kunci mengikuti arsip dan materi dosen; secara klinis soal ini ambigu (MCD juga bergambaran normal), sebaiknya dikonfirmasi dosen.",
       "D": "FSGS menunjukkan sklerosis fokal dan segmental pada glomerulus.",
-      "E": "Amiloidosis menunjukkan deposit amorf merah kongo positif."
+      "E": "Amiloidosis menunjukkan deposit amorf eosinofilik dengan pewarnaan merah Kongo positif."
     },
     "source_id": 50,
     "pembahasanPilihan": [
-      "Minimal Change Disease (MCD) karakteristis memberikan gambaran struktur glomerulus yang tampak normal di bawah mikroskop cahaya, dengan efacement foot process podosit yang hanya terlihat pada mikroskop elektron.",
-      "Nefropati diabetik menunjukkan nodul Kimmelstiel-Wilson dan penebalan membran basalis.",
-      "Nefropati membranosa menunjukkan penebalan kapiler dan gambaran spike and dome.",
+      "MCD juga tampak normal pada mikroskop cahaya, tetapi khas menimbulkan sindrom nefrotik (proteinuria masif), bukan hematuria.",
+      "Nefropati diabetik menunjukkan nodul Kimmelstiel-Wilson dan penebalan membran basalis; memerlukan riwayat DM lama.",
+      "Pada tahap awal nefropati membranosa glomerulus tampak normal atau hanya sedikit menebal pada mikroskop cahaya; penebalan kapiler (spike and dome pada pewarnaan perak) muncul kemudian. Kunci mengikuti arsip dan materi dosen; secara klinis soal ini ambigu (MCD juga bergambaran normal), sebaiknya dikonfirmasi dosen.",
       "FSGS menunjukkan sklerosis fokal dan segmental pada glomerulus.",
-      "Amiloidosis menunjukkan deposit amorf merah kongo positif."
+      "Amiloidosis menunjukkan deposit amorf eosinofilik dengan pewarnaan merah Kongo positif."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-051",
+    "no": 51,
+    "soal": "Seorang laki-laki 55 tahun mengeluh nyeri pinggang kiri sejak 2 minggu. Nyeri tidak menjalar dan demam disangkal. Pada pemeriksaan fisik didapatkan nyeri ketok CVA positif. Pemeriksaan radiologi menunjukkan lesi radioopak pada pyelum berbentuk tanduk rusa. Pemeriksaan baku emas untuk menyokong diagnosis tersebut adalah...",
+    "opsi": [
+      "BNO-IVP",
+      "Biopsi ginjal",
+      "USG ginjal",
+      "CT scan",
+      "MRI"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "CT scan (terutama non-kontras) adalah baku emas untuk mendeteksi dan mengkarakterisasi batu saluran kemih, termasuk batu staghorn yang mengisi pelvis dan kaliks.",
+    "pembahasan_klinis": {
+      "A": "BNO-IVP menilai anatomi dan fungsi ekskresi, tetapi bukan baku emas untuk mengonfirmasi batu, dan kontras berisiko pada gangguan fungsi ginjal.",
+      "B": "Biopsi ginjal untuk penyakit parenkim (misalnya glomerulopati), bukan untuk batu.",
+      "C": "USG aman dan baik untuk hidronefrosis, tetapi kurang sensitif untuk menilai ukuran dan cabang batu staghorn.",
+      "D": "CT scan (terutama non-kontras) adalah baku emas untuk mendeteksi dan mengkarakterisasi batu saluran kemih, termasuk batu staghorn yang mengisi pelvis dan kaliks.",
+      "E": "MRI kurang baik memperlihatkan batu karena batu memberi sinyal rendah; tidak dipakai rutin."
+    },
+    "source_id": 51,
+    "pembahasanPilihan": [
+      "BNO-IVP menilai anatomi dan fungsi ekskresi, tetapi bukan baku emas untuk mengonfirmasi batu, dan kontras berisiko pada gangguan fungsi ginjal.",
+      "Biopsi ginjal untuk penyakit parenkim (misalnya glomerulopati), bukan untuk batu.",
+      "USG aman dan baik untuk hidronefrosis, tetapi kurang sensitif untuk menilai ukuran dan cabang batu staghorn.",
+      "CT scan (terutama non-kontras) adalah baku emas untuk mendeteksi dan mengkarakterisasi batu saluran kemih, termasuk batu staghorn yang mengisi pelvis dan kaliks.",
+      "MRI kurang baik memperlihatkan batu karena batu memberi sinyal rendah; tidak dipakai rutin."
     ],
     "komponenStatistik": "Diagnostics"
   },
@@ -960,6 +1047,66 @@
     "komponenStatistik": "Histology"
   },
   {
+    "id": "ginjal-2021-062",
+    "no": 62,
+    "soal": "Seorang anak 7 tahun dengan BAK keruh dan sedikit, bengkak kelopak mata pada pagi hari, perut membesar, dan bengkak kedua tungkai bawah. Berat badan 30 kg, edema palpebra +/+, edema pretibial +/+, dan pekak pindah +/+. Pemeriksaan penunjang apakah yang diperlukan untuk menetapkan pengobatan?",
+    "opsi": [
+      "Urinalisis",
+      "MSU (kultur urin porsi tengah)",
+      "Biopsi ginjal",
+      "USG ginjal",
+      "BNO-IVP"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Urinalisis (proteinuria +2 sampai +3 atau lebih) mengonfirmasi sindrom nefrotik pada anak dengan edema, sehingga terapi steroid dapat dimulai tanpa biopsi.",
+    "pembahasan_klinis": {
+      "A": "Urinalisis (proteinuria +2 sampai +3 atau lebih) mengonfirmasi sindrom nefrotik pada anak dengan edema, sehingga terapi steroid dapat dimulai tanpa biopsi.",
+      "B": "Kultur urin porsi tengah untuk infeksi saluran kemih, bukan untuk menetapkan pengobatan sindrom nefrotik.",
+      "C": "Biopsi ginjal hanya untuk kasus atipikal atau resisten steroid; tidak dilakukan sebelum terapi awal.",
+      "D": "USG ginjal tidak diperlukan untuk memulai terapi steroid pada sindrom nefrotik tipikal.",
+      "E": "BNO-IVP untuk kelainan anatomi atau obstruksi saluran kemih; tidak relevan di sini."
+    },
+    "source_id": 62,
+    "pembahasanPilihan": [
+      "Urinalisis (proteinuria +2 sampai +3 atau lebih) mengonfirmasi sindrom nefrotik pada anak dengan edema, sehingga terapi steroid dapat dimulai tanpa biopsi.",
+      "Kultur urin porsi tengah untuk infeksi saluran kemih, bukan untuk menetapkan pengobatan sindrom nefrotik.",
+      "Biopsi ginjal hanya untuk kasus atipikal atau resisten steroid; tidak dilakukan sebelum terapi awal.",
+      "USG ginjal tidak diperlukan untuk memulai terapi steroid pada sindrom nefrotik tipikal.",
+      "BNO-IVP untuk kelainan anatomi atau obstruksi saluran kemih; tidak relevan di sini."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-063",
+    "no": 63,
+    "soal": "Seorang laki-laki 25 tahun mengeluh BAK berdarah sejak 1 hari yang lalu, dengan riwayat sakit tenggorokan. Kelainan terdapat di bagian ginjal yang mana?",
+    "opsi": [
+      "Pembuluh darah",
+      "Interstitial",
+      "Glomerulus",
+      "Tubulus proksimal",
+      "Tubulus distal"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Hematuria setelah infeksi tenggorokan (glomerulonefritis pascastreptokokus atau nefropati IgA) disebabkan kerusakan glomerulus oleh kompleks imun; eritrosit melewati barier filtrasi yang rusak.",
+    "pembahasan_klinis": {
+      "A": "Kelainan pembuluh darah (misalnya vaskulitis atau stenosis arteri renalis) tidak khas untuk hematuria setelah radang tenggorokan.",
+      "B": "Nefritis interstisial biasanya terkait obat atau infeksi dengan piuria steril dan demam, bukan hematuria setelah radang tenggorokan.",
+      "C": "Hematuria setelah infeksi tenggorokan (glomerulonefritis pascastreptokokus atau nefropati IgA) disebabkan kerusakan glomerulus oleh kompleks imun; eritrosit melewati barier filtrasi yang rusak.",
+      "D": "Kerusakan tubulus proksimal menimbulkan glukosuria, aminoasiduria, dan fosfaturia (sindrom Fanconi), bukan hematuria.",
+      "E": "Tubulus distal berperan mengatur Na+, K+, dan H+; kelainannya tidak menimbulkan hematuria pascainfeksi."
+    },
+    "source_id": 63,
+    "pembahasanPilihan": [
+      "Kelainan pembuluh darah (misalnya vaskulitis atau stenosis arteri renalis) tidak khas untuk hematuria setelah radang tenggorokan.",
+      "Nefritis interstisial biasanya terkait obat atau infeksi dengan piuria steril dan demam, bukan hematuria setelah radang tenggorokan.",
+      "Hematuria setelah infeksi tenggorokan (glomerulonefritis pascastreptokokus atau nefropati IgA) disebabkan kerusakan glomerulus oleh kompleks imun; eritrosit melewati barier filtrasi yang rusak.",
+      "Kerusakan tubulus proksimal menimbulkan glukosuria, aminoasiduria, dan fosfaturia (sindrom Fanconi), bukan hematuria.",
+      "Tubulus distal berperan mengatur Na+, K+, dan H+; kelainannya tidak menimbulkan hematuria pascainfeksi."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
     "id": "ginjal-2021-066",
     "no": 66,
     "soal": "Seorang laki-laki 77 tahun diantar ke UGD karena tidak bisa BAK sejak pagi dan merasa nyeri suprapubik. Kesulitan miksi dirasakan progresif beberapa bulan terakhir. Obstruksi urinary outflow akibat BPH pada pasien ini disebabkan oleh hiperplasia parenkim prostat terutama pada daerah...",
@@ -988,6 +1135,36 @@
       "Kapsula prostat tidak mengalami nodular hiperplasia."
     ],
     "komponenStatistik": "Physiology"
+  },
+  {
+    "id": "ginjal-2021-068",
+    "no": 68,
+    "soal": "Seorang pria 60 tahun datang dengan kesulitan berkemih sejak 2 hari. Pancaran kencing lemah walaupun sudah mengedan, terasa masih ada sisa, dan frekuensi berkemih meningkat. Tanda vital dalam batas normal. Colok dubur menunjukkan pembesaran kelenjar prostat derajat 2. Terapi apakah yang tepat?",
+    "opsi": [
+      "Atropin",
+      "Prostigmin",
+      "Propantelin",
+      "Alfuzosin",
+      "Prazosin"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Alfuzosin adalah alfa-1 blocker uroselektif: merelaksasi otot polos prostat dan leher kandung kemih sehingga aliran urin membaik dengan efek sistemik minimal.",
+    "pembahasan_klinis": {
+      "A": "Atropin (antimuskarinik) melemahkan kontraksi detrusor dan dapat memicu retensi urin pada BPH; tidak dipakai.",
+      "B": "Prostigmin (neostigmin) adalah inhibitor kolinesterase yang meningkatkan kontraksi detrusor; tidak mengatasi obstruksi prostat.",
+      "C": "Propantelin adalah antimuskarinik untuk kandung kemih overaktif; berisiko memperburuk retensi pada obstruksi infravesikal.",
+      "D": "Alfuzosin adalah alfa-1 blocker uroselektif: merelaksasi otot polos prostat dan leher kandung kemih sehingga aliran urin membaik dengan efek sistemik minimal.",
+      "E": "Prazosin juga alfa-1 blocker, tetapi kurang uroselektif sehingga lebih sering menimbulkan hipotensi ortostatik; bukan pilihan utama pada soal ini."
+    },
+    "source_id": 68,
+    "pembahasanPilihan": [
+      "Atropin (antimuskarinik) melemahkan kontraksi detrusor dan dapat memicu retensi urin pada BPH; tidak dipakai.",
+      "Prostigmin (neostigmin) adalah inhibitor kolinesterase yang meningkatkan kontraksi detrusor; tidak mengatasi obstruksi prostat.",
+      "Propantelin adalah antimuskarinik untuk kandung kemih overaktif; berisiko memperburuk retensi pada obstruksi infravesikal.",
+      "Alfuzosin adalah alfa-1 blocker uroselektif: merelaksasi otot polos prostat dan leher kandung kemih sehingga aliran urin membaik dengan efek sistemik minimal.",
+      "Prazosin juga alfa-1 blocker, tetapi kurang uroselektif sehingga lebih sering menimbulkan hipotensi ortostatik; bukan pilihan utama pada soal ini."
+    ],
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2021-070",
@@ -1048,6 +1225,66 @@
       "Batu semiopak terlihat samar (seperti batu struvit)."
     ],
     "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-074",
+    "no": 74,
+    "soal": "Seorang anak 5 tahun dibawa ke UGD dengan kejang sejak 10 menit lalu (tangan dan kaki kaku, mata mendelik ke atas), tanpa demam atau trauma. Tiga hari terakhir BAK seperti air cucian daging dan kelopak mata bengkak pada pagi hari yang menghilang pada sore hari. Tekanan darah 150/110 mmHg, nadi 90x/menit, napas 24x/menit, edema palpebra +/+, jantung dan paru normal. Urinalisis: eritrosit 25–50/lpb, leukosit 5/lpb, leukosit esterase (-), nitrit (-), epitel (-). Natrium 130 mEq/L, kreatinin 3,5 mg/dL. Apakah diagnosis yang paling mungkin?",
+    "opsi": [
+      "Gagal ginjal akut",
+      "Glomerulonefritis kronis",
+      "Glomerulonefritis akut",
+      "Infeksi saluran kemih dan urolitiasis",
+      "Sindrom nefrotik"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Urin seperti air cucian daging (hematuria), edema periorbital, hipertensi berat disertai kejang (ensefalopati hipertensif), eritrosit urin banyak, kreatinin naik, dan hiponatremia dilusional adalah gambaran sindrom nefritik akut (glomerulonefritis akut).",
+    "pembahasan_klinis": {
+      "A": "Gagal ginjal akut adalah konsekuensi (kreatinin naik), bukan diagnosis penyebabnya; di sini penyebabnya proses glomerulus akut.",
+      "B": "Glomerulonefritis kronis berjalan menahun dengan anemia dan ginjal mengecil; onset hematuria 3 hari dengan hipertensi akut tidak sesuai.",
+      "C": "Urin seperti air cucian daging (hematuria), edema periorbital, hipertensi berat disertai kejang (ensefalopati hipertensif), eritrosit urin banyak, kreatinin naik, dan hiponatremia dilusional adalah gambaran sindrom nefritik akut (glomerulonefritis akut).",
+      "D": "ISK dan urolitiasis biasanya disertai leukosituria, nitrit atau leukosit esterase positif, dan nyeri kolik; hasil di sini negatif.",
+      "E": "Sindrom nefrotik ditandai proteinuria masif dan edema tanpa hipertensi atau hematuria makroskopik yang khas."
+    },
+    "source_id": 74,
+    "pembahasanPilihan": [
+      "Gagal ginjal akut adalah konsekuensi (kreatinin naik), bukan diagnosis penyebabnya; di sini penyebabnya proses glomerulus akut.",
+      "Glomerulonefritis kronis berjalan menahun dengan anemia dan ginjal mengecil; onset hematuria 3 hari dengan hipertensi akut tidak sesuai.",
+      "Urin seperti air cucian daging (hematuria), edema periorbital, hipertensi berat disertai kejang (ensefalopati hipertensif), eritrosit urin banyak, kreatinin naik, dan hiponatremia dilusional adalah gambaran sindrom nefritik akut (glomerulonefritis akut).",
+      "ISK dan urolitiasis biasanya disertai leukosituria, nitrit atau leukosit esterase positif, dan nyeri kolik; hasil di sini negatif.",
+      "Sindrom nefrotik ditandai proteinuria masif dan edema tanpa hipertensi atau hematuria makroskopik yang khas."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-077",
+    "no": 77,
+    "soal": "Lapisan mukosa ureter dilapisi oleh...",
+    "opsi": [
+      "Epitel bertingkat silindris",
+      "Epitel selapis gepeng dengan lapisan tanduk",
+      "Epitel berlapis gepeng dengan lapisan tanduk",
+      "Epitel kubis",
+      "Epitel transisional"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Mukosa ureter, pelvis renalis, kaliks, dan vesika urinaria dilapisi epitel transisional (urotelium) yang dapat meregang.",
+    "pembahasan_klinis": {
+      "A": "Epitel bertingkat silindris dijumpai pada saluran napas atas dan sebagian saluran reproduksi pria.",
+      "B": "Epitel selapis gepeng berkeratin tidak ada pada tubuh manusia; keratinisasi hanya terjadi pada epitel berlapis.",
+      "C": "Epitel berlapis gepeng berkeratin adalah epidermis kulit.",
+      "D": "Epitel kubis melapisi tubulus dan duktus kecil, bukan mukosa ureter.",
+      "E": "Mukosa ureter, pelvis renalis, kaliks, dan vesika urinaria dilapisi epitel transisional (urotelium) yang dapat meregang."
+    },
+    "source_id": 77,
+    "pembahasanPilihan": [
+      "Epitel bertingkat silindris dijumpai pada saluran napas atas dan sebagian saluran reproduksi pria.",
+      "Epitel selapis gepeng berkeratin tidak ada pada tubuh manusia; keratinisasi hanya terjadi pada epitel berlapis.",
+      "Epitel berlapis gepeng berkeratin adalah epidermis kulit.",
+      "Epitel kubis melapisi tubulus dan duktus kecil, bukan mukosa ureter.",
+      "Mukosa ureter, pelvis renalis, kaliks, dan vesika urinaria dilapisi epitel transisional (urotelium) yang dapat meregang."
+    ],
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2021-078",
@@ -1140,6 +1377,66 @@
     "komponenStatistik": "Physiology"
   },
   {
+    "id": "ginjal-2021-084",
+    "no": 84,
+    "soal": "Seorang wanita 30 tahun datang ke rumah sakit dengan nyeri perut kanan bawah yang tidak menjalar dan tanpa demam. Siklus haid teratur. Satu tahun lalu ia pernah mengeluarkan batu kecil lewat kencing. Apakah diagnosisnya?",
+    "opsi": [
+      "Batu buli",
+      "Batu ureter",
+      "Apendisitis akut",
+      "Adneksitis",
+      "Tidak ada satupun di atas"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Nyeri perut kanan bawah tanpa demam dan tanpa gangguan haid, dengan riwayat batu saluran kemih sebelumnya, paling sesuai dengan batu ureter kanan; urinalisis, USG, atau CT diperlukan untuk memastikan. (Kunci ditetapkan dari penalaran klinis; arsip tidak menandai jawaban.)",
+    "pembahasan_klinis": {
+      "A": "Batu buli lebih sering pada pria dengan obstruksi infravesikal dan menimbulkan nyeri suprapubik serta gangguan berkemih.",
+      "B": "Nyeri perut kanan bawah tanpa demam dan tanpa gangguan haid, dengan riwayat batu saluran kemih sebelumnya, paling sesuai dengan batu ureter kanan; urinalisis, USG, atau CT diperlukan untuk memastikan. (Kunci ditetapkan dari penalaran klinis; arsip tidak menandai jawaban.)",
+      "C": "Apendisitis akut umumnya disertai demam ringan, mual, nyeri yang berpindah dari periumbilikal, dan defans di titik McBurney.",
+      "D": "Adneksitis disertai demam, keputihan, gangguan siklus haid, dan nyeri goyang serviks.",
+      "E": "Ada diagnosis yang sesuai di antara pilihan lain."
+    },
+    "source_id": 84,
+    "pembahasanPilihan": [
+      "Batu buli lebih sering pada pria dengan obstruksi infravesikal dan menimbulkan nyeri suprapubik serta gangguan berkemih.",
+      "Nyeri perut kanan bawah tanpa demam dan tanpa gangguan haid, dengan riwayat batu saluran kemih sebelumnya, paling sesuai dengan batu ureter kanan; urinalisis, USG, atau CT diperlukan untuk memastikan. (Kunci ditetapkan dari penalaran klinis; arsip tidak menandai jawaban.)",
+      "Apendisitis akut umumnya disertai demam ringan, mual, nyeri yang berpindah dari periumbilikal, dan defans di titik McBurney.",
+      "Adneksitis disertai demam, keputihan, gangguan siklus haid, dan nyeri goyang serviks.",
+      "Ada diagnosis yang sesuai di antara pilihan lain."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
+    "id": "ginjal-2021-086",
+    "no": 86,
+    "soal": "Seorang laki-laki 62 tahun datang dengan penurunan frekuensi berkemih sejak 5 bulan, disertai kaki dan tangan sedikit bengkak. Ia menderita diabetes melitus sejak 8 tahun lalu. Tekanan darah 155/90 mmHg, konjungtiva anemis, edema ekstremitas bawah. Laboratorium: Hb 7 g/dL, ureum 50 mg/dL (N: 10–50), kreatinin 1,2 mg/dL (N: 0,5–1,5), eGFR 60 mL/menit, albumin 3,0 g/dL (N: 3,5–5,5). Selain pemeriksaan tersebut, pemeriksaan lain manakah yang dapat digunakan untuk menilai fungsi ginjal dengan lebih akurat?",
+    "opsi": [
+      "Albumin urin",
+      "Cystatin C",
+      "Kreatinin urin",
+      "Urinalisis lengkap",
+      "Kultur urin"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Cystatin C diproduksi semua sel berinti dengan laju stabil, difiltrasi bebas, dan tidak banyak dipengaruhi massa otot atau diet, sehingga estimasi LFG lebih akurat, terutama bila kreatinin tampak normal tetapi eGFR menurun.",
+    "pembahasan_klinis": {
+      "A": "Albuminuria menilai adanya kerusakan ginjal (misalnya nefropati diabetik), bukan estimasi laju filtrasi yang lebih akurat.",
+      "B": "Cystatin C diproduksi semua sel berinti dengan laju stabil, difiltrasi bebas, dan tidak banyak dipengaruhi massa otot atau diet, sehingga estimasi LFG lebih akurat, terutama bila kreatinin tampak normal tetapi eGFR menurun.",
+      "C": "Kreatinin urin dipakai untuk menghitung rasio albumin/kreatinin; bukan penanda fungsi yang lebih akurat.",
+      "D": "Urinalisis lengkap membantu menemukan proteinuria, hematuria, dan silinder, tetapi bukan ukuran fungsi.",
+      "E": "Kultur urin mencari infeksi, bukan menilai fungsi ginjal."
+    },
+    "source_id": 86,
+    "pembahasanPilihan": [
+      "Albuminuria menilai adanya kerusakan ginjal (misalnya nefropati diabetik), bukan estimasi laju filtrasi yang lebih akurat.",
+      "Cystatin C diproduksi semua sel berinti dengan laju stabil, difiltrasi bebas, dan tidak banyak dipengaruhi massa otot atau diet, sehingga estimasi LFG lebih akurat, terutama bila kreatinin tampak normal tetapi eGFR menurun.",
+      "Kreatinin urin dipakai untuk menghitung rasio albumin/kreatinin; bukan penanda fungsi yang lebih akurat.",
+      "Urinalisis lengkap membantu menemukan proteinuria, hematuria, dan silinder, tetapi bukan ukuran fungsi.",
+      "Kultur urin mencari infeksi, bukan menilai fungsi ginjal."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
     "id": "ginjal-2021-087",
     "no": 87,
     "soal": "Dalam fikih Islam, seseorang yang mengalami kondisi medis tidak mampu menahan buang air kecil sehingga urin menetes terus-menerus (inkontinensia urin) disebut dengan istilah...",
@@ -1168,6 +1465,96 @@
       "Istihadhah adalah pendarahan di luar haid/nifas pada wanita."
     ],
     "komponenStatistik": "Recall"
+  },
+  {
+    "id": "ginjal-2021-091",
+    "no": 91,
+    "soal": "Seorang laki-laki 77 tahun diantar cucunya ke UGD karena sulit kencing sejak pagi, saat ini disertai nyeri. Keluhan sulit kencing sudah dirasakan beberapa bulan terakhir. Tidak ada riwayat kencing keluar batu, pola makan biasa, dan tidak minum kopi. Apakah diagnosisnya?",
+    "opsi": [
+      "Hidrokel testis kiri",
+      "Hernia skrotalis kanan",
+      "BPH",
+      "Batu buli",
+      "Hidronefrosis ginjal kanan karena batu pelvis renalis kanan"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Lansia dengan gangguan berkemih (LUTS) yang berkembang beberapa bulan lalu jatuh ke retensi urin akut, tanpa riwayat batu dan tanpa pemicu (kopi, obat), paling sesuai dengan BPH.",
+    "pembahasan_klinis": {
+      "A": "Hidrokel adalah kumpulan cairan di tunika vaginalis (benjolan skrotum yang transiluminasi) dan tidak menyebabkan retensi urin akut.",
+      "B": "Hernia skrotalis menimbulkan benjolan skrotum yang berkaitan dengan peningkatan tekanan intraabdomen, bukan sulit kencing progresif.",
+      "C": "Lansia dengan gangguan berkemih (LUTS) yang berkembang beberapa bulan lalu jatuh ke retensi urin akut, tanpa riwayat batu dan tanpa pemicu (kopi, obat), paling sesuai dengan BPH.",
+      "D": "Batu buli biasanya memberi pancaran urin terputus-putus, hematuria, dan nyeri, dengan riwayat batu atau obstruksi lama; riwayat batu disangkal di sini.",
+      "E": "Hidronefrosis karena batu pelvis renalis menimbulkan nyeri pinggang atau kolik, bukan retensi urin akut."
+    },
+    "source_id": 91,
+    "pembahasanPilihan": [
+      "Hidrokel adalah kumpulan cairan di tunika vaginalis (benjolan skrotum yang transiluminasi) dan tidak menyebabkan retensi urin akut.",
+      "Hernia skrotalis menimbulkan benjolan skrotum yang berkaitan dengan peningkatan tekanan intraabdomen, bukan sulit kencing progresif.",
+      "Lansia dengan gangguan berkemih (LUTS) yang berkembang beberapa bulan lalu jatuh ke retensi urin akut, tanpa riwayat batu dan tanpa pemicu (kopi, obat), paling sesuai dengan BPH.",
+      "Batu buli biasanya memberi pancaran urin terputus-putus, hematuria, dan nyeri, dengan riwayat batu atau obstruksi lama; riwayat batu disangkal di sini.",
+      "Hidronefrosis karena batu pelvis renalis menimbulkan nyeri pinggang atau kolik, bukan retensi urin akut."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
+    "id": "ginjal-2021-096",
+    "no": 96,
+    "soal": "Seorang laki-laki 70 tahun datang ke klinik untuk konsultasi rutin. Ia memiliki riwayat hipertensi sejak 6 tahun lalu. Kesadaran compos mentis, tekanan darah 180/70 mmHg, denyut nadi 98x/menit, frekuensi napas 18x/menit. Pada pemeriksaan fisik ditemukan murmur pada katup mitral dan trikuspid. Apa kemungkinan diagnosis pasien?",
+    "opsi": [
+      "Hipertensi sistolik",
+      "Hipertensi sistolik terisolasi",
+      "Hipertensi emergensi",
+      "Hipertensi resisten",
+      "Hipertensi krisis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Tekanan darah 180/70 mmHg memenuhi kriteria hipertensi sistolik terisolasi (sistolik ≥ 140 dan diastolik < 90 mmHg), khas pada usia lanjut karena kekakuan arteri.",
+    "pembahasan_klinis": {
+      "A": "Istilah \"hipertensi sistolik\" saja tidak baku; istilah yang tepat untuk pola ini adalah hipertensi sistolik terisolasi.",
+      "B": "Tekanan darah 180/70 mmHg memenuhi kriteria hipertensi sistolik terisolasi (sistolik ≥ 140 dan diastolik < 90 mmHg), khas pada usia lanjut karena kekakuan arteri.",
+      "C": "Hipertensi emergensi memerlukan bukti kerusakan organ target akut; tidak ada pada kasus ini.",
+      "D": "Hipertensi resisten berarti tekanan darah tetap tinggi meski memakai ≥ 3 obat termasuk diuretik pada dosis optimal; tidak disebutkan.",
+      "E": "Hipertensi krisis mencakup urgensi dan emergensi (umumnya ≥ 180/120 mmHg); diastolik di sini hanya 70 mmHg."
+    },
+    "source_id": 96,
+    "pembahasanPilihan": [
+      "Istilah \"hipertensi sistolik\" saja tidak baku; istilah yang tepat untuk pola ini adalah hipertensi sistolik terisolasi.",
+      "Tekanan darah 180/70 mmHg memenuhi kriteria hipertensi sistolik terisolasi (sistolik ≥ 140 dan diastolik < 90 mmHg), khas pada usia lanjut karena kekakuan arteri.",
+      "Hipertensi emergensi memerlukan bukti kerusakan organ target akut; tidak ada pada kasus ini.",
+      "Hipertensi resisten berarti tekanan darah tetap tinggi meski memakai ≥ 3 obat termasuk diuretik pada dosis optimal; tidak disebutkan.",
+      "Hipertensi krisis mencakup urgensi dan emergensi (umumnya ≥ 180/120 mmHg); diastolik di sini hanya 70 mmHg."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-097",
+    "no": 97,
+    "soal": "Seorang laki-laki 52 tahun datang ke IGD dengan keluhan utama tidak bisa BAK. Ia juga mengalami BAK berdarah 1 minggu sebelumnya dan nyeri pinggang yang menjalar ke perut depan. Nyeri ketok CVA positif. Dokter mendiagnosis ureterolitiasis. Saraf apakah yang terdapat di dekat ureter?",
+    "opsi": [
+      "N. phrenicus dextra",
+      "N. genitofemoralis",
+      "N. splanchnicus major",
+      "N. phrenicus sinistra",
+      "N. splanchnicus minor"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "N. genitofemoralis (L1–L2) turun di permukaan anterior m. psoas mayor, tepat di sebelah ureter; karena itu nyeri kolik ureter dapat menjalar ke inguinal dan genital. (Kunci ditetapkan dengan eliminasi; arsip tidak menandai jawaban dan saraf splanknikus pelvikus tidak ada di antara pilihan.)",
+    "pembahasan_klinis": {
+      "A": "N. phrenicus dekstra berjalan di leher dan mediastinum menuju diafragma; tidak dekat ureter.",
+      "B": "N. genitofemoralis (L1–L2) turun di permukaan anterior m. psoas mayor, tepat di sebelah ureter; karena itu nyeri kolik ureter dapat menjalar ke inguinal dan genital. (Kunci ditetapkan dengan eliminasi; arsip tidak menandai jawaban dan saraf splanknikus pelvikus tidak ada di antara pilihan.)",
+      "C": "N. splanchnicus major berasal dari T5–T9 dan menuju ganglion celiacum; tidak berdekatan dengan ureter.",
+      "D": "N. phrenicus sinistra berjalan di toraks; tidak dekat ureter.",
+      "E": "N. splanchnicus minor (T10–T11) menuju ganglion aortikorenal; tidak berjalan bersama ureter."
+    },
+    "source_id": 97,
+    "pembahasanPilihan": [
+      "N. phrenicus dekstra berjalan di leher dan mediastinum menuju diafragma; tidak dekat ureter.",
+      "N. genitofemoralis (L1–L2) turun di permukaan anterior m. psoas mayor, tepat di sebelah ureter; karena itu nyeri kolik ureter dapat menjalar ke inguinal dan genital. (Kunci ditetapkan dengan eliminasi; arsip tidak menandai jawaban dan saraf splanknikus pelvikus tidak ada di antara pilihan.)",
+      "N. splanchnicus major berasal dari T5–T9 dan menuju ganglion celiacum; tidak berdekatan dengan ureter.",
+      "N. phrenicus sinistra berjalan di toraks; tidak dekat ureter.",
+      "N. splanchnicus minor (T10–T11) menuju ganglion aortikorenal; tidak berjalan bersama ureter."
+    ],
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2021-099",
@@ -1228,5 +1615,515 @@
       "Neisseria adalah diplokokus Gram negatif."
     ],
     "komponenStatistik": "Physiology"
+  },
+  {
+    "id": "ginjal-2021-101",
+    "no": 101,
+    "soal": "Seorang anak laki-laki 7 tahun dibawa ibunya ke dokter dengan BAK keruh disertai bengkak di kelopak mata, kedua tangan, dan kaki. Keadaan umum compos mentis, tekanan darah 100/70 mmHg, nadi 95x/menit, napas 20x/menit, suhu 37,5 °C. Edema palpebra +/+, edema dorsum pedis +/+, pekak pindah negatif. Laboratorium: ureum dan kreatinin normal, urin keruh, protein +++, eritrosit 3–5/lpb, leukosit 1–5/lpb. Apakah tata laksana untuk pasien ini?",
+    "opsi": [
+      "Prednison 60 mg/m²/hari, dibagi 3 dosis",
+      "Eritromisin 10 mg/kgBB/hari, dibagi 3 dosis",
+      "Furosemid 1 mg/kgBB/dosis, intravena",
+      "INH profilaksis 5 mg/kgBB/hari",
+      "Metilprednisolon 60 mg/m²/hari, dibagi 2 dosis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Sindrom nefrotik idiopatik pada anak diobati awal dengan prednison 60 mg/m²/hari (maksimal 80 mg) dibagi 3 dosis selama 4 minggu, dilanjutkan dosis alternate-day selama 4 minggu (protokol ISKDC/IDAI).",
+    "pembahasan_klinis": {
+      "A": "Sindrom nefrotik idiopatik pada anak diobati awal dengan prednison 60 mg/m²/hari (maksimal 80 mg) dibagi 3 dosis selama 4 minggu, dilanjutkan dosis alternate-day selama 4 minggu (protokol ISKDC/IDAI).",
+      "B": "Eritromisin untuk infeksi (misalnya streptokokus) bila ada bukti infeksi; bukan terapi utama sindrom nefrotik.",
+      "C": "Furosemid IV hanya untuk edema berat atau anasarka, biasanya setelah koreksi albumin; bukan terapi dasar.",
+      "D": "INH profilaksis diberikan bila ada kontak tuberkulosis atau uji tuberkulin positif, bukan rutin.",
+      "E": "Metilprednisolon IV dipakai pada kasus resisten atau relaps berat, bukan lini pertama."
+    },
+    "source_id": 101,
+    "pembahasanPilihan": [
+      "Sindrom nefrotik idiopatik pada anak diobati awal dengan prednison 60 mg/m²/hari (maksimal 80 mg) dibagi 3 dosis selama 4 minggu, dilanjutkan dosis alternate-day selama 4 minggu (protokol ISKDC/IDAI).",
+      "Eritromisin untuk infeksi (misalnya streptokokus) bila ada bukti infeksi; bukan terapi utama sindrom nefrotik.",
+      "Furosemid IV hanya untuk edema berat atau anasarka, biasanya setelah koreksi albumin; bukan terapi dasar.",
+      "INH profilaksis diberikan bila ada kontak tuberkulosis atau uji tuberkulin positif, bukan rutin.",
+      "Metilprednisolon IV dipakai pada kasus resisten atau relaps berat, bukan lini pertama."
+    ],
+    "komponenStatistik": "Pharmacology"
+  },
+  {
+    "id": "ginjal-2021-102",
+    "no": 102,
+    "soal": "Seorang anak laki-laki 7 tahun dibawa ke dokter dengan bengkak kelopak mata yang muncul pagi hari dan menghilang sore hari, dan BAK menjadi jarang. Keluhan didahului nyeri tenggorok yang sudah diobati hingga sembuh. Keadaan umum compos mentis, tekanan darah 150/100 mmHg, nadi 90x/menit, napas 20x/menit, suhu 37 °C, edema palpebra +/+, jantung dan paru normal. Laboratorium: urin jernih, eritrosit 10–15/lpb, protein ++, leukosit 1–3/lpb. Bagaimana tata laksana yang sesuai?",
+    "opsi": [
+      "Rawat jalan, tidak diberi antibiotik, periksa ulang urin 1 bulan lagi",
+      "Rawat jalan, berikan eritromisin per oral",
+      "Rawat jalan, berikan penisilin G intramuskular",
+      "Rawat inap, berikan furosemid per oral",
+      "Rawat inap, berikan prednison per oral dan furosemid intravena"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Glomerulonefritis akut pascastreptokokus dengan hipertensi dan edema dirawat inap dengan diuretik (furosemid) untuk mengendalikan edema dan tekanan darah; antibiotik sudah diberikan sebelumnya. (Kunci disimpulkan dari isi soal; arsip tidak menandai jawaban.)",
+    "pembahasan_klinis": {
+      "A": "Rawat jalan tanpa terapi kurang tepat karena ada hipertensi 150/100 mmHg dan edema yang perlu ditangani dan dipantau.",
+      "B": "Antibiotik untuk eradikasi streptokokus sudah diberikan sebelumnya, dan hipertensi memerlukan rawat inap; bukan pilihan terbaik.",
+      "C": "Penisilin G IM tidak menangani hipertensi dan edema; rawat jalan tidak sesuai pada kasus ini.",
+      "D": "Glomerulonefritis akut pascastreptokokus dengan hipertensi dan edema dirawat inap dengan diuretik (furosemid) untuk mengendalikan edema dan tekanan darah; antibiotik sudah diberikan sebelumnya. (Kunci disimpulkan dari isi soal; arsip tidak menandai jawaban.)",
+      "E": "Prednison tidak diindikasikan pada glomerulonefritis akut pascastreptokokus; steroid untuk sindrom nefrotik."
+    },
+    "source_id": 102,
+    "pembahasanPilihan": [
+      "Rawat jalan tanpa terapi kurang tepat karena ada hipertensi 150/100 mmHg dan edema yang perlu ditangani dan dipantau.",
+      "Antibiotik untuk eradikasi streptokokus sudah diberikan sebelumnya, dan hipertensi memerlukan rawat inap; bukan pilihan terbaik.",
+      "Penisilin G IM tidak menangani hipertensi dan edema; rawat jalan tidak sesuai pada kasus ini.",
+      "Glomerulonefritis akut pascastreptokokus dengan hipertensi dan edema dirawat inap dengan diuretik (furosemid) untuk mengendalikan edema dan tekanan darah; antibiotik sudah diberikan sebelumnya. (Kunci disimpulkan dari isi soal; arsip tidak menandai jawaban.)",
+      "Prednison tidak diindikasikan pada glomerulonefritis akut pascastreptokokus; steroid untuk sindrom nefrotik."
+    ],
+    "komponenStatistik": "Pharmacology"
+  },
+  {
+    "id": "ginjal-2021-103",
+    "no": 103,
+    "soal": "Seorang wanita 21 tahun diantar ibunya ke rumah sakit dengan edema palpebra dan edema anasarka. Pemeriksaan urin menunjukkan proteinuria +++. Apakah diagnosisnya?",
+    "opsi": [
+      "Glomerulonefritis akut",
+      "Glomerulonefritis kronik",
+      "Sindrom nefrotik",
+      "Sindrom nefritik",
+      "Pielonefritis"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Edema anasarka dan proteinuria masif (+++) adalah ciri sindrom nefrotik (proteinuria > 3,5 g/hari, hipoalbuminemia, edema, hiperlipidemia).",
+    "pembahasan_klinis": {
+      "A": "Glomerulonefritis akut biasanya disertai hematuria, hipertensi, dan oliguria (sindrom nefritik) dengan proteinuria ringan sampai sedang.",
+      "B": "Glomerulonefritis kronik ditandai penurunan fungsi ginjal menahun, hipertensi, anemia, dan ginjal mengecil.",
+      "C": "Edema anasarka dan proteinuria masif (+++) adalah ciri sindrom nefrotik (proteinuria > 3,5 g/hari, hipoalbuminemia, edema, hiperlipidemia).",
+      "D": "Sindrom nefritik didominasi hematuria, hipertensi, dan azotemia.",
+      "E": "Pielonefritis disertai demam, nyeri pinggang, dan piuria."
+    },
+    "source_id": 103,
+    "pembahasanPilihan": [
+      "Glomerulonefritis akut biasanya disertai hematuria, hipertensi, dan oliguria (sindrom nefritik) dengan proteinuria ringan sampai sedang.",
+      "Glomerulonefritis kronik ditandai penurunan fungsi ginjal menahun, hipertensi, anemia, dan ginjal mengecil.",
+      "Edema anasarka dan proteinuria masif (+++) adalah ciri sindrom nefrotik (proteinuria > 3,5 g/hari, hipoalbuminemia, edema, hiperlipidemia).",
+      "Sindrom nefritik didominasi hematuria, hipertensi, dan azotemia.",
+      "Pielonefritis disertai demam, nyeri pinggang, dan piuria."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
+    "id": "ginjal-2021-104",
+    "no": 104,
+    "soal": "Seorang wanita hamil 24 tahun datang dengan perdarahan 1 jam setelah melahirkan. Tekanan darah 80/60 mmHg, leukosit 13.000/mm³, Hb 4,5 g/dL, produksi urin 200 cc/6 jam. Di manakah letak gangguan ginjal pada pasien ini?",
+    "opsi": [
+      "Pra renal",
+      "Renal",
+      "Post renal",
+      "Tubulus",
+      "Ureter"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Perdarahan hebat menyebabkan hipovolemia dan hipotensi sehingga perfusi ginjal turun (azotemia prarenal) sementara parenkim ginjal awalnya masih normal.",
+    "pembahasan_klinis": {
+      "A": "Perdarahan hebat menyebabkan hipovolemia dan hipotensi sehingga perfusi ginjal turun (azotemia prarenal) sementara parenkim ginjal awalnya masih normal.",
+      "B": "Kerusakan renal intrinsik (misalnya nekrosis tubular akut) dapat menyusul bila hipoperfusi berlangsung lama, tetapi gangguan awal pada kasus ini adalah hipoperfusi.",
+      "C": "Penyebab post renal adalah obstruksi saluran kemih (batu, tumor, BPH); tidak ada tanda pada kasus ini.",
+      "D": "Tubulus adalah bagian dari parenkim ginjal (kategori renal), bukan kategori lokasi tersendiri.",
+      "E": "Kelainan ureter (obstruksi) termasuk penyebab post renal; tidak ada bukti pada kasus ini."
+    },
+    "source_id": 104,
+    "pembahasanPilihan": [
+      "Perdarahan hebat menyebabkan hipovolemia dan hipotensi sehingga perfusi ginjal turun (azotemia prarenal) sementara parenkim ginjal awalnya masih normal.",
+      "Kerusakan renal intrinsik (misalnya nekrosis tubular akut) dapat menyusul bila hipoperfusi berlangsung lama, tetapi gangguan awal pada kasus ini adalah hipoperfusi.",
+      "Penyebab post renal adalah obstruksi saluran kemih (batu, tumor, BPH); tidak ada tanda pada kasus ini.",
+      "Tubulus adalah bagian dari parenkim ginjal (kategori renal), bukan kategori lokasi tersendiri.",
+      "Kelainan ureter (obstruksi) termasuk penyebab post renal; tidak ada bukti pada kasus ini."
+    ],
+    "komponenStatistik": "Anatomy"
+  },
+  {
+    "id": "ginjal-2021-105",
+    "no": 105,
+    "soal": "Seorang wanita tampak sakit berat 1 jam setelah melahirkan dengan perdarahan. Kesadaran somnolen, tekanan darah 80/60 mmHg, Hb 4,5 g/dL, ureum 180 mg/dL, kreatinin 1,5 mg/dL, dan produksi urin hanya 200 cc/6 jam. Apa dasar penegakan diagnosis cedera ginjal akut pada pasien ini?",
+    "opsi": [
+      "Kreatinin dan ureum",
+      "Kreatinin dan jumlah urin",
+      "Kesadaran dan hasil laboratorium",
+      "Kesadaran dan tekanan darah",
+      "Hb dan jumlah urin"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Cedera ginjal akut didefinisikan (KDIGO/RIFLE) berdasarkan kenaikan kreatinin serum dan/atau penurunan luaran urin (< 0,5 mL/kgBB/jam selama ≥ 6 jam).",
+    "pembahasan_klinis": {
+      "A": "Ureum dipengaruhi diet protein, hidrasi, dan katabolisme sehingga tidak dipakai sebagai kriteria; kreatinin saja belum mencakup kriteria luaran urin.",
+      "B": "Cedera ginjal akut didefinisikan (KDIGO/RIFLE) berdasarkan kenaikan kreatinin serum dan/atau penurunan luaran urin (< 0,5 mL/kgBB/jam selama ≥ 6 jam).",
+      "C": "Kesadaran dan hasil laboratorium umum bukan kriteria spesifik cedera ginjal akut.",
+      "D": "Kesadaran dan tekanan darah menggambarkan keparahan klinis atau syok, bukan kriteria diagnosis cedera ginjal akut.",
+      "E": "Hb menggambarkan perdarahan, bukan kriteria cedera ginjal akut; luaran urin saja tanpa kreatinin tidak lengkap."
+    },
+    "source_id": 105,
+    "pembahasanPilihan": [
+      "Ureum dipengaruhi diet protein, hidrasi, dan katabolisme sehingga tidak dipakai sebagai kriteria; kreatinin saja belum mencakup kriteria luaran urin.",
+      "Cedera ginjal akut didefinisikan (KDIGO/RIFLE) berdasarkan kenaikan kreatinin serum dan/atau penurunan luaran urin (< 0,5 mL/kgBB/jam selama ≥ 6 jam).",
+      "Kesadaran dan hasil laboratorium umum bukan kriteria spesifik cedera ginjal akut.",
+      "Kesadaran dan tekanan darah menggambarkan keparahan klinis atau syok, bukan kriteria diagnosis cedera ginjal akut.",
+      "Hb menggambarkan perdarahan, bukan kriteria cedera ginjal akut; luaran urin saja tanpa kreatinin tidak lengkap."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-106",
+    "no": 106,
+    "soal": "Manakah di antara kelainan berikut yang dapat dideteksi dari bau urin yang khas?",
+    "opsi": [
+      "Maple syrup urine disease",
+      "Protoporfirinuria",
+      "Melanuria",
+      "Galaktosuria",
+      "Indikanuria"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Pada maple syrup urine disease, asam keto rantai cabang (sotolon) menimbulkan bau urin seperti sirup maple atau gula terbakar.",
+    "pembahasan_klinis": {
+      "A": "Pada maple syrup urine disease, asam keto rantai cabang (sotolon) menimbulkan bau urin seperti sirup maple atau gula terbakar.",
+      "B": "Porfirin memberi perubahan warna (merah-ungu) pada urin, bukan bau khas.",
+      "C": "Melanuria memberi warna gelap atau hitam pada urin, terutama setelah berdiri.",
+      "D": "Galaktosuria dideteksi dengan tes reduksi (Clinitest); urin tidak berbau khas.",
+      "E": "Indikanuria (metabolit triptofan oleh bakteri usus) memberi warna kebiruan pada urin, bukan bau khas."
+    },
+    "source_id": 106,
+    "pembahasanPilihan": [
+      "Pada maple syrup urine disease, asam keto rantai cabang (sotolon) menimbulkan bau urin seperti sirup maple atau gula terbakar.",
+      "Porfirin memberi perubahan warna (merah-ungu) pada urin, bukan bau khas.",
+      "Melanuria memberi warna gelap atau hitam pada urin, terutama setelah berdiri.",
+      "Galaktosuria dideteksi dengan tes reduksi (Clinitest); urin tidak berbau khas.",
+      "Indikanuria (metabolit triptofan oleh bakteri usus) memberi warna kebiruan pada urin, bukan bau khas."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
+    "id": "ginjal-2021-107",
+    "no": 107,
+    "soal": "Seorang laki-laki 50 tahun datang dengan keluhan kencing tersendat dan keluar batu sebesar biji kacang hijau. Urinalisis menunjukkan batu kalsium. Dokter meresepkan hidroklorotiazid 25 mg sekali sehari. Bagaimana mekanisme obat tersebut dalam mencegah batu?",
+    "opsi": [
+      "Meningkatkan ekskresi sitrat melalui urin",
+      "Menghambat enzim xantin oksidase",
+      "Menghambat ekskresi kalsium urin",
+      "Menghambat sekresi asam urat",
+      "Menghambat reabsorpsi kalsium di tubulus ginjal"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Tiazid menghambat kotransporter Na+-Cl- di tubulus distal sehingga reabsorpsi kalsium meningkat dan ekskresi kalsium urin turun (hipokalsiuria), sehingga mengurangi kekambuhan batu kalsium.",
+    "pembahasan_klinis": {
+      "A": "Peningkatan sitrat urin dicapai dengan kalium sitrat, bukan tiazid.",
+      "B": "Penghambatan xantin oksidase adalah mekanisme alopurinol untuk batu asam urat.",
+      "C": "Tiazid menghambat kotransporter Na+-Cl- di tubulus distal sehingga reabsorpsi kalsium meningkat dan ekskresi kalsium urin turun (hipokalsiuria), sehingga mengurangi kekambuhan batu kalsium.",
+      "D": "Tiazid justru menurunkan ekskresi asam urat (dapat menimbulkan hiperurisemia); ini bukan mekanisme pencegahan batu kalsium.",
+      "E": "Penghambatan reabsorpsi kalsium adalah efek diuretik loop, yang meningkatkan kalsiuria dan memperburuk batu kalsium."
+    },
+    "source_id": 107,
+    "pembahasanPilihan": [
+      "Peningkatan sitrat urin dicapai dengan kalium sitrat, bukan tiazid.",
+      "Penghambatan xantin oksidase adalah mekanisme alopurinol untuk batu asam urat.",
+      "Tiazid menghambat kotransporter Na+-Cl- di tubulus distal sehingga reabsorpsi kalsium meningkat dan ekskresi kalsium urin turun (hipokalsiuria), sehingga mengurangi kekambuhan batu kalsium.",
+      "Tiazid justru menurunkan ekskresi asam urat (dapat menimbulkan hiperurisemia); ini bukan mekanisme pencegahan batu kalsium.",
+      "Penghambatan reabsorpsi kalsium adalah efek diuretik loop, yang meningkatkan kalsiuria dan memperburuk batu kalsium."
+    ],
+    "komponenStatistik": "Pharmacology"
+  },
+  {
+    "id": "ginjal-2021-108",
+    "no": 108,
+    "soal": "Seorang anak perempuan 5 tahun dibawa ibunya ke dokter dengan BAK sakit sejak 2 hari, demam sejak 1 hari, dan kembali mengompol padahal sebelumnya sudah tidak mengompol. Berat badan 25 kg, keadaan umum compos mentis, tekanan darah 110/70 mmHg, napas 24x/menit, nadi 100x/menit, suhu 38,9 °C, nyeri tekan suprapubik, nyeri ketok CVA -/-. Laboratorium: Hb 12 g/dL, leukosit 13.000/mm³, trombosit 225.000/mm³, hematokrit 36%. Bagaimanakah sumber sampel urin yang paling baik pada kasus ini?",
+    "opsi": [
+      "Urin dari urine bag collector",
+      "Urin dari aspirasi suprapubik",
+      "Urin porsi tengah (mid-stream)",
+      "Urin dari kateterisasi",
+      "Urin tampung 24 jam"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Anak 5 tahun yang sudah toilet trained dapat memberikan urin porsi tengah (clean catch) yang bersih dan non-invasif; itu pilihan terbaik.",
+    "pembahasan_klinis": {
+      "A": "Kantong urin sangat sering terkontaminasi sehingga hanya berguna untuk skrining (hasil negatif); tidak untuk menetapkan ISK.",
+      "B": "Aspirasi suprapubik adalah baku emas pada bayi atau anak yang belum toilet training atau bila sampel lain tidak dapat diandalkan; tidak perlu pada anak 5 tahun yang sudah bisa berkemih spontan.",
+      "C": "Anak 5 tahun yang sudah toilet trained dapat memberikan urin porsi tengah (clean catch) yang bersih dan non-invasif; itu pilihan terbaik.",
+      "D": "Kateterisasi dipertimbangkan bila anak tidak dapat berkemih spontan atau porsi tengah tidak memungkinkan; sifatnya invasif.",
+      "E": "Urin 24 jam untuk kuantifikasi protein atau kreatinin, bukan untuk kultur."
+    },
+    "source_id": 108,
+    "pembahasanPilihan": [
+      "Kantong urin sangat sering terkontaminasi sehingga hanya berguna untuk skrining (hasil negatif); tidak untuk menetapkan ISK.",
+      "Aspirasi suprapubik adalah baku emas pada bayi atau anak yang belum toilet training atau bila sampel lain tidak dapat diandalkan; tidak perlu pada anak 5 tahun yang sudah bisa berkemih spontan.",
+      "Anak 5 tahun yang sudah toilet trained dapat memberikan urin porsi tengah (clean catch) yang bersih dan non-invasif; itu pilihan terbaik.",
+      "Kateterisasi dipertimbangkan bila anak tidak dapat berkemih spontan atau porsi tengah tidak memungkinkan; sifatnya invasif.",
+      "Urin 24 jam untuk kuantifikasi protein atau kreatinin, bukan untuk kultur."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-109",
+    "no": 109,
+    "soal": "Seorang anak perempuan 5 tahun datang dengan BAK sakit sejak 2 hari, demam, suhu 38,9 °C, nyeri tekan suprapubik, nyeri ketok CVA -/-, dan leukosit 13.000/mm³. Apakah penyebab terbanyak kasus ini?",
+    "opsi": [
+      "Escherichia coli",
+      "Proteus mirabilis",
+      "Streptococcus β-hemolitikus grup B",
+      "Streptococcus β-hemolitikus grup A",
+      "Klebsiella"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "E. coli (terutama uropatogenik/UPEC dengan pili P dan fimbria tipe 1) menyebabkan sekitar 80% ISK pada anak.",
+    "pembahasan_klinis": {
+      "A": "E. coli (terutama uropatogenik/UPEC dengan pili P dan fimbria tipe 1) menyebabkan sekitar 80% ISK pada anak.",
+      "B": "Proteus mirabilis lebih jarang, biasanya terkait batu struvit atau kelainan anatomi.",
+      "C": "Streptococcus grup B penting pada infeksi neonatus, bukan penyebab utama ISK anak.",
+      "D": "Streptococcus grup A menyebabkan faringitis dan glomerulonefritis pascastreptokokus, bukan ISK.",
+      "E": "Klebsiella lebih jarang dan sering pada ISK nosokomial."
+    },
+    "source_id": 109,
+    "pembahasanPilihan": [
+      "E. coli (terutama uropatogenik/UPEC dengan pili P dan fimbria tipe 1) menyebabkan sekitar 80% ISK pada anak.",
+      "Proteus mirabilis lebih jarang, biasanya terkait batu struvit atau kelainan anatomi.",
+      "Streptococcus grup B penting pada infeksi neonatus, bukan penyebab utama ISK anak.",
+      "Streptococcus grup A menyebabkan faringitis dan glomerulonefritis pascastreptokokus, bukan ISK.",
+      "Klebsiella lebih jarang dan sering pada ISK nosokomial."
+    ],
+    "komponenStatistik": "Physiology"
+  },
+  {
+    "id": "ginjal-2021-110",
+    "no": 110,
+    "soal": "Seorang laki-laki 35 tahun datang ke poliklinik dengan urin berbuih sejak 1 bulan dan bengkak seluruh badan. Pemeriksaan protein urin positif dan dokter mendiagnosis sindrom nefrotik. Satu piramid ginjal bersama korteks di sekitarnya yang dibatasi oleh kolumna renalis disebut...",
+    "opsi": [
+      "Sinus renalis",
+      "Cortex renalis",
+      "Medulla renalis",
+      "Pelvis renalis",
+      "Lobus renalis"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Satu piramid medula beserta korteks di atas dan di sampingnya (hingga kolumna renalis) membentuk satu lobus renalis.",
+    "pembahasan_klinis": {
+      "A": "Sinus renalis adalah rongga tempat pelvis, kaliks, dan pembuluh darah ginjal.",
+      "B": "Korteks adalah lapisan luar ginjal; kolumna renalis adalah perpanjangan korteks di antara piramid, bukan satu unit.",
+      "C": "Medula terdiri atas piramid renalis saja tanpa korteks di sekitarnya.",
+      "D": "Pelvis renalis adalah pelebaran proksimal ureter tempat kaliks bermuara.",
+      "E": "Satu piramid medula beserta korteks di atas dan di sampingnya (hingga kolumna renalis) membentuk satu lobus renalis."
+    },
+    "source_id": 110,
+    "pembahasanPilihan": [
+      "Sinus renalis adalah rongga tempat pelvis, kaliks, dan pembuluh darah ginjal.",
+      "Korteks adalah lapisan luar ginjal; kolumna renalis adalah perpanjangan korteks di antara piramid, bukan satu unit.",
+      "Medula terdiri atas piramid renalis saja tanpa korteks di sekitarnya.",
+      "Pelvis renalis adalah pelebaran proksimal ureter tempat kaliks bermuara.",
+      "Satu piramid medula beserta korteks di atas dan di sampingnya (hingga kolumna renalis) membentuk satu lobus renalis."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
+    "id": "ginjal-2021-111",
+    "no": 111,
+    "soal": "Seorang wanita hamil 27 tahun datang dengan nyeri suprapubik, demam, menggigil, dan kencing tidak lampias. Dokter menduga sistitis. Kultur urin menunjukkan bakteri > 100.000/cc. Bakteri berbentuk batang Gram negatif dan koloninya menjalar (swarming). Apakah bakteri penyebab infeksi ini?",
+    "opsi": [
+      "Staphylococcus aureus",
+      "Proteus mirabilis",
+      "Chlamydia trachomatis",
+      "Staphylococcus saprophyticus",
+      "Neisseria sp."
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Proteus mirabilis adalah batang Gram negatif yang motil (koloni menjalar/swarming) dan urease positif; pada ISK dapat menimbulkan batu struvit.",
+    "pembahasan_klinis": {
+      "A": "S. aureus adalah kokus Gram positif.",
+      "B": "Proteus mirabilis adalah batang Gram negatif yang motil (koloni menjalar/swarming) dan urease positif; pada ISK dapat menimbulkan batu struvit.",
+      "C": "Chlamydia trachomatis adalah bakteri intraseluler obligat yang tidak tumbuh pada kultur biasa dan menyebabkan uretritis.",
+      "D": "S. saprophyticus adalah kokus Gram positif, penyebab ISK pada wanita muda aktif seksual.",
+      "E": "Neisseria adalah diplokokus Gram negatif, bukan batang."
+    },
+    "source_id": 111,
+    "pembahasanPilihan": [
+      "S. aureus adalah kokus Gram positif.",
+      "Proteus mirabilis adalah batang Gram negatif yang motil (koloni menjalar/swarming) dan urease positif; pada ISK dapat menimbulkan batu struvit.",
+      "Chlamydia trachomatis adalah bakteri intraseluler obligat yang tidak tumbuh pada kultur biasa dan menyebabkan uretritis.",
+      "S. saprophyticus adalah kokus Gram positif, penyebab ISK pada wanita muda aktif seksual.",
+      "Neisseria adalah diplokokus Gram negatif, bukan batang."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-112",
+    "no": 112,
+    "soal": "Seorang laki-laki 56 tahun dibawa ke IGD karena tidak sadar sejak 2 hari. Tujuh hari sebelumnya ia mengalami sesak napas, mual-muntah, dan urin sedikit. Riwayat DM dan hipertensi sejak 13 tahun lalu. Keadaan umum sakit berat, kesadaran sopor koma, tekanan darah 160/90 mmHg, nadi 100x/menit, napas 30x/menit, ronki kasar di kedua lapangan paru, dan edema tungkai. Laboratorium: Hb 7,2 g/dL, leukosit 7.100/mm³, trombosit 200.000/mm³, Ht 21 vol%, ureum 388 mg/dL, kreatinin 19,5 mg/dL, eLFG 2,3 mL/menit/1,73 m². Dokter mendiagnosis penyakit ginjal kronik stadium 5. Apa dasar penegakan stadium tersebut?",
+    "opsi": [
+      "Kreatinin",
+      "Ureum",
+      "Sindrom uremikum",
+      "Asidosis metabolik",
+      "Perkiraan laju filtrasi glomerulus"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Stadium PGK ditentukan dari LFG (eLFG): stadium 5 bila < 15 mL/menit/1,73 m² atau memerlukan terapi pengganti ginjal; pada kasus ini eLFG 2,3.",
+    "pembahasan_klinis": {
+      "A": "Kreatinin membantu menghitung eLFG, tetapi nilainya sendiri tidak menentukan stadium karena dipengaruhi massa otot.",
+      "B": "Ureum dipengaruhi diet protein, hidrasi, dan katabolisme; tidak dipakai untuk staging.",
+      "C": "Sindrom uremikum adalah manifestasi klinis, bukan kriteria stadium.",
+      "D": "Asidosis metabolik adalah komplikasi, bukan kriteria stadium.",
+      "E": "Stadium PGK ditentukan dari LFG (eLFG): stadium 5 bila < 15 mL/menit/1,73 m² atau memerlukan terapi pengganti ginjal; pada kasus ini eLFG 2,3."
+    },
+    "source_id": 112,
+    "pembahasanPilihan": [
+      "Kreatinin membantu menghitung eLFG, tetapi nilainya sendiri tidak menentukan stadium karena dipengaruhi massa otot.",
+      "Ureum dipengaruhi diet protein, hidrasi, dan katabolisme; tidak dipakai untuk staging.",
+      "Sindrom uremikum adalah manifestasi klinis, bukan kriteria stadium.",
+      "Asidosis metabolik adalah komplikasi, bukan kriteria stadium.",
+      "Stadium PGK ditentukan dari LFG (eLFG): stadium 5 bila < 15 mL/menit/1,73 m² atau memerlukan terapi pengganti ginjal; pada kasus ini eLFG 2,3."
+    ],
+    "komponenStatistik": "Diagnostics"
+  },
+  {
+    "id": "ginjal-2021-113",
+    "no": 113,
+    "soal": "Seorang wanita 26 tahun, hamil anak kedua dengan usia kehamilan 28–30 minggu, pernah kejang pada kehamilan pertama. Kesadaran compos mentis, tekanan darah 170/90 mmHg, nadi 102x/menit, napas 22x/menit, proteinuria +++. Obat antihipertensi apakah yang baik untuk pasien ini?",
+    "opsi": [
+      "Alfa blocker",
+      "Beta blocker",
+      "ACE inhibitor",
+      "ARB",
+      "CCB (nifedipin)"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Nifedipin (CCB) adalah salah satu antihipertensi lini pertama pada preeklamsia, bersama metildopa dan labetalol.",
+    "pembahasan_klinis": {
+      "A": "Alfa blocker bukan lini pertama pada kehamilan karena data keamanan terbatas.",
+      "B": "Beta blocker murni (misalnya atenolol) dapat menyebabkan hambatan pertumbuhan janin; labetalol (alfa-beta blocker) adalah pengecualian yang dipakai pada preeklamsia.",
+      "C": "ACE inhibitor dikontraindikasikan pada kehamilan (teratogenik: disgenesis ginjal janin, oligohidramnion).",
+      "D": "ARB dikontraindikasikan pada kehamilan dengan alasan yang sama seperti ACE inhibitor.",
+      "E": "Nifedipin (CCB) adalah salah satu antihipertensi lini pertama pada preeklamsia, bersama metildopa dan labetalol."
+    },
+    "source_id": 113,
+    "pembahasanPilihan": [
+      "Alfa blocker bukan lini pertama pada kehamilan karena data keamanan terbatas.",
+      "Beta blocker murni (misalnya atenolol) dapat menyebabkan hambatan pertumbuhan janin; labetalol (alfa-beta blocker) adalah pengecualian yang dipakai pada preeklamsia.",
+      "ACE inhibitor dikontraindikasikan pada kehamilan (teratogenik: disgenesis ginjal janin, oligohidramnion).",
+      "ARB dikontraindikasikan pada kehamilan dengan alasan yang sama seperti ACE inhibitor.",
+      "Nifedipin (CCB) adalah salah satu antihipertensi lini pertama pada preeklamsia, bersama metildopa dan labetalol."
+    ],
+    "komponenStatistik": "Pharmacology"
+  },
+  {
+    "id": "ginjal-2021-114",
+    "no": 114,
+    "soal": "Bagaimana perubahan urin (tanpa pengawet) yang dibiarkan lebih dari 1 jam pada suhu ruangan?",
+    "opsi": [
+      "Penurunan nitrit",
+      "Penurunan pH urin",
+      "Peningkatan beta-hidroksibutirat",
+      "Peningkatan urobilinogen",
+      "Penurunan kadar glukosa karena glikolisis oleh bakteri"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Glukosa menurun karena dipakai bakteri (glikolisis); ini perubahan yang sesuai.",
+    "pembahasan_klinis": {
+      "A": "Nitrit justru meningkat karena bakteri mengubah nitrat menjadi nitrit.",
+      "B": "pH meningkat (menjadi basa) karena bakteri memecah urea menjadi amonia.",
+      "C": "Keton menurun karena menguap dan dimetabolisme bakteri; tidak meningkat.",
+      "D": "Urobilinogen menurun karena dioksidasi menjadi urobilin.",
+      "E": "Glukosa menurun karena dipakai bakteri (glikolisis); ini perubahan yang sesuai."
+    },
+    "source_id": 114,
+    "pembahasanPilihan": [
+      "Nitrit justru meningkat karena bakteri mengubah nitrat menjadi nitrit.",
+      "pH meningkat (menjadi basa) karena bakteri memecah urea menjadi amonia.",
+      "Keton menurun karena menguap dan dimetabolisme bakteri; tidak meningkat.",
+      "Urobilinogen menurun karena dioksidasi menjadi urobilin.",
+      "Glukosa menurun karena dipakai bakteri (glikolisis); ini perubahan yang sesuai."
+    ],
+    "komponenStatistik": "Recall"
+  },
+  {
+    "id": "ginjal-2021-115",
+    "no": 115,
+    "soal": "Seorang laki-laki 77 tahun diantar cucunya ke UGD karena tidak bisa BAK sejak pagi hari dan disertai nyeri. Ia tidak minum kopi. Tindakan awal apakah yang dilakukan dokter di UGD?",
+    "opsi": [
+      "Pemeriksaan kadar kreatinin serum",
+      "Pemasangan kateter",
+      "USG abdomen untuk mencari batu",
+      "PSA untuk mendeteksi kanker",
+      "Urinalisis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Pada retensi urin akut yang nyeri, tindakan pertama adalah dekompresi kandung kemih dengan kateter urin (kateter Foley); pemeriksaan penyebab menyusul.",
+    "pembahasan_klinis": {
+      "A": "Kreatinin serum dinilai setelah kandung kemih didekompresi; bukan tindakan awal.",
+      "B": "Pada retensi urin akut yang nyeri, tindakan pertama adalah dekompresi kandung kemih dengan kateter urin (kateter Foley); pemeriksaan penyebab menyusul.",
+      "C": "USG dapat mendeteksi batu atau hidronefrosis, tetapi tidak meredakan retensi; dilakukan setelah kateterisasi.",
+      "D": "PSA tidak bermanfaat pada retensi akut karena kateterisasi atau retensi sendiri dapat meningkatkan PSA.",
+      "E": "Urinalisis dilakukan setelah urin diperoleh dan bukan tindakan awal untuk retensi."
+    },
+    "source_id": 115,
+    "pembahasanPilihan": [
+      "Kreatinin serum dinilai setelah kandung kemih didekompresi; bukan tindakan awal.",
+      "Pada retensi urin akut yang nyeri, tindakan pertama adalah dekompresi kandung kemih dengan kateter urin (kateter Foley); pemeriksaan penyebab menyusul.",
+      "USG dapat mendeteksi batu atau hidronefrosis, tetapi tidak meredakan retensi; dilakukan setelah kateterisasi.",
+      "PSA tidak bermanfaat pada retensi akut karena kateterisasi atau retensi sendiri dapat meningkatkan PSA.",
+      "Urinalisis dilakukan setelah urin diperoleh dan bukan tindakan awal untuk retensi."
+    ],
+    "komponenStatistik": "Pharmacology"
+  },
+  {
+    "id": "ginjal-2021-116",
+    "no": 116,
+    "soal": "Dalil apakah yang dijadikan dasar bagi kebolehan terapi dengan air kencing unta?",
+    "opsi": [
+      "Hadis \"segala amal tergantung niat\"",
+      "Kaidah darurat (terapi pada kondisi gawat darurat)",
+      "Hadis tentang makanan halal dan thayyib",
+      "QS. Al-A'raf: 157 (mengharamkan bagi mereka segala yang buruk/khabaits)",
+      "Hadis 'Uraniyyin tentang perintah Nabi ﷺ meminum kencing unta bagi penderita penyakit"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Hadis 'Uraniyyin (riwayat al-Bukhari dan Muslim) menyebutkan Nabi ﷺ menyuruh sekelompok orang yang sakit untuk meminum susu dan air kencing unta sebagai obat; inilah dalil yang dipakai pihak yang membolehkan. (Topik fikih AIK; sebaiknya ditinjau oleh dosen AIK.)",
+    "pembahasan_klinis": {
+      "A": "Hadis niat bersifat umum tentang keabsahan amal, bukan dalil khusus terapi air kencing unta.",
+      "B": "Kaidah darurat membolehkan sesuatu yang dilarang dalam kondisi terpaksa, tetapi bukan dalil khusus yang dipakai untuk kencing unta.",
+      "C": "Hadis halal-thayyib adalah dasar umum makanan dan minuman, tidak spesifik.",
+      "D": "Ayat ini dipakai untuk mengharamkan yang buruk (khabaits), sehingga bukan dalil kebolehan.",
+      "E": "Hadis 'Uraniyyin (riwayat al-Bukhari dan Muslim) menyebutkan Nabi ﷺ menyuruh sekelompok orang yang sakit untuk meminum susu dan air kencing unta sebagai obat; inilah dalil yang dipakai pihak yang membolehkan. (Topik fikih AIK; sebaiknya ditinjau oleh dosen AIK.)"
+    },
+    "source_id": 116,
+    "pembahasanPilihan": [
+      "Hadis niat bersifat umum tentang keabsahan amal, bukan dalil khusus terapi air kencing unta.",
+      "Kaidah darurat membolehkan sesuatu yang dilarang dalam kondisi terpaksa, tetapi bukan dalil khusus yang dipakai untuk kencing unta.",
+      "Hadis halal-thayyib adalah dasar umum makanan dan minuman, tidak spesifik.",
+      "Ayat ini dipakai untuk mengharamkan yang buruk (khabaits), sehingga bukan dalil kebolehan.",
+      "Hadis 'Uraniyyin (riwayat al-Bukhari dan Muslim) menyebutkan Nabi ﷺ menyuruh sekelompok orang yang sakit untuk meminum susu dan air kencing unta sebagai obat; inilah dalil yang dipakai pihak yang membolehkan. (Topik fikih AIK; sebaiknya ditinjau oleh dosen AIK.)"
+    ],
+    "komponenStatistik": "Pharmacology"
+  },
+  {
+    "id": "ginjal-2021-117",
+    "no": 117,
+    "soal": "Seorang anak perempuan 7 tahun dibawa ke dokter dengan BAK keruh dan sedikit, bengkak kelopak mata pagi hari yang menghilang sore hari, perut membuncit, dan bengkak kedua tungkai. Berat badan 30 kg, tekanan darah 110/70 mmHg, nadi 90x/menit, napas 24x/menit, suhu 37 °C, edema palpebra +/+, edema pretibial dan dorsum pedis +/+, pekak pindah +/+. Apakah komplikasi yang mungkin terjadi pada pasien ini?",
+    "opsi": [
+      "Batu ginjal",
+      "Hidronefrosis",
+      "Reaksi anafilaksis",
+      "Syok",
+      "Perdarahan ginjal"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Hipoalbuminemia berat menurunkan tekanan onkotik sehingga cairan keluar dari intravaskular; hipovolemia intravaskular dapat menimbulkan syok hipovolemik (di samping infeksi dan tromboemboli). (Kunci disimpulkan dari isi soal; arsip tidak menandai jawaban.)",
+    "pembahasan_klinis": {
+      "A": "Batu ginjal bukan komplikasi khas sindrom nefrotik.",
+      "B": "Hidronefrosis terkait obstruksi saluran kemih, bukan sindrom nefrotik.",
+      "C": "Reaksi anafilaksis bukan komplikasi sindrom nefrotik itu sendiri.",
+      "D": "Hipoalbuminemia berat menurunkan tekanan onkotik sehingga cairan keluar dari intravaskular; hipovolemia intravaskular dapat menimbulkan syok hipovolemik (di samping infeksi dan tromboemboli). (Kunci disimpulkan dari isi soal; arsip tidak menandai jawaban.)",
+      "E": "Perdarahan ginjal bukan komplikasi khas sindrom nefrotik."
+    },
+    "source_id": 117,
+    "pembahasanPilihan": [
+      "Batu ginjal bukan komplikasi khas sindrom nefrotik.",
+      "Hidronefrosis terkait obstruksi saluran kemih, bukan sindrom nefrotik.",
+      "Reaksi anafilaksis bukan komplikasi sindrom nefrotik itu sendiri.",
+      "Hipoalbuminemia berat menurunkan tekanan onkotik sehingga cairan keluar dari intravaskular; hipovolemia intravaskular dapat menimbulkan syok hipovolemik (di samping infeksi dan tromboemboli). (Kunci disimpulkan dari isi soal; arsip tidak menandai jawaban.)",
+      "Perdarahan ginjal bukan komplikasi khas sindrom nefrotik."
+    ],
+    "komponenStatistik": "Diagnostics"
   }
 ]
