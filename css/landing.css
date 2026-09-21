@@ -322,3 +322,53 @@ h2{font-size:clamp(25px,6.4vw,42px)}
   .deck{scroll-behavior:auto}
   .btn,.opt,.nav-btn{transition:none}
 }
+
+/* Modal masuk / daftar: landing tetap terlihat di belakang, diburamkan. */
+.am{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:18px}
+.am[hidden]{display:none}
+.am-backdrop{
+  position:absolute;inset:0;background:rgba(38,50,56,.38);
+  -webkit-backdrop-filter:blur(10px) saturate(1.05);backdrop-filter:blur(10px) saturate(1.05);
+  animation:am-fade .2s ease both;
+}
+.am-card{
+  position:relative;width:min(440px,100%);max-height:calc(100dvh - 36px);overflow-y:auto;
+  padding:22px 20px 20px;border-radius:26px;background:var(--card);color:var(--text);
+  border:2px solid var(--line);box-shadow:0 6px 0 var(--line-d),0 24px 60px rgba(0,0,0,.28);
+  animation:am-pop .26s cubic-bezier(.3,1.3,.5,1) both;
+}
+.am-x{
+  position:absolute;top:14px;right:14px;width:38px;height:38px;display:grid;place-items:center;padding:0 0 2px;
+  border-radius:13px;border:2px solid var(--line);background:var(--card);color:var(--green);
+  font-size:24px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 0 var(--line-d);
+}
+.am-x:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line-d)}
+.am-kicker{display:block;font-size:11px;font-weight:900;letter-spacing:.06em;color:var(--blue-d)}
+.am-card h2{margin:6px 44px 4px 0;font-size:28px}
+.am-sub{margin:0 0 14px;font-size:13.5px;font-weight:700;line-height:1.45;color:var(--muted)}
+.am-card label{display:block;margin:12px 0 6px;font-size:13px;font-weight:900}
+.am-card input{
+  width:100%;padding:13px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--text);
+  font:inherit;font-size:15px;font-weight:700;
+}
+.am-card input::placeholder{color:var(--muted);opacity:.8}
+.am-card input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 25%,transparent)}
+.am-hint{display:block;margin-top:6px;font-size:11.5px;font-weight:700;line-height:1.4;color:var(--muted)}
+.am-pass{position:relative}
+.am-pass input{padding-right:98px}
+.am-eye{
+  position:absolute;top:50%;right:8px;transform:translateY(-50%);padding:7px 11px;border:0;border-radius:11px;cursor:pointer;
+  background:color-mix(in srgb,var(--blue) 14%,var(--card));color:var(--blue-d);font-size:12px;font-weight:900;
+}
+.am-error{
+  margin:14px 0 0;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:800;line-height:1.4;
+  background:color-mix(in srgb,var(--red) 14%,var(--card));color:var(--red-d);border:2px solid var(--red);
+}
+:root.dark .am-error{color:#ff8a8a}
+.am-error[hidden]{display:none}
+.am-submit{width:100%;margin-top:16px;padding:15px 24px}
+.am-submit:disabled{opacity:.7;cursor:progress}
+.am-switch{display:block;width:100%;margin-top:12px;padding:8px;border:0;background:none;cursor:pointer;font-size:13.5px;font-weight:900;color:var(--blue-d)}
+@keyframes am-fade{from{opacity:0}to{opacity:1}}
+@keyframes am-pop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.am-backdrop,.am-card{animation:none}}

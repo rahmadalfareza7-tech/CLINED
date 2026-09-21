@@ -51,6 +51,8 @@
   let resumeTimer = 0;
   let userPaused = reduceMotion.matches; // pengguna yang memilih jeda, atau sistem minta minim gerak
   let hovering = false;
+  let modalOpen = false;   // geser otomatis berhenti selama modal masuk terbuka
+  let loggedIn = false;    // diisi setelah /api/auth/me menjawab
   let interacting = false; // true selama jeda setelah pengguna menggeser atau menekan tombol
 
   deck.style.setProperty('--auto', AUTO_MS + 'ms');
@@ -90,7 +92,7 @@
   function schedule() {
     clearTimeout(autoTimer);
     stopProgress();
-    if (userPaused || hovering || interacting || document.hidden) return;
+    if (userPaused || hovering || interacting || modalOpen || document.hidden) return;
     const d = dots[index];
     void d.offsetWidth;            // paksa reflow supaya animasi mulai dari awal
     d.classList.add('run');
@@ -142,7 +144,8 @@
 
   // Keyboard
   document.addEventListener('keydown', (e) => {
-    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || modalOpen) return;
+    if (e.target.closest && e.target.closest('input,textarea,select')) return;
     if (e.key === 'ArrowRight') { touched(); go(index + 1); }
     else if (e.key === 'ArrowLeft') { touched(); go(index - 1); }
   });
@@ -208,11 +211,122 @@
     flip.setAttribute('aria-pressed', String(on));
   });
 
+  /* ---------- Modal masuk / daftar (tetap di landing) ---------- */
+  const modal = $('#authModal');
+  const form = $('#amForm');
+  const f = {
+    title: $('#amTitle'), sub: $('#amSub'), signup: $('#amSignup'), confirmWrap: $('#amConfirmWrap'),
+    name: $('#amName'), user: $('#amUser'), pass: $('#amPass'), confirm: $('#amConfirm'),
+    error: $('#amError'), submit: $('#amSubmit'), sw: $('#amSwitch'),
+  };
+  const backdropTargets = ['.top', '.stage', '.controls'];
+  let opener = null;
+  let busy = false;
+
+  const setError = (msg) => { f.error.textContent = msg || ''; f.error.hidden = !msg; };
+
+  function setMode(mode) {
+    const signup = mode === 'signup';
+    form.dataset.mode = mode;
+    form.reset();
+    setError('');
+    f.title.textContent = signup ? 'Buat akun' : 'Masuk';
+    f.sub.textContent = signup ? 'Cukup username dan password, tanpa perlu email.' : 'Masuk dengan username dan password kamu.';
+    f.signup.hidden = !signup;
+    f.confirmWrap.hidden = !signup;
+    f.pass.autocomplete = signup ? 'new-password' : 'current-password';
+    f.submit.textContent = signup ? 'Buat akun' : 'Masuk';
+    f.sw.textContent = signup ? 'Sudah punya akun? Masuk' : 'Belum punya akun? Buat akun';
+    [f.pass, f.confirm].forEach((i) => { i.type = 'password'; });
+    modal.querySelectorAll('[data-am-eye]').forEach((b) => { b.textContent = 'Lihat'; });
+  }
+
+  function openModal(mode = 'login') {
+    opener = document.activeElement;
+    setMode(mode);
+    modalOpen = true;
+    modal.hidden = false;
+    backdropTargets.forEach((s) => { const el = $(s); if (el) el.inert = true; });
+    clearTimeout(autoTimer); stopProgress();
+    setTimeout(() => (mode === 'signup' ? f.name : f.user).focus(), 30);
+  }
+
+  function closeModal() {
+    if (busy) return;
+    modalOpen = false;
+    modal.hidden = true;
+    backdropTargets.forEach((s) => { const el = $(s); if (el) el.inert = false; });
+    if (opener && opener.focus) opener.focus();
+    schedule();
+  }
+
+  modal.querySelectorAll('[data-am-close]').forEach((el) => el.addEventListener('click', closeModal));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalOpen) closeModal(); });
+  f.sw.addEventListener('click', () => openModalMode(form.dataset.mode === 'signup' ? 'login' : 'signup'));
+  function openModalMode(mode) { setMode(mode); (mode === 'signup' ? f.name : f.user).focus(); }
+
+  modal.querySelectorAll('[data-am-eye]').forEach((b) => b.addEventListener('click', () => {
+    const input = document.getElementById(b.dataset.amEye);
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    b.textContent = show ? 'Sembunyikan' : 'Lihat';
+  }));
+
+  // Tombol "Masuk", "Mulai belajar", dan "Masuk atau daftar": buka modal, bukan pindah halaman.
+  // Kalau sudah login, tombol tetap membuka aplikasi seperti biasa.
+  document.querySelectorAll('a[data-cta]').forEach((a) => a.addEventListener('click', (e) => {
+    if (loggedIn || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    e.preventDefault();
+    openModal('login');
+  }));
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (busy) return;
+    const signup = form.dataset.mode === 'signup';
+    const username = f.user.value.trim().toLowerCase();
+    const password = f.pass.value;
+    const name = f.name.value.trim();
+    setError('');
+
+    if (signup) {
+      if (name.length < 2 || name.length > 40) return setError('Nama harus terdiri dari 2–40 karakter.');
+      if (!/^[a-z0-9._-]{3,24}$/.test(username)) return setError('Username 3–24 karakter: huruf kecil, angka, titik, garis bawah, atau strip.');
+      if (password.length < 8) return setError('Password minimal 8 karakter.');
+      if (password !== f.confirm.value) return setError('Konfirmasi password tidak sama.');
+    } else if (!username || !password) {
+      return setError('Isi username dan password.');
+    }
+
+    busy = true;
+    f.submit.disabled = true;
+    f.submit.textContent = 'Memproses…';
+    try {
+      const res = await fetch(signup ? '/api/auth/register' : '/api/auth/login', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signup ? { name, username, password } : { identifier: username, password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Akun tidak dapat diproses. Coba lagi.');
+      loggedIn = true;
+      f.submit.textContent = 'Berhasil! Membuka aplikasi…';
+      location.href = './app.html';
+    } catch (err) {
+      const offline = err instanceof TypeError; // fetch gagal terhubung
+      setError(offline ? 'Tidak bisa terhubung ke server. Periksa koneksi lalu coba lagi.' : err.message);
+      busy = false;
+      f.submit.disabled = false;
+      f.submit.textContent = signup ? 'Buat akun' : 'Masuk';
+    }
+  });
+
   /* ---------- Sudah login? ubah teks tombol ---------- */
   fetch('/api/auth/me', { credentials: 'same-origin', cache: 'no-store' })
     .then((r) => (r.ok ? r.json() : null))
     .then((d) => {
       if (!d || !d.user) return;
+      loggedIn = true;
       document.querySelectorAll('[data-cta="start"]').forEach((a) => { a.textContent = 'Lanjut belajar'; });
       document.querySelectorAll('[data-cta="login"]').forEach((a) => { a.textContent = 'Buka aplikasi'; });
     })
