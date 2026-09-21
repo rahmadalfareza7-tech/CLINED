@@ -19,7 +19,8 @@
       "D": "Motivasi merupakan dorongan psikologis awal untuk menginisiasi perubahan tindakan.",
       "E": "Perubahan perilaku sanitasi rumah tangga secara langsung memutus rantai penularan fecal-oral penyebab diare."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-002",
@@ -41,7 +42,8 @@
       "D": "Hasil perkalian tidak sesuai tarif dasar Rp6.000.",
       "E": "Perhitungan yang benar: 8.000 jiwa x Rp6.000 = Rp48.000.000/bulan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-003",
@@ -63,7 +65,8 @@
       "D": "Surveilans sentinel berfokus pada lokasi/populasi representative khusus.",
       "E": "Surveilans sindromik memanfaatkan indikator kumpulan gejala awal (seperti batuk, pilek, pusing) untuk pemantauan dini."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-004",
@@ -85,7 +88,8 @@
       "D": "Pemerataan menjamin seluruh lapisan masyarakat mendapat akses berimbang.",
       "E": "Ketanggapan menilai seberapa cepat sistem merespon keluhan dan kebutuhan pasien."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-005",
@@ -107,7 +111,8 @@
       "D": "Chi-square diperuntukkan bagi analisis komparasi variabel kualitatif/kategorik.",
       "E": "ANOVA digunakan pada perbandingan 3 kelompok numerik atau lebih."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2022-006",
@@ -129,7 +134,8 @@
       "D": "Cross-sectional tidak dapat membuktikan hubungan sebab-akibat temporal.",
       "E": "Kohort retrospektif menggunakan catatan riwayat historis masa lalu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-007",
@@ -151,7 +157,8 @@
       "D": "Pengurangan komplain adalah dampak sekunder mutu layanan.",
       "E": "Efektivitas pengobatan berhubungan dengan kemanjuran regimen terapi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-008",
@@ -173,7 +180,8 @@
       "D": "MFK menangani kelaikan prasarana fisik dan utilitas faskes.",
       "E": "K3 melindungi staf penunjang dan tenaga medis dari bahaya okupasional."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-009",
@@ -195,7 +203,8 @@
       "D": "Pendampingan layanan korban memfasilitasi integrasi bantuan medis, visum, psikologis, dan legal.",
       "E": "Konseling keluarga berfokus pada sistem pendukung lingkungan rumah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-010",
@@ -217,7 +226,8 @@
       "D": "Kurus berada di bawah batas IMT 18.5 kg/m².",
       "E": "IMT pra-kehamilan 20,0 kg/m² menunjukkan status gizi ibu dalam rentang aman/normal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-011",
@@ -239,7 +249,8 @@
       "D": "Case-control memilih sampel dari hasil status penyakit terlebih dahulu.",
       "E": "Eksperimental longitudinal memerlukan uji perlakuan langsung dari peneliti."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-012",
@@ -261,7 +272,8 @@
       "D": "Manajemen sanitasi rutin yang terstruktur diperlukan untuk mencegah perindukan hama pemukiman.",
       "E": "SOP penyimpanan mencegah kontaminasi silang pada stok mentah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-013",
@@ -283,7 +295,8 @@
       "D": "Pemantauan tensi mandiri tidak menggantikan manajemen risiko klinis.",
       "E": "Klasifikasi kehamilan risiko tinggi menentukan rujukan dan rencana intervensi profilaksis (misal aspirin dosis rendah)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-014",
@@ -305,7 +318,8 @@
       "D": "Area terbuka meningkatkan paparan lalat dan debu.",
       "E": "Sirkulasi udara baik tidak mengeliminasi sisa bahan organik kotor."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-015",
@@ -327,7 +341,8 @@
       "D": "Planning merumuskan sasaran dan alokasi sumber daya awal.",
       "E": "Controlling melakukan pemantauan kesesuaian prosedur operasional standar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-016",
@@ -349,7 +364,8 @@
       "D": "Greatest Member tidak relevan dalam penetapan prioritas kesehatan publik.",
       "E": "Utility dan Severity bukan kependekan dari instrumen analisis masalah ini."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-017",
@@ -371,7 +387,8 @@
       "D": "Ketersediaan fasilitas proteksi yang tidak adekuat merupakan Unsafe Condition yang wajib diintervensi.",
       "E": "Pekerja tidak memakai harness karena ketersediaan barang yang terbatas, bukan murni kelalaian perilaku (unsafe act)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-018",
@@ -393,7 +410,8 @@
       "D": "Gizi lebih ditandai dengan kelebihan berat badan di atas garis standar.",
       "E": "Obesitas penumpukan lemak berlebih pada indeks BB/TB."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-019",
@@ -415,7 +433,8 @@
       "D": "Histogram menilai sebaran frekuensi data kontinu.",
       "E": "Diagram Pareto menyusun urutan frekuensi masalah dari terbesar ke terkecil."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-020",
@@ -437,7 +456,8 @@
       "D": "Hipoglikemia dicegah melalui penyesuaian dosis dan jadwal makan.",
       "E": "Dehidrasi ringan merupakan tanda awal kegagalan termoregulasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-021",
@@ -459,7 +479,8 @@
       "D": "Surveilans PTM mencatat tren Hipertensi, DM, dan PJK.",
       "E": "Surveilans PM mendeteksi wabah infeksi menular."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-022",
@@ -481,7 +502,8 @@
       "D": "Transisi peran menjadi kepala keluarga berpotensi memutus pendidikan tinggi.",
       "E": "Batas minimal usia menikah menurut regulasi hukum Indonesia adalah 19 tahun."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-023",
@@ -503,7 +525,8 @@
       "D": "Kalsium membantu pembentukan tulang janin dan mencegah hipertensi kehamilan.",
       "E": "Karbohidrat merupakan sumber energi utama tetapi bukan terapi anemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-024",
@@ -525,7 +548,8 @@
       "D": "Khalwat secara hukum muamalah/syariat dilarang karena membuka celah perzinaan.",
       "E": "Ikhtilat merupakan percampuran fisik pria-wanita di ruang publik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-025",
@@ -547,7 +571,8 @@
       "D": "Community leader mengarahkan partisipasi sosial warga.",
       "E": "Decision maker menetapkan pertimbangan keputusan etik/klinis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-026",
@@ -569,7 +594,8 @@
       "D": "MCUA melakukan perbandingan kriteria pilihan keputusan berbobot.",
       "E": "Delbecq memanfaatkan pertemuan tatap muka staf multidisiplin untuk consensus curah pendapat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-027",
@@ -591,7 +617,8 @@
       "D": "Kapasitas masyarakat berbanding terbalik dengan nilai risiko bencana.",
       "E": "Sistem peringatan dini menurunkan tingkat ketidakpastian evakuasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-028",
@@ -613,7 +640,8 @@
       "D": "Hakikat syariat menekankan substansi spiritualitas.",
       "E": "Hikmah syariat menilai dampak positif penegakan hukum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-029",
@@ -635,7 +663,8 @@
       "D": "Kategori tidak terdaftar dalam epidemiologi gizi anak.",
       "E": "Kategori tidak terdaftar dalam epidemiologi gizi anak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-030",
@@ -657,7 +686,8 @@
       "D": "Fase 4 memantau efek samping jangka panjang pasca izin edar.",
       "E": "Tidak ada klasifikasi formal fase 5."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-031",
@@ -679,7 +709,8 @@
       "D": "Klaster 4 menangani pengendalian penyakit infeksius menular dan sanitasi lingkungan.",
       "E": "Klaster 5 menunjang pelayanan kegawatdaruratan komprehensif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-032",
@@ -701,7 +732,8 @@
       "D": "Isolasi rumah memperburuk morbiditas psikologis anak.",
       "E": "Institusionalisasi tanpa dukungan keluarga menurunkan kualitas hidup jangka panjang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-033",
@@ -723,7 +755,8 @@
       "D": "Advokasi tanpa data asesmen komprehensif kurang berdaya guna.",
       "E": "Asesmen holistik lingkungan menjamin rekomendasi perubahan adaptif sesuai kondisi disabilitas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-034",
@@ -745,7 +778,8 @@
       "D": "Sisa 5 kunjungan (2x T2 dan 3x T3) menjamin pemantauan komprehensif sesuai pedoman Kemenkes.",
       "E": "Dua kali kunjungan tersisa rentan terhadap komplikasi laten kehamilan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-035",
@@ -767,7 +801,8 @@
       "D": "Wilcoxon menganalisis pasangan data berulang numerik.",
       "E": "ANOVA membandingkan rerata variabel kontinu antar 3 grup atau lebih."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-036",
@@ -789,7 +824,8 @@
       "D": "Intervensi gizi spesifik merupakan tindakan medis preventif langsung pada target sasaran.",
       "E": "Pengawasan gizi adalah kegiatan pemetaan epidemiologi status nutrisi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-037",
@@ -811,7 +847,8 @@
       "D": "Peningkatan kepatuhan TTD secara langsung mengoreksi anemia ibu hamil yang merupakan pemicu utama PJT dan stunting.",
       "E": "Susu formula pada usia <6 bulan meningkatkan mortalitas akibat infeksi usus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-038",
@@ -833,7 +870,8 @@
       "D": "Edukator menyampaikan materi promosi dan pencegahan kesehatan kepada populasi.",
       "E": "Community leader menggerakkan massa melalui pengaruh otoritas sosial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-039",
@@ -855,7 +893,8 @@
       "D": "Prospektif kohort membutuhkan tindak lanjut pengamatan bertahun-tahun.",
       "E": "Case-control memilih responden berdasarkan diagnosis penyakit yang sudah terjadi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-040",
@@ -877,7 +916,8 @@
       "D": "Kesiapsiagaan menguji alur respons masyarakat melalui pelatihan dan simulasi evakuasi berkala.",
       "E": "Mitigasi mencakup pembangunan penahan struktur fisik bangunan tahan gempa."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-041",
@@ -899,7 +939,8 @@
       "D": "Rujukan tetap mengikuti prosedur operasional rujukan medis.",
       "E": "Telemedicine menghilangkan hambatan jarak geografis untuk menciptakan keadilan akses medis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-042",
@@ -921,7 +962,8 @@
       "D": "Layanan menilai bentuk operasional intervensi.",
       "E": "Keparahan menilai besarnya angka morbiditas/mortalitas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-043",
@@ -943,7 +985,8 @@
       "D": "Parameter LILA terbukti sensitif mengukur status Kurang Energi Kronis (KEK).",
       "E": "Penurunan porsi ibu hamil KEK mengonfirmasi efektivitas suplementasi pangan kebun gizi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-044",
@@ -965,7 +1008,8 @@
       "D": "Sustainability menjamin ketahanan anggaran kesehatan menghadapi pembiayaan kronis di masa depan.",
       "E": "Efisiensi mengukur optimalisasi penggunaan sumber daya finansial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-045",
@@ -987,7 +1031,8 @@
       "D": "MBO menekankan pengukuran target kuantitatif individu.",
       "E": "Aspek perilaku berfokus pada iklim organisasi kerja."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-046",
@@ -1009,7 +1054,8 @@
       "D": "Controlling melakukan pemantauan jalannya SOP kerja.",
       "E": "Evaluating menilai perbandingan luaran terhadap target awal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-047",
@@ -1031,7 +1077,8 @@
       "D": "Nikah siri merugikan kepastian hukum reproduksi perempuan.",
       "E": "Kehamilan remaja berisiko anemia, preeklamsia, dan stunting janin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-048",
@@ -1053,7 +1100,8 @@
       "D": "Sustainability mengukur kapasitas kesinambungan dana.",
       "E": "Kualitas layanan mengukur kesesuaian tindakan medis terhadap standar klinis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-049",
@@ -1075,7 +1123,8 @@
       "D": "Kunjungan rumah berkala kurang efisien untuk populasi balita cakupan luas.",
       "E": "Insentif finansial tidak etis dan tidak berkesinambungan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-050",
@@ -1097,7 +1146,8 @@
       "D": "Pemeriksaan pelaku merupakan ranah penyidikan kepolisian.",
       "E": "Tindakan klinis medis dilakukan komprehensif bersamaan dengan pengamanan bukti fisik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-051",
@@ -1119,7 +1169,8 @@
       "D": "Health Information adalah komoditas data medis.",
       "E": "AI menekankan pemrosesan algoritma otomatisasi kecerdasan buatan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-052",
@@ -1141,7 +1192,8 @@
       "D": "Usia 7 bulan sudah wajib mendapatkan MPASI pendamping.",
       "E": "Usia 8 bulan terlalu terlambat mengawali MPASI."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-053",
@@ -1163,7 +1215,8 @@
       "D": "Fogging membasmi nyamuk dewasa, bukan patogen air.",
       "E": "Vaksinasi tifoid tidak memberikan imunitas terhadap patogen diare nonspesifik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-054",
@@ -1185,7 +1238,8 @@
       "D": "Globalisasi kesehatan memengaruhi pergerakan obat dan tenaga medis.",
       "E": "Bonus demografi berfokus pada struktur piramida umur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-055",
@@ -1207,7 +1261,8 @@
       "D": "Suhu basal tubuh terpengaruh oleh kondisi demam atau kurang tidur.",
       "E": "Coitus interruptus sering gagal akibat pelepasan cairan pra-ejakulasi yang mengandung sperma."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-056",
@@ -1229,7 +1284,8 @@
       "D": "Kebahagiaan bukan jaminan otomatis tanpa penegakan syariat.",
       "E": "Empat kriteria adalah fenomena pertimbangan umum manusia, namun agama adalah pilihan mutlak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-057",
@@ -1251,7 +1307,8 @@
       "D": "Transisi epidemiologi merujuk pada kurva dinamika pergeserannya.",
       "E": "Emerging infection spesifik pada mutasi/penyebaran agen patogen baru."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-058",
@@ -1273,7 +1330,8 @@
       "D": "Pemberian antibiotik profiaksis massal memicu krisis resistensi antimikroba (AMR).",
       "E": "Penghentian total mematikan intervensi gizi anak sekolah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-059",
@@ -1295,7 +1353,8 @@
       "D": "Pendampingan pasif tidak mengasah neuroplastisitas otak.",
       "E": "Isolasi sosial mempercepat progresi penurunan memori dan sindrom kesepian."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-060",
@@ -1317,7 +1376,8 @@
       "D": "90/120 mengukur kemampuan alat mengidentifikasi individu yang benar-benar bebas kanker serviks (Spesifisitas).",
       "E": "Pecahan ini tidak mewakili parameter uji diagnostik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-061",
@@ -1339,7 +1399,8 @@
       "D": "Pendapatan rendah adalah indikator keuangan mikro rumah tangga.",
       "E": "Dukungan keluarga memengaruhi pengambilan keputusan domestik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-062",
@@ -1361,7 +1422,8 @@
       "D": "Pencarian penyebab menginventarisir semua kemungkinan pemicu.",
       "E": "Pencarian solusi menyusun opsi tindakan korektif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-063",
@@ -1383,7 +1445,8 @@
       "D": "Pengelolaan sampah membasmi sarang perindukan lalat.",
       "E": "Limbah cair mencegah genangan sarang nyamuk dan pencemaran tanah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-064",
@@ -1405,7 +1468,8 @@
       "D": "Amenorea timbul setelah penggunaan jangka panjang akibat penipisan endometrium berkelanjutan.",
       "E": "Peningkatan tensi dipengaruhi oleh aksis sistem renin-angiotensin berlebihan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-065",
@@ -1427,7 +1491,8 @@
       "D": "Watchful waiting pada usia sekolah melanggar penanganan dini red flag tumbuh kembang.",
       "E": "Stimulasi mandiri tidak cukup mengatasi keterlambatan bahasa dan pemahaman yang signifikan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-066",
@@ -1449,7 +1514,8 @@
       "D": "Paliatif meminimalkan rasa sakit penderita stadium akhir.",
       "E": "Rehabilitasi sanitasi mengembalikan integritas fisik dan fungsi utilitas kebersihan pasca-kerusakan bencana."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-067",
@@ -1471,7 +1537,8 @@
       "D": "Fee for service berisiko memicu over-servis atau pembengkakan biaya (over-utilization).",
       "E": "Retrospektif menghitung klaim tagihan di akhir tindakan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2022-068",
@@ -1493,7 +1560,8 @@
       "D": "Menghindari perjalanan non-esensial ke daerah endemik tinggi merupakan pencegahan primer infeksi malaria plasenta paling aman.",
       "E": "Profilaksis fisik (repellent) tidak sepenuhnya menjamin pencegahan gigitan Anopheles."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2022-069",
@@ -1515,7 +1583,8 @@
       "D": "Klaster 4 memantau pengawasan penularan infeksi.",
       "E": "Lintas Klaster menjamin penanganan resusitasi jalan napas (Airway Management) secara cepat tanpa hambatan sekat administrasi klaster."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-070",
@@ -1537,7 +1606,8 @@
       "D": "Kader dan Staf Program TBC merupakan penggerak utama pencatatan, penemuan kasus, dan pengawasan minum obat di lapangan.",
       "E": "Masyarakat umum berfokus pada penerimaan edukasi umum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-071",
@@ -1559,7 +1629,8 @@
       "D": "Penyusunan anggaran memerlukan forum lokarya mini.",
       "E": "Pemberian sanksi menghambat keterbukaan komunikasi konseling."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-072",
@@ -1581,7 +1652,8 @@
       "D": "Membatasi pendapat memangkas ide kreatif lapangan.",
       "E": "Sanksi menciptakan suasana intimidatif dalam forum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-073",
@@ -1603,7 +1675,8 @@
       "D": "Promotif adalah orientasi peningkatan derajat sehat.",
       "E": "Komunikasi sosial merupakan media pertukaran pesan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-074",
@@ -1625,7 +1698,8 @@
       "D": "Fokus pada integrasi konsep hijau dan ramah lingkungan.",
       "E": "Fokus pada kesiapan prosedur krisis umum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-075",
@@ -1647,7 +1721,8 @@
       "D": "Masalah dominan ditentukan setelah penyaringan daftar kesenjangan.",
       "E": "Analisis penyebab menelusuri faktor pemicu kesenjangan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-076",
@@ -1669,7 +1744,8 @@
       "D": "Service-based/Fee for service memberikan imbalan sesuai tarif setiap item tindakan medis yang dikerjakan.",
       "E": "Salary memberikan insentif tetap tanpa terpengaruh volume pasien."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-077",
@@ -1691,7 +1767,8 @@
       "D": "Kegiatan mandiri belum memenuhi kebutuhan stimulasi emosional.",
       "E": "Interaksi teman sebaya (peer group) memberikan empati dan ikatan emosional untuk mengeliminasi rasa kesepian."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-078",
@@ -1713,7 +1790,8 @@
       "D": "Sekolah lansia meningkatkan pengetahuan kesehatan penuaan.",
       "E": "Kunjungan rutin keluarga menjamin pemenuhan kebutuhan kasih sayang dan keterikatan emosional primer lansia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-079",
@@ -1735,7 +1813,8 @@
       "D": "Isapan bayi secara eksklusif merangsang Prolaktin tinggi yang menekan hormon GnRH/LH sehingga mencegah ovulasi.",
       "E": "Susu formula menurunkan intensitas rangsangan saraf puting susu ibu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-080",
@@ -1757,7 +1836,8 @@
       "D": "Posyandu lansia tidak sesuai dengan karakteristik perkembangan remaja.",
       "E": "Pelaporan punitif menurunkan motivasi partisipasi sukarela."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-081",
@@ -1779,7 +1859,8 @@
       "D": "Pearson mengukur derajat kekuatan hubungan linier numerik.",
       "E": "ANOVA membandingkan perbedaan nilai tengah pada tiga kelompok atau lebih."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2022-082",
@@ -1801,7 +1882,8 @@
       "D": "Aspek teknologi menangani kelaikan teknis bangunan jamban.",
       "E": "Budaya parsial tidak memasukkan faktor penggerak kelembagaan sosial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-083",
@@ -1823,7 +1905,8 @@
       "D": "Keterjangkauan menyesuaikan besaran iuran dengan penetapan standar finansial.",
       "E": "Gotong royong mewujudkan subsidi silang finansial antar-kelompok populasi sehat dan sakit."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-084",
@@ -1845,7 +1928,8 @@
       "D": "Lingkungan sosial menggambarkan iklim keakraban antarstaf.",
       "E": "Pengawasan disiplin mengutamakan penegakan sanksi insiden."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-085",
@@ -1867,7 +1951,8 @@
       "D": "Informed consent tidak berlaku sah pada perbuatan yang melanggar undang-undang.",
       "E": "Vonis keringanan adalah wewenang majelis hakim berdasarkan bukti persidangan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-086",
@@ -1889,7 +1974,8 @@
       "D": "Tekanan antar sebaya (peer pressure) memicu kecemasan defensif.",
       "E": "Pembiaran mengabaikan tujuan perbaikan mutu perorangan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2022-087",
@@ -1911,7 +1997,8 @@
       "D": "Pencegahan tersier mengurangi sequelae kecacatan organ.",
       "E": "Pencegahan primordial mengubah pola kondisi sosial ekonomi masyarakat jangka panjang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-088",
@@ -1933,7 +2020,8 @@
       "D": "Ketahanan fisik dewasa bukan prioritas perbaikan indikator stunting/gizi buruk balita.",
       "E": "Perbaikan ekonomi mikro adalah luaran sampingan ketahanan pangan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-089",
@@ -1955,7 +2043,8 @@
       "D": "Fenomena pada fenotipe individu yang sama (anak pendek tapi gemuk).",
       "E": "Terminologi deskriptif umum krisis gizi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2022-090",
@@ -1977,6 +2066,7 @@
       "D": "Penurunan tarif direspons penyedia jasa dengan memperbanyak kuantitas kunjungan pasien.",
       "E": "Kenaikan iuran memindahkan beban finansial kepada masyarakat tanpa menyelesaikan pemborosan faskes."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   }
 ]

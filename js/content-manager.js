@@ -7,7 +7,7 @@
     return d;
   };
   const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const message = (host,text,bad=false) => { const out=host.querySelector('[data-content-message]'); if(out){out.textContent=text;out.classList.toggle('is-error',bad);} };
+  const message = (host,text,bad=false) => { const out=host.querySelector('[data-content-panel]:not([hidden]) [data-content-message]')||host.querySelector('[data-content-message]'); if(out){out.textContent=text;out.classList.toggle('is-error',bad);} };
   const UAB_BLOCKS = [
     ['BM1','BM1'],['BM2','BM2'],['HNC','HNC'],['MP1','MP1'],['MP2','MP2'],['MPT','MPT'],
     ['MUSKULOSKELETAL','Muskuloskeletal'],['RESPIRATORY','Respiratory'],['KARDIOLOGI','Kardiologi'],['HEMATOLOGI','Hematologi'],['GIT','GIT'],['FORENSIK','Forensik'],
@@ -80,63 +80,72 @@
       box.innerHTML=`
         <div class="account-auth-top"><div><span class="account-auth-kicker">${isAdmin?'ADMIN':'HELPER'} • CONTENT MANAGER</span><h3>Kelola Konten</h3><p>UAB dan UPI dipisahkan supaya alur input sesuai jenis kontennya.</p></div><span class="account-security-badge secure">${isAdmin?'ADMIN':'HELPER'}</span></div>
         <div class="admin-content-tabs" role="tablist" aria-label="Jenis konten admin">
-          <button type="button" class="admin-panel-tab selected" data-content-tab="uab">UAB</button>
-          <button type="button" class="admin-panel-tab" data-content-tab="upi">UPI</button>
+          <button type="button" class="admin-panel-tab selected" role="tab" data-content-tab="uab">Import UAB</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="manage">Kelola soal</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="upi">UPI</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="materi">Materi</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="ninja">Ninja Nerd</button>
         </div>
 
-        <div data-content-panel="uab">
-          <div class="admin-content-intro"><b>Import Bank Soal UAB</b><span>Upload JSON yang sudah terformat, lalu tentukan soal masuk ke blok mana.</span></div>
-          <form data-admin-uab-form class="admin-content-form">
-            <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
-            <label>Judul paket <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: UAB KEDKOM 2026">
-            <label>File JSON</label><div class="admin-file-picker"><input id="adminUabJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminUabJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-uab-file-meta>Belum ada file dipilih.</span></div>
-            
-            <button class="account-action account-save" type="submit">Import ke Blok UAB</button>
-            <p class="muted" data-content-message></p>
+        <div class="acm-panel" data-content-panel="uab">
+          <div class="admin-content-intro"><b>Import bank soal UAB</b><span>Upload JSON yang sudah terformat, lalu tentukan soal masuk ke blok mana.</span></div>
+          <form data-admin-uab-form class="admin-content-form acm-form">
+            <div class="acm-grid">
+              <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select></div>
+              <div class="acm-field"><label>Judul paket <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: UAB KEDKOM 2026"></div>
+            </div>
+            <div class="acm-field"><label>File JSON</label><div class="admin-file-picker"><input id="adminUabJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminUabJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-uab-file-meta>Belum ada file dipilih.</span></div></div>
+            <button class="account-action account-save acm-submit" type="submit">Import ke blok UAB</button>
+            <p class="acm-note muted" data-content-message role="status"></p>
           </form>
-          <div class="admin-uab-manage" data-uab-manage>
-            <div class="admin-content-intro"><b>Kelola Soal UAB</b><span>Pilih blok terlebih dahulu, lalu pilih bank dan hapus soal yang salah atau duplikat.</span></div>
-            <label>Blok soal</label>
-            <select data-uab-delete-block>${blockOptions(UAB_BLOCKS)}</select>
+        </div>
+
+        <div class="acm-panel" data-content-panel="manage" hidden>
+          <div class="admin-content-intro"><b>Kelola soal UAB</b><span>Pilih blok, buka bank yang ingin dicek, lalu hapus soal yang salah atau duplikat.</span></div>
+          <div class="admin-uab-manage acm-form" data-uab-manage>
+            <div class="acm-field"><label>Blok soal</label><select data-uab-delete-block>${blockOptions(UAB_BLOCKS)}</select></div>
             <div data-uab-packages class="admin-uab-packages"><p class="muted">Memuat bank UAB…</p></div>
           </div>
         </div>
 
-        <div data-content-panel="upi" hidden>
-          <div class="admin-content-intro"><b>Create Question UPI</b><span>Mode advanced untuk admin: pilih blok, materi, gambar, pertanyaan, jawaban, lalu publikasikan ke semua pengguna.</span></div>
-          <form data-admin-upi-form class="admin-content-form">
-            <label>Blok tujuan</label><select name="block" required>${blockOptions(UPI_BLOCKS)}</select>
-            <label>Materi</label><select name="material" required><option value="Histology">Histology</option><option value="Patologi Anatomi">Patologi Anatomi</option></select>
-            <label>Judul/topik <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: Histology — Jaringan epitel">
-            <label>Gambar soal</label><div class="admin-file-picker"><input id="adminUpiImageFile" name="image" type="file" accept="image/*" required hidden><label for="adminUpiImageFile" class="admin-file-btn" role="button">Pilih gambar</label><span class="admin-file-selected" data-upi-file-meta>Belum ada gambar dipilih.</span></div>
+        <div class="acm-panel" data-content-panel="upi" hidden>
+          <div class="admin-content-intro"><b>Buat soal UPI</b><span>Pilih blok dan materi, unggah gambar, tulis pertanyaan dan jawaban, lalu publikasikan ke semua pengguna.</span></div>
+          <form data-admin-upi-form class="admin-content-form acm-form">
+            <div class="acm-grid">
+              <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UPI_BLOCKS)}</select></div>
+              <div class="acm-field"><label>Materi</label><select name="material" required><option value="Histology">Histology</option><option value="Patologi Anatomi">Patologi Anatomi</option></select></div>
+            </div>
+            <div class="acm-field"><label>Judul atau topik <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: Histology — Jaringan epitel"></div>
+            <div class="acm-field"><label>Gambar soal</label><div class="admin-file-picker"><input id="adminUpiImageFile" name="image" type="file" accept="image/*" required hidden><label for="adminUpiImageFile" class="admin-file-btn" role="button">Pilih gambar</label><span class="admin-file-selected" data-upi-file-meta>Belum ada gambar dipilih.</span></div></div>
             <div class="upi-create-preview admin-upi-preview" data-admin-upi-preview hidden><img alt="Preview gambar"></div>
-            <label>Question</label><textarea name="question" rows="4" maxlength="1000" placeholder="Tulis pertanyaan…" required></textarea>
-            <label>Answer</label><textarea name="answer" rows="4" maxlength="1000" placeholder="Tulis jawaban…" required></textarea>
-            <button class="account-action account-save" type="submit">Publikasikan Question UPI</button>
-            <p class="muted" data-content-message></p>
+            <div class="acm-field"><label>Pertanyaan</label><textarea name="question" rows="3" maxlength="1000" placeholder="Tulis pertanyaan…" required></textarea></div>
+            <div class="acm-field"><label>Jawaban</label><textarea name="answer" rows="3" maxlength="1000" placeholder="Tulis jawaban…" required></textarea></div>
+            <button class="account-action account-save acm-submit" type="submit">Publikasikan soal UPI</button>
+            <p class="acm-note muted" data-content-message role="status"></p>
           </form>
         </div>
 
-        <div class="admin-materials-section">
-          <div class="admin-content-intro"><b>Link Materi UAB per Blok</b><span>Atur link materi yang akan muncul pada tombol MATERI di setiap blok.</span></div>
-          <form data-admin-material-form class="admin-content-form admin-material-form">
-            <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
-            <label>Link materi</label><input name="url" type="url" inputmode="url" placeholder="https://..." required>
+        <div class="acm-panel admin-materials-section" data-content-panel="materi" hidden>
+          <div class="admin-content-intro"><b>Link materi UAB per blok</b><span>Link ini muncul pada tombol Materi di setiap blok.</span></div>
+          <form data-admin-material-form class="admin-content-form admin-material-form acm-form">
+            <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select></div>
+            <div class="acm-field"><label>Link materi</label><input name="url" type="url" inputmode="url" placeholder="https://..." required></div>
             <div class="admin-material-current" data-material-current>Belum ada link tersimpan.</div>
-            <div class="admin-material-actions"><button class="account-action account-save" type="submit">Simpan Link Materi</button><button class="account-action material-delete-action" data-delete-material type="button">Hapus Link</button></div>
-            <p class="muted" data-material-message></p>
+            <div class="acm-actions admin-material-actions"><button class="account-action account-save" type="submit">Simpan link</button><button class="account-action material-delete-action" data-delete-material type="button">Hapus link</button></div>
+            <p class="acm-note muted" data-material-message role="status"></p>
           </form>
         </div>
 
-        <div class="admin-materials-section">
-          <div class="admin-content-intro"><b>Link NINJA NERD UAB per Blok</b><span>Masukkan link playlist YouTube Ninja Nerd untuk setiap blok.</span></div>
-          <form data-admin-youtube-form class="admin-content-form admin-material-form">
-            <label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select>
-            <label>Link playlist YouTube</label><input name="url" type="url" inputmode="url" placeholder="https://www.youtube.com/playlist?..." required>
+        <div class="acm-panel admin-materials-section" data-content-panel="ninja" hidden>
+          <div class="admin-content-intro"><b>Link Ninja Nerd per blok</b><span>Masukkan link playlist YouTube Ninja Nerd untuk tiap blok.</span></div>
+          <form data-admin-youtube-form class="admin-content-form admin-material-form acm-form">
+            <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select></div>
+            <div class="acm-field"><label>Link playlist YouTube</label><input name="url" type="url" inputmode="url" placeholder="https://www.youtube.com/playlist?..." required></div>
             <div class="admin-material-current" data-youtube-current>Belum ada link tersimpan.</div>
-            <div class="admin-material-actions"><button class="account-action account-save" type="submit">Simpan Link NINJA NERD</button><button class="account-action material-delete-action" data-delete-youtube type="button">Hapus Link</button></div>
-            <p class="muted" data-youtube-message></p>
+            <div class="acm-actions admin-material-actions"><button class="account-action account-save" type="submit">Simpan link</button><button class="account-action material-delete-action" data-delete-youtube type="button">Hapus link</button></div>
+            <p class="acm-note muted" data-youtube-message role="status"></p>
           </form>
+        </div>
         </div>`;
       account.append(box);
 

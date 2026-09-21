@@ -19,7 +19,8 @@
       "D": "Thoracal 2-3 sangat jarang terkena HNP karena disokong oleh sangkar dada (rib cage).",
       "E": "Thoracal 5-6 jarang mengalami HNP akibat stabilitas regio thorakal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-002",
@@ -41,7 +42,8 @@
       "D": "M. Psoas Major berinsersio pada trochanter minor femur.",
       "E": "M. Vastus Lateralis berinsersio pada basis patella."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-003",
@@ -63,7 +65,8 @@
       "D": "Sendi dilapisi oleh tulang rawan hialin artikular.",
       "E": "Diskus intervertebralis tersusun atas tulang rawan fibro kartilago."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "muskulo-2022-004",
@@ -85,7 +88,8 @@
       "D": "Osteoarthritis merupakan penyakit degeneratif sendi yang umum pada usia lanjut.",
       "E": "Osteoporosis merupakan penurunan massa dan densitas tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-005",
@@ -107,7 +111,8 @@
       "D": "Metampiron bekerja terutama sebagai analgesik-antipiretik dan kurang aman untuk pengobatan inflamasi kronis.",
       "E": "Piroxicam memiliki efek iritasi gastrointestinal yang sangat tinggi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-006",
@@ -129,7 +134,8 @@
       "D": "Hiperparatiroidism murni hanya menjelaskan peningkatan PTH tanpa merangkum sindrom kelainan tulang renal.",
       "E": "Chronic Kidney Disease-Mineral and Bone Disorder (CKD-MBD) mencakup gangguan metabolisme mineral (kalsium, fosfat, PTH) dan kelainan tulang pada pasien GGK stadium lanjut."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-007",
@@ -151,7 +157,8 @@
       "D": "Varus adalah deformitas angulasi ke arah dalam.",
       "E": "Valgum adalah deformitas angulasi ke arah luar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-008",
@@ -173,7 +180,8 @@
       "D": "Os metacarpalia merupakan tulang telapak tangan.",
       "E": "Os carpali merupakan tulang-tulang karpal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-009",
@@ -195,7 +203,8 @@
       "D": "M. Tibialis anterior terletak di regio cruris anterior.",
       "E": "M. Gluteus maximus terletak di regio glutealis proksimal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-010",
@@ -217,7 +226,8 @@
       "D": "N. Suralis menginervasi sensorik dorsolateral kaki.",
       "E": "Fraktur collum fibulae mencederai N. peroneus communis yang bercabang menjadi N. peroneus profundus, mengakibatkan paralisis dorsofleksi kaki (foot drop) dan kebas pada sela jari 1-2."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-011",
@@ -239,7 +249,8 @@
       "D": "Laterofleksi adalah gerakan pembengkokan/kemiringan leher ke arah samping lateral.",
       "E": "Rotasi adalah gerakan memutar pada poros aksial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-012",
@@ -261,7 +272,8 @@
       "D": "Coccygeus merupakan tulang ekor yang tidak terlibat skoliosis.",
       "E": "Cervicalis jarang menjadi lokasi primer skoliosis idiopatik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-013",
@@ -283,7 +295,8 @@
       "D": "Arcus sagitalis bukan merupakan struktur anatomi arkus pedis.",
       "E": "Arcus horizontalis bukan nomenklatur resmi arkus pedis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-014",
@@ -305,7 +318,8 @@
       "D": "Kalsitonin menurunkan kadar kalsium darah dengan menghambat osteoklas.",
       "E": "Kalsitriol (1,25-dihidroksivitamin D3) adalah bentuk aktif vitamin D yang secara langsung merangsang penyerapan/absorbsi kalsium di usus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-015",
@@ -327,7 +341,8 @@
       "D": "SERM (Raloksifen) lebih difokuskan pada pencegahan osteoporosis tanpa riwayat fraktur berat.",
       "E": "Hormon paratiroid (Teriparatide) digunakan bila terapi antiresorptif gagal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-016",
@@ -349,7 +364,8 @@
       "D": "Retinaculum extensoris berada di kompartemen dorsal pergelangan tangan.",
       "E": "Retinaculum flexoris (flexor retinaculum / transverse carpal ligament) membentuk atap dari carpal tunnel yang menekan N. medianus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-017",
@@ -371,7 +387,8 @@
       "D": "Fraktur sepertiga distal femur secara langsung berisiko merusak A. femoralis, V. femoralis, dan N. saphenus di dalam canalis adductorius (Hunter's canal).",
       "E": "Ruptur/fraktur collum femur berada proksimal di panggul."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-018",
@@ -393,7 +410,8 @@
       "D": "Osteoma adalah lesi jinak tulang matur tanpa destruksi korteks.",
       "E": "Chondrosarcoma dicirikan oleh matriks kalsifikasi popcorn/ring-and-arc pada usia lebih tua."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-019",
@@ -415,7 +433,8 @@
       "D": "M. Splenius anterior bukan struktur yang terlibat utama.",
       "E": "M. Trapezius berfungsi elevasi dan retraksi bahu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-020",
@@ -437,7 +456,8 @@
       "D": "Sarkomer memendek terjadi saat kontraksi, bukan relaksasi.",
       "E": "Penurunan kadar Ca2+ sitosol memicu relaksasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-021",
@@ -459,7 +479,8 @@
       "D": "Opsi 2 dan 4 tidak berurutan dan tidak lengkap.",
       "E": "Berdasarkan QS. Al-Mu'minun: 14, seluruh urutan tahapan Nutfah -> 'Alaqah -> Mudghah -> 'Izham (tulang) adalah benar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-022",
@@ -481,7 +502,8 @@
       "D": "Caput Femoris terlihat pada foto panggul/coxae.",
       "E": "Sustentaculum tali terlihat pada foto ankle/calcaneus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-023",
@@ -503,7 +525,8 @@
       "D": "Pronasi terjadi pada articulatio radioulnaris.",
       "E": "Fleksi adalah gerakan menekuk pergelangan tangan ke palmar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-024",
@@ -525,7 +548,8 @@
       "D": "Berinsersio pada basis patella via tendon quadriceps.",
       "E": "Terletak di kompartemen anterior paha."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-025",
@@ -547,7 +571,8 @@
       "D": "Sarkolema adalah membran sel otot.",
       "E": "Tuberculum/retikulum sarkoplasma adalah organel penyimpan kalsium."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-026",
@@ -569,7 +594,8 @@
       "D": "Motor end-plate adalah daerah terspesialisasi dari sarkolema (post-sinaps) yang mengalami depolarisasi akibat masuknya Na+.",
       "E": "Vesikel neurotransmitter menyimpan ACh."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-027",
@@ -591,7 +617,8 @@
       "D": "Dosis Ibuprofen 400 mg 3x/hari pada radang sendi bengkak terutama dimanfaatkan untuk efek Antiinflamasi menekan pembengkakan dan eksudasi.",
       "E": "Ibuprofen tidak memiliki sifat antibiotik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-028",
@@ -613,7 +640,8 @@
       "D": "Arteria ulnaris terletak di sisi medial pergelangan tangan.",
       "E": "Arteria radialis digunakan untuk palpasi nadi wrist."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-029",
@@ -635,7 +663,8 @@
       "D": "Diskus interkalaris khas pada otot jantung.",
       "E": "Bentuk fusiformis adalah ciri otot polos."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "muskulo-2022-030",
@@ -657,7 +686,8 @@
       "D": "Crista occipitalis externa berada di os occipitale.",
       "E": "Condylus occipitalis bersendi dengan os atlas (C1)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-031",
@@ -679,7 +709,8 @@
       "D": "Whiplash injury disebabkan oleh pendorongan akselerasi-deselerasi cepat yang mengakibatkan hiperekstensi leher mendadak diikuti oleh hiperfleksi.",
       "E": "Sirkumduksi adalah gerakan melingkar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-032",
@@ -701,7 +732,8 @@
       "D": "Sacrum berada di panggul.",
       "E": "Coccygis merupakan tulang ekor."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-033",
@@ -723,7 +755,8 @@
       "D": "Rontgen lumbal polos kurang sensitif untuk perubahan massa tulang < 30%.",
       "E": "Bone survey digunakan untuk evaluasi lesi osteolitik/osteoblastik multipel."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-034",
@@ -745,7 +778,8 @@
       "D": "Retinaculum flexorum manus (flexor retinaculum) membatasi sisi anterior terowongan karpal.",
       "E": "Fascia antebrachii berada di proksimal lengan bawah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-035",
@@ -767,7 +801,8 @@
       "D": "Rachitic rosary adalah pembesaran costochondral junction pada riketsia.",
       "E": "Dwarfisme (akondroplasia) merupakan kerdil genetik mutasi FGFR3, bukan manifestasi spesifik riketsia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-036",
@@ -789,7 +824,8 @@
       "D": "Sulbi adalah nama bagian anatomi tulang punggung.",
       "E": "Tankis fil khalq merujuk pada kejadian penurunan bentuk penciptaan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-037",
@@ -811,7 +847,8 @@
       "D": "Penulangan endokhondoral menggantikan cetakan tulang rawan menjadi tulang keras.",
       "E": "Intramembranosa terjadi pada tulang pipih."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-038",
@@ -833,7 +870,8 @@
       "D": "Jaringan ikat longgar terdapat pada stroma submukosa.",
       "E": "Kondrosit terdapat pada tulang rawan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "muskulo-2022-039",
@@ -855,7 +893,8 @@
       "D": "M. Vastus lateralis merupakan situs aman injeksi intramuskular (IM) terutama pada bayi dan anak.",
       "E": "Berada di regio femoris anterior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-040",
@@ -877,7 +916,8 @@
       "D": "Os mandibularis mengalami fraktur mandibula.",
       "E": "Os frontale terlibat pada Le Fort III."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-041",
@@ -899,7 +939,8 @@
       "D": "Pes planus adalah hilangnya arcus longitudinalis medialis.",
       "E": "Tarsal coalition adalah penyatuan kongenital antar tulang tarsal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-042",
@@ -921,7 +962,8 @@
       "D": "Canalis adductorius terletak di aspek anteromedial sepertiga distal femur, sehingga fraktur lokasi ini berisiko mencederai vasa femoralis.",
       "E": "Ruptur ligamen knee memicu instabilitas lutut."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-043",
@@ -943,7 +985,8 @@
       "D": "Bifosfonat berikatan dengan hidroksiapatit dan dihimpun oleh osteoklas, lalu menghambat farnesyl pyrophosphate synthase dan menginduksi apoptosis osteoklas.",
       "E": "Efek anti-apoptotik osteosit bukan mekanisme utama antiresorptif bifosfonat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-044",
@@ -965,7 +1008,8 @@
       "D": "Fraktur kominutif merupakan serpihan garis patah akibat trauma.",
       "E": "Fraktur komplit adalah diskontinuitas tulang penuh."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-045",
@@ -987,7 +1031,8 @@
       "D": "Penyerapan berlebih terjadi pada hipervitaminosis D.",
       "E": "Ekskresi kalsium ginjal dipengaruhi hormon PTH."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-046",
@@ -1009,7 +1054,8 @@
       "D": "Sitokin tidak dihambat secara langsung oleh OAINS konvensional.",
       "E": "Leukotrien dihambat oleh kelompok inhibitor 5-LOX / Montelukast."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-047",
@@ -1031,7 +1077,8 @@
       "D": "Spondilolisthesis adalah pergeseran korpus vertebra.",
       "E": "Spondilolisis adalah defek pada pars interarticularis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-048",
@@ -1053,7 +1100,8 @@
       "D": "Sendi Ginglymus (engsel) terdapat pada articulatio humeroulnaris (siku).",
       "E": "Sendi Sellaris terdapat pada articulatio carpometacarpalis I."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-049",
@@ -1075,7 +1123,8 @@
       "D": "A. tibialis anterior berjalan di kompartemen anterior kruris lateral terhadap crista anterior tibia.",
       "E": "A. dorsalis pedis berada di dorsum pedis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-050",
@@ -1097,7 +1146,8 @@
       "D": "Opsi D belum mencakup penyakit degeneratif dan metabolik.",
       "E": "Pengelompokan lengkap sistem muskuloskeletal mencakup Kongenital, Infeksi, Neoplasma, Trauma, serta Degeneratif/Metabolik/Hormonal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-051",
@@ -1119,7 +1169,8 @@
       "D": "Rheumatoid arthritis adalah penyakit autoimun inflamasi karsinoma sendi.",
       "E": "Scurvy disebabkan oleh defisiensi Vitamin C."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-052",
@@ -1141,7 +1192,8 @@
       "D": "A. Thoracica interna berasal dari A. subclavia.",
       "E": "A. Thoracalis lateralis berasal dari pars secunda A. axillaris."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-053",
@@ -1163,7 +1215,8 @@
       "D": "Ligamentum medialis femoris bukan penyokong utama articulatio coxae.",
       "E": "Ligamentum capitis femoris (ligamentum teres femoris) menghubungkan fovea capitis femoris dengan incisura acetabuli."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-054",
@@ -1185,7 +1238,8 @@
       "D": "Aktivitas osteoklas tidak terhenti total.",
       "E": "Terjadi penyerapan tulang (resorpsi), bukan deposisi berlebihan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-055",
@@ -1207,7 +1261,8 @@
       "D": "A. Subclavia terletak di fossa supraclavicularis proksimal.",
       "E": "Vena jugularis interna adalah pembuluh darah balik vena."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-056",
@@ -1229,7 +1284,8 @@
       "D": "Lig. coracohumeralis memperkuat kapsul superior.",
       "E": "Otot-otot rotator cuff (Supraspinatus, Infraspinatus, Teres minor, Subscapularis) membentuk stabilisator dinamik utama yang mempertahankan caput humeri di fossa glenoidalis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-057",
@@ -1251,7 +1307,8 @@
       "D": "Spondiloartrosis terjadi pada tulang belakang.",
       "E": "Gout ditunjukkan oleh hiperurisemia dan kristal MSU."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-058",
@@ -1273,7 +1330,8 @@
       "D": "Zona kalsifikasi ditandai pengendapan matriks kalsium.",
       "E": "Zona degenerasi (erosi/destruksi) ditandai oleh kondrosit yang pecah/mati dan matriks lakuna yang terbuka menyatu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-059",
@@ -1295,7 +1353,8 @@
       "D": "Nyeri tekan pada anatomical snuffbox pasca FOOSH (fall on outstretched hand) adalah tanda khas fraktur Os Scaphoideum.",
       "E": "Os trapezium terletak di basis metakarpal I."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-060",
@@ -1317,7 +1376,8 @@
       "D": "Lakuna Howship adalah cekungan resorpsi tempat osteoklas bekerja.",
       "E": "Osteoid adalah matriks tulang organik uncalcified."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-061",
@@ -1339,7 +1399,8 @@
       "D": "Batas medial fossa axillaris dibentuk oleh dinding lateral toraks (iga 1-4) yang dilapisi M. Serratus anterior.",
       "E": "M. pectoralis major membentuk dinding anterior axilla."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-062",
@@ -1361,7 +1422,8 @@
       "D": "Lakuna hanya tempat berdiamnya kondrosit.",
       "E": "Nutrisi berdifusi dari pembuluh darah perikondrium melalui cairan jaringan (air) yang terikat glikosaminoglikan di dalam matriks tulang rawan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-063",
@@ -1383,7 +1445,8 @@
       "D": "Anamnesis dan PF adalah langkah dasar tetapi sering memerlukan penunjang.",
       "E": "Penegakan diagnosis medis muskuloskeletal yang holistik memerlukan kombinasi Anamnesis, Pemeriksaan Fisik, dan Pemeriksaan Penunjang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-064",
@@ -1405,7 +1468,8 @@
       "D": "N. cutaneus femoris posterior hanya menginervasi sensasi kulit posterior paha.",
       "E": "N. Femoralis menginervasi anterior paha (L2-L4)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-065",
@@ -1427,7 +1491,8 @@
       "D": "V. saphena parva berjalan di posterior malleolus lateralis.",
       "E": "Vena Saphena Magna secara konsisten berada di anterior malleolus medialis, menjadikannya lokasi ideal untuk tindakan veneseksi darurat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-066",
@@ -1449,7 +1514,8 @@
       "D": "Constriction band syndrome adalah pita amnion yang menjepit ekstremitas janin.",
       "E": "Radial club hand adalah hipoplasia/agenesis os radius."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-067",
@@ -1471,7 +1537,8 @@
       "D": "Inti sel otot rangka terletak di perifer/tepi sel.",
       "E": "Diskus interkalaris dan percabangan sel khas untuk otot jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "muskulo-2022-068",
@@ -1493,7 +1560,8 @@
       "D": "OA lumbalis mengenai vertebra pinggang.",
       "E": "Keluhan nyeri rahang bawah saat membuka mulut dengan krepitasi menunjukkan Osteoarthritis sendi temporomandibular (TMJ)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-069",
@@ -1515,7 +1583,8 @@
       "D": "Tulang sangat padat tetapi rapuh (chalk-like).",
       "E": "Osteoklas mengalami disfungsi/defisiensi aktivitas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-070",
@@ -1537,7 +1606,8 @@
       "D": "Sujud seperti biasa membatalkan konsistensi posisi duduk jika fisik terbatas.",
       "E": "Isyarat jari hanya dilakukan dalam keadaan kelumpuhan total."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-071",
@@ -1559,7 +1629,8 @@
       "D": "Penurunan osteoblas menurunkan pembentukan tulang.",
       "E": "Bifosfonat terikat pada matriks hidroksiapatit, diabsorbsi oleh osteoklas saat resorpsi, lalu menekan aktivitas resorpsi serta memicu apoptosis osteoklas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-072",
@@ -1581,7 +1652,8 @@
       "D": "Osteofit adalah istilah umum taji tulang.",
       "E": "Pannus adalah jaringan granulasi inflamasi pada Rheumatoid Arthritis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-073",
@@ -1603,7 +1675,8 @@
       "D": "M. Procerus mengerutkan kulit di atas pangkal hidung.",
       "E": "M. Risorius menarik sudut mulut ke lateral."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-074",
@@ -1625,7 +1698,8 @@
       "D": "Osteoporosis ditandai pengeroposan massa tulang tanpa penyempitan sendi khas.",
       "E": "Fraktur adalah patah tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-075",
@@ -1647,7 +1721,8 @@
       "D": "M. Infraspinatus adalah bagian dari rotator cuff (eksorotasi).",
       "E": "M. Subscapularis adalah bagian dari rotator cuff (endorotasi)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-076",
@@ -1669,7 +1744,8 @@
       "D": "Paracetamol kurang efektif untuk inflamasi berat arthritis.",
       "E": "Ibuprofen non-selektif COX-1/2."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-077",
@@ -1691,7 +1767,8 @@
       "D": "Absorpsi usus seringkali menurun seiring penuaan.",
       "E": "Kalsium serum biasanya tetap normal karena kompensasi hormon PTH."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-078",
@@ -1713,7 +1790,8 @@
       "D": "Analgesik meredakan nyeri, namun efek antiinflamasi spesifik untuk pembengkakannya.",
       "E": "Antitrombotik dikhususkan untuk pencegahan agregasi trombosit (seperti aspirin dosis rendah)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-079",
@@ -1735,7 +1813,8 @@
       "D": "Zona proliferasi berisi sel membelah cepat.",
       "E": "Zona degenerasi/erosi ditandai oleh kondrosit mati/pecah dan lakuna interkoneksi yang hancur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "muskulo-2022-080",
@@ -1757,7 +1836,8 @@
       "D": "Dinding tuba eustachii (bersama epiglottis dan pinna aurikula) tersusun atas elastic cartilage yang kaya serat elastin.",
       "E": "Bronkus tersusun atas hialin kartilago."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-081",
@@ -1779,7 +1859,8 @@
       "D": "M. fibularis longus menyokong arcus transversus.",
       "E": "Ligamentum plantaris longum adalah penyokong pasif arcus lateralis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-082",
@@ -1801,7 +1882,8 @@
       "D": "Trias osteofit, penyempitan celah sendi, dan sklerosis subkondral pada rontgen sendi adalah patognomonik Osteoarthritis.",
       "E": "Spondiloarthritis mengenai vertebra dan articulatio sacroiliaca."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-083",
@@ -1823,7 +1905,8 @@
       "D": "Osteosarkoma (osteogenic sarcoma) berasal dari sel mesenkim pembentuk tulang yaitu Osteoblas maligna yang memproduksi osteoid ganas.",
       "E": "Khondrosit mengalami transformasi pada kondrosarkoma."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "muskulo-2022-084",
@@ -1845,7 +1928,8 @@
       "D": "Ikatan protein plasma diklofenak sangat tinggi (> 99%).",
       "E": "Diklofenak adalah OAINS non-selektif (meski memiliki sedikit preferensi COX-2)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-085",
@@ -1867,7 +1951,8 @@
       "D": "Trauma fisiologi bukan kategori baku OA.",
       "E": "Trauma patologi disebabkan benturan fisik mendadak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-086",
@@ -1889,7 +1974,8 @@
       "D": "Foto polos Rontgen genu bilateral posisi AP/Lateral merupakan pemeriksaan pencitraan awal standar untuk menilai kesimetrisan celah sendi dan osteofit.",
       "E": "CT scan dengan kontras jarang digunakan sebagai lini pertama kasus articulatio genu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-087",
@@ -1911,7 +1997,8 @@
       "D": "M. palmaris longus terletak superfisial.",
       "E": "M. flexor carpi ulnaris terletak superfisial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-088",
@@ -1933,7 +2020,8 @@
       "D": "Caput femoris di regio panggul.",
       "E": "Sustentaculum tali di os calcaneus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-089",
@@ -1955,7 +2043,8 @@
       "D": "Ligamentum medialis femoris tidak ada.",
       "E": "Ligamentum capitis femoris (ligamentum teres femoris) menempel pada caput femoris di fovea capitis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-090",
@@ -1977,7 +2066,8 @@
       "D": "A. tibialis anterior di kompartemen anterior kruris.",
       "E": "A. dorsalis pedis di punggung kaki."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-091",
@@ -1999,7 +2089,8 @@
       "D": "Zona proliferasi sel membelah.",
       "E": "Zona degenerasi ditandai pecahnya sel kondrosit dan peleburan lakuna."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-092",
@@ -2021,7 +2112,8 @@
       "D": "Infraspinatus anggota rotator cuff.",
       "E": "Subscapularis anggota rotator cuff."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-093",
@@ -2043,7 +2135,8 @@
       "D": "Asetosal berisiko pendarahan.",
       "E": "Metamizol (Antalgin) merupakan analgesik non-opioid poten yang efektif untuk nyeri somatik akut sedang hingga berat akibat fraktur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-094",
@@ -2065,7 +2158,8 @@
       "D": "M. serratus anterior melapisi dinding lateral dada membentuk batas medial ketiak.",
       "E": "M. pectoralis major batas anterior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-095",
@@ -2087,7 +2181,8 @@
       "D": "Tulang memadat padat-kapur.",
       "E": "Aktivitas osteoklas justru terganggu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "muskulo-2022-096",
@@ -2109,7 +2204,8 @@
       "D": "Constriction band disebabkan jeratan amnion.",
       "E": "Radial club hand adalah aplasia/hipoplasia os radius."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "muskulo-2022-097",
@@ -2131,7 +2227,8 @@
       "D": "N. cutaneus femoris posterior menginervasi sensorik kulit paha posterior.",
       "E": "N. Femoralis menginervasi paha anterior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-098",
@@ -2153,7 +2250,8 @@
       "D": "Efek Antiinflamasi merupakan efek utama yang menekan edema, migrasi leukosit, dan tanda radang lokal.",
       "E": "Ibuprofen bukan anti-bakteri."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "muskulo-2022-099",
@@ -2175,7 +2273,8 @@
       "D": "M. Splenius anterior bukan struktur utama.",
       "E": "Platysma otot superfisial tipis leher."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "muskulo-2022-100",
@@ -2197,6 +2296,7 @@
       "D": "Thoracica interna dari A. subclavia.",
       "E": "Thoracalis lateralis cabang bagian kedua A. axillaris."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   }
 ]

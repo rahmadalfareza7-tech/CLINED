@@ -68,7 +68,7 @@ let banksLoadPromise=null;
 let staticBankManifest=null;
 // Embedded metadata is a deliberate fallback: the question bank must remain visible
 // even if a hosting rewrite/CDN temporarily serves the manifest incorrectly.
-const STATIC_BANK_META=[{"id":"endo-2019","name":"ENDO 2019","block":"ENDOKRINE","version":1,"count":100},{"id":"ginjal-2018","name":"GINJAL 2018","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2019","name":"GINJAL 2019","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2020","name":"GINJAL 2020","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2021","name":"GINJAL 2021","block":"GINJAL","version":1,"count":100},{"id":"ginjal-2022","name":"GINJAL 2022","block":"GINJAL","version":1,"count":97},{"id":"kedkel-2020","name":"KEDKEL 2020","block":"KEDKEL","version":1,"count":123},{"id":"kedkel-2021","name":"KEDKEL 2021","block":"KEDKEL","version":1,"count":100},{"id":"kedkel-2022","name":"KEDKEL 2022","block":"KEDKEL","version":1,"count":92},{"id":"kedkom-2020","name":"KEDKOM 2020","block":"KEDKOM","version":1,"count":157},{"id":"kedkom-2021","name":"KEDKOM 2021","block":"KEDKOM","version":1,"count":100}];
+const STATIC_BANK_META=[{"id":"endo-2019","name":"ENDO 2019","block":"ENDOKRINE","version":2,"count":100},{"id":"ginjal-2018","name":"GINJAL 2018","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2019","name":"GINJAL 2019","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2020","name":"GINJAL 2020","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2021","name":"GINJAL 2021","block":"GINJAL","version":2,"count":41},{"id":"ginjal-2022","name":"GINJAL 2022","block":"GINJAL","version":2,"count":97},{"id":"kedkel-2020","name":"KEDKEL 2020","block":"KEDKEL","version":2,"count":123},{"id":"kedkel-2021","name":"KEDKEL 2021","block":"KEDKEL","version":2,"count":100},{"id":"kedkel-2022","name":"KEDKEL 2022","block":"KEDKEL","version":2,"count":92},{"id":"kedkom-2020","name":"KEDKOM 2020","block":"KEDKOM","version":2,"count":157},{"id":"kedkom-2021","name":"KEDKOM 2021","block":"KEDKOM","version":2,"count":99}];
 function seedStaticBankCatalog(list){
   for(const b of (list||[])){
     const id=String(b.id);
@@ -475,38 +475,13 @@ function questionAbilityProfile(q){
     return {primary:explicit,weights:{[explicit]:1},scores:{[explicit]:1}};
   }
 
-  // Fallback untuk soal lama/eksternal yang belum memiliki metadata.
-  // Analisis terutama memakai stem, bukan seluruh opsi, agar opsi pengecoh
-  // dari domain lain tidak menggeser komponen soal.
-  const stem=String(q?.soal||"").toLowerCase();
-  const scores=Object.fromEntries(ABILITIES.map(a=>[a,0]));
-
-  const score=(ability,patterns,weight=1)=>{
-    patterns.forEach(rx=>{if(rx.test(stem))scores[ability]+=weight;});
-  };
-  score("Pharmacology",[
-    /\bobat\b|\bmedikasi\b|\bdosis\b|\bterapi farmako\b|\bfarmakologi\b|\banestesi\b|\banalgesik\b|\bantibiotik\b|\bantikejang\b|\bantikonvulsan\b|\bantidepresan\b|\bantipsikotik\b|\bopioid\b|\bantitoksin\b|\bvasokonstriktor\b|\bpelumpuh otot\b|\bmekanisme kerja obat\b|\befek samping obat\b|\bkontraindikasi\b/
-  ],5);
-  score("Histology",[
-    /\bhistologi\b|\bhistopatologi\b|\bmikroskop\b|\bmikroskopis\b|\bmikrotom\b|\bpewarnaan\b|\bsel\b.*\bbermorfologi\b|\btipe sel\b|\bjaringan\b|\bepitel\b|\bstroma\b|\bparenkim\b|\bmyelin\b.*\bselubung/
-  ],5);
-  score("Anatomy",[
-    /\banatomi\b|\bstruktur\b|\blokasi\b|\bletak\b|\bnervus\b|\bsyaraf\b|\bsaraf\b|\barteri\b|\bvena\b|\bvaskularisasi\b|\binnervasi\b|\blobus\b|\bgyrus\b|\bhipokampus\b|\bthalamus\b|\bcerebellum\b|\bmedulla spinalis\b|\bkornu anterior\b|\bforamen\b|\bkanalis\b|\blapisan\b|\bkorteks\b|\bventrikel\b|\bmeningen\b|\borgan\b|\barea broca\b/
-  ],4);
-  score("Diagnostics",[
-    /\bdiagnosis\b|\bdiagnostik\b|\bdiagnosa\b|\bpemeriksaan\b|\bpemeriksaan penunjang\b|\bct scan\b|\bmri\b|\bx-ray\b|\blab(?:oratorium)?\b|\bhasil\b.*\bscan\b|\bgejala\b|\bkeluhan\b|\bpasien\b|\bkasus\b|\btatalaksana\b|\bmenentukan\b|\bskor\b|\bgcs\b/
-  ],3);
-  score("Physiology",[
-    /\bfisiologi\b|\bmekanisme\b|\bfungsi\b|\bregulasi\b|\bhomeostasis\b|\bneurotransmitter\b|\bpotensial membran\b|\bpotensial aksi\b|\bdepolarisasi\b|\brepolarisasi\b|\brefleks\b|\bventilasi\b|\bperfusi\b|\btekanan\b|\bsekresi\b|\bfeedback\b|\bkonduksi\b|\bmelatonin\b|\bparasimpatis\b|\bsimpatis\b/
-  ],4);
-  score("Recall",[
-    /^\s*\d*\.?\s*(apa|apakah|intinya)\b|\bdisebut\b|\bistilah\b|\barti\b|\bnama\b|\bmanakah\b|\byang dimaksud\b|\bmerujuk kepada\b|\bdefinisi\b/
-  ],2);
-
-  const sorted=ABILITIES.slice().sort((a,b)=>scores[b]-scores[a]);
-  const top=sorted[0],topScore=scores[top];
-  if(topScore<=0)return {primary:"Recall",weights:{Recall:1},scores};
-  return {primary:top,weights:{[top]:1},scores};
+  // Fallback untuk soal tanpa metadata (mis. hasil import admin): klasifikasi berdasarkan kalimat pertanyaan.
+  const api=window.CLINED_ABILITY_CLASSIFIER;
+  if(api){
+    const r=api.classify(q);
+    return {primary:r.primary,weights:{[r.primary]:1},scores:r.scores};
+  }
+  return {primary:"Recall",weights:{Recall:1},scores:{Recall:1}};
 }
 function syncAbilityCatalog(){
   const old=get(KEY.abilityMap,{});
@@ -1536,6 +1511,13 @@ function blockForBank(bankId){
   return 'OTHER';
 }
 function blockLabel(block){ return String(block||'SSP').replace(/^BLOK\s+/i,'').toUpperCase(); }
+// Semua blok UAB. Dashboard boleh memilih blok mana pun, bukan hanya blok yang sudah pernah dikerjakan.
+const DASHBOARD_ALL_BLOCKS=['BM1','BM2','HNC','MP1','MP2','MPT','MUSKULOSKELETAL','RESPIRATORY','KARDIOLOGI','HEMATOLOGI','GIT','FORENSIK','GINJAL','ENDOKRINE','REPRODUKSI','SSP','PANCA INDRA','KEDKOM','KEDKEL','MULSIS'];
+function dashboardBlockIds(){
+  const all=DASHBOARD_ALL_BLOCKS.slice();
+  workedBlockIds().forEach(b=>{ if(b && b!=='OTHER' && !all.includes(b)) all.push(b); });
+  return all;
+}
 function workedBlockIds(){
   const found=new Set();
   const hist=get(KEY.hist,[]);
@@ -1552,22 +1534,25 @@ function workedBlockIds(){
   });
 }
 function dashboardBlock(){
-  const options=workedBlockIds();
+  const options=dashboardBlockIds();
   const saved=localStorage.getItem(DASHBOARD_BLOCK_KEY);
   if(saved && options.includes(saved)) return saved;
   const last=getLastWorkedBlock();
   return options.includes(last)?last:options[0];
 }
 function setDashboardBlock(id){
-  const options=workedBlockIds();
+  const options=dashboardBlockIds();
   const block=options.includes(id)?id:(options.includes(getLastWorkedBlock())?getLastWorkedBlock():options[0]||'SSP');
   localStorage.setItem(DASHBOARD_BLOCK_KEY,block);
   return block;
 }
 function renderDashboardBlockOptions(){
-  const options=workedBlockIds();
+  const worked=workedBlockIds().filter(b=>b!=='OTHER');
+  const rest=dashboardBlockIds().filter(b=>!worked.includes(b));
   const selected=setDashboardBlock(dashboardBlock());
-  const html=options.map(block=>`<option value="${esc(block)}">${esc(blockLabel(block))}</option>`).join('');
+  const opt=block=>`<option value="${esc(block)}">${esc(blockLabel(block))}</option>`;
+  // Blok yang sudah dikerjakan tampil di atas; semua blok lain tetap bisa dipilih.
+  const html=(worked.length?`<optgroup label="Sudah dikerjakan">${worked.map(opt).join('')}</optgroup>`:'')+`<optgroup label="Semua blok">${rest.map(opt).join('')}</optgroup>`;
   ['dashboardStatScope','dashboardDetailStatScope'].forEach(id=>{
     const el=$(id); if(!el)return;
     el.innerHTML=html;
@@ -1602,7 +1587,7 @@ function abilityQuestionTotals(scope="current"){
   for(const [bankId,bankObj] of Object.entries(BANKS||{})){
     if(scope!=="all" && blockForBank(bankId)!==block) continue;
     for(const q of (bankObj.data||[])){
-      const c=String(q?.komponenStatistik||"");
+      const c=questionAbilityProfile(q).primary;
       if(ABILITIES.includes(c)) totals[c]++;
     }
   }

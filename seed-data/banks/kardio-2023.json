@@ -19,7 +19,8 @@
       "D": "Endometrium adalah lapisan mukosa rahim/uterus, bukan bagian jantung.",
       "E": "Miokardium merupakan lapisan otot utama jantung yang mengalami pembesaran (hipertrofi) pada kondisi kardiomegali."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-002",
@@ -41,7 +42,8 @@
       "D": "Vena brachiocephalica terletak di dalam rongga dada dan tidak dapat diinspeksi langsung pada leher.",
       "E": "Vena subclavia terletak di bawah tulang klavikula dan tidak dapat diinspeksi secara visual di leher."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-003",
@@ -63,7 +65,8 @@
       "D": "Limfangitis merupakan infeksi/inflamasi akut saluran limfe yang ditandai dengan garis kemerahan dan nyeri tekan.",
       "E": "Tromboflebitis adalah inflamasi dinding vena yang disertai pembentukan trombus lokal dengan tanda keradangan akut."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-004",
@@ -85,7 +88,8 @@
       "D": "Menghentikan cholestyramine tanpa indikasi yang jelas dapat memicu perburukan hiperlipidemia.",
       "E": "Colesevelam masih memiliki potensi interaksi pengikatan obat lain meski relatif lebih rendah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-005",
@@ -107,7 +111,8 @@
       "D": "NT-proBNP merupakan penanda peregangan ventrikel pada gagal jantung.",
       "E": "Troponin I adalah biomarker non-lipid spesifik dan gold standard untuk diagnosis nekrosis miokard pada penyakit jantung iskemik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-006",
@@ -129,7 +134,8 @@
       "D": "Rosuvastatin (golongan statin) memiliki efek samping khas berupa mialgia, miopati, hingga rhabdomyolysis.",
       "E": "Gemfibrozil dapat menyebabkan miopati, namun indikasi utamanya adalah hipertrigliseridemia berat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-007",
@@ -151,7 +157,8 @@
       "D": "Arteri vertebralis merupakan cabang dari arteri subclavia.",
       "E": "Arteri koronaria merupakan cabang dari aorta ascendens."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-008",
@@ -173,7 +180,8 @@
       "D": "Miokardium adalah otot jantung yang berada di dalam pembungkus jantung.",
       "E": "Endokardium adalah lapisan paling dalam ruang jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-009",
@@ -195,7 +203,8 @@
       "D": "Truncus sympathicus mengirimkan sinyal simpatis adrenergik yang meningkatkan denyut jantung dan kontraktilitas.",
       "E": "N. Vagus memberikan stimulasi parasimpatis yang menurunkan denyut jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-010",
@@ -217,7 +226,8 @@
       "D": "Penurunan preload terutama dihasilkan oleh diuretik seperti furosemide dan vasodilator vena.",
       "E": "Peningkatan inotropik/kontraksi otot jantung dihasilkan oleh obat inotropik positif seperti digoksin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-011",
@@ -239,7 +249,8 @@
       "D": "Secara histologis, lapisan endokardium pada atrium relatif lebih tebal dibandingkan pada ventrikel.",
       "E": "Atrium kiri berhubungan dengan ventrikel kiri melalui katup bikuspidalis (mitral), bukan trikuspidalis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-012",
@@ -261,7 +272,8 @@
       "D": "Miokarditis adalah inflamasi miokardium, bisa disebabkan oleh berbagai virus/bakteri.",
       "E": "Endokarditis infektif ditandai oleh vegetasi bakterialis pada katup tanpa adanya Badan Aschoff."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-013",
@@ -283,7 +295,8 @@
       "D": "Blok AV derajat 2 tipe 2 ditandai interval PR konstan tetapi ada gelombang P yang tiba-tiba tidak diteruskan ke QRS.",
       "E": "Atrial fibrilasi tidak memiliki gelombang P yang jelas dan iramanya ireguler ireguler."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-014",
@@ -305,7 +318,8 @@
       "D": "Aurikula adalah struktur penonjolan pada atrium jantung.",
       "E": "Iktus cordis adalah apeks jantung yang teraba di dinding dada."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-015",
@@ -327,7 +341,8 @@
       "D": "Perubahan posisi duduk/berbaring berguna untuk hipotensi ortostatik, bukan validasi teknik manset anak.",
       "E": "Manset dewasa terlalu besar untuk anak sehingga menghasilkan nilai tensi lebih rendah dari sebenarnya."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-016",
@@ -349,7 +364,8 @@
       "D": "Perhitungan MAP = Diastolik + 1/3 (Sistolik - Diastolik) = 100 + 1/3 (180 - 100) = 100 + 26,67 = 126,67 mmHg (dibulatkan menjadi 130 mmHg).",
       "E": "160 mmHg melebihi estimasi rata-rata tekanan arteri."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-017",
@@ -371,7 +387,8 @@
       "D": "Minyak sayur umum sering kali mengandung omega-6 tinggi atau olahan lemak jenuh.",
       "E": "Minyak ikan mengandung omega-3 tetapi minyak zaitun adalah komponen lemak utama dalam pola diet mediterania."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-018",
@@ -393,7 +410,8 @@
       "D": "Muskarinik memediasi efek parasimpatis pada jantung.",
       "E": "Dingin justru meningkatkan resistensi vascular perifer (vasokonstriksi)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-019",
@@ -415,7 +433,8 @@
       "D": "Aspirin saja tanpa IVIG tidak efektif menekan insidensi kelainan pembuluh darah koroner secara memadai.",
       "E": "Penyakit Kawasaki adalah vaskulitis bukan infeksi bakteri primer sehingga antibiotik tidak efektif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-020",
@@ -437,7 +456,8 @@
       "D": "Efusi pleura sangat jarang menjadi komplikasi khas.",
       "E": "Perikarditis akut dapat terjadi pada fase akut tetapi komplikasi jangka panjang yang utama adalah kelainan koroner."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-021",
@@ -459,7 +479,8 @@
       "D": "Myoglobin penanda awal nekrosis otot non-spesifik.",
       "E": "hs-CRP menilai inflamasi sistemik vaskular."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-022",
@@ -481,7 +502,8 @@
       "D": "Efusi pleura memperlihatkan perselubungan pada cavum pleura dengan sudut kostofrenikus tumpul.",
       "E": "Edema paru memperlihatkan infiltrat perihilar (bat-wing appearance)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-023",
@@ -503,7 +525,8 @@
       "D": "Sulcus interventricularis anterior ditempati oleh Left Anterior Descending (LAD) artery.",
       "E": "Sulcus interventricularis posterior ditempati oleh Posterior Interventricular Artery (PDA)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-024",
@@ -525,7 +548,8 @@
       "D": "Ligamentum venosum adalah jaringan ikat remnant hasil obliterasi duktus venosus janin.",
       "E": "Ligamentum arteriosum merupakan sisa obliterasi duktus arteriosus Botalli."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-025",
@@ -547,7 +571,8 @@
       "D": "Penetrasinya ke dalam intima dipengaruhi muatan dan bentuk strukturnya.",
       "E": "Lp(a) bersaing dengan plasminogen, bukan karena reseptor di seluruh endotel."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-026",
@@ -569,7 +594,8 @@
       "D": "Bisoprolol adalah obat beta blocker.",
       "E": "Valsartan adalah obat antihipertensi golongan ARB."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-027",
@@ -591,7 +617,8 @@
       "D": "Lead V3, V4 menyadap dinding anterior jantung.",
       "E": "Lead V7, V8, V9 menyadap dinding posterior jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-028",
@@ -613,7 +640,8 @@
       "D": "Arteri elastis meredam fluktuasi tekanan sistolik aorta.",
       "E": "Sphincter prekapiler mengatur pembukaan aliran ke bed kapiler."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-029",
@@ -635,7 +663,8 @@
       "D": "Prostaglandin memiliki aksi vasodilator namun secara farmakologi sistemik utama antihipertensi ditempati lini ACEI.",
       "E": "Penghambat endotelin digunakan terbatas untuk hipertensi pulmonal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-030",
@@ -657,7 +686,8 @@
       "D": "Pelemahan dinding memicu aneurisma, bukan plak aterosklerosis.",
       "E": "Komunikasi abnormal arteri-vena adalah fistula AV."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-031",
@@ -679,7 +709,8 @@
       "D": "Golongan 3 (Amiodarone) berefek samping toksisitas organ dan fotosensitivitas (silau/memicu gangguan penglihatan/kornea).",
       "E": "Golongan 4 (CCB non-dihidropiridin) kurang dianjurkan dibanding beta blocker pada iskemia berulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-032",
@@ -701,7 +732,8 @@
       "D": "Cor pulmonale ditandai oleh hipertrofi ventrikel kanan dengan apeks terangkat (apex elevated).",
       "E": "Apex tertanam (hipertrofi ventrikel kiri / LVE) disertai dilatasi dan elongasi aorta khas pada Hypertensive Heart Disease (HHD)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-033",
@@ -723,7 +755,8 @@
       "D": "55 cc salah perhitungan.",
       "E": "255 cc salah perhitungan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-034",
@@ -745,7 +778,8 @@
       "D": "Anastomosis arteriovenosus adalah saluran vaskular langsung yang menghubungkan arteriol dan venula tanpa melalui Anyaman Kapiler (capillary bed).",
       "E": "Pernyataan tidak lengkap."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-035",
@@ -767,7 +801,8 @@
       "D": "Arteri thyroidea inferior berasal dari truncus thyrocervicalis.",
       "E": "Arteri cervicalis ascendens merupakan cabang arteri thyroidea inferior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-036",
@@ -789,7 +824,8 @@
       "D": "Hipomagnesemia dapat terjadi tetapi hipokalemia adalah pemicu utama toksisitas fatal digoksin.",
       "E": "Hipokloremia merupakan akibat dari diuresis, bukan pemicu utama intoksikasi digoksin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-037",
@@ -811,7 +847,8 @@
       "D": "Ringan terbatas pada posisi duduk, membaca, atau berbaring.",
       "E": "Jawaban spesifik adalah sedang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-038",
@@ -833,7 +870,8 @@
       "D": "Sangat tinggi (>30%) biasanya memiliki TDS >180 mmHg atau komorbiditas berat ganda.",
       "E": "Tidak ada kategori sangat sangat tinggi dalam grafik standar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-039",
@@ -855,7 +893,8 @@
       "D": "Beta blocker merupakan lini kedua pada panduan JNC-8.",
       "E": "CCB lini pertama tetapi beta blocker bukan lini pertama standar JNC-8."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-040",
@@ -877,7 +916,8 @@
       "D": "PDA menunjukkan penonjolan segmen pulmonal dan apeks terangkat/tertanam bergantung hipertrofi biventrikular.",
       "E": "Cor pulmonale ditandai hipertrofi ventrikel kanan (apeks terangkat) akibat kelainan paru."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-041",
@@ -899,7 +939,8 @@
       "D": "Vena hemiazygos bermuara ke vena azygos sebelum menuju VCS.",
       "E": "Vena pulmonalis bermuara ke atrium kiri."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-042",
@@ -921,7 +962,8 @@
       "D": "Jejas endotel melandasi aterosklerosis.",
       "E": "Vaskulitis adalah peradangan dinding pembuluh darah, yang dapat menjadi penyebab sekunder tetapi mekanisme dasarnya adalah vasospasme."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-043",
@@ -943,7 +985,8 @@
       "D": "Menurut Mazhab Syafi'i dan sebagian pendapat Hanbali, sholat di atas kendaraan tanpa menghadap kiblat/berdiri dilakukan untuk menghormati waktu (Shalat li Hurmatil Waqti) dan Wajib Diulangi (Qadha/I'adah) setelah sampai.",
       "E": "Mazhab Maliki membebaskan qadha jika dilakukan dalam kondisi dharurat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-044",
@@ -965,7 +1008,8 @@
       "D": "NSTEMI ditandai dengan peningkatan troponin/biomarker kardiak yang positif.",
       "E": "Infark miokard lama ditandai adanya gelombang Q patologis pada EKG."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-045",
@@ -987,7 +1031,8 @@
       "D": "hs-CRP untuk penanda risiko Inflamasi aterosklerosis kronis.",
       "E": "Myoglobin meningkat awal (1-2 jam) tetapi sangat tidak spesifik karena ada di otot rangka."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-046",
@@ -1009,7 +1054,8 @@
       "D": "Truncus arteriosus adalah kegagalan septasi batang pembuluh darah utama.",
       "E": "Septum secundum membentuk pembatas atrium."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-047",
@@ -1031,7 +1077,8 @@
       "D": "Furosemide adalah diuretik loop yang memicu hipokalemia.",
       "E": "Asetazolamid memicu asidosis metabolik dan hipokalemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-048",
@@ -1053,7 +1100,8 @@
       "D": "Elevated BP jika persentil 90th - 95th.",
       "E": "Pre-hipertensi adalah kategori lama untuk elevated BP."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-049",
@@ -1075,7 +1123,8 @@
       "D": "Hasil tidak menunjukkan underweight maupun hipotensi.",
       "E": "Hasil menunjukkan hipertensi dan hiperkolesterolemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-050",
@@ -1097,7 +1146,8 @@
       "D": "Minyak zaitun kaya lemak tidak jenuh tunggal (MUFA).",
       "E": "Lemak ikan (omega-3) adalah lemak sehat yang dianjurkan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-051",
@@ -1119,7 +1169,8 @@
       "D": "Rhinovirus memicu ISPA ringan.",
       "E": "E. coli memicu infeksi saluran kemih/saluran cerna."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-052",
@@ -1141,7 +1192,8 @@
       "D": "Captopril (golongan ACE inhibitor) adalah obat hipertensi lini pertama yang efektif dan aman digunakan pada pasien alergi golongan diuretik tertentu.",
       "E": "Propranolol bukan lini pertama untuk hipertensi tanpa indikasi kardiak khusus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-053",
@@ -1163,7 +1215,8 @@
       "D": "Stenosis mitral merupakan kelainan katup struktural tersendiri.",
       "E": "Perikarditis adalah infeksi/inflamasi selaput pembungkus jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-054",
@@ -1185,7 +1238,8 @@
       "D": "Atrium dextrum berada di dalam rongga perikardium.",
       "E": "Vena cava inferior menembus diafragma dan masuk perikardium tetapi bukan dasar perlekatan utamanya."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-055",
@@ -1207,7 +1261,8 @@
       "D": "Perikarditis menyerang lapisan luar pembungkus jantung.",
       "E": "Miokarditis menyerang otot miokardium."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-056",
@@ -1229,7 +1284,8 @@
       "D": "Mitral stenosis memerlukan kehati-hatian preload tetapi bukan kontraindikasi mutlak hipotensif dibanding PDE-5 inhibitor.",
       "E": "Arthritis tidak mempengaruhi metabolisme nitrat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-057",
@@ -1251,7 +1307,8 @@
       "D": "Atrofi adalah pengecilan ukuran sel akibat berkurangnya beban kerja.",
       "E": "Respons kardiromiosit terhadap peningkatan afterload akibat hipertensi kronis adalah peningkatan ukuran sel (Hipertrofi miosit)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "cvs-2023-058",
@@ -1273,7 +1330,8 @@
       "D": "Fibrilasi atrium ditandai irama ireguler ireguler tanpa gelombang P jelas.",
       "E": "Flutter atrium ditandai gambaran gelombang gigi gergaji (saw-tooth wave)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-059",
@@ -1295,7 +1353,8 @@
       "D": "Valva bicuspidalis (katup mitral) mencegah aliran darah balik ke atrium sinistrum saat sistol ventrikel kiri.",
       "E": "Valvula sinus coronarius (katup Thebesius) menjaga muara sinus koronarius pada atrium kanan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-060",
@@ -1317,7 +1376,8 @@
       "D": "Lipoprotein-X ditemukan pada penyakit kolestasis hati.",
       "E": "Lipoprotein A adalah faktor risiko genetik independen."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-061",
@@ -1339,7 +1399,8 @@
       "D": "Dominansi simpatis (melalui reseptor Beta-1 adrenergik) menyebabkan Peningkatan Kontraktilitas (inotropik positif) pada otot atrium dan ventrikel serta peningkatan frekuensi jantung.",
       "E": "Simpatis mempercepat konduksi AV node, bukan menundanya."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-062",
@@ -1361,7 +1422,8 @@
       "D": "NT pro BNP untuk gagal jantung.",
       "E": "CKMB untuk nekrosis miokard."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-063",
@@ -1383,7 +1445,8 @@
       "D": "Al-Qur'an mendeskripsikan Qalbu sebagai pusat kesadaran, pemikiran spiritual, serta pemahaman hakikat (QS. Al-Hajj: 46).",
       "E": "Memompa darah adalah fungsi mekanis organ jantung secara anatomis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-064",
@@ -1405,7 +1468,8 @@
       "D": "Ductus arteriosus menghubungkan A. pulmonalis ke Aorta.",
       "E": "Fossa ovalis sisa penutupan foramen ovale."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-065",
@@ -1427,7 +1491,8 @@
       "D": "Kolesterol bagian dari pemeriksaan penunjang.",
       "E": "Stroke merupakan ranah neurologi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-066",
@@ -1449,7 +1514,8 @@
       "D": "ASTO mendeteksi antibodi pasca-infeksi Streptococcus hemolitikus.",
       "E": "Kultur darah (blood culture) merupakan pemeriksaan baku untuk mengisolasi kuman penyebab (etiologi kausal) endokarditis infektif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-067",
@@ -1471,7 +1537,8 @@
       "D": "Meningkatkan oksidasi asam lemak adalah mekanisme kerja golongan fibrat.",
       "E": "Penghambatan lipolisis terinduksi cAMP adalah mekanisme kerja niacin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-068",
@@ -1493,7 +1560,8 @@
       "D": "Koartasio aorta menunjukkan perbedaan tekanan darah lengan dan tungkai serta bising kontinyu interscapular.",
       "E": "PDA khas dengan bising kontinyu (machinery murmur) di subklavia kiri."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-069",
@@ -1515,7 +1583,8 @@
       "D": "Enzim kardiak kurang spesifik menilai aneurisma koroner.",
       "E": "Ekokardiografi adalah gold standard penunjang lini pertama untuk mendeteksi adanya keterlibatan vaskular koroner atau aneurisma koroner pada Penyakit Kawasaki."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-070",
@@ -1537,7 +1606,8 @@
       "D": "Kriteria minor yang ada berjumlah 2, bukan 3.",
       "E": "Kriteria mayor ada 2."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-071",
@@ -1559,7 +1629,8 @@
       "D": "AHA Grade D untuk gagal jantung refrakter end-stage.",
       "E": "NYHA FC IV sesak timbul saat istirahat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-072",
@@ -1581,7 +1652,8 @@
       "D": "Syok hipovolemik bukan akibat vaskulitis Kawasaki.",
       "E": "Endokarditis bukan komplikasi utama vaskulitis medium vessel ini."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-073",
@@ -1603,7 +1675,8 @@
       "D": "Gemfibrozil dikontraindikasikan pada gangguan ginjal berat karena risiko rhabdomyolysis tinggi.",
       "E": "Colesevelam dapat meningkatkan kadar trigliserida."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-074",
@@ -1625,7 +1698,8 @@
       "D": "Pengikat asam empedu adalah Bile Acid Sequestrants.",
       "E": "Penghambat absorbsi kolesterol adalah Ezetimibe."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-075",
@@ -1647,7 +1721,8 @@
       "D": "MAP = Diastolik + 1/3 (Sistolik - Diastolik) = 100 + 1/3 (180 - 100) = 100 + 26,67 = 126,67 mmHg (pilihan paling mendekati adalah 130 mmHg).",
       "E": "100 mmHg sama dengan tekanan diastolik saja."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-076",
@@ -1669,7 +1744,8 @@
       "D": "Mitral stenosis memerlukan monitor preload.",
       "E": "Arthritis tidak mempengaruhi penggunaan nitrat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-077",
@@ -1691,7 +1767,8 @@
       "D": "ASTO mengonfirmasi riwayat infeksi streptokokus grup A.",
       "E": "Kultur darah (blood culture) mengidentifikasi agen kuman penyebab bakteremia pada endokarditis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-078",
@@ -1713,7 +1790,8 @@
       "D": "Efusi perikardium berbentuk water bottle.",
       "E": "Cor pulmonale menunjukkan apeks terangkat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-079",
@@ -1735,7 +1813,8 @@
       "D": "Sulcus interventricularis anterior dilewati LAD.",
       "E": "Sulcus interventricularis posterior dilewati PDA."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-080",
@@ -1757,7 +1836,8 @@
       "D": "Ketamine meningkatkan SVR tetapi morfin adalah pilihan awal utama menekan pusat pernapasan hyperpnea.",
       "E": "Pemberian Morfin Sulfat bermanfaat menekan dorongan hiperventilasi/hyperpnea dan merelaksasikan spasme infundibulum ventrikel kanan pada serangan sianotik (Tet spell)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-081",
@@ -1779,7 +1859,8 @@
       "D": "HHD menunjukkan LVH.",
       "E": "TOF menunjukkan boot-shaped heart."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-082",
@@ -1801,7 +1882,8 @@
       "D": "Menghentikan cholestyramine merugikan pengobatan lipid.",
       "E": "Masih memiliki efek pengikatan interaksi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-083",
@@ -1823,7 +1905,8 @@
       "D": "Golongan 3 (Amiodarone) berefek samping foto-toksisitas/mata silau dan deposisi kornea.",
       "E": "Golongan 4 kontraindikasi jika ada disfungsi sistolik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-084",
@@ -1845,7 +1928,8 @@
       "D": "65 bpm salah perhitungan.",
       "E": "60 bpm untuk R-R 5 kotak besar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-085",
@@ -1867,7 +1951,8 @@
       "D": "Insufisiensi Vena Dalam (Deep Vein Insufficiency / CVI) ditandai oleh hipertensi vena kronis yang menyebabkan varises, edema, dan ulkus venosum di area malleolus medialis.",
       "E": "Inkompetensi vena perforator merupakan bagian mekanisme, tetapi diagnosis klinis utamanya adalah Deep Vein Insufficiency."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-086",
@@ -1889,7 +1974,8 @@
       "D": "Limfangitis disertai garis merah infeksi akut.",
       "E": "Tromboflebitis ditandai tanda peradangan lokal pembuluh vena."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-087",
@@ -1911,7 +1997,8 @@
       "D": "Qalbu sebagai pusat kesadaran dijelaskan dalam Al-Qur'an.",
       "E": "Qalbu untuk memahami/berpikir dijelaskan pada Surah Al-Hajj ayat 46."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "cvs-2023-088",
@@ -1933,7 +2020,8 @@
       "D": "Stenosis aorta menyebabkan hambatan sistemik, bukan sianosis pulmonal.",
       "E": "Stenosis mitral menyebabkan kongesti paru, bukan oligemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "cvs-2023-089",
@@ -1955,7 +2043,8 @@
       "D": "Salah hitung jumlah kriteria.",
       "E": "Kriteria mayor ada 2."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "cvs-2023-090",
@@ -1977,7 +2066,8 @@
       "D": "Cholestyramine tetap dibutuhkan.",
       "E": "Masih memiliki efek interaksi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-091",
@@ -1999,7 +2089,8 @@
       "D": "Diuretik hemat kalium bukan lini utama hipertensi esensial primer.",
       "E": "Alpha blocker merupakan lini tambahan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "cvs-2023-092",
@@ -2021,7 +2112,8 @@
       "D": "Hipomagnesemia dapat memperberat tetapi pemicu utama toksisitas digoksin adalah hipokalemia.",
       "E": "Hipokloremia bukan pemicu langsung intoksikasi digoksin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "cvs-2023-093",
@@ -2043,6 +2135,7 @@
       "D": "Menurut JNC-8, 4 kelas obat lini pertama hipertensi adalah Diuretik (Tiazid), CCB, ACE-I, dan ARB.",
       "E": "Beta blocker tidak dimasukkan sebagai lini pertama standar pada JNC-8."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   }
 ]

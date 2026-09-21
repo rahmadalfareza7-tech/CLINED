@@ -1,0 +1,153 @@
+/* polish.css — dimuat setelah style.css. Berisi perbaikan yang sengaja dipisah agar mudah dilacak. */
+
+/* ---------- 1. Tombol buka/tutup Menu ---------- */
+/* Sebelumnya: latar transparan + caret putih (tak terlihat di mode terang), sisa bayangan hijau,
+   dan rotasi 180° yang menumpuk dengan pergantian simbol ⌃/⌄ dari JS. */
+#menuSection .menu-section-toggle .menu-section-arrow,
+.menu-section-toggle .menu-section-arrow{
+  display:inline-grid!important;place-items:center!important;
+  flex:0 0 38px!important;width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+  margin:0 0 0 auto!important;padding:0!important;border:0!important;border-radius:13px!important;
+  background:#58cc02!important;color:#fff!important;
+  font-size:22px!important;font-weight:950!important;line-height:1!important;text-align:center!important;
+  box-shadow:inset 0 -4px 0 #46a302,0 2px 0 rgba(0,0,0,.10)!important;
+  transform:none!important;overflow:hidden!important;
+}
+.menu-collapsible.is-collapsed .menu-section-toggle .menu-section-arrow,
+#menuSection.menu-collapsible.is-collapsed .menu-section-arrow{
+  transform:none!important;
+  box-shadow:inset 0 -4px 0 #46a302,0 2px 0 rgba(0,0,0,.10)!important;
+}
+.menu-section-toggle:active .menu-section-arrow{transform:translateY(2px)!important;box-shadow:inset 0 -2px 0 #46a302!important}
+.menu-section-toggle:focus-visible{outline:3px solid #1cb0f6;outline-offset:2px}
+
+/* ---------- 2. Mode gelap: sisa elemen yang masih terang ---------- */
+:root.dark{
+  --p-card:#172329;--p-surface:#1e2e35;--p-line:#2d3d44;--p-line-d:#0f181c;
+  --p-text:#f4fafc;--p-muted:#a9bbc2;--p-blue:#57c7f5;--p-purple:#c9a7ff;
+}
+/* Profil, admin, keamanan */
+:root.dark .account-auth-card,
+:root.dark .admin-content-workspace,
+:root.dark .account-modal-card{background:var(--p-card)!important;color:var(--p-text)!important;border-color:var(--p-line)!important}
+:root.dark .account-auth-card h3,:root.dark .account-auth-card b,:root.dark .account-auth-card label,
+:root.dark .admin-content-workspace h3,:root.dark .admin-content-workspace b,:root.dark .admin-content-workspace label{color:var(--p-text)!important}
+:root.dark .account-auth-card p,:root.dark .account-auth-card small,:root.dark .account-auth-card span:not(.account-security-badge):not(.account-auth-kicker),
+:root.dark .admin-content-workspace .muted{color:var(--p-muted)}
+:root.dark .account-auth-kicker{color:var(--p-blue)!important}
+:root.dark .account-security-badge.secure{background:#1c3a26!important;color:#7be07b!important;border-color:#2a5a39!important}
+:root.dark .account-security-btn,
+:root.dark .admin-panel-tab,
+:root.dark .account-action:not(.account-save){background:var(--p-surface)!important;color:var(--p-text)!important;border-color:var(--p-line)!important;box-shadow:0 3px 0 var(--p-line-d)!important}
+:root.dark .admin-panel-tab.selected{background:#123549!important;color:var(--p-blue)!important;border-color:#1c6d94!important}
+:root.dark .account-security-btn.danger,
+:root.dark .account-action.material-delete-action,
+:root.dark .admin-delete-btn.danger{background:#3a1d20!important;color:#ff9a9a!important;border-color:#6b2a30!important;box-shadow:0 3px 0 #1c0d0f!important}
+:root.dark .admin-material-current{background:var(--p-surface)!important;color:var(--p-muted)!important}
+:root.dark .admin-file-selected{color:var(--p-muted)!important}
+:root.dark .admin-file-btn{background:var(--p-surface)!important;color:var(--p-text)!important;border-color:var(--p-line)!important}
+:root.dark .account-password-toggle{background:#123549!important;color:var(--p-blue)!important}
+/* Tombol tutup/kembali berlatar putih */
+:root.dark .ui-arrow.ui-arrow-back,
+:root.dark .account-modal-close.ui-arrow{background:var(--p-surface)!important;color:#7be07b!important;border-color:var(--p-line)!important;box-shadow:0 3px 0 var(--p-line-d)!important}
+/* Halaman UAB */
+:root.dark .uab-duo-mascot,
+:root.dark .uab-duo-tip{background:var(--p-card)!important;color:var(--p-text)!important;border-color:var(--p-line)!important}
+:root.dark .uab-duo-tip small,:root.dark .uab-duo-tip span{color:var(--p-muted)!important}
+:root.dark .semester-divider span{background:var(--p-card)!important;color:var(--p-muted)!important;border-color:var(--p-line)!important;box-shadow:0 3px 0 var(--p-line-d)!important}
+:root.dark .uab-node b{color:var(--p-text)!important}
+:root.dark .uab-node.locked-node b{color:var(--p-muted)!important}
+:root.dark .uab-node-icon{background:var(--p-surface)!important;border-color:var(--p-line)!important;box-shadow:0 5px 0 var(--p-line-d)!important}
+:root.dark .uab-node.active-node .uab-node-icon{background:#1c3a26!important;border-color:#58cc02!important;box-shadow:0 5px 0 #46a302!important}
+/* Kontras teks rendah */
+:root.dark .study-kicker,:root.dark .flash-label{color:var(--p-purple)!important}
+:root.dark .timer-mode-choice{background:var(--p-surface)!important;color:var(--p-text)!important;border-color:var(--p-line)!important}
+:root.dark .timer-mode-choice.selected,:root.dark .timer-mode-choice.active{background:#123549!important;color:var(--p-blue)!important}
+:root.dark #quiz .info,:root.dark .quiz-top .info{color:#6de0d6!important}
+
+/* ---------- 3. Admin Content Manager ---------- */
+#adminContentWorkspace{--acm-gap:14px}
+#adminContentWorkspace .account-auth-top{margin-bottom:14px}
+#adminContentWorkspace .account-auth-top p{margin:4px 0 0;font-size:13px;line-height:1.45}
+
+/* Tab: membungkus ke baris berikutnya agar semua tab selalu terlihat */
+#adminContentWorkspace .admin-content-tabs{
+  display:flex!important;flex-wrap:wrap;gap:8px!important;padding:2px 0 6px;margin:0 0 14px;
+}
+#adminContentWorkspace .admin-panel-tab{
+  flex:1 1 auto!important;width:auto!important;white-space:nowrap;padding:10px 14px!important;min-height:40px;text-align:center;
+  font-size:13px!important;font-weight:900;border-radius:14px!important;
+}
+
+/* Panel */
+#adminContentWorkspace .acm-panel{display:grid;gap:var(--acm-gap)}
+#adminContentWorkspace .acm-panel[hidden]{display:none}
+#adminContentWorkspace .admin-content-intro{display:grid;gap:3px;margin:0}
+#adminContentWorkspace .admin-content-intro b{font-size:16px;line-height:1.25}
+#adminContentWorkspace .admin-content-intro span{font-size:12.5px;line-height:1.5;font-weight:700;opacity:.75}
+
+/* Form dan bidang */
+#adminContentWorkspace .acm-form{display:grid;gap:var(--acm-gap);margin:0}
+#adminContentWorkspace .acm-grid{display:grid;grid-template-columns:1fr;gap:var(--acm-gap)}
+#adminContentWorkspace .acm-field{display:grid;gap:6px;min-width:0}
+#adminContentWorkspace .acm-field>label{margin:0!important;font-size:12.5px!important;font-weight:900!important;line-height:1.2}
+#adminContentWorkspace .acm-field>label small{font-weight:700;opacity:.7}
+#adminContentWorkspace .acm-field select,
+#adminContentWorkspace .acm-field input:not([type=file]),
+#adminContentWorkspace .acm-field textarea{
+  width:100%;margin:0!important;padding:11px 13px!important;min-height:44px;border-radius:14px!important;
+  font-size:14px!important;font-weight:700;box-sizing:border-box;
+}
+#adminContentWorkspace .acm-field textarea{min-height:92px;resize:vertical;line-height:1.5}
+#adminContentWorkspace .admin-file-picker{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0}
+#adminContentWorkspace .admin-file-btn{padding:10px 16px!important;border-radius:13px!important;font-size:13px!important;min-height:42px;display:inline-grid;place-items:center;cursor:pointer}
+#adminContentWorkspace .admin-file-selected{font-size:12px;font-weight:700;opacity:.8;min-width:0;overflow-wrap:anywhere}
+#adminContentWorkspace .acm-actions{display:flex;gap:10px;flex-wrap:wrap}
+#adminContentWorkspace .acm-actions .account-action{flex:1 1 150px;margin:0!important}
+#adminContentWorkspace .acm-submit{width:100%;margin:2px 0 0!important}
+#adminContentWorkspace .acm-note{margin:0!important;font-size:12.5px;font-weight:800;line-height:1.5;min-height:0}
+#adminContentWorkspace .acm-note:empty{display:none}
+#adminContentWorkspace .acm-note.is-error{color:#d93a3a}
+:root.dark #adminContentWorkspace .acm-note.is-error{color:#ff8a8a}
+#adminContentWorkspace .admin-material-current{padding:10px 12px;border-radius:12px;font-size:12.5px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+
+/* Daftar bank UAB yang bisa dihapus */
+#adminContentWorkspace .admin-uab-packages{display:grid;gap:10px}
+#adminContentWorkspace .admin-uab-result-count{font-size:12px;font-weight:800;opacity:.7}
+#adminContentWorkspace .admin-uab-empty{display:grid;gap:8px;padding:14px;border-radius:16px;border:2px dashed rgba(127,127,127,.35);text-align:left}
+#adminContentWorkspace .admin-uab-empty b{font-size:14px}
+#adminContentWorkspace .admin-uab-empty span{font-size:12.5px;line-height:1.5;opacity:.8}
+#adminContentWorkspace .admin-uab-empty .account-action{margin:4px 0 0!important;justify-self:start}
+#adminContentWorkspace .admin-uab-package{border:2px solid rgba(127,127,127,.28);border-radius:16px;padding:0;overflow:hidden}
+#adminContentWorkspace .admin-uab-package>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;cursor:pointer;list-style:none}
+#adminContentWorkspace .admin-uab-package>summary::-webkit-details-marker{display:none}
+#adminContentWorkspace .admin-uab-package>summary>span{display:grid;gap:2px;min-width:0}
+#adminContentWorkspace .admin-uab-package>summary b{font-size:14px;overflow-wrap:anywhere}
+#adminContentWorkspace .admin-uab-package>summary small{font-size:12px;font-weight:700;opacity:.7}
+#adminContentWorkspace .admin-uab-question-list{display:grid;gap:8px;padding:0 12px 12px}
+#adminContentWorkspace .admin-uab-question-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(127,127,127,.09)}
+#adminContentWorkspace .admin-uab-question-row>div{min-width:0}
+#adminContentWorkspace .admin-uab-question-row b{display:block;font-size:12.5px;line-height:1.45;font-weight:800;overflow-wrap:anywhere}
+#adminContentWorkspace .admin-uab-question-row small{display:block;margin-top:3px;font-size:11px;opacity:.6}
+#adminContentWorkspace .admin-delete-btn{flex:0 0 auto;padding:8px 12px!important;font-size:12px!important;border-radius:11px!important}
+
+@media (min-width:640px){
+  #adminContentWorkspace .acm-grid{grid-template-columns:1fr 1fr}
+}
+
+/* Halaman UAB (mode gelap): selektor memakai #uabPage agar menang dari aturan lama yang ber-ID */
+:root.dark #uabPage .semester-divider span,
+:root.dark #uabPage .uab-duo-stats span{background:var(--p-card)!important;color:var(--p-muted)!important;border-color:var(--p-line)!important;box-shadow:0 3px 0 var(--p-line-d)!important}
+:root.dark #uabPage .uab-duo-stats span b,:root.dark #uabPage .uab-duo-stats span{color:var(--p-text)!important}
+:root.dark #uabPage .uab-node-icon{background:var(--p-surface)!important;border-color:var(--p-line)!important;box-shadow:0 5px 0 var(--p-line-d)!important}
+:root.dark #uabPage .uab-node.active-node .uab-node-icon{background:#1c3a26!important;border-color:#58cc02!important;box-shadow:0 5px 0 #46a302!important}
+:root.dark #uabPage .uab-node b{color:var(--p-text)!important}
+:root.dark #uabPage .uab-node.locked-node b{color:var(--p-muted)!important}
+:root.dark #uabPage .uab-duo-mascot,:root.dark #uabPage .uab-duo-tip{background:var(--p-card)!important;color:var(--p-text)!important;border-color:var(--p-line)!important}
+/* Kartu unit di beranda: putih di atas biru muda kontrasnya rendah di kedua mode */
+.duo-unit-card{background-color:#1899d6!important;color:#fff!important}
+.duo-unit-card .duo-unit-label,.duo-unit-card b,.duo-unit-card small,.duo-unit-card span:not(.ui-arrow){color:#fff!important}
+:root.dark #uabPage #uabBlockList .uab-node .uab-node-icon,
+:root.dark #uabBlockList .uab-node .uab-node-icon{background:var(--p-surface)!important;border-color:var(--p-line)!important;box-shadow:0 5px 0 var(--p-line-d)!important}
+:root.dark #uabPage #uabBlockList .uab-node.active-node .uab-node-icon,
+:root.dark #uabBlockList .uab-node.active-node .uab-node-icon{background:#1c3a26!important;border-color:#58cc02!important;box-shadow:0 5px 0 #46a302!important}

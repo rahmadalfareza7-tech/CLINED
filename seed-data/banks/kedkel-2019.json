@@ -19,7 +19,8 @@
       "D": "Senam adalah salah satu cabang olahraga atau bentuk latihan fisik tertentu.",
       "E": "Kebugaran jasmani adalah kemampuan tubuh untuk melakukan penyesuaian terhadap beban fisik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-002",
@@ -41,7 +42,8 @@
       "D": "Mengetahui akar masalah adalah bagian dari diagnosis, namun belum tentu menyelesaikan masalah tanpa tindakan.",
       "E": "Ketergantungan pada konselor merupakan efek yang harus dihindari dalam hubungan terapeutik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-004",
@@ -63,7 +65,8 @@
       "D": "Tablet implant dimasukkan secara subkutan.",
       "E": "Bacilla adalah bentuk sediaan batang yang dimasukkan ke dalam saluran seperti uretra."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-006",
@@ -85,7 +88,8 @@
       "D": "Pertemuan tingkat desa harus mendahului SMD untuk koordinasi lintas sektor.",
       "E": "MMD tidak dapat dilakukan sebelum SMD karena MMD mendiskusikan hasil SMD."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-007",
@@ -107,7 +111,8 @@
       "D": "Penggunaan opioid untuk indikasi medis tidak bertentangan dengan norma hukum maupun etika kedokteran.",
       "E": "Meskipun merupakan obat keras, penggunaannya legal dan rasional di bawah pengawasan dokter."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-008",
@@ -129,7 +134,8 @@
       "D": "Status nutrisi yang buruk adalah kondisi biologis/fisik individu pasien sendiri (faktor internal).",
       "E": "Jumlah saudara dan perhatian ibu merupakan faktor risiko psikososial/keluarga (eksternal)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-009",
@@ -151,7 +157,8 @@
       "D": "Efek cepat diperoleh dari sediaan sublingual atau IV.",
       "E": "Sustained release mempertahankan kadar obat dalam darah lebih lama sehingga durasi kerja lebih panjang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-010",
@@ -173,7 +180,8 @@
       "D": "Early diagnosis merupakan salah satu tingkat pencegahan, bukan keseluruhan pendekatan kedokteran keluarga.",
       "E": "Penatalaksanaan dilakukan berdasarkan temuan pada kelima aspek diagnosis holistik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-022",
@@ -195,7 +203,8 @@
       "D": "Abstinensia sementara membantu, tetapi pasangan berisiko tetap harus diobati.",
       "E": "Kepatuhan pengobatan pasien sendiri penting, namun reinfeksi tetap terjadi jika pasangan tidak diobati."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-033",
@@ -217,7 +226,8 @@
       "D": "Garis putus-putus mewakili garis tengah dari estimasi efek gabungan.",
       "E": "Kotak hitam mewakili besar sampel dan estimasi titik (point estimate) dari tiap studi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-026",
@@ -239,7 +249,8 @@
       "D": "Dosis brosur adalah panduan umum, tetap memerlukan penyesuaian klinis individu.",
       "E": "Pemilihan obat didasarkan pada efikasi, keamanan, mutu, dan rasio biaya-manfaat terbaik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-028",
@@ -261,7 +272,8 @@
       "D": "Obat yang terbukti bermanfaat, aman, dan efisien secara operasional merupakan kriteria utama DOEN.",
       "E": "Persyaratan rantai dingin yang ekstrem (-20°C) dapat menyulitkan distribusi dalam pelayanan kesehatan dasar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-029",
@@ -283,7 +295,8 @@
       "D": "Uji klinis fase 4 (post-marketing surveillance) mengamati efek samping jangka panjang setelah obat dipasarkan.",
       "E": "Uji klinis fase 1 menguji keamanan dan toksisitas obat pada relawan sehat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-032",
@@ -305,7 +318,8 @@
       "D": "Pasal 33 ayat (1) mengatur tentang perekonomian nasional.",
       "E": "Pasal 34 ayat (1) mengatur tentang fakir miskin dan anak terlantar dipelihara oleh negara."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-034",
@@ -327,7 +341,8 @@
       "D": "Biaya dapat diestimasikan berdasarkan rencana asuhan keperawatan rumah.",
       "E": "Home care justru menghemat beban finansial pasien jangka panjang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-037",
@@ -349,7 +364,8 @@
       "D": "Penilai aset (appraiser) menilai kelaikan properti/aset riil.",
       "E": "Underwriter medis memerlukan kompetensi dokter untuk melakukan analisis risiko klinis calon nasabah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-041",
@@ -371,7 +387,8 @@
       "D": "Pelaksanaan UKK terintegrasi antara upaya kesehatan masyarakat dan kesehatan kerja.",
       "E": "Peningkatan derajat kesehatan pekerja merupakan sasaran utama Upaya Kesehatan Kerja."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-042",
@@ -393,7 +410,8 @@
       "D": "Pencatatan standar dilakukan selama 3 hari, bukan 1 minggu penuh.",
       "E": "Pencatatan dibatasi pada periode sampel hari tertentu untuk menjaga akurasi subjek."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-043",
@@ -415,7 +433,8 @@
       "D": "Target olahraga yang disarankan adalah 150 menit/minggu (30 menit, 5x/minggu).",
       "E": "Penurunan berat badan 25 kg dalam 1 bulan ekstrem dan berbahaya bagi kesehatan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-048",
@@ -437,7 +456,8 @@
       "D": "Promotif mencakup edukasi gizi dan gaya hidup sehat di tempat kerja.",
       "E": "Rehabilitatif sederhana meliputi pemulihan pasca cedera ringan kerja."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-050",
@@ -459,7 +479,8 @@
       "D": "Pengukuran objektif menggunakan instrumen mekanis/elektronik kuantitatif.",
       "E": "Pengukuran langsung biasanya merujuk pada kalorimetri langsung di laboratorium."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-053",
@@ -481,7 +502,8 @@
       "D": "Benar dari sudut pandang kepatutan sosial.",
       "E": "Benar dari sudut pandang undang-undang kekarantinaan kesehatan dan hukum pidana."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-055",
@@ -503,7 +525,8 @@
       "D": "Melaksanakan pencegahan penularan penyakit di tempat kerja merupakan tugas pokok pelayanan kesehatan kerja.",
       "E": "Analisis risiko adalah proses evaluasi bahaya, bukan pelaksanaan sosialisasi dan intervensi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-056",
@@ -525,7 +548,8 @@
       "D": "Maksimal 3 hari terlalu singkat untuk durasi standar terapi antibiotik.",
       "E": "Stabilitas antibiotik rekonstitusi terjaga efektif selama 7-14 hari."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-058",
@@ -547,7 +571,8 @@
       "D": "Perawatan paliatif bertujuan menghilangkan/mengurangi penderitaan, bukan memperpanjang.",
       "E": "Meningkatkan kualitas hidup pasien dan dukungan bagi keluarga adalah definisi baku perawatan paliatif menurut WHO."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-063",
@@ -569,7 +594,8 @@
       "D": "Dokter Spesialis Patologi Klinik diwajibkan untuk Laboratorium Klinik Utama.",
       "E": "Pelatihan laboratorium menambah kompetensi, tetapi gelar dokter umum sudah memenuhi syarat legal minimal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-064",
@@ -591,7 +617,8 @@
       "D": "Hasil perhitungan 1000 mg dibagi 5 ml menghasilkan konsentrasi tepat 200 mg/ml.",
       "E": "Serbuk steril injeksi umumnya dikemas dalam vial, bukan ampul."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-065",
@@ -613,7 +640,8 @@
       "D": "Pemeriksaan GDP dan GD 2J PP diperlukan untuk mengetahui tingkat kendali glikemik pasien.",
       "E": "Target GDP yang baik menurut PERKENI adalah <100 mg/dL (atau 80-130 mg/dL tergantung profil pasien)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2019-068",
@@ -635,7 +663,8 @@
       "D": "Sendok teh cocok untuk anak usia lebih tua yang dapat minum dari sendok.",
       "E": "Amoxicillin bukan merupakan bentuk sediaan emulsi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-069",
@@ -657,7 +686,8 @@
       "D": "Home visit adalah kunjungan singkat dokter ke rumah untuk investigasi/evaluasi, bukan perawatan terintegrasi.",
       "E": "Diagnosis holistik adalah pendekatan diagnostik, bukan bentuk layanan fisik perawatan medis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-070",
@@ -679,7 +709,8 @@
       "D": "Tidak semua asma adalah PAK, hanya asma akibat kerja (Occupational Asthma) yang terbukti kausalitasnya.",
       "E": "Status hak perlindungan didasarkan pada hubungan kausalitas lingkungan kerja, bukan strata dokter penganalisis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-071",
@@ -701,7 +732,8 @@
       "D": "Pasien bersama konselor mengevaluasi konsekuensi positif dan negatif dari tiap opsi pemecahan masalah.",
       "E": "Pilihan solusi harus memperhitungkan risiko yang mungkin timbul."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2019-072",
@@ -723,7 +755,8 @@
       "D": "Gold standard adalah metode pengujian terbaik yang diakui sebagai acuan kebenaran mutlak.",
       "E": "Validitas adalah keshahihan instrumen pengukuran secara keseluruhan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2019-073",
@@ -745,7 +778,8 @@
       "D": "Kultur sputum adalah uji konfirmasi diagnostik.",
       "E": "Biopsi jaringan merupakan gold standard diagnostik definitif, bukan skrining."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2019-078",
@@ -767,7 +801,8 @@
       "D": "Rute sublingual digunakan saat serangan akut, bukan untuk mengurangi frekuensi dosis harian.",
       "E": "Pasien gangguan menelan menggunakan sediaan sirup/injeksi, bukan pertimbangan utama ISDN sublingual."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-079",
@@ -789,7 +824,8 @@
       "D": "Fungsi utama tim ahli adalah menilai secara ilmiah kelayakan medis/farmakologis obat.",
       "E": "Tidak semua usulan disetujui tanpa analisis kriteria ketat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-080",
@@ -811,7 +847,8 @@
       "D": "Konsultasi kebugaran pada individu sehat merupakan wujud pelayanan promotif dan preventif.",
       "E": "Kegawatdaruratan hanya ditangani saat kondisi darurat medis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-081",
@@ -833,7 +870,8 @@
       "D": "Pola makan merupakan perilaku, namun E menggali aspek pemahaman dasar pemicu perilaku tersebut.",
       "E": "Persepsi pasien mengenai penyakit adalah faktor internal psikologis/kognitif yang menentukan kepatuhan berobat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-082",
@@ -855,7 +893,8 @@
       "D": "Tetes hidung tidak mensyaratkan sterilitas mutlak seperti sediaan mata.",
       "E": "Obat kumur (collutorium) digunakan pada rongga mulut yang non-steril."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-084",
@@ -877,7 +916,8 @@
       "D": "Obat harus sudah memiliki izin edar resmi dari BPOM.",
       "E": "Monopoli pabrik dihindari untuk menjamin kelangsungan pasokan nasional."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2019-086",
@@ -899,7 +939,8 @@
       "D": "Penggunaan obat tanpa resep pada ibu hamil berbahaya dan bukan tujuan DOEN.",
       "E": "DOEN memastikan hanya obat dengan profil keamanan baik yang menjadi prioritas utama."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-092",
@@ -921,7 +962,8 @@
       "D": "Higienitas mutlak dijaga untuk mencegah kontaminasi mikroba.",
       "E": "Bentuk sediaan tidak mengubah profil efek samping intrinsically inherent dari obat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-094",
@@ -943,7 +985,8 @@
       "D": "Genogram adalah alat standar kedokteran keluarga untuk pemetaan riwayat kesehatan keluarga 3 generasi.",
       "E": "EKG adalah pemeriksaan aktivitas listrik jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2019-100",
@@ -965,6 +1008,7 @@
       "D": "Syarat skrining ideal adalah mudah diterapkan, aman, murah, dan sensitif.",
       "E": "Uji skrining harus sebisa mungkin non-invasif untuk meminimalkan risiko."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   }
 ]

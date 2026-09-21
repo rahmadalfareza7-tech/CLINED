@@ -19,7 +19,8 @@
       "D": "Plantarfleksi pedis digerakkan oleh kelompok otot posterior cruris.",
       "E": "Ekstensi cruris adalah fungsi dari M. quadriceps femoris."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-002",
@@ -41,7 +42,8 @@
       "D": "A. Thoracica interna berjalan di dinding dada anterior memvaskularisasi mamae dan dinding dada.",
       "E": "A. Thoracalis lateralis memvaskularisasi M. serratus anterior dan M. pectoralis major."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-003",
@@ -63,7 +65,8 @@
       "D": "M. Procerus mengekspresikan rasa tidak suka atau konsentrasi.",
       "E": "M. Risorius menghasilkan ekspresi tersenyum simetris."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-004",
@@ -85,7 +88,8 @@
       "D": "Aponeurosis berbentuk lembaran datar penyambung otot.",
       "E": "Kolagen tipe 1 memberikan kekuatan regangan yang tinggi pada tendon."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-005",
@@ -107,7 +111,8 @@
       "D": "Kerapuhan terjadi karena deposisi kalsium tidak beraturan.",
       "E": "Penurunan fungsi resorpsi osteoklas adalah patofisiologi dasar osteopetrosis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-006",
@@ -129,7 +134,8 @@
       "D": "Crista occipitalis externa merupakan penanda anatomi cranium posterior.",
       "E": "Processus condylaris mandibulae bersama discus articularis membentuk sendi TMJ."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-007",
@@ -151,7 +157,8 @@
       "D": "Paralisis timbul akibat gangguan jalur transmisi persarafannya.",
       "E": "Korteks serebri berfungsi memulai gerakan volunter."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-008",
@@ -173,7 +180,8 @@
       "D": "N. Radialis menginervasi kompartemen ekstensor antebrachium dan brachium.",
       "E": "N. Ulnaris berjalan melintasi sulcus nervi ulnaris di siku; kelumpuhan otot intrinsik manus menyebabkan clawing digiti 4-5."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-009",
@@ -195,7 +203,8 @@
       "D": "Osteosarkoma ditandai produksi osteoid malignant oleh sel mesenkim multipoten/osteoblas.",
       "E": "Kondrosarkoma menghasilkan matriks kartilago ganas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "kedkom-2020-010",
@@ -217,7 +226,8 @@
       "D": "M. Fibularis longus berjalan menyilang telapak kaki menuju metatarsal 1.",
       "E": "Ligamentum plantare longum membentang dari calcaneus ke os cuboid & basis metatarsal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-011",
@@ -239,7 +249,8 @@
       "D": "Parasetamol merupakan pilihan lini pertama analgetik ringan tanpa komponen inflamasi besar.",
       "E": "Asam mefenamat menyebabkan efek samping mual, muntah, dan dispepsia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-012",
@@ -261,7 +272,8 @@
       "D": "Lamel interna berbatasan langsung dengan cavum medullare.",
       "E": "Lamel interstitial merupakan sisa osteon tua hasil remodeling tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-013",
@@ -283,7 +295,8 @@
       "D": "Fraktur metakarpal contohnya adalah Boxer's fracture.",
       "E": "Fraktur skafoid ditandai nyeri tekan pada anatomical snuffbox."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-014",
@@ -305,7 +318,8 @@
       "D": "EPB menyisip pada basis phalanx proximalis ibu jari.",
       "E": "FPL merupakan fleksor ibu jari di bagian palmar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-015",
@@ -327,7 +341,8 @@
       "D": "Indikasi antifungi tidak sesuai.",
       "E": "Antibiotik hanya diberikan pada artritis septik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-016",
@@ -349,7 +364,8 @@
       "D": "Tidak berhubungan langsung dengan trauma terbuka.",
       "E": "Avascular necrosis terjadi akibat cedera arteri pendarah kaput tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-017",
@@ -371,7 +387,8 @@
       "D": "A. recurren ulnaris memvaskularisasi kompartemen medial siku.",
       "E": "Arcus palmaris profundus terletak lebih dalam di dasar os metacarpalia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-018",
@@ -393,7 +410,8 @@
       "D": "RA merupakan penyakit autoimun inflamasi sistemik simetris dengan erosi marjinal tulang.",
       "E": "OA ditandai osteofit dan penyempitan celah sendi asimetris."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-019",
@@ -415,7 +433,8 @@
       "D": "Defisiensi asam askorbat merusak hidroksilasi prolin/lisin pada sintesis kolagen.",
       "E": "Riketsia ditandai cupping dan fraying pada metafisis tulang panjang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-020",
@@ -437,7 +456,8 @@
       "D": "Ligamen kolateral berada di lutut/siku.",
       "E": "Ligamentum capitis femoris memuat r. acetabularis A. obturatoris memvaskularisasi caput femoris pada anak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-021",
@@ -459,7 +479,8 @@
       "D": "Corpus femur memiliki korteks tebal yang butuh trauma kuat untuk patah.",
       "E": "Collum femur merupakan trabekula tulang spons yang rapuh akibat penyerapan pascamenopause/senilis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-022",
@@ -481,7 +502,8 @@
       "D": "L2-L3 lebih jarang mengalami degenerasi anulus fibrosus berat.",
       "E": "T5-T6 sangat jarang herniasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-023",
@@ -503,7 +525,8 @@
       "D": "Osteoma bersifat jinak dan asimptomatik.",
       "E": "Kondrosarkoma berasal dari sel karsinoma tulang rawan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-024",
@@ -525,7 +548,8 @@
       "D": "Gerakan mengangguk (articulatio atlantooccipitalis) berada di bidang sagital.",
       "E": "Fleksi lateral leher terjadi di bidang koronal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-025",
@@ -547,7 +571,8 @@
       "D": "Holistik menyangkut perbaikan fungsional dan pencegahan komplikasi imobilisasi pada lansia.",
       "E": "Penahapan beban dilakukan sesuai penyembuhan kalus tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-026",
@@ -569,7 +594,8 @@
       "D": "Defisiensi vit D kronis melunakkan tulang.",
       "E": "OA memicu pembentukan osteofit, bukan kerapuhan korteks femur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-027",
@@ -591,7 +617,8 @@
       "D": "Fraktur oblik terjadi akibat kombinasi angulasi dan kompresi.",
       "E": "Overriding/contractionum adalah pergeseran ujung patahan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-028",
@@ -613,7 +640,8 @@
       "D": "Sendi engsel bergerak uniaksial fleksi-ekstensi.",
       "E": "Sendi pelana bergerak biaksial sirkumduksi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-029",
@@ -635,7 +663,8 @@
       "D": "Informed consent menghormati hak otonom pasien menolak atau menerima tindakan medis.",
       "E": "Justice tidak diskriminatif dalam pelayanan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-030",
@@ -657,7 +686,8 @@
       "D": "Bahan awal mula fisik manusia.",
       "E": "Ahsani taqwiim menegaskan kesempurnaan anatomi dan fisiologi struktur manusia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-031",
@@ -679,7 +709,8 @@
       "D": "Terletak di sebelah pisiforme.",
       "E": "Nyeri tekan anatomical snuffbox adalah patognomonis fraktur os scaphoideum yang berisiko avascular necrosis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-032",
@@ -701,7 +732,8 @@
       "D": "Osteoklas teraktivasi oleh PTH sekunder.",
       "E": "Kalsium tulang justru berkurang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-033",
@@ -723,7 +755,8 @@
       "D": "Osteoblastoma timbul pada columna vertebralis anak/dewasa muda.",
       "E": "RA jarang manifestasi utamanya berupa tofus pecah di MTP-1."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-034",
@@ -745,7 +778,8 @@
       "D": "Pencegahan deposisi mineral mengalahkan resorpsi osteoblas.",
       "E": "PTH tersekresi kompensatorik secara berlebihan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-035",
@@ -767,7 +801,8 @@
       "D": "Spondilolisthesis paling sering di L4-L5/L5-S1.",
       "E": "Spondilolisis tanpa massa infeksius paravertebral."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-036",
@@ -789,7 +824,8 @@
       "D": "Grade I luka punktur kecil.",
       "E": "Klasifikasi Gustilo IIIA: panjang luka >10 cm, trauma energi tinggi, namun perios tebal dan jaringan soft tissue masih mampu menutupi rekonstruksi tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-037",
@@ -811,7 +847,8 @@
       "D": "Tidak menyegarkan komponen motorik leg.",
       "E": "N. femoralis (L2-L4) menimbulkan gejala di paha depan dan reflek patela menurun."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-038",
@@ -833,7 +870,8 @@
       "D": "Muara V. saphena parva masuk ke V. poplitea di posterior.",
       "E": "Akses V. saphena magna di anterior malleolus medialis merupakan pilihan kanulasi darurat karena posisinya konstan dan superfisial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-039",
@@ -855,7 +893,8 @@
       "D": "Nilai pembulatan kasar.",
       "E": "Hasil tanpa memasukkan komponen proyeksi aksial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-040",
@@ -877,7 +916,8 @@
       "D": "Gips spica tidak stabil untuk menahan gaya traksi otot paha dewasa.",
       "E": "Tatalaksana bedah disesuaikan derajat fraktur dan soft tissue."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-041",
@@ -899,7 +939,8 @@
       "D": "Osteoblas mensekresi matriks osteoid.",
       "E": "Sel osteoprogenitor esensial untuk pembentukan kalus lunak dan keras pasca fraktur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "kedkom-2020-042",
@@ -921,7 +962,8 @@
       "D": "Obesitas meningkatkan pembebanan artikular lutut yang mempercepat penyempitan celah sendi dan eburnasi tulang subkondral pada OA.",
       "E": "RA melibatkan pannus dan deformitas simetris."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-043",
@@ -943,7 +985,8 @@
       "D": "Tegak murni memanfaatkan gaya gravitasi agar obat langsung masuk ke gaster.",
       "E": "Posisi rekumben merupakan kontraindikasi pasca minum alendronat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-044",
@@ -965,7 +1008,8 @@
       "D": "Sendi antara caput iga dan korpus tulang belakang.",
       "E": "Sendi sakroiliaka menstransfer beban tubuh ke ekstremitas bawah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-045",
@@ -987,7 +1031,8 @@
       "D": "Lamela konsentris kolagen pada annulus fibrosus menahan tekanan hidrostatik nucleus pulposus.",
       "E": "Lempeng epifisis berfungsi dalam pertumbuhan memanjang tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "kedkom-2020-046",
@@ -1009,7 +1054,8 @@
       "D": "Pannus melepaskan enzim kolagenase dan protease yang merusak komponen kartilago sendi.",
       "E": "Osteofit dibentuk sebagai kompensasi perluasan permukaan beban pada OA."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-047",
@@ -1031,7 +1077,8 @@
       "D": "Nomenklatur tidak tepat.",
       "E": "Kondroitis mengenai struktur kartilaginosa."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-048",
@@ -1053,7 +1100,8 @@
       "D": "Dislokasi coxae terjadi saat caput femoris terlepas keluar dari mangkuk acetabulum os coxae.",
       "E": "Patella berada di kompartemen genu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-049",
@@ -1075,7 +1123,8 @@
       "D": "RF negatif pada gout.",
       "E": "Kadar asam urat >7.0 mg/dL (pria) mendukung kriteria diagnosis gout bersama dengan ditemukannya kristal monosodium urat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-050",
@@ -1097,7 +1146,8 @@
       "D": "Tidak memenuhi kaidah keselamatan diagnostik ortopedi.",
       "E": "Visualisasi sendi penting untuk mengevaluasi rotasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-051",
@@ -1119,7 +1169,8 @@
       "D": "Diagnosis banding membantu menyingkirkan luksasi murni.",
       "E": "Diagnosis radiologis melengkapi rincian garis fraktur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-052",
@@ -1141,7 +1192,8 @@
       "D": "Kristal MSU mempresipitasi fagositosis leukosit yang melepaskan mediator nyeri (prostaglandin, IL-1beta).",
       "E": "Deposisi bakteri terjadi pada artritis septik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-053",
@@ -1163,7 +1215,8 @@
       "D": "Menahan pergeseran inferior caput humeri.",
       "E": "Kontraksi simultan empat otot rotator cuff memberikan efek 'dynamic depresi' yang menjaga konsentrisitas sendi bahu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-054",
@@ -1185,7 +1238,8 @@
       "D": "Fraktur tonjolan akromion os skapula.",
       "E": "Fraktur glenoid terdiagnosis via CT-scan bahu."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-055",
@@ -1207,7 +1261,8 @@
       "D": "Besar EPP berbanding lurus dengan kuantum asetilkolin yang dilepaskan.",
       "E": "Depolarisasi EPP yang mencapai ambang akan memicu potensial aksi berambat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-056",
@@ -1229,7 +1284,8 @@
       "D": "Digerakkan M. quadriceps femoris.",
       "E": "Digerakkan M. iliopsoas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-057",
@@ -1251,7 +1307,8 @@
       "D": "M. Semimembranosus diinervasi oleh N. tibialis (pars ischiadica).",
       "E": "Otot betis superfisial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-058",
@@ -1273,7 +1330,8 @@
       "D": "Bukan penekan sitokin murni.",
       "E": "Penghambat leukotrien ditujukan pada asma bronkial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-059",
@@ -1295,7 +1353,8 @@
       "D": "Smith fracture menghasilkan 'garden spade deformity'.",
       "E": "Colles fracture menghasilkan 'dinner fork deformity'."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-060",
@@ -1317,7 +1376,8 @@
       "D": "Pemasangan spalk stabil mengendalikan perdarahan internal intramuskular paha.",
       "E": "Tidak mengatasi instabilitas fraktur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-061",
@@ -1339,7 +1399,8 @@
       "D": "Lokasi M. quadriceps femoris.",
       "E": "Lokasi M. gluteus maximus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-062",
@@ -1361,7 +1422,8 @@
       "D": "Coccyx bersifat immobile fungsional.",
       "E": "Servikal scoliosis biasanya akibat kelainan kongenital (Klippel-Feil syndrome)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-063",
@@ -1383,7 +1445,8 @@
       "D": "Mengabaikan komponen sinus.",
       "E": "Nilai komplementer aksial terdeviasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-064",
@@ -1405,7 +1468,8 @@
       "D": "Tempat penyimpanan dan pelepasan eksositosis vesikel ACh.",
       "E": "Merupakan struktur pelepasan persarafan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-065",
@@ -1427,7 +1491,8 @@
       "D": "Berjalan melintasi fossa cubiti.",
       "E": "Menginervasi otot-otot ekstensor lengan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-066",
@@ -1449,7 +1514,8 @@
       "D": "Rukhshah memfasilitasi adaptasi ibadah sesuai kapasitas medis fisik pasien tanpa meninggalkan kewajiban dasar.",
       "E": "Mencakup penanda ketetapan hukum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-067",
@@ -1471,7 +1537,8 @@
       "D": "Psoas sign positif pada apendisitis retrosekal.",
       "E": "Menstabilkan lutut saat ekstensi via tractus iliotibialis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-068",
@@ -1493,7 +1560,8 @@
       "D": "Fasciotomy superfisial membebaskan M. flexor carpi radialis dan berkas pembuluh darah radialis di dekatnya.",
       "E": "Pronator quadratus membentang di antara ulna dan radius distal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-069",
@@ -1515,7 +1583,8 @@
       "D": "Penting sebelum evaluasi hepatotoksisitas leflunomide/methotrexate.",
       "E": "CRP digunakan untuk menilai respon terapi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-070",
@@ -1537,7 +1606,8 @@
       "D": "Osteoblas meletakkan materi osteoid di atas spikula kartilago kalsifikasi.",
       "E": "Zona proliferasi bertanggung jawab langsung atas pertambahan panjang tulang panjang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "kedkom-2020-071",
@@ -1559,7 +1629,8 @@
       "D": "Memeriksa profil koagulasi dan hemoglobin pra-operasi.",
       "E": "Indikasi pada fraktur patologis akibat kecurigaan metastasis keganasan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-072",
@@ -1581,7 +1652,8 @@
       "D": "Sering digunakan untuk biopsi saraf perifer.",
       "E": "Posisi N. peroneus communis amat superfisial pada collum fibulae sehingga rentan tertekan gips/fraktur fibula proksimal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-073",
@@ -1603,7 +1675,8 @@
       "D": "Sendi lutut penumpu beban utama.",
       "E": "Sendi siku superior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-074",
@@ -1625,7 +1698,8 @@
       "D": "Mekanisme kerja obat urikosurik.",
       "E": "Penurunan sintesis terjadi pada gangguan enzim xanthine oxidase."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-075",
@@ -1647,7 +1721,8 @@
       "D": "Mencegah osteoporosis.",
       "E": "Kalsifikasi ekstraseluler berlebih tidak terjadi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-076",
@@ -1669,7 +1744,8 @@
       "D": "DEXA mengukur densitas mineral gram/cm2 pada L1-L4 dan Collum Femoris secara akurat.",
       "E": "Membedakan osteoporosis senilis dari hiperparatiroidisme primer."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-077",
@@ -1691,7 +1767,8 @@
       "D": "Inti banyak di tepi membedakan otot lurik dari otot jantung dan polos.",
       "E": "Diskus interkalaris memuat gap junction untuk konduksi kelistrikan sincitium otot jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "kedkom-2020-078",
@@ -1713,7 +1790,8 @@
       "D": "Fibrosarkoma bersifat menginvasi struktur sekitar.",
       "E": "Kondroma bertempat di kavum medula tulang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-079",
@@ -1735,7 +1813,8 @@
       "D": "Arteri dinding perut dalam posterior.",
       "E": "A. circumflexa femoris medialis pendarah utama caput femoris."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-080",
@@ -1757,7 +1836,8 @@
       "D": "Tegangan pasif muncul saat otot diregangkan melebihi panjang istirahat.",
       "E": "Potensial aksi otot memicu respon pelepasan kalsium."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-081",
@@ -1779,7 +1859,8 @@
       "D": "Terminologi tidak relevan.",
       "E": "Bukan istilah anatomi penumpu beban."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-082",
@@ -1801,7 +1882,8 @@
       "D": "Aspirin memicu erosi lambung berat.",
       "E": "Parasetamol menghambat COX di sistem saraf pusat tanpa merusak produksi prostaglandin sitoprotektif gaster."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-083",
@@ -1823,7 +1905,8 @@
       "D": "Anti-CCP positif sangat spesifik untuk RA awal.",
       "E": "Urinalisis untuk evaluasi penyakit ginjal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-084",
@@ -1845,7 +1928,8 @@
       "D": "Raloksifen efisien mencegah fraktur vertebra tetapi kurang efektif untuk fraktur femur.",
       "E": "Teriparatide menstimulasi osteoblas tetapi harganya mahal dan digunakan terbatas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-085",
@@ -1867,7 +1951,8 @@
       "D": "Lahman menggambarkan miogenesis di mana jaringan otot membungkus kerangka tulang.",
       "E": "Tahap pembentukan somit janin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-086",
@@ -1889,7 +1974,8 @@
       "D": "Diskus interkalaris memfasilitasi sinkronisasi jantung.",
       "E": "Percabangan serat adalah keistimewaan otot jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "kedkom-2020-087",
@@ -1911,7 +1997,8 @@
       "D": "Hanya menekan inflamasi PGE2.",
       "E": "Kolkisin menghambat polimerisasi tubulin neutrofil."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-088",
@@ -1933,7 +2020,8 @@
       "D": "Lokasi A. tibialis anterior yang berdekatan dengan periosteum tibia membuatnya sangat rentan robek pada fraktur tertutup/terbuka diafisis tibia.",
       "E": "Lokasi palpasi pulsasi di dorsum pedis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-089",
@@ -1955,7 +2043,8 @@
       "D": "Fraktur os ethmoidale/lamina cribrosa berisiko menimbulkan anosmia dan rinorea cairan serebrospinal (CSF leak).",
       "E": "Terdiri dari pars petrosa, squamosa, dan mastoidea."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-090",
@@ -1977,7 +2066,8 @@
       "D": "Lokasi kanulasi Central Venous Pressure (CVP).",
       "E": "Digunakan untuk menilai Jugular Venous Pressure (JVP)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-091",
@@ -1999,7 +2089,8 @@
       "D": "Relatif aman secara metabolik tulang.",
       "E": "Menyebabkan instabilitas lokal saja."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-092",
@@ -2021,7 +2112,8 @@
       "D": "Perlindungan privasi pasien.",
       "E": "Autonomy tidak boleh menghambat penanganan darurat yang mengancam nyawa pasien tidak sadar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2020-093",
@@ -2043,7 +2135,8 @@
       "D": "Kristal urat menyerang sendi MTP-1.",
       "E": "OA disebabkan wear-and-tear mekanis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "kedkom-2020-094",
@@ -2065,7 +2158,8 @@
       "D": "Dislokasi panggul anterior jarang terjadi.",
       "E": "Lokasi bengkak dan deformitas berada di proksimal paha."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-095",
@@ -2087,7 +2181,8 @@
       "D": "Menahan stres varus sendi lutut.",
       "E": "Menstabilkan rotasi internal lutut."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-096",
@@ -2109,7 +2204,8 @@
       "D": "Robekan A. tibialis anterior memicu syok dan iskemia kompartemen anterior pedis jika tidak dihentikan dan direkonstruksi cito.",
       "E": "Melingkari femur proksimal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "kedkom-2020-097",
@@ -2131,7 +2227,8 @@
       "D": "Disertai tanda infeksi tuberkulosis sistemik.",
       "E": "Dipicu oleh penumpukan kristal MSU."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-098",
@@ -2153,7 +2250,8 @@
       "D": "Ditandai 5P (Pain, Pallor, Pulselessness, Paresthesia, Paralysis).",
       "E": "Belum membentuk traktus sinus mature ke permukaan kulit."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2020-099",
@@ -2175,7 +2273,8 @@
       "D": "COX-2 selektif dirancang untuk menghemat COX-1 gaster.",
       "E": "Aspirin-exacerbated respiratory disease lebih dipicu NSAID non-selektif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2020-100",
@@ -2197,6 +2296,7 @@
       "D": "Membatasi gerakan fleksi Columna vertebralis.",
       "E": "Hypertrophy ligamen flavum memicu stenosis kanalis spinalis dari posterior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   }
 ]

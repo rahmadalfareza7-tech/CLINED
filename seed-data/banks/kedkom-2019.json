@@ -19,7 +19,8 @@
       "D": "Skrining perkembangan tidak membutuhkan evaluasi formal setiap bulan.",
       "E": "Skrining 3 bulanan berlanjut hingga usia 2 tahun (24 bulan)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-002",
@@ -41,7 +42,8 @@
       "D": "Merupakan bagian dari Sistem Peradilan Pidana Anak (SPPA).",
       "E": "Pengadilan umum tidak memfasilitasi rehabilitasi khusus anak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-003",
@@ -63,7 +65,8 @@
       "D": "Terminologi umum untuk pelayanan kesehatan dasar balita.",
       "E": "Fokus pada pengasuhan dan pembinaan keluarga lansia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-004",
@@ -85,7 +88,8 @@
       "D": "Air berfungsi sebagai media transmisi/penyebaran bahan pencemar ke host.",
       "E": "Faktor pendukung keparahan dampak kesehatan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-005",
@@ -107,7 +111,8 @@
       "D": "Faktor lingkungan mencakup fasilitas fisik fisik/infrastruktur publik dan lingkungan sosial tempat tinggal lansia.",
       "E": "Faktor hereditas intrinsik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-006",
@@ -129,7 +134,8 @@
       "D": "Pengumpulan data demografi agregat.",
       "E": "Studi epidemiologi sampel populasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-007",
@@ -151,7 +157,8 @@
       "D": "Fungsi penyuluhan dan konseling.",
       "E": "Fungsi kepemimpinan pemberdayaan masyarakat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-008",
@@ -173,7 +180,8 @@
       "D": "Fokus pada perdamaian dan keadilan lembaga.",
       "E": "SDG 3 secara khusus dikelompokkan pada Pilar Sosial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-009",
@@ -195,7 +203,8 @@
       "D": "Observasi berisiko memperburuk progresivitas lesi.",
       "E": "Tatalaksana standar FKTP untuk tanda bahaya ginekologi/kecurigaan kanker serviks adalah rujukan ke RS sekunder/spesialis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-010",
@@ -217,7 +226,8 @@
       "D": "Pengamatan berjangka pada KLB atau penyakit spesifik.",
       "E": "Mengandalkan laporan berkala pasif dari faskes pelayanan dasar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-011",
@@ -239,7 +249,8 @@
       "D": "Penyusunan peraturan daerah zonasi rawan banjir.",
       "E": "Intervensi fisik infrastruktur untuk mengurangi dampak kerugian krisis/bencana."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-012",
@@ -261,7 +272,8 @@
       "D": "Hanya ASI tanpa tambahan cairan/makanan padat.",
       "E": "Pemberian ASI dikombinasikan dengan formula/tambahan cairan sebelum 6 bulan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-013",
@@ -283,7 +295,8 @@
       "D": "Kondisi patologis ko-eksisten.",
       "E": "Faktor kerentanan usia perkembangan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-014",
@@ -305,7 +318,8 @@
       "D": "Tidak efektif mencegah konsepsi pasca coitus langsung.",
       "E": "Tersedia pilihan pil kontrasepsi darurat (Kondar)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-015",
@@ -327,7 +341,8 @@
       "D": "Puskesmas D memiliki persentase keberhasilan tertinggi terhadap target sasaran (64,28%).",
       "E": "Persentase cakupan 63,15%."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-016",
@@ -349,7 +364,8 @@
       "D": "Perlindungan terhadap keberlangsungan keturunan.",
       "E": "Upaya menjaga fungsi kognitif dan kesehatan mental akal manusia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-017",
@@ -371,7 +387,8 @@
       "D": "Pengisi formulir kematian faskes rujukan.",
       "E": "Tim pengkaji medis kasus kematian di RS."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-018",
@@ -393,7 +410,8 @@
       "D": "Instrumen persepsi orang tua terhadap tumbuh kembang.",
       "E": "Skala penilaian perilaku klinis terstandardisasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-019",
@@ -415,7 +433,8 @@
       "D": "Hasil kalkulasi tidak sesuai.",
       "E": "Hasil kalkulasi salah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-020",
@@ -437,7 +456,8 @@
       "D": "Alih rawat pasien antar tingkatan faskes yang sederajat.",
       "E": "Sesuai regulasi rujukan UKP, rujukan penunjang sementara akibat kendala reagen/alat dikategorikan sebagai rujukan parsial."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-021",
@@ -459,7 +479,8 @@
       "D": "Teknik kesepakatan pakar.",
       "E": "Keadaan empiris populasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-022",
@@ -481,7 +502,8 @@
       "D": "Tidak relevan.",
       "E": "Aspek administratif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-023",
@@ -503,7 +525,8 @@
       "D": "Sistem pembayaran prospektif kapitasi merupakan pola pembayaran standar BPJS untuk FKTP.",
       "E": "Sistem prospektif berbasis kelompok diagnosis paket RS."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-024",
@@ -525,7 +548,8 @@
       "D": "Program PKPR di sekolah memberi pemahaman kesehatan reproduksi yang aman, terstruktur, dan berbasis bukti.",
       "E": "Meningkatkan risiko perilaku seks tidak aman."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-025",
@@ -547,7 +571,8 @@
       "D": "Pendekatan persuasif individual memungkinkan identifikasi hambatan spesifik (seperti ketakutan tertular infeksi) dan edukasi terfokus.",
       "E": "Kurang efektif mengurai kendala personal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-026",
@@ -569,7 +594,8 @@
       "D": "Tindakan evakuasi dan pengobatan saat bencana terjadi.",
       "E": "Tindakan pemulihan jangka pendek."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-027",
@@ -591,7 +617,8 @@
       "D": "Sesuai alur siklus pemecahan masalah kesehatan masyarakat (problem solving cycle).",
       "E": "Kurang sistematis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkom-2019-028",
@@ -613,7 +640,8 @@
       "D": "Pengiriman tenaga medis perbantuan.",
       "E": "Pengiriman spesimen pemeriksaan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-029",
@@ -635,7 +663,8 @@
       "D": "Pengumpulan data sekunder secara pasif.",
       "E": "Penjangkauan aktif oleh kader di lapangan merupakan bentuk aktif surveilans berbasis masyarakat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-030",
@@ -657,7 +686,8 @@
       "D": "Tujuan sektor kesehatan.",
       "E": "Tujuan kesetaraan hak gender."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-031",
@@ -679,7 +709,8 @@
       "D": "Intervensi gizi personal.",
       "E": "Riwayat obstetri individual."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-032",
@@ -701,7 +732,8 @@
       "D": "Berisiko komersialisasi.",
       "E": "Formulasi tidak lengkap."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-033",
@@ -723,7 +755,8 @@
       "D": "Peran pelatih klinis.",
       "E": "Domain pemaknaan dan kosmologi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-034",
@@ -745,7 +778,8 @@
       "D": "Terdapat potensi hambatan pendidikan.",
       "E": "Ketentuan batas usia minimal 19 tahun dilindungi oleh undang-undang untuk mencegah dampak buruk pernikahan anak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-035",
@@ -767,7 +801,8 @@
       "D": "Hasil tidak sesuai formula MMR.",
       "E": "Perhitungan MMR komprehensif memperhitungkan seluruh kematian ibu yang disebabkan oleh kehamilan, persalinan, dan nifas dibagi total lahir hidup pada periode tersebut."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-036",
@@ -789,7 +824,8 @@
       "D": "Opsi E benar.",
       "E": "Advokasi dan pendekatan sosiokultural awal memerlukan pelibatan pemimpin lokal informal dan formal (Toga/Toma) untuk efektivitas intervensi komunitas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-037",
@@ -811,7 +847,8 @@
       "D": "Upaya peningkatan derajat kesehatan.",
       "E": "Upaya pencegahan spesifik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-038",
@@ -833,7 +870,8 @@
       "D": "Data awal populasi dan status gizi merupakan bagian dari komponen Input sistem sistem surveilans kesehatan.",
       "E": "Pengawasan kinerja sistem."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkom-2019-039",
@@ -855,7 +893,8 @@
       "D": "Fase transisi merinci kebutuhan penambalan kekurangan alkes dan SDM agar pelayanan dapat segera pulih stabil.",
       "E": "Respon taktis awal tanggap darurat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-040",
@@ -877,7 +916,8 @@
       "D": "Pencegahan kebugaran fisiologis PTM.",
       "E": "Menghindari kontak langsung adalah proteksi transmisi agen infeksius penyakit menular."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkom-2019-041",
@@ -899,6 +939,7 @@
       "D": "Tafsir nash didasarkan pada prinsip perlindungan jiwa.",
       "E": "Perbedaan filosofis fikih berpusat pada penentuan tahap awal penciptaan ruh dan status hukum tahapan embriogenesis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   }
 ]

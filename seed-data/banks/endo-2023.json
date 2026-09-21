@@ -19,7 +19,8 @@
       "D": "Konversi kolesterol menjadi pregnenolon justru terhambat karena kolesterol tidak dapat masuk mitokondria.",
       "E": "Hormon tiroid disintesis dari asam amino tirosin dan iodium, tidak bergantung pada protein StAR."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-002",
@@ -41,7 +42,8 @@
       "D": "35 mcg adalah dosis kecukupan harian mineral kromium untuk pria dewasa dalam menjaga fungsi dan sensitivitas insulin.",
       "E": "40 mcg melebihi kecukupan harian standar kromium."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-003",
@@ -63,7 +65,8 @@
       "D": "Tatalaksana lini pertama hipertrigliseridemia berat (>500 mg/dL) untuk mencegah pankreatitis akut adalah kombinasi fibrat dan perbaikan pola hidup.",
       "E": "Perbaikan pola hidup saja tidak cukup menurunkan kadar trigliserida sebesar 980 mg/dL."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-004",
@@ -85,7 +88,8 @@
       "D": "pH 7.6 dan keton normal tidak sesuai dengan gambaran klinis KAD.",
       "E": "pH 7.6 mencerminkan alkalosis yang berlawanan dengan patofisiologi KAD."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-005",
@@ -107,7 +111,8 @@
       "D": "Penurunan glikolisis di jaringan lemak bukan pengatur utama kadar glukosa postprandial.",
       "E": "Peningkatan glukoneogenesis hati (bukan penurunan) yang menyebabkan hiperglikemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-006",
@@ -129,7 +134,8 @@
       "D": "Menunggu timbulnya gejala berat akan menyebabkan kerusakan otak permanen yang tidak dapat diperbaiki.",
       "E": "Terapi intermittent menyebabkan fluktuasi hormon tiroid yang merusak perkembangan sel otak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-007",
@@ -151,7 +157,8 @@
       "D": "Kromium adalah mineral mikro utama yang memfasilitasi kerja insulin dan meningkatkan sensitivitas reseptor insulin.",
       "E": "Kalium merupakan kation intraseluler utama untuk menjaga potensial membran sel."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-008",
@@ -173,7 +180,8 @@
       "D": "Buah warna jingga kaya akan karotenoid/vitamin A, bukan omega-3.",
       "E": "Sayuran daun hijau mengandung Alpha-Linolenic Acid (ALA), jenis omega-3 nabati yang bersifat anti-inflamasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-009",
@@ -195,7 +203,8 @@
       "D": "Meningkatkan sekresi insulin adalah mekanisme kerja obat golongan Sulfonilurea.",
       "E": "Menghambat absorpsi glukosa usus adalah mekanisme obat golongan Alpha-glucosidase inhibitor (akarbose)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-010",
@@ -217,7 +226,8 @@
       "D": "Glaukoma neovaskular merupakan dampak lanjutan dari rubeosis iridis, namun manifestasi pembuluh darah baru awal adalah neovaskularisasi iris.",
       "E": "Proptosis adalah penonjolan bola mata pada penyakit Graves."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-011",
@@ -239,7 +249,8 @@
       "D": "Neovaskularisasi retina menandakan stadium PDR, namun penurunan tajam penglihatan sentral utama disebabkan makulopati.",
       "E": "Makulopati (kerusakan pada makula lutea) menghancurkan fungsi penglihatan sentral sehingga pandangan menjadi kabur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-012",
@@ -261,7 +272,8 @@
       "D": "Uveitis posterior adalah proses inflamasi uvea posterior.",
       "E": "Perdarahan akibat neovaskularisasi umumnya mengisi vitreus (perdarahan vitreus), bukan humor aquos."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-013",
@@ -283,7 +295,8 @@
       "D": "Pemeriksaan menunjukkan lensa jernih, menyingkirkan diagnosis katarak.",
       "E": "Perdarahan dan edema makula pada mata kanan merusak fovea sentralis sehingga visus tajam menurun drastis menjadi 6/60."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-014",
@@ -305,7 +318,8 @@
       "D": "Mikroaneurisma adalah dilatasi lokal pembuluh kapiler.",
       "E": "Iskemia jaringan retina merangsang pelepasan VEGF yang menjadi pemicu utama timbulnya neovaskularisasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-015",
@@ -327,7 +341,8 @@
       "D": "Bukan istilah histologis standar untuk sekret tiroid.",
       "E": "Bukan istilah histologis standar untuk sekret tiroid."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-016",
@@ -349,7 +364,8 @@
       "D": "Skor 11 di bawah kalkulasi total poin kriteria PEDIS kasus.",
       "E": "Skor 12 diperoleh dari penjumlahan kategori Perfusi(2) + Luas(2) + Kedalaman(3) + Infeksi(3) + Sensasi(2)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-017",
@@ -371,7 +387,8 @@
       "D": "Medikamentosa sering kurang efektif dan memerlukan dekompresi bedah jika menekan saluran napas.",
       "E": "Radioterapi bukan pilihan indikasi utama pada Tiroiditis Riedel."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-018",
@@ -393,7 +410,8 @@
       "D": "Kombinasi CK (efek samping otot), SGPT (efek samping hati), dan profil lipid (efektivitas terapi) adalah monitoring komprehensif.",
       "E": "Gula darah sewaktu tidak relevan untuk monitoring rutin dislipidemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-019",
@@ -415,7 +433,8 @@
       "D": "Merupakan penjelasan hukum, bukan arti terjemahan harfiah kata.",
       "E": "Tidak membatasi pada darah manusia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-020",
@@ -437,7 +456,8 @@
       "D": "Permen karet mengandung perasa/gula yang mempengaruhi komposisi saliva dan reaksi sekresi.",
       "E": "Kuesioner Fox menilai keluhan subjektif serostomia, bukan laju fungsi sekresi objektif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "gaster-2023-021",
@@ -459,7 +479,8 @@
       "D": "Menunjukkan sindrom Cushing tergantung ACTH.",
       "E": "Menunjukkan sindrom Cushing independen ACTH (misal adenoma adrenal)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-022",
@@ -481,7 +502,8 @@
       "D": "Gambaran khas hiperparatiroid primer adalah ditemukannya kadar PTH yang meningkat beriringan dengan hiperkalsemia.",
       "E": "PTH normal yang tidak tertekan pada hiperkalsemia disebut inappropriately normal PTH, tetapi temuan paling dominan adalah kenaikan PTH."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-023",
@@ -503,7 +525,8 @@
       "D": "Pemeriksaan histopatologi adalah baku emas diagnosis pasti keganasan tiroid.",
       "E": "Tes fungsi tiroid (TSH, FT4) sebagian besar bernilai normal pada kanker tiroid."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-024",
@@ -525,7 +548,8 @@
       "D": "Benign termasuk dalam Bethesda kategori II.",
       "E": "Non-diagnostic masuk dalam Bethesda kategori I."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-025",
@@ -547,7 +571,8 @@
       "D": "Kondisi bayi dipicu gangguan metabolisme glukosa, bukan hipotiroidisme.",
       "E": "Manifestasi utama neonatus dari ibu DMG adalah hipoglikemia, bukan hipernatremia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-026",
@@ -569,7 +594,8 @@
       "D": "Metformin adalah antidiabetik oral.",
       "E": "Cefixime adalah antibiotik cephalosporin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-027",
@@ -591,7 +617,8 @@
       "D": "Muhkamat adalah ayat-ayat Al-Qur'an yang tegas dan jelas maknanya.",
       "E": "Syubhat adalah kondisi tidak jelas atau keraguan antara halal dan haram."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-028",
@@ -613,7 +640,8 @@
       "D": "Neuropati otonom menyerang organ dalam seperti kardiovaskular, pencernaan, atau urogenital.",
       "E": "Mononeuropati hanya melibatkan satu saraf perifer tunggal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-029",
@@ -635,7 +663,8 @@
       "D": "Mikroangiopati adalah patofisiologi vaskuler melatarbelakangi, namun penyebab mekanis penopang gigi terlepas adalah hilangnya ligamen.",
       "E": "Disfungsi neutrofil meningkatkan kerentanan infeksi, yang merusak ligamen."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-030",
@@ -657,7 +686,8 @@
       "D": "Amenorea didefinisikan jika tidak haid berturut-turut selama minimal 3 bulan (sekunder) atau belum menarke usia 15 tahun (primer).",
       "E": "Menoragia adalah perdarahan haid dalam jumlah berlebih namun siklus teratur."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-031",
@@ -679,7 +709,8 @@
       "D": "Feokromositoma adalah tumor neuroendokrin yang berasal dari sel kromaFin medula adrenal memproduksi katekolamin berlebih.",
       "E": "Adenoma adrenokortikal terletak pada lapisan korteks."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-032",
@@ -701,7 +732,8 @@
       "D": "Neuropati demielinasi ditandai pemanjangan latensi dan penurunan kecepatan hantar saraf.",
       "E": "Pada kasus ini elektrodiagnostik murni menunjukkan penurunan amplitudo tanpa perlambatan hantar bermakna."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-033",
@@ -723,7 +755,8 @@
       "D": "Gastroparesis ditandai gangguan pengosongan lambung.",
       "E": "Resting tachycardia adalah peningkatan denyut jantung istirahat akibat hilangnya tonus parasimpatis vagal pada neuropati otonom diabetik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-034",
@@ -745,7 +778,8 @@
       "D": "Mitokondria bukan bagian jalur utama modifikasi sekresi protein intraseluler.",
       "E": "RE halus tidak memproses protein (tidak memiliki ribosom)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-035",
@@ -767,7 +801,8 @@
       "D": "Pemeriksaan TRH jarang dilakukan secara rutin dalam lini awal praktis klinis.",
       "E": "FT3 tidak direkomendasikan sebagai evaluasi skrining standar hipotiroidisme."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-036",
@@ -789,7 +824,8 @@
       "D": "T4 total saja tanpa TSH tidak dapat menentukan letak gangguan (primer vs sekunder).",
       "E": "USG tiroid adalah pencitraan anatomi, bukan parameter ketersediaan hormon biologis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-037",
@@ -811,7 +847,8 @@
       "D": "Hashimoto Disease pada fase destruktif awal (Hashitoxicosis) menunjukkan T3/T4 tinggi, TSH tertekan, Anti-TPO sangat positif, dan TSI negatif.",
       "E": "Tiroiditis Riedel dicirikan oleh keterlibatan jaringan ikat fibrotik berat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-038",
@@ -833,7 +870,8 @@
       "D": "Penyakit Graves adalah penyebab paling sering hipertiroidisme yang khas dengan eksoftalmus dan struma difus.",
       "E": "Hipotiroidisme menunjukkan fT4 rendah dan TSH tinggi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-039",
@@ -855,7 +893,8 @@
       "D": "Oligoteratozoospermia jika terdapat gangguan konsentrasi dan morfologi abnormal (<4%).",
       "E": "Teratozoospermia tidak tepat karena morfologi 5% masih di atas ambang batas standar (≥4%)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-040",
@@ -877,7 +916,8 @@
       "D": "Metformin adalah eksogen obat antidiabetik.",
       "E": "Insulin mengontrol regulasi glukosa."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-041",
@@ -899,7 +939,8 @@
       "D": "Koreksi hipoglikemia menggunakan Dextrose 10%, bukan Dextrose 40%.",
       "E": "Nutrisi awal F-75, Kotrimoksazol, Vitamin A, dan Asam Folat sesuai protokol standar fase awal tatalaksana gizi buruk."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-042",
@@ -921,7 +962,8 @@
       "D": "Dressing lembab (moist wound healing) mempercepat pembentukan jaringan granulasi.",
       "E": "Pemberian antibiotik sesuai indikasi infeksi jaringan lunak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-043",
@@ -943,7 +985,8 @@
       "D": "Sel pituisit berada di neurohipofisis.",
       "E": "Pulau Langerhans adalah struktur mikroskopis endokrin pankreas yang mengandung sel beta pembuat insulin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-044",
@@ -965,7 +1008,8 @@
       "D": "Bukan fungsi utama aldosteron.",
       "E": "Kalsium diatur terutama oleh PTH dan Kalsitonin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-045",
@@ -987,7 +1031,8 @@
       "D": "Penurunan kadar insulin secara langsung tidak menjadi mekanisme lokal terbentuknya ulkus.",
       "E": "Ischemia/penurunan perfusi vaskuler menghambat penyembuhan luka."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-046",
@@ -1009,7 +1054,8 @@
       "D": "Pembagian definisi kurang tepat.",
       "E": "Menyamakan dua konsep kriteria yang berbeda."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-047",
@@ -1031,7 +1077,8 @@
       "D": "Levotiroksin adalah suplementasi pengganti hormon tiroid utama pada hipotiroidisme.",
       "E": "Omega 3 suplemen asam lemak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-048",
@@ -1053,7 +1100,8 @@
       "D": "Transferrin mentranspor zat besi.",
       "E": "Hemoglobin mentranspor oksigen dalam eritrosit."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-049",
@@ -1075,7 +1123,8 @@
       "D": "Kadar hormon tiroid yang rendah justru akan menaikkan sekresi TSH.",
       "E": "Kerusakan reseptor TRH jarang menjadi patofisiologi umum supresi TSH."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-050",
@@ -1097,7 +1146,8 @@
       "D": "Asam amino adalah blok penyusun protein.",
       "E": "Lipid adalah kelompok asam lemak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-051",
@@ -1119,7 +1169,8 @@
       "D": "Porsi besar dan jarang memicu fluktuasi ekstrem kadar glukosa darah.",
       "E": "Porsi kecil dan jarang berisiko menyebabkan malnutrisi dan hipoglikemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-052",
@@ -1141,7 +1192,8 @@
       "D": "Asfiksia terkait gangguan respirasi dan nilai APGAR rendah pasca lahir.",
       "E": "Sepsis ditandai tanda infeksi sistemik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-053",
@@ -1163,7 +1215,8 @@
       "D": "DM tipe 1 ditandai defisiensi insulin total.",
       "E": "Diabetes insipidus adalah kelainan hormon ADH."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-054",
@@ -1185,7 +1238,8 @@
       "D": "Cincin trakea 1 terletak tepat di atas pinggir atas isthmus.",
       "E": "Terlalu inferior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "gaster-2023-055",
@@ -1207,7 +1261,8 @@
       "D": "Pil penghambat haid justru mencegah timbulnya kehamilan.",
       "E": "Operasi stimulasi ovarium merupakan tindakan pembedahan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-056",
@@ -1229,7 +1284,8 @@
       "D": "Tiroiditis Hashimoto adalah penyakit autoimun.",
       "E": "Tiroiditis Riedel adalah peradangan fibrotik jinak."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-057",
@@ -1251,7 +1307,8 @@
       "D": "Prolaktin memicu produksi ASI, bukan menghambat.",
       "E": "Oxytocin dan Prolaktin bekerja secara sinergis, bukan saling menghambat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-058",
@@ -1273,7 +1330,8 @@
       "D": "Ventrikel IV terletak di antara batang otak dan serebelum.",
       "E": "Sella turcica adalah lokasi anatomical dari kelenjar hipofisis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "gaster-2023-059",
@@ -1295,7 +1353,8 @@
       "D": "Mempertahankan Arteri Ovarium menjaga suplai darah nutrisi dan oksigenasi kelenjar gonad untuk sekresi hormon.",
       "E": "Mesometrium adalah bagian dari ligamentum latum yang menyangga uterus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "gaster-2023-060",
@@ -1317,7 +1376,8 @@
       "D": "N. Trochlear berjalan di dinding lateral sinus kavernosus.",
       "E": "N. Trigeminus terletak di ganglion gasseri/sinus kavernosus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-061",
@@ -1339,7 +1399,8 @@
       "D": "Sel basofil terdapat di adenohipofisis (menghasilkan TSH, ACTH, FSH, LH).",
       "E": "Sel asidofil terdapat di adenohipofisis (menghasilkan GH dan Prolaktin)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "gaster-2023-062",
@@ -1361,7 +1422,8 @@
       "D": "Inflamasi pankreas pankreatitis bukan etiologi utama DM tipe 1 anak.",
       "E": "Bukan disebabkan neoplasma."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-063",
@@ -1383,7 +1445,8 @@
       "D": "7-Dehydrocholesterol adalah prekursor vitamin D di kulit.",
       "E": "Enzim usus tidak meregulasi hidroksilasi vitamin D."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "gaster-2023-064",
@@ -1405,7 +1468,8 @@
       "D": "Hipertiroid primer ditandai TSH tertekan dan FT4 tinggi.",
       "E": "Hipertiroid sekunder ditandai TSH tinggi dan FT4 tinggi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-065",
@@ -1427,7 +1491,8 @@
       "D": "Penyakit Cushing terkait hormon kortisol.",
       "E": "Addison disease terkait destruksi korteks adrenal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-066",
@@ -1449,7 +1514,8 @@
       "D": "Hipertiroid sekunder berhubungan dengan TSH pituitary.",
       "E": "Cushing syndrome akibat kortisol tinggi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-067",
@@ -1471,7 +1537,8 @@
       "D": "Arteri phrenica inferior mendasari percabangan arteri suprarenalis superior.",
       "E": "Pernyataan anatomi benar: Arteri phrenica inferior memperdarahi arteri suprarenalis superior."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "gaster-2023-068",
@@ -1493,7 +1560,8 @@
       "D": "Resusitasi cairan awal dengan salin isotonik NaCl 0,9% 10-20 mL/kg dalam 1-2 jam adalah standar emas lini pertama DKA anak.",
       "E": "Bolus insulin IV DILARANG pada DKA anak karena meningkatkan risiko edema serebral drastis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-069",
@@ -1515,7 +1583,8 @@
       "D": "Terjadi pada alkoholisme tanpa hiperglikemia masif.",
       "E": "Adanya keton positif menunjukkan gangguan ketogenesis aktif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-070",
@@ -1537,7 +1606,8 @@
       "D": "Gagal ginjal dan jantung merupakan komplikasi sekunder dari kontrol glikemik buruk.",
       "E": "Bukan korelasi kausatif langsung yang ditunjukkan panah diagram."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-071",
@@ -1559,7 +1629,8 @@
       "D": "Mengukur glukosa pasca pembebanan instant.",
       "E": "Mengukur kadar glukosa saat puasa instant."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-072",
@@ -1581,7 +1652,8 @@
       "D": "GDP saja dapat melewatkan kasus hiperglikemia postprandial.",
       "E": "Darah lengkap menilai komponen seluler darah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-073",
@@ -1603,7 +1675,8 @@
       "D": "Defisiensi 11-beta hidroksilase memicu hipertensi.",
       "E": "Kelebihan aromatase merubah androgen menjadi estrogen."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-074",
@@ -1625,7 +1698,8 @@
       "D": "Tiroiditis Riedel ditandai jaringan ikat fibrotik padat.",
       "E": "Tiroiditis Hashimoto ditandai infiltrat limfositik profus dan sel Hürthle."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-075",
@@ -1647,7 +1721,8 @@
       "D": "Adenoma folikuler umumnya berupa nodul soliter lokal berbatas tegas.",
       "E": "Karsinoma tiroid umumnya keras, berbenjol-benjol, asimetris, dan terfiksir."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-076",
@@ -1669,7 +1744,8 @@
       "D": "Sindrom Sheehan dipicu oleh perdarahan dan hipovolemia, bukan autoimun.",
       "E": "Bukan disebabkan infeksi mikroorganisme."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-077",
@@ -1691,7 +1767,8 @@
       "D": "Kebutuhan yodium yang tidak terpenuhi (inadekuat) memicu peningkatan kompensasi TSH yang merangsang hiperplasia folikel tiroid.",
       "E": "Autoimun biasanya memberikan gambaran nodular atau destruksi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-078",
@@ -1713,7 +1790,8 @@
       "D": "Kelainan bawaan akan bergejala sejak masa anak-anak.",
       "E": "Akan berdampak pada perawakan pendek sejak kecil."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-079",
@@ -1735,7 +1813,8 @@
       "D": "TSH bekerja memicu sintesis dan pelepasan T3-T4 dengan mengaktifkan jalur cAMP pada sel folikel tiroid.",
       "E": "TSH menstimulasi pompa NIS (Na+/I- symporter), bukan menghambat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-080",
@@ -1757,7 +1836,8 @@
       "D": "FSH adalah hormon gonadotropin hipofisis.",
       "E": "LH adalah hormon gonadotropin hipofisis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-081",
@@ -1779,7 +1859,8 @@
       "D": "Metode penghitungan porsi karbohidrat untuk penyesuaian dosis insulin.",
       "E": "Strategi penumpukan karbohidrat pra-olahraga ketahanan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-082",
@@ -1801,7 +1882,8 @@
       "D": "Berdampak pada sekresi ekstraseluler peptida.",
       "E": "Apolipoprotein B mengangkut kilomikron dan VLDL/LDL."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-083",
@@ -1823,7 +1905,8 @@
       "D": "Kalsitonin menghambat reabsorpsi kalsium di tubulus ginjal.",
       "E": "Kalsitonin bekerja antagonis terhadap PTH."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-084",
@@ -1845,7 +1928,8 @@
       "D": "Hipoparatiroidisme ditandai oleh hipokalsemia.",
       "E": "Hiperparatiroidisme memicu hiperkalsemia dan pembentukan batu ginjal kalsium (nefrolitiasis)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-085",
@@ -1867,7 +1951,8 @@
       "D": "PTU tidak boleh diberikan pada anak.",
       "E": "Propranolol hanya terapi suportif gejala adrenergik, bukan pengobatan antitiroid kausatif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-086",
@@ -1889,7 +1974,8 @@
       "D": "Diabetes Melitus ditegakkan jika GD2PP ≥ 200 mg/dL atau GDP ≥ 126 mg/dL.",
       "E": "Sindrom metabolik memerlukan kombinasi obesitas sentral, hipertensi, dan dislipidemia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-087",
@@ -1911,7 +1997,8 @@
       "D": "Ovulasi adalah proses pelepasan oosit sekunder.",
       "E": "LH memicu lonjakan (surge) untuk pemicu utama timbulnya ovulasi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-088",
@@ -1933,7 +2020,8 @@
       "D": "Reseptor sitoplasma untuk hormon steroid lipofilik.",
       "E": "Bukan lokasi reseptor hormon."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-089",
@@ -1955,7 +2043,8 @@
       "D": "Penyakit Addison adalah insufisiensi adrenal (kortisol rendah).",
       "E": "Sindrom Conn ditandai oleh hiperaldosteronisme primer."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-090",
@@ -1977,7 +2066,8 @@
       "D": "Endometriosis dicirikan oleh keluhan nyeri panggul kronis dan dismenorea berat.",
       "E": "Adenomiosis dicirikan oleh uterus membesar simetris dan menoragia."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-091",
@@ -1999,7 +2089,8 @@
       "D": "Hashimoto penyakit autoimun yang berujung hipotiroidisme.",
       "E": "Graves disease ditandai secara spesifik oleh gambaran hipertiroidisme difus disertai eksoftalmus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-092",
@@ -2021,7 +2112,8 @@
       "D": "Gastroparesis adalah lambatnya pengosongan lambung.",
       "E": "Resting tachycardia ditandai peningkatan denyut nadi persisten saat istirahat akibat kerusakan kontrol parasimpatis jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "gaster-2023-093",
@@ -2043,7 +2135,8 @@
       "D": "Defisiensi 17-hidroksilase menurunkan sintesis androgen/testosteron.",
       "E": "Merupakan produk perantara, bukan nama enzim."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-094",
@@ -2065,7 +2158,8 @@
       "D": "11B-hidroksilase menyumbang sekitar 5% kasus CAH.",
       "E": "17a-hidroksilase merupakan kelainan yang sangat jarang."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-095",
@@ -2087,7 +2181,8 @@
       "D": "Rifampisin menginduksi (memacu) enzim CYP, bukan menghambat.",
       "E": "Interaksi utama terletak pada metabolisme fase 1 hepatik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-096",
@@ -2109,7 +2204,8 @@
       "D": "Cholecalciferol adalah prekursor yang disintesis kulit.",
       "E": "7-dehydrocholesterol adalah provitamin D3 di kulit."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-097",
@@ -2131,7 +2227,8 @@
       "D": "Ekskresi utamanya melalui empedu/feses.",
       "E": "Sintesisnya melibatkan reaksi di kulit, hati, dan ginjal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "gaster-2023-098",
@@ -2153,7 +2250,8 @@
       "D": "Menunda pemeriksaan berbahaya karena hipoglikemia persisten dapat memicu kerusakan otak.",
       "E": "Infus tanpa konfirmasi glukosa darah awal kurang tepat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "gaster-2023-099",
@@ -2175,7 +2273,8 @@
       "D": "Tidak meningkatkan sensitivitas insulin perifer.",
       "E": "Tidak mempercepat metabolisme sulfonilurea."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "gaster-2023-100",
@@ -2197,7 +2296,8 @@
       "D": "Ligamentum rotundum dipotong untuk membebaskan uterus.",
       "E": "Arteri pudenda interna memperdarahi area perineum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "gaster-2023-101",
@@ -2219,6 +2319,7 @@
       "D": "Pemberian ASI harus ditingkatkan, bukan dihentikan.",
       "E": "Insulin justru akan makin menurunkan kadar gula darah bayi hingga berakibat fatal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   }
 ]

@@ -19,7 +19,8 @@
       "D": "BNO-IVP mengevaluasi traktus urinarius bagian atas, kurang tepat dan berisiko pada trauma akut uretra.",
       "E": "Rontgen abdomen 3 posisi digunakan untuk evaluasi perforasi organ berongga/ileus, bukan ruptur uretra."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-002",
@@ -41,7 +42,8 @@
       "D": "Ureter pars pelvica terletak di dalam rongga panggul/pelvis.",
       "E": "Uretra terletak di regio perineum/pelvis bawah."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-003",
@@ -63,7 +65,8 @@
       "D": "Proteus vulgaris juga berbentuk batang Gram negatif tetapi Proteus mirabilis jauh lebih sering memicu ISK swarming.",
       "E": "E. coli merupakan kuman batang Gram negatif penyebab ISK tersering tetapi tidak membentuk pola swarming khas."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-004",
@@ -85,7 +88,8 @@
       "D": "Gangguan pendengaran (ototoksisitas) lebih khas pada golongan aminoglikosida.",
       "E": "Reaksi fotosensitivitas lebih sering ditemukan pada penggunaan fluorokuinolon atau tetrasiklin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-005",
@@ -107,7 +111,8 @@
       "D": "Tamsulosin bersifat uroselektif (alfa-1A) sehingga jarang menimbulkan pusing/hipotensi sistemik berat.",
       "E": "Oxybutynin adalah antimuskarinik yang digunakan untuk overactive bladder."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-006",
@@ -129,7 +134,8 @@
       "D": "Pengadilan memiliki wewenang legal tertinggi untuk menetapkan persetujuan (court approval).",
       "E": "Orang tua tidak ada/tidak dapat dihubungi pada skenario."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-007",
@@ -151,7 +157,8 @@
       "D": "Hiponatremia berat dapat menyebabkan kejang namun tidak dipicu krisis hipertensi mendadak.",
       "E": "Krisis kejang idiopatik tidak disertai gambaran krisis hipertensi dan edema serebral akut."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-008",
@@ -173,7 +180,8 @@
       "D": "Ostium urethra interna merupakan lubang menuju uretra.",
       "E": "Trigonum vesicae bersama katup submukosa ureter berfungsi mencegah vesicoureteral reflux (VUR)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-009",
@@ -195,7 +203,8 @@
       "D": "E. coli merupakan penyebab utama infeksi saluran kemih (ISK).",
       "E": "Streptokokus beta hemolitikus grup A merupakan etiologi utama Glomerulonefritis Akut Pasca Streptokokus (GNAPS) yang dominan hematuria."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-010",
@@ -217,7 +226,8 @@
       "D": "ISK (Infeksi Saluran Kemih) merupakan diagnosis umbrella yang tepat sesuai gejala klinis dan urinalisis.",
       "E": "Prostatitis disertai nyeri perineum, nyeri saat ejakulasi, atau prostat yang sangat nyeri pada RT."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-011",
@@ -239,7 +249,8 @@
       "D": "Syok hipovolemik menyebabkan tekanan darah turun/hipotensi, bukan krisis hipertensi.",
       "E": "E. coli merupakan penyebab terbanyak ISK atau HUS, bukan GNAPS."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-012",
@@ -261,7 +272,8 @@
       "D": "Tamsulosin mengurangi spasme ureter distal dan memfasilitasi ekspulsi batu.",
       "E": "Acetazolamide adalah penghambat karbonik anhidrase."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-013",
@@ -283,7 +295,8 @@
       "D": "Dokter forensik menangani kasus kematian tidak wajar/medikolegal luar rumah sakit.",
       "E": "Dokter ICCU menangani perawatan intensif jantung."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-014",
@@ -305,7 +318,8 @@
       "D": "Ensefalopati hipertensi dipicu oleh krisis hipertensi (biasanya TD sistolik >180-200 mmHg) tanpa tingkat uremia ekstrem.",
       "E": "Ensefalitis dipicu infeksi parenkim otak dengan gejala demam dan penurunan kesadaran."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-015",
@@ -327,7 +341,8 @@
       "D": "Epitel bertingkat silindris terdapat pada saluran napas atau uretra pars cavernosa.",
       "E": "Epitel berlapis kubis ditemukan pada saluran kelenjar keringat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "ginjal-2023-016",
@@ -349,7 +364,8 @@
       "D": "Uretra pars spongiosa berada di dalam korpus spongiosum penis.",
       "E": "Ostium uretra internum dikelilingi sfingter uretra internal yang bekerja secara involunter."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-017",
@@ -371,7 +387,8 @@
       "D": "Bilirubin indirek bersifat lipid-soluble dan tidak diekskresi ke urin.",
       "E": "Bilirubin direk bersifat water-soluble sehingga jika terhambat di empedu akan masuk ke darah dan dibuang via urin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-018",
@@ -393,7 +410,8 @@
       "D": "Pseudoefedrin mengaktivasi reseptor alfa-1 adrenergik pada leher vesika untuk meningkatkan resistensi uretra.",
       "E": "Tolterodin ditujukan untuk Urge Incontinence."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-019",
@@ -415,7 +433,8 @@
       "D": "Trauma abdomen merupakan istilah umum non-spesifik.",
       "E": "Grade 4 ditandai laserasi melalui korteks, medula hingga kolektivus dengan ekstravasasi urin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-020",
@@ -437,7 +456,8 @@
       "D": "Daerah ileus bukan batas permukaan tubuh.",
       "E": "Daerah simfisis pubis terletak di anterior suprapubik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-021",
@@ -459,7 +479,8 @@
       "D": "Retensi natrium sekunder terjadi tetapi dipicu hilangnya tekanan kapiler/onkotik.",
       "E": "Penurunan cardiac output terjadi pada syok kardiogenik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-022",
@@ -481,7 +502,8 @@
       "D": "CT Scan tidak diindikasikan sebagai skrining awal.",
       "E": "USG ginjal mengevaluasi struktur tetapi Mantoux spesifik untuk keamanan imunosupresi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-023",
@@ -503,7 +525,8 @@
       "D": "Ureter pars pelvica berjalan menyilang di bawah arteri uterina di rongga panggul.",
       "E": "Arteri testicularis hanya ada pada laki-laki."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-024",
@@ -525,7 +548,8 @@
       "D": "Hernia inguinalis ditandai adanya kantong hernia yang membesar saat berdiri dan bisa direduksi.",
       "E": "Undescended testis ditandai tidak terabanya testis di dalam kantong skrotum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-025",
@@ -547,7 +571,8 @@
       "D": "Bayangan opak pada ureter distal merupakan gambaran batu ureter.",
       "E": "Ekstravasasi ke intraperitoneum khas pada ruptur buli intraperitoneal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-026",
@@ -569,7 +594,8 @@
       "D": "Shifting dullness positif mengonfirmasi akumulasi cairan asites di rongga peritoneum.",
       "E": "Peningkatan tekanan atrium kanan dinilai melalui Jugular Venous Pressure (JVP)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-027",
@@ -591,7 +617,8 @@
       "D": "Fimbria (penulisan salah/sinonim pili) merupakan organel adhesi.",
       "E": "Flagella berperan untuk pergerakan (motilitas) bakteri."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-028",
@@ -613,7 +640,8 @@
       "D": "Najis Mutawassithah adalah najis sedang (kencing bayi perempuan/orang dewasa).",
       "E": "Makruh adalah hukum fikih perbuatan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-029",
@@ -635,7 +663,8 @@
       "D": "Dibuang pakaiannya tidak berdasar syariat.",
       "E": "Dibiarkan tidak menyucikan najis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-030",
@@ -657,7 +686,8 @@
       "D": "Disiram 3 kali tanpa mengusap bukan cara spesifik mukhaffafah.",
       "E": "Membiarkan kering tidak mensucikan najis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-031",
@@ -679,7 +709,8 @@
       "D": "Gagal ginjal terminal ditandai eGFR <15 mL/min berkelanjutan.",
       "E": "Insufisiensi ginjal akut istilah lama untuk AKI."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-032",
@@ -701,7 +732,8 @@
       "D": "Hemodialisis Cito dengan cepat membuang toksin uremik dan penarikan cairan ekstra selular.",
       "E": "Transfusi PRC tanpa dialisis justru akan memperberat edema paru pada kelebihan cairan masif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-033",
@@ -723,7 +755,8 @@
       "D": "Syok neurogenik terjadi pada cedera medula spinalis.",
       "E": "Refluks vesikoureter (VUR) memicu ISK berulang dan kerusakan parenkim ginjal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-034",
@@ -745,7 +778,8 @@
       "D": "Hadas besar membutuhkan mandi wajib.",
       "E": "Najis Mutawassithah adalah klasifikasi kencing bayi perempuan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-035",
@@ -767,7 +801,8 @@
       "D": "Parameter pemantauan adalah respon klinis umum.",
       "E": "Dosis baku ciprofloxacin standar adalah 250-500 mg per kali minum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-036",
@@ -789,7 +824,8 @@
       "D": "Stimulasi beta-2 adrenergik menyebabkan relaksasi bronkus.",
       "E": "Penghambatan PDE-5 adalah mekanisme kerja Sildenafil."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-037",
@@ -811,7 +847,8 @@
       "D": "Vesicle adalah vesikel intraseluler.",
       "E": "Muscle membran mengacu pada sarkolema sel otot."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-038",
@@ -833,7 +870,8 @@
       "D": "Hematuria makroskopik memerlukan evaluasi ketat.",
       "E": "Peningkatan proteinuria menandakan eksaserbasi/pemburukan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-039",
@@ -855,7 +893,8 @@
       "D": "Urethra pars spongiosa merupakan saluran sepanjang penis.",
       "E": "Urethra pars prostatica dikelilingi jaringan parenkim prostat."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-040",
@@ -877,7 +916,8 @@
       "D": "Dinding sel menjaga bentuk dan tekanan osmotik bakteri.",
       "E": "Ribosom berfungsi untuk sintesis protein intraseluler."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-041",
@@ -899,7 +939,8 @@
       "D": "Pirimidin tidak terdeteksi via tes reduksi.",
       "E": "Protein dideteksi dengan asam sulfosalisilat atau carik celup kuantitatif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-042",
@@ -921,7 +962,8 @@
       "D": "Informed consent sirkumsisi salah karena preputium harus dipertahankan.",
       "E": "Pemasangan kateter rutin tidak diindikasikan tanpa indikasi retensi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-043",
@@ -943,7 +985,8 @@
       "D": "Pemberian diuretik memperberat distensi vesika urinaria.",
       "E": "Observasi tanpa evaluasi memperburuk retensi urin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-044",
@@ -965,7 +1008,8 @@
       "D": "Trauma ginjal ditandai nyeri pinggang dan hematuria mikroskopis/makroskopis.",
       "E": "Ruptur uretra dorsal bukan istilah anatomi spesifik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-045",
@@ -987,7 +1031,8 @@
       "D": "Ansa Henle asendens berfungsi sebagai diluting segment (osmolalitas cairan menurun tajam).",
       "E": "Osmolalitas cairan tubulus berubah-ubah dinamis sepanjang segmen nefron."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-046",
@@ -1009,7 +1054,8 @@
       "D": "Pielonefritis akut ditandai gejala ISK atas (demam tinggi, leukositosis, nyeri ketok CVA).",
       "E": "Sistitis hanya terbatas ISK bawah tanpa demam tinggi/nyeri ketok CVA."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-047",
@@ -1031,7 +1077,8 @@
       "D": "Menghambat dinding sel pektidoglikan adalah mekanisme Penisilin/Sefalosporin.",
       "E": "Menghambat awal dinding sel adalah mekanisme Fosfomisin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-048",
@@ -1053,7 +1100,8 @@
       "D": "Hiperplasia prostat (BPH) ditandai prostat membesar dengan permukaan licin, kenyal, sulkus medianus dangkal.",
       "E": "Fimosis adalah ketidakmampuan retraksi prepusium."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-049",
@@ -1075,7 +1123,8 @@
       "D": "eGFR adalah penanda definitif pembagian stadium CKD 1 hingga 5.",
       "E": "Ureum urin tidak sensitif untuk pementasan CKD."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-050",
@@ -1097,7 +1146,8 @@
       "D": "Diabetes melitus bukan faktor risiko utama karsinoma buli.",
       "E": "Schistosoma haematobium memicu karsinoma sel skuamosa khas di daerah endemik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-051",
@@ -1119,7 +1169,8 @@
       "D": "Gagal jantung umum tanpa spesifikasi kelebihan cairan.",
       "E": "Kreatinin 1 mg/dL adalah nilai mendekati normal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-052",
@@ -1141,7 +1192,8 @@
       "D": "Pasangan tidak otomatis berwenang atas donor organ yang bersifat non-terapeutik bagi donor.",
       "E": "Pengadilan adalah lembaga resmi pemegang keputusan hak hukum individu inkompeten."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-053",
@@ -1163,7 +1215,8 @@
       "D": "Nefroblastoma adalah sinonim Tumor Wilms.",
       "E": "Tumor Wilms merupakan keganasan ginjal tersering pada anak usia <5 tahun dengan gambaran pendorongan massa ginjal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-054",
@@ -1185,7 +1238,8 @@
       "D": "Perdarahan adalah etiologinya, bukan mekanisme fisiologis intrarenek.",
       "E": "Dilatasi arteriol aferen meningkatkan GFR."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-055",
@@ -1207,7 +1261,8 @@
       "D": "Grade 2 didefinisikan sebagai laserasi parenkim korteks <1 cm.",
       "E": "Grade 1 hanya hematoma subkapsular tanpa robekan parenkim."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-056",
@@ -1229,7 +1284,8 @@
       "D": "Aspirasi port kateter merupakan teknik baku pengumpulan spesimen terkontrol pada pasien berkateter.",
       "E": "Urine 24 jam untuk clearance kreatinin atau proteinuria kuantitatif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-057",
@@ -1251,7 +1307,8 @@
       "D": "Urin 24 jam untuk kuantifikasi zat kimia.",
       "E": "Aspirasi suprapubik hanya dilakukan pada indikasi khusus/bayi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-058",
@@ -1273,7 +1330,8 @@
       "D": "Lobus lateral membentuk bagian terbesar prostat di samping kanan-kiri.",
       "E": "Zona transisional berada di sekeliling uretra proksimal (tempat BPH berkembang)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-059",
@@ -1295,7 +1353,8 @@
       "D": "Sesak napas bukan efek merugikan utama.",
       "E": "Gatal-gatal merupakan respon alergi idiosinkratik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-060",
@@ -1317,7 +1376,8 @@
       "D": "Lily sign khas pada IVP kista/duplikasi.",
       "E": "Claw sign merupakan tanda adanya massa padat parenkim."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-061",
@@ -1339,7 +1399,8 @@
       "D": "Jaringan fibril adalah komponen matriks.",
       "E": "Sel otot lurik membentuk sfingter uretra luar."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "ginjal-2023-062",
@@ -1361,7 +1422,8 @@
       "D": "Staphylococcus saprophyticus adalah kokus Gram positif bergerombol penyebab ISK.",
       "E": "Staphylococcus aureus lebih jarang menyebabkan ISK tanpa bakteremia sekunder."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-063",
@@ -1383,7 +1445,8 @@
       "D": "USG ginjal adalah pemeriksaan pencitraan awal lini pertama paling aman.",
       "E": "GFR adalah uji fungsi laboratorium, bukan pencitraan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-064",
@@ -1405,7 +1468,8 @@
       "D": "Estrogen berperan sekunder dalam sensitivitas reseptor.",
       "E": "Androgen adalah kelompok hormon secara umum."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-065",
@@ -1427,7 +1491,8 @@
       "D": "Asam nukleat kaya basa purin yang dirombak menjadi asam urat.",
       "E": "Asam amino menghasilkan gugus amonia/urea."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-066",
@@ -1449,7 +1514,8 @@
       "D": "Sindrom nefrotik didominasi proteinuria masif dan hipoalbuminemia.",
       "E": "Sistitis infeksi lokal kandung kemih."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-067",
@@ -1471,7 +1537,8 @@
       "D": "Furosemid diuretik simptomatik jika ada edema berat/simptomatik.",
       "E": "INH diberikan jika ada koinfeksi TB."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-068",
@@ -1493,7 +1560,8 @@
       "D": "Ureum dipengaruhi oleh asupan protein dan hidrasi.",
       "E": "Kreatinin urin fluktuatif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-069",
@@ -1515,7 +1583,8 @@
       "D": "GNAPS adalah glomerulonefritis imunologis.",
       "E": "Nefropati terminologi kronis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-070",
@@ -1537,7 +1606,8 @@
       "D": "Calyx minor bermuara menuju calyx mayor.",
       "E": "Uretra terletak jauh di distal vesika urinaria."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Anatomy"
   },
   {
     "id": "ginjal-2023-071",
@@ -1559,7 +1629,8 @@
       "D": "Defisiensi B12 memicu anemia pernisiosa.",
       "E": "Defisiensi besi sering menjadi komplikasi penyerta tetapi etiologi primer ginjalnya adalah defisiensi EPO."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-072",
@@ -1581,7 +1652,8 @@
       "D": "Kreatinin normal dapat menyesatkan pada pasien dengan massa otot rendah.",
       "E": "eGFR adalah baku emas penilaian penurunan fungsi filtrasi ginjal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-073",
@@ -1603,7 +1675,8 @@
       "D": "Glomerulonefritis primer terjadi tanpa penyakit sistemik underlying.",
       "E": "Glomerulonefritis sekunder istilah deskriptif umum nefritis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-074",
@@ -1625,7 +1698,8 @@
       "D": "Gangguan ereksi dikontrol fungsi vaskular dan saraf perifer.",
       "E": "Tumor/Kanker testis risiko keganasan utama akibat paparan suhu tinggi abdomen."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-075",
@@ -1647,7 +1721,8 @@
       "D": "Nekrosis tubular akut (ATN) mengenai epitel tubulus secara akut.",
       "E": "Glomerulopati membranosa ditandai penebalan membran basalis glomerulus difus."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-076",
@@ -1669,7 +1744,8 @@
       "D": "Tekanan ekstraseluler tidak spesifik glomerulus.",
       "E": "Tekanan osmotik tubulus proksimal minimal."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "ginjal-2023-077",
@@ -1691,7 +1767,8 @@
       "D": "Menyunnahkan keduanya adalah pendapat mazhab Maliki.",
       "E": "Haram bertentangan dengan sunnah Nabi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-078",
@@ -1713,7 +1790,8 @@
       "D": "Fimosis penyempitan preputium.",
       "E": "Torsio testis komplikasi akut akibat ketidakstabilan fiksasi anatomi UDT."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-079",
@@ -1735,7 +1813,8 @@
       "D": "Iritasi kandung kemih dipicu pelepasan formaldehida iritatif dalam urin.",
       "E": "Anemia hemolitik terjadi pada defisiensi G6PD paparan obat lain."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-080",
@@ -1757,7 +1836,8 @@
       "D": "ISK atas tidak sesuai dengan hanya gejala suprapubik.",
       "E": "Hipertensi stage 3 tidak digunakan dalam kriteria pediatrik AAP."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-081",
@@ -1777,7 +1857,8 @@
       "C": "Mual/muntah adalah efek samping biasa, bukan kontraindikasi mutlak.",
       "D": "Anemia hemolitik adalah bahaya toksisitas eritrosit spesifik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-082",
@@ -1799,7 +1880,8 @@
       "D": "Kapsula bowman adalah struktur pembungkus glomerulus.",
       "E": "Arteriol aferen pembuluh darah masuk."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-083",
@@ -1821,7 +1903,8 @@
       "D": "Segmen tipis ansa Henle dilapisi epitel gepeng selapis mirip kapiler.",
       "E": "Ansa Henle asendens tebal memiliki lumen jelas tanpa brush border."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Histology"
   },
   {
     "id": "ginjal-2023-084",
@@ -1843,7 +1926,8 @@
       "D": "Profil lipid evaluasi dislipidemia.",
       "E": "USG ginjal evaluasi anatomi struktural."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-085",
@@ -1865,7 +1949,8 @@
       "D": "Seftriakson IV diindikasikan jika anak intoleransi oral/muntah profus.",
       "E": "Sefotaksim IV diberikan pada kondisi sepsis/intoleransi oral."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-086",
@@ -1887,7 +1972,8 @@
       "D": "Propranolol adalah beta blocker non-selektif.",
       "E": "Tamsulosin adalah agen MET terbukti untuk ekspulsi batu ureter."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-087",
@@ -1909,7 +1995,8 @@
       "D": "Pengenceran dapat menurunkan sensitivitas tetapi faktor etiologi kuman adalah penyebab utama.",
       "E": "Urin siang dapat berpengaruh pada inkubasi tetapi jenis kuman faktor kunci."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-088",
@@ -1929,7 +2016,8 @@
       "C": "Vitamin C tinggi justru menyebabkan hasil negatif palsu dipstick.",
       "D": "BJ tinggi dapat membuat eritrosit mengkerut (krenasi) tetapi tetap terdeteksi secara mikroskopik."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-089",
@@ -1951,7 +2039,8 @@
       "D": "Gagal ginjal kronik penyakit progresif jangka panjang.",
       "E": "Glomerulonefritis adalah etiologi patologik underlying."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-090",
@@ -1973,7 +2062,8 @@
       "D": "Analisis gas darah menilai status asam-basa.",
       "E": "Kreatinin darah spesifik menilai penurunan Laju Filtrasi Glomerulus akut."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-091",
@@ -1995,7 +2085,8 @@
       "D": "Tes asam sulfosalisilat uji kualitatif semikuantitatif.",
       "E": "Tes asam asetat uji kualitatif pemanasan."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-092",
@@ -2017,7 +2108,8 @@
       "D": "Menghambat topoisomerase II adalah kerja Kuinolon.",
       "E": "Menghambat membran luar adalah kerja Polimiksin."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-093",
@@ -2039,7 +2131,8 @@
       "D": "Sistitis diobati antibiotik oral.",
       "E": "Hipertensi derajat 1 diobati antihipertensi oral."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-094",
@@ -2061,7 +2154,8 @@
       "D": "Siklosporin lini kedua/ketiga.",
       "E": "Bolus metilprednisolon untuk kasus nefrotik resisten steroid."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-095",
@@ -2083,7 +2177,8 @@
       "D": "Kultur urin mengevaluasi ISK, bukan hilangnya fungsi filtrasi.",
       "E": "CT kontras berisiko nephrotoxicity (NEF)."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "ginjal-2023-096",
@@ -2105,7 +2200,8 @@
       "D": "Enterococcus faecalis adalah kokus Gram positif.",
       "E": "Streptococcus pyogenes kokus Gram positif."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-097",
@@ -2127,7 +2223,8 @@
       "D": "Inotropik meningkatkan tekanan darah pada syok.",
       "E": "Antikoagulan indikasi thrombosis."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "ginjal-2023-098",
@@ -2149,7 +2246,8 @@
       "D": "Reabsorpsi tubulus proksimal meningkat.",
       "E": "Sistem RAAS diaktivasi, bukan diinhibisi."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Physiology"
   },
   {
     "id": "ginjal-2023-099",
@@ -2171,7 +2269,8 @@
       "D": "Defisiensi aldosteron memicu wasting natrium, bukan murni insensitivitas air.",
       "E": "Ekskresi protein memicu proteinuria."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "ginjal-2023-100",
@@ -2193,6 +2292,7 @@
       "D": "Sindrom Alport kelainan genetik kolagen tipe IV.",
       "E": "Amyloidosis renalis akibat penumpukan amiloid."
     },
-    "source_id": 1
+    "source_id": 1,
+    "komponenStatistik": "Diagnostics"
   }
 ]

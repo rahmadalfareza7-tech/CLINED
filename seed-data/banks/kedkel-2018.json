@@ -19,7 +19,8 @@
       "D": "Ciprofloxacin dikontraindikasikan pada anak usia <18 tahun karena berisiko menyebabkan gangguan pertumbuhan tulang/sendi (arthropathy), sehingga tidak cocok (unsuitable) diberikan pada pasien ini.",
       "E": "Efek samping merupakan reaksi merugikan obat, namun masalah kontraindikasi usia masuk kategori kecocokan obat."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-002",
@@ -41,7 +42,8 @@
       "D": "Epithema adalah obat kompres kulit.",
       "E": "Emulsa (emulsi) adalah sediaan cair mengandung dua fase cair yang tidak bercampur (air dan minyak) yang distabilkan dengan zat pengemulsi (emulgator)."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-003",
@@ -63,7 +65,8 @@
       "D": "Mengabaikan aspek promotif dan preventif.",
       "E": "Prinsip utama pelayanan dokter keluarga berlandaskan pendekatan yang komprehensif berorientasi pada pasien, keluarga, dan masyarakat (Patient, Family, and Community oriented)."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-004",
@@ -85,7 +88,8 @@
       "D": "Larutan irigasi dan dialisis masuk ke dalam kompartemen tubuh yang wajib steril.",
       "E": "Implan dimasukkan di bawah kulit/jaringan sehingga wajib steril."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-005",
@@ -107,7 +111,8 @@
       "D": "Sikap rasional adalah pertimbangan rasio manusia menurut Madzhab Klasik.",
       "E": "Sikap hedonistik adalah upaya manusia menghindari ketidaknyamanan menurut Madzhab Klasik."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-006",
@@ -129,7 +134,8 @@
       "D": "Dari norma kesopanan merupakan perilaku tidak patut.",
       "E": "Dari tinjauan hukum pidana merupakan tindakan melanggar hukum."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-007",
@@ -151,7 +157,8 @@
       "D": "Tes skrining yang baik mengutamakan SENSITIVITAS tinggi (menjaring sebanyak mungkin kasus), sedangkan kemampuan mendiagnostik pasti dengan spesifisitas tinggi adalah ciri tes diagnostik konfirmasi.",
       "E": "Tidak menyakitkan/minimal invasif agar masyarakat mau berpartisipasi."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-008",
@@ -173,7 +180,8 @@
       "D": "Pengusulan harus secara tertulis, tidak boleh sebatas lisan.",
       "E": "Obat harus sudah memiliki izin edar BPOM yang masih berlaku aktif."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-009",
@@ -195,7 +203,8 @@
       "D": "Penggunaan obat pada ibu hamil tanpa resep dokter sangat berbahaya dan bertentangan dengan tujuan DOEN.",
       "E": "DOEN mengutamakan efikasi dan keamanan yang teruji."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-010",
@@ -217,7 +226,8 @@
       "D": "Pertimbangan utama DOEN adalah obat yang efikasinya telah terbukti secara ilmiah melaui pengalaman klinis panjang dan jelas kemanfaatannya.",
       "E": "Diutamakan obat yang penyimpanan dan pengadaannya mudah di fasilitas primer."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-011",
@@ -239,7 +249,8 @@
       "D": "Perintah pengajaran shalat anak bukan turunan langsung dari laa ikraaha fid-diin.",
       "E": "Ayat QS Al-Baqarah 2:256 dimulai dengan ketiadaan paksaan dalam memeluk agama Islam ('Laa ikraaha fid-diin')."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-012",
@@ -261,7 +272,8 @@
       "D": "Praktik mandiri dokter/dokter gigi merupakan FKTP.",
       "E": "Puskesmas merupakan FKTP utama."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-013",
@@ -283,7 +295,8 @@
       "D": "Rapid test memerlukan kehadiran fisik.",
       "E": "Pemeriksaan fisik tatap muka dibatasi saat puncak transmisi pandemi."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-014",
@@ -305,7 +318,8 @@
       "D": "Terasing/tersingkir pemicu alienasi dan perilaku menyimpang.",
       "E": "Karena semua pilihan A, B, C, dan D merupakan faktor penyebab perilaku menyimpang, maka opsi 'bukan salah satu di atas' adalah yang tepat."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-015",
@@ -327,7 +341,8 @@
       "D": "Menurut acuan penilaian Riskesdas, rumah tangga dengan balita dikategorikan PHBS Baik apabila memenuhi minimal 6 indikator.",
       "E": "5 indikator merupakan syarat minimal untuk rumah tangga yang TIDAK memiliki balita."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-016",
@@ -349,7 +364,8 @@
       "D": "Pencegahan fokus pada upaya preventif.",
       "E": "Kolaborasi melibatkan kerja sama tim multidisiplin."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-017",
@@ -371,7 +387,8 @@
       "D": "Faktor budaya mempengaruhi norma dan perilaku.",
       "E": "Penelusuran riwayat keluarga residivis merupakan contoh praktik kriminologi positivis."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-018",
@@ -393,7 +410,8 @@
       "D": "BPJS mengedepankan fungsi gatekeeper dan Continuity of Care (pelayanan kontinu/berkesinambungan) untuk mengendalikan biaya dan mutu pelayanan.",
       "E": "Kesehatan reproduksi merupakan bagian dari ruang lingkup rawat jalan."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-019",
@@ -415,7 +433,8 @@
       "D": "Delirium adalah kondisi akut, bukan prekondisi kronis terbanyak.",
       "E": "Demensia berada di urutan kedua tersering (~5%)."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-020",
@@ -437,7 +456,8 @@
       "D": "Penyakit ringan dapat datang langsung ke klinik/puskesmas.",
       "E": "Pasien kondisi kritis/darurat memerlukan faskes rujukan."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-021",
@@ -459,7 +479,8 @@
       "D": "Bank konvensional mengandung usur riba (haram).",
       "E": "Perjudian mengandung unsur maysir (haram)."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-022",
@@ -481,7 +502,8 @@
       "D": "Impaction (konstipasi/skibala) adalah sindrom geriatri yang ditandai dengan kesulitan buang air besar.",
       "E": "Isolation mengarah pada gangguan psikososial/depresi."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-023",
@@ -503,7 +525,8 @@
       "D": "Multiple Sclerosis lebih dominan pada usia muda/dewasa.",
       "E": "Penyakit Alzheimer adalah penyebab demensia paling umum pada lansia (menyumbang 60-80% dari seluruh kasus)."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-024",
@@ -525,7 +548,8 @@
       "D": "Tingkat pendidikan didapat dari profil data diri.",
       "E": "Pekerjaan didapat dari profil medis pasien."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-025",
@@ -547,7 +571,8 @@
       "D": "Identifikasi obat hanya bagian kecil dari manajemen gejala.",
       "E": "Konseling keluarga merupakan aktivitas penunjang."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-026",
@@ -569,7 +594,8 @@
       "D": "Gold standard test adalah tes terbaik yang dijadikan tolok ukur kebenaran diagnosis.",
       "E": "Spesifisitas adalah kemampuan tes menunjukkan individu sehat dari populasi yang benar-benar sehat."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-027",
@@ -591,7 +617,8 @@
       "D": "Amoxicillin tersedia dalam banyak bentuk (tablet, sirup dry, dll).",
       "E": "Harga relatif tidak selalu lebih murah dibanding sirup biasa."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-028",
@@ -613,7 +640,8 @@
       "D": "Transaksi pengobatan dilakukan di akhir sesi.",
       "E": "Pemeriksaan fisik merupakan kelanjutan anamnesis."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-029",
@@ -635,7 +663,8 @@
       "D": "Dosis brosur bersifat patokan umum dan harus disesuaikan dengan kondisi ginjal/hati/umur pasien.",
       "E": "Bila obat baru terbukti secara ilmiah lebih unggul dan aman, obat baru tersebut diprioritaskan."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-030",
@@ -657,7 +686,8 @@
       "D": "Layanan kesehatan masuk aspek risiko eksternal.",
       "E": "Komponen Aspek Personal dalam Diagnosis Holistik mencakup: Alasan kedatangan, Harapan, Kekhawatiran, dan Persepsi pasien terhadap penyakitnya."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-031",
@@ -679,7 +709,8 @@
       "D": "Kurang aktivitas fisik adalah akibat sekunder.",
       "E": "Media sosial hanya salah satu elemen penggunaan gawai."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-032",
@@ -701,7 +732,8 @@
       "D": "Kepemilikan gadget tidak relevan untuk kriteria kuis adiksi karena kepemilikan tidak menentukan kecanduan atau tidaknya seseorang.",
       "E": "Penarikan diri dari interaksi sosial adalah indikator klinis kecanduan."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-033",
@@ -723,7 +755,8 @@
       "D": "Pembukaan adalah tahap awal perkenalan.",
       "E": "Menghubungkan keluhan somatik (dispepsia fungsional) dengan peristiwa pemicu stres psikologis (batal nikah) dilakukan pada tahap Perumusan Masalah."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-034",
@@ -745,7 +778,8 @@
       "D": "Menimbang plus minus masuk ke tahap pengambilan keputusan.",
       "E": "Ide alternatif digali secara aktif bersama konselor."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-035",
@@ -767,7 +801,8 @@
       "D": "Memberikan perhatian penuh ada dalam standar WHO.",
       "E": "Menggali dan mengidentifikasi masalah adalah tujuan proses konseling WHO."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-036",
@@ -789,7 +824,8 @@
       "D": "Sakit (illness) adalah pengalaman dan penilaian subjektif individu terhadap penderitaan atau ketidaknyamanan tubuhnya.",
       "E": "Perilaku penyakit merujuk pada respons institusional."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-037",
@@ -811,7 +847,8 @@
       "D": "Kuadran 5 tidak ada dalam matriks 2x2.",
       "E": "Kuadran 2: Tidak terasa Sakit (-), Ada Penyakit (+)."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-038",
@@ -833,7 +870,8 @@
       "D": "Keputusan berobat aktif (pencarian pengobatan) dipemicu langsung oleh tingkatan/intensitas gejala sakit berulang yang mengganggu kenyamanan pasien.",
       "E": "Sosial budaya mempengaruhi kepercayaan terhadap pengobatan alternatif."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-039",
@@ -855,7 +893,8 @@
       "D": "Langkah awal penatalaksanaan adalah melakukan pemeriksaan GDP dan GD2PP untuk mengevaluasi derajat hiperglikemia klinis dan menentukan eskalasi terapi OHO/insulin.",
       "E": "Target GDP yang terkontrol baik adalah <100 mg/dL."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-040",
@@ -877,7 +916,8 @@
       "D": "Sediaan ini adalah larutan rekonstitusi, bukan emulsi.",
       "E": "Konsentrasi larutan setelah rekonstitusi adalah 200 mg/ml."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-041",
@@ -899,7 +939,8 @@
       "D": "Tugas utama Tim Ahli DOEN adalah mengevaluasi daftar obat esensial versi sebelumnya serta menilai secara ilmiah obat yang masuk/keluar.",
       "E": "Pencatatan administratif dilakukan sekretariat/Tim Pelaksana."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-042",
@@ -921,7 +962,8 @@
       "D": "Ihtikar (penimbunan barang dagangan di pasar) bukan alasan dasar keharaman akad asuransi konvensional.",
       "E": "Jahalah terdapat pada ketiadaan transparansi akad."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-043",
@@ -943,7 +985,8 @@
       "D": "Penyiapan puyer racikan membutuhkan waktu pengerjaan lebih lama di apotek.",
       "E": "Penggunaan oral pada anak sering sulit jika rasanya pahit."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-044",
@@ -965,7 +1008,8 @@
       "D": "Mempengaruhi perjalanan penyakit mengacu pada perburukan derajat kronisitas.",
       "E": "Kondisi hunian yang sempit, sesak, dan tanpa ventilasi bertindak sebagai faktor pencetus/penunjang (predisposing factor lingkungan) munculnya keluhan psikologis."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-045",
@@ -987,7 +1031,8 @@
       "D": "Efek lebih cepat didapat dari sediaan sublingual/suntikan.",
       "E": "Rasa nyaman di mulut didapat dari tablet kunyah atau salut gula."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-046",
@@ -1009,7 +1054,8 @@
       "D": "Kebijakan KBK 2004 Dikti menetapkan standar lulusan fakultas kedokteran di Indonesia sebagai Dokter Layanan Primer dengan penerapan prinsip kedokteran keluarga.",
       "E": "Istilah lama praktik mandiri."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-047",
@@ -1031,7 +1077,8 @@
       "D": "Penilai aset fisik diampu oleh appraisal teknis.",
       "E": "Peran dokter dalam industri asuransi jiwa sangat dibutuhkan sebagai Underwriter Medis untuk menilai riwayat penyakit, kelayakan, serta tingkat risiko medis calon peserta."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-048",
@@ -1053,7 +1100,8 @@
       "D": "Dokter keluarga bekerja dalam tim terpadu/rujukan.",
       "E": "Mengutamakan pencegahan sekunder semata tidak mencakup aspek holistik."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-049",
@@ -1075,7 +1123,8 @@
       "D": "Definisi patologi sosial.",
       "E": "Anomi (Durkheim) adalah keadaan norma dan sistem nilai masyarakat yang kehilangan kekuatan mengikat, tanpa kepastian atau norma yang dihayati bersama."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-050",
@@ -1097,7 +1146,8 @@
       "D": "Kerja sama bisnis adalah akad Musyarakah/Mudharabah.",
       "E": "Penitipan adalah akad Wadi'ah."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-051",
@@ -1119,7 +1169,8 @@
       "D": "Penggerusan wajib higienis agar tidak tercemar kontaminan.",
       "E": "Mengubah bentuk sediaan menjadi puyer tidak mengurangi profil insidensi efek samping farmakologis dari zat aktif obat tersebut."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-052",
@@ -1141,7 +1192,8 @@
       "D": "Penyakit degeneratif berkembang seiring pertambahan usia.",
       "E": "Stamina tubuh yang tetap terjaga bukanlah risiko/dampak negatif dari pertambahan usia lansia."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-053",
@@ -1163,7 +1215,8 @@
       "D": "Elemen utama penilaian Keamanan Obat (Safety) adalah insidensi Efek Samping dan tingkat toksisitasnya pada pasien.",
       "E": "Efikasi menilai kemanjuran obat."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-054",
@@ -1185,7 +1238,8 @@
       "D": "Pelayanan terintegrasi menyatukan jejaring faskes.",
       "E": "Identifikasi masalah kesehatan secara menyeluruh dari aspek personal, klinis, risiko internal, eksternal, dan fungsional dinamakan Diagnosis Holistik."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-055",
@@ -1207,7 +1261,8 @@
       "D": "Perasa ditambahkan secara terpisah pada zat eksipien.",
       "E": "Pengawet tetap dibutuhkan setelah ditambahkan air."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-056",
@@ -1229,7 +1284,8 @@
       "D": "Berhubungan dengan disiplin waktu kedatangan.",
       "E": "Menerima panggilan telepon secara berulang saat sesi konsultasi berlangsung menunjukkan sikap mengabaikan dan tidak menghargai pasien."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-057",
@@ -1251,7 +1307,8 @@
       "D": "Status nutrisi yang buruk (berat badan kurang) melekat secara biologis pada tubuh individu pasien, sehingga merupakan Risiko Internal.",
       "E": "Pola perawatan ibu yang terbagi masuk risiko eksternal keluarga."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-058",
@@ -1273,7 +1330,8 @@
       "D": "Pengobatan paliatif untuk meminimalkan nyeri stadium akhir.",
       "E": "Penyuluhan kesehatan untuk promotif massal."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-059",
@@ -1295,7 +1353,8 @@
       "D": "Parasetamol tepat diberikan sebagai simptomatik penurun pusing/gejala malaise.",
       "E": "Tidak ada indikasi antibiotik jenis apa pun pada infeksi virus murni."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-060",
@@ -1317,7 +1376,8 @@
       "D": "Diagnosis klinis common cold sudah benar.",
       "E": "Dosis dan durasi mengacu pada resep pemberian."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-061",
@@ -1339,7 +1399,8 @@
       "D": "Opsi ini menghilangkan diagnosis klinis hipertensi dan hiperkolesterolemia.",
       "E": "Opsi ini mengabaikan variabel riwayat merokok."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-062",
@@ -1361,7 +1422,8 @@
       "D": "Keluhan utama masuk dalam Aspek Personal.",
       "E": "Kondisi ekonomi masuk dalam Aspek Risiko Eksternal."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-063",
@@ -1383,7 +1445,8 @@
       "D": "Selective abreaction bukan istilah umum distorsi Beck.",
       "E": "Arbitrary inference menarik kesimpulan tanpa bukti pendukung."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-064",
@@ -1405,7 +1468,8 @@
       "D": "Fase pemeliharaan fokus pada pencegahan kambuh (relapse).",
       "E": "Fase penilaian fokus pada pencarian informasi psikososial awal."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-065",
@@ -1427,7 +1491,8 @@
       "D": "Fase Penilaian (Assessment phase) bertujuan membangun rapot/hubungan baik dengan pasien/keluarga guna mengidentifikasi masalah psikososial dasar dan menentukan modalitas pendekatan CBT.",
       "E": "Rekonseptualisasi dilakukan setelah pengumpulan informasi selesai."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-066",
@@ -1449,7 +1514,8 @@
       "D": "Depresi ditandai rasa sedih berlebih dan penarikan diri.",
       "E": "Bargaining ditandai tawar-menawar kesempatan hidup."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-067",
@@ -1471,7 +1537,8 @@
       "D": "Fisiologis terkait kebutuhan makan, minum, dan tidur.",
       "E": "Kebutuhan Aktualisasi Diri (Self-Actualization) merupakan pilar tertinggi hierarki Maslow yang ditandai dengan otonomi, penerimaan diri, dan kebebasan dari tekanan internal/eksternal."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-068",
@@ -1493,7 +1560,8 @@
       "D": "Noda darah tidak disebutkan dalam matan hadits.",
       "E": "Lemak babi merupakan zat haram dikonsumsi."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-069",
@@ -1515,7 +1583,8 @@
       "D": "Iritasi lambung dihindari dengan sediaan salut enterik.",
       "E": "Efek lebih lama dicapai oleh tablet lepas lambat."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-070",
@@ -1537,7 +1606,8 @@
       "D": "Accordion family ditandai anak dewasa yang kembali hidup bersama orang tua.",
       "E": "Three generation mencakup nenek/kakek, orang tua, dan anak."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-071",
@@ -1559,7 +1629,8 @@
       "D": "Menghentikan kerja ibu dapat mengganggu kestabilan finansial keluarga.",
       "E": "Memisahkan pengasuhan dapat memicu trauma separasi anak."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-072",
@@ -1581,7 +1652,8 @@
       "D": "Implan dimasukkan secara subdermal.",
       "E": "Bacilla bukan bentuk sediaan farmasi baku."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-073",
@@ -1603,7 +1675,8 @@
       "D": "Kegiatan promotif dan preventif kesehatan di lingkungan kerja merupakan Tugas Pokok Pelayanan Kesehatan Kerja (sebagaimana diatur Permenaker).",
       "E": "Analisis risiko adalah metode kalkulasi dampak pajanan."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-074",
@@ -1625,7 +1698,8 @@
       "D": "Ergonomi berhubungan dengan tata letak bangku kerja.",
       "E": "Bahaya fisik seperti gelombang panas tidak tersaring oleh masker pernapasan."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-075",
@@ -1647,7 +1721,8 @@
       "D": "Diagnosis klinis adalah langkah penentuan penyakit.",
       "E": "Diagnosis PAK adalah kesimpulan hubungan kerja."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-076",
@@ -1669,7 +1744,8 @@
       "D": "Data Pengujian Lingkungan Kerja (seperti kadar debu, nilai ambang batas bahan kimia, atau kebisingan) adalah bukti objektif paling kuat penunjang diagnosis okupasi.",
       "E": "Data kunjungan hanya menunjukkan angka absensi/poliklinik."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-077",
@@ -1691,7 +1767,8 @@
       "D": "Menyebutkan tidak terdapat pajanan melanggar prinsip pembuktian kausalitas.",
       "E": "Membalik urutan diagnosis klinis dan PAK."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-078",
@@ -1713,7 +1790,8 @@
       "D": "Mendapat akar masalah baru tahap kognitif awal.",
       "E": "Ketergantungan pada konselor merupakan kegagalan konseling."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-079",
@@ -1735,7 +1813,8 @@
       "D": "Didengarkan masalahnya merupakan teknik ventilasi emosi.",
       "E": "Edukasi medis merupakan bagian dari transmisi informasi."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-080",
@@ -1757,7 +1836,8 @@
       "D": "Menyombongkan diri adalah sikap batin penolakan.",
       "E": "Berdasarkan QS Nuh 71:7, tindakan fisik spontan saat diseru dakwah adalah 'memasukkan anak jari ke dalam telinganya' (menutup telinga)."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-081",
@@ -1779,7 +1859,8 @@
       "D": "Impaction adalah masalah konstipasi/feses mengeras.",
       "E": "Isolation adalah penarikan diri sosial."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-082",
@@ -1801,7 +1882,8 @@
       "D": "Hasil negatif pada orang sakit adalah Negatif Palsu (False Negative).",
       "E": "Mengacu pada tes inkonklusif."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Diagnostics"
   },
   {
     "id": "kedkel-2018-083",
@@ -1823,7 +1905,8 @@
       "D": "Menghindari monopoli produsen tunggal.",
       "E": "Diutamakan obat tanpa kriteria restriksi rumit."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-084",
@@ -1845,7 +1928,8 @@
       "D": "Uji Fase 4 (Post-Marketing Surveillance) dilakukan untuk memantau efek samping setelah obat beredar.",
       "E": "Uji Fase 1 berfokus pada keamanan dasar dan batas toleransi dosis pada relawan sehat."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Pharmacology"
   },
   {
     "id": "kedkel-2018-085",
@@ -1867,7 +1951,8 @@
       "D": "Memenuhi syarat sanitasi pembuangan kotoran manusia.",
       "E": "Tempat pembuangan sampah yang terbuka (tidak tertutup) melanggar syarat sanitasi karena menjadi sarang lalat dan vektor pemicu penularan diare."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-086",
@@ -1889,7 +1974,8 @@
       "D": "Pendekatan terintegrasi dan berkesinambungan.",
       "E": "Meningkatkan kapasitas dan kebugaran kerja."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-087",
@@ -1911,7 +1997,8 @@
       "D": "Alat komunikasi merupakan sarana pendukung.",
       "E": "Tenaga kesehatan bertindak sebagai pembina dari Puskesmas setempat."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-088",
@@ -1933,7 +2020,8 @@
       "D": "SMD tanpa advokasi tingkat desa terlebih dahulu.",
       "E": "Membalik urutan MMD dan SMD."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-089",
@@ -1955,7 +2043,8 @@
       "D": "Pendidikan tinggi tidak menjadi jaminan perlindungan biologis terhadap ketergantungan zat.",
       "E": "Penggunaan ekstasi non-medis tanpa resep legal dilarang keras oleh hukum."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-090",
@@ -1977,7 +2066,8 @@
       "D": "Kecanduan ditandai perilaku kompulsi tak terkontrol dan sakau parah.",
       "E": "Ketergantungan ditandai wujud toleransi fisik dan fungsional penuh."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-091",
@@ -1999,7 +2089,8 @@
       "D": "Melapor mandiri ke IPWL membebaskan dari tuntutan pidana.",
       "E": "Detoksifikasi hanya tahapan medis awal dari keseluruhan proses rehabilitasi."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   },
   {
     "id": "kedkel-2018-092",
@@ -2021,6 +2112,7 @@
       "D": "Edukasi pasien saja tidak efektif mengubah gaya hidup masakan berlemak di rumah.",
       "E": "Paman tidak relevan dalam pengelolaan intervensi gaya hidup harian."
     },
-    "source_id": 2018
+    "source_id": 2018,
+    "komponenStatistik": "Recall"
   }
 ]
