@@ -12,7 +12,7 @@ const privateFiles = new Set(['server.mjs','package.json','package-lock.json','d
 
 async function staticFile(req,res){
   if(!['GET','HEAD'].includes(req.method))return res.writeHead(405).end();
-  const wanted=decodeURIComponent(new URL(req.url,`http://${req.headers.host||'localhost'}`).pathname),rel=wanted==='/'?'index.html':wanted.replace(/^\/+/, '');
+  const wanted=decodeURIComponent(new URL(req.url,`http://${req.headers.host||'localhost'}`).pathname),rel=wanted==='/'?'index.html':wanted==='/app'?'app.html':wanted.replace(/^\/+/, '');
   if(rel.includes('..')||rel.startsWith('.')||privateFiles.has(rel.toLowerCase())||rel.startsWith('data/')||rel.startsWith('seed-data/')||rel.startsWith('banks/')||rel.startsWith('lib/')||rel.startsWith('api/')||rel.endsWith('.bak'))return res.writeHead(404).end();
   const file=resolve(root,rel);
   if(!file.startsWith(root+sep))return res.writeHead(404).end();
