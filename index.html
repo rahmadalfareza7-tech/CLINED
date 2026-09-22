@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="stylesheet" href="css/landing.css?v=2">
+<link rel="stylesheet" href="css/landing.css?v=3">
 </head>
 <body>
 
@@ -32,29 +32,32 @@
       <div class="slide-inner">
         <div class="copy">
           <h1>Latihan soal UAB dan UPI tanpa bosan.</h1>
-          <p class="lead">CLINED mengumpulkan bank soal klinis, flashcard, materi, dan statistik belajarmu dalam satu aplikasi. Bisa dibuka di HP, juga saat sinyal hilang.</p>
+          <p class="lead">Bank soal klinis, flashcard, materi, dan statistik belajarmu, dalam satu jalur yang kamu susuri blok demi blok. Bisa dibuka di HP, juga saat sinyal hilang.</p>
+          <dl class="stat-row">
+            <div><dt>20</dt><dd>blok UAB</dd></div>
+            <div><dt>7</dt><dd>semester</dd></div>
+            <div><dt>2.200+</dt><dd>soal terlatih</dd></div>
+          </dl>
           <div class="cta-row">
             <a class="btn" href="./app.html" data-cta="start">Mulai belajar</a>
             <button class="btn btn-ghost" type="button" data-go-next>Lihat fitur</button>
           </div>
-          <ul class="chips" aria-label="Ringkasan isi">
-            <li><b>20</b> blok</li>
-            <li><b>7</b> semester</li>
-            <li><b>2.200+</b> soal</li>
-          </ul>
         </div>
-        <div class="visual visual-phone" aria-hidden="true">
-          <div class="phone">
-            <div class="phone-stats"><span>⚡ <b>240</b></span><span>💎 <b>12</b></span></div>
-            <div class="phone-banner">
-              <span class="phone-mascot">🧑‍⚕️</span>
+        <div class="visual visual-path" aria-hidden="true">
+          <div class="path-peek">
+            <div class="path-peek-head">
+              <span class="path-peek-mascot">🧑‍⚕️</span>
               <div><b>Siap menaklukkan UAB?</b><small>Ikuti blok satu per satu.</small></div>
+              <span class="path-peek-stats">⚡ 240 · 💎 12</span>
             </div>
-            <div class="phone-sem"><span>Semester 3</span></div>
-            <div class="phone-path">
-              <div class="pnode active" style="--x:-34px"><i>🦴</i><small>Muskulo</small><em>MULAI</em></div>
-              <div class="pnode" style="--x:30px"><i>🫁</i><small>Respiratory</small></div>
-              <div class="pnode" style="--x:-8px"><i>❤️</i><small>Kardiologi</small></div>
+            <div class="path-peek-sem">SEMESTER 3</div>
+            <div class="path-peek-nodes">
+              <div class="pnode is-active" style="--x:-30px"><i>🦴</i><em>MULAI</em></div>
+              <div class="pnode" style="--x:26px"><i>🫁</i></div>
+              <div class="pnode" style="--x:-10px"><i>❤️</i></div>
+            </div>
+            <div class="path-peek-labels">
+              <span>Muskuloskeletal</span><span>Respiratory</span><span>Kardiologi</span>
             </div>
           </div>
         </div>
@@ -65,26 +68,25 @@
     <section class="slide" data-tone="blue" role="group" aria-roledescription="slide" aria-label="Jalur blok UAB">
       <div class="slide-inner">
         <div class="copy">
-          <span class="badge" aria-hidden="true">🗺️</span>
           <h2>Jalur 20 blok, dari semester 1 sampai 7.</h2>
-          <p class="lead">Buka blok satu per satu seperti jalur belajar. Blok yang sudah punya soal atau materi menyala sendiri.</p>
-          <ul class="points">
-            <li><i>⚡</i><div><b>XP, gem, dan streak</b><span>Bertambah setiap kamu selesai berlatih.</span></div></li>
-            <li><i>🔓</i><div><b>Blok terbuka otomatis</b><span>Begitu bank soal atau materi ditambahkan, tidak perlu update aplikasi.</span></div></li>
-            <li><i>📚</i><div><b>Satu blok, semua bahan</b><span>Bank soal, materi, dan playlist Ninja Nerd ada di halaman blok yang sama.</span></div></li>
-          </ul>
+          <p class="lead">Buka blok satu per satu seperti jalur belajar biasa. Blok yang sudah punya soal atau materi menyala sendiri, tanpa perlu update aplikasi.</p>
+          <div class="feature-list">
+            <div><b>XP, gem, dan streak</b> bertambah setiap kamu selesai berlatih.</div>
+            <div><b>Blok terbuka otomatis</b> begitu bank soal atau materi ditambahkan.</div>
+            <div><b>Satu blok, semua bahan</b>: bank soal, materi, dan playlist Ninja Nerd ada di halaman yang sama.</div>
+          </div>
         </div>
         <div class="visual" aria-label="Daftar blok per semester">
-          <div class="blocks">
-            <div class="brow"><span class="bsem">Sem 1</span><span class="bchip"><i>🦴</i>BM1</span><span class="bchip"><i>🧬</i>BM2</span><span class="bchip"><i>👂</i>HNC</span></div>
-            <div class="brow"><span class="bsem">Sem 2</span><span class="bchip"><i>🩺</i>MP1</span><span class="bchip"><i>💊</i>MP2</span><span class="bchip"><i>🧪</i>MPT</span></div>
-            <div class="brow"><span class="bsem">Sem 3</span><span class="bchip on"><i>🦴</i>Muskulo</span><span class="bchip on"><i>🫁</i>Respiratory</span><span class="bchip on"><i>❤️</i>Kardiologi</span></div>
-            <div class="brow"><span class="bsem">Sem 4</span><span class="bchip on"><i>🩸</i>Hematologi</span><span class="bchip on"><i>🫃</i>GIT</span><span class="bchip"><i>🔎</i>Forensik</span></div>
-            <div class="brow"><span class="bsem">Sem 5</span><span class="bchip on"><i>🫘</i>Ginjal</span><span class="bchip on"><i>🧪</i>Endokrin</span><span class="bchip"><i>🧬</i>Reproduksi</span></div>
-            <div class="brow"><span class="bsem">Sem 6</span><span class="bchip on"><i>🧠</i>SSP</span><span class="bchip on"><i>👁️</i>Panca Indra</span></div>
-            <div class="brow"><span class="bsem">Sem 7</span><span class="bchip on"><i>🩺</i>Kedkom</span><span class="bchip on"><i>👨‍👩‍👧‍👦</i>Kedkel</span><span class="bchip"><i>🧬</i>Mulsis</span></div>
-          </div>
-          <p class="legend"><span class="dot-on"></span>Sudah ada isi <span class="dot-off"></span>Segera menyusul</p>
+          <ol class="toc">
+            <li><span class="toc-sem">1</span><span class="toc-blocks"><span>BM1</span><span>BM2</span><span>HNC</span></span></li>
+            <li><span class="toc-sem">2</span><span class="toc-blocks"><span>MP1</span><span>MP2</span><span>MPT</span></span></li>
+            <li><span class="toc-sem">3</span><span class="toc-blocks"><span class="on">Muskuloskeletal</span><span class="on">Respiratory</span><span class="on">Kardiologi</span></span></li>
+            <li><span class="toc-sem">4</span><span class="toc-blocks"><span class="on">Hematologi</span><span class="on">GIT</span><span>Forensik</span></span></li>
+            <li><span class="toc-sem">5</span><span class="toc-blocks"><span class="on">Ginjal</span><span class="on">Endokrin</span><span>Reproduksi</span></span></li>
+            <li><span class="toc-sem">6</span><span class="toc-blocks"><span class="on">SSP</span><span class="on">Panca Indra</span></span></li>
+            <li><span class="toc-sem">7</span><span class="toc-blocks"><span class="on">Kedkom</span><span class="on">Kedkel</span><span>Mulsis</span></span></li>
+          </ol>
+          <p class="toc-legend">Tulisan gelap dan tebal sudah ada isinya. Tulisan pudar segera menyusul.</p>
         </div>
       </div>
     </section>
@@ -93,18 +95,16 @@
     <section class="slide" data-tone="orange" role="group" aria-roledescription="slide" aria-label="Bank soal dan pembahasan">
       <div class="slide-inner">
         <div class="copy">
-          <span class="badge" aria-hidden="true">📝</span>
           <h2>Soal klinis dengan pembahasan tiap opsi.</h2>
-          <p class="lead">Kamu tidak hanya tahu jawaban yang benar. Setiap pilihan dijelaskan, jadi kamu paham kenapa pilihan lain salah.</p>
-          <ul class="points">
-            <li><i>🔖</i><div><b>Bookmark dan riwayat</b><span>Simpan soal penting, lihat lagi skor tiap kuis.</span></div></li>
-            <li><i>❌</i><div><b>Soal yang sering salah</b><span>Terkumpul otomatis untuk kamu ulang.</span></div></li>
-            <li><i>⏱️</i><div><b>Batas waktu opsional</b><span>Latihan santai atau simulasi ujian, kamu yang pilih.</span></div></li>
-          </ul>
+          <p class="lead">Kamu tidak hanya tahu jawaban yang benar. Setiap pilihan dijelaskan, coba di sebelah, jadi kamu paham kenapa pilihan lain salah.</p>
+          <div class="feature-list">
+            <div><b>Bookmark dan riwayat</b> menyimpan soal penting dan skor tiap kuis.</div>
+            <div><b>Soal yang sering salah</b> terkumpul otomatis untuk kamu ulang.</div>
+            <div><b>Batas waktu opsional</b>: latihan santai atau simulasi ujian, kamu yang pilih.</div>
+          </div>
         </div>
         <div class="visual">
           <div class="quiz" id="quiz">
-            <p class="demo-tag">Contoh soal. Coba pilih satu jawaban.</p>
             <p class="q">Perempuan 19 tahun dengan diabetes tipe 1 datang dengan lemas, mual, dan nyeri perut. Napas cepat dan dalam, berbau seperti buah. GDS 420 mg/dL. Diagnosis paling mungkin?</p>
             <div class="opts">
               <button type="button" class="opt" data-correct="1" data-why="Benar. Hiperglikemia berat dengan napas Kussmaul dan bau keton menunjukkan asidosis metabolik akibat ketosis."><span class="l">A</span>Ketoasidosis diabetik</button>
@@ -124,18 +124,16 @@
     <section class="slide" data-tone="purple" role="group" aria-roledescription="slide" aria-label="Flashcard UPI">
       <div class="slide-inner">
         <div class="copy">
-          <span class="badge" aria-hidden="true">🃏</span>
           <h2>Flashcard gambar untuk UPI.</h2>
-          <p class="lead">Lihat gambar, tebak dulu, baru buka jawabannya. Lalu nilai seberapa kamu ingat, dan kartu yang sulit akan muncul lebih cepat.</p>
-          <ul class="points">
-            <li><i>🔁</i><div><b>Jadwal ulang otomatis</b><span>Pilih Again, Hard, Good, atau Easy setelah membuka jawaban.</span></div></li>
-            <li><i>➕</i><div><b>Buat kartu sendiri</b><span>Tambahkan foto, pertanyaan, dan jawaban dari catatanmu.</span></div></li>
-            <li><i>🗂️</i><div><b>Tersusun per blok</b><span>Kartu dikelompokkan berdasarkan blok dan materi.</span></div></li>
-          </ul>
+          <p class="lead">Lihat gambar, tebak dulu, baru buka jawabannya, coba di sebelah. Lalu nilai seberapa kamu ingat, dan kartu yang sulit akan muncul lebih cepat.</p>
+          <div class="feature-list">
+            <div><b>Jadwal ulang otomatis</b> lewat pilihan Again, Hard, Good, atau Easy.</div>
+            <div><b>Buat kartu sendiri</b>: tambahkan foto, pertanyaan, dan jawaban dari catatanmu.</div>
+            <div><b>Tersusun per blok</b>, dikelompokkan berdasarkan blok dan materi.</div>
+          </div>
         </div>
         <div class="visual">
           <div class="flipwrap">
-            <p class="demo-tag">Contoh kartu. Ketuk untuk membuka jawaban.</p>
             <button type="button" class="flip" id="flip" aria-pressed="false" aria-label="Kartu flashcard. Ketuk untuk membalik.">
               <span class="face front">
                 <img src="assets/flashcards/heart.svg" alt="" width="84" height="84">
@@ -160,23 +158,22 @@
     <section class="slide" data-tone="yellow" role="group" aria-roledescription="slide" aria-label="Materi dan video">
       <div class="slide-inner">
         <div class="copy">
-          <span class="badge" aria-hidden="true">📚</span>
           <h2>Materi dan video, langsung dari halaman blok.</h2>
           <p class="lead">Tombol Materi di tiap blok membuka catatan belajarnya. Link playlist Ninja Nerd juga tersedia per blok.</p>
-          <ul class="points">
-            <li><i>🧭</i><div><b>Dirapikan per semester</b><span>Kumpulan Materi mengikuti urutan blok UAB.</span></div></li>
-            <li><i>🔗</i><div><b>Link selalu terbaru</b><span>Admin dan helper memperbarui link tanpa menunggu update aplikasi.</span></div></li>
-            <li><i>📥</i><div><b>Impor soal dari JSON</b><span>Tambah paket soal ke blok mana pun lewat panel Kelola Konten.</span></div></li>
-          </ul>
+          <div class="feature-list">
+            <div><b>Dirapikan per semester</b>, mengikuti urutan blok UAB.</div>
+            <div><b>Link selalu terbaru</b>, diperbarui admin dan helper tanpa menunggu update aplikasi.</div>
+            <div><b>Impor soal dari JSON</b> ke blok mana pun lewat panel Kelola Konten.</div>
+          </div>
         </div>
         <div class="visual" aria-hidden="true">
-          <div class="mlist">
-            <div class="mcard has"><span class="mnum">01</span><i>🦴</i><div><b>MUSKULOSKELETAL</b><small>Materi tersedia</small></div><span class="marr">›</span></div>
-            <div class="mcard has"><span class="mnum">02</span><i>🫁</i><div><b>RESPIRATORY</b><small>Materi tersedia</small></div><span class="marr">›</span></div>
-            <div class="mcard has"><span class="mnum">03</span><i>❤️</i><div><b>KARDIOLOGI</b><small>Materi tersedia</small></div><span class="marr">›</span></div>
-            <div class="mcard has"><span class="mnum">04</span><i>🫘</i><div><b>GINJAL</b><small>Materi tersedia</small></div><span class="marr">›</span></div>
-            <div class="mcard"><span class="mnum">05</span><i>🔎</i><div><b>FORENSIK</b><small>Materi belum tersedia</small></div><span class="marr">›</span></div>
-          </div>
+          <ol class="mlist">
+            <li class="has"><b>Muskuloskeletal</b><span>Materi tersedia</span></li>
+            <li class="has"><b>Respiratory</b><span>Materi tersedia</span></li>
+            <li class="has"><b>Kardiologi</b><span>Materi tersedia</span></li>
+            <li class="has"><b>Ginjal</b><span>Materi tersedia</span></li>
+            <li><b>Forensik</b><span>Materi belum tersedia</span></li>
+          </ol>
         </div>
       </div>
     </section>
@@ -185,23 +182,22 @@
     <section class="slide" data-tone="red" role="group" aria-roledescription="slide" aria-label="Study Lab">
       <div class="slide-inner">
         <div class="copy">
-          <span class="badge" aria-hidden="true">🧠</span>
           <h2>Study Lab: belajar aktif, bukan cuma mengerjakan soal.</h2>
           <p class="lead">Pakai kartu dan soal yang masih lemah untuk melatih active recall. Mulai dari yang paling perlu kamu kuasai.</p>
-          <ul class="points">
-            <li><i>🎯</i><div><b>Smart Review</b><span>Prioritaskan soal yang sering salah dan lama tidak kamu buka.</span></div></li>
-            <li><i>⚡</i><div><b>Smart 10</b><span>Sepuluh soal acak untuk sesi singkat.</span></div></li>
-            <li><i>🔎</i><div><b>Cari Soal</b><span>Telusuri semua arsip dengan kata kunci.</span></div></li>
-          </ul>
+          <div class="feature-list">
+            <div><b>Smart Review</b> memprioritaskan soal yang sering salah dan lama tidak dibuka.</div>
+            <div><b>Smart 10</b>: sepuluh soal acak untuk sesi singkat.</div>
+            <div><b>Cari Soal</b> menelusuri semua arsip dengan kata kunci.</div>
+          </div>
         </div>
         <div class="visual" aria-hidden="true">
-          <div class="labgrid">
-            <div class="tile t-blue"><i>🃏</i><b>Flashcards</b><small>Active recall cepat</small></div>
-            <div class="tile t-orange"><i>🔖</i><b>Bookmark Drill</b><small>Ulangi soal tersimpan</small></div>
-            <div class="tile t-green"><i>⚡</i><b>Smart 10</b><small>10 soal acak</small></div>
-            <div class="tile t-purple"><i>🔁</i><b>Smart Review</b><small>Prioritas soal lemah</small></div>
-            <div class="tile t-red wide"><i>🔎</i><b>Cari Soal</b><small>Telusuri semua arsip</small></div>
-          </div>
+          <ol class="lab-list">
+            <li><b>Flashcards</b><span>Active recall cepat</span></li>
+            <li><b>Bookmark Drill</b><span>Ulangi soal tersimpan</span></li>
+            <li><b>Smart 10</b><span>10 soal acak</span></li>
+            <li><b>Smart Review</b><span>Prioritas soal lemah</span></li>
+            <li><b>Cari Soal</b><span>Telusuri semua arsip</span></li>
+          </ol>
         </div>
       </div>
     </section>
@@ -210,18 +206,16 @@
     <section class="slide" data-tone="green" role="group" aria-roledescription="slide" aria-label="Progres dan kompetisi">
       <div class="slide-inner">
         <div class="copy">
-          <span class="badge" aria-hidden="true">📈</span>
           <h2>Lihat kemajuanmu, bukan hanya skor.</h2>
           <p class="lead">Dashboard menunjukkan blok mana yang sudah kuat dan mana yang perlu kamu kejar sebelum ujian.</p>
-          <ul class="points">
-            <li><i>🩺</i><div><b>Clinical Dashboard</b><span>Statistik per blok, analitik belajar, dan riwayat skor.</span></div></li>
-            <li><i>🏆</i><div><b>Achievements</b><span>Kumpulkan pencapaian dari konsistensi belajarmu.</span></div></li>
-            <li><i>🥇</i><div><b>Papan peringkat mingguan</b><span>XP direset tiap Senin, jadi semua bisa mulai lagi.</span></div></li>
-          </ul>
+          <div class="feature-list">
+            <div><b>Clinical Dashboard</b>: statistik per blok, analitik belajar, dan riwayat skor.</div>
+            <div><b>Achievements</b> terkumpul dari konsistensi belajarmu.</div>
+            <div><b>Papan peringkat mingguan</b>, XP direset tiap Senin agar semua bisa mulai lagi.</div>
+          </div>
         </div>
         <div class="visual" aria-hidden="true">
           <div class="dash">
-            <p class="demo-tag">Contoh tampilan</p>
             <div class="streak"><span>🔥</span><div><b>5 hari streak</b><small>Tinggal 2 soal lagi hari ini</small></div></div>
             <div class="bars">
               <div class="bar"><span>Ginjal</span><div class="track"><i style="--w:82%;--c:var(--green)"></i></div><em>82%</em></div>
@@ -239,14 +233,13 @@
     <section class="slide" data-tone="blue" role="group" aria-roledescription="slide" aria-label="Alat bantu dan mulai">
       <div class="slide-inner">
         <div class="copy">
-          <span class="badge" aria-hidden="true">🚀</span>
           <h2>Siap dipakai di mana saja.</h2>
           <p class="lead">Akunmu tersinkron online, dan latihan tetap jalan saat offline. Kerjakan soal pertamamu sekarang.</p>
-          <ul class="points">
-            <li><i>⏱️</i><div><b>Study Timer Pomodoro</b><span>Pilih 25/5 menit atau fokus singkat 15/3 menit.</span></div></li>
-            <li><i>🧪</i><div><b>Nilai normal lab</b><span>Tabel rujukan siap dibuka saat mengerjakan soal.</span></div></li>
-            <li><i>🌙</i><div><b>Mode gelap dan offline</b><span>Nyaman dipakai malam hari, aman saat sinyal hilang.</span></div></li>
-          </ul>
+          <div class="feature-list">
+            <div><b>Study Timer Pomodoro</b>: pilih 25/5 menit atau fokus singkat 15/3 menit.</div>
+            <div><b>Nilai normal lab</b> siap dibuka saat mengerjakan soal.</div>
+            <div><b>Mode gelap dan offline</b>, nyaman dipakai malam hari, aman saat sinyal hilang.</div>
+          </div>
           <div class="cta-row cta-end">
             <a class="btn" href="./app.html" data-cta="start">Mulai belajar</a>
             <a class="btn btn-ghost" href="./app.html" data-cta="login">Masuk atau daftar</a>
@@ -307,6 +300,6 @@
   </section>
 </div>
 
-<script src="js/landing.js?v=2" defer></script>
+<script src="js/landing.js?v=3" defer></script>
 </body>
 </html>
