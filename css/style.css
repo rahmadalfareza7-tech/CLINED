@@ -1100,17 +1100,33 @@ button,.primary,.secondary,.account-action,.account-security-btn,.materi-button,
 .upi-flashcard{padding:12px;margin-top:10px;overflow:hidden}
 .upi-card-topline{display:flex;justify-content:space-between;gap:8px;padding:2px 3px 10px;font-size:10px;font-weight:900;color:var(--muted);letter-spacing:.04em}
 .upi-card-topline span:last-child{color:var(--ios-green,#34c759)}
+
+/* Kartu yang bisa dibalik: ketuk untuk membuka jawaban, seperti flashcard di landing page. */
+.upi-flip{position:relative;perspective:1600px;cursor:pointer;border-radius:20px}
+.upi-flip:focus-visible{outline:3px solid var(--blue,#58cc02);outline-offset:3px}
+.upi-flip[aria-disabled="true"]{cursor:default}
+.upi-flip-inner{display:grid;transition:transform .55s cubic-bezier(.3,1.15,.4,1);transform-style:preserve-3d;will-change:transform}
+.upi-flip.is-flipped .upi-flip-inner{transform:rotateY(180deg)}
+.upi-face{grid-area:1/1;min-width:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.upi-face-back{transform:rotateY(180deg);align-self:stretch;display:flex;flex-direction:column;padding:16px;border-radius:18px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.20)}
+@media (prefers-reduced-motion:reduce){.upi-flip-inner{transition:none}}
+
 .upi-image-frame{position:relative;aspect-ratio:1.5/1;border-radius:20px;overflow:hidden;background:#f6f8fa;border:1px solid var(--line);display:grid;place-items:center}
 html.dark .upi-image-frame{background:#242426}
 .upi-image-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .25s ease,transform .25s ease}
 .upi-image-hint{position:absolute;left:10px;top:10px;padding:6px 8px;border-radius:999px;background:rgba(20,20,22,.72);color:#fff;font-size:8px;font-weight:900;letter-spacing:.08em;backdrop-filter:blur(10px)}
 .upi-prompt{padding:15px 4px 4px}
 .upi-prompt h3{margin:4px 0 0;font-size:19px;line-height:1.35;letter-spacing:-.25px}
-.upi-answer-wrap{margin-top:10px;padding:14px;border-radius:16px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.20)}
+
+/* Ajakan ketuk, di kedua sisi kartu */
+.upi-flip-cta{margin-top:14px;padding:11px 2px 2px;border-top:1px solid var(--line);text-align:center;font-size:11.5px;font-weight:800;color:var(--muted)}
+.upi-flip-cta span{margin-left:3px}
+.upi-face-back .upi-flip-cta{margin-top:auto;border-top-color:rgba(52,199,89,.25)}
+
 .upi-answer-label{font-size:9px;font-weight:900;letter-spacing:.1em;color:var(--ios-green,#34c759);margin-bottom:5px}
-.upi-answer-wrap b{font-size:18px;display:block}
-.upi-answer-wrap p{font-size:12px;line-height:1.45;color:var(--muted);margin:5px 0 0}
-.upi-reveal-btn{width:100%;margin-top:12px;min-height:50px}
+.upi-face-back b{font-size:18px;display:block}
+.upi-face-back p{font-size:12px;line-height:1.45;color:var(--muted);margin:5px 0 0}
+
 .upi-rating{margin-top:13px}
 .upi-rating-title{text-align:center;font-size:11px;font-weight:900;color:var(--muted);margin-bottom:8px}
 .upi-rating-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
@@ -1157,9 +1173,6 @@ html.dark .upi-image-frame{background:#242426}
 .upi-block-context b{font-size:.9rem}
 .upi-block-context small{font-size:.72rem;color:var(--muted,#6b7280);margin-top:2px}
 .upi-context-arrow{font-size:24px;color:var(--muted,#8a939b)}
-.upi-reveal-link{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:13px 2px;border-top:1px solid var(--border,#e5e7eb);font-weight:800;font-size:.88rem;color:var(--primary,#2563eb);cursor:pointer;user-select:none}
-.upi-reveal-link span{font-size:1.1rem}
-.upi-reveal-link:focus-visible{outline:3px solid color-mix(in srgb,var(--primary,#2563eb) 20%,transparent);border-radius:10px}
 .upi-block-detail .upi-rating-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 .upi-block-detail .upi-rate{cursor:pointer;user-select:none}
 .upi-block-selector>.section-title{font-size:20px!important;font-weight:950!important;margin:0 0 5px!important}
