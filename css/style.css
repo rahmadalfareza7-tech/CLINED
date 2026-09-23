@@ -2402,3 +2402,116 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
 
 .material-block-icon img,.uab-node-icon img{width:100%;height:100%;object-fit:contain;display:block;}
 .uab-node-icon img{width:34px;height:34px;}
+
+/* =========================================
+   UPI RATING BUTTONS - FINAL VISUAL
+   Keep existing rating logic unchanged
+   ========================================= */
+
+.upi-rating-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.upi-rating-grid button,
+.upi-rating-grid .upi-rate {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 46px !important;
+  min-height: 46px !important;
+
+  padding: 0 10px !important;
+  margin: 0 !important;
+
+  border: 0 !important;
+  border-radius: 13px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+
+  cursor: pointer !important;
+  user-select: none !important;
+
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease,
+    filter 0.08s ease !important;
+}
+
+/* MERAH - Salah / Again */
+.upi-rating-grid button:nth-child(1),
+.upi-rating-grid .upi-rate:nth-child(1) {
+  background: #ff4752 !important;
+  box-shadow: 0 4px 0 #d93640 !important;
+}
+
+/* ORANGE - Sulit / Hard */
+.upi-rating-grid button:nth-child(2),
+.upi-rating-grid .upi-rate:nth-child(2) {
+  background: #ff9800 !important;
+  box-shadow: 0 4px 0 #d97900 !important;
+}
+
+/* HIJAU - Ingat / Good */
+.upi-rating-grid button:nth-child(3),
+.upi-rating-grid .upi-rate:nth-child(3) {
+  background: #50c900 !important;
+  box-shadow: 0 4px 0 #399900 !important;
+}
+
+/* BIRU - Mudah / Easy */
+.upi-rating-grid button:nth-child(4),
+.upi-rating-grid .upi-rate:nth-child(4) {
+  background: #20ade8 !important;
+  box-shadow: 0 4px 0 #0788bd !important;
+}
+
+/* Hover */
+.upi-rating-grid button:hover,
+.upi-rating-grid .upi-rate:hover {
+  filter: brightness(1.04) !important;
+}
+
+/* Pressed - efek tombol ditekan */
+.upi-rating-grid button:active,
+.upi-rating-grid .upi-rate:active {
+  transform: translateY(4px) !important;
+  box-shadow: none !important;
+}
+
+/* Hilangkan subteks jika ada */
+.upi-rating-grid button small,
+.upi-rating-grid .upi-rate small {
+  display: none !important;
+}
+
+/* Mobile tetap 4 tombol sejajar */
+@media (max-width: 600px) {
+  .upi-rating-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+  }
+
+  .upi-rating-grid button,
+  .upi-rating-grid .upi-rate {
+    height: 43px !important;
+    min-height: 43px !important;
+    padding: 0 5px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+  }
+}
+
