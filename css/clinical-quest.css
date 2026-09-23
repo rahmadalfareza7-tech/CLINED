@@ -1,66 +1,498 @@
+/* === CLINICAL QUEST — redesigned to match CLINED design system === */
 
-.quest-scenario-box{
-  border:1px solid var(--border,#d9e1ea);
-  border-radius:14px;
-  padding:16px 18px;
-  margin-bottom:18px;
-  background:var(--card,#fff);
+/* ─── Shell wrapper ─── */
+.clinical-quest-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── HOME: Hero section ─── */
+.clinical-quest-hero {
+  background: linear-gradient(145deg, #eaf9df 0%, #d0f0fd 100%);
+  border: 2px solid var(--line);
+  border-radius: var(--clined-radius-xl);
+  padding: 20px 18px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--depth);
+  position: relative;
+  overflow: hidden;
+}
+.clinical-quest-hero::before {
+  content: '🩺';
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  font-size: 38px;
+  opacity: .18;
+  pointer-events: none;
+}
+:root.dark .clinical-quest-hero {
+  background: linear-gradient(145deg, #0f2a1e 0%, #092d3b 100%);
+  border-color: var(--line);
+}
+.quest-kicker {
+  display: block;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 6px;
+}
+.clinical-quest-hero h3 {
+  font-size: 22px;
+  font-weight: 900;
+  margin: 0 0 6px;
+  line-height: 1.12;
+  letter-spacing: -.4px;
+  color: var(--text);
+}
+.clinical-quest-hero p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── HOME: Filter tabs ─── */
+.clinical-quest-filter {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 2px 0;
+}
+.clinical-quest-filter button {
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  border-radius: 99px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .15s ease;
+  box-shadow: 0 2px 0 var(--line);
+}
+.clinical-quest-filter button.active,
+.clinical-quest-filter button:hover {
+  background: var(--brand);
+  border-color: var(--brand-dark);
+  color: #fff;
+  box-shadow: 0 2px 0 var(--brand-dark);
+}
+
+/* ─── HOME: Quest list ─── */
+.clinical-quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ─── HOME: Quest card ─── */
+.clinical-quest-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: var(--card) !important;
+  border: 2px solid var(--line) !important;
+  border-radius: var(--clined-radius-lg) !important;
+  padding: 14px 14px 14px 16px !important;
+  box-shadow: var(--depth) !important;
+  cursor: default;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.clinical-quest-card:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--line) !important;
+}
+
+/* Completed state */
+.clinical-quest-card.quest-completed {
+  background: #dcfce7 !important;
+  border-color: #22c55e !important;
+}
+:root.dark .clinical-quest-card.quest-completed {
+  background: #0f2a1c !important;
+  border-color: #22c55e !important;
+}
+
+/* Icon */
+.quest-icon {
+  font-size: 26px;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 var(--line);
+}
+
+/* Main text block */
+.quest-main {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+.quest-main b {
+  display: block;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.3;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.clinical-quest-card.quest-completed .quest-main b {
+  color: #15803d;
+}
+:root.dark .clinical-quest-card.quest-completed .quest-main b {
+  color: #4ade80;
+}
+
+/* Action area */
+.quest-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex: none !important;
+  flex-shrink: 0 !important;
+}
+
+/* Percent badge */
+.quest-percent {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 46px !important;
+  height: 32px !important;
+  padding: 0 9px !important;
+  border-radius: 10px !important;
+  background: #dcfce7 !important;
+  border: 1.5px solid #22c55e !important;
+  color: #15803d !important;
+  font-size: .85rem !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 0 #16a34a55 !important;
+}
+:root.dark .quest-percent {
+  background: #0f2a1c !important;
+  color: #4ade80 !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 2px 0 #16a34a44 !important;
+}
+
+/* Start button (inherits .primary style, override width) */
+.clinical-quest-start {
+  width: auto !important;
+  min-width: 90px;
+  border: 2px solid var(--clined-green-dark) !important;
+  background: var(--clined-green) !important;
+  color: #fff !important;
+  border-radius: 14px !important;
+  padding: 9px 14px !important;
+  font-weight: 900 !important;
+  font-size: 13px !important;
+  cursor: pointer;
+  border-bottom: 4px solid var(--clined-green-dark) !important;
+  box-shadow: none !important;
+  white-space: nowrap;
+  transition: transform .13s ease;
+}
+.clinical-quest-start:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px !important;
+}
+
+/* ─── QUEST STEP: Container ─── */
+.clinical-quest-step-card {
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: var(--clined-radius-xl) !important;
+  border: 2px solid var(--line) !important;
+  box-shadow: var(--depth) !important;
+}
+
+/* Progress bar row */
+.clinical-quest-step-card > div:first-child {
+  padding: 14px 16px 0;
+}
+
+.quest-case-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: var(--brand);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.clinical-quest-progress {
+  height: 8px;
+  background: var(--surface);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  margin-bottom: 14px;
+}
+.clinical-quest-progress i {
+  display: block;
+  height: 100%;
+  background: var(--brand);
+  border-radius: inherit;
+  transition: width .3s ease;
+}
+
+/* Scenario box */
+.quest-scenario-box {
+  margin: 0 16px 14px;
+  padding: 14px 15px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
 }
 .quest-scenario-label,
-.quest-question-label{
-  font-size:.78rem;
-  font-weight:800;
-  letter-spacing:.08em;
-  margin-bottom:8px;
+.quest-question-label {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
 }
-.quest-scenario-text{
-  line-height:1.65;
-  color:var(--text,#243447);
+.quest-question-label {
+  padding: 0 16px;
+  margin-top: 0;
+  color: var(--text);
+  font-size: 11px;
+  opacity: .6;
 }
-.quest-question-label{
-  margin-top:4px;
-}
-.quest-step-title{
-  line-height:1.55;
-  margin-top:0;
-}
-
-.quest-completed{background:#dcfce7!important;border-color:#22c55e!important}
-.quest-completed .quest-main b{color:#15803d}
-.clinical-quest-card{display:flex!important;align-items:center!important;flex-wrap:nowrap!important}
-.clinical-quest-card .quest-main{flex:1!important;min-width:0!important}
-.clinical-quest-card .quest-percent{flex:none!important;margin:0 10px 0 8px!important;padding:4px 8px!important;border-radius:7px!important;background:#fff!important;border:1px solid #22c55e!important;color:#15803d!important;font-size:.78rem!important;font-weight:800!important;white-space:nowrap!important}
-.clinical-quest-card .clinical-quest-start{flex:none!important;margin:0!important;white-space:nowrap!important}
-.quest-actions{display:flex!important;align-items:center!important;gap:8px!important;flex:none!important}
-.quest-actions .clinical-quest-start{margin:0!important}
-.clinical-quest-card .quest-actions{display:flex!important;align-items:center!important;gap:8px!important;flex-shrink:0!important}
-.clinical-quest-card .quest-percent{order:1!important}
-.clinical-quest-card .quest-actions{order:2!important}
-.clinical-quest-card .quest-main{flex:1 1 auto!important}
-
-.clinical-quest-card .quest-actions{
-  display:flex!important;
-  align-items:center!important;
-  gap:14px!important;
-  flex:none!important;
+.quest-scenario-text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text);
 }
 
-.clinical-quest-card .quest-percent{
-  display:inline-flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  min-width:52px!important;
-  height:36px!important;
-  padding:0 10px!important;
-  box-sizing:border-box!important;
-  border-radius:9px!important;
-  background:#fff!important;
-  border:1.5px solid #22c55e!important;
-  color:#15803d!important;
-  font-size:1rem!important;
-  font-weight:900!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-  margin:0!important;
+/* Question title */
+.quest-step-title {
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  line-height: 1.45 !important;
+  letter-spacing: -.2px;
+  margin: 0 16px 14px !important;
+  color: var(--text);
 }
 
+/* ─── QUEST STEP: Options ─── */
+.quest-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+  margin-bottom: 12px;
+}
+.quest-option {
+  width: 100%;
+  text-align: left;
+  border: 2px solid var(--line) !important;
+  background: var(--card) !important;
+  color: var(--text);
+  border-radius: 16px !important;
+  padding: 13px 14px !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.4;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0,0,0,.12) !important;
+  transition: transform .13s, border-color .15s, background .15s;
+  min-height: 50px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.quest-option:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--line) !important;
+}
+.quest-option b {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--muted);
+  transition: background .15s, color .15s;
+}
+.quest-option.correct {
+  background: var(--brand-soft) !important;
+  border-color: var(--brand) !important;
+  box-shadow: 0 2px 0 #c7eab6 !important;
+}
+.quest-option.correct b {
+  background: var(--brand) !important;
+  border-color: var(--brand-dark) !important;
+  color: #fff !important;
+}
+.quest-option.wrong {
+  background: #fff0f0 !important;
+  border-color: var(--red) !important;
+  box-shadow: 0 2px 0 #ffd0d0 !important;
+}
+.quest-option.wrong b {
+  background: var(--red) !important;
+  border-color: #cc0000 !important;
+  color: #fff !important;
+}
+:root.dark .quest-option.wrong {
+  background: #2d1015 !important;
+}
+
+/* ─── QUEST STEP: Explanation ─── */
+.quest-explanation {
+  margin: 0 16px 12px;
+  padding: 13px 14px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.quest-explanation b {
+  display: block;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--brand);
+  margin-bottom: 5px;
+}
+.quest-explanation b:contains('Belum tepat') {
+  color: var(--red);
+}
+
+/* ─── QUEST STEP: Navigation ─── */
+.quest-step-nav {
+  display: flex;
+  gap: 9px;
+  padding: 0 16px 16px;
+}
+.quest-step-nav .secondary {
+  flex: 0 0 auto;
+  width: auto;
+  padding: 12px 18px;
+  border-radius: 14px !important;
+}
+.quest-step-nav .primary {
+  flex: 1;
+  border-radius: 14px !important;
+  padding: 12px 14px !important;
+}
+
+/* ─── RESULT SCREEN ─── */
+.quest-result {
+  text-align: center;
+  padding: 24px 20px 20px !important;
+}
+
+.quest-score-ring {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: conic-gradient(var(--brand) calc(var(--quest-score)), var(--surface) 0%);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 0 0 4px var(--card), 0 6px 18px rgba(0,0,0,.12);
+  position: relative;
+}
+.quest-score-ring::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: var(--card);
+}
+.quest-score-ring > div {
+  position: relative;
+  z-index: 1;
+}
+.quest-score-ring b {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--brand);
+}
+
+.quest-result h3 {
+  font-size: 19px;
+  font-weight: 900;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+.quest-result > p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.quest-result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.quest-result-grid > div {
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.quest-result-grid > div b {
+  font-size: 16px;
+  flex: 0 0 22px;
+}
+.quest-result-grid > div b:first-child {
+  color: var(--brand);
+}
+.quest-result-grid > div > b:first-child[style*="×"] ,
+.quest-result-grid > div:has(b:contains('×')) b:first-child {
+  color: var(--red);
+}
+.quest-result-grid small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.quest-result-actions {
+  display: flex;
+  gap: 9px;
+}
+.quest-result-actions .secondary {
+  flex: 0 1 auto;
+  width: auto;
+  padding: 12px 18px;
+  border-radius: 14px !important;
+}
+.quest-result-actions .primary {
+  flex: 1;
+  border-radius: 14px !important;
+}

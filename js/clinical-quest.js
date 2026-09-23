@@ -13,10 +13,30 @@
     const done=progress();
     const blocks=['ALL',...new Set(QUESTS.map(q=>q.block))];
     const list=QUESTS.filter(q=>filter==='ALL'||q.block===filter).map(q=>{
-      const d=done[q.id];const pct=d?Math.round((d.correct/q.steps.length)*100):0;
-      return `<article class="clinical-quest-card" style="${d?"background:#dcfce7;border:2px solid #22c55e;":""}"><span class="quest-icon">${q.icon}</span><div class="quest-main"><b>${escQ(q.title)}</b></div><div class="quest-actions">${d?`<span class="quest-percent">${Math.round((d.correct/q.steps.length)*100)}%</span>`:""}<button class="clinical-quest-start" type="button" data-quest-start="${escQ(q.id)}">${d?'Ulangi Quest':'Mulai Quest'}</button></div></article>`;
+      const d=done[q.id];
+      const pct=d?Math.round((d.correct/q.steps.length)*100):0;
+      const isComplete=!!d;
+      return `<article class="clinical-quest-card${isComplete?' quest-completed':''}">
+        <span class="quest-icon">${escQ(q.icon)}</span>
+        <div class="quest-main">
+          <b>${escQ(q.title)}</b>
+          <small style="display:block;color:var(--muted);font-size:11px;margin-top:2px;font-weight:700">${escQ(q.duration)} • ${escQ(String(q.steps.length))} tahap</small>
+        </div>
+        <div class="quest-actions">
+          ${d?`<span class="quest-percent">${pct}%</span>`:''}
+          <button class="clinical-quest-start" type="button" data-quest-start="${escQ(q.id)}">${d?'Ulangi':'Mulai'}</button>
+        </div>
+      </article>`;
     }).join('');
-    root.innerHTML=`<div class="clinical-quest-shell"><section class="clinical-quest-hero"><span class="quest-kicker">CLINICAL REASONING MODE</span><h3>Think like a clinician.</h3><p>Jangan hanya mencari jawaban. Baca kasus, tentukan masalah, analisis mekanisme, pilih pemeriksaan, interpretasikan data, lalu tentukan langkah berikutnya.</p></section><div class="clinical-quest-filter">${blocks.map(b=>`<button type="button" class="${b===filter?'active':''}" data-quest-filter="${escQ(b)}">${escQ(b==='ALL'?'Semua':b)}</button>`).join('')}</div><div class="clinical-quest-list">${list||'<div class="card"><p class="muted">Belum ada quest untuk blok ini.</p></div>'}</div></div>`;
+    root.innerHTML=`<div class="clinical-quest-shell">
+      <section class="clinical-quest-hero">
+        <span class="quest-kicker">CLINICAL REASONING MODE</span>
+        <h3>Think like a clinician.</h3>
+        <p>Baca kasus, tentukan masalah, analisis mekanisme — bukan sekadar mencari jawaban.</p>
+      </section>
+      <div class="clinical-quest-filter">${blocks.map(b=>`<button type="button" class="${b===filter?'active':''}" data-quest-filter="${escQ(b)}">${escQ(b==='ALL'?'Semua Block':b)}</button>`).join('')}</div>
+      <div class="clinical-quest-list">${list||'<div class="card"><p class="muted">Belum ada quest untuk blok ini.</p></div>'}</div>
+    </div>`;
     root.querySelectorAll('[data-quest-start]').forEach(b=>b.addEventListener('click',()=>start(b.dataset.questStart)));
     root.querySelectorAll('[data-quest-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.questFilter;render();}));
   }
@@ -58,8 +78,35 @@
   function renderStep(root){
     const q=active, s=q.steps[step], selected=answers[step];
     const pct=Math.round((step/q.steps.length)*100);
-    const opts=s.options.map((o,i)=>{let cls='';if(selected!=null){if(i===s.answer)cls=' correct';else if(i===selected)cls=' wrong';}return `<button type="button" class="quest-option${cls}" data-quest-answer="${i}" ${selected!=null?'disabled':''}><b>${String.fromCharCode(65+i)}.</b> ${escQ(o)}</button>`}).join('');
-    root.innerHTML=`<div class="clinical-quest-shell"><section class="card clinical-quest-step-card"><div><div class="quest-case-label">${escQ(q.block)} - Clinical Case ${QUESTS.indexOf(q)+1} • ${escQ(s.stage)}</div><div class="clinical-quest-progress"><i style="width:${pct}%"></i></div></div>${(()=>{const m=s.q.match(/^(.*?)(?:\s+)(Apakah|Apa|Manakah|Bagaimanakah|Bagaimana|Mengapa|Kapan|Dimanakah|Di manakah|Siapakah|Berapa)\b([\s\S]*)$/i);const scenario=m?m[1].trim():s.q.trim();const question=m?(m[2]+" "+m[3]).trim():s.q.trim();return `<div class="quest-scenario-box"><div class="quest-scenario-label">SKENARIO</div><div class="quest-scenario-text">${escQ(scenario)}</div></div><div class="quest-question-label">PERTANYAAN</div><h3 class="quest-step-title">${escQ(question)}${question.endsWith("?")?"":"?"}</h3>`})()}<div class="quest-options">${opts}</div>${selected!=null?`<div class="quest-explanation"><b>${selected===s.answer?'Benar.':'Belum tepat.'}</b> ${escQ(s.why)}</div>`:''}<div class="quest-step-nav"><button type="button" class="secondary" data-quest-exit>Kembali</button>${selected!=null?`<button type="button" class="primary" data-quest-next>${step===q.steps.length-1?'Lihat Hasil':'Lanjut →'}</button>`:''}</div></section></div>`;
+    const opts=s.options.map((o,i)=>{
+      let cls='';
+      if(selected!=null){if(i===s.answer)cls=' correct';else if(i===selected)cls=' wrong';}
+      return `<button type="button" class="quest-option${cls}" data-quest-answer="${i}" ${selected!=null?'disabled':''}><b>${String.fromCharCode(65+i)}</b>${escQ(o)}</button>`;
+    }).join('');
+    const splitQ=(()=>{
+      const m=s.q.match(/^(.*?)(?:\s+)(Apakah|Apa|Manakah|Bagaimanakah|Bagaimana|Mengapa|Kapan|Dimanakah|Di manakah|Siapakah|Berapa)\b([\s\S]*)$/i);
+      const scenario=m?m[1].trim():s.q.trim();
+      const question=m?(m[2]+" "+m[3]).trim():s.q.trim();
+      return {scenario,question};
+    })();
+    const stepBadge=`${step+1} / ${q.steps.length}`;
+    root.innerHTML=`<div class="clinical-quest-shell">
+      <section class="card clinical-quest-step-card">
+        <div>
+          <div class="quest-case-label">${escQ(q.block)} • ${escQ(s.stage)} <span style="float:right;font-weight:700;color:var(--muted);letter-spacing:0">${stepBadge}</span></div>
+          <div class="clinical-quest-progress"><i style="width:${pct}%"></i></div>
+        </div>
+        <div class="quest-scenario-box"><div class="quest-scenario-label">SKENARIO KASUS</div><div class="quest-scenario-text">${escQ(splitQ.scenario)}</div></div>
+        <div class="quest-question-label">PERTANYAAN</div>
+        <h3 class="quest-step-title">${escQ(splitQ.question)}${splitQ.question.endsWith('?')?'':'?'}</h3>
+        <div class="quest-options">${opts}</div>
+        ${selected!=null?`<div class="quest-explanation"><b>${selected===s.answer?'✔ Benar!':'✖ Belum tepat.'}</b>${escQ(s.why)}</div>`:''}
+        <div class="quest-step-nav">
+          <button type="button" class="secondary" data-quest-exit>← Kembali</button>
+          ${selected!=null?`<button type="button" class="primary" data-quest-next>${step===q.steps.length-1?'Lihat Hasil':'Lanjut →'}</button>`:''}
+        </div>
+      </section>
+    </div>`;
     root.querySelectorAll('[data-quest-answer]').forEach(b=>b.addEventListener('click',()=>{answers[step]=Number(b.dataset.questAnswer);render();}));
     root.querySelector('[data-quest-exit]')?.addEventListener('click',()=>{active=null;render();});
     root.querySelector('[data-quest-next]')?.addEventListener('click',()=>{if(step<q.steps.length-1){step++;render();window.scrollTo({top:0,behavior:'auto'});}else finish();});
@@ -68,7 +115,18 @@
     const q=active;const correct=answers.reduce((n,a,i)=>n+(a===q.steps[i].answer?1:0),0);const st=state();st.completed=st.completed||{};st.completed[q.id]={correct,total:q.steps.length,at:new Date().toISOString()};save(st);
     try{if(typeof window.addXP==='function')window.addXP(10+correct*5,`Clinical Quest • ${q.title}`);}catch(e){}
     const pct=Math.round(correct/q.steps.length*100);const root=host();
-    root.innerHTML=`<div class="clinical-quest-shell"><section class="card quest-result"><div class="quest-score-ring" style="--quest-score:${pct}%"><div><b>${pct}%</b></div></div><h3>${escQ(q.title)} selesai</h3><p>${correct} dari ${q.steps.length} tahap berhasil. Clinical reasoning dibangun dari proses, bukan hanya jawaban akhir.</p><div class="quest-result-grid">${q.steps.map((s,i)=>`<div><b>${answers[i]===s.answer?'✓':'×'}</b><small>${escQ(s.stage)}</small></div>`).join('')}</div><div class="quest-result-actions"><button type="button" class="secondary" data-quest-home>Kembali ke Quest</button><button type="button" class="primary" data-quest-retry>Ulangi Quest</button></div></section></div>`;
+    root.innerHTML=`<div class="clinical-quest-shell">
+      <section class="card quest-result">
+        <div class="quest-score-ring" style="--quest-score:${pct}%"><div><b>${pct}%</b></div></div>
+        <h3>${escQ(q.title)}</h3>
+        <p>${correct} dari ${q.steps.length} tahap berhasil. Clinical reasoning dibangun dari proses, bukan hanya jawaban akhir.</p>
+        <div class="quest-result-grid">${q.steps.map((s,i)=>`<div><b>${answers[i]===s.answer?'✔':'×'}</b><small>${escQ(s.stage)}</small></div>`).join('')}</div>
+        <div class="quest-result-actions">
+          <button type="button" class="secondary" data-quest-home>← Quest</button>
+          <button type="button" class="primary" data-quest-retry>Ulangi Quest</button>
+        </div>
+      </section>
+    </div>`;
     root.querySelector('[data-quest-home]').onclick=()=>{active=null;render();};
     root.querySelector('[data-quest-retry]').onclick=()=>{step=0;answers=[];render();};
   }
