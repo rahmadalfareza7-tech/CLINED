@@ -1100,9 +1100,9 @@ button,.primary,.secondary,.account-action,.account-security-btn,.materi-button,
 .upi-flashcard{padding:12px;margin-top:10px;overflow:hidden}
 .upi-card-topline{display:flex;justify-content:space-between;gap:8px;padding:2px 3px 10px;font-size:10px;font-weight:900;color:var(--muted);letter-spacing:.04em}
 .upi-card-topline span:last-child{color:var(--ios-green,#34c759)}
-.upi-image-frame{position:relative;aspect-ratio:1.5/1;border-radius:20px;overflow:hidden;background:#f6f8fa;border:1px solid var(--line);display:grid;place-items:center}
+.upi-image-frame{position:relative;width:100%;aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:#f6f8fa;border:1px solid var(--line);display:grid;place-items:center;box-sizing:border-box}
 html.dark .upi-image-frame{background:#242426}
-.upi-image-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .25s ease,transform .25s ease}
+.upi-image-frame img{width:100%;height:100%;object-fit:contain;display:block;transition:filter .25s ease,transform .25s ease}
 .upi-image-hint{position:absolute;left:10px;top:10px;padding:6px 8px;border-radius:999px;background:rgba(20,20,22,.72);color:#fff;font-size:8px;font-weight:900;letter-spacing:.08em;backdrop-filter:blur(10px)}
 .upi-prompt{padding:15px 4px 4px}
 .upi-prompt h3{margin:4px 0 0;font-size:19px;line-height:1.35;letter-spacing:-.25px}
