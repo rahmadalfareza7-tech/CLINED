@@ -89,18 +89,27 @@
       const question=m?(m[2]+" "+m[3]).trim():s.q.trim();
       return {scenario,question};
     })();
-    const stepBadge=`${step+1} / ${q.steps.length}`;
+    const isCorrect=selected===s.answer;
     root.innerHTML=`<div class="clinical-quest-shell">
       <section class="card clinical-quest-step-card">
-        <div>
-          <div class="quest-case-label">${escQ(q.block)} • ${escQ(s.stage)} <span style="float:right;font-weight:700;color:var(--muted);letter-spacing:0">${stepBadge}</span></div>
+        <div class="cq-step-header">
+          <div class="quest-case-label">
+            ${escQ(q.block)} &bull; ${escQ(s.stage)}
+            <span>${step+1} / ${q.steps.length}</span>
+          </div>
           <div class="clinical-quest-progress"><i style="width:${pct}%"></i></div>
         </div>
-        <div class="quest-scenario-box"><div class="quest-scenario-label">SKENARIO KASUS</div><div class="quest-scenario-text">${escQ(splitQ.scenario)}</div></div>
-        <div class="quest-question-label">PERTANYAAN</div>
+        <div class="quest-scenario-box">
+          <div class="quest-scenario-label">Skenario Kasus</div>
+          <div class="quest-scenario-text">${escQ(splitQ.scenario)}</div>
+        </div>
+        <div class="quest-question-label">Pertanyaan</div>
         <h3 class="quest-step-title">${escQ(splitQ.question)}${splitQ.question.endsWith('?')?'':'?'}</h3>
         <div class="quest-options">${opts}</div>
-        ${selected!=null?`<div class="quest-explanation"><b>${selected===s.answer?'✔ Benar!':'✖ Belum tepat.'}</b>${escQ(s.why)}</div>`:''}
+        ${selected!=null?`<div class="quest-explanation">
+          <b class="${isCorrect?'correct-label':'wrong-label'}">${isCorrect?'✔ Benar!':'❌ Belum tepat.'}</b>
+          ${escQ(s.why)}
+        </div>`:''}
         <div class="quest-step-nav">
           <button type="button" class="secondary" data-quest-exit>← Kembali</button>
           ${selected!=null?`<button type="button" class="primary" data-quest-next>${step===q.steps.length-1?'Lihat Hasil':'Lanjut →'}</button>`:''}

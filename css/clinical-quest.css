@@ -1,66 +1,69 @@
-/* === CLINICAL QUEST — redesigned to match CLINED design system === */
+/* ═══════════════════════════════════════════
+   CLINICAL QUEST — v3 (fully integrated)
+   Tokens: inherit dari style.css / polish.css
+   ═══════════════════════════════════════════ */
 
-/* ─── Shell wrapper ─── */
+/* ── SHELL ── */
 .clinical-quest-shell {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 10px;
+  padding: 0 4px;
 }
 
-/* ─── HOME: Hero section ─── */
+/* ── HERO BERANDA ── */
 .clinical-quest-hero {
-  background: linear-gradient(145deg, #eaf9df 0%, #d0f0fd 100%);
-  border: 2px solid var(--line);
-  border-radius: var(--clined-radius-xl);
-  padding: 20px 18px 18px;
-  margin-bottom: 14px;
-  box-shadow: var(--depth);
+  background: linear-gradient(135deg, #eafaf8 0%, #d4f5e9 100%);
+  border: 2px solid #b6e8d8;
+  border-radius: 22px;
+  padding: 18px 16px 16px;
+  box-shadow: 0 4px 0 #c8ead9;
   position: relative;
   overflow: hidden;
 }
-.clinical-quest-hero::before {
+:root.dark .clinical-quest-hero {
+  background: linear-gradient(135deg, #0a2820 0%, #0c2218 100%);
+  border-color: #1a4a35;
+  box-shadow: 0 4px 0 #0a1e15;
+}
+.clinical-quest-hero::after {
   content: '🩺';
   position: absolute;
-  right: 16px;
-  top: 14px;
-  font-size: 38px;
-  opacity: .18;
+  right: 14px; top: 12px;
+  font-size: 36px;
+  opacity: .12;
   pointer-events: none;
 }
-:root.dark .clinical-quest-hero {
-  background: linear-gradient(145deg, #0f2a1e 0%, #092d3b 100%);
-  border-color: var(--line);
-}
 .quest-kicker {
-  display: block;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--brand);
-  margin-bottom: 6px;
+  color: #0a7f78;
+  display: block;
+  margin-bottom: 5px;
 }
+:root.dark .quest-kicker { color: #3ecfba; }
 .clinical-quest-hero h3 {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 900;
-  margin: 0 0 6px;
-  line-height: 1.12;
+  margin: 0 0 5px;
   letter-spacing: -.4px;
   color: var(--text);
+  line-height: 1.15;
 }
 .clinical-quest-hero p {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--muted);
   margin: 0;
   line-height: 1.5;
 }
 
-/* ─── HOME: Filter tabs ─── */
+/* ── FILTER TABS ── */
 .clinical-quest-filter {
   display: flex;
-  gap: 7px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
   padding: 2px 0;
 }
 .clinical-quest-filter button {
@@ -68,211 +71,214 @@
   background: var(--card);
   color: var(--muted);
   border-radius: 99px;
-  padding: 7px 14px;
+  padding: 6px 13px;
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
-  transition: all .15s ease;
   box-shadow: 0 2px 0 var(--line);
+  transition: all .14s ease;
+  white-space: nowrap;
 }
-.clinical-quest-filter button.active,
-.clinical-quest-filter button:hover {
-  background: var(--brand);
-  border-color: var(--brand-dark);
+.clinical-quest-filter button.active {
+  background: #58cc02;
+  border-color: #46a900;
   color: #fff;
-  box-shadow: 0 2px 0 var(--brand-dark);
+  box-shadow: 0 2px 0 #46a900;
 }
 
-/* ─── HOME: Quest list ─── */
+/* ── QUEST LIST ── */
 .clinical-quest-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* ─── HOME: Quest card ─── */
+/* ── QUEST CARD (tiap case = 1 card) ── */
 .clinical-quest-card {
   display: flex !important;
   align-items: center !important;
   gap: 12px !important;
   background: var(--card) !important;
   border: 2px solid var(--line) !important;
-  border-radius: var(--clined-radius-lg) !important;
-  padding: 14px 14px 14px 16px !important;
-  box-shadow: var(--depth) !important;
+  border-radius: 20px !important;
+  padding: 14px 14px 14px 15px !important;
+  box-shadow: 0 4px 0 rgba(31,42,35,.12) !important;
   cursor: default;
-  transition: transform .15s ease, box-shadow .15s ease;
+  /* reset any inline style from old code */
+  background-image: none !important;
 }
-.clinical-quest-card:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 0 var(--line) !important;
-}
-
-/* Completed state */
 .clinical-quest-card.quest-completed {
-  background: #dcfce7 !important;
-  border-color: #22c55e !important;
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+  box-shadow: 0 4px 0 #bbf7d0 !important;
 }
 :root.dark .clinical-quest-card.quest-completed {
-  background: #0f2a1c !important;
-  border-color: #22c55e !important;
+  background: #052e16 !important;
+  border-color: #166534 !important;
+  box-shadow: 0 4px 0 #052e16 !important;
 }
 
-/* Icon */
+/* Icon emoji badge */
 .quest-icon {
-  font-size: 26px;
-  flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
   display: grid;
   place-items: center;
   background: var(--surface);
-  border: 1.5px solid var(--line);
-  border-radius: 12px;
+  border: 2px solid var(--line);
+  border-radius: 13px;
   box-shadow: 0 2px 0 var(--line);
 }
 
-/* Main text block */
+/* Teks utama */
 .quest-main {
   flex: 1 1 auto !important;
   min-width: 0 !important;
 }
 .quest-main b {
   display: block;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 900;
-  line-height: 1.3;
   color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.25;
 }
-.clinical-quest-card.quest-completed .quest-main b {
-  color: #15803d;
+.quest-main small {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-top: 3px;
 }
-:root.dark .clinical-quest-card.quest-completed .quest-main b {
-  color: #4ade80;
-}
+.clinical-quest-card.quest-completed .quest-main b { color: #15803d; }
+:root.dark .clinical-quest-card.quest-completed .quest-main b { color: #4ade80; }
 
 /* Action area */
 .quest-actions {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  flex: none !important;
   flex-shrink: 0 !important;
 }
 
-/* Percent badge */
+/* % badge */
 .quest-percent {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-width: 46px !important;
-  height: 32px !important;
-  padding: 0 9px !important;
-  border-radius: 10px !important;
+  min-width: 44px !important;
+  height: 30px !important;
+  padding: 0 8px !important;
+  border-radius: 9px !important;
   background: #dcfce7 !important;
-  border: 1.5px solid #22c55e !important;
+  border: 1.5px solid #86efac !important;
   color: #15803d !important;
-  font-size: .85rem !important;
+  font-size: 12px !important;
   font-weight: 900 !important;
   white-space: nowrap !important;
-  box-shadow: 0 2px 0 #16a34a55 !important;
+  box-shadow: 0 2px 0 #bbf7d0 !important;
 }
 :root.dark .quest-percent {
-  background: #0f2a1c !important;
+  background: #052e16 !important;
   color: #4ade80 !important;
-  border-color: #22c55e !important;
-  box-shadow: 0 2px 0 #16a34a44 !important;
+  border-color: #166534 !important;
+  box-shadow: 0 2px 0 #021a0d !important;
 }
 
-/* Start button (inherits .primary style, override width) */
+/* Tombol Mulai/Ulangi */
 .clinical-quest-start {
   width: auto !important;
-  min-width: 90px;
-  border: 2px solid var(--clined-green-dark) !important;
-  background: var(--clined-green) !important;
+  min-width: 72px;
+  border: 2px solid #46a900 !important;
+  background: #58cc02 !important;
   color: #fff !important;
-  border-radius: 14px !important;
-  padding: 9px 14px !important;
-  font-weight: 900 !important;
+  border-radius: 13px !important;
+  padding: 8px 13px !important;
   font-size: 13px !important;
+  font-weight: 900 !important;
   cursor: pointer;
-  border-bottom: 4px solid var(--clined-green-dark) !important;
-  box-shadow: none !important;
+  border-bottom: 4px solid #3a8c00 !important;
   white-space: nowrap;
-  transition: transform .13s ease;
+  transition: transform .12s, box-shadow .12s;
 }
 .clinical-quest-start:active {
   transform: translateY(2px);
   border-bottom-width: 2px !important;
 }
 
-/* ─── QUEST STEP: Container ─── */
+/* ════════════════════════════════
+   QUEST STEP (saat mengerjakan)
+   ════════════════════════════════ */
 .clinical-quest-step-card {
   padding: 0 !important;
   overflow: hidden;
-  border-radius: var(--clined-radius-xl) !important;
+  border-radius: 22px !important;
   border: 2px solid var(--line) !important;
-  box-shadow: var(--depth) !important;
+  box-shadow: 0 4px 0 rgba(31,42,35,.12) !important;
+  background: var(--card) !important;
 }
 
-/* Progress bar row */
-.clinical-quest-step-card > div:first-child {
-  padding: 14px 16px 0;
+/* Header progress */
+.cq-step-header {
+  padding: 13px 16px 0;
+  border-bottom: 1.5px solid var(--line);
+  background: var(--surface);
+  padding-bottom: 13px;
 }
-
 .quest-case-label {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 900;
-  letter-spacing: .08em;
-  color: var(--brand);
+  letter-spacing: .06em;
   text-transform: uppercase;
+  color: #0a7f78;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
-  display: block;
 }
-
+:root.dark .quest-case-label { color: #3ecfba; }
+.quest-case-label span {
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 11px;
+}
 .clinical-quest-progress {
   height: 8px;
-  background: var(--surface);
+  background: var(--line);
   border-radius: 99px;
   overflow: hidden;
   border: 1.5px solid var(--line);
-  margin-bottom: 14px;
 }
 .clinical-quest-progress i {
   display: block;
   height: 100%;
-  background: var(--brand);
+  background: linear-gradient(90deg, #58cc02, #0a7f78);
   border-radius: inherit;
   transition: width .3s ease;
 }
 
 /* Scenario box */
 .quest-scenario-box {
-  margin: 0 16px 14px;
-  padding: 14px 15px;
+  margin: 14px 16px 0;
+  padding: 13px 14px;
   background: var(--surface);
   border: 1.5px solid var(--line);
   border-radius: 16px;
 }
-.quest-scenario-label,
-.quest-question-label {
-  font-size: 10px;
+.quest-scenario-label {
+  font-size: 9.5px;
   font-weight: 900;
-  letter-spacing: .1em;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 6px;
   display: block;
-}
-.quest-question-label {
-  padding: 0 16px;
-  margin-top: 0;
-  color: var(--text);
-  font-size: 11px;
-  opacity: .6;
+  margin-bottom: 7px;
 }
 .quest-scenario-text {
   font-size: 13px;
@@ -280,23 +286,32 @@
   color: var(--text);
 }
 
-/* Question title */
+/* Pertanyaan */
+.quest-question-label {
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin: 13px 16px 5px;
+}
 .quest-step-title {
-  font-size: 16px !important;
+  font-size: 15.5px !important;
   font-weight: 900 !important;
   line-height: 1.45 !important;
   letter-spacing: -.2px;
-  margin: 0 16px 14px !important;
+  margin: 0 16px 13px !important;
   color: var(--text);
 }
 
-/* ─── QUEST STEP: Options ─── */
+/* Opsi jawaban */
 .quest-options {
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 0 16px;
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 .quest-option {
   width: 100%;
@@ -304,15 +319,15 @@
   border: 2px solid var(--line) !important;
   background: var(--card) !important;
   color: var(--text);
-  border-radius: 16px !important;
-  padding: 13px 14px !important;
-  font-size: 14px !important;
+  border-radius: 15px !important;
+  padding: 12px 13px !important;
+  font-size: 13.5px !important;
   font-weight: 800 !important;
   line-height: 1.4;
   cursor: pointer;
-  box-shadow: 0 3px 0 rgba(0,0,0,.12) !important;
-  transition: transform .13s, border-color .15s, background .15s;
-  min-height: 50px !important;
+  box-shadow: 0 3px 0 rgba(0,0,0,.1) !important;
+  transition: transform .12s, border-color .14s, background .14s;
+  min-height: 48px !important;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -321,10 +336,11 @@
   transform: translateY(2px);
   box-shadow: 0 1px 0 var(--line) !important;
 }
+/* Huruf bulat per opsi */
 .quest-option b {
-  flex: 0 0 24px;
-  width: 24px;
-  height: 24px;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: var(--surface);
   border: 1.5px solid var(--line);
@@ -333,55 +349,53 @@
   font-size: 11px;
   font-weight: 900;
   color: var(--muted);
-  transition: background .15s, color .15s;
+  transition: background .14s, color .14s, border-color .14s;
+  flex-shrink: 0;
 }
 .quest-option.correct {
-  background: var(--brand-soft) !important;
-  border-color: var(--brand) !important;
-  box-shadow: 0 2px 0 #c7eab6 !important;
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+  box-shadow: 0 2px 0 #bbf7d0 !important;
 }
 .quest-option.correct b {
-  background: var(--brand) !important;
-  border-color: var(--brand-dark) !important;
+  background: #22c55e !important;
+  border-color: #16a34a !important;
   color: #fff !important;
 }
 .quest-option.wrong {
-  background: #fff0f0 !important;
-  border-color: var(--red) !important;
-  box-shadow: 0 2px 0 #ffd0d0 !important;
+  background: #fff1f1 !important;
+  border-color: #fca5a5 !important;
+  box-shadow: 0 2px 0 #fecaca !important;
 }
 .quest-option.wrong b {
-  background: var(--red) !important;
-  border-color: #cc0000 !important;
+  background: #ef4444 !important;
+  border-color: #dc2626 !important;
   color: #fff !important;
 }
-:root.dark .quest-option.wrong {
-  background: #2d1015 !important;
-}
+:root.dark .quest-option.correct { background: #052e16 !important; }
+:root.dark .quest-option.wrong   { background: #2d0f0f !important; }
 
-/* ─── QUEST STEP: Explanation ─── */
+/* Penjelasan */
 .quest-explanation {
-  margin: 0 16px 12px;
+  margin: 0 16px 13px;
   padding: 13px 14px;
   background: var(--surface);
   border: 1.5px solid var(--line);
-  border-radius: 16px;
+  border-radius: 15px;
   font-size: 13px;
   line-height: 1.6;
   color: var(--text);
 }
 .quest-explanation b {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
-  color: var(--brand);
   margin-bottom: 5px;
 }
-.quest-explanation b:contains('Belum tepat') {
-  color: var(--red);
-}
+.quest-explanation b.correct-label { color: #16a34a; }
+.quest-explanation b.wrong-label   { color: #dc2626; }
 
-/* ─── QUEST STEP: Navigation ─── */
+/* Navigasi bawah */
 .quest-step-nav {
   display: flex;
   gap: 9px;
@@ -389,54 +403,52 @@
 }
 .quest-step-nav .secondary {
   flex: 0 0 auto;
-  width: auto;
-  padding: 12px 18px;
+  width: auto !important;
+  padding: 11px 16px !important;
   border-radius: 14px !important;
+  font-size: 13px !important;
 }
 .quest-step-nav .primary {
   flex: 1;
   border-radius: 14px !important;
   padding: 12px 14px !important;
+  font-size: 14px !important;
 }
 
-/* ─── RESULT SCREEN ─── */
+/* ════════════════════════════════
+   RESULT SCREEN
+   ════════════════════════════════ */
 .quest-result {
   text-align: center;
-  padding: 24px 20px 20px !important;
+  padding: 24px 18px 20px !important;
 }
-
 .quest-score-ring {
-  width: 90px;
-  height: 90px;
+  width: 88px; height: 88px;
   border-radius: 50%;
-  background: conic-gradient(var(--brand) calc(var(--quest-score)), var(--surface) 0%);
+  background: conic-gradient(#58cc02 calc(var(--quest-score, 0%)), var(--surface) 0%);
   display: grid;
   place-items: center;
   margin: 0 auto 16px;
-  box-shadow: 0 0 0 4px var(--card), 0 6px 18px rgba(0,0,0,.12);
+  box-shadow: 0 0 0 4px var(--card), 0 6px 18px rgba(0,0,0,.1);
   position: relative;
 }
 .quest-score-ring::before {
   content: '';
   position: absolute;
-  inset: 8px;
+  inset: 9px;
   border-radius: 50%;
   background: var(--card);
 }
-.quest-score-ring > div {
-  position: relative;
-  z-index: 1;
-}
+.quest-score-ring > div { position: relative; z-index: 1; }
 .quest-score-ring b {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--brand);
-}
-
-.quest-result h3 {
   font-size: 19px;
   font-weight: 900;
-  margin: 0 0 6px;
+  color: #22c55e;
+}
+.quest-result h3 {
+  font-size: 18px;
+  font-weight: 900;
+  margin: 0 0 5px;
   color: var(--text);
 }
 .quest-result > p {
@@ -445,12 +457,11 @@
   margin: 0 0 16px;
   line-height: 1.5;
 }
-
 .quest-result-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
-  margin: 0 0 18px;
+  margin-bottom: 18px;
   text-align: left;
 }
 .quest-result-grid > div {
@@ -460,20 +471,14 @@
   padding: 10px 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   font-size: 12px;
   font-weight: 800;
-}
-.quest-result-grid > div b {
-  font-size: 16px;
-  flex: 0 0 22px;
+  color: var(--text);
 }
 .quest-result-grid > div b:first-child {
-  color: var(--brand);
-}
-.quest-result-grid > div > b:first-child[style*="×"] ,
-.quest-result-grid > div:has(b:contains('×')) b:first-child {
-  color: var(--red);
+  font-size: 17px;
+  flex-shrink: 0;
 }
 .quest-result-grid small {
   display: block;
@@ -481,18 +486,19 @@
   color: var(--muted);
   font-weight: 700;
 }
-
 .quest-result-actions {
   display: flex;
   gap: 9px;
 }
 .quest-result-actions .secondary {
   flex: 0 1 auto;
-  width: auto;
-  padding: 12px 18px;
+  width: auto !important;
+  padding: 11px 16px !important;
   border-radius: 14px !important;
+  font-size: 13px !important;
 }
 .quest-result-actions .primary {
   flex: 1;
   border-radius: 14px !important;
+  font-size: 14px !important;
 }
