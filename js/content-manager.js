@@ -113,7 +113,7 @@
           <form data-admin-upi-form class="admin-content-form acm-form">
             <div class="acm-grid">
               <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UPI_BLOCKS)}</select></div>
-              <div class="acm-field"><label>Materi</label><select name="material" required><option value="Histology">Histology</option><option value="Patologi Anatomi">Patologi Anatomi</option></select></div>
+              <div class="acm-field"><label>Materi</label><select name="material" required><option value="Histology">Histology</option><option value="Patologi Anatomi">Patologi Anatomi</option><option value="Patologi Klinik">Patologi Klinik</option><option value="Mikrobiologi">Mikrobiologi</option><option value="Fisiologi">Fisiologi</option><option value="Parasitologi">Parasitologi</option></select></div>
             </div>
             <div class="acm-field"><label>Judul atau topik <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: Histology — Jaringan epitel"></div>
             <div class="acm-field"><label>Gambar soal</label><div class="admin-file-picker"><input id="adminUpiImageFile" name="image" type="file" accept="image/*" required hidden><label for="adminUpiImageFile" class="admin-file-btn" role="button">Pilih gambar</label><span class="admin-file-selected" data-upi-file-meta>Belum ada gambar dipilih.</span></div></div>
