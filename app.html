@@ -14,136 +14,14 @@
 <link rel="stylesheet" href="css/polish.css?v=1">
 <link rel="stylesheet" href="css/clinical-quest.css?v=4">
 <link rel="stylesheet" href="css/clined-ui-fixes.css?v=1">
+<link rel="stylesheet" href="css/clined-inline-extracted.css?v=1">
 <title>CLINED — Clinical Education</title>
 <meta name="clined-release" content="v28-server-auth">
 <meta name="theme-color" content="#f7f7f2">
 <link rel="manifest" href="manifest.webmanifest">
-
-<style>
-.offline-external-section{margin-top:14px}.external-material-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.external-material-card,.materi-button{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:16px;text-decoration:none;font-weight:900;color:inherit;background:rgba(255,255,255,.72);border:1px solid rgba(0,0,0,.06);transition:transform .16s ease,box-shadow .16s ease}.external-material-card:active,.materi-button:active,.feedback-card:active{transform:scale(.97)}.external-note{display:block;margin-top:10px;opacity:.6;line-height:1.4}.materi-section{margin:12px 0}.materi-button{width:100%;padding:12px 16px}.offline-feedback-card{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;margin-top:14px}.feedback-content{display:flex;flex-direction:column;gap:3px;flex:1}.feedback-content small{opacity:.6}@media(max-width:520px){.external-material-grid{grid-template-columns:1fr}}
-</style>
-
-<style id="offline-profile-dashboard-fix">
-.account-page-view .account-header h2,.account-page-view .account-header .account-title{letter-spacing:.01em}
-
-/* Floating dashboard: compact 5-column layout */
-.floating-dashboard-nav{
-  left:50%!important; right:auto!important;
-  transform:translateX(-50%)!important;
-  width:min(calc(100vw - 24px), 430px)!important;
-  box-sizing:border-box!important;
-  display:grid!important;
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
-  align-items:center!important;
-  justify-items:center!important;
-  padding:7px!important;
-  gap:0!important;
-  margin:0!important;
-}
-.floating-dashboard-nav .floating-nav-slider{
-  width:calc((100% - 14px) / 5)!important;
-  left:7px!important;
-  transform:translateX(calc(var(--floating-index,0) * 100%))!important;
-}
-.floating-dashboard-nav .floating-nav-item{
-  width:100%!important; min-width:0!important;
-  display:flex!important; flex-direction:column!important;
-  align-items:center!important; justify-content:center!important;
-  text-align:center!important; box-sizing:border-box!important;
-  padding:8px 2px!important; margin:0!important;
-}
-.floating-dashboard-nav .floating-nav-icon{
-  display:flex!important; align-items:center!important; justify-content:center!important;
-  width:28px!important; height:28px!important; margin:0 auto 3px!important;
-}
-.floating-dashboard-nav .floating-nav-item span:last-child{
-  width:100%!important; text-align:center!important; white-space:nowrap!important;
-}
-@media (max-width:390px){
-  .floating-dashboard-nav{width:calc(100vw - 16px)!important}
-  .floating-dashboard-nav .floating-nav-item{font-size:9px!important;padding-left:4px!important;padding-right:4px!important}
-}
-
-.offline-profile-auth-disabled{display:none!important}
-
-/* Clinical dashboard cards: symmetric, predictable grid */
-.dashboard-stats{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
-.dashboard-stats>*{min-width:0!important;text-align:center!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important}
-@media(max-width:560px){.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-</style>
-
-
-<style id="clined-v6-safe-area">
-/* CLINED V6 safe-area fallback */
-:root{--clined-nav-safe:env(safe-area-inset-bottom,0px)}
-html,body{overflow-x:hidden}
-@media(max-width:600px){
-  .bottom-nav,.floating-dashboard,.app-bottom-nav,.mobile-nav{
-    padding-bottom:max(10px,var(--clined-nav-safe));
-  }
-  body{padding-bottom:calc(96px + var(--clined-nav-safe))}
-}
-</style>
 <link rel="stylesheet" href="css/motion.css?v=auth-layout-v2">
-<style id="clined-floating-mobile-final">
-.floating-dashboard-nav{z-index:99999!important;pointer-events:auto!important;touch-action:manipulation!important;isolation:isolate!important;}
-.floating-dashboard-nav .floating-nav-item{position:relative!important;z-index:2!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-user-select:none!important;user-select:none!important;}
-.floating-dashboard-nav .floating-nav-slider{pointer-events:none!important;z-index:1!important;}
-@media(max-width:600px){.floating-dashboard-nav{bottom:calc(10px + env(safe-area-inset-bottom))!important;width:calc(100vw - 18px)!important;max-width:430px!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;}.floating-dashboard-nav .floating-nav-item{min-height:52px!important;padding:6px 1px!important;}.floating-dashboard-nav .floating-nav-icon{width:26px!important;height:26px!important;}.floating-dashboard-nav .floating-nav-item span:last-child{font-size:9px!important;}}
-.admin-panel-tab{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;}
-.admin-tab-count{display:inline-grid!important;place-items:center!important;min-width:20px!important;height:20px!important;padding:0 5px!important;border-radius:999px!important;background:rgba(0,122,255,.10)!important;font-size:10px!important;font-weight:900!important;line-height:1!important;}
-</style>
-<style id="clined-loading-bounce-final">
-/* Loading: short playful bounce/settle, then a smooth full-screen logo expansion. */
-#appLoading .splash-logo{
-  animation:splashLogoBounceThenSettle 1.45s cubic-bezier(.2,.85,.2,1) both!important;
-}
-#appLoading .splash-content.is-exiting .splash-logo{
-  animation:splashLogoCoverCentered 900ms cubic-bezier(.72,0,.18,1) forwards!important;
-}
-#appLoading .splash-content.is-exiting .splash-brand{
-  animation:splashBrandExitCentered 420ms ease forwards!important;
-}
-@keyframes splashLogoBounceThenSettle{
-  0%{transform:translate(-50%,-50%) scale(.72);opacity:0}
-  22%{transform:translate(-50%,-50%) scale(1.06);opacity:1}
-  38%{transform:translate(-50%,-50%) scale(.94)}
-  52%{transform:translate(-50%,-50%) scale(1.025)}
-  66%{transform:translate(-50%,-50%) scale(.985)}
-  78%{transform:translate(-50%,-50%) scale(1.008)}
-  100%{transform:translate(-50%,-50%) scale(1);opacity:1}
-}
-@media(prefers-reduced-motion:reduce){
-  #appLoading .splash-logo{animation:none!important;transform:translate(-50%,-50%) scale(1)!important;opacity:1!important}
-  #appLoading .splash-content.is-exiting .splash-logo{animation:splashLogoCoverCentered 650ms ease forwards!important}
-}
-</style>
-<style id="uab-admin-manage-style">
-.admin-uab-manage{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
-.admin-uab-packages{display:grid;gap:9px}
-.admin-uab-package{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
-.admin-uab-package summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;cursor:pointer;list-style:none}
-.admin-uab-package summary::-webkit-details-marker{display:none}
-.admin-uab-package summary>span{min-width:0;display:flex;flex-direction:column;gap:3px}
-.admin-uab-package summary b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.admin-uab-package summary small{font-size:10px;opacity:.6}
-.admin-uab-question-list{border-top:1px solid var(--line);padding:7px 10px}
-.admin-uab-question-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 3px;border-bottom:1px solid var(--line)}
-.admin-uab-question-row:last-child{border-bottom:0}
-.admin-uab-question-row>div{min-width:0}.admin-uab-question-row b{display:block;font-size:11px;line-height:1.4}.admin-uab-question-row small{display:block;font-size:9px;opacity:.5;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:560px){.admin-uab-package summary,.admin-uab-question-row{align-items:flex-start}.admin-uab-question-row .admin-delete-btn,.admin-uab-package summary .admin-delete-btn{flex:0 0 auto;font-size:9px;padding:7px 9px}}
-.uab-ai-disclaimer{max-width:520px}
-</style>
-
-<style id="clined-floating-nav-v5">
-#floatingDashboardNav{position:fixed!important;z-index:2147483000!important;pointer-events:auto!important;}
-#floatingDashboardNav .floating-nav-item{position:relative!important;z-index:3!important;pointer-events:auto!important;cursor:pointer!important;touch-action:manipulation!important;}
-#floatingDashboardNav .floating-nav-slider{z-index:1!important;pointer-events:none!important;}
-</style>
 </head>
 <body class="auth-pending">
-
-
 
 <main class="app">
 <header class="header">
@@ -797,8 +675,6 @@ html,body{overflow-x:hidden}
   </div>
 </section>
 
-
-
 <section id="history" class="view">
   <div class="card">
     <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📊 Riwayat Skor</b></div>
@@ -1184,14 +1060,5 @@ html,body{overflow-x:hidden}
 
 </body>
 </html>
-<style>
-.study-room-members{max-height:150px;overflow:auto}.study-room-toolbar{align-items:center}.study-room-code{font-size:15px}.study-room-join{grid-template-columns:1fr}.study-room-card{padding:15px}}
-</style>
-<style>
-.admin-materials-section{margin-top:16px;padding-top:16px;border-top:1px solid rgba(0,0,0,.08)}
-.admin-material-actions{display:flex;gap:10px;flex-wrap:wrap}
-.admin-material-actions>*{flex:1 1 180px}
-.admin-material-current{font-size:12px;line-height:1.45;word-break:break-all;opacity:.65;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.035)}
-</style>
 
 
