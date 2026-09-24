@@ -572,3 +572,728 @@
   .timer-mode-grid { grid-template-columns: 1fr !important; }
   .timer-mode-choice { flex-direction: row !important; justify-content: center !important; gap: 6px !important; }
 }
+
+
+/* ═══════════════════════════════════════════════
+   Migrated from style.css patch section
+   ═══════════════════════════════════════════════ */
+/* ── HOME REDESIGN IMPROVEMENTS ───────────────────────────────────────────── */
+/* Reward strip: more visual weight */
+.duo-reward-strip {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  margin-bottom: 14px !important;
+}
+.duo-reward-item {
+  background: var(--card) !important;
+  border: 2px solid var(--line) !important;
+  border-radius: 18px !important;
+  padding: 12px 8px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+  box-shadow: 0 3px 0 rgba(0,0,0,.10) !important;
+}
+.duo-reward-icon { font-size: 22px; }
+.duo-reward-item b { font-size: 18px; font-weight: 900; letter-spacing: -.5px; }
+.duo-reward-item small { font-size: 9px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+
+/* Cleaner menu grid: 2-col with better spacing */
+.menu-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 9px !important;
+}
+.menu-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 12px 13px !important;
+  text-align: left !important;
+  font-size: 13px !important;
+  border-radius: 16px !important;
+  font-weight: 800 !important;
+}
+.menu-icon { font-size: 18px; flex: 0 0 auto; }
+
+/* Exam launcher: tighter, cleaner */
+.exam-launcher { padding: 14px !important; }
+.exam-launcher-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.exam-launch-card {
+  padding: 20px 8px !important;
+  border-radius: 18px !important;
+  font-weight: 900 !important;
+  font-size: 22px !important;
+  border: 2px solid var(--line) !important;
+  box-shadow: 0 4px 0 var(--line) !important;
+  border-bottom: 5px solid var(--line) !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.exam-launch-card:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line) !important; }
+.exam-launch-card.uab { background: linear-gradient(145deg, #4aad10 0%, #5ec204 100%) !important; border-color: #4aa800 !important; color: #fff !important; border-bottom-color: #3d8e00 !important; box-shadow: 0 4px 0 #3d8e00 !important; }
+.exam-launch-card.uab b, .exam-launch-card.uab small, .exam-launch-card.uab em { color: rgba(255,255,255,.92) !important; }
+.exam-launch-card.upi { background: linear-gradient(145deg, #1398c8 0%, #29aee8 100%) !important; border-color: #1190be !important; color: #fff !important; border-bottom-color: #0d7aa0 !important; box-shadow: 0 4px 0 #0d7aa0 !important; }
+.exam-launch-card.upi b, .exam-launch-card.upi small, .exam-launch-card.upi em { color: rgba(255,255,255,.92) !important; }
+
+/* Admin stats summary card */
+.admin-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.admin-stat-mini {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 10px;
+  text-align: center;
+}
+.admin-stat-mini b { display: block; font-size: 22px; font-weight: 900; }
+.admin-stat-mini small { font-size: 10px; color: var(--muted); }
+
+/* Dark mode adjustments */
+:root.dark .leaderboard-teaser-card {
+  background: linear-gradient(135deg, #0c1122 0%, #1a2340 100%) !important;
+  border-color: #1e3a5f !important;
+  color: #f1f5f9 !important;
+}
+:root.dark .announcement-banner {
+  background: linear-gradient(135deg, #0a6fa0 0%, #0c93d0 100%);
+  box-shadow: 0 2px 0 #074f72, 0 4px 14px rgba(12,147,208,.20);
+}
+
+/* ── Responsive: narrow screens ─────────────────────────────────────────── */
+@media (max-width: 420px) {
+  .timer-mode-grid { grid-template-columns: 1fr 1fr; }
+  .timer-mode-grid .timer-mode-choice:last-child { grid-column: 1 / -1; }
+  .menu-grid { grid-template-columns: 1fr !important; }
+  .admin-stats-row { grid-template-columns: 1fr 1fr; }
+}
+
+
+/* ── CLINED POLISH PASS • unified controls / admin form / mobile fit ─────── */
+:root{
+  --clined-control-font:12px;
+  --clined-control-radius:14px;
+  --clined-control-shadow:0 3px 0 rgba(31,42,35,.12);
+}
+button.primary,button.secondary,button.account-action,button.admin-panel-tab,
+button.admin-delete-btn,button.small-btn,button.clined-compact-action{
+  min-height:var(--clined-control-h);
+  border-radius:var(--clined-control-radius);
+  font-family:var(--clined-font);
+  font-size:var(--clined-control-font);
+  line-height:1.15;
+  font-weight:900;
+  letter-spacing:0;
+  padding:10px 15px;
+  transition:transform var(--motion-fast) ease,box-shadow var(--motion-fast) ease,filter var(--motion-fast) ease;
+}
+button.primary,button.account-save{box-shadow:var(--clined-control-shadow,var(--clined-shadow));}
+button.primary:not(:disabled):active,button.secondary:not(:disabled):active,
+button.account-action:not(:disabled):active,button.admin-panel-tab:not(:disabled):active,
+button.admin-delete-btn:not(:disabled):active,button.small-btn:not(:disabled):active{
+  transform:translateY(2px);
+}
+button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
+
+/* "Langsung publikasikan" is a compact option, never a large CTA. */
+.admin-ann-publish-check,label.admin-ann-publish-check,
+.admin-ann-publish-check *{
+  font-family:var(--clined-font)!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  text-transform:none!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+}
+.admin-ann-publish-check{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%;
+  margin:0!important;
+  padding:5px 8px!important;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--surface);
+}
+.admin-ann-publish-check input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;
+  width:16px!important;height:16px!important;min-width:16px!important;
+  margin:0!important;border:2px solid var(--muted);border-radius:5px;
+  background:var(--card);display:grid;place-items:center;
+}
+.admin-ann-publish-check input[type="checkbox"]:checked{border-color:var(--brand);background:var(--brand);}
+.admin-ann-publish-check input[type="checkbox"]:checked::after{
+  content:"";width:7px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:rotate(-45deg) translateY(-1px);
+}
+.admin-new-announce-form input[type=text],
+.admin-new-announce-form textarea,
+.admin-new-announce-form select{font-size:12px!important;}
+.admin-new-announce-form textarea{min-height:88px;}
+.admin-section-head h3{font-size:17px!important;}
+.admin-section-head p{font-size:11px!important;line-height:1.45!important;}
+@media (max-width:640px){
+  .app{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important;}
+  button.primary,button.secondary,button.account-action,button.admin-panel-tab,
+  button.admin-delete-btn,button.small-btn,button.clined-compact-action{
+    min-height:44px;padding:9px 12px;font-size:11px;
+  }
+  .admin-new-announce-form{padding:12px!important;}
+  .admin-ann-meta-row{gap:7px!important;}
+  .admin-ann-publish-check{font-size:10px!important;padding:5px 7px!important;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    scroll-behavior:auto!important;transition-duration:.01ms!important;
+  }
+}
+
+/* Unified material-link controls: save and delete use the same CLINED button geometry. */
+.admin-material-actions .material-delete-action{
+  width:100%!important; min-width:0!important; margin:0!important;
+  min-height:var(--clined-control-h)!important; height:auto!important;
+  box-sizing:border-box!important; padding:10px 14px!important;
+  border:2px solid #e0b0b0!important; border-radius:20px!important;
+  background:#fff7f7!important; color:#b63b3b!important;
+  box-shadow:0 4px 0 #d8a0a0!important;
+  font:800 12px/1.2 var(--clined-font),inherit!important;
+  cursor:pointer!important;
+  transition:transform .09s ease,box-shadow .09s ease,filter .09s ease,background .14s ease!important;
+}
+.admin-material-actions .material-delete-action:hover{background:#fff0f0!important;filter:brightness(1.01)}
+.admin-material-actions .material-delete-action:active{transform:translateY(4px)!important;box-shadow:0 0 0 #d8a0a0!important;filter:brightness(.96)}
+.admin-material-actions .material-delete-action:disabled{opacity:.55!important;cursor:wait!important}
+@media(max-width:520px){.admin-material-actions .material-delete-action{min-height:var(--clined-control-h)!important;height:auto!important;padding:10px 12px!important;border-radius:20px!important}}
+
+/* AI Tanya-Jawab */
+
+
+/* DASHBOARD NAV HOTFIX v3 */
+.floating-dashboard-nav{pointer-events:auto!important;touch-action:manipulation!important;}
+.floating-nav-item{pointer-events:auto!important;touch-action:manipulation!important;}
+.floating-nav-slider{pointer-events:none!important;}
+.floating-nav-item[data-floating-nav="dashboard"]{position:relative!important;z-index:20!important;cursor:pointer!important;}
+
+/* v7 loading credit */
+#appLoading .splash-brand{font-size:clamp(16px,4vw,22px)!important;font-weight:800!important;letter-spacing:.06em!important;color:#fff!important;top:calc(50% + 92px)!important;line-height:1.2!important;}
+
+#dailyStreakCard{display:flex!important;visibility:visible!important;opacity:1!important;}
+
+#dailyStreakCard{display:flex!important;visibility:visible!important;opacity:1!important;}
+
+/* Keep UAB signal pulse active on desktop */
+.uab-node.active-node .uab-node-icon::before,
+.uab-node.active-node .uab-node-icon::after {
+  animation: clinicalSignal 2.15s cubic-bezier(.22,.72,.35,1) infinite !important;
+}
+.uab-node.active-node .uab-node-icon::after {
+  animation-delay: .45s !important;
+}
+
+.material-block-icon img,.uab-node-icon img{width:100%;height:100%;object-fit:contain;display:block;}
+.uab-node-icon img{width:34px;height:34px;}
+
+/* =========================================
+   UPI RATING BUTTONS - FINAL VISUAL
+   Keep existing rating logic unchanged
+   ========================================= */
+
+.upi-rating-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.upi-rating-grid button,
+.upi-rating-grid .upi-rate {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 46px !important;
+  min-height: 46px !important;
+
+  padding: 0 10px !important;
+  margin: 0 !important;
+
+  border: 0 !important;
+  border-radius: 13px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+
+  cursor: pointer !important;
+  user-select: none !important;
+
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease,
+    filter 0.08s ease !important;
+}
+
+/* MERAH - Salah / Again */
+.upi-rating-grid button:nth-child(1),
+.upi-rating-grid .upi-rate:nth-child(1) {
+  background: #ff4752 !important;
+  box-shadow: 0 4px 0 #d93640 !important;
+}
+
+/* ORANGE - Sulit / Hard */
+.upi-rating-grid button:nth-child(2),
+.upi-rating-grid .upi-rate:nth-child(2) {
+  background: #ff9800 !important;
+  box-shadow: 0 4px 0 #d97900 !important;
+}
+
+/* HIJAU - Ingat / Good */
+.upi-rating-grid button:nth-child(3),
+.upi-rating-grid .upi-rate:nth-child(3) {
+  background: #50c900 !important;
+  box-shadow: 0 4px 0 #399900 !important;
+}
+
+/* BIRU - Mudah / Easy */
+.upi-rating-grid button:nth-child(4),
+.upi-rating-grid .upi-rate:nth-child(4) {
+  background: #20ade8 !important;
+  box-shadow: 0 4px 0 #0788bd !important;
+}
+
+/* Hover */
+.upi-rating-grid button:hover,
+.upi-rating-grid .upi-rate:hover {
+  filter: brightness(1.04) !important;
+}
+
+/* Pressed - efek tombol ditekan */
+.upi-rating-grid button:active,
+.upi-rating-grid .upi-rate:active {
+  transform: translateY(4px) !important;
+  box-shadow: none !important;
+}
+
+/* Hilangkan subteks jika ada */
+.upi-rating-grid button small,
+.upi-rating-grid .upi-rate small {
+  display: none !important;
+}
+
+/* Mobile tetap 4 tombol sejajar */
+@media (max-width: 600px) {
+  .upi-rating-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+  }
+
+  .upi-rating-grid button,
+  .upi-rating-grid .upi-rate {
+    height: 43px !important;
+    min-height: 43px !important;
+    padding: 0 5px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+
+
+/* ═══════════════════════════════════════
+   SKELETON LOADING STATES
+   ═══════════════════════════════════════ */
+
+@keyframes clined-shimmer {
+  0%   { background-position: -400px 0 }
+  100% { background-position: 400px 0 }
+}
+
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--surface) 25%,
+    var(--line)    50%,
+    var(--surface) 75%
+  );
+  background-size: 800px 100%;
+  animation: clined-shimmer 1.4s infinite linear;
+  border-radius: 10px;
+}
+
+/* Skeleton untuk leaderboard row */
+.leaderboard-skeleton .lb-rank  { width: 28px; height: 28px; border-radius: 50%; }
+.leaderboard-skeleton .lb-user-sk { flex: 1; height: 13px; border-radius: 7px; }
+.leaderboard-skeleton .lb-xp-sk   { width: 48px; height: 13px; border-radius: 7px; }
+.leaderboard-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 12px;
+}
+
+/* Skeleton untuk player card stats */
+.player-card-skeleton b {
+  display: inline-block;
+  width: 60px; height: 18px;
+  border-radius: 8px;
+}
+.player-card-skeleton .xp-track {
+  background: var(--surface) !important;
+}
+
+/* Skeleton untuk daily card */
+.daily-card-skeleton {
+  height: 80px;
+  border-radius: var(--clined-radius-lg);
+}
+
+/* Quest loading state */
+.clinical-quest-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+.quest-skeleton-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--clined-radius-lg);
+  border: 2px solid var(--line);
+  background: var(--card);
+  box-shadow: 0 4px 0 var(--line);
+}
+.quest-skeleton-icon {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+.quest-skeleton-text { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.quest-skeleton-title { height: 14px; border-radius: 7px; width: 65%; }
+.quest-skeleton-sub   { height: 11px; border-radius: 6px; width: 40%; }
+.quest-skeleton-btn   { width: 72px; height: 38px; border-radius: 14px; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════
+   EMPTY STATE — blok kosong
+   ═══════════════════════════════════════ */
+
+.empty-bank-inline {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  padding: 18px !important;
+  border-radius: 18px !important;
+  background: var(--surface) !important;
+  border: 2px dashed var(--line) !important;
+  margin: 0 !important;
+}
+.empty-bank-icon {
+  font-size: 32px !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
+}
+.empty-bank-inline b {
+  display: block !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: var(--text) !important;
+  margin-bottom: 5px !important;
+}
+.empty-bank-inline small {
+  display: block !important;
+  font-size: 12px !important;
+  color: var(--muted) !important;
+  line-height: 1.5 !important;
+  font-weight: 700 !important;
+}
+/* CTA di empty bank */
+.empty-bank-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 13px;
+  background: var(--brand-soft);
+  border: 2px solid var(--brand);
+  color: var(--brand-dark);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--brand-dark);
+  text-decoration: none;
+  transition: transform .12s ease;
+}
+.empty-bank-cta:active { transform: translateY(2px); }
+:root.dark .empty-bank-cta {
+  background: rgba(88,204,2,.12);
+  color: var(--brand);
+}
+
+/* Block disabled note */
+.block-empty-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 700;
+  text-align: center;
+  margin-top: 8px;
+  padding: 8px 0 4px;
+  border-top: 1.5px dashed var(--line);
+}
+
+
+/* ═══════════════════════════════════════
+   P7: DARK MODE SWEEP
+   Fix hardcoded colors yang tidak ikut token
+   ═══════════════════════════════════════ */
+
+/* Admin tab count badge */
+:root.dark .admin-tab-count {
+  background: rgba(88,204,2,.15) !important;
+  color: var(--brand) !important;
+}
+
+/* Admin materials section divider */
+:root.dark .admin-materials-section {
+  border-top-color: var(--line) !important;
+}
+
+/* Admin material current URL preview */
+:root.dark .admin-material-current {
+  background: rgba(255,255,255,.05) !important;
+}
+
+/* Safe area overlay — harus transparan di dark */
+:root.dark .clined-safe-area-top,
+:root.dark .clined-safe-area-bottom {
+  background: var(--bg) !important;
+}
+
+/* Loading bounce dots */
+:root.dark .bounce-dot {
+  background: var(--brand) !important;
+}
+
+/* Toast */
+:root.dark .clined-toast {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+  color: var(--text) !important;
+}
+:root.dark .clined-toast.is-error {
+  background: #3b2022 !important;
+  border-color: var(--red) !important;
+  color: #fca5a5 !important;
+}
+
+/* XP live pop */
+:root.dark .xp-live {
+  background: rgba(88,204,2,.2) !important;
+  color: var(--brand) !important;
+  border-color: var(--brand) !important;
+}
+
+/* Timer pill */
+:root.dark .timer-pill {
+  background: rgba(88,204,2,.12) !important;
+  color: var(--brand) !important;
+  border-color: var(--brand) !important;
+}
+
+/* Grade pill */
+:root.dark .grade-pill {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+}
+
+/* Truth badge (correct/wrong indicator) */
+:root.dark .truth-badge {
+  border-color: var(--line) !important;
+}
+
+/* Review option in result */
+:root.dark .review-option {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+}
+:root.dark .review-option.was-answer {
+  background: rgba(88,204,2,.08) !important;
+  border-color: var(--brand) !important;
+}
+:root.dark .review-option.was-wrong {
+  background: rgba(239,68,68,.08) !important;
+  border-color: var(--red) !important;
+}
+
+/* HP track (battle mode) */
+:root.dark .hp-track {
+  background: rgba(255,255,255,.08) !important;
+}
+
+/* Info boxes */
+:root.dark .info {
+  background: rgba(28,176,246,.08) !important;
+  border-color: rgba(28,176,246,.3) !important;
+  color: #7dd3fc !important;
+}
+
+/* ═══════════════════════════════════════
+   P8: ERROR BOUNDARY
+   Global error state jika komponen gagal render
+   ═══════════════════════════════════════ */
+
+.clined-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 32px 20px;
+  border-radius: var(--clined-radius-xl);
+  border: 2px dashed var(--line);
+  background: var(--surface);
+  min-height: 140px;
+}
+.clined-error-state .error-icon {
+  font-size: 32px;
+  opacity: .7;
+}
+.clined-error-state b {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--text);
+}
+.clined-error-state small {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.5;
+}
+.clined-error-state button {
+  margin-top: 4px;
+  padding: 9px 18px;
+  border-radius: 14px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-weight: 900;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--line);
+}
+
+/* ═══════════════════════════════════════
+   P9: ADMIN BUTTON CONSISTENCY
+   ═══════════════════════════════════════ */
+
+/* Admin delete buttons */
+.admin-delete-btn {
+  border: 2px solid #fca5a5 !important;
+  background: #fff1f1 !important;
+  color: #dc2626 !important;
+  border-radius: 11px !important;
+  padding: 7px 11px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 0 #fecaca !important;
+  white-space: nowrap !important;
+  transition: transform .12s ease !important;
+}
+.admin-delete-btn:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 0 0 #fecaca !important;
+}
+:root.dark .admin-delete-btn {
+  background: #2d0f0f !important;
+  border-color: var(--red) !important;
+  color: #fca5a5 !important;
+  box-shadow: 0 2px 0 #4d1515 !important;
+}
+
+/* Admin save/update buttons */
+.admin-save-btn,
+.account-save {
+  border-radius: 16px !important;
+  min-height: var(--clined-touch) !important;
+  font-weight: 900 !important;
+  font-size: 14px !important;
+}
+
+/* Admin section titles */
+.admin-section-label {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+/* Admin stat cards — seragam dengan .stat */
+.admin-stat-mini {
+  border-radius: 14px !important;
+  border: 1.5px solid var(--line) !important;
+  background: var(--card) !important;
+  padding: 10px 12px !important;
+  box-shadow: 0 2px 0 var(--line) !important;
+}
+.admin-stat-mini b {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  letter-spacing: -.4px !important;
+  color: var(--brand) !important;
+}
+.admin-stat-mini small {
+  font-size: 10px !important;
+  color: var(--muted) !important;
+  font-weight: 800 !important;
+}
+
+/* Admin panel tabs */
+.admin-panel-tab {
+  min-height: 44px !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  border-radius: 0 !important;
+  border-bottom: 3px solid transparent !important;
+  background: transparent !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  color: var(--muted) !important;
+  cursor: pointer !important;
+  padding: 0 14px !important;
+}
+.admin-panel-tab.active {
+  color: var(--brand) !important;
+  border-bottom-color: var(--brand) !important;
+}
