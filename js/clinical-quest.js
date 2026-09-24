@@ -20,7 +20,7 @@
         <span class="quest-icon">${escQ(q.icon)}</span>
         <div class="quest-main">
           <b>${escQ(q.title)}</b>
-          <small style="display:block;color:var(--muted);font-size:11px;margin-top:2px;font-weight:700">${escQ(q.duration)} • ${escQ(String(q.steps.length))} tahap</small>
+          <small>${escQ(q.duration)} &bull; ${escQ(String(q.steps.length))} tahap</small>
         </div>
         <div class="quest-actions">
           ${d?`<span class="quest-percent">${pct}%</span>`:''}
@@ -30,7 +30,7 @@
     }).join('');
     root.innerHTML=`<div class="clinical-quest-shell">
       <section class="clinical-quest-hero">
-        <span class="quest-kicker">CLINICAL REASONING MODE</span>
+        <span class="quest-kicker">Clinical Reasoning Mode</span>
         <h3>Think like a clinician.</h3>
         <p>Baca kasus, tentukan masalah, analisis mekanisme — bukan sekadar mencari jawaban.</p>
       </section>
@@ -40,6 +40,7 @@
     root.querySelectorAll('[data-quest-start]').forEach(b=>b.addEventListener('click',()=>start(b.dataset.questStart)));
     root.querySelectorAll('[data-quest-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.questFilter;render();}));
   }
+
   function shuffleArray(arr){
     const a=arr.slice();
     for(let i=a.length-1;i>0;i--){

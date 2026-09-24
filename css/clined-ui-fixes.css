@@ -1,0 +1,574 @@
+/*
+  clined-ui-fixes.css
+  Perbaikan menyeluruh UI/UX CLINED — dimuat setelah polish.css
+  Scope: beranda, leaderboard, study timer, clinical quest, semua komponen
+  Semua token inherit dari style.css (--brand, --card, --line, --surface, --text, --muted, --med, dll)
+*/
+
+/* ═══════════════════════════════════════
+   1. RESET INKONSISTENSI GLOBAL
+   ═══════════════════════════════════════ */
+
+/* Leaderboard teaser: hapus warna biru indigo — pakai token CLINED */
+.leaderboard-teaser-card {
+  background: var(--card) !important;
+  border: 2px solid var(--line) !important;
+  border-color: var(--brand) !important;
+  box-shadow: 0 4px 0 var(--line) !important;
+}
+:root.dark .leaderboard-teaser-card {
+  background: var(--card) !important;
+  border-color: var(--brand-dark) !important;
+}
+.leaderboard-see-all {
+  background: var(--brand-soft) !important;
+  border: 2px solid var(--brand) !important;
+  color: var(--brand-dark) !important;
+  border-radius: 12px !important;
+  padding: 6px 12px !important;
+  font-size: 11.5px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 2px 0 var(--brand-dark) !important;
+}
+:root.dark .leaderboard-see-all {
+  background: rgba(88,204,2,.15) !important;
+  color: var(--brand) !important;
+}
+.lb-teaser-row {
+  background: var(--surface) !important;
+  border-radius: 12px !important;
+  border: 1.5px solid var(--line) !important;
+}
+:root.dark .lb-teaser-row { background: var(--surface) !important; }
+.lb-teaser-row.leaderboard-me {
+  background: var(--brand-soft) !important;
+  border-color: var(--brand) !important;
+}
+
+/* ── Leaderboard halaman penuh ── */
+.leaderboard-tabs-card {
+  border-radius: var(--clined-radius-xl) !important;
+}
+.lb-tab {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  min-height: 48px !important;
+  border-bottom: 3px solid transparent !important;
+}
+.lb-tab.active {
+  color: var(--brand) !important;
+  border-bottom-color: var(--brand) !important;
+}
+.leaderboard-row {
+  border-radius: 14px !important;
+  border: 1.5px solid transparent !important;
+}
+.leaderboard-row:hover { background: var(--surface) !important; }
+.leaderboard-row.leaderboard-me {
+  background: var(--brand-soft) !important;
+  border-color: var(--brand) !important;
+}
+:root.dark .leaderboard-row.leaderboard-me {
+  background: rgba(88,204,2,.10) !important;
+}
+
+/* ═══════════════════════════════════════
+   2. STUDY TIMER — seragamkan dgn .card
+   ═══════════════════════════════════════ */
+
+.study-timer-card {
+  border-radius: var(--clined-radius-xl) !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+.timer-display {
+  padding: 32px 20px 20px;
+  border-bottom: 1.5px solid var(--line);
+  background: var(--surface);
+}
+.timer-mode-label {
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .1em !important;
+  color: var(--med) !important;
+  text-transform: uppercase !important;
+  margin-bottom: 10px !important;
+}
+.timer-clock {
+  font-size: 68px !important;
+  font-weight: 900 !important;
+  letter-spacing: -3px !important;
+  line-height: 1 !important;
+  color: var(--text) !important;
+  margin-bottom: 10px !important;
+}
+.timer-session-count {
+  font-size: 12px !important;
+  color: var(--muted) !important;
+  font-weight: 700 !important;
+}
+.timer-controls {
+  display: flex !important;
+  gap: 10px !important;
+  padding: 16px !important;
+}
+.timer-btn {
+  flex: 1 !important;
+  min-height: var(--clined-touch) !important;
+  border-radius: 18px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  border: 2px solid var(--line) !important;
+  transition: transform .12s ease, box-shadow .12s ease !important;
+}
+.timer-btn:active {
+  transform: translateY(3px) !important;
+}
+.timer-start {
+  background: var(--brand) !important;
+  border-color: var(--brand-dark) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 0 var(--brand-dark) !important;
+  border-bottom-width: 5px !important;
+}
+.timer-start:active { box-shadow: 0 1px 0 var(--brand-dark) !important; }
+.timer-reset {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+  box-shadow: 0 3px 0 var(--line) !important;
+}
+.timer-reset:active { box-shadow: 0 1px 0 var(--line) !important; }
+
+.timer-mode-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px !important;
+  padding: 0 16px 16px !important;
+}
+.timer-mode-choice {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 11px 8px !important;
+  border-radius: 16px !important;
+  border: 2px solid var(--line) !important;
+  background: var(--card) !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  color: var(--text) !important;
+  box-shadow: 0 3px 0 var(--line) !important;
+  transition: transform .12s ease !important;
+  min-height: 58px !important;
+}
+.timer-mode-choice:active { transform: translateY(2px) !important; }
+.timer-mode-choice small {
+  font-size: 9.5px !important;
+  opacity: .7 !important;
+  font-weight: 700 !important;
+}
+.timer-mode-choice.active {
+  border-color: var(--brand) !important;
+  background: var(--brand-soft) !important;
+  color: var(--brand-dark) !important;
+  box-shadow: 0 3px 0 var(--brand-dark) !important;
+}
+:root.dark .timer-mode-choice.active {
+  background: rgba(88,204,2,.12) !important;
+  color: var(--brand) !important;
+}
+.timer-tips {
+  margin: 0 !important;
+  padding: 0 0 0 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 9px !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: var(--muted) !important;
+}
+
+/* ═══════════════════════════════════════
+   3. HOME — perbaikan ergonomi
+   ═══════════════════════════════════════ */
+
+/* Stats bar — lebih terbaca */
+.stats {
+  gap: 8px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+}
+.stat {
+  border-radius: var(--clined-radius-md) !important;
+  border: 2px solid var(--line) !important;
+  background: var(--card) !important;
+  padding: 12px 8px !important;
+  box-shadow: 0 3px 0 var(--line) !important;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.stat b {
+  font-size: 19px !important;
+  font-weight: 900 !important;
+  letter-spacing: -.5px !important;
+  line-height: 1 !important;
+}
+.stat span {
+  font-size: 9.5px !important;
+  color: var(--muted) !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+}
+.stats .stat:nth-child(1) b { color: var(--brand); }
+.stats .stat:nth-child(2) b { color: #f59e0b; }
+.stats .stat:nth-child(3) b { color: var(--ios-blue); }
+.stats .stat:nth-child(4) b { color: var(--purple); }
+
+/* Player card — lebih rapi */
+.player-card {
+  border: 2px solid var(--brand) !important;
+  box-shadow: 0 4px 0 var(--line) !important;
+}
+.player-level span {
+  font-size: 11px !important;
+  padding: 5px 10px !important;
+}
+
+/* Resume card — lebih menonjol */
+.resume-card {
+  border: 2px solid var(--ios-blue) !important;
+  background: linear-gradient(135deg, rgba(28,176,246,.07), var(--card)) !important;
+  box-shadow: 0 4px 0 rgba(28,176,246,.25) !important;
+}
+
+/* Exam launcher — perbaiki spacing */
+.exam-launcher.card {
+  padding: 16px !important;
+}
+.exam-launcher-grid {
+  gap: 12px !important;
+  margin-top: 10px !important;
+}
+
+/* ═══════════════════════════════════════
+   4. QUIZ ENGINE — konsistensi jawaban
+   ═══════════════════════════════════════ */
+
+/* Answer options — min-height ergonomis di mobile */
+.answer {
+  min-height: 54px !important;
+  padding: 13px 14px !important;
+  border-radius: 18px !important;
+  font-size: 15px !important;
+}
+.answer-letter {
+  width: 30px !important;
+  height: 30px !important;
+  flex: 0 0 30px !important;
+  border-radius: 50% !important;
+  font-size: 12px !important;
+}
+
+/* Explain box */
+.explain {
+  border-radius: var(--clined-radius-lg) !important;
+  padding: 14px 15px !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+.explain-title {
+  font-size: 15px !important;
+  margin-bottom: 8px !important;
+}
+
+/* Progress bar di kuis */
+.progress {
+  height: 10px !important;
+  border-radius: 99px !important;
+}
+
+/* ═══════════════════════════════════════
+   5. EXAM LAUNCH CARDS — konsistensi
+   ═══════════════════════════════════════ */
+.exam-launch-card {
+  border-radius: var(--clined-radius-lg) !important;
+  min-height: 82px !important;
+  padding: 14px !important;
+  border: 2px solid var(--line) !important;
+  box-shadow: 0 4px 0 var(--line) !important;
+}
+.exam-launch-card:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 1px 0 var(--line) !important;
+}
+.exam-launch-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 15px !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+}
+
+/* ═══════════════════════════════════════
+   6. BLOCK/QUIZ SETTINGS CARDS
+   ═══════════════════════════════════════ */
+.bank-card {
+  border-radius: var(--clined-radius-xl) !important;
+}
+.nested-card {
+  border-radius: var(--clined-radius-lg) !important;
+  padding: 14px !important;
+}
+.choice-grid {
+  gap: 8px !important;
+}
+.choice {
+  border-radius: 16px !important;
+  min-height: 48px !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  padding: 11px 8px !important;
+}
+.choice.selected {
+  background: var(--brand) !important;
+  border-color: var(--brand-dark) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 0 var(--brand-dark) !important;
+}
+
+/* ═══════════════════════════════════════
+   7. RESULT SCREEN
+   ═══════════════════════════════════════ */
+.result-score .big {
+  font-size: 56px !important;
+  letter-spacing: -3px !important;
+}
+.result-grid {
+  border-radius: var(--clined-radius-lg) !important;
+  overflow: hidden !important;
+  border: 2px solid var(--line) !important;
+  background: var(--line) !important;
+  gap: 1px !important;
+}
+.result-grid > div {
+  padding: 13px 10px !important;
+  border-radius: 0 !important;
+}
+.result-grid b {
+  font-size: 20px !important;
+}
+.result-grid span {
+  font-size: 11px !important;
+  color: var(--muted) !important;
+}
+.quiz-actions {
+  gap: 9px !important;
+  margin-top: 14px !important;
+}
+
+/* ═══════════════════════════════════════
+   8. BACK LINK & PAGE HEADERS
+   ═══════════════════════════════════════ */
+.back-link {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: var(--brand) !important;
+  padding: 6px 0 !important;
+  min-height: 36px !important;
+  display: inline-flex;
+  align-items: center;
+}
+.exam-page-header {
+  padding: 4px 0 16px !important;
+  gap: 10px !important;
+}
+.exam-page-header h2 {
+  font-size: 26px !important;
+  letter-spacing: -.5px !important;
+  margin: 4px 0 3px !important;
+}
+.exam-page-header .eyebrow {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  letter-spacing: .08em !important;
+  color: var(--med) !important;
+}
+.exam-page-header p {
+  font-size: 12px !important;
+  color: var(--muted) !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+/* ═══════════════════════════════════════
+   9. MENU ITEMS — gap & spacing
+   ═══════════════════════════════════════ */
+#menuSectionContent {
+  gap: 10px !important;
+}
+.menu-item {
+  min-height: 60px !important;
+  padding: 12px 14px !important;
+  gap: 12px !important;
+  border-radius: 17px !important;
+  font-size: 14px !important;
+}
+.menu-icon {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  border-radius: 12px !important;
+  font-size: 20px !important;
+}
+
+/* ═══════════════════════════════════════
+   10. FLASHCARD / STUDY LAB
+   ═══════════════════════════════════════ */
+.flashcard {
+  min-height: 280px !important;
+  border-radius: var(--clined-radius-xl) !important;
+  padding: 22px !important;
+}
+.flash-label {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  letter-spacing: .1em !important;
+}
+.flash-actions {
+  gap: 10px !important;
+}
+
+/* ═══════════════════════════════════════
+   11. ACHIEVEMENTS PAGE
+   ═══════════════════════════════════════ */
+.achievement-item {
+  border-radius: 16px !important;
+  padding: 12px !important;
+  border: 1.5px solid var(--line) !important;
+  background: var(--surface) !important;
+}
+.achievement-item b {
+  font-size: 13.5px !important;
+}
+.achievement-item small {
+  font-size: 11px !important;
+  color: var(--muted) !important;
+}
+
+/* ═══════════════════════════════════════
+   12. MATERIALS PAGE
+   ═══════════════════════════════════════ */
+.material-block-card {
+  border-radius: var(--clined-radius-lg) !important;
+  min-height: 76px !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  box-shadow: none !important;
+}
+.material-block-card.has-material {
+  border-color: var(--brand) !important;
+  border-bottom-color: var(--brand-dark) !important;
+  background: var(--brand-soft) !important;
+}
+:root.dark .material-block-card.has-material {
+  background: rgba(88,204,2,.07) !important;
+}
+
+/* ═══════════════════════════════════════
+   13. DAILY HOME CARD / STREAK
+   ═══════════════════════════════════════ */
+.daily-streak-card {
+  border-radius: 16px !important;
+  margin-top: 12px !important;
+}
+.streak-flame {
+  font-size: 26px !important;
+}
+.streak-progress {
+  height: 10px !important;
+  border-radius: 99px !important;
+}
+
+/* ═══════════════════════════════════════
+   14. ANALYTICS / DASHBOARD CARDS
+   ═══════════════════════════════════════ */
+.dashboard-stat {
+  border-radius: 16px !important;
+  border: 1.5px solid var(--line) !important;
+  background: var(--card) !important;
+  min-height: 80px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px 8px !important;
+  text-align: center !important;
+  gap: 4px !important;
+  box-shadow: 0 2px 0 var(--line) !important;
+}
+.dashboard-stat span { font-size: 22px !important; }
+.dashboard-stat b {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  letter-spacing: -.4px !important;
+}
+.dashboard-stat small {
+  font-size: 10px !important;
+  color: var(--muted) !important;
+  font-weight: 800 !important;
+}
+
+/* ═══════════════════════════════════════
+   15. CLINICAL QUEST — fix back-compat
+   ═══════════════════════════════════════ */
+/* Pastikan quest-card tidak punya inline style dari JS lama */
+.clinical-quest-card[style*="background"],
+.clinical-quest-card[style*="border"] {
+  background: var(--card) !important;
+}
+.clinical-quest-card.quest-completed[style] {
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+}
+:root.dark .clinical-quest-card.quest-completed[style] {
+  background: #052e16 !important;
+}
+
+/* ═══════════════════════════════════════
+   16. SMALL RESPONSIVE FIXES
+   ═══════════════════════════════════════ */
+@media (max-width: 560px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+    gap: 6px !important;
+  }
+  .stat b { font-size: 16px !important; }
+  .stat span { font-size: 8.5px !important; }
+
+  .timer-clock { font-size: 58px !important; }
+  .timer-mode-choice { min-height: 52px !important; font-size: 11px !important; }
+  .timer-mode-choice small { font-size: 8.5px !important; }
+
+  .exam-page-header h2 { font-size: 22px !important; }
+  .back-link { font-size: 13px !important; }
+
+  .answer { min-height: 50px !important; font-size: 14px !important; }
+  .choice { min-height: 44px !important; }
+
+  .leaderboard-see-all { font-size: 10.5px !important; padding: 5px 9px !important; }
+}
+
+@media (max-width: 420px) {
+  .stats { grid-template-columns: repeat(2, 1fr) !important; }
+  .timer-mode-grid { grid-template-columns: 1fr !important; }
+  .timer-mode-choice { flex-direction: row !important; justify-content: center !important; gap: 6px !important; }
+}
