@@ -499,3 +499,28 @@
 }
 :root.dark .card-pack-price { color: #d8b4fe; }
 :root.dark .card-collection-title { color: var(--text); }
+
+/* ── FAB posisi kiri, 1/3 dari atas ── */
+.card-shop-fab--topleft {
+  /* Override bottom-right ke top-left 1/3 */
+  bottom: auto !important;
+  right: auto !important;
+  top: calc(33vh + env(safe-area-inset-top, 0px));
+  left: 14px;
+  /* Sedikit lebih kecil agar tidak ganggu konten */
+  width: 52px;
+  min-height: 58px;
+  border-radius: 18px;
+}
+
+/* Admin ∞ badge di FAB */
+.fab-admin-badge {
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(255,215,0,.9);
+  color: #5b21b6;
+  border-radius: 7px;
+  padding: 1px 5px;
+  line-height: 1.4;
+  margin-top: -2px;
+}
