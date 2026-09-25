@@ -31,19 +31,27 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
 
-          tar czf - --exclude='.git' . | ssh "$VPS_USER@$VPS_HOST" \
-            'tar xzf - -C /root/CLINED --no-same-owner'
+          rsync -az --delete-delay \
+            --exclude='.git/' \
+            --exclude='.env' \
+            --exclude='node_modules/' \
+            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=6" \
+            ./ "$VPS_USER@$VPS_HOST:/root/CLINED/"
 
-          ssh "$VPS_USER@$VPS_HOST" << 'EOF2'
-            set -e
-            cd /root/CLINED
+          ssh -i ~/.ssh/id_ed25519 \
+            -o StrictHostKeyChecking=yes \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=6 \
+            "$VPS_USER@$VPS_HOST" <<'EOF2'
+          set -e
+          cd /root/CLINED
 
-            if [ -f package-lock.json ]; then
-              npm ci --omit=dev
-            fi
+          if [ -f package-lock.json ]; then
+            npm ci --omit=dev
+          fi
 
-            pm2 restart clined-api --update-env
-            pm2 save
+          pm2 restart clined-api --update-env
+          pm2 save
 
-            echo "CLINED deployment successful"
+          echo "CLINED deployment successful"
           EOF2
