@@ -524,3 +524,74 @@
   line-height: 1.4;
   margin-top: -2px;
 }
+
+/* ═══════════════════════════════════════
+   FAB — hanya tampil di beranda
+   ═══════════════════════════════════════ */
+.card-shop-fab {
+  /* Default: tersembunyi */
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.7);
+  transition: opacity .2s ease, transform .2s ease;
+}
+/* Tampil hanya saat body.home-context */
+body.home-context .card-shop-fab {
+  opacity: 1;
+  pointer-events: all;
+  transform: scale(1);
+}
+
+/* ── Admin FAB diamond display ── */
+.fab-dia--admin {
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(255,215,0,.9);
+  color: #5b21b6;
+  border-radius: 8px;
+  padding: 2px 6px;
+  line-height: 1.4;
+  letter-spacing: .02em;
+}
+
+/* ── Shop modal scroll fix ── */
+.card-shop-modal {
+  /* Pastikan touch event tidak terblokir */
+  touch-action: none;
+}
+.card-shop-container {
+  /* Scroll di dalam container, bukan body */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+/* Pastikan inner content bisa di-scroll penuh */
+.card-shop-inner {
+  min-height: min-content;
+}
+
+/* Modal height lebih fleksibel */
+.card-shop-container {
+  max-height: 88dvh !important;
+  /* Minimum height agar tidak terlalu kecil */
+  min-height: 340px;
+}
+
+/* Collection grid scroll area */
+.card-collection-grid {
+  /* Pastikan grid tidak terpotong */
+  overflow: visible;
+}
+
+/* ── Draggable FAB cursor ── */
+.card-shop-fab {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.card-shop-fab:active {
+  cursor: grabbing;
+}
+
+/* Hapus fab-admin-badge yang lama (sekarang pakai fab-dia--admin) */
+.fab-admin-badge { display: none; }

@@ -11,7 +11,35 @@ function isAdmin(){try{const u=typeof authCurrentUser==='function'?authCurrentUs
 const getDia=()=>isAdmin()?999999:parseInt(localStorage.getItem(KEY_DIA)||'0');
 const setDia=v=>{if(!isAdmin())localStorage.setItem(KEY_DIA,String(Math.max(0,v)));};
 const getCards=()=>{try{return JSON.parse(localStorage.getItem(KEY_CARDS)||'[]');}catch{return[];}};
-const saveCards=c=>localStorage.setItem(KEY_CARDS,JSON.stringify(c));
+const saveCards=c=>{
+    localStorage.setItem(KEY_CARDS,JSON.stringify(c));
+    syncCardsToServer(c);
+  };
+  async function syncCardsToServer(col){
+    try{
+      if(typeof authCurrentUser!=='function'||!authCurrentUser())return;
+      // Simpan ke server via profile metadata
+      await fetch('/api/auth/cards',{
+        method:'POST',credentials:'same-origin',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({cards:col})
+      });
+    }catch(e){console.warn('Card sync failed',e);}
+  }
+  async function loadCardsFromServer(){
+    try{
+      if(typeof authCurrentUser!=='function'||!authCurrentUser())return;
+      const r=await fetch('/api/auth/cards',{credentials:'same-origin'});
+      if(!r.ok)return;
+      const d=await r.json();
+      if(d&&Array.isArray(d.cards)&&d.cards.length>0){
+        const local=getCards();
+        const merged=[...d.cards];
+        local.forEach(lc=>{if(!merged.find(sc=>sc.id===lc.id&&sc.at===lc.at))merged.push(lc);});
+        localStorage.setItem(KEY_CARDS,JSON.stringify(merged));
+      }
+    }catch(e){console.warn('Card load failed',e);}
+  }
 const getPacks=()=>parseInt(localStorage.getItem(KEY_PACKS)||'0');
 
 /* Diamond earn hook */
@@ -191,6 +219,8 @@ function hideShop(){
 }
 
 function injectUI(){
+  // Load kartu dari server kalau sudah login
+  loadCardsFromServer().then(()=>refreshShop()).catch(()=>{});
   /* Ganti item ke-4 di duo-reward-strip dengan Diamond */
   const items=document.querySelectorAll('.duo-reward-item');
   if(items.length>=4){
@@ -204,9 +234,42 @@ function injectUI(){
     fab.className='card-shop-fab card-shop-fab--topleft';
     fab.setAttribute('aria-label','Card Shop');
     fab.innerHTML='<span class="fab-icon">🎴</span>'
-      +'<span class="fab-dia"><span data-diamond-count>'+getDia()+'</span> 💎</span>'
-      +(isAdmin()?'<span class="fab-admin-badge">∞</span>':'');
-    fab.addEventListener('click',showShop);
+      +(isAdmin()
+        ?'<span class="fab-dia fab-dia--admin">∞ 💎</span>'
+        :'<span class="fab-dia"><span data-diamond-count>'+getDia()+'</span> 💎</span>');
+    // Draggable FAB
+    let dragging=false,dragStartX=0,dragStartY=0,fabX=0,fabY=0,dragMoved=false;
+    function getFabPos(){const r=fab.getBoundingClientRect();return{x:r.left,y:r.top};}
+    fab.addEventListener('pointerdown',function(e){
+      if(e.button!==0)return;
+      dragging=true;dragMoved=false;
+      const pos=getFabPos();
+      fabX=pos.x;fabY=pos.y;
+      dragStartX=e.clientX;dragStartY=e.clientY;
+      fab.setPointerCapture(e.pointerId);
+      fab.style.transition='none';
+      e.preventDefault();
+    });
+    fab.addEventListener('pointermove',function(e){
+      if(!dragging)return;
+      const dx=e.clientX-dragStartX,dy=e.clientY-dragStartY;
+      if(Math.abs(dx)>4||Math.abs(dy)>4)dragMoved=true;
+      if(!dragMoved)return;
+      const nx=Math.max(8,Math.min(window.innerWidth-fab.offsetWidth-8,fabX+dx));
+      const ny=Math.max(8,Math.min(window.innerHeight-fab.offsetHeight-8,fabY+dy));
+      fab.style.left=nx+'px';fab.style.top=ny+'px';
+      fab.style.bottom='auto';fab.style.right='auto';
+    });
+    fab.addEventListener('pointerup',function(e){
+      if(!dragging)return;dragging=false;
+      fab.style.transition='';
+      if(!dragMoved)showShop();
+      // Snap to nearest edge
+      const r=fab.getBoundingClientRect();
+      const cx=r.left+r.width/2;
+      fab.style.left=(cx<window.innerWidth/2)?'14px':(window.innerWidth-r.width-14)+'px';
+    });
+    fab.addEventListener('click',function(e){if(dragMoved){dragMoved=false;e.stopPropagation();}});
     document.body.appendChild(fab);
   }
   updateDia();
