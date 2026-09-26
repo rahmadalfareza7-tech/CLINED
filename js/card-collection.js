@@ -147,37 +147,108 @@ function buildShop(){
 }
 
 function showReveal(card){
-  const ov=document.createElement('div');ov.className='card-reveal-overlay';
-  ov.innerHTML='<div class="card-reveal-inner">'
+  const isRare=card.rarity==='rare';
+  const ov=document.createElement('div');
+  ov.className='card-reveal-overlay';
+  ov.innerHTML=
+    '<div class="card-reveal-particles" id="rvParticles"></div>'
+    +'<div class="card-reveal-inner">'
     +'<div class="card-reveal-glow" style="--glow:'+card.color+'"></div>'
-    +'<div id="rvPack" class="card-reveal-pack">'+packSVG(false)+'</div>'
-    +'<div id="rvResult" class="card-reveal-result" hidden>'
-    +'<div class="card-reveal-label">Kartu baru! ✨</div>'
-    +'<div class="card-result-wrap" style="--rarity-color:'+card.color+'">'
-    +'<img src="'+card.img+'" alt="'+card.name+'" class="card-result-img"/></div>'
-    +'<div class="card-reveal-name">'+card.name+'</div>'
-    +'<div class="card-reveal-rarity '+(card.rarity)+'">'+(card.rarity==='rare'?'⭐ RARE':'COMMON')+'</div>'
-    +'<button class="primary card-reveal-ok" id="rvOk">Simpan ke Koleksi →</button>'
+    +'<div id="rvPack" class="card-reveal-pack">'
+    +'<div class="pack-shine-ring"></div>'
+    +packSVG(false)
     +'</div>'
-    +'<p class="card-reveal-hint" id="rvHint">Tap untuk membuka pack 👆</p>'
+    +'<div id="rvResult" class="card-reveal-result" hidden>'
+    +'<div class="card-reveal-label">'+(isRare?'✨ Kartu Langka! ✨':'Kartu Baru!')+'</div>'
+    +'<div class="card-result-wrap" style="--rarity-color:'+card.color+'">'
+    +(isRare?'<div class="rare-shine"></div>':'')
+    +'<img src="'+card.img+'" alt="'+card.name+'" class="card-result-img" loading="eager"/>'
+    +'</div>'
+    +'<div class="card-reveal-name">'+card.name+'</div>'
+    +'<div class="card-reveal-rarity '+(card.rarity)+'">'+(isRare?'⭐ RARE':'COMMON')+'</div>'
+    +'<button class="card-reveal-ok" id="rvOk">Simpan ke Koleksi →</button>'
+    +'</div>'
+    +'<div class="card-reveal-hint-wrap" id="rvHint">'
+    +'<span class="hint-tap-icon">👆</span>'
+    +'<span>Tap untuk membuka</span>'
+    +'</div>'
     +'</div>';
   document.body.appendChild(ov);
+
+  // Particle burst helper
+  function burstParticles(color){
+    const container=document.getElementById('rvParticles');
+    if(!container)return;
+    const colors=isRare?['#fbbf24','#f59e0b','#ffd700','#fff','#ec4899']:['#fff','#a5f3fc','#86efac','#c4b5fd'];
+    for(let i=0;i<(isRare?28:16);i++){
+      const p=document.createElement('div');
+      p.className='rv-particle';
+      p.style.cssText='--tx:'+(Math.random()*200-100)+'px;--ty:'+(-(Math.random()*180+60))+'px;'
+        +'--rot:'+(Math.random()*720-360)+'deg;'
+        +'--bg:'+colors[Math.floor(Math.random()*colors.length)]+';'
+        +'--sz:'+(Math.random()*8+4)+'px;'
+        +'--delay:'+(Math.random()*0.15)+'s;'
+        +'--dur:'+(Math.random()*0.4+0.5)+'s;'
+        +'left:calc(50% + '+(Math.random()*60-30)+'px);'
+        +'top:50%;';
+      container.appendChild(p);
+      setTimeout(()=>p.remove(),900);
+    }
+  }
+
   let done=false;
+
+  function openPack(){
+    if(done)return;done=true;
+    const pack=document.getElementById('rvPack');
+    const hint=document.getElementById('rvHint');
+    const result=document.getElementById('rvResult');
+    // Phase 1: hint fade out
+    if(hint)hint.classList.add('hint-exit');
+    // Phase 2: pack glow burst
+    pack.classList.add('pack-pre-open');
+    setTimeout(()=>{
+      // Phase 3: shake
+      pack.classList.add('pack-opening');
+      setTimeout(()=>{
+        // Phase 4: burst particles
+        burstParticles(card.color);
+        // Phase 5: pack explode out
+        pack.classList.add('pack-explode');
+        setTimeout(()=>{
+          pack.hidden=true;
+          // Phase 6: card slide in
+          result.hidden=false;
+          result.classList.add('result-appear');
+          // Phase 7: rare extra flash
+          if(isRare){
+            ov.classList.add('rare-flash');
+            setTimeout(()=>ov.classList.remove('rare-flash'),600);
+          }
+        },320);
+      },400);
+    },200);
+  }
+
+  // Tap or click to open
   ov.addEventListener('click',function(e){
-    if(e.target.id==='rvOk'){
+    if(e.target.id==='rvOk'||e.target.closest('#rvOk')){
       ov.classList.add('closing');
-      setTimeout(()=>{ov.remove();refreshShop();},380);
+      setTimeout(()=>{ov.remove();refreshShop();},450);
       return;
     }
-    if(done)return;done=true;
-    document.getElementById('rvPack').classList.add('pack-opening');
-    document.getElementById('rvHint').hidden=true;
-    setTimeout(()=>{
-      document.getElementById('rvPack').hidden=true;
-      const r=document.getElementById('rvResult');
-      r.hidden=false;r.classList.add('result-appear');
-    },700);
+    if(done)return;
+    openPack();
   });
+
+  // Touch support (mobile)
+  ov.addEventListener('touchend',function(e){
+    if(done)return;
+    const t=e.target;
+    if(t.id==='rvOk'||t.closest&&t.closest('#rvOk'))return;
+    e.preventDefault();
+    openPack();
+  },{passive:false});
 }
 
 function refreshShop(){
@@ -209,13 +280,21 @@ function showShop(){
   document.getElementById('cardShopContainer').innerHTML=buildShop();
   bindShop();
   requestAnimationFrame(()=>m.classList.add('open'));
-  document.body.style.overflow='hidden';
+  // Blokir scroll body tapi jangan via overflow:hidden (iOS bug)
+  document.body.dataset.shopOpen='1';
+  document.addEventListener('touchmove',_blockBodyScroll,{passive:false});
 }
 
+function _blockBodyScroll(e){
+  const container=document.getElementById('cardShopContainer');
+  if(container&&container.contains(e.target))return;
+  e.preventDefault();
+}
 function hideShop(){
   const m=document.getElementById('cardShopModal');
   if(m)m.classList.remove('open');
-  document.body.style.overflow='';
+  delete document.body.dataset.shopOpen;
+  document.removeEventListener('touchmove',_blockBodyScroll);
 }
 
 function injectUI(){
@@ -238,38 +317,52 @@ function injectUI(){
         ?'<span class="fab-dia fab-dia--admin">∞ 💎</span>'
         :'<span class="fab-dia"><span data-diamond-count>'+getDia()+'</span> 💎</span>');
     // Draggable FAB
-    let dragging=false,dragStartX=0,dragStartY=0,fabX=0,fabY=0,dragMoved=false;
-    function getFabPos(){const r=fab.getBoundingClientRect();return{x:r.left,y:r.top};}
-    fab.addEventListener('pointerdown',function(e){
-      if(e.button!==0)return;
-      dragging=true;dragMoved=false;
-      const pos=getFabPos();
-      fabX=pos.x;fabY=pos.y;
-      dragStartX=e.clientX;dragStartY=e.clientY;
-      fab.setPointerCapture(e.pointerId);
+    let _dragging=false,_dsx=0,_dsy=0,_fx=0,_fy=0,_moved=false;
+    function _fabRect(){const r=fab.getBoundingClientRect();return{x:r.left,y:r.top,w:r.width,h:r.height};}
+    function _fabStart(cx,cy){
+      _dragging=true;_moved=false;
+      const r=_fabRect();_fx=r.x;_fy=r.y;_dsx=cx;_dsy=cy;
       fab.style.transition='none';
-      e.preventDefault();
-    });
-    fab.addEventListener('pointermove',function(e){
-      if(!dragging)return;
-      const dx=e.clientX-dragStartX,dy=e.clientY-dragStartY;
-      if(Math.abs(dx)>4||Math.abs(dy)>4)dragMoved=true;
-      if(!dragMoved)return;
-      const nx=Math.max(8,Math.min(window.innerWidth-fab.offsetWidth-8,fabX+dx));
-      const ny=Math.max(8,Math.min(window.innerHeight-fab.offsetHeight-8,fabY+dy));
+    }
+    function _fabMove(cx,cy){
+      if(!_dragging)return;
+      const dx=cx-_dsx,dy=cy-_dsy;
+      if(Math.abs(dx)>5||Math.abs(dy)>5)_moved=true;
+      if(!_moved)return;
+      const r=_fabRect();
+      const nx=Math.max(8,Math.min(window.innerWidth-r.w-8,_fx+dx));
+      const ny=Math.max(8+48,Math.min(window.innerHeight-r.h-8,_fy+dy));
       fab.style.left=nx+'px';fab.style.top=ny+'px';
       fab.style.bottom='auto';fab.style.right='auto';
+    }
+    function _fabEnd(){
+      if(!_dragging)return;_dragging=false;
+      fab.style.transition='transform .2s ease';
+      if(!_moved){showShop();return;}
+      // Snap ke kiri/kanan
+      const r=_fabRect();
+      fab.style.left=(r.x+r.w/2<window.innerWidth/2)?'14px':(window.innerWidth-r.w-14)+'px';
+      setTimeout(()=>_moved=false,50);
+    }
+    // Touch events (mobile)
+    fab.addEventListener('touchstart',function(e){
+      _fabStart(e.touches[0].clientX,e.touches[0].clientY);
+      e.stopPropagation(); // jangan propagate ke page scroll
+    },{passive:true});
+    fab.addEventListener('touchmove',function(e){
+      if(!_dragging)return;
+      _fabMove(e.touches[0].clientX,e.touches[0].clientY);
+      if(_moved)e.preventDefault(); // cegah scroll page HANYA kalau sedang drag
+    },{passive:false});
+    fab.addEventListener('touchend',_fabEnd,{passive:true});
+    // Mouse events (desktop)
+    fab.addEventListener('mousedown',function(e){
+      if(e.button!==0)return;
+      _fabStart(e.clientX,e.clientY);
     });
-    fab.addEventListener('pointerup',function(e){
-      if(!dragging)return;dragging=false;
-      fab.style.transition='';
-      if(!dragMoved)showShop();
-      // Snap to nearest edge
-      const r=fab.getBoundingClientRect();
-      const cx=r.left+r.width/2;
-      fab.style.left=(cx<window.innerWidth/2)?'14px':(window.innerWidth-r.width-14)+'px';
-    });
-    fab.addEventListener('click',function(e){if(dragMoved){dragMoved=false;e.stopPropagation();}});
+    document.addEventListener('mousemove',function(e){if(_dragging)_fabMove(e.clientX,e.clientY);});
+    document.addEventListener('mouseup',function(e){if(_dragging)_fabEnd();});
+    fab.addEventListener('click',function(e){if(_moved)e.stopPropagation();});
     document.body.appendChild(fab);
   }
   updateDia();
