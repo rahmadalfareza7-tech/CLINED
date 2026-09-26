@@ -21,6 +21,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="css/motion.css?v=auth-layout-v2">
 <link rel="stylesheet" href="css/card-collection.css?v=1">
+<link rel="stylesheet" href="css/learning-features.css?v=1">
 </head>
 <body class="auth-pending">
 
@@ -602,6 +603,14 @@
     <div class="answers" id="answers"></div>
     <div class="explain" id="explain">
       <div id="explainText"></div>
+      <div class="soal-note-wrap" id="soalNoteWrap">
+        <div class="soal-note-label">📝 Catatan saya</div>
+        <textarea id="soalNoteInput" class="soal-note-input" placeholder="Tulis mnemonik atau catatan singkat..." rows="2" maxlength="300"></textarea>
+        <div class="soal-note-actions">
+          <button class="soal-note-save" id="soalNoteSave">💾 Simpan</button>
+          <span class="soal-note-status" id="soalNoteStatus"></span>
+        </div>
+      </div>
     </div>
     <div class="quiz-actions">
       <button class="secondary" id="prevBtn" hidden>← Soal Sebelumnya</button>
@@ -669,6 +678,10 @@
     <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📈 Analitik Belajar</b></div>
     <div id="analyticsSummary" class="history-summary"></div>
     <div id="analyticsCards" class="analytics-grid"></div>
+    <div class="section-title sub-title">🕸️ Weakness Radar</div>
+    <div class="radar-wrap"><canvas id="weaknessRadar" width="320" height="320" aria-label="Radar chart kelemahan per blok"></canvas></div>
+    <div class="section-title sub-title">🔁 Smart Review per Blok</div>
+    <div id="smartReviewByBlock"></div>
     <div class="section-title sub-title">Performa per bank</div>
     <div id="analyticsBanks"></div>
     <div class="section-title sub-title">Fokus belajar</div>
@@ -1060,6 +1073,7 @@
 </script>
 
 <script src="js/card-collection.js?v=1"></script>
+<script src="js/learning-features.js?v=1"></script>
 </body>
 </html>
 
