@@ -1,0 +1,2224 @@
+[
+  {
+    "id": "gaster-2023-001",
+    "no": 1,
+    "soal": "Obat yang menghambat kerja StAR (Steroidogenic Acute Regulatory Protein) akan menghambat pemindahan kolesterol ke dalam mitokondria, sehingga sintesis hormon steroid tidak dapat berlangsung. Apa konsekuensi utama dari pemberian obat penghambat StAR?",
+    "opsi": [
+      "Produksi hormon peptida terhambat",
+      "Produksi hormon steroid menurun (kortisol, aldosteron, testosteron, estrogen)",
+      "Peningkatan sekresi insulin",
+      "Meningkatkan konversi kolesterol menjadi pregnenolon",
+      "Meningkatkan produksi hormon tiroid"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "StAR protein berfungsi memindahkan kolesterol dari membran luar ke membran dalam mitokondria yang merupakan langkah penentu (rate-limiting step) sintesis hormon steroid. Penghambatan StAR menyebabkan penurunan sintesis seluruh hormon steroid seperti kortisol, aldosteron, dan hormon seks.",
+    "pembahasan_klinis": {
+      "A": "Hormon peptida disintesis melalui transkripsi/translasi protein, tidak membutuhkan protein StAR maupun kolesterol.",
+      "B": "Penghambatan StAR menghentikan translocating kolesterol ke mitokondria sehingga produksi semua hormon steroid menurun.",
+      "C": "Sekresi insulin dipengaruhi kadar glukosa darah dan sel beta pankreas, bukan protein StAR.",
+      "D": "Konversi kolesterol menjadi pregnenolon justru terhambat karena kolesterol tidak dapat masuk mitokondria.",
+      "E": "Hormon tiroid disintesis dari asam amino tirosin dan iodium, tidak bergantung pada protein StAR."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-002",
+    "no": 2,
+    "soal": "Berapa dosis mineral Zat gizi untuk sensitivitas insulin?",
+    "opsi": [
+      "25 mikrogram (mcg)",
+      "30 mikrogram (mcg)",
+      "20 mikrogram (mcg)",
+      "35 mikrogram (mcg)",
+      "40 mikrogram (mcg)"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Kromium (Chromium) adalah mineral mikro esensial yang berperan penting dalam meningkatkan sensitivitas insulin (sebagai komponen Glucose Tolerance Factor / GTF). Angka Kecukupan Gizi (AKG) kecukupan harian kromium pada pria dewasa adalah sekitar 35 mcg/hari.",
+    "pembahasan_klinis": {
+      "A": "25 mcg merupakan kecukupan harian (AI) kromium untuk wanita dewasa.",
+      "B": "30 mcg mendekati kecukupan harian namun bukan standar rekomendasi harian pria dewasa.",
+      "C": "20 mcg berada di bawah dosis kecukupan harian kromium.",
+      "D": "35 mcg adalah dosis kecukupan harian mineral kromium untuk pria dewasa dalam menjaga fungsi dan sensitivitas insulin.",
+      "E": "40 mcg melebihi kecukupan harian standar kromium."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-003",
+    "no": 3,
+    "soal": "Seorang laki-laki 45 tahun mengeluh sering nyeri pada leher dan pundaknya. Pemeriksaan fisik didapatkan TD 130/80 mmHg dan frekuensi nadi 84x/menit. Kemudian dilakukan pemeriksaan laboratorium dan didapatkan hasil total kolesterol total 380 mg/dL, HDL 40 mg/dL, LDL 140 mg/dL, dan trigliseridanya 980 mg/dL. Bagaimana tatalaksana pasien tersebut?",
+    "opsi": [
+      "Perbaikan pola hidup dan atorvastatin 20",
+      "Perbaikan pola hidup dan omega 3",
+      "Perbaikan pola hidup statin",
+      "Perbaikan pola hidup dan fibrat",
+      "Perbaikan pola hidup"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Kadar trigliserida > 500 mg/dL (pada pasien ini 980 mg/dL) meningkatkan risiko berat terjadinya pankreatitis akut. Oleh karena itu, target utama penanganan adalah menurunkan kadar trigliserida secara agresif menggunakan obat golongan Fibrat (seperti fenofibrat) disertai perubahan gaya hidup.",
+    "pembahasan_klinis": {
+      "A": "Statin terutama ditujukan untuk menurunkan LDL dan risiko kardiovaskular, bukan lini pertama hipertrigliseridemia berat (>500 mg/dL).",
+      "B": "Omega-3 dapat menurunkan trigliserida tetapi fibrat lebih efektif sebagai pilihan utama pada kadar trigliserida ekstrem.",
+      "C": "Statin bukan terapi utama saat trigliserida > 500 mg/dL karena risiko utama adalah pankreatitis.",
+      "D": "Tatalaksana lini pertama hipertrigliseridemia berat (>500 mg/dL) untuk mencegah pankreatitis akut adalah kombinasi fibrat dan perbaikan pola hidup.",
+      "E": "Perbaikan pola hidup saja tidak cukup menurunkan kadar trigliserida sebesar 980 mg/dL."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-004",
+    "no": 4,
+    "soal": "Laki laki dengan usia 36 tahun menderita diabetes melitus sejak 10 tahun yg lalu dengan dislipidemia dan obesitas sentral. Dokter memberikan pengobatan dan diet dari dokter, tiga tahun terakhir gula darah tidak terkontrol hingga mencapai > 400 mg/dL, pasien saat ini berada di IGD dengan keadaan pingsan dan nafas pendek-pendek, Bagaimana laboratorium yang mendukung diagnosis tersebut?",
+    "opsi": [
+      "pH 7.6 dan keton darah menurun",
+      "pH 7.2 dan keton darah meningkat",
+      "pH 7.2 dan keton darah menurun",
+      "pH 7.6 dan keton darah normal",
+      "pH 7.6 dan keton darah meningkat"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Gejala penurunan kesadaran, hiperglikemia masif (> 400 mg/dL), dan napas Kussmaul (pendek-pendek dan dalam) menunjukkan Ketoasidosis Diabetik (KAD). Temuan laboratorium KAD adalah asidosis metabolik (pH arterial < 7.35, misal 7.2) dan peningkatan kadar keton darah/urin.",
+    "pembahasan_klinis": {
+      "A": "pH 7.6 menunjukkan alkalosis, bukan kondisi asidosis pada KAD.",
+      "B": "pH 7.2 (asidosis metabolik) dan keton darah meningkat mendukung diagnosis Ketoasidosis Diabetik (KAD).",
+      "C": "Keton darah yang menurun tidak konsisten dengan ketoasidosis.",
+      "D": "pH 7.6 dan keton normal tidak sesuai dengan gambaran klinis KAD.",
+      "E": "pH 7.6 mencerminkan alkalosis yang berlawanan dengan patofisiologi KAD."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-005",
+    "no": 5,
+    "soal": "Laki2 berumur 39 tahun datang ke rumah sakit tanpa keluhan dgn tekanan darah 140/90 mg/dL. Belum makan sejak jam 8 terakhir dgn GDP 110 mg/dI dan GD2PP 190 mg/dL. Apa penyebab hiperglikemi pasien?",
+    "opsi": [
+      "Penurunan sekresi insulin di sel pankreas",
+      "Penurunan uptake insulin di sel otot",
+      "Penurunan produksi insulin di sel pankreas",
+      "Penurunan glikolisis di sel lemak",
+      "Penurunan glukoneogenesis di hati"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "GDP 110 mg/dL (terganggu) dan GD2PP 190 mg/dL menunjukkan Toleransi Glukosa Terganggu (TGT/prediabetes). Penyebab utama hiperglikemia postprandial pada TGT adalah resistensi insulin perifer, khususnya penurunan ambilan (uptake) glukosa yang diperantarai insulin pada sel otot rangka.",
+    "pembahasan_klinis": {
+      "A": "Penurunan sekresi insulin pankreas lebih mendasari peningkatan glukosa puasa yang signifikan.",
+      "B": "Resistensi insulin perifer berupa penurunan uptake glukosa di sel otot merupakan mekanisme utama terjadinya Toleransi Glukosa Terganggu (GD2PP 140-199 mg/dL).",
+      "C": "Penurunan produksi insulin pankreas berlebihan terjadi pada tahap destruksi sel beta atau DM stadium lanjut.",
+      "D": "Penurunan glikolisis di jaringan lemak bukan pengatur utama kadar glukosa postprandial.",
+      "E": "Peningkatan glukoneogenesis hati (bukan penurunan) yang menyebabkan hiperglikemia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-006",
+    "no": 6,
+    "soal": "Seorang bayi didiagnosis hipotiroid kongenital melalui skrining neonatal. Ia segera mendapatkan terapi levotiroksin. Apa prinsip tatalaksana yang benar pada hipotiroid kongenital?",
+    "opsi": [
+      "Hentikan terapi 1-2 tahun sampai kadar tiroid normal",
+      "Terapi diberikan dini, kemudian dihentikan bila kadar tiroid sudah normal",
+      "Terapi dimulai sedini mungkin dan dilanjutkan jangka panjang; evaluasi ulang fungsi tiroid dilakukan usia 3 tahun untuk menentukan apakah permanen atau transien",
+      "Terapi hanya diberikan bila muncul gejala klinis berat",
+      "Terapi diberikan intermittent sesuai kadar TSH bulanan"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Tatalaksana hipotiroid kongenital harus dimulai sedini mungkin (<2 minggu kelahiran) menggunakan Levotiroksin untuk mencegah retardasi mental irreversible. Terapi dilanjutkan setidaknya hingga usia 3 tahun, saat perkembangan otak anak sudah matur, lalu dilakukan uji coba penghentian terapi sementara untuk menentukan sifat hipotiroidisme (permanen atau transien).",
+    "pembahasan_klinis": {
+      "A": "Penghentian dini sebelum usia 3 tahun berisiko mengganggu perkembangan sitem saraf pusat.",
+      "B": "Penghentian terapi saat kadar tiroid normal akan menyebabkan kecacatan perkembangan yang menetap.",
+      "C": "Prinsip utama adalah pemberian terapi sedini mungkin secara kontinu dan re-evaluasi permanensi penyakit dilakukan setelah usia 3 tahun.",
+      "D": "Menunggu timbulnya gejala berat akan menyebabkan kerusakan otak permanen yang tidak dapat diperbaiki.",
+      "E": "Terapi intermittent menyebabkan fluktuasi hormon tiroid yang merusak perkembangan sel otak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-007",
+    "no": 7,
+    "soal": "Zat gizi Mineral yang meningkatkan sensitivitas terhadap insulin adalah?",
+    "opsi": [
+      "Selenium",
+      "Kalsium",
+      "Zat Besi",
+      "Kromium",
+      "Kalium"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Kromium (Cr) merupakan komponen penting dari Glucose Tolerance Factor (GTF) yang mengikat ikatan disulfida antara insulin dan reseptornya, sehingga mengamplifikasi sinyal insulin dan meningkatkan sensitivitas insulin seluler.",
+    "pembahasan_klinis": {
+      "A": "Selenium berfungsi terutama sebagai antioksidan (bagian dari enzim glutation peroksidase).",
+      "B": "Kalsium berperan dalam konduksi saraf dan kontraksi otot serta eksositosis vesikel.",
+      "C": "Zat besi berperan dalam pembentukan hemoglobin dan pasokan oksigen jaringan.",
+      "D": "Kromium adalah mineral mikro utama yang memfasilitasi kerja insulin dan meningkatkan sensitivitas reseptor insulin.",
+      "E": "Kalium merupakan kation intraseluler utama untuk menjaga potensial membran sel."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-008",
+    "no": 8,
+    "soal": "Asam lemak esensial merupakan jenis lemak yang harus didapat dari makanan yang kita konsumsi. Salah satu fungsi asam lemak esensial adalah untuk pembentukan eicosanoid. Bahan makanan sumber untuk pembentukan eicosanoid dari omega-bersifat anti-inflamasi. Manakah bahan makanan sumber omega 3 selain ikan laut dalam?",
+    "opsi": [
+      "Ikan Air Tawar",
+      "Susu",
+      "Daging merah",
+      "Buah warna jingga",
+      "Sayuran daun hijau"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Selain ikan laut dalam, asam alfa-linolenat (ALA) yang merupakan prekursor Omega-3 juga ditemukan pada sumber nabati seperti sayuran daun hijau (bayam, kale), biji-bijian (flaxseed, chia seed), dan kacang-kacangan.",
+    "pembahasan_klinis": {
+      "A": "Ikan air tawar mengandung omega 3 dalam jumlah yang sangat rendah dibandingkan ikan laut dalam.",
+      "B": "Susu kaya akan asam lemak jenuh.",
+      "C": "Daging merah kaya akan asam lemak jenuh dan omega-6 (asam arakidonat).",
+      "D": "Buah warna jingga kaya akan karotenoid/vitamin A, bukan omega-3.",
+      "E": "Sayuran daun hijau mengandung Alpha-Linolenic Acid (ALA), jenis omega-3 nabati yang bersifat anti-inflamasi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-009",
+    "no": 9,
+    "soal": "Seorang wanita usia 60 tahun mengalami DM tipe 2 dan sudah memulai terapi metformin. Setelah 4 minggu, HbA1c turun dari 8,3% ke 7,2%. Bagaimana mekanisme kerja obat tersebut?",
+    "opsi": [
+      "Mengaktifkan reseptor PPAR-y",
+      "Menghambat enzim DDP-4",
+      "Menghambat glukoneogenesis hepatic",
+      "Meningkatkan sekresi insulin dari sel beta pankreas",
+      "Menghambat absorpsi di usus halus"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Metformin adalah obat lini pertama DM tipe 2 dari golongan biguanid. Mekanisme kerja utamanya adalah menghambat glukoneogenesis di hati (hepar) serta meningkatkan sensitivitas insulin perifer di jaringan otot dan lemak.",
+    "pembahasan_klinis": {
+      "A": "Mengaktifkan reseptor PPAR-gamma adalah mekanisme kerja obat golongan Tiazolidindion (pioglitazon).",
+      "B": "Menghambat DDP-4 adalah mekanisme obat golongan DPP-4 inhibitor (sitagliptin, vildagliptin).",
+      "C": "Metformin bekerja dengan cara menghambat glukoneogenesis hepatik dan menurunkan resistensi insulin.",
+      "D": "Meningkatkan sekresi insulin adalah mekanisme kerja obat golongan Sulfonilurea.",
+      "E": "Menghambat absorpsi glukosa usus adalah mekanisme obat golongan Alpha-glucosidase inhibitor (akarbose)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-010",
+    "no": 10,
+    "soal": "Komplikasi pada retinopati diabetik tapi selain retina",
+    "opsi": [
+      "Ablasio retina",
+      "Neovaskularisasi iris",
+      "Oftalmophaty",
+      "Glaukoma neovaskular",
+      "Proptosis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Iskemia retina pada retinopati diabetik proliferatif memicu pelepasan meruah hormon VEGF yang berdifusi ke segmen anterior mata, merangsang pembentukan pembuluh darah baru di iris yang disebut neovaskularisasi iris (rubeosis iridis).",
+    "pembahasan_klinis": {
+      "A": "Ablasio retina merupakan komplikasi langsung yang terjadi pada jaringan retina.",
+      "B": "Neovaskularisasi iris (Rubeosis iridis) adalah komplikasi ekstra-retinal segmen anterior akibat ischemic VEGF spillover dari retina.",
+      "C": "Oftalmopati umumnya diasosiasikan dengan penyakit tiroid (Graves).",
+      "D": "Glaukoma neovaskular merupakan dampak lanjutan dari rubeosis iridis, namun manifestasi pembuluh darah baru awal adalah neovaskularisasi iris.",
+      "E": "Proptosis adalah penonjolan bola mata pada penyakit Graves."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-011",
+    "no": 11,
+    "soal": "Segmen anterior ods: tak ada kelainan. + Segmen posterior od: a/v: mikroaneurisma (+), retina: perdarahan (+), eksudat (+), neovaskularisasi (+) di perifer. Makula: fovea reflex (-), perdarahan (+). Os: retina: perdarahan blot dot (+), makula: fovea reflex (+), perdarahan (-). Apakah yang menyebabkan penglihatan menjadi buram pada pasien tersebut?",
+    "opsi": [
+      "Mikroaneurisma",
+      "Eksudat retina",
+      "Perdarahan retina",
+      "Neovaskularisasi retina",
+      "Makulopati"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Keterlibatan daerah makula (fovea reflex negatif, edema, perdarahan makula) yang dikenal sebagai makulopati diabetik atau Diabetic Macular Edema (DME) merupakan penyebab utama penurunan visus tajam penglihatan sentral pada penderita DM.",
+    "pembahasan_klinis": {
+      "A": "Mikroaneurisma adalah tanda awal NPDR, seringkali asimptomatis bila di luar makula.",
+      "B": "Eksudat retina menandakan kebocoran lipid, penurunan visus tajam dipicu oleh edema/kelainan makula.",
+      "C": "Perdarahan retina perifer tidak langsung mengganggu penglihatan sentral.",
+      "D": "Neovaskularisasi retina menandakan stadium PDR, namun penurunan tajam penglihatan sentral utama disebabkan makulopati.",
+      "E": "Makulopati (kerusakan pada makula lutea) menghancurkan fungsi penglihatan sentral sehingga pandangan menjadi kabur."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-012",
+    "no": 12,
+    "soal": "Segmen posterior od: a/v mikroaneurisma (+), retina: perdarahan (+), eksudat (+), neovaskularisasi (+) di perifer. Makula: fovea reflex (-), perdarahan (+). Os: retina: perdarahan blot dot (+), makula: fovea reflex (+), perdarahan (-). Apakah komplikasi yang dapat terjadi pada pasien tersebut?",
+    "opsi": [
+      "Panuveitis",
+      "Rubeosis iridis",
+      "Glaukoma primer kronis",
+      "Uveitis posterior",
+      "Perdarahan di humor aquos"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Pasien menderita Retinopati Diabetik Proliferatif (PDR) ditandai dengan ditemukannya neovaskularisasi. Komplikasi lanjut segmen anterior dari PDR akibat faktor pro-angiogenik (VEGF) adalah tumbuhnya pembuluh darah baru pada iris (Rubeosis iridis).",
+    "pembahasan_klinis": {
+      "A": "Panuveitis adalah peradangan seluruh uvea akibat infeksi/autoimun.",
+      "B": "Rubeosis iridis (neovaskularisasi iris) merupakan komplikasi klasik lanjut dari iskemia kronis dan neovaskularisasi pada PDR.",
+      "C": "Glaukoma yang terdorong oleh retinopati diabetik bersifat sekunder (Glaukoma Neovaskular), bukan primer.",
+      "D": "Uveitis posterior adalah proses inflamasi uvea posterior.",
+      "E": "Perdarahan akibat neovaskularisasi umumnya mengisi vitreus (perdarahan vitreus), bukan humor aquos."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-013",
+    "no": 13,
+    "soal": "Seorang perempuan usia 45 tahun datang ke poliklinik RS dengan keluhan mata kanan penglihatan buram. Keluhan dirasakan sejak 6 bulan yang lalu secara perlahan. Pasien adalah penderita Diabetes Mellitus sejak 3 tahun yang lalu. Pemeriksaan oftalmologis: Visus mata kanan: 6/60 (menurun) | Segment anterior: Lensa: jernih. Segmen posterior: Retina: mikroaneurisma (+) perdarahan blot dot Makula: refleks fovea (-).edema (+), perdarahan (+). Visus mata kiri: 6/6 (normal). Segmen anterior: Lensa: jernih. Segmen posterior Retina: mikroaneurisma (+) perdarahan blot dot. Makula: refleks fovea: (+). Edema (-) perdarahan (-). Apakah yang menyebabkan visus mata kanan menurun pada pasien tersebut?",
+    "opsi": [
+      "Lamanya menderita DM",
+      "Microaneurisma",
+      "Perdarahan retina",
+      "Katarak",
+      "Perdarahan Makula"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Penyebab utama penurunan penglihatan sentral secara signifikan (visus 6/60) pada mata kanan pasien adalah kelainan pada daerah fovea/makula berupa edema dan perdarahan makula (makulopati). Mata kiri dengan makula yang intak mempertahankan visus 6/6.",
+    "pembahasan_klinis": {
+      "A": "Lamanya DM adalah faktor risiko, bukan penyebab langsung hilangnya visus tajam secara anatomis.",
+      "B": "Mikroaneurisma ditemukan pada kedua mata, tetapi visus OS tetap 6/6.",
+      "C": "Perdarahan retina umum (blot dot) terjadi di kedua mata.",
+      "D": "Pemeriksaan menunjukkan lensa jernih, menyingkirkan diagnosis katarak.",
+      "E": "Perdarahan dan edema makula pada mata kanan merusak fovea sentralis sehingga visus tajam menurun drastis menjadi 6/60."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-014",
+    "no": 14,
+    "soal": "Seorang perempuan usia 60 tahun datang ke poliklinik dengan keluhan mata kanan penglihatan buram, Keluhan dirasakan sejak 6 bulan terakhir secara perlahan. Pasien mempunyai riwayat kencing manis sejak 5 tahun yang lalu. Pemeriksaan oftalmologis: Visus mata kanan (OD): 6/50 pinhole tetap (menurun) Visus mata kiri (OS): 6/20 dengan koreksi kacamata 6/6. Segmen anterior ODS tidak ada kelainan. Segmen posterior OD: A/V: mikroaneurisma (+). Retina: perdarahan (+), eksudat (+), neovaskularisasi (+), Macula lutea: reflex fovea (-) perdarahan (+). OS: A/V: mikroaneurisma (+), Retina: perdarahan blot dot (+), eksudat (-), neovaskularisasi (-). Macula lutea: reflex fovea (+), perdarahan (-). Apakah yang menyebabkan terjadinya neovaskularisasi di retina pada pasien tersebut?",
+    "opsi": [
+      "Eksudat pada retina",
+      "Makulopati",
+      "Kebocoran pembuluh darah",
+      "Mikroaneurisma",
+      "Iskemia jaringan retina"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Neovaskularisasi pada retinopati diabetik dipicu oleh iskemia jaringan retina. Kondisi hipoksia kronis merangsang pelepasan Vascular Endothelial Growth Factor (VEGF) yang merangsang angiogenesis pembuluh darah baru yang abnormal dan rapuh.",
+    "pembahasan_klinis": {
+      "A": "Eksudat disebabkan oleh akumulasi lipid/protein akibat kebocoran pembuluh darah.",
+      "B": "Makulopati merusak penglihatan sentral tetapi bukan pemicu utama angiogenesis.",
+      "C": "Kebocoran pembuluh darah menyebabkan edema dan eksudat, bukan neovaskularisasi.",
+      "D": "Mikroaneurisma adalah dilatasi lokal pembuluh kapiler.",
+      "E": "Iskemia jaringan retina merangsang pelepasan VEGF yang menjadi pemicu utama timbulnya neovaskularisasi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-015",
+    "no": 15,
+    "soal": "Kelenjar tiroid mempunyai struktur histologis yang berbeda dengan kelenjar endokrin lainnya. Balon-balon Sekret dari kelenjar ini tidak langsung didistribusikan ke dalam pembuluh darah, tetapi ditampung di dalam lumen yang dibentuk oleh sel-sel sekretori-nya. Apakah nama sekret yang ditampung ini?",
+    "opsi": [
+      "Sisa kantung rathke",
+      "Cairan parafolikel",
+      "Substansia koloid",
+      "Cairan folikel",
+      "Cairan vesikel"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Kelenjar tiroid terdiri dari folikel-folikel tiroid. Di dalam lumen folikel terdapat materi gelatinosa kaya akan tiroglobulin teriodinasi yang disimpan, dikenal sebagai substansia koloid.",
+    "pembahasan_klinis": {
+      "A": "Sisa kantung Rathke berhubungan dengan pembentukan adenohipofisis.",
+      "B": "Sel parafolikel berada di luar folikel dan mensekresikan kalsitonin.",
+      "C": "Substansia koloid adalah materi ekstraseluler di dalam lumen folikel tiroid tempat penyimpanan hormon tiroid pasif.",
+      "D": "Bukan istilah histologis standar untuk sekret tiroid.",
+      "E": "Bukan istilah histologis standar untuk sekret tiroid."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-016",
+    "no": 16,
+    "soal": "Pasien mengalami luka diabetik dengan ukuran 5 cm dan dasar terlihat tulang, jaringan nekrotik (+), pus (+) berbau, pulsasi arteri dorsalis pedis dan tibialis posterior dekstra teraba lemah daripada kiri, sensasi terasa lemah. Berapa skor PEDIS nya?",
+    "opsi": [
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Kategori PEDIS:\n- Perfusion (P): Grade 2 (PAD, pulsasi melemah)\n- Extent (E): Grade 2 (>2 cm²)\n- Depth (D): Grade 3 (mencapai tulang)\n- Infection (I): Grade 3 (infeksi lokal berat/pus berbau)\n- Sensation (S): Grade 2 (sensasi menurun/hilang).\nTotal skor penjumlahan grade = 2 + 2 + 3 + 3 + 2 = 12.",
+    "pembahasan_klinis": {
+      "A": "Skor 8 di bawah kalkulasi total poin kriteria PEDIS kasus.",
+      "B": "Skor 9 di bawah kalkulasi total poin kriteria PEDIS kasus.",
+      "C": "Skor 10 di bawah kalkulasi total poin kriteria PEDIS kasus.",
+      "D": "Skor 11 di bawah kalkulasi total poin kriteria PEDIS kasus.",
+      "E": "Skor 12 diperoleh dari penjumlahan kategori Perfusi(2) + Luas(2) + Kedalaman(3) + Infeksi(3) + Sensasi(2)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-017",
+    "no": 17,
+    "soal": "Manakah pernyataan yang benar terkait Tiroiditis Riedel's?",
+    "opsi": [
+      "Secara klinis seperti karsinoma thyroid",
+      "Lab menunjukkan hipotiroid",
+      "Merupakan penyakit radang tiroid",
+      "Dapat diberikan pengobatan dengan medikamentosa",
+      "Dapat diberikan terapi radioterapi"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Riedel's thyroiditis ditandai oleh penggantian parenkim tiroid dengan jaringan ikat fibrotik yang sangat keras (stony-hard) dan terfiksir ke struktur sekitarnya. Secara klinis, benjolan keras terfiksir ini sangat menyerupai karsinoma tiroid anaplastik/invasif.",
+    "pembahasan_klinis": {
+      "A": "Konsistensi yang sangat keras seperti batu dan sifat invasif lokal secara klinis meniru gambaran karsinoma tiroid.",
+      "B": "Kadar hormon tiroid awalnya bisa normal (eutiroid), walau bisa berkembang hipotiroid belakangan.",
+      "C": "Ini merupakan kelainan sistemik berbasis IgG4-related fibroinflammatory disease.",
+      "D": "Medikamentosa sering kurang efektif dan memerlukan dekompresi bedah jika menekan saluran napas.",
+      "E": "Radioterapi bukan pilihan indikasi utama pada Tiroiditis Riedel."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-018",
+    "no": 18,
+    "soal": "Pasien diberi obat dislipidemia, apa saja pemeriksaan untuk memonitor pasien tersebut?",
+    "opsi": [
+      "CK dan profil lipid",
+      "Gula darah puasa",
+      "CK dan SGPT",
+      "CK, profil lipid, dan SGPT",
+      "Gula darah sewaktu"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Penggunaan obat dislipidemia (terutama statin) memerlukan pemantauan efiakasi berupa Profil Lipid, pemantauan efek samping miopati/rhabdomyolysis menggunakan Creatine Kinase (CK), dan hepatotoksisitas menggunakan fungsi hati (SGPT/ALT).",
+    "pembahasan_klinis": {
+      "A": "Memerlukan pemantauan fungsi hati (SGPT) tambahan.",
+      "B": "Pemeriksaan gula darah tidak memantau profil toksisitas statin pada otot dan hati.",
+      "C": "Kurang pemantauan profil lipid untuk efektivitas terapi.",
+      "D": "Kombinasi CK (efek samping otot), SGPT (efek samping hati), dan profil lipid (efektivitas terapi) adalah monitoring komprehensif.",
+      "E": "Gula darah sewaktu tidak relevan untuk monitoring rutin dislipidemia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-019",
+    "no": 19,
+    "soal": "Kalimat \"au daman masfuhan\" artinya?",
+    "opsi": [
+      "Darah yang beku",
+      "Darah yang mengalir",
+      "Darah ternak yang halal dikonsumsi",
+      "Darah hewan yang haram dikonsumsi",
+      "Darah manusia"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Lafazh 'aw daman masfūḥan' (أَوْ دَمًا مَسْفُوحًا) dalam Al-Qur'an (QS. Al-An'am: 145) secara bahasa berarti 'atau darah yang mengalir', yang dihukumi haram untuk dikonsumsi.",
+    "pembahasan_klinis": {
+      "A": "Darah beku diterjemahkan sebagai 'al-'alaqah'.",
+      "B": "Terjemahan harfiah dan syar'i dari 'daman masfūḥan' adalah darah yang mengalir tercurah.",
+      "C": "Terjemahan tidak tepat secara bahasa.",
+      "D": "Merupakan penjelasan hukum, bukan arti terjemahan harfiah kata.",
+      "E": "Tidak membatasi pada darah manusia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-020",
+    "no": 20,
+    "soal": "Pasien karsinoma nasofaring dengan riwayat pasca kemoradiasi kepala leher datang untuk mencari pengobatan atas keluhan mulut kering yang dirasakannya. Pasien juga memiliki riwayat diabetes mellitus. Apa yang perlu dilakukan untuk memeriksa fungsi kelenjar yang terdampak oleh tindakan kemoradiasi tersebut?",
+    "opsi": [
+      "Melihat secara visual kejernihan air liur pada dasar mulut",
+      "Meminta pasien untuk meludah pada wadah sambil mengunyah parafin",
+      "Meminta pasien untuk mengumpulkan air liur pada mulut",
+      "Meminta pasien untuk meludah pada wadah sambil mengunyah permen karet",
+      "Menanyakan pertanyaan kuesioner Fox"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Evaluasi laju aliran saliva terstimulasi (stimulated salivary flow rate) dilakukan dengan mengukur jumlah air liur yang dikumpulkan dalam wadah saat pasien mengunyah lilin parafin pejal netral selama periode waktu tertentu (sialometri terstimulasi).",
+    "pembahasan_klinis": {
+      "A": "Inspeksi visual tidak kuantitatif menilai kapasitas fungsi sekresi kelenjar saliva.",
+      "B": "Sialometri terstimulasi mengunyah wax parafin adalah baku emas untuk menilai kuantitas aliran saliva terstimulasi pasca radiasi.",
+      "C": "Merupakan pengukuran unstimulated salivary flow rate.",
+      "D": "Permen karet mengandung perasa/gula yang mempengaruhi komposisi saliva dan reaksi sekresi.",
+      "E": "Kuesioner Fox menilai keluhan subjektif serostomia, bukan laju fungsi sekresi objektif."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-021",
+    "no": 21,
+    "soal": "Pasien mengalami insufisiensi adrenal primer akibat autoantibodi. Apa temuan laboratorium pasien tersebut?",
+    "opsi": [
+      "Kortisol rendah ACTH normal",
+      "Kortisol rendah ACTH tinggi",
+      "Kortisol rendah ACTH rendah",
+      "Kortisol tinggi ACTH tinggi",
+      "Kortisol tinggi ACTH rendah"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Insufisiensi adrenal primer (Penyakit Addison) terjadi akibat kerusakan korteks adrenal. Kerusakan ini memicu penurunan kadar kortisol, yang memutus umpan balik negatif ke hipofisis anterior sehingga memicu kompensasi pelepasan kadar ACTH yang sangat tinggi.",
+    "pembahasan_klinis": {
+      "A": "ACTH akan meningkat signifikan akibat hilangnya umpan balik negatif.",
+      "B": "Kortisol serum yang rendah dikombinasikan dengan kenaikan kadar ACTH plasma adalah temuan patognomonis insufisiensi adrenal primer.",
+      "C": "Kortisol rendah dan ACTH rendah menunjukkan insufisiensi adrenal sekunder/tersier.",
+      "D": "Menunjukkan sindrom Cushing tergantung ACTH.",
+      "E": "Menunjukkan sindrom Cushing independen ACTH (misal adenoma adrenal)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-022",
+    "no": 22,
+    "soal": "Pada hiperparatiroid primer, hasil pemeriksaan terjadi peningkatan pada kalsium, dan penurunan pada kortisol. Bagaimana interpretasi laboratoriumnya?",
+    "opsi": [
+      "Kortisol menurun, PTH meningkat",
+      "Kortisol meningkat, PTH menurun",
+      "Kortisol menurun, PTH menurun",
+      "Kortisol meningkat, PTH meningkat",
+      "Kortisol meningkat, PTH normal"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Hiperparatiroid primer ditandai oleh hipersekresi otonom Hormon Paratiroid (PTH) dari adenoma/hiperplasia paratiroid, yang memicu hiperkalsemia. Peningkatan persisten PTH bersama hiperkalsemia mendasari diagnosis hiperparatiroid primer.",
+    "pembahasan_klinis": {
+      "A": "Kortisol tidak terkait langsung dengan aksis PTH-Kalsium.",
+      "B": "Pada hiperparatiroid primer, PTH diukur harus meningkat.",
+      "C": "PTH yang menurun akan menyebabkan hipokalsemia.",
+      "D": "Gambaran khas hiperparatiroid primer adalah ditemukannya kadar PTH yang meningkat beriringan dengan hiperkalsemia.",
+      "E": "PTH normal yang tidak tertekan pada hiperkalsemia disebut inappropriately normal PTH, tetapi temuan paling dominan adalah kenaikan PTH."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-023",
+    "no": 23,
+    "soal": "Apa Gold standard untuk keganasan tiroid?",
+    "opsi": [
+      "USG tiroid",
+      "FNAB",
+      "Tumor marker",
+      "Histopatologi",
+      "Tes fungsi tiroid"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Gold standard (standar baku emas) diagnostik pasti untuk menentukan keganasan tiroid dan tipe histologisnya adalah pemeriksaan Histopatologi dari jaringan yang diangkat melalui pembedahan (biopsi eksisi/tiroidektomi).",
+    "pembahasan_klinis": {
+      "A": "USG tiroid adalah modalitas pencitraan lini pertama untuk menilai kriteria risiko nodul.",
+      "B": "FNAB adalah prosedur sitologi lini pertama untuk skrining pra-bedah, bukan baku emas jaringan.",
+      "C": "Tumor marker (seperti kalsitonin/tiroglobulin) tidak memberikan kepastian diagnosis arsitektur seluler.",
+      "D": "Pemeriksaan histopatologi adalah baku emas diagnosis pasti keganasan tiroid.",
+      "E": "Tes fungsi tiroid (TSH, FT4) sebagian besar bernilai normal pada kanker tiroid."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-024",
+    "no": 24,
+    "soal": "Pasien datang ke rumah sakit untuk menjalankan FNAB. Hasil FNAB didapatkan Bethesda IV. Apa interpretasi hasil tersebut?",
+    "opsi": [
+      "Malignant",
+      "Adenoma follicular",
+      "Suspicious malignant",
+      "Benign",
+      "Non diagnostic"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Sistem Pelaporan Sitopatologi Tiroid Bethesda IV dikategorikan sebagai Follicular Neoplasm / Suspicious for a Follicular Neoplasm (Neoplasma Folikuler / Adenoma Folikuler). Kategori ini memerlukan konfirmasi pembedahan karena sitologi tidak dapat membedakan adenoma folikuler benigna dengan karsinoma folikuler.",
+    "pembahasan_klinis": {
+      "A": "Malignant termasuk dalam Bethesda kategori VI.",
+      "B": "Bethesda IV menunjukkan hasil Neoplasma Folikuler / Adenoma Folikuler.",
+      "C": "Suspicious for malignancy masuk dalam Bethesda kategori V.",
+      "D": "Benign termasuk dalam Bethesda kategori II.",
+      "E": "Non-diagnostic masuk dalam Bethesda kategori I."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-025",
+    "no": 25,
+    "soal": "Seorang ibu postpartum memiliki riwayat diabetes gestasional dengan gula darah tinggi selama kehamilan. Bayinya lahir dalam keadaan apatis, tidak aktif, dan tampak lemah. Apa penyebab kondisi bayi, komplikasi yang mungkin dialami, dan tatalaksana yang tepat untuk ibunya setelah persalinan?",
+    "opsi": [
+      "Bayi mengalami hipoglikemia karena hiperinsulinisme; komplikasi kejang; ibu perlu dilakukan TTGO 6-8 minggu post partum untuk evaluasi DM",
+      "Bayi mengalami hipoglikemia karena kurang ASI; komplikasi gagal tumbuh; ibu harus TTGO 6-8 bulan postpartum",
+      "Bayi mengalami hiperglikemia karena ibu DM; komplikasi DKA; ibu dianjurkan tidak menyusui karena risiko hipoglikemia",
+      "Bayi mengalami hipotiroid karena ibu DM; komplikasi retardasi mental; ibu hanya perlu kontrol rutin tanpa TTGO",
+      "Bayi mengalami hipernatremia; komplikasi dehidrasi berat; ibu dianjurkan menghentikan semua terapi"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Ibu dengan DM Gestasional menyebabkan paparan glukosa berlebih pada janin. Janin merespons dengan hiperplasia sel beta pankreas (hiperinsulinisme). Saat lahir, suplai glukosa maternal terputus mendadak sementara kadar insulin bayi tetap tinggi, memicu hipoglikemia berat yang berisiko kejang. Ibu perlu dievaluasi dengan TTGO 75g pada 6-8 minggu postpartum.",
+    "pembahasan_klinis": {
+      "A": "Penjelasan patofisiologi hiperinsulinisme janin, risiko kejang, dan skrining evaluasi TTGO 6-8 minggu postpartum pada ibu adalah tepat.",
+      "B": "Penyebab utama hipoglikemia neonatus adalah hiperinsulinisme fetalis, dan jarak TTGO ibu yang benar adalah 6-8 minggu.",
+      "C": "Bayi mengalami hipoglikemia, bukan hiperglikemia.",
+      "D": "Kondisi bayi dipicu gangguan metabolisme glukosa, bukan hipotiroidisme.",
+      "E": "Manifestasi utama neonatus dari ibu DMG adalah hipoglikemia, bukan hipernatremia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-026",
+    "no": 26,
+    "soal": "Seorang anak 8 tahun datang ke rumah sakit dengan takikardi 130x/menit. Pasien didiagnosis Graves disease oleh dokter. Apa tatalaksana yang tepat untuk anak tersebut?",
+    "opsi": [
+      "PTU",
+      "Propanolol",
+      "Methimazole",
+      "Metformin",
+      "Cefixim"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Methimazole (MMI) merupakan obat antitiroid (OAT) pilihan utama pada populasi anak dengan Graves Disease karena memiliki profil keamanan hepatik yang jauh lebih baik dibandingkan Propylthiouracil (PTU), yang berisiko menyebabkan hepatotoksisitas berat fatal pada anak.",
+    "pembahasan_klinis": {
+      "A": "PTU dihindari pada anak-anak karena risiko nekrosis hati fulminan berat.",
+      "B": "Propranolol digunakan singkat sebagai terapi simptomatis kontrol takikardia, bukan obat primer lini pertama antitiroid.",
+      "C": "Methimazole adalah pilihan obat lini pertama antitiroid yang direkomendasikan pada pediatrik.",
+      "D": "Metformin adalah antidiabetik oral.",
+      "E": "Cefixime adalah antibiotik cephalosporin."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-027",
+    "no": 27,
+    "soal": "Diantara kaidah hukum dalam menetapkan kehalalan makanan dan minuman, mengutip hadis Nabi, bahwa yang halal itu jelas, dan yang haram juga jelas. Sesuatu keadaan antara yang halal dan haram, antara keduanya (atau kehalalan dan keharamannya tidak jelas). Disebut apakah yang tidak jelas tersebut?",
+    "opsi": [
+      "Makruhah",
+      "Syathahat",
+      "Musyabbahah",
+      "Muhakkamah atau muhkamat",
+      "Syubhat"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Dalam hukum Fikih Islam, perkara samar yang belum jelas kehalalan maupun keharamannya dinamakan Syubhat (sebagaimana hadis Nu'man bin Basyir: 'Innal halala bayyinun wa innal harama bayyinun wa bainahuma musytabihat...').",
+    "pembahasan_klinis": {
+      "A": "Makruh adalah perbuatan yang dianjurkan ditinggalkan tetapi tidak berdosa jika dikerjakan.",
+      "B": "Syathahat istilah dalam tasawuf terkait ucapan ketidaksadaran spiritual.",
+      "C": "Musyabbahah adalah aliran yang menyerupakan Allah dengan makhluk.",
+      "D": "Muhkamat adalah ayat-ayat Al-Qur'an yang tegas dan jelas maknanya.",
+      "E": "Syubhat adalah kondisi tidak jelas atau keraguan antara halal dan haram."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-028",
+    "no": 28,
+    "soal": "Seorang perempuan berusia 56 tahun datang ke poliklinik RS dengan keluhan kesemutan di kedua ujung jari tangan dan kaki sejak 2 bulan yang lalu. Keluhan awalnya dirasakan hilang timbul, namun menetap sejak 1 minggu terakhir. Pasien terdiagnosa diabetes melitus sejak 2 tahun yang lalu, namun tidak rutin kontrol ke dokter. Pemeriksaan fisik: Tampak obesitas. Tanda-tanda vital dan status generalis dalam batas normal. Status neurologis: stocks and gloves (kanan kiri) hipestesi (baal). Apakah diagnosis klinis yang paling tepat pada pasien di atas?",
+    "opsi": [
+      "Polineuritis",
+      "Mononeuritis multipleks",
+      "Polineuropati",
+      "Neuropati otonom",
+      "Mononeuropati"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Gambaran klinis hipestesi simetris bilateral pada bagian distal ekstremitas bawah dan atas (pola 'stocks and gloves') pada penderita DM tak terkontrol adalah bentuk klasik dari Polineuropati Diabetik simetris distal.",
+    "pembahasan_klinis": {
+      "A": "Polineuritis menunjukkan proses inflamasi saraf ganda primer.",
+      "B": "Mononeuritis multipleks menyerang beberapa saraf secara asimetris dan terpisah.",
+      "C": "Polineuropati ditandai oleh kerusakan simetris perifer bilateral berpola stocks and gloves.",
+      "D": "Neuropati otonom menyerang organ dalam seperti kardiovaskular, pencernaan, atau urogenital.",
+      "E": "Mononeuropati hanya melibatkan satu saraf perifer tunggal."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-029",
+    "no": 29,
+    "soal": "Seorang pasien datang dengan riwayat diabetes mellitus. Pasien mengaku sudah lama tidak kontrol ke dokter dan juga tidak konsumsi obat anti diabetik. Pasien mengaku tadi malam gigi geraham kanan bawah belakangnya yang sudah lama goyang terlepas dari gusinya. Apa penyebab kejadian yang terjadi pada gigi pasien ini?",
+    "opsi": [
+      "Terbentuknya Poket gingiva",
+      "Pembentukan plak dan deposit kalsium",
+      "Kerusakan ligamen periodontal",
+      "Mikroangiopati",
+      "Perubahan respon imun dan kemotaksis neutrofil"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Hiperglikemia kronis mempercepat timbulnya periodontitis berat. Prospek inflamasi merusak serat-serat ligamen periodontal dan menyebabkan resorpsi tulang alveolar penopang gigi, yang berakhir pada kegoyahan dan lepasnya gigi dari saku gusi.",
+    "pembahasan_klinis": {
+      "A": "Poket gingiva adalah tahap awal terbentuknya celah infeksi gusi.",
+      "B": "Pembentukan kalkulus/plak memicu inflamasi awal.",
+      "C": "Kerusakan ligamen periodontal dan destruksi tulang alveolar secara langsung menyebabkan kehilangan perlekatan dan kegoyahan gigi hingga tanggal.",
+      "D": "Mikroangiopati adalah patofisiologi vaskuler melatarbelakangi, namun penyebab mekanis penopang gigi terlepas adalah hilangnya ligamen.",
+      "E": "Disfungsi neutrofil meningkatkan kerentanan infeksi, yang merusak ligamen."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-030",
+    "no": 30,
+    "soal": "Seorang remaja wanita usia 12 tahun dibawa ibunya datang ke puskesmas dengan keluhan 2 bulan tidak haid. Haid pertama 1 tahun yang lalu. Keluhan disertai nyeri pada payudara. Gangguan siklus haid pada pasien ini disebut?",
+    "opsi": [
+      "PMDD",
+      "Menometrorrhagia",
+      "Oligomenorrhea",
+      "Amenorrhea",
+      "Menorrhagia"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Oligomenorea didefinisikan sebagai kondisi siklus haid yang jarang, yaitu interval antar haid melebihi 35 hari atau terlewat 1-2 siklus bulanan (pada remaja awal sering terjadi akibat belum maturnya aksis hipotalamus-hipofisis-ovarium pasca-menarke).",
+    "pembahasan_klinis": {
+      "A": "PMDD adalah gangguan disforik emosional berat sebelum menstruasi.",
+      "B": "Menometroragia adalah perdarahan haid yang sangat banyak dan tidak teratur.",
+      "C": "Oligomenorea ditandai oleh keterlambatan haid berturut-turut dengan interval pendarahan jarang (>35 hari hingga <3 bulan).",
+      "D": "Amenorea didefinisikan jika tidak haid berturut-turut selama minimal 3 bulan (sekunder) atau belum menarke usia 15 tahun (primer).",
+      "E": "Menoragia adalah perdarahan haid dalam jumlah berlebih namun siklus teratur."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-031",
+    "no": 31,
+    "soal": "Wanita 22 tahun mengeluh sering pusing, sakit kepala, berdebar, dan banyak keringat. pada pemeriksaan fisik didapatkan TD 210/110 mmHg dan nadi 122x/menit. Hasil pemeriksaan laboratorium menunjukkan natrium darah 135 mEq/L (n: 135-145 mEq/L) dan kalium darah 3,8 mEq/L (n: 3,5-5,5 mEq/L). Pada pemeriksaan CT Scan Abdomen didapatkan massa 4 cm di medulla adrenal, batas tegas, dan vaskularisasi padat. Apa diagnosis kasus tersebut",
+    "opsi": [
+      "Karsinoma Adrenokortikal",
+      "Penyakit Cushing",
+      "Penyakit Addison",
+      "Feokromositoma",
+      "Adenoma Adrenokortikal"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Trias klasik feokromositoma mencakup sakit kepala episodik, berkeringat profus, dan takikardia, dipicu oleh sekresi katekolamin berlebih dari tumor medulla adrenal. CT scan menunjukkan massa padat pada medula adrenal.",
+    "pembahasan_klinis": {
+      "A": "Karsinoma adrenokortikal berasal dari korteks adrenal, bukan medula.",
+      "B": "Penyakit Cushing memicu hiperkortisolisme akibat adenoma hipofisis.",
+      "C": "Penyakit Addison adalah insfisiensi korteks adrenal.",
+      "D": "Feokromositoma adalah tumor neuroendokrin yang berasal dari sel kromaFin medula adrenal memproduksi katekolamin berlebih.",
+      "E": "Adenoma adrenokortikal terletak pada lapisan korteks."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-032",
+    "no": 32,
+    "soal": "Seorang laki-laki berusia 40 tahun datang ke poliklinik RS dengan keluhan baal di kedua ujung kedua tangan dan kaki sejak 1 bulan yang lalu. Pasien terdiagnosis dengan diabetes mellitus tipe 1 sejak 10 tahun yang lalu dan rutin mendapat insulin. Pemeriksaan fisik: tanda-tanda vital dan status generalis dalam batas normal. Status neurologis: stocks and gloves hipestesi. Elektrodiagnostik: penurunan amplitudo. Apakah kemungkinan tipe neuropati pada pasien?",
+    "opsi": [
+      "Aksonal",
+      "Motorik",
+      "Otonom",
+      "Demielinasi",
+      "Aksonal dan demielinasi"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Pemeriksaan konduksi saraf (elektrodiagnostik) yang menunjukkan penurunan amplitudo (amplitude loss) mencerminkan hilangnya aksis aksonal saraf (neuropati aksonal). Sebaliknya, penurunan kecepatan hantar saraf (conduction velocity) menunjukkan kelainan demielinasi.",
+    "pembahasan_klinis": {
+      "A": "Penurunan amplitudo potensial aksi sensorik/motorik khas mendasari lesi tipe aksonal degeneratif.",
+      "B": "Keluhan utama sensorik hipestesi merujuk pada dominansi serabut sensorik.",
+      "C": "Keluhan tidak melibatkan disfungsi organ otonom.",
+      "D": "Neuropati demielinasi ditandai pemanjangan latensi dan penurunan kecepatan hantar saraf.",
+      "E": "Pada kasus ini elektrodiagnostik murni menunjukkan penurunan amplitudo tanpa perlambatan hantar bermakna."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-033",
+    "no": 33,
+    "soal": "Seorang pasien perempuan berusia 60 tahun datang ke poliklinik RS dengan keluhan berdebar padahal sedang tidak beraktivitas. Pasien terdiagnosis dengan diabetes mellitus sejak 5 tahun yang lalu, namun tidak kontrol rutin. Pemeriksaan fisik: tanda-tanda vital, status generalis, dan neurologis dalam batas normal. Apakah kemungkinan diagnosis pada pasien tersebut?",
+    "opsi": [
+      "Hipotensi ortostatik",
+      "Anhidrosis",
+      "Hypoglycemic unawareness",
+      "Gastroparesis",
+      "Resting tachycardia"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Takikardia saat istirahat (resting tachycardia) yang persisten merupakan salah satu tanda awal paling khas dari Neuropati Otonom Diabetik Kardiovaskular (CAN), yang disebabkan oleh denervasi parasimpatis (saraf vagus) pada jantung.",
+    "pembahasan_klinis": {
+      "A": "Hipotensi ortostatik ditandai penurunan tekanan darah saat perubahan posisi berdiri.",
+      "B": "Anhidrosis adalah ketidakmampuan memproduksi keringat.",
+      "C": "Hypoglycemic unawareness ditandai hilangnya gejala adrenergik saat glukosa darah drop.",
+      "D": "Gastroparesis ditandai gangguan pengosongan lambung.",
+      "E": "Resting tachycardia adalah peningkatan denyut jantung istirahat akibat hilangnya tonus parasimpatis vagal pada neuropati otonom diabetik."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-034",
+    "no": 34,
+    "soal": "Bagaimana urutan organel untuk sintesis protein?",
+    "opsi": [
+      "Nukleus - Ribosom - RE kasar - Badan golgi - Vesikel",
+      "Mitokondria - RE halus - RE kasar",
+      "Ribosom - Badan golgi - Nukleus",
+      "Ribosom→ Mitokondria → Badan Golgi",
+      "Nukleus → RE halus → Lisosom"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Proses ekspresi protein dimulai dari transkripsi DNA menjadi mRNA di Nukleus → mRNA ditranslasi oleh Ribosom yang menempel pada Retikulum Endoplasma (RE) Kasar → protein dikirim ke Badan Golgi untuk pematangan/modifikasi pasca-translasi → dibungkus dalam Vesikel sekretori.",
+    "pembahasan_klinis": {
+      "A": "Urutan biologis benar: Nukleus (transkripsi) -> Ribosom & RE Kasar (translasi) -> Badan Golgi (modifikasi) -> Vesikel (transportasi/eksositosis).",
+      "B": "Mitokondria berperan memproduksi ATP, RE halus untuk sintesis lipid.",
+      "C": "Urutan terbalik, transkripsi materi genetik di nukleus harus mendahului translasi.",
+      "D": "Mitokondria bukan bagian jalur utama modifikasi sekresi protein intraseluler.",
+      "E": "RE halus tidak memproses protein (tidak memiliki ribosom)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-035",
+    "no": 35,
+    "soal": "Seorang perempuan usia 40 tahun, datang ke dokter praktik dengan keluhan cepat lelah dan rasa mengantuk yang berlebihan sejak 3 bulan lalu. Pasien menjadi tidak tahan dingin dan berat badannya bertambah 5 kg dalam sebulan meskipun nafsu makan tidak bertambah. Pasien juga mengeluh sulit BAB dan rambutnya semakin rontok. Pada pemeriksaan fisik ditemukan TD 110/80 mmHg, HR 55x/meni, RR 15x/menit, dan T 36,9?. Tampak bekas luka operasi di regio coli anterior, kulit kering dan edema fasialis. Apakah pemeriksaan penunjang awal untuk menegakkan diagnosis pada kasus tersebut?",
+    "opsi": [
+      "TSH dan FT4",
+      "FSH dan TRH",
+      "FT4 dan T3",
+      "TSH dan TRH",
+      "FT3 dan TRH"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Gejala klinis (intoleransi dingin, berat badan naik, bradikardia, konstipasi, fasialis myxedematous pasca pembedahan tiroid) mengarah pada Hipotiroidisme Iatrogenik pasca-tiroidektomi. Pemeriksaan penunjang awal baku adalah kadar TSH (Thyroid Stimulating Hormone) dan FT4 (Free T4).",
+    "pembahasan_klinis": {
+      "A": "Pemeriksaan kombinasi TSH sensitif dan FT4 serum merupakan langkah penunjang awal paling akurat menilai status hipotiroidisme.",
+      "B": "FSH menilai fungsi reproduksi/gonad.",
+      "C": "Kadar T3 kurang sensitif untuk diagnosis hipotiroidisme.",
+      "D": "Pemeriksaan TRH jarang dilakukan secara rutin dalam lini awal praktis klinis.",
+      "E": "FT3 tidak direkomendasikan sebagai evaluasi skrining standar hipotiroidisme."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-036",
+    "no": 36,
+    "soal": "Seorang anak, 7 tahun, keluhan kulit kering, intoleransi dingin, konstipasi, dan lambat dalam belajar. Pemeriksaan fisik terdapat wajah bengkak (myxedema). Pemeriksaan hormon tiroid apa yang paling akurat?",
+    "opsi": [
+      "Anti TG",
+      "TSH dan T4",
+      "T3 total",
+      "T4 total",
+      "USG Tiroid"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Pada hipotiroidisme anak (juvenile hypothyroidism), pemeriksaan laboratorium standar yang paling akurat untuk konfirmasi diagnostik adalah pengukuran kadar TSH dan T4 (atau Free T4).",
+    "pembahasan_klinis": {
+      "A": "Anti-TG mengukur antibodi tiroid pada kecurigaan etiologi autoimun.",
+      "B": "Evaluasi TSH (meningkat) dan T4/FT4 (menurun) merupakan diagnostik laboratorium paling akurat untuk mengonfirmasi hipotiroidisme.",
+      "C": "T3 total kurang akurat karena fluktuatif dan baru menurun pada hipotiroidisme tahap sangat berat.",
+      "D": "T4 total saja tanpa TSH tidak dapat menentukan letak gangguan (primer vs sekunder).",
+      "E": "USG tiroid adalah pencitraan anatomi, bukan parameter ketersediaan hormon biologis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-037",
+    "no": 37,
+    "soal": "Pasien datang ke rumah sakit dengan keluhan benjolan di leher. Pemeriksaan laboratorium ditemukan kadar tiroid tinggi, T3 T4 tinggi, TSH turun, Anti-TPO(+), dan TSI (-)",
+    "opsi": [
+      "Grave Disease",
+      "Diabetes Melitus",
+      "Syndrome Cushing",
+      "Hashimoto Disease",
+      "Tiroiditis Riedel's"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Kondisi tirotoksikosis transient disertai peningkatan Anti-TPO positif dan TSI negatif sesuai dengan fase akut awal pemecahan folikel tiroid pada Tiroiditis Hashimoto (Hashitoxicosis).",
+    "pembahasan_klinis": {
+      "A": "Graves disease khas ditandai oleh TSI (Thyroid Stimulating Immunoglobulin) positif.",
+      "B": "Diabetes Melitus merupakan gangguan metabolisme glukosa.",
+      "C": "Sindrom Cushing merupakan kelainan kelebihan kortisol.",
+      "D": "Hashimoto Disease pada fase destruktif awal (Hashitoxicosis) menunjukkan T3/T4 tinggi, TSH tertekan, Anti-TPO sangat positif, dan TSI negatif.",
+      "E": "Tiroiditis Riedel dicirikan oleh keterlibatan jaringan ikat fibrotik berat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-038",
+    "no": 38,
+    "soal": "Wanita usia 32 tahun datang ke RS dengan keluhan dada berdebar-debar sejak 1 minggu yang lalu. Keluhan disertai gelisah, sulit tidur, mudah lelah dan diare. Pada pemeriksaan TD 130/80 mmHg, N 120x/menit, RR 24x/menit, S 37,2C, mata menonjol. Pembesaran tiroid difus. Laboratorium: fT4 meningkat dan TSH menurun. Apakah diagnosa yang tepat?",
+    "opsi": [
+      "Krisis tiroid",
+      "Karsinoma tiroid",
+      "Tiroiditis Hashimoto",
+      "Grave disease",
+      "Hipotiroidisme"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Kombinasi manifestasi hipermetabolisme, struma difus, eksoftalmus (mata menonjol/oftalmopati), fT4 tinggi, dan TSH tertekan merupakan gambaran klasik Penyakit Graves (Graves' Disease).",
+    "pembahasan_klinis": {
+      "A": "Krisis tiroid ditandai dengan disfungsi organ multisistemik berat seperti demam tinggi hiperpireksia (>38.5C), ikterus, atau penurunan kesadaran.",
+      "B": "Karsinoma tiroid umumnya membesar berupa nodul soliter keras soliter tanpa hipermetabolisme difus.",
+      "C": "Tiroiditis Hashimoto manifestasi utamanya adalah hipotiroidisme.",
+      "D": "Penyakit Graves adalah penyebab paling sering hipertiroidisme yang khas dengan eksoftalmus dan struma difus.",
+      "E": "Hipotiroidisme menunjukkan fT4 rendah dan TSH tinggi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-039",
+    "no": 39,
+    "soal": "seorang laki laki 35 tahun melakukan pemeriksaan infertilitas, volume sperma 2mL, konsentrasi sperma 10jt, motilitas 28%, morfologi normal 5%, apakah interpretasi yang paling tepat. untuk pasien ini?",
+    "opsi": [
+      "Normozoospermia",
+      "Asthenozoospermia",
+      "Oligoasthenozoospermia",
+      "Oligoteratozoospermia",
+      "Oligoasthenoteratozoospermia"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Kriteria Analisis Semen WHO 2010:\n- Konsentrasi < 15 juta/mL = Oligozoospermia (di sini 10 juta/mL)\n- Motilitas progresif < 32% = Asthenozoospermia (di sini 28%)\n- Morfologi normal ≥ 4% = Normal (di sini 5% normal).\nKombinasi gangguan konsentrasi dan motilitas disebut Oligoasthenozoospermia.",
+    "pembahasan_klinis": {
+      "A": "Normozoospermia jika seluruh parameter berada di atas batas normal.",
+      "B": "Asthenozoospermia hanya melingkupi kelainan motilitas.",
+      "C": "Oligoasthenozoospermia mencakup konsentrasi sperma yang rendah (<15 juta/mL) dan motilitas yang rendah (<32%).",
+      "D": "Oligoteratozoospermia jika terdapat gangguan konsentrasi dan morfologi abnormal (<4%).",
+      "E": "Teratozoospermia tidak tepat karena morfologi 5% masih di atas ambang batas standar (≥4%)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-040",
+    "no": 40,
+    "soal": "Perempuan 25 tahun datang dengan penurunan kesadaran semenjak 1 jam lalu TD 200/120 mmHg dan takikardia. Pemeriksaan umum tampak sakit berat, kesadaran somnolen. Pemeriksaan lab kadar natrium, kalium, dan klorida normal. CT scan terdapat massa 3x2 di adrenal. Pemeriksaan hormon apa yang dapat mendasari peningkatan tekanan darah pasien?",
+    "opsi": [
+      "Kadar aldosteron urin",
+      "Kadar kortisol urin",
+      "Kadar dehydroepiandrosterone urin",
+      "Kadar metformin urin",
+      "Kadar insulin urin"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Hipertensi emergensi dengan massa di korteks/medula adrenal dapat dipicu oleh hiperaldosteronisme sekunder/primer atau peningkatan kadar hormon yang mempengaruhi retensi vaskuler. Di antara pilihan hormon yang disediakan, aldosteron mendasari regulasi tekanan darah via retensi cairan vaskuler.",
+    "pembahasan_klinis": {
+      "A": "Kadar aldosteron mengatur reabsorpsi natrium dan tonus vaskuler yang dapat memicu kenaikan tekanan darah krisis.",
+      "B": "Kortisol urin berkaitan dengan pemeriksaan Sindrom Cushing.",
+      "C": "DHEA merupakan androgen adrenal.",
+      "D": "Metformin adalah eksogen obat antidiabetik.",
+      "E": "Insulin mengontrol regulasi glukosa."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-041",
+    "no": 41,
+    "soal": "Perempuan berusia 2 tahun dibawa ke puskesmas karena diare berulang sudah 3 bulan. Pemeriksaan fisik: Berat badan 4,5 kg, Tinggi badan 67 cm. frekuensi napas: 32 kali per menit, nadi 122x/menit, suhu tubuh 37.3°C. Anak tampak sakit berat dan wajah seperti orang tua, palpebra cekung, kedua hemithorax simetris, suara vesikuler normal, Iga gambang. Turgor kurang, kulit bila dicubit lambat kembali seperti semula, tidak terdapat edema, akral hangat. Penanganan yang dilakukan:",
+    "opsi": [
+      "Bila hemoglobin kurang dari 8 berikan tranfusi darah merah",
+      "Segera berikan tablet tambah darah dan vitamin A",
+      "Nutrisi cair F75, antibiotik serta antipiretik",
+      "Berikan oksigen, rehidrasi dengan dextrose 40%",
+      "Nutrisi berupa makanan cair F75, kotrimoksazol, vitamin A dan asam folat"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Anak menderita Gizi Buruk Tipe Marasmus (BB 4,5 kg usia 2 th, iga gambang, baggy pants/wajah orang tua). Menurut pedoman WHO/Kemenkes, tatalaksana fase stabilisasi mencakup pemberian nutrisi refeeding awal Formula F-75, antibiotik spektrum luas rutin (seperti Kotrimoksazol), Vitamin A dosis tinggi, dan Asam Folat.",
+    "pembahasan_klinis": {
+      "A": "Transfusi darah diindikasikan pada marasmus jika Hb < 4 g/dL atau Hb 4-6 g/dL disertai distress napas.",
+      "B": "Zat besi/tablet tambah darah DILARANG diberikan pada fase awal stabilisasi gizi buruk karena berbahaya bagi hepar.",
+      "C": "Antipiretik tidak rutin bila suhu tubuh tidak hiperpireksia (>38.5C).",
+      "D": "Koreksi hipoglikemia menggunakan Dextrose 10%, bukan Dextrose 40%.",
+      "E": "Nutrisi awal F-75, Kotrimoksazol, Vitamin A, dan Asam Folat sesuai protokol standar fase awal tatalaksana gizi buruk."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-042",
+    "no": 42,
+    "soal": "Wanita 55 tahun, datang dengan keluhan luka tidak sembuh sejak 2 minggu yang lalu. Luka meluas sampai mata kaki. Pada pemeriksaan fisik, ditemukan luka berukuran 2 cm dengan dasar otot, jaringan nekrotik (+), pus (+) berbau. Pasien adalah penderita diabetes tetapi tidak pernah kontrol. Tatalaksana bedah yang tidak tepat pada pasien diabetes adalah?",
+    "opsi": [
+      "Jaringan nekrotik dibuang sampai berdarah",
+      "Luka dijahit untuk mempercepat penutupan luka",
+      "Pada luka dengan pus produktif, dapat digunakan foam absorbent dressing",
+      "Luka ditangani dengan kasa lembab",
+      "Pemberian antibiotic"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Melakukan penjahitan primer (suturing) pada luka diabetik yang terinfeksi aktif dan berisi pus produktif adalah tindakan yang DILARANG (kontraindikasi absolut) karena akan menjebak bakteri anaerob dan memperluas infeksi nekrotikan ke jaringan dalam.",
+    "pembahasan_klinis": {
+      "A": "Debridemen eksisi jaringan nekrotik hingga timbul perdarahan aktif (viable tissue) adalah standar tepat.",
+      "B": "Menjahit luka terinfeksi adalah kesalahan tindakan bedah yang memicu pembentukan abses dan nekrosis luas.",
+      "C": "Penggunaan absorbent foam dressing sesuai indikasi eksudat masif.",
+      "D": "Dressing lembab (moist wound healing) mempercepat pembentukan jaringan granulasi.",
+      "E": "Pemberian antibiotik sesuai indikasi infeksi jaringan lunak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-043",
+    "no": 43,
+    "soal": "Seorang pria 50 tahun datang dengan riwayat dm. Pada DM terjadi kegagalan produksi insulin oleh pankreas. Apakah nama bangunan tempat sel itu berada?",
+    "opsi": [
+      "Substansi koloid",
+      "Asinus",
+      "Sel parafolikuler",
+      "Sel pituisit",
+      "Pulau langerhans"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Insulin disintesis dan disekresikan oleh sel beta yang terletak di dalam mikroorgan Pulau Langerhans (Islets of Langerhans) pada jaringan endokrin pankreas.",
+    "pembahasan_klinis": {
+      "A": "Substansi koloid terdapat pada kelenjar tiroid.",
+      "B": "Asinus pankreas merupakan bagian eksokrin yang menghasilkan enzim pencernaan.",
+      "C": "Sel parafolikuler berada di tiroid menghasilkan kalsitonin.",
+      "D": "Sel pituisit berada di neurohipofisis.",
+      "E": "Pulau Langerhans adalah struktur mikroskopis endokrin pankreas yang mengandung sel beta pembuat insulin."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-044",
+    "no": 44,
+    "soal": "Laki-laki datang ke UGD RS Yarsi dengan keluhan lemas sejak 2 hari yang lalu. Pemeriksaan fisik: TD 170/100 mmHg. Pemeriksaan penunjang ditemukan peningkatan hiperkalemia tetapi kadar natrium normal. Dokter menduga pasien mengalami hipotiroid sekunder. Aldosteron terganggu. Apa fungsinya?",
+    "opsi": [
+      "Retensi kalium",
+      "Retensi natrium",
+      "Retensi klorida",
+      "Retensi magnesium",
+      "Retensi kalsium"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Hormon Aldosteron bekerja pada tubulus kontortus distalis dan duktus koligentes ginjal untuk meningkatkan reabsorpsi (retensi) Natrium ke dalam darah dan merangsang ekskresi Kalium serta Ion Hidrogen ke dalam urin.",
+    "pembahasan_klinis": {
+      "A": "Aldosteron membuang kalium, gangguan aldosteron yang menyebabkan hiperkalemia.",
+      "B": "Fungsi fisiologis utama aldosteron adalah retensi natrium dan air untuk menjaga volume vaskular.",
+      "C": "Klorida menyertai natrium secara pasif, tetapi target spesifik utamanya natrium.",
+      "D": "Bukan fungsi utama aldosteron.",
+      "E": "Kalsium diatur terutama oleh PTH dan Kalsitonin."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-045",
+    "no": 45,
+    "soal": "Berikut yang kurang berperan patofisiologi terjadinya luka diabetes?",
+    "opsi": [
+      "Perubahan sensitivitas sensorik",
+      "Perubahan anatomi kaki",
+      "Penurunan daya tahan",
+      "Penurunan insulin",
+      "Penurunan suplai jaringan"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Trias patofisiologi utama terbentuknya ulkus/luka diabetik perifer adalah Neuropati (sensorik/motorik/otonom), Deformitas anatomis kaki, dan Iskemia vaskular perifer (penurunan suplai darah jaringan). Penurunan kadar insulin sistemik adalah penyebab DM-nya, bukan elemen patofisiologi lokal luka.",
+    "pembahasan_klinis": {
+      "A": "Hilangnya sensasi protektif sensorik menyebabkan trauma berulang tanpa disadari.",
+      "B": "Deformitas anatomi kaki memicu akumulasi tekanan tumpuan abnormal (callus).",
+      "C": "Penurunan daya tahan dan migrasi lekosit memperburuk infeksi.",
+      "D": "Penurunan kadar insulin secara langsung tidak menjadi mekanisme lokal terbentuknya ulkus.",
+      "E": "Ischemia/penurunan perfusi vaskuler menghambat penyembuhan luka."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-046",
+    "no": 46,
+    "soal": "Dari segi apakah penentuan perintah makan yang halal dan thayyib sesuai yang diperintahkan dalam Al-Qur'an?",
+    "opsi": [
+      "Halal dari segi bahan dan cara mendapatkannya dan thayyib dari segi manfaat dan efeknya",
+      "Halal dari cara bahannya dan thayyib dari segi mendapatkannya",
+      "Halal dari segi mendapatkannya dan thayyib dari segi bahan dan efeknya",
+      "Halal dari segi bahannya, dan thayyib dari segi cara mendapatkan dan efeknya",
+      "Halal dan thayyib dari segi substansinya"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Secara syariat, Halal mencakup kehalalan zat/zat bahan makanan (halal bi dzatihi) serta cara memperolehnya (halal sababi), sedangkan Thayyib mencakup aspek kualitas, nutrisi, higienitas, serta dampak baik/manfaat bagi kesehatan tubuh.",
+    "pembahasan_klinis": {
+      "A": "Halal meninjau zat kehalalan dan cara perolehannya, sedangkan thayyib meninjau nilai mutu, manfaat, dan keamanan efek bagi tubuh.",
+      "B": "Terbalik dalam pembagian definisi syar'i.",
+      "C": "Kurang komprehensif membatasi halal hanya pada aspek perolehan.",
+      "D": "Pembagian definisi kurang tepat.",
+      "E": "Menyamakan dua konsep kriteria yang berbeda."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-047",
+    "no": 47,
+    "soal": "Pasien datang ke rumah sakit dengan keluhan benjolan di leher. Pada pemeriksaan laboratorium menunjukkan kadar TSH rendah, T3 dan T4 rendah. Apa obat untuk diagnosis tersebut?",
+    "opsi": [
+      "Atorvastatin",
+      "Rosuvastatin",
+      "Simvastatin",
+      "Levotiroksin",
+      "Omega 3"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Kadar TSH rendah disertai T3 dan T4 rendah mengindikasikan Hipotiroidisme Sekunder / Sentral (kelainan pada hipofisis/hipotalamus). Terapi pengganti hormon pilihan utama untuk kondisi hipotiroidisme adalah Levotiroksin.",
+    "pembahasan_klinis": {
+      "A": "Atorvastatin obat dislipidemia.",
+      "B": "Rosuvastatin obat dislipidemia.",
+      "C": "Simvastatin obat dislipidemia.",
+      "D": "Levotiroksin adalah suplementasi pengganti hormon tiroid utama pada hipotiroidisme.",
+      "E": "Omega 3 suplemen asam lemak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-048",
+    "no": 48,
+    "soal": "Seorang atlet laki-laki mendapatkan suplemen testosteron. Setelah masuk ke sirkulasi, testosteron terutama berikatan dengan apa?",
+    "opsi": [
+      "Sex hormone-binding globulin (SHBG) dan albumin",
+      "Kortisol-binding globulin",
+      "Tiroksin-binding globulin",
+      "Transferrin",
+      "Hemoglobin"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Dalam sirkulasi darah, sekitar 60% testosteron terikat kuat dengan Sex Hormone-Binding Globulin (SHBG), sekitar 38% terikat longgar dengan Albumin, dan hanya sekitar 1-2% berada dalam bentuk bebas (unbound).",
+    "pembahasan_klinis": {
+      "A": "Testosteron dalam sirkulasi mayoritas diikat oleh SHBG dan Albumin.",
+      "B": "Kortisol-binding globulin (CBG) mengikat glukokortikoid.",
+      "C": "Tiroksin-binding globulin (TBG) mengikat hormon tiroid.",
+      "D": "Transferrin mentranspor zat besi.",
+      "E": "Hemoglobin mentranspor oksigen dalam eritrosit."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-049",
+    "no": 49,
+    "soal": "Pada seorang pasien ditemukan kadar TSH menurun. Apa patofisiologi yang menjelaskan kondisi tersebut?",
+    "opsi": [
+      "Terjadi umpan balik negatif ke hipotalamus dan hipofisis anterior",
+      "Hipotalamus meningkatkan sekresi TRH",
+      "Terjadi stimulasi berlebihan pada reseptor TSH",
+      "Kadar hormon tiroid rendah sehingga menurunkan TSH",
+      "Terjadi kerusakan pada reseptor TRH di hipofisis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Ketika kadar hormon tiroid bebas (FT4/FT3) di dalam sirkulasi meningkat, hormon ini akan melakukan umpan balik negatif (negative feedback) ke hipofisis anterior dan hipotalamus untuk menekan sekresi TSH.",
+    "pembahasan_klinis": {
+      "A": "Umpan balik negatif oleh kadar T3/T4 tinggi menekan pelepasan TSH dari sel tirotrop hipofisis.",
+      "B": "Peningkatan TRH justru akan menaikkan kadar TSH.",
+      "C": "Stimulasi berlebihan reseptor TSH merangsang kelenjar tiroid, bukan menekan sekresi TSH.",
+      "D": "Kadar hormon tiroid yang rendah justru akan menaikkan sekresi TSH.",
+      "E": "Kerusakan reseptor TRH jarang menjadi patofisiologi umum supresi TSH."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-050",
+    "no": 50,
+    "soal": "Mineral yang kerjanya mirip dengan insulin?",
+    "opsi": [
+      "Peptida",
+      "Steroid",
+      "Mineral",
+      "Asam amino",
+      "Lipid"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Mineral mikro tertentu (seperti Kromium dan Vanadium) memiliki aktivitas mimetik insulin (insulin-mimetic property) yang meningkatkan fosforilasi reseptor insulin dan translokasi GLUT-4.",
+    "pembahasan_klinis": {
+      "A": "Peptida adalah struktur molekul alami insulin.",
+      "B": "Steroid adalah kelompok hormon derivat kolesterol.",
+      "C": "Mineral mikro (seperti Kromium) bertindak menyerupai atau memfasilitasi kerja biologis insulin.",
+      "D": "Asam amino adalah blok penyusun protein.",
+      "E": "Lipid adalah kelompok asam lemak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-051",
+    "no": 51,
+    "soal": "Bagaimana cara pemilihan makanan untuk pasien diabetes?",
+    "opsi": [
+      "Porsi kecil tapi sering",
+      "Porsi Besar tapi sering",
+      "Porsi sedang tapi jarang",
+      "Porsi besar tapi jarang",
+      "Porsi kecil tapi jarang"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Prinsip pengaturan makan pada penderita Diabetes Melitus adalah menjaga stabilitas kadar glukosa darah agar tidak melonjak drastis (glikemik spike) maupun turun drastis (hipoglikemia) dengan pola porsi kecil tetapi sering (prinsip 3J: Jumlah, Jadwal, Jenis).",
+    "pembahasan_klinis": {
+      "A": "Pola porsi kecil tapi sering membantu mencegah lonjakan drastis kadar glukosa darah pasca makan.",
+      "B": "Porsi besar memicu hiperglikemia postprandial masif.",
+      "C": "Pola jarang berisiko memicu hipoglikemia di antara jeda makan.",
+      "D": "Porsi besar dan jarang memicu fluktuasi ekstrem kadar glukosa darah.",
+      "E": "Porsi kecil dan jarang berisiko menyebabkan malnutrisi dan hipoglikemia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-052",
+    "no": 52,
+    "soal": "Seorang ibu baru saja melahirkan anak dengan berat 4200gr dan panjang badan 60cm. Ibu memiliki riwayat keturunan diabetes mellitus dari kedua orangtuanya dan riwayat dm sebelumnya disangkal. Setelah dilakukan pemeriksaan GD hasilnya 315 mg/dl, dan anak tidak aktif dan apatis. Setelah dilakukan pemeriksaan GD anak hasilnya 60 mg/dl Apa diagnosis anak tsb?",
+    "opsi": [
+      "Hipoglikemi neonatus",
+      "Hiperglikemi neonatus",
+      "Makrosomia",
+      "Asfiksia neonatorum",
+      "Sepsis awitan dini"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Bayi yang lahir dari ibu dengan hiperglikemia (GD ibu 315 mg/dL) mengalami hiperinsulinisme fetus. Setelah lahir, timbul penurunan kadar glukosa darah mendadak yang memicu gejala lemas, tidak aktif, dan apatis (Hipoglikemi Neonatus, kadar GD < 47-60 mg/dL pada bayi berisiko).",
+    "pembahasan_klinis": {
+      "A": "Kondisi bayi lemas, apatis, dan penurunan gula darah pasca lahir dari ibu hiperglikemia sesuai dengan Hipoglikemi Neonatus.",
+      "B": "Hiperglikemia neonatus ditandai kadar gula darah bayi >145 mg/dL.",
+      "C": "Makrosomia adalah deskripsi fisik BB > 4000 gram, bukan diagnosis gangguan metaboliknya.",
+      "D": "Asfiksia terkait gangguan respirasi dan nilai APGAR rendah pasca lahir.",
+      "E": "Sepsis ditandai tanda infeksi sistemik."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-053",
+    "no": 53,
+    "soal": "bayi lahir spontan, BB 4200, Panjang Badan 50 cm. pengakuan ibu saat ibu hamil 6 bulan, kadar gula darahnya 135 mg/dl. pada PF terlihat kesadaran bayi somnolen, tidak aktif. Gula darah bayi saat lahir 40 mg/dl Apa penyebab kondisi bayi?",
+    "opsi": [
+      "Ibu gestasional diabetes mellitus",
+      "Kerusakan B-pankreas",
+      "Glycogen storage disease",
+      "Diabetes tipe 1",
+      "Diabetes insipidus"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Kondisi bayi lahir makrosomia (4200 g) dengan hipoglikemia berat (40 mg/dL) dan somnolen disebabkan oleh kondisi Diabetes Mellitus Gestasional (DMG) pada ibu yang memicu hiperinsulinisme sekunder pada janin.",
+    "pembahasan_klinis": {
+      "A": "Gestational Diabetes Mellitus pada ibu memindahkan glukosa berlebih ke janin sehingga memicu hiperinsulinisme fetal dan hipoglikemia neonatus.",
+      "B": "Kerusakan sel B pankreas menyebabkan insfisiensi insulin, bukan hiperinsulinisme.",
+      "C": "Kelainan kongenital metabolik langka pemecahan glikogen.",
+      "D": "DM tipe 1 ditandai defisiensi insulin total.",
+      "E": "Diabetes insipidus adalah kelainan hormon ADH."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-054",
+    "no": 54,
+    "soal": "Pada bagian bawah kelenjar tiroid Dimanakah lokasi kelenjar tiroid menurut urutan cartilago trachea?",
+    "opsi": [
+      "2-5",
+      "2-3",
+      "3-5",
+      "1-2",
+      "4-5"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Isthmus kelenjar tiroid secara anatomis menyilang di depan cincin kartilago trakea ke-2 dan ke-3 (Cincin Trakea 2-3). Lobus lateral tiroid membentang dari kartilago tiroid hingga cincin trakea ke-4/5.",
+    "pembahasan_klinis": {
+      "A": "Cincin 2-5 adalah rentang luas lateral lobus.",
+      "B": "Isthmus tiroid terletak tepat melintasi bagian depan cincin kartilago trakea ke-2 dan ke-3.",
+      "C": "Terlalu inferior untuk lokasi isthmus utama.",
+      "D": "Cincin trakea 1 terletak tepat di atas pinggir atas isthmus.",
+      "E": "Terlalu inferior."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-055",
+    "no": 55,
+    "soal": "Pasangan suami istri sudah 2 tahun menikah istrinya mengalami infertilitas. Sudah pernah bersenggama tanpa kontrasepsi tetapi belum hamil. Pada pemeriksaan fisik didapatkan hasil normal. Dokter menyarankan Ibu bisa hamil alami. Tatalaksana non-farmakologi?",
+    "opsi": [
+      "Laparotomi",
+      "Fertilisasi in vitro (IVF)",
+      "Berhubungan saat masa subur",
+      "Konsumsi pil penghambat haid",
+      "Melakukan operasi stimulasi ovarium"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Pada infertilitas yang tidak ditemukan kelainan organik (infertilitas idiopatik/unexplained dengan hasil pemeriksaan normal), rekomendasi tatalaksana non-farmakologis awal adalah edukasi timed intercourse, yaitu berhubungan seksual secara teratur pada masa subur (ovulasi).",
+    "pembahasan_klinis": {
+      "A": "Laparotomi adalah tindakan bedah invasif.",
+      "B": "IVF merupakan teknologi reproduksi berbantu tingkat lanjut.",
+      "C": "Berhubungan seksual teratur pada masa subur (timed intercourse) adalah tatalaksana edukasi non-farmakologis paling dasar.",
+      "D": "Pil penghambat haid justru mencegah timbulnya kehamilan.",
+      "E": "Operasi stimulasi ovarium merupakan tindakan pembedahan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-056",
+    "no": 56,
+    "soal": "Yang termasuk kategori well differentiated thyroid carcinoma?",
+    "opsi": [
+      "Papiler dan folikuler thyroid carcinoma",
+      "Malignant thyroid carcinoma",
+      "Struma adenomatosa",
+      "Tiroiditis Hashimoto",
+      "Tiroiditis Riedel's"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Well-Differentiated Thyroid Carcinoma (WDTC) mencakup dua jenis kanker tiroid epitelial terbanyak yang memiliki prognosis baik, yaitu Karsinoma Tiroid Papiler dan Karsinoma Tiroid Folikuler.",
+    "pembahasan_klinis": {
+      "A": "Karsinoma tiroid tipe papiler dan folikuler diklasifikasikan sebagai karsinoma tiroid terdiferensiasi baik (well-differentiated).",
+      "B": "Kategori umum yang mencakup tipe berdiferensiasi buruk dan anaplastik.",
+      "C": "Struma adenomatosa adalah lesi jinak non-neoplastik.",
+      "D": "Tiroiditis Hashimoto adalah penyakit autoimun.",
+      "E": "Tiroiditis Riedel adalah peradangan fibrotik jinak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-057",
+    "no": 57,
+    "soal": "Berdasarkan fisiologi dari prolaktin, apa fungsi dari hormon oxytocin dan hormon prolaktin?",
+    "opsi": [
+      "Oxytocin untuk mensekresi ASI, Prolaktin untuk memberikan rasa bahagia bagi ibu untuk membantu pengeluaran ASI",
+      "Oxytocin untuk memberikan rasa bahagia bagi ibu ketika proses suckling bayi, Prolaktin untuk meningkatkan sekresi ASI ibu pasca melahirkan",
+      "Oxytocin untuk menghambat sekresi ASI, Prolaktin untuk mensekresi ASI",
+      "Oxytocin untuk meningkatkan pengeluaran ASI pasca melahirkan, Prolaktin untuk menghambat proses sekresi ASI",
+      "Oxytocin untuk menghambat penghasilan hormon prolaktin, Prolaktin untuk mensekresi ASI pasca melahirkan"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Dalam laktasi:\n- Prolaktin (dihasilkan hipofisis anterior) merangsang sintesis/produksi dan sekresi ASI oleh sel-sel alveolus payudara.\n- Oksitosin (dihasilkan hipofisis posterior) merangsang kontraksi sel mioepitel untuk pengeluaran ASI (let-down reflex) serta memberikan rasa rileks/bahagia bagi ibu saat hisapan (suckling) bayi.",
+    "pembahasan_klinis": {
+      "A": "Oxytocin memicu pengeluaran (let-down), prolaktin yang memicu sintesis/sekresi.",
+      "B": "Oxytocin merangsang refleks pengeluaran ASI serta memberikan efek afeksi rasa tenang/bahagia pada ibu saat suckling, sementara Prolaktin memicu pembentukan dan sekresi ASI.",
+      "C": "Oxytocin tidak menghambat sekresi ASI.",
+      "D": "Prolaktin memicu produksi ASI, bukan menghambat.",
+      "E": "Oxytocin dan Prolaktin bekerja secara sinergis, bukan saling menghambat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-058",
+    "no": 58,
+    "soal": "Corpus pineal terletak pada bagian posterior dari cerebrum. Dimanakah letak corpus pineal tersebut?",
+    "opsi": [
+      "Ventricle I",
+      "Ventricle III",
+      "Ventricle Lateral",
+      "Ventrikel IV",
+      "Sella Turcica"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Kelenjar/korpus pineal (epifisis cerebri) terletak di bagian epitalamus, menempel pada dinding posterior Ventrikel ke-3 (Ventricle III) otak.",
+    "pembahasan_klinis": {
+      "A": "Ventrikel I dan II merujuk pada ventrikel lateral.",
+      "B": "Corpus pineal secara anatomis terletak terfiksasi di dinding posterior Ventrikel III.",
+      "C": "Ventrikel lateral berada di dalam hemisfer serebri.",
+      "D": "Ventrikel IV terletak di antara batang otak dan serebelum.",
+      "E": "Sella turcica adalah lokasi anatomical dari kelenjar hipofisis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-059",
+    "no": 59,
+    "soal": "Bagian yang dijaga oleh dokter bedah saat melakukan bedah untuk menjaga keseimbangan hormon ovarium adalah?",
+    "opsi": [
+      "Lig. Latum untuk menjaga vaskularisasi ovarium",
+      "Lig. Suspensorium Ovarii untuk menjaga posisi ovarium",
+      "Mesovarium untuk menjaga vaskularisasi ovarium",
+      "A. ovarium untuk vaskularisasi",
+      "Mesometrium untuk menjaga posisi ovarium"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Untuk mempertahankan integritas jaringan endokrin ovarium agar tidak mengalami nekrosis dan kegagalan hormon pasca bedah, dokter bedah harus mempertahankan vaskularisasi utama ovarium, yaitu Arteri Ovarica (Arteri ovarium).",
+    "pembahasan_klinis": {
+      "A": "Ligamentum latum adalah lipatan peritoneum pendukung uterus.",
+      "B": "Fungsi ligamen suspensorium adalah fiksasi anatomi.",
+      "C": "Mesovarium adalah lipatan peritoneum penambat ovarium.",
+      "D": "Mempertahankan Arteri Ovarium menjaga suplai darah nutrisi dan oksigenasi kelenjar gonad untuk sekresi hormon.",
+      "E": "Mesometrium adalah bagian dari ligamentum latum yang menyangga uterus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-060",
+    "no": 60,
+    "soal": "Tumor pada hipofisis dapat menekan organ?",
+    "opsi": [
+      "N1 (N. Olfactorius)",
+      "N2 (N. Optic)",
+      "N3 (N. Oculomotor)",
+      "N4 (N. Trochlear)",
+      "N5 (N. Trigeminus)"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Adenoma hipofisis yang membesar ke arah kranial (suprasellar extension) akan menekan Kiasma Optikum yang dibentuk oleh Saraf Kranial II (N. Opticus / N2), menyebabkan defisensi lapang pandang hemianopia bitemporal.",
+    "pembahasan_klinis": {
+      "A": "N. Olfactorius terletak di anterior fossa kranialis di atas lamina kribrosa.",
+      "B": "N2 (N. Opticus / Kiasma Optikum) terletak tepat di atas sella turcica sehingga paling rentan tertekan oleh makroadenoma hipofisis.",
+      "C": "N. Oculomotor berjalan di dinding lateral sinus kavernosus.",
+      "D": "N. Trochlear berjalan di dinding lateral sinus kavernosus.",
+      "E": "N. Trigeminus terletak di ganglion gasseri/sinus kavernosus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-061",
+    "no": 61,
+    "soal": "Pada preparat histologi glandula hipofisis, sel apa yang tidak mungkin ditemui pada bagian adenohipofisis?",
+    "opsi": [
+      "Sel Chromophobe",
+      "Sel Chromophils",
+      "Pituisit",
+      "Sel Basophil",
+      "Sel Acidophils"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Pituisit (Pituicytes) adalah sel glial khusus yang secara spesifik hanya ditemukan pada Neurohipofisis (hipofisis posterior). Adenohipofisis (hipofisis anterior) terdiri dari sel-sel epitel penyerap warna: Kromofil (Asidofil dan Basofil) serta Kromofob.",
+    "pembahasan_klinis": {
+      "A": "Sel kromofob terdapat di adenohipofisis (sel yang telah melepaskan granul hormonnya).",
+      "B": "Sel kromofil merupakan komponen seluler sekretori adenohipofisis.",
+      "C": "Pituisit adalah sel penunjang glial yang khas hanya berada pada lobus neurohipofisis.",
+      "D": "Sel basofil terdapat di adenohipofisis (menghasilkan TSH, ACTH, FSH, LH).",
+      "E": "Sel asidofil terdapat di adenohipofisis (menghasilkan GH dan Prolaktin)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-062",
+    "no": 62,
+    "soal": "Seorang anak perempuan berusia 8 tahun datang ke dokter bersama ibu nya dengan keluhan lemas sejak 2 minggu lalu. Keluhan disertai dengan sering BAK, Cepat haus dan lapar, mual muntah, disertai penglihatan terganggu. TTV normal dan GDS 600. Apakah etiologi dari kasus diatas?",
+    "opsi": [
+      "Autoimun",
+      "Degeneratif",
+      "Trauma",
+      "Inflamasi",
+      "Neoplasma"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Gejala trias diabetik (polidipsi, polifagi, poliuri) disertai kadar gula darah tinggi (GDS 600 mg/dL) pada anak usia 8 tahun merupakan diagnosis DM Tipe 1. Etiologi utamanya adalah reaksi Autoimun yang menghancurkan sel beta pankreas secara selektif.",
+    "pembahasan_klinis": {
+      "A": "Diabetes Melitus Tipe 1 pada anak disebabkan destruksi sel beta pankreas berbasis autoimun.",
+      "B": "Proses degeneratif merupakan karakteristik utama DM Tipe 2 pada usia lanjut.",
+      "C": "Bukan disebabkan oleh trauma fisik.",
+      "D": "Inflamasi pankreas pankreatitis bukan etiologi utama DM tipe 1 anak.",
+      "E": "Bukan disebabkan neoplasma."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-063",
+    "no": 63,
+    "soal": "Vitamin D sebenarnya seperti hormon harus disintesis kayak hormon. melewati proses kulit, hati, ginjal. defisiensi vitamin D terjadi gangguan pada proses apa?",
+    "opsi": [
+      "CYP2R1 di Hepar",
+      "CYP27B1 di Ginjal",
+      "CYP24A1 di Ginjal",
+      "7-Dehydrocholesterol di Kulit",
+      "Enzim pencernaan di Usus Halus"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Enzim CYP2R1 di hepar bertindak sebagai enzim 25-hidroksilase utama yang mengonversi Vitamin D3 menjadi 25-hidroksivitamin D3 [25(OH)D]. Gangguan pada enzim CYP2R1 di hepar merupakan salah satu penyebab metabolik utama defisiensi vitamin D.",
+    "pembahasan_klinis": {
+      "A": "CYP2R1 di hepar adalah enzim utama 25-hidroksilasi vitamin D3.",
+      "B": "CYP27B1 adalah enzim 1-alpha-hidroksilase di ginjal.",
+      "C": "CYP24A1 adalah enzim inaktivasi (24-hidroksilase) vitamin D.",
+      "D": "7-Dehydrocholesterol adalah prekursor vitamin D di kulit.",
+      "E": "Enzim usus tidak meregulasi hidroksilasi vitamin D."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-064",
+    "no": 64,
+    "soal": "(Skenario) FT4 turun, FT3 normal, TSH naik, TsAB positif, TSI negatif, diagnosis?",
+    "opsi": [
+      "Hipotiroid primer",
+      "Hipotiroid sekunder",
+      "Tiroiditis Hashimoto",
+      "Hipertiroid primer",
+      "Hipertiroid sekunder"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Kadar FT4 yang turun dikombinasikan dengan TSH yang naik mengindikasikan Hipotiroidisme Primer. Ditemukannya antibodi spesifik autoimun tiroid (TsAB/Anti-TPO) menegakkan diagnosis Tiroiditis Hashimoto (etiologi autoimun hipotiroidisme teratas).",
+    "pembahasan_klinis": {
+      "A": "Hipotiroid primer adalah diagnosis klinis umum, namun adanya antibodi positif secara spesifik merujuk pada Tiroiditis Hashimoto.",
+      "B": "Hipotiroid sekunder ditandai TSH rendah dan FT4 rendah.",
+      "C": "Tiroiditis Hashimoto adalah etiologi spesifik hipotiroidisme primer berbasis autoimun dengan temuan antibodi positif.",
+      "D": "Hipertiroid primer ditandai TSH tertekan dan FT4 tinggi.",
+      "E": "Hipertiroid sekunder ditandai TSH tinggi dan FT4 tinggi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-065",
+    "no": 65,
+    "soal": "(Kasus) FT4 naik, FT3 normal, TSH turun, TSI positif, diagnosis?",
+    "opsi": [
+      "Hipertiroid primer",
+      "Hipertiroid sekunder",
+      "Graves Disease",
+      "Penyakit Cushing",
+      "Addison Disease"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Ditemukannya TSI (Thyroid Stimulating Immunoglobulin) positif dikombinasikan dengan gambaran laboratorium hipertiroidisme primer (FT4 meningkat dan TSH tertekan) adalah patognomonis untuk Penyakit Graves (Graves' Disease).",
+    "pembahasan_klinis": {
+      "A": "Hipertiroid primer merupakan kategori sindrom umum.",
+      "B": "Hipertiroid sekunder dicirikan oleh TSH yang ikut meningkat.",
+      "C": "Penyakit Graves terkonfirmasi secara spesifik melalui ditemukannya autoantibodi TSI positif.",
+      "D": "Penyakit Cushing terkait hormon kortisol.",
+      "E": "Addison disease terkait destruksi korteks adrenal."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-066",
+    "no": 66,
+    "soal": "punya penyakit ginjal, sudah dapat transplantasi rajin hemodialisis. \"labnya panjang sebenarnya\", dia hipokalsemia, hiperfosfatemia. Diagnosis",
+    "opsi": [
+      "Hiperparatiroid primer",
+      "Hiperparatiroid sekunder",
+      "Hipertiroid primer",
+      "Hipertiroid sekunder",
+      "Cushing syndrome"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Gagal ginjal kronis mengganggu ekskresi fosfat (hiperfosfatemia) dan pembentukan 1,25(OH)2D3 sehingga memicu hipokalsemia. Kondisi hipokalsemia persisten ini memicu stimulasi kompensasi kelenjar paratiroid untuk mensekresikan PTH berlebih, yang disebut Hiperparatiroidisme Sekunder.",
+    "pembahasan_klinis": {
+      "A": "Hiperparatiroid primer ditandai oleh hiperkalsemia, bukan hipokalsemia.",
+      "B": "Hiperparatiroid sekunder terjadi akibat respons kompensasi Paratiroid terhadap hipokalsemia/hiperfosfatemia pada Penyakit Ginjal Kronis.",
+      "C": "Hipertiroid berhubungan dengan hormon tiroid.",
+      "D": "Hipertiroid sekunder berhubungan dengan TSH pituitary.",
+      "E": "Cushing syndrome akibat kortisol tinggi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-067",
+    "no": 67,
+    "soal": "Bagaimana vaskularisasi kelenjar suprarenal",
+    "opsi": [
+      "Mendapat vaskularisasi dari A. renalis",
+      "Sebagian dari vaskularisasi A. renalis",
+      "Dari mesenterica abdominalis (?)",
+      "Aorta abdominalis memperdarahi semua arteri suprarenal",
+      "A. phrenica inferior memperdarahi suprarenalis superior"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Vaskularisasi Kelenjar Suprarenal (Adrenal) dipasok oleh 3 arteri utama:\n1. A. suprarenalis superior (cabang dari A. phrenica inferior)\n2. A. suprarenalis media (cabang langsung Aorta Abdominalis)\n3. A. suprarenalis inferior (cabang dari A. renalis).",
+    "pembahasan_klinis": {
+      "A": "Arteri renalis hanya memperdarahi arteri suprarenalis inferior.",
+      "B": "Hanya sebagian, yaitu cabang inferior.",
+      "C": "Arteri mesenterika memperdarahi usus.",
+      "D": "Arteri phrenica inferior mendasari percabangan arteri suprarenalis superior.",
+      "E": "Pernyataan anatomi benar: Arteri phrenica inferior memperdarahi arteri suprarenalis superior."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-068",
+    "no": 68,
+    "soal": "Seorang anak datang dengan kecurigaan DKA. Apa tatalaksana awal yang tepat pada DKA anak?",
+    "opsi": [
+      "IV koloid 400 mg",
+      "IV NaCl 0,9% dan manitol",
+      "NaCl 400 mg/mL",
+      "Pemberian cairan awal: bolus NaCl 0,9% 10-20 mL/kg dalam 1-2 jam",
+      "Pemberian insulin bolus IV (bolus)"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Langkah pertama tatalaksana Ketoasidosis Diabetik (KAD/DKA) pada pediatrik adalah resusitasi cairan kristaloid awal berupa istirahat hidrasi NaCl 0,9% sebesar 10-20 mL/kgBB yang diberikan dalam 1-2 jam pertama sebelum pemberian insulin.",
+    "pembahasan_klinis": {
+      "A": "Koloid tidak direkomendasikan untuk resusitasi awal DKA.",
+      "B": "Manitol hanya diindikasikan jika timbul tanda-tanda edema serebral.",
+      "C": "Konsentrasi cairan tidak tepat.",
+      "D": "Resusitasi cairan awal dengan salin isotonik NaCl 0,9% 10-20 mL/kg dalam 1-2 jam adalah standar emas lini pertama DKA anak.",
+      "E": "Bolus insulin IV DILARANG pada DKA anak karena meningkatkan risiko edema serebral drastis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-069",
+    "no": 69,
+    "soal": "Pasien dewasa dengan diabetes datang dengan dehidrasi ringan. Napas tidak Kussmaul, tidak bau keton, tetapi keton urin positif. Gula darah 760 mg/dL. Apa diagnosisnya?",
+    "opsi": [
+      "HHS",
+      "KAD",
+      "Mixed HHS-KAD",
+      "Ketoasidosis alkoholik",
+      "DM tipe 2 dengan dehidrasi saja"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Kadar glukosa darah sangat tinggi (>600 mg/dL, di sini 760 mg/dL) khas untuk HHS, tetapi disertai adanya ketonuria positif tanpa asidosis berat Kussmaul menunjukkan kondisi tumpang tindih (Mixed HHS-KAD / Overlap Syndrome).",
+    "pembahasan_klinis": {
+      "A": "HHS murni biasanya ditandai keton negatif atau trace.",
+      "B": "KAD murni dicirikan oleh napas Kussmaul, bau aseton, dan gula darah umumnya <600 mg/dL.",
+      "C": "Kondisi hiperglikemia ekstrim (>600 mg/dL) disertai ditemukannya ketonemia/ketonuria dinamakan kondisi Overlap / Mixed HHS-KAD.",
+      "D": "Terjadi pada alkoholisme tanpa hiperglikemia masif.",
+      "E": "Adanya keton positif menunjukkan gangguan ketogenesis aktif."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-070",
+    "no": 70,
+    "soal": "Kalimat hipotesis yang tepat gambar tsb?",
+    "opsi": [
+      "Karies gigi dapat menyebabkan kontrol glikemik rendah",
+      "Kontrol glikemik rendah menyebabkan edema",
+      "Kontrol glikemik rendah menyebabkan penyakit periodontal dan infeksi gigi, dan penyakit periodontal memperburuk kontrol glikemik",
+      "Penyakit hati dan ginjal dapat menyebabkan penyakit periodontal",
+      "Abses periapikal dapat menyebabkan gagal ginjal"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Berdasarkan diagram konsep dua arah (two-way relationship), kontrol glikemik yang buruk (poor glycemic control) memicu timbulnya penyakit periodontal dan infeksi gigi, sebaliknya eliminasi patogen/inflamasi jaringan periodontal akan menurunkan resistensi insulin dan memperbaik kontrol glikemik.",
+    "pembahasan_klinis": {
+      "A": "Karies tidak langsung memicu penurunan kontrol glikemik tanpa perantara infeksi periodontal.",
+      "B": "Diagram tidak menjelaskan hubungan edema.",
+      "C": "Secara tepat menggambarkan skema hubungan dua arah (two-way relationship) antara kontrol glikemik dan penyakit periodontal.",
+      "D": "Gagal ginjal dan jantung merupakan komplikasi sekunder dari kontrol glikemik buruk.",
+      "E": "Bukan korelasi kausatif langsung yang ditunjukkan panah diagram."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-071",
+    "no": 71,
+    "soal": "Pemeriksaan untuk cek kadar glukosa beberapa bulan yg lalu pake apa?",
+    "opsi": [
+      "Glukosa darah sewaktu",
+      "TTGO 75 gram",
+      "HbA1c",
+      "Glukosa puasa 2 jam",
+      "Glukosa darah puasa"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Pemeriksaan HbA1c (Hemoglobin A1c) mengukur persentase hemoglobin yang terglikasi, mencerminkan rata-rata kadar glukosa darah pasien selama 2-3 bulan terakhir (sesuai usia sel darah merah).",
+    "pembahasan_klinis": {
+      "A": "Glukosa darah sewaktu hanya mencerminkan kadar gula saat titik waktu pengambilan.",
+      "B": "TTGO menilai toleransi beban glukosa saat itu.",
+      "C": "HbA1c adalah parameter baku emas untuk mengevaluasi kontrol glikemik rata-rata 2-3 bulan ke belakang.",
+      "D": "Mengukur glukosa pasca pembebanan instant.",
+      "E": "Mengukur kadar glukosa saat puasa instant."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-072",
+    "no": 72,
+    "soal": "Seorang ibu baru saja melahirkan anak dengan berat 4200gr dan panjang badan 60cm. Ibu memiliki riwayat keturunan diabetes mellitus dari kedua orangtuanya dan riwayat dm sebelumnya disangkal. Setelah dilakukan pemeriksaan GD hasilnya 315 mg/dl, dan anak tidak aktif dan apatis. Setelah dilakukan pemeriksaan GD anak hasilnya 60 mg/dl Pemeriksaan apa yang bisa dilakukan untuk mendiagnosis ibu tersebut?",
+    "opsi": [
+      "GDS",
+      "HbA1c",
+      "TTGO 75 gr glukosa",
+      "GDP",
+      "Darah lengkap"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Pemeriksaan standar baku untuk mendiagnosis Diabetes Mellitus Gestasional (DMG) atau evaluasi DM pasca melahirkan pada ibu berisiko adalah Tes Toleransi Glukosa Oral (TTGO) dengan pembebanan 75 gram glukosa.",
+    "pembahasan_klinis": {
+      "A": "GDS kurang sensitif sebagai tes konfirmasi standar baku DMG.",
+      "B": "HbA1c bermanfaat tetapi TTGO 75g adalah kriteria baku diagnosis DMG.",
+      "C": "TTGO 75 gram glukosa merupakan tes diagnostik standar untuk mengevaluasi status toleransi glukosa pada ibu melahirkan dengan riwayat DMG.",
+      "D": "GDP saja dapat melewatkan kasus hiperglikemia postprandial.",
+      "E": "Darah lengkap menilai komponen seluler darah."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-073",
+    "no": 73,
+    "soal": "Seorang anak perempuan dia mengalami insufisiensi kelenjar adrenal primer, anak perawakan terlihat seperti laki-laki dan setelah dilakukan pemeriksaan lab hormon testosteronnya itu tinggi. Bagaimana patofisiologi terjadinya hal tsb (pokoknya knp testosteronnya tinggi)?",
+    "opsi": [
+      "Defisiensi 21 hidroksilase yang tidak bisa merubah prehormon menjadi estrogen",
+      "Defisiensi 21 hidroksilase yang tidak bisa merubah prehormon menjadi aldosteron dan kortisol",
+      "Defisiensi 17-hidroksilase",
+      "Defisiensi 11-beta-hidroksilase",
+      "Kelebihan enzim aromatase"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Defisiensi Enzim 21-Hidroksilase (penyebab terbanyak Congenital Adrenal Hyperplasia / CAH) menghambat konversi prekursor menjadi kortisol dan aldosteron. Penumpukan prekursor (17-OH progesterone) dialihkan secara berlebih ke jalur biosintesis androgen (testosteron), memicu virilisasi/ambiguous genitalia pada anak perempuan.",
+    "pembahasan_klinis": {
+      "A": "21-hidroksilase bekerja pada jalur glukokortikoid dan mineralokortikoid, bukan pengubahan estrogen.",
+      "B": "Defisiensi 21-hidroksilase memblok sintesis aldosteron & kortisol, mengalihkan akumulasi prekursor steroid ke sintesis androgen (testosteron).",
+      "C": "Defisiensi 17-hidroksilase justru menurunkan kadar androgen.",
+      "D": "Defisiensi 11-beta hidroksilase memicu hipertensi.",
+      "E": "Kelebihan aromatase merubah androgen menjadi estrogen."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-074",
+    "no": 74,
+    "soal": "Seorang wanita berusia 37 tahun mengeluhkan benjolan pada leher. Selain itu didapatkan keluhan mudah lelah, dan terasa penuh di leher sejak 3 bulan yang lalu. Berat badan diakui cenderung turun dalam 2 bulan terakhir. Pada pemeriksaan fisik terdapat benjolan pada leher. Benjolan teraba saat menelan dan nyeri saat ditekan. Pemeriksaan fungsi tiroid normal. Pada pemeriksaan patologi anatomi terdapat inti sel groove dan pseudoinclusion pada folikel. Apakah diagnosis yang tepat?",
+    "opsi": [
+      "Karsinoma folikuler tiroid",
+      "Karsinoma papiler tiroid",
+      "Tiroiditis de Quervain",
+      "Tiroiditis Riedel",
+      "Tiroiditis Hashimoto"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Gambaran histopatologi ditemukannya inti sel dengan celah (nuclear grooves), inklusi sitoplasma intraseluler (intranuclear pseudoinclusions), dan 'Orphan Annie eyes' merupakan ciri patognomonis khas dari Karsinoma Papiler Tiroid.",
+    "pembahasan_klinis": {
+      "A": "Karsinoma folikuler ditandai invasi kapsul/pembuluh darah tanpa gambaran inti khas papiler.",
+      "B": "Karsinoma papiler tiroid secara khas menunjukkan fitur inti sel berupa nuclear grooves dan intranuclear pseudoinclusions.",
+      "C": "Tiroiditis de Quervain ditandai sel datia berinti banyak (granulomatosa).",
+      "D": "Tiroiditis Riedel ditandai jaringan ikat fibrotik padat.",
+      "E": "Tiroiditis Hashimoto ditandai infiltrat limfositik profus dan sel Hürthle."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-075",
+    "no": 75,
+    "soal": "(Skenario PA) Gerak saat menelan, tidak nyeri, simetris dan difus. Diagnosis?",
+    "opsi": [
+      "Kraniofaringioma",
+      "Struma Adenomatosa Tiroid",
+      "Tiroiditis Hashimoto",
+      "Adenoma Folikuler Tiroid",
+      "Karsinoma Tiroid"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Pembesaran kelenjar tiroid yang bergerak saat menelan, simetris, difus, dan tidak disertai nyeri tekan merupakan gambaran klinis klasik dari Struma Adenomatosa Tiroid (Struma Nondotoksik Difus/Multinodular).",
+    "pembahasan_klinis": {
+      "A": "Kraniofaringioma adalah tumor intrakranial daerah sella.",
+      "B": "Struma Adenomatosa Tiroid ditandai pembesaran tiroid difus/multinodul yang simetris dan tidak nyeri.",
+      "C": "Tiroiditis Hashimoto sering konsistensi padat kenyal dengan antibodi positif.",
+      "D": "Adenoma folikuler umumnya berupa nodul soliter lokal berbatas tegas.",
+      "E": "Karsinoma tiroid umumnya keras, berbenjol-benjol, asimetris, dan terfiksir."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-076",
+    "no": 76,
+    "soal": "Ibu melahirkan mengeluh mengalami pembesaran nodul dan tidak bisa menyusui, masalahnya dimana?",
+    "opsi": [
+      "iskemik lobus anterior",
+      "iskemik lobus posterior",
+      "inflamasi",
+      "autoimun",
+      "infeksi"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Kegagalan laktasi (agalaktorea) pasca persalinan yang disertai gangguan endokrin lain mengarah pada Sindrom Sheehan (nekrosis iskemik kelenjar hipofisis anterior akibat perdarahan hebat postpartum).",
+    "pembahasan_klinis": {
+      "A": "Sindrom Sheehan disebabkan nekrosis iskemik lobus anterior hipofisis sehingga gagal memproduksi prolaktin untuk menyusui.",
+      "B": "Lobus posterior menghasilkan oksitosin dan ADH, bukan prolaktin.",
+      "C": "Proses utama adalah infark iskemik, bukan inflamasi primer.",
+      "D": "Sindrom Sheehan dipicu oleh perdarahan dan hipovolemia, bukan autoimun.",
+      "E": "Bukan disebabkan infeksi mikroorganisme."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-077",
+    "no": 77,
+    "soal": "Seorang ibu usia 30 tahun datang ke Rumah sakit dengan keluhan terdapat benjolan di leher. Diketahui Riwayat ibu baru saja 3 minggu lalu melahirkan dan saat ini sedamg menyusui.Hasil pemeriksaan dokter, terdapat benjolan difus dan tidak bernodul. Rangsangan oleh hormon TSH berlebihan pada sel folikel kelenjar thyroid dapat disebabkan oleh apa?",
+    "opsi": [
+      "Defek enzymatic yang meningkat",
+      "Defek Iodine transport",
+      "Hormon tiroksin meningkat",
+      "Gangguan karena kebutuhan Yodium inadekuat",
+      "Autoimun"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Pada masa menyusui, kebutuhan iodium meningkat pesat. Kebutuhan/asupan iodium yang inadekuat menyebabkan produksi hormon tiroid (T3/T4) menurun, yang menghilangkan umpan balik negatif sehingga merangsang pelepasan TSH berlebih dari hipofisis untuk menstimulasi hiperplasia sel folikel tiroid (struma difus).",
+    "pembahasan_klinis": {
+      "A": "Defek enzimatis bawaan bermanifestasi sejak usia anak.",
+      "B": "Bukan penyebab tersering pembesaran difus masa laktasi.",
+      "C": "Tiroksin yang meningkat justru menekan TSH.",
+      "D": "Kebutuhan yodium yang tidak terpenuhi (inadekuat) memicu peningkatan kompensasi TSH yang merangsang hiperplasia folikel tiroid.",
+      "E": "Autoimun biasanya memberikan gambaran nodular atau destruksi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-078",
+    "no": 78,
+    "soal": "Seorang pria usia 35 tahun mengalami penurunan berat badan signifikan. Tidak ada riwayat penyakit sejak masa kanak-kanak. Penyebab yang paling mungkin adalah...",
+    "opsi": [
+      "Defisiensi vitamin D",
+      "Diabetes melitus",
+      "Cacingan kronis sejak kecil",
+      "Malabsorpsi bawaan",
+      "Gangguan pertumbuhan masa anak"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Penurunan berat badan secara signifikan dan cepat pada usia dewasa muda tanpa adanya riwayat penyakit kronis sejak kecil merupakan salah satu manifestasi klasik dari timbulnya Diabetes Melitus (akibat pemecahan lemak dan protein akibat defisiensi/resistensi insulin).",
+    "pembahasan_klinis": {
+      "A": "Defisiensi vitamin D menyebabkan kelainan tulang/osteomalasia, bukan penurunan berat badan drastis.",
+      "B": "Diabetes Melitus memicu catabolic state akibat ketidakmampuan sel memanfaatkan glukosa, memicu penurunan berat badan drastis.",
+      "C": "Cacingan sejak kecil akan memberikan riwayat penyakit sejak usia anak.",
+      "D": "Kelainan bawaan akan bergejala sejak masa anak-anak.",
+      "E": "Akan berdampak pada perawakan pendek sejak kecil."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-079",
+    "no": 79,
+    "soal": "Seorang wanita usia 28 tahun dengan benjolan pada daerah leher sejak 1 tahun yang lalu disertai keluhan berupa sering BAB dan sering berkeringat (tidak pernah periksa sebelumnya), Pasien dibawa ke IGD oleh keluarganya dikarenakan tidak sadarkan diri. Pada pemeriksaan fisik didapatkan Tekanan Darah 110/70 mmHg, Frekuensi Nadi 120 kali/menit irregular, RR 24 kali/menit, suhu 38,20 C, sklera ikterik (+), struma difus (+), lain-lain dalam batas normal. Hormon TSH disintesis dan disekresi oleh hipofisis anterior. Bagaimana cara kerja hormon TSH?",
+    "opsi": [
+      "Meningkatkan proses endositosis thyroglobulin",
+      "Menghambat proteolysis",
+      "Meningkatkan sekresi Iodium dari sel folikel",
+      "Meningkatkan sekresi hormone T3-T4 → lebih spesifioknya meningkatkan CAMP di tirotrop",
+      "Menghambat pompa Yodium efek beta blocker terhadap insulin bikin hipo atau hiperglikemi"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "Hormon TSH berikatan dengan reseptor TSH (GPCR) pada membran sel folikel tiroid, mengaktifkan adenilat siklase dan meningkatkan kadar cAMP intraseluler. Kenaikan cAMP merangsang seluruh tahapan sintesis dan sekresi hormon tiroid (T3 dan T4).",
+    "pembahasan_klinis": {
+      "A": "Peningkatan endositosis adalah salah satu jalur hilir, bukan mekanisme utama transduksi sinyal receptor TSH.",
+      "B": "TSH merangsang proteolisis tiroglobulin, bukan menghambat.",
+      "C": "TSH meningkatkan ambilan (uptake) iodium, bukan ekskresi.",
+      "D": "TSH bekerja memicu sintesis dan pelepasan T3-T4 dengan mengaktifkan jalur cAMP pada sel folikel tiroid.",
+      "E": "TSH menstimulasi pompa NIS (Na+/I- symporter), bukan menghambat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-080",
+    "no": 80,
+    "soal": "Struktur molekul hormon paratiroid adalah?",
+    "opsi": [
+      "Peptide",
+      "Steroid",
+      "Asam amino",
+      "FSH",
+      "LH"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Hormon Paratiroid (PTH) secara struktural merupakan Hormon Peptida rantai tunggal yang tersusun atas 84 asam amino.",
+    "pembahasan_klinis": {
+      "A": "Hormon paratiroid memiliki struktur kimia polipeptida/peptida.",
+      "B": "Hormon steroid merupakan derivat kolesterol (kortisol, aldosteron, estrogen).",
+      "C": "Derivat asam amino tunggal contohnya katekolamin dan tiroksin.",
+      "D": "FSH adalah hormon gonadotropin hipofisis.",
+      "E": "LH adalah hormon gonadotropin hipofisis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-081",
+    "no": 81,
+    "soal": "Seorang perempuan berusia 34 tahun menderita diabetes melitus. Dokter menyarankan untuk mengkonsumsi makanan yang cepat meningkatkan kadar gula darah seperti sayur2an & buah2an yang tidak manis. Seberapa cepat suatu bahan makanan dalam meningkatkan kadar glukosa & insulin setelah dikonsumsi disebut?",
+    "opsi": [
+      "Indeks glikemik",
+      "Beban glikemik",
+      "Glikemik count",
+      "Karbohidrat count",
+      "Karbohidrat loading"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Indeks Glikemik (Glycemic Index / GI) adalah tingkatan indikator skala (0-100) yang mengukur seberapa cepat suatu bahan makanan berkarbohidrat ditingkatkan menjadi kadar glukosa darah setelah dikonsumsi.",
+    "pembahasan_klinis": {
+      "A": "Indeks glikemik mengukur kecepatan makanan berkarbohidrat dinaikkan menjadi kadar glukosa darah.",
+      "B": "Beban glikemik memperhitungkan Indeks Glikemik dikalikan dengan jumlah total karbohidrat per porsi.",
+      "C": "Bukan istilah medis standar.",
+      "D": "Metode penghitungan porsi karbohidrat untuk penyesuaian dosis insulin.",
+      "E": "Strategi penumpukan karbohidrat pra-olahraga ketahanan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-082",
+    "no": 82,
+    "soal": "Seorang atlet diduga melakukan suntikan ilegal untuk meningkatkan performa. Dokter curiga ia menggunakan hormon testosteron. Mengingat sifat kimia hormon tersebut, protein manakah yang digunakan dalam mekanisme kerjanya?",
+    "opsi": [
+      "Globulin pengikat hormon seks (SHBG) dan albumin",
+      "Reseptor transmembran",
+      "Transporter glukosa",
+      "Vesikel sekresi di badan Golgi",
+      "Apolipoprotein B"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Testosteron adalah hormon steroid hidrofobik/lipofilik yang membutuhkan protein pembawa spesifik untuk mentransportasikannya dalam sirkulasi plasma darah, yaitu Sex Hormone-Binding Globulin (SHBG) dan Albumin.",
+    "pembahasan_klinis": {
+      "A": "Sebagai hormon hidrofobik lipid, testosteron diangkut dalam darah terikat pada SHBG dan Albumin.",
+      "B": "Testosteron menembus membran sel dan berikatan dengan reseptor intraseluler/sitoplasmik, bukan transmembran.",
+      "C": "Memfasilitasi transpor glukosa.",
+      "D": "Berdampak pada sekresi ekstraseluler peptida.",
+      "E": "Apolipoprotein B mengangkut kilomikron dan VLDL/LDL."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-083",
+    "no": 83,
+    "soal": "Cara kerja kalsitonin dalam kelebihan kalsium adalah?",
+    "opsi": [
+      "Meningkatkan osteoblast",
+      "Meningkatkan osteoklast",
+      "Meningkatkan absorbsi di usus",
+      "Meningkatkan reabsorpsi kalsium di ginjal",
+      "Meningkatkan sekresi PTH"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Kalsitonin disekresikan oleh sel C parafolikuler tiroid saat kadar kalsium darah tinggi. Kalsitonin menurunkan kalsium darah dengan cara menghambat aktivitas resorpsi tulang oleh osteoklas dan merangsang deposisi kalsium tulang oleh osteoblas.",
+    "pembahasan_klinis": {
+      "A": "Kalsitonin merangsang aktivitas osteoblas (deposisi kalsium ke tulang) dan menghambat osteoklas.",
+      "B": "Osteoklas yang meningkat akan menaikkan kalsium darah (efek PTH).",
+      "C": "Peningkatan absorpsi usus diperantarai Kalsitriol (Vitamin D aktif).",
+      "D": "Kalsitonin menghambat reabsorpsi kalsium di tubulus ginjal.",
+      "E": "Kalsitonin bekerja antagonis terhadap PTH."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-084",
+    "no": 84,
+    "soal": "Seorang wanita usia 50 tahun datang dengan keluhan nyeri hebat pada pinggang kanan dalam 72 jam terakhir. Tanda vital masih dalam batas normal. Dari pemeriksaan laboratorium ditemukan peningkatan kalsium darah, urinalisis menunjukkan hematuria tanpa ada bakteri. Pemeriksaan radiologi ditemukan batu pada pelvis ginjal kanan dan ureter kanan. Kondisi pasien ini mungkin berhubungan dengan kelainan organ endokrin yang mana?",
+    "opsi": [
+      "Hipertiroid",
+      "Cushing syndrome",
+      "Conn syndrome",
+      "Hipoparatiroid",
+      "Hiperparatiroid"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Hiperparatiroidisme Primer ditandai oleh hipersekresi PTH yang menyebabkan hiperkalsemia, hiperkalsiuria, dan nefrolitiasis (batu ginjal / 'renal stones') berulang akibat pengendapan kalsium di saluran kemih.",
+    "pembahasan_klinis": {
+      "A": "Hipertiroidisme tidak menyebabkan hiperkalsemia berat berciri batu ginjal kalsium terisolasi.",
+      "B": "Cushing syndrome memicu osteopenia tetapi bukan pemicu utama nefrolitiasis kalsium berulang.",
+      "C": "Conn syndrome dipicu kadar aldosteron tinggi.",
+      "D": "Hipoparatiroidisme ditandai oleh hipokalsemia.",
+      "E": "Hiperparatiroidisme memicu hiperkalsemia dan pembentukan batu ginjal kalsium (nefrolitiasis)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-085",
+    "no": 85,
+    "soal": "Seorang anak laki-laki berusia 7 tahun, dibawa ibunya ke dokter dengan keluhan sering berdebar-debar disertai tangan dan kaki sering berkeringat. Nafsu makan pasien baik tetapi berat badan sulit naik. Pada pemeriksaan fisik didapatkan KU: CM, tekanan darah 130/90 mmhg, denyut nadi 110x/mnt Frekuensi nafas 24x/mnt, suhu 37.5 C. tampak bola mata menonjol. Pada pemeriksaan laboratorium didapatkan peningkatan T3 dan T4. bagaimanakah tata laksana untuk pasien tersebut?",
+    "opsi": [
+      "Rawat jalan, berikan metimazol",
+      "Rawat inap, berikan propiltiourasil dan captopril",
+      "Rawat inap, berikan propiltiourasil dan propranolol",
+      "Rawat jalan, berikan propiltiourasil",
+      "Rawat jalan, berikan propranolol"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Penyakit Graves pada pediatrik ditatalaksana secara rawat jalan menggunakan Methimazole (Metimazol) sebagai lini utama antitiroid. PTU dihindari pada anak karena risiko nekrosis hati fulminan.",
+    "pembahasan_klinis": {
+      "A": "Metimazol rawat jalan adalah tatalaksana lini pertama antitiroid yang direkomendasikan pada anak hipertiroidisme.",
+      "B": "PTU DILARANG pada anak karena hepatotoksisitas berat.",
+      "C": "PTU tidak digunakan pada anak.",
+      "D": "PTU tidak boleh diberikan pada anak.",
+      "E": "Propranolol hanya terapi suportif gejala adrenergik, bukan pengobatan antitiroid kausatif."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-086",
+    "no": 86,
+    "soal": "Seorang wanita berusia 40 thn melakukan medical check up rutin, pada pemeriksaan fisik didapatkan normal namun pada pemeriksaan glukosa didapatkan hasil: glukosa puasa 90 mg/dL (N: 70-99), glukosa 2 jam pp 180 (N: 70-139). apakah diagnosis pada kasus tersebut?",
+    "opsi": [
+      "Ketoasidosis metabolik",
+      "Glukosa darah puasa terganggu",
+      "Toleransi glukosa terganggu",
+      "diabetes melitus",
+      "sindrom metabolik"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Kriteria Prediabetes PERKENI:\n- Glukosa Darah Puasa Terganggu (GDPT): GDP 100–125 mg/dL\n- Toleransi Glukosa Terganggu (TGT): GD2PP / TTGO 2 jam berada di antara 140–199 mg/dL (pada kasus ini 180 mg/dL dengan GDP normal 90 mg/dL).",
+    "pembahasan_klinis": {
+      "A": "Ketoasidosis metabolik merupakan komplikasi akut hiperglikemia berat.",
+      "B": "GDPT diangkat jika kadar GDP berada di antara 100-125 mg/dL.",
+      "C": "Toleransi Glukosa Terganggu (TGT) ditegakkan jika GD2PP berada pada rentang 140–199 mg/dL.",
+      "D": "Diabetes Melitus ditegakkan jika GD2PP ≥ 200 mg/dL atau GDP ≥ 126 mg/dL.",
+      "E": "Sindrom metabolik memerlukan kombinasi obesitas sentral, hipertensi, dan dislipidemia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-087",
+    "no": 87,
+    "soal": "Hormon yang ngehasilin folikel",
+    "opsi": [
+      "Progesteron",
+      "FSH",
+      "Estrogen",
+      "Ovulasi",
+      "LH"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Follicle Stimulating Hormone (FSH) disekresikan oleh hipofisis anterior untuk merangsang perkembangan dan pematangan folikel de Graaf di dalam ovarium.",
+    "pembahasan_klinis": {
+      "A": "Progesteron dihasilkan oleh korpus luteum untuk mempersiapkan endometrium.",
+      "B": "FSH (Follicle Stimulating Hormone) memicu rekrutmen dan pematangan folikel ovarium.",
+      "C": "Estrogen disekresikan oleh sel granulosa folikel yang berkembang.",
+      "D": "Ovulasi adalah proses pelepasan oosit sekunder.",
+      "E": "LH memicu lonjakan (surge) untuk pemicu utama timbulnya ovulasi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-088",
+    "no": 88,
+    "soal": "Seorang wanita berusia 50 tahun datang ke RS dengan keluhan nyeri di tulang panggul. Hasil pemeriksaan menunjukkan tanda-tanda osteoporosis, kadar kalsium darah di atas normal (hiperkalsemia), terdapat nephrolithiasis dan hiperkalsiuria. Hiperkalsemia pada kasus tersebut disebabkan gangguan hormon utama yang mengatur kadar kalsium. Dimanakah reseptor hormon tersebut?",
+    "opsi": [
+      "Membran sel",
+      "Membran dalam mitokondria",
+      "Membran inti",
+      "Sitoplasma",
+      "Matriks mitokondria"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Hormon Paratiroid (PTH) adalah hormon peptida hidrofilik. Hormon peptida tidak dapat menembus membran sel, sehingga reseptornya (PTH1R) berada di permukaan Membran Sel (G-protein coupled receptor).",
+    "pembahasan_klinis": {
+      "A": "Hormon peptida seperti PTH mengikat reseptor transmembran yang terletak di membran sel.",
+      "B": "Bukan lokasi reseptor PTH.",
+      "C": "Reseptor membran inti untuk hormon tiroid/steroid.",
+      "D": "Reseptor sitoplasma untuk hormon steroid lipofilik.",
+      "E": "Bukan lokasi reseptor hormon."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-089",
+    "no": 89,
+    "soal": "Wanita usia 26 tahun datang ke RS dengan keluhan mudah lelah sejak 2 minggu yang lalu, keluhan disertai peningkatan berat badan dalam beberapa bulan terakhir. Sejak 2 bulan yang lalu, menstruasi pasien tidak teratur. Sebelumnya pasien riwayat konsumsi prednison sebanyak 3x1 tablet sejak 5 bulan terakhir tanpa resep dokter. Pada pemeriksaan fisik TD 150/90 mmHg, N 89x/menit, RR 18x/menit, S 36,8C. Terdapat striae di regio abdomen. GDS 256mg/dL. Apakah diagnosa pasien tersebut?",
+    "opsi": [
+      "Krisis adrenal",
+      "Obesitas",
+      "Sindrom Cushing",
+      "Penyakit Addison",
+      "Sindrom Conn"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Konsumsi kortikosteroid eksogen jangka panjang (Prednison) memicu Sindrom Cushing Iatrogenik/Eksogen. Gejala khasnya mencakup striae violaseus pada abdomen, penambahan berat badan (obesitas sentral), hipertensi, gangguan menstruasi, dan hiperglikemia.",
+    "pembahasan_klinis": {
+      "A": "Krisis adrenal terjadi akibat penghentian steroid mendadak yang memicu syok hipotensif.",
+      "B": "Obesitas adalah salah satu manifestasi klinis.",
+      "C": "Sindrom Cushing ditandai kumpulan gejala kelebihan glukokortikoid akibat konsumsi prednison jangka panjang.",
+      "D": "Penyakit Addison adalah insufisiensi adrenal (kortisol rendah).",
+      "E": "Sindrom Conn ditandai oleh hiperaldosteronisme primer."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-090",
+    "no": 90,
+    "soal": "Seorang wanita siklus menstruasi yang tidak teratur. Pemeriksaan fisik normal. Apa kemungkinan etiologi infertilitas yang paling mungkin pada pasien ini?",
+    "opsi": [
+      "Gangguan ovulasi",
+      "Infertilitas faktor tuba akibat riwayat infeksi panggul",
+      "Kelainan anatomi uterus",
+      "Endometriosis",
+      "Adenomiosis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Siklus menstruasi yang tidak teratur (oligomenorea/amenorea) merupakan indikator klinis utama adanya Gangguan Ovulasi (anovulasi, seperti pada PCOS), yang menjadi penyebab terbanyak infertilitas wanita faktor oligovulasi.",
+    "pembahasan_klinis": {
+      "A": "Siklus menstruasi yang tidak teratur mencerminkan gangguan ovulasi (anovulasi).",
+      "B": "Faktor tuba biasanya siklus haid tetap teratur tetapi terjadi sumbatan tuba.",
+      "C": "Kelainan anatomi uterus umumnya menimbulkan dismenorea berat atau menoragia.",
+      "D": "Endometriosis dicirikan oleh keluhan nyeri panggul kronis dan dismenorea berat.",
+      "E": "Adenomiosis dicirikan oleh uterus membesar simetris dan menoragia."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-091",
+    "no": 91,
+    "soal": "Pasien berdebar, gelisah, susah tidur, cepat lelah. Pembesaran tiroid difus, tsh turun ft4 naik, mata menonjol. Diagnosisnya?",
+    "opsi": [
+      "Nodul tiroid",
+      "Hipertiroid primer",
+      "Hipotiroid",
+      "Hashimoto",
+      "Graves disease"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Trias klinis Graves Disease terdiri dari: Tirotoksikosis (berdebar, gelisah), Struma Difus, dan Oftalmopati Graves (mata menonjol/eksoftalmus), yang dikonfirmasi oleh penurun TSH dan kenaikan FT4.",
+    "pembahasan_klinis": {
+      "A": "Nodul tiroid gambaran benjolan lokal terisolasi.",
+      "B": "Hipertiroid primer adalah kategori umum, secara spesifik dengan mata menonjol adalah Graves disease.",
+      "C": "Hipotiroid ditandai penurunan metabolism.",
+      "D": "Hashimoto penyakit autoimun yang berujung hipotiroidisme.",
+      "E": "Graves disease ditandai secara spesifik oleh gambaran hipertiroidisme difus disertai eksoftalmus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-092",
+    "no": 92,
+    "soal": "Seorang laki-laki berusia 59 tahun datang ke poliklinik RS dengan keluhan dada berdebar sejak 1 minggu yang lalu. Keluhan dada berdebar dirasakan meski pasien sedang tidak melakukan aktivitas berat. Pasien terdiagnosa diabetes melitus sejak 10 tahun yang lalu. Sejak 6 bulan terakhir pasien mendapat insulin, namun kadar glukosa darah terkadang masih tinggi. Pemeriksaan fisik: tekanan darah 120/80 mmHg, denyut nadi 120x/menit reguler, obesitas. Lainnya dalam batas normal. Apakah kemungkinan diagnosis yang tepat pada pasien di atas?",
+    "opsi": [
+      "Hipotensi ortostatik",
+      "Anhidrosis",
+      "Hypoglycemic unawareness",
+      "Gastroparesis",
+      "Resting tachycardia"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "Denyut nadi istirahat yang tinggi (120x/menit) tanpa dipengaruhi aktivitas pada penderita DM lama merupakan manifestasi Resting Tachycardia akibat Neuropati Otonom Diabetik Kardiovaskular.",
+    "pembahasan_klinis": {
+      "A": "Hipotensi ortostatik ditandai rasa pusing berputar saat bangkit berdiri.",
+      "B": "Anhidrosis adalah gangguan sekresi kelenjar keringat.",
+      "C": "Hypoglycemic unawareness adalah hilangnya peringatan adrenergik saat hipoglikemia.",
+      "D": "Gastroparesis adalah lambatnya pengosongan lambung.",
+      "E": "Resting tachycardia ditandai peningkatan denyut nadi persisten saat istirahat akibat kerusakan kontrol parasimpatis jantung."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-093",
+    "no": 93,
+    "soal": "Seorang anak ditemukan kelenjar adrenalnya terlalu banyak memproduksi hormon testosteron tetapi kekurangan hormon aldosteron dan kortisol. Enzim apa yang mengalami defisiensi?",
+    "opsi": [
+      "enzim 17-hidroksi pregnenolon",
+      "enzim 17-hidroksiprogesteron",
+      "enzim 21-hidroksilase",
+      "enzim 17-hidroksilase",
+      "enzim 11-deoksikortison"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Defisiensi Enzim 21-Hidroksilase merupakan kelainan genetis yang memblok sintesis kortisol dan aldosteron pada korteks adrenal, mengalihkan akumulasi substrat secara berlebih ke jalur androgen (testosteron).",
+    "pembahasan_klinis": {
+      "A": "Bukan enzim penentu hambatan sintesis kortisol dan aldosteron.",
+      "B": "17-OHP adalah substrat metabolit yang menumpuk, bukan enzimnya.",
+      "C": "Defisiensi Enzim 21-Hidroksilase menghambat jalur kortisol dan aldosteron serta memicu produksi berlebih testosteron.",
+      "D": "Defisiensi 17-hidroksilase menurunkan sintesis androgen/testosteron.",
+      "E": "Merupakan produk perantara, bukan nama enzim."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-094",
+    "no": 94,
+    "soal": "Enzim kortisol aldosteron apaan? (ini yg sering terjadi defisiensi ga sih pertanyaannya?)",
+    "opsi": [
+      "Cholesterol desmolase (CYP11A1)",
+      "3B-HSD",
+      "21-hidroksilase (CYP21A2)",
+      "11B-hidroksilase (CYP11B1)",
+      "17a-hidroksilase (CYP17)"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Enzim yang paling sering mengalami defisiensi pada kasus Congenital Adrenal Hyperplasia (CAH) menyumbang sekitar 90-95% kasus adalah 21-Hidroksilase (CYP21A2).",
+    "pembahasan_klinis": {
+      "A": "CYP11A1 memicu defisiensi steroid kongenital berat yang sangat jarang.",
+      "B": "3B-HSD menyumbang <5% kasus CAH.",
+      "C": "21-hidroksilase (CYP21A2) adalah enzim yang paling sering mengalami defisiensi pada biosintesis kortisol dan aldosteron.",
+      "D": "11B-hidroksilase menyumbang sekitar 5% kasus CAH.",
+      "E": "17a-hidroksilase merupakan kelainan yang sangat jarang."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-095",
+    "no": 95,
+    "soal": "Interaksi rifampisin dengan glibenklamid (glibenclamide) menyebabkan efek apa?",
+    "opsi": [
+      "Rifampisin mempercepat reaksi sehingga menimbulkan hipoglikemia",
+      "Rifampisin menunda kerja sehingga menimbulkan hiperglikemia",
+      "Rifampisin menstimulasi enzim CYP sehingga meningkatkan metabolisme obat dan menyebabkan hiperglikemia",
+      "Rifampisin menghambat enzim CYP sehingga menyebabkan hipoglikemia",
+      "Rifampisin meningkatkan ikatan protein glibenklamid"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Rifampisin adalah penginduksi kuat (inducer) enzim sitokrom P450 (terutama CYP2C9/CYP3A4) di hati. Pemberian rifampisin akan meningkatkan metabolisme glibenklamid sehingga kadar glibenklamid dalam darah menurun drastis, yang mengakibatkan efektivitas obat antidiabetik berkurang dan memicu Hiperglikemia.",
+    "pembahasan_klinis": {
+      "A": "Rifampisin tidak memicu hipoglikemia, melainkan mempercepat eliminasi obat.",
+      "B": "Mekanismenya melalui induksi enzim hepatik CYP, bukan sekadar penundaan absorpsi.",
+      "C": "Induksi enzim CYP oleh Rifampisin mempercepat metabolisme glibenklamid sehingga kadar obat drop dan memicu timbulnya hiperglikemia.",
+      "D": "Rifampisin menginduksi (memacu) enzim CYP, bukan menghambat.",
+      "E": "Interaksi utama terletak pada metabolisme fase 1 hepatik."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-096",
+    "no": 96,
+    "soal": "Bentuk aktif dari vitamin D dalam tubuh adalah...",
+    "opsi": [
+      "1,25-dihydroxycholecalciferol (1,25(OH)2D)",
+      "25-hydroxycholecalciferol (25(OH)D)",
+      "Ergocalciferol (Vitamin D2)",
+      "Cholecalciferol (Vitamin D3)",
+      "7-dehydrocholesterol"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Bentuk biologis aktif dari Vitamin D di dalam tubuh setelah melalui hidroksilasi di hati dan ginjal adalah 1,25-dihydroxycholecalciferol atau Kalsitriol [1,25(OH)2D3].",
+    "pembahasan_klinis": {
+      "A": "1,25-dihydroxycholecalciferol (Kalsitriol) adalah bentuk hormon aktif biologis dari vitamin D.",
+      "B": "25(OH)D (Kalsidiol) adalah bentuk sirkulasi utama yang diukur dalam darah, tetapi belum aktif sepenuhnya.",
+      "C": "Ergocalciferol adalah prekursor suplemen nabati.",
+      "D": "Cholecalciferol adalah prekursor yang disintesis kulit.",
+      "E": "7-dehydrocholesterol adalah provitamin D3 di kulit."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-097",
+    "no": 97,
+    "soal": "Pernyataan yang benar mengenai vitamin D adalah...",
+    "opsi": [
+      "Mudah larut dalam lemak",
+      "Mudah larut dalam air",
+      "Merupakan hormon peptida",
+      "Ekskresi utamanya melalui urine",
+      "Disintesis penuh di usus halus"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "Vitamin D tergolong dalam kelompok vitamin yang Larut dalam Lemak (Fat-Soluble Vitamin: A, D, E, K), sehingga absorpsinya di usus memerlukan bantuan garam empedu dan misel lemak.",
+    "pembahasan_klinis": {
+      "A": "Vitamin D tergolong vitamin yang larut dalam lemak (fat-soluble).",
+      "B": "Vitamin B dan C adalah vitamin larut air.",
+      "C": "Vitamin D merupakan turunan sekosteroid, bukan peptida.",
+      "D": "Ekskresi utamanya melalui empedu/feses.",
+      "E": "Sintesisnya melibatkan reaksi di kulit, hati, dan ginjal."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-098",
+    "no": 98,
+    "soal": "Seorang ibu dengan riwayat diabetes melahirkan bayi yang tampak lemah, letih, tidak aktif, dan apatis. Tindakan pertama yang harus dilakukan adalah...",
+    "opsi": [
+      "Meminta ibu untuk lebih mengasihi bayinya agar tidak hipoglikemia",
+      "Memberikan ASI sesegera mungkin untuk meningkatkan kadar glukosa",
+      "Segera melakukan pemeriksaan kadar glukosa darah bayi",
+      "Menunggu bayi menjadi lebih aktif sebelum dilakukan pemeriksaan",
+      "Memberikan cairan infus tanpa pemeriksaan awal"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Bayi dari ibu diabetes (IDM) memiliki risiko sangat tinggi mengalami hipoglikemia neonatus. Bila bayi menunjukkan gejala klinis letargi/apatis, tindakan prioritas pertama adalah konfirmasi objektif melalui Pemeriksaan Glukosa Darah PoCT/Laboratorium.",
+    "pembahasan_klinis": {
+      "A": "Tindakan non-medis yang tidak menyelesaikan masalah kegawatdaruratan metabolik.",
+      "B": "Pemberian ASI merupakan langkah intervensi, tetapi diagnostik Glukosa Darah harus segera diperiksa untuk menentukan derajat keparahan dan jalur terapi (oral vs IV).",
+      "C": "Memeriksa kadar glukosa darah segera adalah langkah awal diagnostik vital pada neonatus berisiko tinggi hipoglikemia.",
+      "D": "Menunda pemeriksaan berbahaya karena hipoglikemia persisten dapat memicu kerusakan otak.",
+      "E": "Infus tanpa konfirmasi glukosa darah awal kurang tepat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-099",
+    "no": 99,
+    "soal": "Pasien 50 tahun menggunakan glimepiride, metformin, dan beta-blocker. Saat tidur ia mengalami gemetar dan berkeringat. Diagnosis: hipoglikemia. Mengapa hipoglikemia dapat terjadi pada pasien yang menggunakan beta-blocker?",
+    "opsi": [
+      "Beta-blocker meningkatkan pelepasan insulin sehingga glukosa turun",
+      "Beta-blocker menghambat glikogenolisis dan menutupi gejala adrenergik hipoglikemia",
+      "Beta-blocker merangsang glukoneogenesis",
+      "Beta-blocker meningkatkan sensitivitas insulin",
+      "Beta-blocker mempercepat metabolisme glimepiride"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Obat penghambat beta (beta-blocker non-selektif) dapat memicu dan memperburuk hipoglikemia dengan cara menghambat glikogenolisis hepatik yang dimediasi reseptor beta-2, sekaligus menutupi (masking) gejala peringatan adrenergik hipoglikemia seperti tremor dan palpitasi.",
+    "pembahasan_klinis": {
+      "A": "Beta blocker tidak memicu sekresi insulin secara langsung.",
+      "B": "Beta-blocker menghambat kompensasi glikogenolisis serta menutupi gejala peringatan adrenergik hipoglikemia.",
+      "C": "Beta-blocker menghambat glikogenolisis, bukan merangsang glukoneogenesis.",
+      "D": "Tidak meningkatkan sensitivitas insulin perifer.",
+      "E": "Tidak mempercepat metabolisme sulfonilurea."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-100",
+    "no": 100,
+    "soal": "Seorang wanita akan menjalani histerektomi, tetapi ingin agar ovarium tidak ikut diangkat. Struktur anatomi apa yang harus dipertahankan?",
+    "opsi": [
+      "Arteri uterina",
+      "Ligamentum ovarii proprium / ovarian ligament",
+      "Ligamentum latum",
+      "Ligamentum rotundum",
+      "Arteri pudenda interna"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "Pada tindakan histerektomi dengan preservasi ovarium (Ovarian sparing), ligamentum yang mengikat ovarium ke dinding panggul serta menyalurkan vaskularisasi utamanya (Ligamentum Infundibulopelvicum / Suspensorium Ovarii / pengikat ovarium) harus dipertahankan secara utuh.",
+    "pembahasan_klinis": {
+      "A": "Arteri uterina dipotong saat pengangkatan uterus.",
+      "B": "Mencakup struktur penambat dan pembuluh darah ovarium yang harus dijaga agar ovarium tetap viabel.",
+      "C": "Ligamentum latum dipotong sebagian dalam histerektomi.",
+      "D": "Ligamentum rotundum dipotong untuk membebaskan uterus.",
+      "E": "Arteri pudenda interna memperdarahi area perineum."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "gaster-2023-101",
+    "no": 101,
+    "soal": "Ibu hamil dengan hiperglikemia melahirkan bayi yang mengalami hipoglikemiaa Apa tatalaksana pertama pada bayi?",
+    "opsi": [
+      "Observasi saja karena akan membaik sendiri",
+      "Memberikan oral glukosa tanpa pemeriksaan",
+      "Segera lakukan pemeriksaan glukosa darah dan berikan ASI/feeding dini",
+      "Hentikan pemberian ASI sementara",
+      "Berikan insulin dosis kecil"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "Tatalaksana lini pertama pada neonatus berisiko hipoglikemia dari ibu diabetes adalah melakukan pemeriksaan gula darah segera pasca lahir dan memfasilitasi pemberian ASI / enteral feeding dini dalam 30-60 menit pertama kehidupan.",
+    "pembahasan_klinis": {
+      "A": "Observasi tanpa tindakan berisiko memicu kejang hipoglikemia.",
+      "B": "Pemeriksaan glukosa darah objektif harus dikonfirmasi terlebih dahulu.",
+      "C": "Konfirmasi kadar gula darah dan pemberian ASI/feeding enteral dini adalah tatalaksana standar pertama hipoglikemia neonatus.",
+      "D": "Pemberian ASI harus ditingkatkan, bukan dihentikan.",
+      "E": "Insulin justru akan makin menurunkan kadar gula darah bayi hingga berakibat fatal."
+    },
+    "source_id": 1
+  }
+]
