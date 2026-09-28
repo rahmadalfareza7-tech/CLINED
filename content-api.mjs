@@ -12,7 +12,7 @@ export async function contentApi({ request, response, url, user, pool, body, jso
   if (request.method === 'GET' && path === '/packages') {
     const module = url.searchParams.get('module');
     const metaOnly = url.searchParams.get('meta') === '1';
-    if (module && !['UAB', 'UPI', 'MAT'].includes(module)) return fail(response, 400, 'Modul tidak valid.');
+    if (module && !['UAB', 'UPI'].includes(module)) return fail(response, 400, 'Modul tidak valid.');
     if (metaOnly) {
       // Node-state/catalog checks must never download the full question payload.
       // The full questions are fetched only when the user actually opens UAB/UPI.
@@ -40,16 +40,16 @@ export async function contentApi({ request, response, url, user, pool, body, jso
     if (!['admin','helper'].includes(user.role)) return fail(response, 403, 'Hanya admin/helper yang dapat menghapus soal.');
     const packageId = deletePackageId;
     const questionId = deleteQuestionId;
-    const current = await pool.query('SELECT id,module,title,block,questions FROM content_packages WHERE id=$1 AND module IN (\'UAB\',\'MAT\')', [packageId]);
+    const current = await pool.query('SELECT id,module,title,block,questions FROM content_packages WHERE id=$1 AND module=\'UAB\'', [packageId]);
     if (!current.rows.length) return fail(response, 404, 'Paket UAB tidak ditemukan.');
     const questions = Array.isArray(current.rows[0].questions) ? current.rows[0].questions : [];
     const next = questions.filter(q => String(q?.id) !== questionId);
     if (next.length === questions.length) return fail(response, 404, 'Soal tidak ditemukan.');
     if (!next.length) {
-      await pool.query('DELETE FROM content_packages WHERE id=$1 AND module IN (\'UAB\',\'MAT\')', [packageId]);
+      await pool.query('DELETE FROM content_packages WHERE id=$1 AND module=\'UAB\'', [packageId]);
       return json(response, 200, { ok:true, deletedQuestion:true, packageDeleted:true, message:'Soal terakhir dihapus; paket UAB juga dihapus.' });
     }
-    await pool.query('UPDATE content_packages SET questions=$1::jsonb, updated_at=now() WHERE id=$2 AND module IN (\'UAB\',\'MAT\')', [JSON.stringify(next), packageId]);
+    await pool.query('UPDATE content_packages SET questions=$1::jsonb, updated_at=now() WHERE id=$2 AND module=\'UAB\'', [JSON.stringify(next), packageId]);
     return json(response, 200, { ok:true, deletedQuestion:true, packageDeleted:false, remaining:next.length, message:'Soal UAB berhasil dihapus.' });
   }
   // Admin/helper dapat menghapus seluruh paket UAB dari bank.
@@ -59,14 +59,14 @@ export async function contentApi({ request, response, url, user, pool, body, jso
     origin(request);
     if (!['admin','helper'].includes(user.role)) return fail(response, 403, 'Hanya admin/helper yang dapat menghapus paket.');
     const packageId = deleteOnlyPackageId;
-    const result = await pool.query('DELETE FROM content_packages WHERE id=$1 AND module IN (\'UAB\',\'MAT\') RETURNING id', [packageId]);
+    const result = await pool.query('DELETE FROM content_packages WHERE id=$1 AND module=\'UAB\' RETURNING id', [packageId]);
     if (!result.rows.length) return fail(response, 404, 'Paket UAB tidak ditemukan.');
     return json(response, 200, { ok:true, packageDeleted:true, message:'Paket UAB berhasil dihapus.' });
   }
   if (request.method !== 'POST' || path !== '/packages') return fail(response, 404, 'Endpoint konten tidak ditemukan.');
   origin(request);
   const input = await body(request), module = String(input.module || ''), title = String(input.title || '').trim(), block = input.block ? String(input.block).trim().slice(0, 80) : null;
-  if (!['UAB', 'UPI', 'MAT'].includes(module) || !title || (module === 'MAT' && !block) || title.length > 160 || !Array.isArray(input.questions) || !input.questions.length || input.questions.length > 500) return fail(response, 400, 'Paket soal tidak valid.');
+  if (!['UAB', 'UPI'].includes(module) || !title || title.length > 160 || !Array.isArray(input.questions) || !input.questions.length || input.questions.length > 500) return fail(response, 400, 'Paket soal tidak valid.');
   const questions = input.questions.map(packageQuestion), ids = new Set(questions.map(question => question.id));
   if (ids.size !== questions.length) return fail(response, 400, 'ID soal dalam paket harus unik.');
   // Semua paket server yang masuk ke katalog publik hanya boleh dibuat admin atau helper.
