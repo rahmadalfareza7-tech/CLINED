@@ -82,7 +82,6 @@
         <div class="admin-content-tabs" role="tablist" aria-label="Jenis konten admin">
           <button type="button" class="admin-panel-tab selected" role="tab" data-content-tab="uab">Import UAB</button>
           <button type="button" class="admin-panel-tab" role="tab" data-content-tab="manage">Kelola soal</button>
-          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="latihan">Latihan Materi</button>
           <button type="button" class="admin-panel-tab" role="tab" data-content-tab="upi">UPI</button>
           <button type="button" class="admin-panel-tab" role="tab" data-content-tab="materi">Materi</button>
           <button type="button" class="admin-panel-tab" role="tab" data-content-tab="ninja">Ninja Nerd</button>
@@ -107,22 +106,6 @@
             <div class="acm-field"><label>Blok soal</label><select data-uab-delete-block>${blockOptions(UAB_BLOCKS)}</select></div>
             <div data-uab-packages class="admin-uab-packages"><p class="muted">Memuat bank UAB…</p></div>
           </div>
-        </div>
-
-        <div class="acm-panel" data-content-panel="latihan" hidden>
-          <div class="admin-content-intro"><b>Latihan Materi</b><span>Tambah soal latihan per materi. Muncul di tombol LATIHAN MATERI pada blok UAB yang dipilih.</span></div>
-          <form data-admin-latihan-form class="admin-content-form acm-form">
-            <div class="acm-grid">
-              <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select></div>
-              <div class="acm-field"><label>Judul materi</label><input name="title" maxlength="160" required placeholder="Contoh: Anatomi Jantung"></div>
-            </div>
-            <div class="acm-field"><label>File JSON</label><div class="admin-file-picker"><input id="adminLatihanJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminLatihanJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-latihan-file-meta>Belum ada file dipilih.</span></div></div>
-            <button class="account-action account-save acm-submit" type="submit">Tambah ke Latihan Materi</button>
-            <p class="acm-note muted" data-content-message role="status"></p>
-          </form>
-          <div class="admin-content-intro" style="margin-top:14px"><b>Latihan yang sudah ada</b><span>Hapus paket yang salah atau duplikat.</span></div>
-          <div class="acm-field"><label>Filter blok</label><select data-latihan-filter><option value="*">Semua blok</option>${blockOptions(UAB_BLOCKS)}</select></div>
-          <div data-latihan-list class="admin-uab-packages"><p class="muted">Memuat…</p></div>
         </div>
 
         <div class="acm-panel" data-content-panel="upi" hidden>
@@ -274,41 +257,9 @@
         }catch(err){message(box,err.message||'Publikasi UPI gagal.',true);}
       });
 
-      // ── Latihan Materi (module MAT) ──
-      const latihanForm=box.querySelector('[data-admin-latihan-form]'),latihanMeta=box.querySelector('[data-latihan-file-meta]'),latihanList=box.querySelector('[data-latihan-list]'),latihanFilter=box.querySelector('[data-latihan-filter]');
-      const renderLatihanList=async()=>{
-        try{
-          const d=await request('/api/content/packages?module=MAT&meta=1');
-          const f=latihanFilter.value; const rows=(d.packages||[]).filter(p=>f==='*'||String(p.block||'').toUpperCase()===f);
-          latihanList.innerHTML=rows.length?rows.map(p=>`<div class="admin-uab-package"><div><b>${esc(p.title)}</b><small>${esc(p.block||'-')} • ${Number(p.question_count||0)} soal</small></div><button type="button" class="account-action material-delete-action" data-del-latihan="${esc(p.id)}">Hapus</button></div>`).join(''):'<p class="muted">Belum ada latihan materi.</p>';
-          latihanList.querySelectorAll('[data-del-latihan]').forEach(b=>b.addEventListener('click',async()=>{
-            if(!confirm('Hapus paket latihan ini?'))return;
-            try{await request('/api/content/packages/'+encodeURIComponent(b.dataset.delLatihan),{method:'DELETE'});message(box,'Paket latihan dihapus.');await renderLatihanList();}catch(err){message(box,err.message||'Gagal menghapus.',true);}
-          }));
-        }catch(err){latihanList.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat daftar.')}</p>`;}
-      };
-      latihanFilter.addEventListener('change',renderLatihanList);
-      latihanForm.elements.file.addEventListener('change',()=>{const f=latihanForm.elements.file.files?.[0];latihanMeta.textContent=f?`${f.name} • ${(f.size/1024).toFixed(1)} KB`:'Belum ada file dipilih.';});
-      latihanForm.addEventListener('submit',async e=>{
-        e.preventDefault(); const f=latihanForm.elements.file.files?.[0]; if(!f){message(box,'Pilih file JSON terlebih dahulu.',true);return;}
-        try{
-          const block=latihanForm.elements.block.value,title=latihanForm.elements.title.value.trim().slice(0,160);
-          if(!title)throw Error('Judul materi wajib diisi.');
-          const questions=parseUabJson(await f.text()); if(!Array.isArray(questions)||!questions.length)throw Error('File JSON tidak berisi soal.');
-          const slug=(block+'-'+title).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-          const normalized=questions.map((q,i)=>({...q,id:String(q?.id||`${slug}-${i+1}`)}));
-          const validation=window.CLINED_BANK_ENGINE?.validateBank?.(normalized); if(validation && !validation.ok) throw Error(validation.errors.slice(0,4).join(' '));
-          await request('/api/content/packages',{method:'POST',body:JSON.stringify({module:'MAT',title,block,questions:normalized})});
-          message(box,`"${title}" ditambahkan ke ${block} (${normalized.length} soal).`); latihanForm.reset(); latihanMeta.textContent='Belum ada file dipilih.';
-          await renderLatihanList(); scheduleSyncUabNodeStates();
-        }catch(err){message(box,err.message||'Gagal menambah latihan.',true);}
-      });
-      renderLatihanList();
-
       box.querySelectorAll('[data-content-tab]').forEach(tab=>tab.addEventListener('click',()=>{
         box.querySelectorAll('[data-content-tab]').forEach(x=>x.classList.toggle('selected',x===tab));
         box.querySelectorAll('[data-content-panel]').forEach(p=>p.hidden=p.dataset.contentPanel!==tab.dataset.contentTab);
-        if(tab.dataset.contentTab==='latihan')renderLatihanList();
       }));
     }
 
@@ -378,7 +329,6 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
       const addActive=(value)=>{const b=canonicalBlock(value);if(b)activeBlocks.add(b);};
       // 1. Server UAB packages
       try{const d=await request('/api/content/packages?module=UAB&meta=1');(d.packages||[]).forEach(p=>{if(p.block&&Number(p.question_count||0)>0)addActive(p.block);});}catch{}
-      try{const d=await request('/api/content/packages?module=MAT&meta=1');(d.packages||[]).forEach(p=>{if(p.block&&Number(p.question_count||0)>0)addActive(p.block);});}catch{}
       // 1a. Fallback: baca bank soal utama dari endpoint /api/banks.
       // Ini memastikan bank lama seperti KEDKOM dan KEDKEL tetap terdeteksi.
       try{
