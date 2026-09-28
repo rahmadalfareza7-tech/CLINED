@@ -20,7 +20,7 @@
 <meta name="theme-color" content="#f7f7f2">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="css/motion.css?v=auth-layout-v2">
-<link rel="stylesheet" href="css/card-collection.css?v=4-fabfix">
+<link rel="stylesheet" href="css/card-collection.css?v=5-fabfix">
 <link rel="stylesheet" href="css/learning-features.css?v=2">
 </head>
 <body class="auth-pending">
@@ -1072,7 +1072,47 @@
 })();
 </script>
 
-<script src="js/card-collection.js?v=4-fabfix"></script>
+<script src="js/card-collection.js?v=5-fabfix"></script>
+<script id="clined-fab-guard">
+/* Penjaga FAB Card Shop v10f: kalau card-collection.js gagal/lama, FAB darurat tetap dibuat langsung dari app.html. */
+(function(){
+  var BUILD='v10f-fab-guard';
+  try{document.documentElement.setAttribute('data-clined-build',BUILD);console.info('[CLINED] build',BUILD,'| cardShop:',typeof window.cardShop);}catch(e){}
+  function homeVisible(){
+    var h=document.getElementById('home'),b=document.body;
+    return !!(h&&h.classList.contains('active'))&&!b.classList.contains('auth-pending');
+  }
+  function toast(t){try{if(typeof showToast==='function')return showToast(t);}catch(e){}alert(t);}
+  function loadShop(cb){
+    var s=document.createElement('script');
+    s.src='js/card-collection.js?t='+Date.now();
+    s.onload=function(){cb&&cb();};
+    s.onerror=function(){toast('Card Shop gagal dimuat. Coba refresh (Ctrl+Shift+R).');};
+    document.head.appendChild(s);
+  }
+  function makeFallback(){
+    if(document.getElementById('cardShopFab'))return;
+    var st=document.createElement('style');
+    st.textContent='#cardShopFab.fab-guard{position:fixed;left:14px;top:33vh;z-index:900;width:60px;min-height:68px;border-radius:20px;border:2.5px solid #5b21b6;border-bottom-width:5px;background:linear-gradient(160deg,#a855f7,#7c3aed);box-shadow:0 6px 0 #4c1d95,0 10px 28px rgba(124,58,237,.4);display:none;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;cursor:pointer;color:#fff;font:800 12px system-ui,sans-serif;touch-action:manipulation}#cardShopFab.fab-guard.on{display:flex}';
+    document.head.appendChild(st);
+    var f=document.createElement('button');
+    f.id='cardShopFab';f.className='fab-guard';f.setAttribute('aria-label','Card Shop');
+    f.innerHTML='<span style="font-size:30px;line-height:1">🎁</span><span>Cards</span>';
+    f.addEventListener('click',function(){
+      if(window.cardShop&&window.cardShop.show)return window.cardShop.show();
+      loadShop(function(){if(window.cardShop&&window.cardShop.show)window.cardShop.show();else toast('Card Shop belum siap. Refresh halaman.');});
+    });
+    document.body.appendChild(f);
+    console.warn('[CLINED] FAB darurat dipakai: card-collection.js tidak membuat FAB.');
+  }
+  function sync(){
+    var f=document.getElementById('cardShopFab');
+    if(f&&f.classList.contains('fab-guard'))f.classList.toggle('on',homeVisible());
+  }
+  function init(){setTimeout(function(){makeFallback();sync();},400);setInterval(sync,400);}
+  document.readyState==='complete'?init():window.addEventListener('load',init);
+})();
+</script>
 <script src="js/learning-features.js?v=2"></script>
 </body>
 </html>
