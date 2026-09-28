@@ -352,6 +352,19 @@ const CARD_CATALOG=[
     updateDia();
   }
 
-  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',injectUI):injectUI();
+  /* Jaga class home-context selalu sinkron dengan view aktif (FAB hanya tampil di Beranda setelah login) */
+  function syncHomeContext(){
+    const b=document.body,h=document.getElementById('home');
+    const want=!!(h&&h.classList.contains('active'))&&!b.classList.contains('auth-pending');
+    if(b.classList.contains('home-context')!==want)b.classList.toggle('home-context',want);
+  }
+  function watchHome(){
+    syncHomeContext();
+    const mo=new MutationObserver(syncHomeContext);
+    mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+    document.querySelectorAll('.view').forEach(v=>mo.observe(v,{attributes:true,attributeFilter:['class']}));
+  }
+  const boot=()=>{injectUI();watchHome();};
+  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',boot):boot();
   window.cardShop={show:showShop,hide:hideShop,getDiamonds:getDia};
 })();
