@@ -28,6 +28,10 @@
     const d=await request(path);
     if(d.mode==='full'){apply(d.state||{});snapshot(d.state||{});}else apply(d.changes||{});
     if(d.updatedAt){cursor=d.updatedAt;nativeSet(CURSOR,d.updatedAt);}
+    // Data dari akun lain (mis. login di perangkat lain) baru masuk lewat nativeSet,
+    // jadi tidak lewat hook localStorage.setItem di atas. Beri tahu UI lain (statistik,
+    // Card Shop, dsb.) supaya me-render ulang dari localStorage yang sudah diperbarui.
+    try{window.dispatchEvent(new CustomEvent('clined:sync-applied',{detail:{mode:d.mode}}));}catch{}
     if(!d.hasMore)return d;
   }
   return {mode:'delta',hasMore:true,updatedAt:cursor};

@@ -1,370 +1,268 @@
-/* CLINED CARD COLLECTION v2 */
-(function(){
-'use strict';
-const KEY_DIA='clined_diamonds_v1',KEY_CARDS='clined_collection_v1',KEY_PACKS='clined_packs_v1';
-const PACK_PRICE=20,QUIZ_PER_DIA=5;
-function isAdmin(){try{const u=typeof authCurrentUser==='function'?authCurrentUser():null;return!!(u&&u.role==='admin');}catch{return false;}}
-const CARD_CATALOG=[
-{id:'cor',name:'COR',rarity:'rare',color:'#e8435a',img:'assets/cards/card-cor.png'},
-{id:'pulmo',name:'PULMO',rarity:'common',color:'#00c9d4',img:'assets/cards/card-pulmo.png'},
-    {id:'cerebrum',name:'CEREBRUM',rarity:'epic',color:'#4ade80',fact:'Complicated',strength:'Telekinesis',img:'assets/cards/card-cerebrum.png'},
-    {id:'skull',name:'SKULL',rarity:'legendary',color:'#f5c97a',fact:'Like a war helmet',strength:'Strongest',img:'assets/cards/card-skull.png'}
+/* CLINED Card Shop — gacha kartu organ.
+   Ditulis ulang dari nol (v2, bebas bug lama). Aturan:
+   - Semua gambar adalah file terpisah di assets/cards/, TIDAK ADA base64 ditanam di sini.
+   - Semua state disimpan di localStorage per-perangkat (belum disinkron ke server).
+   - FAB hanya tampil di halaman Beranda (class body.home-context) dan setelah login. */
+(() => {
+  'use strict';
+
+  const KEY_DIA = 'clined_diamonds_v1';
+  const KEY_CARDS = 'clined_collection_v1';
+  const QUIZ_PER_DIAMOND = 5; // 1 diamond setiap N soal benar
+
+  const CARD_CATALOG = [
+    { id: 'pulmo', name: 'PULMO', rarity: 'common', color: '#00c9d4', fact: 'Menukar O2 dan CO2 tiap napas', strength: 'Napas', img: 'assets/cards/card-pulmo.png' },
+    { id: 'cor', name: 'COR', rarity: 'rare', color: '#e8435a', fact: 'Berdetak ~100.000 kali sehari', strength: 'Sirkulasi', img: 'assets/cards/card-cor.png' },
+    { id: 'cerebrum', name: 'CEREBRUM', rarity: 'epic', color: '#4ade80', fact: 'Pusat kendali seluruh tubuh', strength: 'Telekinesis', img: 'assets/cards/card-cerebrum.png' },
+    { id: 'skull', name: 'SKULL', rarity: 'legendary', color: '#f5c97a', fact: 'Seperti helm perang alami', strength: 'Terkuat', img: 'assets/cards/card-skull.png' },
   ];
+  const RARITY_LABEL = { common: 'Common', rare: 'Rare', epic: 'Epic', legendary: 'Legendary' };
+  const RARITY_ORDER = ['common', 'rare', 'epic', 'legendary'];
 
-  const getDia=()=>isAdmin()?999999:parseInt(localStorage.getItem(KEY_DIA)||'0');
-  const setDia=v=>{if(!isAdmin())localStorage.setItem(KEY_DIA,String(Math.max(0,v)));};
-  const getCards=()=>{try{return JSON.parse(localStorage.getItem(KEY_CARDS)||'[]');}catch{return[];}};
-  const saveCards=c=>{
-    localStorage.setItem(KEY_CARDS,JSON.stringify(c));
-    syncCardsToServer(c);
-  };
-  async function syncCardsToServer(col){
-    try{
-      if(typeof authCurrentUser!=='function'||!authCurrentUser())return;
-      await fetch('/api/auth/cards',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({cards:col})});
-    }catch(e){console.warn('Card sync failed',e);}
+  const isAdmin = () => { try { const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null; return !!(u && u.role === 'admin'); } catch { return false; } };
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const getDia = () => isAdmin() ? Infinity : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0);
+  const setDia = v => { if (!isAdmin()) localStorage.setItem(KEY_DIA, String(Math.max(0, v))); };
+  const getCards = () => { try { return JSON.parse(localStorage.getItem(KEY_CARDS) || '[]'); } catch { return []; } };
+  const addCard = card => { const c = getCards(); c.push({ id: card.id, at: Date.now() }); localStorage.setItem(KEY_CARDS, JSON.stringify(c)); };
+  const ownedCount = id => getCards().filter(c => c.id === id).length;
+
+  function updateDiaBadges() {
+    const d = getDia(), text = d === Infinity ? '∞' : String(d);
+    document.querySelectorAll('[data-diamond-count]').forEach(e => { e.textContent = text; });
   }
-  async function loadCardsFromServer(){
-    try{
-      if(typeof authCurrentUser!=='function'||!authCurrentUser())return;
-      const r=await fetch('/api/auth/cards',{credentials:'same-origin'});
-      if(!r.ok)return;
-      const d=await r.json();
-      if(d&&Array.isArray(d.cards)&&d.cards.length>0){
-        const local=getCards();
-        const merged=[...d.cards];
-        local.forEach(lc=>{if(!merged.find(sc=>sc.id===lc.id&&sc.at===lc.at))merged.push(lc);});
-        localStorage.setItem(KEY_CARDS,JSON.stringify(merged));
-      }
-    }catch(e){console.warn('Card load failed',e);}
-  }
-  const getPacks=()=>parseInt(localStorage.getItem(KEY_PACKS)||'0');
-
-  /* Diamond earn */
-  let _ans=parseInt(sessionStorage.getItem('clined_qa_cnt')||'0');
-  const _orig=window.addXP;
-  window.addXP=function(a,r){
-    if(_orig)_orig.apply(this,arguments);
-    if(a>5||(r&&r.includes('benar'))){
-      _ans++;sessionStorage.setItem('clined_qa_cnt',String(_ans));
-      if(_ans>0&&_ans%QUIZ_PER_DIA===0){setDia(getDia()+1);updateDia();showDiaPop();}
-    }
-  };
-
-  function updateDia(){const d=getDia();document.querySelectorAll('[data-diamond-count]').forEach(e=>e.textContent=d);}
-  function showDiaPop(){
-    const p=document.createElement('div');
-    p.className='diamond-earn-pop';p.textContent='💎 +1 Diamond!';
-    document.body.appendChild(p);setTimeout(()=>p.remove(),2200);
+  function popDiamondToast() {
+    const p = document.createElement('div');
+    p.className = 'diamond-earn-pop';
+    p.textContent = '💎 +1 Diamond!';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1600);
   }
 
-  /* Pack SVG */
-  function packSVG(anim){
-    const sw=anim?'<animateTransform attributeName="transform" type="translate" values="-200 0;400 0" dur="1.4s" repeatCount="indefinite"/>':'';
-    return '<svg viewBox="0 0 160 220" xmlns="http://www.w3.org/2000/svg" class="pack-svg-art">'
-      +'<defs>'
-      +'<linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1cb0f6"/><stop offset="50%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#ec4899"/></linearGradient>'
-      +'<linearGradient id="ps" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="rgba(255,255,255,0)"/><stop offset="50%" stop-color="rgba(255,255,255,0.38)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></linearGradient>'
-      +'<linearGradient id="pt" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffd700"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>'
-      +'<filter id="pglow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
-      +'<clipPath id="pc"><rect x="8" y="32" width="144" height="180" rx="12"/></clipPath>'
-      +'</defs>'
-      +'<ellipse cx="80" cy="215" rx="55" ry="5" fill="rgba(0,0,0,0.18)"/>'
-      +'<rect x="8" y="32" width="144" height="180" rx="12" fill="url(#pg)" filter="url(#pglow)"/>'
-      +'<rect x="13" y="37" width="134" height="170" rx="9" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>'
-      +'<text x="22" y="78" font-size="13" opacity="0.65">✦</text>'
-      +'<text x="122" y="68" font-size="9" opacity="0.55">✦</text>'
-      +'<text x="112" y="162" font-size="15" opacity="0.6">✦</text>'
-      +'<text x="18" y="172" font-size="7" opacity="0.45">✦</text>'
-      +'<circle cx="80" cy="125" r="42" fill="rgba(255,255,255,0.11)"/>'
-      +'<circle cx="80" cy="125" r="34" fill="rgba(255,255,255,0.07)"/>'
-      +'<text x="80" y="139" font-size="38" text-anchor="middle" filter="url(#pglow)">🧬</text>'
-      +'<rect x="30" y="175" width="100" height="24" rx="12" fill="rgba(255,255,255,0.17)"/>'
-      +'<text x="80" y="191" font-size="10" font-weight="900" text-anchor="middle" fill="white" letter-spacing="2">CLINED</text>'
-      +'<rect x="8" y="32" width="144" height="180" rx="12" fill="url(#ps)" clip-path="url(#pc)">'
-      +'<rect x="0" y="0" width="60" height="300" fill="url(#ps)">'+sw+'</rect></rect>'
-      +'<rect x="8" y="32" width="144" height="28" rx="12" fill="url(#pt)"/>'
-      +'<path d="M68,16 L80,32 L92,16 Z" fill="url(#pt)"/>'
-      +'<rect x="15" y="39" width="130" height="14" rx="7" fill="rgba(255,255,255,0.24)"/>'
-      +'<text x="80" y="50" font-size="9" font-weight="900" text-anchor="middle" fill="rgba(255,255,255,0.95)" letter-spacing="1">ORGAN PACK</text>'
-      +'<circle cx="28" cy="46" r="3" fill="rgba(255,255,255,0.38)"/>'
-      +'<circle cx="132" cy="46" r="3" fill="rgba(255,255,255,0.38)"/>'
-      +'</svg>';
-  }
+  /* Dapat diamond setiap N jawaban benar. Membungkus window.addXP kalau ada, tanpa memutus fungsi aslinya. */
+  (function hookDiamondEarning() {
+    let count = parseInt(sessionStorage.getItem('clined_qa_count') || '0', 10) || 0;
+    const original = window.addXP;
+    window.addXP = function (amount, reason) {
+      if (typeof original === 'function') original.apply(this, arguments);
+      const isCorrectAnswer = (typeof amount === 'number' && amount > 0) || (typeof reason === 'string' && reason.includes('benar'));
+      if (!isCorrectAnswer) return;
+      count++;
+      sessionStorage.setItem('clined_qa_count', String(count));
+      if (count % QUIZ_PER_DIAMOND === 0) { setDia(getDia() + 1); updateDiaBadges(); popDiamondToast(); }
+    };
+  })();
 
-  /* Gacha */
-  function openPack(){
-    const d=getDia();if(d<PACK_PRICE)return null;
-    setDia(d-PACK_PRICE);updateDia();
-    localStorage.setItem(KEY_PACKS,String(getPacks()+1));
-    // Weighted random: legendary 5%, epic 15%, rare 30%, common 50%
-    const weights={legendary:5,epic:15,rare:30,common:50};
-    const roll=Math.random()*100;
-    let tiers=CARD_CATALOG.filter(c=>c.rarity==='common');
-    if(roll<5)tiers=CARD_CATALOG.filter(c=>c.rarity==='legendary');
-    else if(roll<20)tiers=CARD_CATALOG.filter(c=>c.rarity==='epic');
-    else if(roll<50)tiers=CARD_CATALOG.filter(c=>c.rarity==='rare');
-    const pool=tiers.length?tiers:CARD_CATALOG;
-    const card=pool[Math.floor(Math.random()*pool.length)];
-    const col=getCards();col.push({id:card.id,at:new Date().toISOString()});saveCards(col);
+  /* Peluang: legendary 5%, epic 15%, rare 30%, sisanya common. */
+  function rollCard() {
+    const roll = Math.random() * 100;
+    const tier = roll < 5 ? 'legendary' : roll < 20 ? 'epic' : roll < 50 ? 'rare' : 'common';
+    const pool = CARD_CATALOG.filter(c => c.rarity === tier);
+    return pool[Math.floor(Math.random() * pool.length)] || CARD_CATALOG[0];
+  }
+  function openPack() {
+    const cost = 20;
+    if (getDia() < cost) return null;
+    setDia(getDia() - cost);
+    const card = rollCard();
+    addCard(card);
     return card;
   }
 
-  /* Rarity label */
-  const RARITY_LABEL={common:'COMMON',rare:'⭐ RARE',epic:'💜 EPIC',legendary:'👑 LEGENDARY'};
-  const RARITY_COLOR={common:'rgba(255,255,255,.12)',rare:'linear-gradient(135deg,#fbbf24,#f59e0b)',epic:'linear-gradient(135deg,#a855f7,#7c3aed)',legendary:'linear-gradient(135deg,#ffd700,#ff8c00)'};
-
-  /* Collection grid */
-  function buildGrid(){
-    const col=getCards();
-    if(!col.length)return '<div class="card-coll-empty">Belum ada kartu.<br>Buka pack pertamamu! 🎴</div>';
-    const counts={};col.forEach(c=>counts[c.id]=(counts[c.id]||0)+1);
-    return CARD_CATALOG.map(card=>{
-      const n=counts[card.id]||0;
-      if(!n)return '<div class="coll-card-slot locked"><span>🔒</span><small>???</small></div>';
-      return '<div class="coll-card-slot rarity-'+card.rarity+'" style="--card-color:'+card.color+'">'
-        +'<img src="'+card.img+'" alt="'+card.name+'" class="coll-card-img" loading="lazy"/>'
-        +'<div class="coll-card-name">'+card.name+'</div>'
-        +(n>1?'<div class="coll-card-badge">×'+n+'</div>':'')
-        +'</div>';
+  function buildGrid() {
+    const owned = getCards();
+    return CARD_CATALOG.map(card => {
+      const n = owned.filter(c => c.id === card.id).length;
+      const cls = 'coll-card-slot rarity-' + card.rarity + (n ? '' : ' locked');
+      return `<div class="${cls}" style="--card-color:${card.color}">
+        <img src="${card.img}" alt="${esc(card.name)}" loading="lazy">
+        <b>${esc(card.name)}</b>
+        ${n ? `<small>x${n}</small>` : '<small>🔒</small>'}
+      </div>`;
     }).join('');
   }
 
-  /* Shop HTML */
-  function buildShop(){
-    const d=getDia(),n=getCards().length;
-    return '<div class="card-shop-inner">'
-      +'<div class="card-shop-header">'
-      +'<div><div class="card-shop-kicker">CLINED CARDS</div><h3>Card Shop</h3><p>Kumpulkan semua kartu organ!</p></div>'
-      +'<button class="card-shop-close" id="closeCardShop" aria-label="Tutup">✕</button>'
-      +'</div>'
-      +'<div class="card-shop-dia-row">'
-      +'<span class="card-shop-dia-badge">💎 <b data-diamond-count>'+(isAdmin()?'∞':d)+'</b></span>'
-      +'<small>+1 💎 setiap 5 soal benar</small>'
-      +'</div>'
-      +'<div class="card-shop-divider"></div>'
-      +'<div class="card-pack-feature">'
-      +'<div class="card-pack-art">'+packSVG(true)+'</div>'
-      +'<div class="card-pack-info">'
-      +'<div class="card-pack-name">Organ Pack</div>'
-      +'<div class="card-pack-desc">1 kartu acak • chance LEGENDARY!</div>'
-      +'<div class="card-rarity-odds">'
-      +'<span class="odds-pill common">COMMON 50%</span>'
-      +'<span class="odds-pill rare">RARE 30%</span>'
-      +'<span class="odds-pill epic">EPIC 15%</span>'
-      +'<span class="odds-pill legendary">LEGENDARY 5%</span>'
-      +'</div>'
-      +'<div class="card-pack-price">💎 '+PACK_PRICE+'</div>'
-      +'<button class="card-shop-buy-btn" id="buyPackBtn"'+(!isAdmin()&&d<PACK_PRICE?' disabled':'')+'>'
-      +(!isAdmin()&&d<PACK_PRICE?'💎 '+d+'/'+PACK_PRICE:'🎴 Buka Pack')
-      +'</button>'
-      +'</div></div>'
-      +'<div class="card-shop-divider"></div>'
-      +'<div class="card-collection-title">Koleksiku <span class="card-coll-count">'+n+' / '+CARD_CATALOG.length+'</span></div>'
-      +'<div class="card-collection-grid">'+buildGrid()+'</div>'
-      +'</div>';
+  function buildShop() {
+    const d = getDia(), diaText = d === Infinity ? '∞' : d;
+    const owned = getCards(), uniqueOwned = new Set(owned.map(c => c.id)).size;
+    return `<div class="card-shop-sheet">
+      <div class="card-shop-head">
+        <div><span class="card-shop-eyebrow">CLINED CARDS</span><h3>Card Shop</h3><p>Kumpulkan semua kartu organ!</p></div>
+        <button type="button" class="card-shop-close" id="closeCardShop" aria-label="Tutup">✕</button>
+      </div>
+      <div class="card-shop-dia-row">
+        <span class="card-shop-dia-badge">💎 <b data-diamond-count>${diaText}</b></span>
+        <span class="card-shop-dia-hint">+1 💎 setiap ${QUIZ_PER_DIAMOND} soal benar</span>
+      </div>
+      <div class="card-pack-card">
+        <img class="card-pack-img" src="assets/cards/fab-basket.png" alt="Organ Pack">
+        <div class="card-pack-info">
+          <b>Organ Pack</b>
+          <small>1 kartu acak • chance LEGENDARY!</small>
+          <div class="card-rarity-odds">
+            <span>Common 50%</span><span class="odd-rare">Rare 30%</span><span class="odd-epic">Epic 15%</span><span class="odd-legendary">Legendary 5%</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="card-buy-btn" id="buyCardPack" ${d < 20 ? 'disabled' : ''}>💎 Buka Pack — 20</button>
+      <div class="card-collection-head"><span>Koleksiku</span><b>${uniqueOwned} / ${CARD_CATALOG.length}</b></div>
+      <div class="card-collection-grid">${buildGrid()}</div>
+    </div>`;
   }
 
-  /* REVEAL — cinematic multi-phase */
-  function showReveal(card){
-    const isRare=card.rarity==='rare';
-    const isEpic=card.rarity==='epic';
-    const isLegendary=card.rarity==='legendary';
-    const isFancy=isRare||isEpic||isLegendary;
-    const ov=document.createElement('div');
-    ov.className='card-reveal-overlay'+(isLegendary?' reveal-legendary':isEpic?' reveal-epic':'');
-    ov.innerHTML=
-      '<div class="card-reveal-bg-rays" id="rvRays" hidden></div>'
-      +'<div class="card-reveal-particles" id="rvParticles"></div>'
-      +'<div class="card-reveal-inner">'
-      +'<div class="card-reveal-glow" style="--glow:'+card.color+'"></div>'
-      +'<div id="rvPack" class="card-reveal-pack">'
-      +'<div class="pack-shine-ring"></div>'
-      +packSVG(false)
-      +'</div>'
-      +'<div id="rvResult" class="card-reveal-result" hidden>'
-      +'<div class="card-reveal-label">'+(isLegendary?'👑 LEGENDARY! 👑':isEpic?'💜 Epic Pull! 💜':isFancy?'✨ Kartu Langka! ✨':'Kartu Baru!')+'</div>'
-      +'<div class="card-result-wrap rarity-'+card.rarity+'" style="--rarity-color:'+card.color+'">'
-      +(isFancy?'<div class="rare-shine"></div>':'')
-      +'<img src="'+card.img+'" alt="'+card.name+'" class="card-result-img" loading="eager"/>'
-      +'</div>'
-      +'<div class="card-reveal-name">'+card.name+'</div>'
-      +'<div class="card-reveal-rarity '+card.rarity+'">'+RARITY_LABEL[card.rarity]+'</div>'
-      +'<button class="card-reveal-ok" id="rvOk">Simpan ke Koleksi →</button>'
-      +'</div>'
-      +'<div class="card-reveal-hint-wrap" id="rvHint">'
-      +'<span class="hint-tap-icon">👆</span><span>Tap untuk membuka</span>'
-      +'</div>'
-      +'</div>';
+  /* Confetti ringan (div, bukan canvas) untuk kartu Epic/Legendary. Dibuang otomatis lewat animationend. */
+  function burstConfetti(container, rarity) {
+    const palettes = { epic: ['#a855f7', '#7c3aed', '#e9d5ff', '#c084fc'], legendary: ['#f5c97a', '#fbbf24', '#fff7cd', '#ffe08a'] };
+    const colors = palettes[rarity]; if (!colors) return;
+    const count = rarity === 'legendary' ? 46 : 28;
+    const layer = document.createElement('div');
+    layer.className = 'card-confetti-layer';
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('i');
+      const angle = Math.random() * Math.PI * 2, dist = 70 + Math.random() * 140;
+      p.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(0) + 'px');
+      p.style.setProperty('--dy', (Math.sin(angle) * dist - 60).toFixed(0) + 'px');
+      p.style.setProperty('--rot', (Math.random() * 720 - 360).toFixed(0) + 'deg');
+      p.style.background = colors[i % colors.length];
+      p.style.animationDelay = (Math.random() * 120) + 'ms';
+      p.style.left = (46 + Math.random() * 8) + '%';
+      layer.appendChild(p);
+    }
+    container.appendChild(layer);
+    layer.addEventListener('animationend', () => layer.remove());
+    setTimeout(() => layer.remove(), 1800);
+  }
+
+  function showReveal(card) {
+    const ov = document.createElement('div');
+    ov.className = 'card-reveal-overlay';
+    const dup = ownedCount(card.id) > 1;
+    ov.innerHTML = `<div class="card-result-wrap rarity-${card.rarity}" style="--rarity-color:${card.color}">
+      <div class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</div>
+      <img src="${card.img}" alt="${esc(card.name)}">
+      <h4>${esc(card.name)}</h4>
+      ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
+      ${dup ? '<small class="card-dup-note">Sudah punya kartu ini sebelumnya</small>' : ''}
+      <button type="button" class="ml-next" id="closeCardReveal">Lanjut</button>
+    </div>`;
     document.body.appendChild(ov);
-
-    /* Particle burst */
-    function burstParticles(){
-      const container=document.getElementById('rvParticles');if(!container)return;
-      const palettes={
-        common:['#fff','#a5f3fc','#86efac','#c4b5fd'],
-        rare:['#fbbf24','#f59e0b','#ffd700','#fff','#fb7185'],
-        epic:['#a855f7','#c084fc','#e879f9','#fff','#818cf8'],
-        legendary:['#ffd700','#ff8c00','#fff','#fbbf24','#f97316','#ec4899']
-      };
-      const colors=palettes[card.rarity]||palettes.common;
-      const count={common:14,rare:24,epic:32,legendary:48}[card.rarity]||14;
-      for(let i=0;i<count;i++){
-        const p=document.createElement('div');
-        const isStr=Math.random()>.5;
-        p.className='rv-particle'+(isStr?' rv-particle--star':'');
-        p.style.cssText='--tx:'+(Math.random()*280-140)+'px;--ty:'+(-(Math.random()*220+60))+'px;'
-          +'--rot:'+(Math.random()*720-360)+'deg;'
-          +'--bg:'+colors[Math.floor(Math.random()*colors.length)]+';'
-          +'--sz:'+(Math.random()*10+4)+'px;'
-          +'--delay:'+(Math.random()*.2)+'s;'
-          +'--dur:'+(Math.random()*.5+.5)+'s;'
-          +'left:calc(50% + '+(Math.random()*80-40)+'px);top:40%;';
-        container.appendChild(p);
-        setTimeout(()=>p.remove(),1000);
-      }
-    }
-
-    let done=false;
-    function openPk(){
-      if(done)return;done=true;
-      const pack=document.getElementById('rvPack');
-      const hint=document.getElementById('rvHint');
-      const result=document.getElementById('rvResult');
-      const rays=document.getElementById('rvRays');
-      if(hint)hint.classList.add('hint-exit');
-      // Phase 1: glow surge
-      pack.classList.add('pack-pre-open');
-      setTimeout(()=>{
-        // Phase 2: shake
-        pack.classList.remove('pack-pre-open');
-        pack.classList.add('pack-opening');
-        setTimeout(()=>{
-          // Phase 3: particles + explode
-          burstParticles();
-          pack.classList.add('pack-explode');
-          // Rays for epic/legendary
-          if(isEpic||isLegendary){rays.hidden=false;rays.classList.add('rays-spin');}
-          setTimeout(()=>{
-            pack.hidden=true;
-            // Phase 4: card appear
-            result.hidden=false;
-            result.classList.add('result-appear');
-            // Phase 5: screen flash
-            if(isLegendary){ov.classList.add('legendary-flash');setTimeout(()=>ov.classList.remove('legendary-flash'),800);}
-            else if(isFancy){ov.classList.add('rare-flash');setTimeout(()=>ov.classList.remove('rare-flash'),500);}
-          },340);
-        },420);
-      },220);
-    }
-
-    ov.addEventListener('click',function(e){
-      if(e.target.id==='rvOk'||e.target.closest&&e.target.closest('#rvOk')){
-        ov.classList.add('closing');setTimeout(()=>{ov.remove();refreshShop();},450);return;
-      }
-      if(!done)openPk();
+    requestAnimationFrame(() => {
+      ov.classList.add('show');
+      if (card.rarity === 'epic' || card.rarity === 'legendary') setTimeout(() => burstConfetti(ov.firstElementChild, card.rarity), 150);
     });
-    ov.addEventListener('touchend',function(e){
-      const t=e.target;
-      if(t.id==='rvOk'||(t.closest&&t.closest('#rvOk'))){return;}
-      e.preventDefault();if(!done)openPk();
-    },{passive:false});
+    const close = () => { ov.classList.remove('show'); setTimeout(() => ov.remove(), 200); };
+    ov.querySelector('#closeCardReveal').addEventListener('click', close);
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
   }
 
-  /* Shop modal */
-  function refreshShop(){const c=document.getElementById('cardShopContainer');if(c){c.innerHTML=buildShop();bindShop();}}
-  function bindShop(){
-    const cl=document.getElementById('closeCardShop');if(cl)cl.addEventListener('click',hideShop);
-    const buy=document.getElementById('buyPackBtn');
-    if(buy)buy.addEventListener('click',()=>{const card=openPack();if(!card)return;hideShop();showReveal(card);});
+  function refreshShop() {
+    const c = document.getElementById('cardShopContainer');
+    if (c) { c.innerHTML = buildShop(); bindShop(); }
   }
-  function _blockBodyScroll(e){
-    const c=document.getElementById('cardShopContainer');
-    if(c&&c.contains(e.target))return;
-    e.preventDefault();
+  function bindShop() {
+    document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
+    document.getElementById('buyCardPack')?.addEventListener('click', () => {
+      const card = openPack();
+      if (!card) return;
+      hideShop();
+      showReveal(card);
+    });
   }
-  function showShop(){
-    let m=document.getElementById('cardShopModal');
-    if(!m){
-      m=document.createElement('div');m.id='cardShopModal';m.className='card-shop-modal';
-      m.innerHTML='<div class="card-shop-backdrop" id="csBd"></div><div id="cardShopContainer" class="card-shop-container"></div>';
-      document.body.appendChild(m);
-      document.getElementById('csBd').addEventListener('click',hideShop);
+  function blockScroll(e) { if (e.target.closest('.card-shop-sheet')) return; e.preventDefault(); }
+  function showShop() {
+    let modal = document.getElementById('cardShopModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'cardShopModal';
+      modal.className = 'card-shop-modal';
+      modal.innerHTML = '<div class="card-shop-backdrop" id="csBackdrop"></div><div id="cardShopContainer"></div>';
+      document.body.appendChild(modal);
+      document.getElementById('csBackdrop').addEventListener('click', hideShop);
     }
-    document.getElementById('cardShopContainer').innerHTML=buildShop();
-    bindShop();
-    requestAnimationFrame(()=>m.classList.add('open'));
-    document.body.dataset.shopOpen='1';
-    document.addEventListener('touchmove',_blockBodyScroll,{passive:false});
+    refreshShop();
+    requestAnimationFrame(() => modal.classList.add('open'));
+    document.addEventListener('touchmove', blockScroll, { passive: false });
   }
-  function hideShop(){
-    const m=document.getElementById('cardShopModal');if(m)m.classList.remove('open');
-    delete document.body.dataset.shopOpen;
-    document.removeEventListener('touchmove',_blockBodyScroll);
+  function hideShop() {
+    document.getElementById('cardShopModal')?.classList.remove('open');
+    document.removeEventListener('touchmove', blockScroll);
   }
 
-  /* FAB inject */
-  function injectUI(){
-    loadCardsFromServer().then(()=>refreshShop()).catch(()=>{});
-    const items=document.querySelectorAll('.duo-reward-item');
-    if(items.length>=4){
-      items[3].innerHTML='<span class="duo-reward-icon">💎</span><div><b data-diamond-count>'+(isAdmin()?'∞':getDia())+'</b><small>Diamond</small></div>';
-    }
-    if(!document.getElementById('cardShopFab')){
-      const fab=document.createElement('button');
-      fab.id='cardShopFab';fab.className='card-shop-fab';
-      fab.setAttribute('aria-label','Card Shop');
-      fab.innerHTML='<img class="fab-basket-img" src="assets/cards/fab-basket.png" alt="shop"/>'
-        +(isAdmin()?'<span class="fab-dia fab-dia--admin">∞ 💎</span>'
-          :'<span class="fab-dia"><span data-diamond-count>'+getDia()+'</span> 💎</span>');
-      // Drag
-      let _d=false,_mx=false,_fx=0,_fy=0,_sx=0,_sy=0;
-      function _start(cx,cy){_d=true;_mx=false;const r=fab.getBoundingClientRect();_fx=r.left;_fy=r.top;_sx=cx;_sy=cy;fab.style.transition='none';}
-      function _move(cx,cy){
-        if(!_d)return;
-        const dx=cx-_sx,dy=cy-_sy;
-        if(Math.abs(dx)>5||Math.abs(dy)>5)_mx=true;
-        if(!_mx)return;
-        const r=fab.getBoundingClientRect();
-        fab.style.left=Math.max(8,Math.min(window.innerWidth-r.width-8,_fx+dx))+'px';
-        fab.style.top=Math.max(56,Math.min(window.innerHeight-r.height-8,_fy+dy))+'px';
-        fab.style.bottom='auto';fab.style.right='auto';
-      }
-      function _end(){
-        if(!_d)return;_d=false;
-        fab.style.transition='transform .18s ease,box-shadow .18s ease';
-        if(!_mx){showShop();return;}
-        // Snap edge
-        const r=fab.getBoundingClientRect();
-        const toLeft=r.left+r.width/2<window.innerWidth/2;
-        fab.style.left=toLeft?'14px':(window.innerWidth-r.width-14)+'px';
-        setTimeout(()=>_mx=false,80);
-      }
-      fab.addEventListener('touchstart',e=>{_start(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
-      fab.addEventListener('touchmove',e=>{_move(e.touches[0].clientX,e.touches[0].clientY);if(_mx)e.preventDefault();},{passive:false});
-      fab.addEventListener('touchend',_end,{passive:true});
-      fab.addEventListener('mousedown',e=>{if(e.button===0)_start(e.clientX,e.clientY);});
-      document.addEventListener('mousemove',e=>{if(_d)_move(e.clientX,e.clientY);});
-      document.addEventListener('mouseup',e=>{if(_d)_end();});
-      fab.addEventListener('click',e=>{if(_mx)e.stopPropagation();});
-      document.body.appendChild(fab);
-    }
-    updateDia();
+  /* FAB draggable vertikal, hanya tampil kalau body.home-context (lihat syncHomeContext di bawah). */
+  function createFab() {
+    if (document.getElementById('cardShopFab')) return;
+    const fab = document.createElement('button');
+    fab.id = 'cardShopFab';
+    fab.className = 'card-shop-fab';
+    fab.setAttribute('aria-label', 'Card Shop');
+    fab.innerHTML = `<img class="fab-basket-img" src="assets/cards/fab-basket.png" alt="">
+      <span class="fab-dia"><span data-diamond-count>${getDia() === Infinity ? '∞' : getDia()}</span> 💎</span>`;
+    document.body.appendChild(fab);
+
+    let dragging = false, moved = false, startX = 0, startY = 0, fabX = 0, fabY = 0;
+    const start = (x, y) => { dragging = true; moved = false; const r = fab.getBoundingClientRect(); fabX = r.left; fabY = r.top; startX = x; startY = y; fab.style.transition = 'none'; };
+    const move = (x, y) => {
+      if (!dragging) return;
+      const dx = x - startX, dy = y - startY;
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) moved = true;
+      const nx = Math.min(Math.max(8, fabX + dx), window.innerWidth - fab.offsetWidth - 8);
+      const ny = Math.min(Math.max(8, fabY + dy), window.innerHeight - fab.offsetHeight - 8);
+      fab.style.left = nx + 'px'; fab.style.top = ny + 'px'; fab.style.right = 'auto';
+    };
+    const end = () => {
+      if (!dragging) return;
+      dragging = false;
+      fab.style.transition = '';
+      const r = fab.getBoundingClientRect();
+      const snapLeft = r.left + r.width / 2 < window.innerWidth / 2;
+      fab.style.left = snapLeft ? '14px' : (window.innerWidth - r.width - 14) + 'px';
+      setTimeout(() => { moved = false; }, 60);
+    };
+    fab.addEventListener('touchstart', e => start(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    fab.addEventListener('touchmove', e => { move(e.touches[0].clientX, e.touches[0].clientY); if (moved) e.preventDefault(); }, { passive: false });
+    fab.addEventListener('touchend', end, { passive: true });
+    fab.addEventListener('mousedown', e => { if (e.button === 0) start(e.clientX, e.clientY); });
+    document.addEventListener('mousemove', e => { if (dragging) move(e.clientX, e.clientY); });
+    document.addEventListener('mouseup', () => { if (dragging) end(); });
+    fab.addEventListener('click', e => { if (moved) { e.stopPropagation(); return; } showShop(); });
   }
 
-  /* Jaga class home-context selalu sinkron dengan view aktif (FAB hanya tampil di Beranda setelah login) */
-  function syncHomeContext(){
-    const b=document.body,h=document.getElementById('home');
-    const want=!!(h&&h.classList.contains('active'))&&!b.classList.contains('auth-pending');
-    if(b.classList.contains('home-context')!==want)b.classList.toggle('home-context',want);
+  /* Sinkron visibilitas dengan halaman aktif: FAB & sel Diamond di Beranda hanya tampak
+     kalau home-context aktif dan user sudah login (bukan auth-pending). */
+  function syncHomeContext() {
+    const b = document.body;
+    const visible = b.classList.contains('home-context') && !b.classList.contains('auth-pending');
+    document.getElementById('cardShopFab')?.classList.toggle('is-visible', visible);
   }
-  function watchHome(){
+  function watchHomeContext() {
     syncHomeContext();
-    const mo=new MutationObserver(syncHomeContext);
-    mo.observe(document.body,{attributes:true,attributeFilter:['class']});
-    document.querySelectorAll('.view').forEach(v=>mo.observe(v,{attributes:true,attributeFilter:['class']}));
+    new MutationObserver(syncHomeContext).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   }
-  const boot=()=>{injectUI();watchHome();};
-  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',boot):boot();
-  window.cardShop={show:showShop,hide:hideShop,getDiamonds:getDia};
+
+  function injectDiamondStatCell() {
+    const items = document.querySelectorAll('.duo-reward-item');
+    if (items.length < 4) return;
+    items[3].innerHTML = `<span class="duo-reward-icon">💎</span><div><b data-diamond-count>${getDia() === Infinity ? '∞' : getDia()}</b><small>Diamond</small></div>`;
+  }
+
+  /* Saat data disinkron dari perangkat lain (login di HP lalu buka di laptop, dsb.),
+     localStorage berubah lewat jalur yang tidak lewat UI ini, jadi badge & grid perlu di-refresh manual. */
+  function onExternalSync() {
+    updateDiaBadges();
+    injectDiamondStatCell();
+    if (document.getElementById('cardShopModal')?.classList.contains('open')) refreshShop();
+  }
+
+  function boot() {
+    createFab();
+    watchHomeContext();
+    injectDiamondStatCell();
+    updateDiaBadges();
+    window.addEventListener('clined:sync-applied', onExternalSync);
+    window.addEventListener('clined:auth-ready', () => setTimeout(onExternalSync, 600));
+  }
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
+
+  window.CLINED_CARD_SHOP = { show: showShop, hide: hideShop };
 })();
