@@ -1,0 +1,2180 @@
+[
+  {
+    "id": "kedkom-2021-001",
+    "no": 1,
+    "soal": "Apa nama bidang gerakan sendi tersebut?",
+    "opsi": [
+      "Sagital",
+      "Frontal",
+      "Vertical",
+      "Transversal",
+      "Rotasi ke kanan"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Bidang sagital membagi tubuh menjadi bagian kanan dan kiri.\nB. Bidang frontal membagi tubuh menjadi bagian depan dan belakang.\nC. Vertikal merupakan garis sumbu aksial tubuh.\nD. Bidang transversal (horisontal) membagi tubuh menjadi bagian atas dan bawah, tempat terjadinya gerakan rotasi.\nE. Rotasi ke kanan adalah jenis pergerakan, bukan nama bidang anatomi.",
+    "pembahasan_klinis": {
+      "A": "Bidang sagital membagi tubuh menjadi bagian kanan dan kiri.",
+      "B": "Bidang frontal membagi tubuh menjadi bagian depan dan belakang.",
+      "C": "Vertikal merupakan garis sumbu aksial tubuh.",
+      "D": "Bidang transversal (horisontal) membagi tubuh menjadi bagian atas dan bawah, tempat terjadinya gerakan rotasi.",
+      "E": "Rotasi ke kanan adalah jenis pergerakan, bukan nama bidang anatomi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-002",
+    "no": 2,
+    "soal": "Seorang laki-laki, berusia 20 tahun memiliki profesi sebagai atlet, datang ke Dokter Poliklinik karena mengalami cedera pada bahu. Sebelum dilakukan pemeriksaan lebih lanjut, Dokter menjelaskan ke pasien mengenai lokasi cedera yaitu di articulatio humeri. Pada articulatio humeri, struktur apakah yang memelihara stabilitas dinamis dari gerak sendi tersebut?",
+    "opsi": [
+      "Ligamentum di sekitar articulatio humeri",
+      "Ligamentum acromioclavicularis",
+      "Ligamentum coracoclavicularis",
+      "Ligamentum coracohumeralis",
+      "Otot rotator cuff (rotator cuff muscles)"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Ligamen sekitar sendi humeri memberikan stabilitas pasif.\nB. Ligamentum acromioclavicularis menstabilkan sendi akromioklavikularis.\nC. Ligamentum coracoclavicularis menstabilkan klavikula dan prosesus korakoideus.\nD. Ligamentum coracohumeralis membantu menahan kaput humeri secara pasif.\nE. Otot rotator cuff (supraspinatus, infraspinatus, teres minor, subscapularis) merupakan penstabil dinamis utama sendi bahu.",
+    "pembahasan_klinis": {
+      "A": "Ligamen sekitar sendi humeri memberikan stabilitas pasif.",
+      "B": "Ligamentum acromioclavicularis menstabilkan sendi akromioklavikularis.",
+      "C": "Ligamentum coracoclavicularis menstabilkan klavikula dan prosesus korakoideus.",
+      "D": "Ligamentum coracohumeralis membantu menahan kaput humeri secara pasif.",
+      "E": "Otot rotator cuff (supraspinatus, infraspinatus, teres minor, subscapularis) merupakan penstabil dinamis utama sendi bahu."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-003",
+    "no": 3,
+    "soal": "Pada saat terjadi fraktur dilakukan pembidaian, arteri yang dapat teraba di bagian belakang bawah malleolus medialis adalah....",
+    "opsi": [
+      "A. Radialis",
+      "A. Ulnaris",
+      "A. Brachialis",
+      "A. Tibialis anterior",
+      "A. Tibialis posterior"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. A. Radialis teraba di pergelangan tangan ventral lateral.\nB. A. Ulnaris teraba di pergelangan tangan ventral medial.\nC. A. Brachialis teraba di fosa kubiti lengan atas.\nD. A. Tibialis anterior teraba sebagai A. dorsalis pedis di dorsum pedis.\nE. A. Tibialis posterior berjalan melintasi bagian belakang bawah malleolus medialis (didalam tarsal tunnel).",
+    "pembahasan_klinis": {
+      "A": "A. Radialis teraba di pergelangan tangan ventral lateral.",
+      "B": "A. Ulnaris teraba di pergelangan tangan ventral medial.",
+      "C": "A. Brachialis teraba di fosa kubiti lengan atas.",
+      "D": "A. Tibialis anterior teraba sebagai A. dorsalis pedis di dorsum pedis.",
+      "E": "A. Tibialis posterior berjalan melintasi bagian belakang bawah malleolus medialis (didalam tarsal tunnel)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-004",
+    "no": 4,
+    "soal": "Sistem muskuloskeletal dapat mengalami kelainan. Untuk menegakkan diagnosis penyakit muskuloskeletal, dokter akan melakukan pemeriksaan sistematis, yakni :",
+    "opsi": [
+      "Anamnesis & pemeriksaan fisik",
+      "Anamnesis saja",
+      "Pemeriksaan fisik saja",
+      "Pemeriksaan penunjang saja",
+      "Anamnesis, pemeriksaan fisik, & pemeriksaan penunjang"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Anamnesis dan PF penting namun belum mencakup pemeriksaan penunjang konfirmasi.\nB. Anamnesis saja tidak cukup untuk penegakan diagnosis yang komprehensif.\nC. Pemeriksaan fisik tanpa anamnesis kehilangan informasi riwayat trauma/penyakit.\nD. Pemeriksaan penunjang harus didasari oleh temuan klinis.\nE. Penegakan diagnosis muskuloskeletal secara rinci dan terstruktur meliputi anamnesis, pemeriksaan fisik (look, feel, move), serta pemeriksaan penunjang (radiologi/lab).",
+    "pembahasan_klinis": {
+      "A": "Anamnesis dan PF penting namun belum mencakup pemeriksaan penunjang konfirmasi.",
+      "B": "Anamnesis saja tidak cukup untuk penegakan diagnosis yang komprehensif.",
+      "C": "Pemeriksaan fisik tanpa anamnesis kehilangan informasi riwayat trauma/penyakit.",
+      "D": "Pemeriksaan penunjang harus didasari oleh temuan klinis.",
+      "E": "Penegakan diagnosis muskuloskeletal secara rinci dan terstruktur meliputi anamnesis, pemeriksaan fisik (look, feel, move), serta pemeriksaan penunjang (radiologi/lab)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-005",
+    "no": 5,
+    "soal": "Otot apa yang berkontraksi pada saat seseorang mengedipkan mata?",
+    "opsi": [
+      "M. Orbicularis oculi",
+      "M. Zygomaticus major",
+      "M. Orbicularis oris",
+      "M. Buccinator",
+      "M. Procerus"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. M. Orbicularis oculi berfungsi untuk memejamkan/mengedipkan kelopak mata.\nB. M. Zygomaticus major berfungsi menarik sudut mulut ke atas (tersenyum).\nC. M. Orbicularis oris berfungsi menutup dan memonyongkan bibir.\nD. M. Buccinator berfungsi menekan pipi ke dalam saat mengunyah/meniup.\nE. M. Procerus berfungsi mengerutkan kulit di antara kedua alis.",
+    "pembahasan_klinis": {
+      "A": "M. Orbicularis oculi berfungsi untuk memejamkan/mengedipkan kelopak mata.",
+      "B": "M. Zygomaticus major berfungsi menarik sudut mulut ke atas (tersenyum).",
+      "C": "M. Orbicularis oris berfungsi menutup dan memonyongkan bibir.",
+      "D": "M. Buccinator berfungsi menekan pipi ke dalam saat mengunyah/meniup.",
+      "E": "M. Procerus berfungsi mengerutkan kulit di antara kedua alis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-006",
+    "no": 6,
+    "soal": "Pria 66 tahun datang ke RS Yarsi mengeluhkan jarinya selalu menekuk dan nyeri saat diluruskan. Keluhan ini dialami selama 1,5 tahun. Pada pemeriksaan ditemukan deformitas akibat fleksi sendi PIP dan hiperekstensi sendi DIP. Apa nama deformitas tersebut?",
+    "opsi": [
+      "Squeeze test",
+      "Boutonniere deformity",
+      "Swan neck deformity",
+      "Bamboo spine",
+      "Dagger sign"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Squeeze test adalah uji provokasi untuk arthritis/neuroma.\nB. Boutonniere deformity ditandai oleh fleksi sendi PIP dan hiperekstensi sendi DIP.\nC. Swan neck deformity ditandai oleh hiperekstensi PIP dan fleksi DIP.\nD. Bamboo spine merupakan gambaran radiologis pada Ankylosing Spondylitis.\nE. Dagger sign adalah gambaran osifikasi ligamen interspinosus pada radiografi vertebra.",
+    "pembahasan_klinis": {
+      "A": "Squeeze test adalah uji provokasi untuk arthritis/neuroma.",
+      "B": "Boutonniere deformity ditandai oleh fleksi sendi PIP dan hiperekstensi sendi DIP.",
+      "C": "Swan neck deformity ditandai oleh hiperekstensi PIP dan fleksi DIP.",
+      "D": "Bamboo spine merupakan gambaran radiologis pada Ankylosing Spondylitis.",
+      "E": "Dagger sign adalah gambaran osifikasi ligamen interspinosus pada radiografi vertebra."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-007",
+    "no": 7,
+    "soal": "Seorang laki-laki usia 47 tahun datang ke UGD dengan luka bakar derajat 3 di regio antebrachii. Dari pemeriksaan fisik pada regio tersebut, ditemukan bengkak, kebiruan, palpasi a. Radialis lemah. Dokter menyarankan untuk melakukan fasciotomy daerah palmar antebrachii untuk membebaskan tekanan otot-otot di kompartemen superficial. Dibawah ini, manakah otot kompartemen tersebut?",
+    "opsi": [
+      "M. flexor pollicis longus",
+      "M. supinator",
+      "M. pronator quadratus",
+      "M. flexor carpi radialis",
+      "M. flexor digitorum profundus"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. M. flexor pollicis longus terletak di kompartemen anterior profunda.\nB. M. supinator terletak di kompartemen posterior profunda.\nC. M. pronator quadratus terletak di kompartemen anterior profunda.\nD. M. flexor carpi radialis merupakan salah satu otot fleksor superfisial di regio antebrachii anterior.\nE. M. flexor digitorum profundus terletak di kompartemen anterior profunda.",
+    "pembahasan_klinis": {
+      "A": "M. flexor pollicis longus terletak di kompartemen anterior profunda.",
+      "B": "M. supinator terletak di kompartemen posterior profunda.",
+      "C": "M. pronator quadratus terletak di kompartemen anterior profunda.",
+      "D": "M. flexor carpi radialis merupakan salah meurut otot fleksor superfisial di regio antebrachii anterior.",
+      "E": "M. flexor digitorum profundus terletak di kompartemen anterior profunda."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-008",
+    "no": 8,
+    "soal": "Seorang wanita berumur 35 thn mengalami pendarahan yang lama dan menstruasi yang sakit. Hasil dari USG menemukan adanya massa dari uterus berukuran 4x3 cm. Dilakukan operasi, hasil pemeriksaan PA adalah sel berbentuk cerutu, serat berbentuk kisaran. Hasil diagnosis adalah:",
+    "opsi": [
+      "Lipoma",
+      "Leiomioma",
+      "Hamartoma",
+      "Rhabdomyoma",
+      "Fibroma"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Lipoma terdiri atas sel-sel lemak matur.\nB. Leiomioma adalah tumor jinak otot polos dengan sel berbentuk cerutu (*cigar-shaped nuclei*) yang tersusun dalam berkas simpang siur (kisaran).\nC. Hamartoma merupakan malformasi jaringan benigna lokal.\nD. Rhabdomyoma berasal dari otot lurik/skelet.\nE. Fibroma terdiri dari proliferasi jaringan ikat fibrosa.",
+    "pembahasan_klinis": {
+      "A": "Lipoma terdiri atas sel-sel lemak matur.",
+      "B": "Leiomioma adalah tumor jinak otot polos dengan sel berbentuk cerutu (cigar-shaped nuclei) yang tersusun dalam berkas simpang siur (kisaran).",
+      "C": "Hamartoma merupakan malformasi jaringan benigna lokal.",
+      "D": "Rhabdomyoma berasal dari otot lurik/skelet.",
+      "E": "Fibroma terdiri dari proliferasi jaringan ikat fibrosa."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-009",
+    "no": 9,
+    "soal": "Pasien mengeluhkan nyeri pada tumit dan telapak kaki kanan. Pasien merasa nyeri semakin bertambah saat berdiri atau digerakkan. Namun nyeri hilang saat istirahat. Dokter mendiagnosis sementara pasien terkena Tarsal Tunnel Syndrome. Pada kondisi ini, saraf apakah yang memungkinkan terjadi gangguan?",
+    "opsi": [
+      "N. saphenus",
+      "N. tibialis",
+      "N. femoralis",
+      "N. peroneus superficialis",
+      "N. peroneus profundus"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. N. saphenus memberikan persarafan sensorik di tungkai bawah medial.\nB. Tarsal tunnel syndrome disebabkan oleh jepitan pada N. tibialis (posterior) saat berjalan melintasi kanalis tarsalis.\nC. N. femoralis mempersarafi regio paha anterior.\nD. N. peroneus superficialis mempersarafi kompartemen lateral leg dan dorsum pedis.\nE. N. peroneus profundus mempersarafi kompartemen anterior leg.",
+    "pembahasan_klinis": {
+      "A": "N. saphenus memberikan persarafan sensorik di tungkai bawah medial.",
+      "B": "Tarsal tunnel syndrome disebabkan oleh jepitan pada N. tibialis (posterior) saat berjalan melintasi kanalis tarsalis.",
+      "C": "N. femoralis mempersarafi regio paha anterior.",
+      "D": "N. peroneus superficialis mempersarafi kompartemen lateral leg dan dorsum pedis.",
+      "E": "N. peroneus profundus mempersarafi kompartemen anterior leg."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-010",
+    "no": 10,
+    "soal": "Seorang laki-laki 20 thn mengalami pembengkakan pada femur kanan bagian distal sejak 9 bulan yang lalu, sebelumnya pasien terjatuh dan terbentur pada bagian tersebut. Pasien didiagnosis sarkoma osteogenik (osteosarcoma). Sel manakah yang mengalami keganasan dan apakah perannya?",
+    "opsi": [
+      "Osteoblas yang menghasilkan osteoid",
+      "Kondroblas yang membentuk tulang rawan",
+      "Osteosit yang menghasilkan kalsium",
+      "Osteoklas yang meresorpsi tulang",
+      "Osteoprogenitor yang membelah sel"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Sarkoma osteogenik ditandai oleh proliferasi sel meseim/osteoblas anaplastik maligna yang membentuk matriks tulang imatur (osteoid).\nB. Kondroblas membentuk matriks kartilago (terdapat pada chondrosarcoma).\nC. Osteosit adalah sel tulang dewasa di dalam lakuna.\nD. Osteoklas berperan dalam destruksi/resorpsi tulang.\nE. Sel osteoprogenitor merupakan stem sel pembentuk osteoblas.",
+    "pembahasan_klinis": {
+      "A": "Sarkoma osteogenik ditandai oleh proliferasi sel meseim/osteoblas anaplastik maligna yang membentuk matriks tulang imatur (osteoid).",
+      "B": "Kondroblas membentuk matriks kartilago (terdapat pada chondrosarcoma).",
+      "C": "Osteosit adalah sel tulang dewasa di dalam lakuna.",
+      "D": "Osteoklas berperan dalam destruksi/resorpsi tulang.",
+      "E": "Sel osteoprogenitor merupakan stem sel pembentuk osteoblas."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-011",
+    "no": 11,
+    "soal": "Seorang wanita, berumur 52 tahun datang ke poliklinik dengan keluhan nyeri pada seluruh persendian terutama pada bagian pergelangan tangan sampai jari-jari tangan. Pasien sudah didiagnosis menderita rheumatoid arthritis sejak 3 tahun lalu. Bagian sendi yang paling sering mengalami kelainan simetris pada penyakit ini adalah:",
+    "opsi": [
+      "Proximal interphalangeal (PIP)",
+      "Os coxae",
+      "Os patella",
+      "Metacarpophalangeal (MCP)",
+      "Distal interphalangeal (DIP)"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Sendi PIP dapat terkena pada RA, namun khas dialami bersama MCP.\nB. Os coxae jarang menjadi destruksi awal pada RA.\nC. Os patella bukan merupakan sendi Diarthrodial dengan keterlibatan primer khas RA.\nD. Rheumatoid Arthritis secara khas menyerang sendi-sendi kecil tangan seperti MCP (Metacarpophalangeal) dan PIP secara simetris.\nE. Sendi DIP khas terkena pada Osteoarthritis, bukan RA.",
+    "pembahasan_klinis": {
+      "A": "Sendi PIP dapat terkena pada RA, namun khas dialami bersama MCP.",
+      "B": "Os coxae jarang menjadi destruksi awal pada RA.",
+      "C": "Os patella bukan merupakan sendi Diarthrodial dengan keterlibatan primer khas RA.",
+      "D": "Rheumatoid Arthritis secara khas menyerang sendi-sendi kecil tangan seperti MCP (Metacarpophalangeal) dan PIP secara simetris.",
+      "E": "Sendi DIP khas terkena pada Osteoarthritis, bukan RA."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-012",
+    "no": 12,
+    "soal": "Tata cara rukuk dan sujud pada pasien yang shalat dengan posisi berbaring terlentang adalah?",
+    "opsi": [
+      "Rukuk dan sujud dilakukan seperti saat shalat sempurna",
+      "Rukuk dengan cara membungkukkan badan dan sujud membungkuk lebih rendah",
+      "Rukuk dilakukan dengan menggunakan isyarat dan sujud seperti biasa",
+      "Rukuk seperti biasa dan sujud menggunakan isyarat",
+      "Rukuk dan sujud dilakukan dengan menggunakan isyarat (gerakan kepala/kelopak mata)"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Pasien terlentang tidak mampu melakukan rukuk/sujud fisik sempurna.\nB. Pasien terlentang tidak bisa membungkukkan badan secara normal.\nC. Rukuk dan sujud kedua-duanya dilakukan dengan isyarat jika tidak mampu secara fisik.\nD. Tidak memisahkan bentuk fisik dan isyarat jika dalam keadaan terlentang penuh.\nE. Pada posisi terlentang, rukuk dan sujud dilakukan dengan menggunakan isyarat tundukan kepala atau anggukan/kedipan mata di mana sujud lebih rendah daripada rukuk.",
+    "pembahasan_klinis": {
+      "A": "Pasien terlentang tidak mampu melakukan rukuk/sujud fisik sempurna.",
+      "B": "Pasien terlentang tidak bisa membungkukkan badan secara normal.",
+      "C": "Rukuk dan sujud kedua-duanya dilakukan dengan isyarat jika tidak mampu secara fisik.",
+      "D": "Tidak memisahkan bentuk fisik dan isyarat jika dalam keadaan terlentang penuh.",
+      "E": "Pada posisi terlentang, rukuk dan sujud dilakukan dengan menggunakan isyarat tundukan kepala atau anggukan/kedipan mata di mana sujud lebih rendah daripada rukuk."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-013",
+    "no": 13,
+    "soal": "Setiap kumpulan/berkas serat otot (fasikulus) diliputi oleh jaringan ikat yang merupakan tempat lewatnya pembuluh darah dan saraf. Apa nama jaringan ikat tersebut?",
+    "opsi": [
+      "Perimisium",
+      "Endomisium",
+      "Sarkolema",
+      "Sarkoplasma",
+      "Epimisium"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Perimisium adalah jaringan ikat yang membungkus kumpulan/berkas serabut otot (fasikulus).\nB. Endomisium membungkus setiap satu serat otot individu.\nC. Sarkolema adalah membran sel otot.\nD. Sarkoplasma adalah sitoplasma sel otot.\nE. Epimisium membungkus keseluruhan organ otot rangka.",
+    "pembahasan_klinis": {
+      "A": "Perimisium adalah jaringan ikat yang membungkus kumpulan/berkas serabut otot (fasikulus).",
+      "B": "Endomisium membungkus setiap satu serat otot individu.",
+      "C": "Sarkolema adalah membran sel otot.",
+      "D": "Sarkoplasma adalah sitoplasma sel otot.",
+      "E": "Epimisium membungkus keseluruhan organ otot rangka."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-014",
+    "no": 14,
+    "soal": "Seorang Laki-laki 65 tahun, datang ke dokter dengan keluhan nyeri di lutut kiri dan lutut kanan. Hal tersebut sering terjadi namun dia tidak memiliki riwayat jatuh dan trauma, setelah melakukan pemeriksaan ditemukan pada lutut kanan bengkak, lalu dokter memberikan tablet Ketoprofen 50 mg 2 kali sehari. Bagaimanakah mekanisme kerja obat tersebut?",
+    "opsi": [
+      "Menghambat sintesis TNF alfa",
+      "Menghambat sintesis Interleukin",
+      "Menghambat sintesis Prostaglandin",
+      "Menghambat sintesis Sitokin",
+      "Menghambat sintesis Leukotrien"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. TNF-alfa dihambat oleh agen biologis seperti Infliximab/Etanercept.\nB. Interleukin dihambat oleh agen biologis seperti Anakinra.\nC. Ketoprofen adalah NSAID yang bekerja menghambat enzim siklooksigenase (COX) sehingga menghambat sintesis prostaglandin mediator nyeri dan inflamasi.\nD. Sitokin tidak dihambat secara direct enzimatis oleh NSAID non-selektif.\nE. Leukotrien dihambat oleh obat golongan leukotriene receptor antagonist atau 5-LOX inhibitor.",
+    "pembahasan_klinis": {
+      "A": "TNF-alfa dihambat oleh agen biologis seperti Infliximab/Etanercept.",
+      "B": "Interleukin dihambat oleh agen biologis seperti Anakinra.",
+      "C": "Ketoprofen adalah NSAID yang bekerja menghambat enzim siklooksigenase (COX) sehingga menghambat sintesis prostaglandin mediator nyeri dan inflamasi.",
+      "D": "Sitokin tidak dihambat secara direct enzimatis oleh NSAID non-selektif.",
+      "E": "Leukotrien dihambat oleh obat golongan leukotriene receptor antagonist atau 5-LOX inhibitor."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-015",
+    "no": 15,
+    "soal": "Seorang laki-laki berusia 49 tahun datang ke poliklinik RS YARSI dengan keluhan utama nyeri punggung bawah menjalar ke kaki. Diketahui pasien merupakan seorang kuli bangunan. Dokter mendiagnosis pasien dengan Hernia Nucleus Pulposus (HNP). Apakah ligamen jaringan ikat yang mengalami penekanan/peregangan saat protrusi diskus ke arah posterolateral/posterior?",
+    "opsi": [
+      "Lig. Supraspinosus",
+      "Lig. Longitudinalis posterior",
+      "Lig. Longitudinalis anterior",
+      "Lig. Interspinosus",
+      "Lig. Flavum"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Lig. Supraspinosus menghubungkan apeks prosesus spinosus di bagian paling posterior.\nB. Herniasi nukleus pulposus ke arah posterior mendesak Ligamentum longitudinalis posterior sebelum menekan kanalis spinalis/radiks saraf.\nC. Lig. Longitudinalis anterior membatasi ekstensi di bagian anterior korpus vertebra.\nD. Lig. Interspinosus terdapat di antara prosesus spinosus.\nE. Lig. Flavum menghubungkan lamina antar vertebra.",
+    "pembahasan_klinis": {
+      "A": "Lig. Supraspinosus menghubungkan apeks prosesus spinosus di bagian paling posterior.",
+      "B": "Herniasi nukleus pulposus ke arah posterior mendesak Ligamentum longitudinalis posterior sebelum menekan kanalis spinalis/radiks saraf.",
+      "C": "Lig. Longitudinalis anterior membatasi ekstensi di bagian anterior korpus vertebra.",
+      "D": "Lig. Interspinosus terdapat di antara prosesus spinosus.",
+      "E": "Lig. Flavum menghubungkan lamina antar vertebra."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-016",
+    "no": 16,
+    "soal": "Sel yang berperan utama dalam proses destruksi/resorpsi matriks tulang pada proses remodeling tulang adalah:",
+    "opsi": [
+      "Osteoprogenitor",
+      "Osteoblas",
+      "Osteoklas",
+      "Osteoid",
+      "Osteosit"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Sel osteoprogenitor membelah menjadi osteoblas.\nB. Osteoblas berperan membentuk matriks tulang baru.\nC. Osteoklas adalah sel multinuklear besar yang bertugas meresorpsi/menghancurkan matriks tulang tua pada remodeling tulang.\nD. Osteoid adalah matriks tulang organik imatur yang belum terkalsifikasi.\nE. Osteosit berperan memelihara homeostasis matriks tulang.",
+    "pembahasan_klinis": {
+      "A": "Sel osteoprogenitor membelah menjadi osteoblas.",
+      "B": "Osteoblas berperan membentuk matriks tulang baru.",
+      "C": "Osteoklas adalah sel multinuklear besar yang bertugas meresorpsi/menghancurkan matriks tulang tua pada remodeling tulang.",
+      "D": "Osteoid adalah matriks tulang organik imatur yang belum terkalsifikasi.",
+      "E": "Osteosit berperan memelihara homeostasis matriks tulang."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-017",
+    "no": 17,
+    "soal": "Zat yang dapat menghambat respon asetilkolin di hubungan neuromuskular (neuromuscular junction) dapat menimbulkan pengaruh:",
+    "opsi": [
+      "Relaksasi/kelumpuhan otot",
+      "Peningkatan respon otot",
+      "Peningkatan kontraksi otot",
+      "Depolarisasi membran sel otot",
+      "Pergeseran aktin dan miosin"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Hambatan pada reseptor asetilkolin mencegah depolarisasi lempeng ujung motorik sehingga otot gagal berkontraksi dan mengalami relaksasi/paralisis.\nB. Respon otot akan menurun, bukan meningkat.\nC. Kontraksi otot tidak dapat terjadi tanpa pemicuan asetilkolin.\nD. Terjadi hiperpolarisasi/kegagalan depolarisasi.\nE. Tanpa kalsium dan depolarisasi, pergeseran filamen aktin-miosin tidak terpicu.",
+    "pembahasan_klinis": {
+      "A": "Hambatan pada reseptor asetilkolin mencegah depolarisasi lempeng ujung motorik sehingga otot gagal berkontraksi dan mengalami relaksasi/paralisis.",
+      "B": "Respon otot akan menurun, bukan meningkat.",
+      "C": "Kontraksi otot tidak dapat terjadi tanpa pemicuan asetilkolin.",
+      "D": "Terjadi hiperpolarisasi/kegagalan depolarisasi.",
+      "E": "Tanpa kalsium dan depolarisasi, pergeseran filamen aktin-miosin tidak terpicu."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-018",
+    "no": 18,
+    "soal": "Seorang laki-laki usia 30 tahun dibawa ke UGD karena kecelakaan lalu lintas. Pada pemeriksaan pasien tampak syok dan pucat. Karena pasien syok dan pembuluh darah kolaps akibat perdarahan banyak, akan dilakukan venasectio pada tungkai bawah. Apakah pembuluh darah superfisial yang paling sering digunakan pada kasus ini?",
+    "opsi": [
+      "V. femoralis",
+      "V. saphena parva",
+      "V. saphena magna",
+      "V. tibialis posterior",
+      "V. mediana cubiti"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. V. femoralis merupakan pembuluh darah dalam (deep vein).\nB. V. saphena parva terletak di posterior ankle lateral.\nC. Vena saphena magna terletak konsisten di anterior malleolus medialis sehingga menjadi pilihan utama tindakan venasectio krisis.\nD. V. tibialis posterior adalah vena dalam.\nE. V. mediana cubiti terletak di lengan atas/fosa kubiti, bukan tungkai bawah.",
+    "pembahasan_klinis": {
+      "A": "V. femoralis merupakan pembuluh darah dalam (deep vein).",
+      "B": "V. saphena parva terletak di posterior ankle lateral.",
+      "C": "Vena saphena magna terletak konsisten di anterior malleolus medialis sehingga menjadi pilihan utama tindakan venasectio krisis.",
+      "D": "V. tibialis posterior adalah vena dalam.",
+      "E": "V. mediana cubiti terletak di lengan atas/fosa kubiti, bukan tungkai bawah."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-019",
+    "no": 19,
+    "soal": "Seorang perempuan berusia 65 tahun mengonsumsi Alendronat sejak 1 bulan lalu untuk osteoporosis dan mengeluhkan rasa terbakar di dada (esofagitis). Bagaimana edukasi minum obat Alendronat yang tepat diberikan kepada pasien?",
+    "opsi": [
+      "Obat diminum dengan 300 ml air putih + badan tetap posisi tegak minimal 30 menit setelah minum obat",
+      "Obat dilarutkan dalam 100 ml juice + kepala tetap posisi 45 derajat selama 30 menit",
+      "Obat dimakan bersama makanan + 1 jam kemudian kepala posisi 30 derajat",
+      "Obat diminum dengan 5 gelas air sekaligus + badan setengah duduk",
+      "Obat dimakan bersama makanan + 30 menit kemudian badan tengkurap"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Bisfosfonat oral (Alendronat) harus diminum dengan segelas penuh air putih (200-300 ml) saat perut kosong dan pasien harus dalam posisi tegak (duduk/berdiri) minimal 30 menit untuk mencegah ulserasi esofagus.\nB. Jus mengganggu absorpsi bisfosfonat secara signifikan.\nC. Bisfosfonat tidak boleh diminum bersama makanan karena menurunkan absorpsi hingga mendekati nol.\nD. Lima gelas air berlebihan dan posisi setengah duduk berisiko refluks.\nE. Posisi tengkurap dan makanan sangat meningkatkan iritasi esofagus.",
+    "pembahasan_klinis": {
+      "A": "Bisfosfonat oral (Alendronat) harus diminum dengan segelas penuh air putih (200-300 ml) saat perut kosong dan pasien harus dalam posisi tegak (duduk/berdiri) minimal 30 menit untuk mencegah ulserasi esofagus.",
+      "B": "Jus mengganggu absorpsi bisfosfonat secara signifikan.",
+      "C": "Bisfosfonat tidak boleh diminum bersama makanan karena menurunkan absorpsi hingga mendekati nol.",
+      "D": "Lima gelas air berlebihan dan posisi setengah duduk berisiko refluks.",
+      "E": "Posisi tengkurap dan makanan sangat meningkatkan iritasi esofagus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-020",
+    "no": 20,
+    "soal": "Pada saat terjadi fraktur dilakukan pembidaian, arteri yang dapat teraba di bagian posterior dari malleolus medialis adalah....",
+    "opsi": [
+      "A. Radialis",
+      "A. Ulnaris",
+      "A. Brachialis",
+      "A. Tibialis anterior",
+      "A. Tibialis posterior"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. A. Radialis berada di regio karpal lateral.\nB. A. Ulnaris berada di regio karpal medial.\nC. A. Brachialis berada di regio brachium/cubiti.\nD. A. Tibialis anterior menjadi A. dorsalis pedis.\nE. A. Tibialis posterior teraba melintas di posterior malleolus medialis.",
+    "pembahasan_klinis": {
+      "A": "A. Radialis berada di regio karpal lateral.",
+      "B": "A. Ulnaris berada di regio karpal medial.",
+      "C": "A. Brachialis berada di regio brachium/cubiti.",
+      "D": "A. Tibialis anterior menjadi A. dorsalis pedis.",
+      "E": "A. Tibialis posterior teraba melintas di posterior malleolus medialis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-021",
+    "no": 21,
+    "soal": "Saat orang sakit melaksanakan sholat berbaring terlentang di bed rumah sakit, mana bagian tubuh yang paling dekat/dihadapkan ke arah kiblat?",
+    "opsi": [
+      "Kepala",
+      "Tangan",
+      "Perut",
+      "Dada",
+      "Kaki"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Kepala berada di sisi berlawanan arah kiblat pada posisi terlentang.\nB. Tangan berada di samping tubuh.\nC. Perut berada di bagian tengah.\nD. Dada dihadapkan ke atas/kiblat dengan peninggian kepala jika memungkinkan.\nE. Bagi pasien yang berbaring terlentang, kaki diarahkan ke kiblat sehingga ujung jari kaki menghadap ke arah kiblat.",
+    "pembahasan_klinis": {
+      "A": "Kepala berada di sisi berlawanan arah kiblat pada posisi terlentang.",
+      "B": "Tangan berada di samping tubuh.",
+      "C": "Perut berada di bagian tengah.",
+      "D": "Dada dihadapkan ke atas/kiblat dengan peninggian kepala jika memungkinkan.",
+      "E": "Bagi pasien yang berbaring terlentang, kaki diarahkan ke kiblat sehingga ujung jari kaki menghadap ke arah kiblat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-022",
+    "no": 22,
+    "soal": "Manakah di bawah ini yang merupakan mekanisme dan profil kerja obat golongan AINS (Anti-Inflamasi Non-Steroid)?",
+    "opsi": [
+      "Menghambat enzim siklooksigenase (COX-1 dan COX-2)",
+      "Menghambat enzim lipooksigenase secara spesifik",
+      "Meningkatkan sekresi mukus dan bikarbonat lambung",
+      "Menyebabkan penumpukan kristal asam urat di sendi",
+      "Tidak memicu efek samping iritasi lambung sama sekali"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Mekanisme utama AINS adalah menghambat enzim COX-1 dan/atau COX-2 sehingga menghalangi konversi asam arakidonat menjadi prostaglandin.\nB. Obat 5-LOX inhibitor menghambat lipooksigenase.\nC. AINS justru menekan prostasiklin/prostaglandin pembentuk mukus lambung.\nD. AINS digunakan meredakan nyeri pada serangan gout, bukan memicu deposisi kristal.\nE. Kebanyakan AINS non-selektif berpotensi menyebabkan iritasi lambung.",
+    "pembahasan_klinis": {
+      "A": "Mekanisme utama AINS adalah menghambat enzim COX-1 dan/atau COX-2 sehingga menghalangi konversi asam arakidonat menjadi prostaglandin.",
+      "B": "Obat 5-LOX inhibitor menghambat lipooksigenase.",
+      "C": "AINS justru menekan prostasiklin/prostaglandin pembentuk mukus lambung.",
+      "D": "AINS digunakan meredakan nyeri pada serangan gout, bukan memicu deposisi kristal.",
+      "E": "Kebanyakan AINS non-selektif berpotensi menyebabkan iritasi lambung."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-023",
+    "no": 23,
+    "soal": "Perempuan 24 tahun jatuh karena memakai high heels, masih bisa berjalan dengan bantuan tongkat, tidak ada deformitas, namun terasa nyeri saat gerakan inversi pergelangan kaki. Struktur permukaan artikular manakah yang membentuk sendi pergelangan kaki (articulatio talocruralis)?",
+    "opsi": [
+      "Facies articularis inferior os tibia, malleolus medialis/lateralis, dan trochlea tali",
+      "Condylus medialis dan facies articularis metatarsal I",
+      "Facies articularis superior os calcaneus dan os cuboid",
+      "Os femur dan os patella",
+      "Os naviculare dan os cuneiforme"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Articulatio talocruralis (sendi pergelangan kaki) dibentuk oleh mortise tibia-fibula (facies articularis inferior tibia, malleolus medialis tibia, malleolus lateralis fibula) dan trochlea tali.\nB. Bukan komponen artikulasi pergelangan kaki.\nC. Merupakan artikulasi subtalar/calcaneocuboid.\nD. Merupakan sendi patellofemoral di lutut.\nE. Merupakan persendian cuneonavicularis di midfoot.",
+    "pembahasan_klinis": {
+      "A": "Articulatio talocruralis (sendi pergelangan kaki) dibentuk oleh mortise tibia-fibula (facies articularis inferior tibia, malleolus medialis tibia, malleolus lateralis fibula) dan trochlea tali.",
+      "B": "Bukan komponen artikulasi pergelangan kaki.",
+      "C": "Merupakan artikulasi subtalar/calcaneocuboid.",
+      "D": "Merupakan sendi patellofemoral di lutut.",
+      "E": "Merupakan persendian cuneonavicularis di midfoot."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-024",
+    "no": 24,
+    "soal": "Apa nama otot yang berkontraksi pada saat orang mengedipkan mata?",
+    "opsi": [
+      "M. Orbicularis oculi",
+      "M. Orbicularis oris",
+      "M. Risorius",
+      "M. Zygomaticus major",
+      "M. Buccinator"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. M. Orbicularis oculi dipersarafi N. VII berfungsi menutup/mengedipkan palpebra.\nB. M. Orbicularis oris berada di sekeliling mulut.\nC. M. Risorius menarik sudut mulut ke lateral.\nD. M. Zygomaticus major tersenyum.\nE. M. Buccinator membentuk dinding pipi.",
+    "pembahasan_klinis": {
+      "A": "M. Orbicularis oculi dipersarafi N. VII berfungsi menutup/mengedipkan palpebra.",
+      "B": "M. Orbicularis oris berada di sekeliling mulut.",
+      "C": "M. Risorius menarik sudut mulut ke lateral.",
+      "D": "M. Zygomaticus major tersenyum.",
+      "E": "M. Buccinator membentuk dinding pipi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-025",
+    "no": 25,
+    "soal": "Pada pemeriksaan tekanan darah di lengan atas, dokter harus meraba denyut arteri. Apa nama arteri yang merupakan kelanjutan langsung dari arteria axillaris di distal batas bawah m. teres major?",
+    "opsi": [
+      "A. Profunda brachialis",
+      "A. Ulnaris",
+      "A. Radialis",
+      "A. Brachialis",
+      "A. Interossea communis"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. A. profunda brachialis adalah cabang dari A. brachialis.\nB. A. ulnaris adalah cabang terminal A. brachialis di fosa kubiti.\nC. A. radialis adalah cabang terminal A. brachialis di fosa kubiti.\nD. A. brachialis adalah kelanjutan langsung dari A. axillaris begitu melewati tepi bawah M. teres major.\nE. A. interossea communis adalah cabang dari A. ulnaris.",
+    "pembahasan_klinis": {
+      "A": "A. profunda brachialis adalah cabang dari A. brachialis.",
+      "B": "A. ulnaris adalah cabang terminal A. brachialis di fosa kubiti.",
+      "C": "A. radialis adalah cabang terminal A. brachialis di fosa kubiti.",
+      "D": "A. brachialis adalah kelanjutan langsung dari A. axillaris begitu melewati tepi bawah M. teres major.",
+      "E": "A. interossea communis adalah cabang dari A. ulnaris."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-026",
+    "no": 26,
+    "soal": "Seorang anak perempuan berusia 5 tahun dibawa orangtuanya ke poliklinik karena keluhan gusi sering berdarah, lemas, paha kanan bengkak dan nyeri sejak 1 bulan sebelum masuk RS. Pemeriksaan fisik: paha kanan bengkak, nyeri tekan (+), gusi berdarah (+), tinggi anak tidak sesuai dengan usia. Pemeriksaan radiografi: gambaran cincin sklerotik mengelilingi epifisis (Wimberger ring sign). Lab: hipovitaminosis C. Apakah diagnosis pasien tersebut?",
+    "opsi": [
+      "Scurvy (Skorbut)",
+      "Osteopetrosis",
+      "Osteomalacia",
+      "Spondylosis",
+      "Rickets"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Scurvy (Skorbut) terjadi akibat defisiensi vitamin C yang memicu gangguan sintesis kolagen, pendarahan subperiosteal, perdarahan gusi, dan gambaran khas radiologis Wimberger ring.\nB. Osteopetrosis ditandai tulang yang sangat padat dan rapuh (*marble bone*).\nC. Osteomalacia adalah defisiensi vitamin D pada dewasa.\nD. Spondylosis adalah perubahan degeneratif vertebra.\nE. Rickets adalah defisiensi vitamin D pada anak (ditandai *fraying* metafisis).",
+    "pembahasan_klinis": {
+      "A": "Scurvy (Skorbut) terjadi akibat defisiensi vitamin C yang memicu gangguan sintesis kolagen, pendarahan subperiosteal, perdarahan gusi, dan gambaran khas radiologis Wimberger ring.",
+      "B": "Osteopetrosis ditandai tulang yang sangat padat dan rapuh (marble bone).",
+      "C": "Osteomalacia adalah defisiensi vitamin D pada dewasa.",
+      "D": "Spondylosis adalah perubahan degeneratif vertebra.",
+      "E": "Rickets adalah defisiensi vitamin D pada anak (ditandai fraying metafisis)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-027",
+    "no": 27,
+    "soal": "Manakah otot di bawah ini yang melintasi articulatio coxae dan berperan sebagai fleksor utama sendi panggul?",
+    "opsi": [
+      "M. Vastus medialis",
+      "M. Vastus intermedius",
+      "Tractus iliotibialis",
+      "M. Ligamentum patellae",
+      "M. Iliopsoas major"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. M. Vastus medialis melintasi sendi lutut.\nB. M. Vastus intermedius melintasi sendi lutut.\nC. Tractus iliotibialis adalah penguat fasia lateral paha.\nD. M. Ligamentum patellae adalah ligamen penyambung patela ke tuberositas tibia.\nE. M. Iliopsoas (iliacus dan psoas major) melekat pada trochanter minor femur dan merupakan fleksor panggul paling kuat.",
+    "pembahasan_klinis": {
+      "A": "M. Vastus medialis melintasi sendi lutut.",
+      "B": "M. Vastus intermedius melintasi sendi lutut.",
+      "C": "Tractus iliotibialis adalah penguat fasia lateral paha.",
+      "D": "M. Ligamentum patellae adalah ligamen penyambung patela ke tuberositas tibia.",
+      "E": "M. Iliopsoas (iliacus dan psoas major) melekat pada trochanter minor femur dan merupakan fleksor panggul paling kuat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-028",
+    "no": 28,
+    "soal": "Ada seorang laki-laki mengalami kecelakaan, ditemukan pemendekan (*shortening*) serta rotasi eksternal pada tungkai kanan regio femur dextra. Apakah diagnosis trauma yang paling mungkin?",
+    "opsi": [
+      "Dislokasi panggul anterior",
+      "Fraktur femur proksimal",
+      "Fraktur femur distal",
+      "Dislokasi genu",
+      "Fraktur korpus tibia"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Dislokasi panggul posterior biasanya menampilkan rotasi internal dan adduksi.\nB. Fraktur femur proksimal (misal fraktur collum femoris/intertrochanteric) klasik memberikan deformitas pemendekan tungkai dan eksorotasi (rotasi eksternal).\nC. Fraktur femur distal tidak selalu memberikan rotasi eksternal masif panggul.\nD. Dislokasi genu terjadi pada sendi lutut.\nE. Fraktur korpus tibia berlokasi di cruris.",
+    "pembahasan_klinis": {
+      "A": "Dislokasi panggul posterior biasanya menampilkan rotasi internal dan adduksi.",
+      "B": "Fraktur femur proksimal (misal fraktur collum femoris/intertrochanteric) klasik memberikan deformitas pemendekan tungkai dan eksorotasi (rotasi eksternal).",
+      "C": "Fraktur femur distal tidak selalu memberikan rotasi eksternal masif panggul.",
+      "D": "Dislokasi genu terjadi pada sendi lutut.",
+      "E": "Fraktur korpus tibia berlokasi di cruris."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-029",
+    "no": 29,
+    "soal": "Saat dilakukan venasectio pada tungkai bawah di atas malleolus medialis os tibia yaitu v. saphena magna, pembuluh darah balik ini akan berjalan ke proksimal dan bermuara ke dalam?",
+    "opsi": [
+      "V. Tibialis posterior",
+      "V. Femoralis",
+      "V. Poplitea",
+      "V. Cava Inferior",
+      "V. Saphena parva"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. V. tibialis posterior adalah vena dalam di cruris.\nB. Vena saphena magna bermuara ke dalam Vena femoralis di fossa ovalis (hiatus saphenus) regio inguinalis.\nC. V. poplitea menerima muara dari V. saphena parva.\nD. V. cava inferior menerima darah dari V. iliaca communis.\nE. V. saphena parva berjalan di posterior malleolus lateralis.",
+    "pembahasan_klinis": {
+      "A": "V. tibialis posterior adalah vena dalam di cruris.",
+      "B": "Vena saphena magna bermuara ke dalam Vena femoralis di fossa ovalis (hiatus saphenus) regio inguinalis.",
+      "C": "V. poplitea menerima muara dari V. saphena parva.",
+      "D": "V. cava inferior menerima darah dari V. iliaca communis.",
+      "E": "V. saphena parva berjalan di posterior malleolus lateralis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-030",
+    "no": 30,
+    "soal": "Fraktur kompleks tulang wajah tipe Le Fort I, II, dan III secara definisi melibatkan fraktur pada tulang:",
+    "opsi": [
+      "Os frontale",
+      "Os mandibulae",
+      "Os maxilla",
+      "Os sphenoidale",
+      "Os zygomaticum"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Os frontale dapat terlibat pada Le Fort III tetapi bukan komponen utama pendefinisian Le Fort.\nB. Mandibula adalah tulang rahang bawah mandiri.\nC. Klasifikasi fraktur Le Fort (Le Fort I, II, III) didasarkan pada garis patah tulang midfasial yang melibatkan os maxilla.\nD. Os sphenoidale terletak di basis cranii.\nE. Zygoma terlibat pada Le Fort III.",
+    "pembahasan_klinis": {
+      "A": "Os frontale dapat terlibat pada Le Fort III tetapi bukan komponen utama pendefinisian Le Fort.",
+      "B": "Mandibula adalah tulang rahang bawah mandiri.",
+      "C": "Klasifikasi fraktur Le Fort (Le Fort I, II, III) didasarkan pada garis patah tulang midfasial yang melibatkan os maxilla.",
+      "D": "Os sphenoidale terletak di basis cranii.",
+      "E": "Zygoma terlibat pada Le Fort III."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-031",
+    "no": 31,
+    "soal": "Sendi yang menghubungkan antara os metacarpal dan phalanges proksimal pada tangan disebut sendi:",
+    "opsi": [
+      "Proximal interphalangeal joint",
+      "Metatarsophalangeal joint",
+      "Metacarpophalangeal joint",
+      "Distal interphalangeal joint",
+      "Carpometacarpal joint"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. PIP joint terletak antar falan proksimal dan medial.\nB. MTP joint berada pada kaki/pes.\nC. Metacarpophalangeal (MCP) joint mempertemukan kaput os metacarpal dengan basis falan proksimal tangan.\nD. DIP joint terletak antar falan medial dan distal.\nE. CMC joint mempertemukan tulang carpal dan metacarpal.",
+    "pembahasan_klinis": {
+      "A": "PIP joint terletak antar falan proksimal dan medial.",
+      "B": "MTP joint berada pada kaki/pes.",
+      "C": "Metacarpophalangeal (MCP) joint mempertemukan kaput os metacarpal dengan basis falan proksimal tangan.",
+      "D": "DIP joint terletak antar falan medial dan distal.",
+      "E": "CMC joint mempertemukan tulang carpal dan metacarpal."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-032",
+    "no": 32,
+    "soal": "Kelainan atau penyakit pada sistem muskuloskeletal dapat dikelompokkan secara etiopatogenesis. Manakah kelompok penyakit sistem muskuloskeletal yang paling tepat di bawah ini?",
+    "opsi": [
+      "Congenital, Infeksi, Neoplasm",
+      "Congenital, Neoplasm, Trauma, Appendages",
+      "Congenital, Infeksi, Trauma",
+      "Congenital, Neoplasm, Appendages",
+      "Congenital, Infeksi, Neoplasm, Trauma, Appendages"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Kurang lengkap.\nB. Kurang mencakup infeksi.\nC. Kurang mencakup neoplasma.\nD. Kurang mencakup infeksi dan trauma.\nE. Kelompok etiologi sistem muskuloskeletal mencakup kelainan Congenital, Infeksi, Neoplasm, Trauma, dan Appendages.",
+    "pembahasan_klinis": {
+      "A": "Kurang lengkap.",
+      "B": "Kurang mencakup infeksi.",
+      "C": "Kurang mencakup neoplasma.",
+      "D": "Kurang mencakup infeksi dan trauma.",
+      "E": "Kelompok etiologi sistem muskuloskeletal mencakup kelainan Congenital, Infeksi, Neoplasm, Trauma, dan Appendages."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-033",
+    "no": 33,
+    "soal": "Apakah syarat pembuatan dan evaluasi foto rontgen tulang/trauma muskuloskeletal yang baik (Rule of Two)?",
+    "opsi": [
+      "2 proyeksi (AP & Lateral) dan meliputi 2 sendi (proksimal & distal)",
+      "Proyeksi AP dan oblik saja",
+      "2 proyeksi meliputi 1 tulang tanpa sendi",
+      "Proyeksi AP saja meliputi 2 sendi",
+      "1 proyeksi meliputi 2 sendi"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Prinsip 'Rule of Twos' pada radiologi ortopedi: 2 proyeksi tegak lurus (AP dan Lateral), mencakup 2 sendi (proksimal dan distal dari lesi), 2 ekstremitas (sebagai pembanding pada anak), dan 2 kali pemeriksaan (sebelum dan sesudah tindakan).\nB. Oblique tidak wajib kecuali pada regio khusus.\nC. Harus mencakup sendi proksimal dan distal.\nD. Proyeksi tunggal tidak dapat mendeteksi pergeseran angulasi 3D.\nE. Hanya 1 proyeksi tidak memenuhi standar diagnostik.",
+    "pembahasan_klinis": {
+      "A": "Prinsip 'Rule of Twos' pada radiologi ortopedi: 2 proyeksi tegak lurus (AP dan Lateral), mencakup 2 sendi (proksimal dan distal dari lesi), 2 ekstremitas (sebagai pembanding pada anak), dan 2 kali pemeriksaan (sebelum dan sesudah tindakan).",
+      "B": "Oblique tidak wajib kecuali pada regio khusus.",
+      "C": "Harus mencakup sendi proksimal dan distal.",
+      "D": "Proyeksi tunggal tidak dapat mendeteksi pergeseran angulasi 3D.",
+      "E": "Hanya 1 proyeksi tidak memenuhi standar diagnostik."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-034",
+    "no": 34,
+    "soal": "Pasien dengan keluhan nyeri pada tumit dan telapak kaki kanan. Nyeri dirasakan pada saat berdiri atau beraktivitas, namun tidak dirasakan pada saat beristirahat. Pada kondisi Tarsal Tunnel Syndrome ini, saraf apa yang mengalami gangguan kompresi?",
+    "opsi": [
+      "N. femoralis",
+      "N. saphenus",
+      "N. tibialis",
+      "N. peroneus profundus",
+      "N. peroneus superficialis"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. N. femoralis melayani paha anterior.\nB. N. saphenus melayani sensori tungkai medial.\nC. N. tibialis berjalan melintasi kanalis tarsalis di posterior malleolus medialis dan memcabang menjadi nervus plantaris medialis dan lateralis.\nD. N. peroneus profundus melayani otot kompartemen anterior cruris.\nE. N. peroneus superficialis melayani otot kompartemen lateral cruris.",
+    "pembahasan_klinis": {
+      "A": "N. femoralis melayani paha anterior.",
+      "B": "N. saphenus melayani sensori tungkai medial.",
+      "C": "N. tibialis berjalan melintasi kanalis tarsalis di posterior malleolus medialis dan memcabang menjadi nervus plantaris medialis dan lateralis.",
+      "D": "N. peroneus profundus melayani otot kompartemen anterior cruris.",
+      "E": "N. peroneus superficialis melayani otot kompartemen lateral cruris."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-035",
+    "no": 35,
+    "soal": "Bagi pasien yang shalatnya dalam posisi duduk bersandar pada dinding atau bed rumah sakit, maka anggota tubuh yang paling dekat/dihadapkan ke arah kiblatnya adalah:",
+    "opsi": [
+      "Kaki dan ujung jari kakinya",
+      "Mukanya",
+      "Tangannya",
+      "Keningnya",
+      "Dadanya"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Pada posisi duduk selonjor/bersandar, ujung kaki mengarah lurus ke depan menghadap kiblat.\nB. Wajah menghadap lurus atau agak menunduk saat rukuk/sujud isyarat.\nC. Tangan diletakkan di atas paha.\nD. Kening menunduk sebagai isyarat sujud.\nE. Dada menghadap anterior.",
+    "pembahasan_klinis": {
+      "A": "Pada posisi duduk selonjor/bersandar, ujung kaki mengarah lurus ke depan menghadap kiblat.",
+      "B": "Wajah menghadap lurus atau agak menunduk saat rukuk/sujud isyarat.",
+      "C": "Tangan diletakkan di atas paha.",
+      "D": "Kening menunduk sebagai isyarat sujud.",
+      "E": "Dada menghadap anterior."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-036",
+    "no": 36,
+    "soal": "Fraktur Le Fort terjadi pada struktur tulang:",
+    "opsi": [
+      "Mandibula",
+      "Maxilla",
+      "Temporal",
+      "Frontal",
+      "Humerus"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Fraktur mandibula merupakan fraktur rahang bawah terpisah.\nB. Fraktur Le Fort adalah fraktur osteotomi alami pada tulang maksila (*maxillary fracture*).\nC. Os temporal ada di samping tengkorak.\nD. Os frontal ada di dahi.\nE. Humerus di tulang lengan atas.",
+    "pembahasan_klinis": {
+      "A": "Fraktur mandibula merupakan fraktur rahang bawah terpisah.",
+      "B": "Fraktur Le Fort adalah fraktur osteotomi alami pada tulang maksila (maxillary fracture).",
+      "C": "Os temporal ada di samping tengkorak.",
+      "D": "Os frontal ada di dahi.",
+      "E": "Humerus di tulang lengan atas."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-037",
+    "no": 37,
+    "soal": "Perempuan 50 tahun datang dengan keluhan nyeri pinggang, bokong, belakang tungkai atas hingga ke kaki kiri sejak 1 minggu yang lalu. Keluhan ini semakin dirasa jika batuk, bersin, atau duduk lama. Saraf manakah yang mengalami kompresi/gangguan?",
+    "opsi": [
+      "N. Obturatorius",
+      "N. Ischiadicus",
+      "N. Gluteus superior",
+      "N. Cutaneus femoris posterior",
+      "N. Femoralis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. N. Obturatorius mempersarafi kompartemen medial paha (adduktor).\nB. N. Ischiadicus (sciatic nerve) berjalan dari L4-S3 menuju bokong, paha posterior, hingga paha/kaki distal; penekanannya memicu skiatika.\nC. N. Gluteus superior mempersarafi m. gluteus medius dan minimus.\nD. N. Cutaneus femoris posterior hanya memberikan persarafan sensorik kulit paha posterior.\nE. N. Femoralis mempersarafi anterior paha.",
+    "pembahasan_klinis": {
+      "A": "N. Obturatorius mempersarafi kompartemen medial paha (adduktor).",
+      "B": "N. Ischiadicus (sciatic nerve) berjalan dari L4-S3 menuju bokong, paha posterior, hingga paha/kaki distal; penekanannya memicu skiatika.",
+      "C": "N. Gluteus superior mempersarafi m. gluteus medius dan minimus.",
+      "D": "N. Cutaneus femoris posterior hanya memberikan persarafan sensorik kulit paha posterior.",
+      "E": "N. Femoralis mempersarafi anterior paha."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-038",
+    "no": 38,
+    "soal": "Pasien syok dan pembuluh darah kolaps akibat perdarahan yang banyak, maka akan dilakukan venesectio pada tungkai bawah. Apakah pembuluh darah yang paling sering dipakai?",
+    "opsi": [
+      "V. femoralis",
+      "V. popliteal",
+      "V. tibialis posterior",
+      "V. saphena parva",
+      "V. saphena magna"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. V. femoralis adalah vena profundus.\nB. V. popliteal berada di posterior lutut.\nC. V. tibialis posterior di dalam kompartemen profundus.\nD. V. saphena parva di posterior ankle lateral.\nE. V. saphena magna di anterior malleolus medialis adalah lokasi anatomis standar venasectio.",
+    "pembahasan_klinis": {
+      "A": "V. femoralis adalah vena profundus.",
+      "B": "V. popliteal berada di posterior lutut.",
+      "C": "V. tibialis posterior di dalam kompartemen profundus.",
+      "D": "V. saphena parva di posterior ankle lateral.",
+      "E": "V. saphena magna di anterior malleolus medialis adalah lokasi anatomis standar venasectio."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-039",
+    "no": 39,
+    "soal": "Seorang anak perempuan 3 tahun berada di UGD karena tertelan sesuatu. Hasil evaluasi penunjang menemukan adanya benda asing di dalam organ lambung. Bagaimana gambaran jaringan histologi otot penyusun organ tersebut?",
+    "opsi": [
+      "Mempunyai serat otot berbentuk fusiformis dengan inti di tengah",
+      "Pada ototnya mengandung inti lonjong terletak di tepi",
+      "Setiap serat ototnya mengandung serabut lurik yang jelas",
+      "Mengandung otot yang bersifat volunter",
+      "Setiap fasikulusnya dibungkus oleh epimisium tebal"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Dinding lambung tersusun atas otot polos (*smooth muscle*) yang sel-selnya berbentuk fusiformis (gelendong) dengan satu inti sel berada di tengah.\nB. Inti lonjong di tepi merupakan ciri otot rangka.\nC. Serabut lurik merupakan ciri otot rangka dan otot jantung.\nD. Otot polos bersifat involunter.\nE. Epimisium membungkus otot rangka.",
+    "pembahasan_klinis": {
+      "A": "Dinding lambung tersusun atas otot polos (smooth muscle) yang sel-selnya berbentuk fusiformis (gelendong) dengan satu inti sel berada di tengah.",
+      "B": "Inti lonjong di tepi merupakan ciri otot rangka.",
+      "C": "Serabut lurik merupakan ciri otot rangka dan otot jantung.",
+      "D": "Otot polos bersifat involunter.",
+      "E": "Epimisium membungkus otot rangka."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-040",
+    "no": 40,
+    "soal": "Seorang anak perempuan berusia 5 tahun dibawa berobat ke Poliklinik oleh orang tuanya dengan keluhan kepalanya miring ke kiri. Pada pemeriksaan dokter didapatkan otot sternocleidomastoideus kaku/spasme, pergerakkan leher terbatas, dan bahu kiri terangkat. Apakah kemungkinan diagnosis pasien?",
+    "opsi": [
+      "Kontraktur",
+      "Klippel-Feil Syndrome",
+      "Tortikolis",
+      "Skoliosis cervical",
+      "Sprengel's Deformity"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Kontraktur adalah pemendekan jaringan lunak akibat luka bakar/fibrosis umum.\nB. Klippel-Feil syndrome ditandai oleh fusi kongenital vertebra servikal (*triad: short neck, low hairline, limited neck ROM*).\nC. Tortikolis (*wryneck*) ditandai oleh spasme/pemendekan m. sternocleidomastoideus yang membuat kepala miring ke satu sisi.\nD. Skoliosis servikal melibatkan kurvatura tulang belakang servikal.\nE. Sprengel deformity adalah kegagalan penurunan skapula kongenital.",
+    "pembahasan_klinis": {
+      "A": "Kontraktur adalah pemendekan jaringan lunak akibat luka bakar/fibrosis umum.",
+      "B": "Klippel-Feil syndrome ditandai oleh fusi kongenital vertebra servikal (triad: short neck, low hairline, limited neck ROM).",
+      "C": "Tortikolis (wryneck) ditandai oleh spasme/pemendekan m. sternocleidomastoideus yang membuat kepala miring ke satu sisi.",
+      "D": "Skoliosis servikal melibatkan kurvatura tulang belakang servikal.",
+      "E": "Sprengel deformity adalah kegagalan penurunan skapula kongenital."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-041",
+    "no": 41,
+    "soal": "Seorang anak perempuan usia 5 tahun, dibawa orang tuanya ke RS dengan keluhan mengalami kesulitan berjalan. Hasil rontgen mendiagnosis pasien mengalami Coxa Vara. Apakah penyebab perubahan sudut anatomi pada kondisi Coxa Vara?",
+    "opsi": [
+      "Penurunan sudut antara collum femoris dengan corpus femoris (<120 derajat)",
+      "Penurunan sudut caput femoris dengan fossa acetabuli",
+      "Penurunan sudut caput femoris dengan collum femoris",
+      "Peningkatan sudut antara collum femoris dengan corpus femoris (>135 derajat)",
+      "Peningkatan sudut caput femoris dengan collum femoris"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Coxa Vara didefinisikan sebagai penurunan sudut inklinasi antara collum femoris dan corpus femoris menjadi kurang dari 120-125 derajat.\nB. Bukan definisi Coxa Vara.\nC. Bukan sudut inklinasi utama.\nD. Peningkatan sudut inklinasi (>135 derajat) disebut Coxa Valga.\nE. Bukan parameter definisi.",
+    "pembahasan_klinis": {
+      "A": "Penurunan sudut inklinasi antara collum femoris dan corpus femoris menjadi kurang dari 120-125 derajat.",
+      "B": "Bukan definisi Coxa Vara.",
+      "C": "Bukan sudut inklinasi utama.",
+      "D": "Peningkatan sudut inklinasi (>135 derajat) disebut Coxa Valga.",
+      "E": "Bukan parameter definisi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-042",
+    "no": 42,
+    "soal": "Seorang anak perempuan usia 5 tahun didiagnosis Coxa Vara. Gerakan apakah pada panggul yang paling mengalami keterbatasan (terbatas) akibat kelainan Coxa Vara tersebut?",
+    "opsi": [
+      "Abduksi femoris pada sendi panggul",
+      "Fleksi femoris pada sendi panggul",
+      "Rotasi internal pedis",
+      "Fleksi cruris pada sendi lutut",
+      "Adduksi femoris pada sendi panggul"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Pada Coxa Vara, penurunan sudut kolum femur menyebabkan trokanter mayor naik ke atas mendekati ilium sehingga gerakan Abduksi femoris sangat terbatas.\nB. Fleksi panggul tidak terbatas secara signifikan.\nC. Rotasi pedis terjadi pada pergelangan kaki/lutut.\nD. Fleksi cruris terjadi di sendi lutut.\nE. Adduksi justru mempermudah mendekatnya paha, bukan terbatas.",
+    "pembahasan_klinis": {
+      "A": "Pada Coxa Vara, penurunan sudut kolum femur menyebabkan trokanter mayor naik ke atas mendekati ilium sehingga gerakan Abduksi femoris sangat terbatas.",
+      "B": "Fleksi panggul tidak terbatas secara signifikan.",
+      "C": "Rotasi pedis terjadi pada pergelangan kaki/lutut.",
+      "D": "Fleksi cruris terjadi di sendi lutut.",
+      "E": "Adduksi justru mempermudah mendekatnya paha, bukan terbatas."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-043",
+    "no": 43,
+    "soal": "Seorang perempuan berusia 65 tahun mengonsumsi Alendronat untuk osteoporosis dan mengalami keluhan dispepsia/esofagitis. Bagaimana edukasi minum obat yang tepat diberikan pada pasien tersebut?",
+    "opsi": [
+      "Obat diminum dengan 300 ml air putih + badan tetap posisi tegak minimal 30 menit setelah minum obat",
+      "Obat dilarutkan dalam 100 ml juice + kepala tetap posisi 45 derajat selama 30 menit",
+      "Obat dimakan bersama makanan + 1 jam kemudian kepala posisi 30 derajat",
+      "Obat diminum dengan 5 gelas air sekaligus + badan setengah duduk",
+      "Obat dimakan bersama makanan + 30 menit kemudian badan tengkurap"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Alendronat diminum dengan air putih yang cukup dan posisi tubuh harus tetap tegak (minimal 30 menit) untuk mengurangi risiko refluks dan iritasi/ulserasi esofagus.\nB. Jus mengganggu absorpsi Alendronat.\nC. Makanan mengikat bisfosfonat dan menggagalkan absorpsi.\nD. Pasien tidak disarankan langsung berbaring atau setengah duduk.\nE. Tengkurap memperparah refluks asam/obat ke esofagus.",
+    "pembahasan_klinis": {
+      "A": "Alendronat diminum dengan air putih yang cukup dan posisi tubuh harus tetap tegak (minimal 30 menit) untuk mengurangi risiko refluks dan iritasi/ulserasi esofagus.",
+      "B": "Jus mengganggu absorpsi Alendronat.",
+      "C": "Makanan mengikat bisfosfonat dan menggagalkan absorpsi.",
+      "D": "Pasien tidak disarankan langsung berbaring atau setengah duduk.",
+      "E": "Tengkurap memperparah refluks asam/obat ke esofagus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-044",
+    "no": 44,
+    "soal": "Seorang anak laki-laki berusia 14 tahun didiagnosis skoliosis pada vertebra thoracalis. Processus transversus vertebra thoracalis memiliki permukaan sendi yang berhubungan dengan Tuberculum costae. Apa nama persendian tersebut?",
+    "opsi": [
+      "Articulatio sacrococcygea",
+      "Articulatio costotransversaria",
+      "Articulatio iliosacralis",
+      "Articulatio capitis costae",
+      "Articulatio intervertebralis"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Articulatio sacrococcygea di antara sakrum dan koksigis.\nB. Persendian antara tuberculum costae dan processus transversus vertebra thoracalis disebut Articulatio costotransversaria.\nC. Articulatio iliosacralis di antara ilium dan sakrum.\nD. Articulatio capitis costae mempertemukan kaput iga dengan korpus vertebra.\nE. Articulatio intervertebralis menghubungkan antar korpus/faset vertebra.",
+    "pembahasan_klinis": {
+      "A": "Articulatio sacrococcygea di antara sakrum dan koksigis.",
+      "B": "Persendian antara tuberculum costae dan processus transversus vertebra thoracalis disebut Articulatio costotransversaria.",
+      "C": "Articulatio iliosacralis di antara ilium dan sakrum.",
+      "D": "Articulatio capitis costae mempertemukan kaput iga dengan korpus vertebra.",
+      "E": "Articulatio intervertebralis menghubungkan antar korpus/faset vertebra."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-045",
+    "no": 45,
+    "soal": "Seorang kuli bangunan berusia 40 tahun mengalami Hernia Nucleus Pulposus (HNP). Diskus intervertebralis luar (annulus fibrosus) tersusun atas jaringan kartilago jenis apa dan bagaimana karakteristik mikroskopisnya?",
+    "opsi": [
+      "Merupakan tulang rawan elastis yang dikelilingi perikondrium",
+      "Berupa jaringan tulang rawan hialin murni",
+      "Jaringan tulang rawan yang tidak mengandung serat kolagen",
+      "Jaringannya mengandung kondrosit dengan serat kolagen tipe I yang tebal (Fibrokartilago)",
+      "Jaringan tersebut dapat ditemukan pada lempeng epifisis tulang panjang"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Kartilago elastis terdapat pada daun telinga/epiglotis.\nB. Kartilago hialin melapisi permukaan sendi diartrodial.\nC. Fibrokartilago sangat kaya akan berkas serat kolagen tipe I.\nD. Annulus fibrosus diskus intervertebralis tersusun dari jaringan Fibrokartilago (mengandung kondrosit dan serat kolagen padat) untuk menahan beban kompresi aksial.\nE. Lempeng epifisis tersusun dari kartilago hialin.",
+    "pembahasan_klinis": {
+      "A": "Kartilago elastis terdapat pada daun telinga/epiglotis.",
+      "B": "Kartilago hialin melapisi permukaan sendi diartrodial.",
+      "C": "Fibrokartilago sangat kaya akan berkas serat kolagen tipe I.",
+      "D": "Annulus fibrosus diskus intervertebralis tersusun dari jaringan Fibrokartilago (mengandung kondrosit dan serat kolagen padat) untuk menahan beban kompresi aksial.",
+      "E": "Lempeng epifisis tersusun dari kartilago hialin."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-046",
+    "no": 46,
+    "soal": "Seorang perempuan berusia 46 tahun menderita Rheumatoid Arthritis. Pemeriksaan jaringan sinovial sendi menunjukkan membran sinovial mengalami hiperplasia, infiltrasi sel radang, dan membentuk jaringan granulasi invasif yang menutupi kartilago sendi. Apakah nama struktur invasif tersebut?",
+    "opsi": [
+      "Eburnasi",
+      "Ganglion",
+      "Tofus",
+      "Pannus",
+      "Osteofit"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Eburnasi adalah sklerosis tulang subkondral pada Osteoarthritis.\nB. Ganglion adalah kista sinovial benigna.\nC. Tofus adalah deposit kristal monosodium urat pada Gout.\nD. Pannus adalah massa jaringan granulasi reaktif dan hiperplastik yang khas terbentuk pada Rheumatoid Arthritis dan mengikis kartilago/tulang.\nE. Osteofit adalah tonjolan tulang baru pada Osteoarthritis.",
+    "pembahasan_klinis": {
+      "A": "Eburnasi adalah sklerosis tulang subkondral pada Osteoarthritis.",
+      "B": "Ganglion adalah kista sinovial benigna.",
+      "C": "Tofus adalah deposit kristal monosodium urat pada Gout.",
+      "D": "Pannus adalah massa jaringan granulasi reaktif dan hiperplastik yang khas terbentuk pada Rheumatoid Arthritis dan mengikis kartilago/tulang.",
+      "E": "Osteofit adalah tonjolan tulang baru pada Osteoarthritis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-047",
+    "no": 47,
+    "soal": "Seorang laki laki berusia 40 tahun didiagnosis osteomielitis kronis piogenik. Pada pemeriksaan foto rontgen ditemukan gambaran abses kronis terlokalisasi yang dikelilingi oleh jaringan sklerotik di dalam tulang. Apakah nama abses tersebut?",
+    "opsi": [
+      "Abses Brodie",
+      "Kondroma",
+      "Sarkoma osteogenik",
+      "Abses Garre",
+      "Kondroitis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Abses Brodie adalah bentuk osteomielitis kronis terlokalisir khas berupa kavitas abses litik yang dikelilingi oleh rim sklerotik.\nB. Kondroma adalah tumor jinak pembentuk kartilago.\nC. Sarkoma osteogenik adalah keganasan tulang.\nD. Osteomielitis sklerosans Garre ditandai penebalan korteks masif tanpa kavitas abses jelas.\nE. Kondroitis adalah peradangan tulang rawan.",
+    "pembahasan_klinis": {
+      "A": "Abses Brodie adalah bentuk osteomielitis kronis terlokalisir khas berupa kavitas abses litik yang dikelilingi oleh rim sklerotik.",
+      "B": "Kondroma adalah tumor jinak pembentuk kartilago.",
+      "C": "Sarkoma osteogenik adalah keganasan tulang.",
+      "D": "Osteomielitis sklerosans Garre ditandai penebalan korteks masif tanpa kavitas abses jelas.",
+      "E": "Kondroitis adalah peradangan tulang rawan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-048",
+    "no": 48,
+    "soal": "Seorang perempuan berusia 60 tahun mengalami dislokasi articulatio coxae (sendi panggul). Apakah nama tulang-tulang pembentuk persendian tersebut?",
+    "opsi": [
+      "Os coxae dan os fibula",
+      "Os fibula dan os tibia",
+      "Os femur dan os fibula",
+      "Os femur dan os coxae",
+      "Os patella dan os coxae"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Os fibula berada di tungkai bawah.\nB. Fibula dan tibia membentuk sendi tibiofibularis.\nC. Os fibula tidak berartikulasi dengan panggul.\nD. Articulatio coxae dibentuk oleh persendian antara caput femoris (os femur) dan acetabulum (os coxae).\nE. Os patella berada di anterior sendi lutut.",
+    "pembahasan_klinis": {
+      "A": "Os fibula berada di tungkai bawah.",
+      "B": "Fibula dan tibia membentuk sendi tibiofibularis.",
+      "C": "Os fibula tidak berartikulasi dengan panggul.",
+      "D": "Articulatio coxae dibentuk oleh persendian antara caput femoris (os femur) dan acetabulum (os coxae).",
+      "E": "Os patella berada di anterior sendi lutut."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-049",
+    "no": 49,
+    "soal": "Seorang bayi laki-laki, usia 1 hari, dilaporkan mengalami kelainan perkembangan kongenital berupa tidak ditemukannya sama sekali satu atau lebih anggota gerak (ekstremitas). Disebut apakah kelainan tersebut?",
+    "opsi": [
+      "Amelia",
+      "Phocomelia",
+      "Supernumerary",
+      "Aplasia",
+      "Mikromelia"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Amelia adalah kongenital absensi total (tidak adanya) satu atau lebih ekstremitas.\nB. Phocomelia adalah tidak ditemukannya segmen proksimal ekstremitas sehingga tangan/kaki menempel langsung pada badan (seperti anjing laut).\nC. Supernumerary merujuk pada jumlah ekstremitas/jari berlebih.\nD. Aplasia merujuk pada kegagalan perkembangan organ/jaringan secara umum.\nE. Mikromelia adalah ukuran ekstremitas yang abnormal kecil.",
+    "pembahasan_klinis": {
+      "A": "Amelia adalah kongenital absensi total (tidak adanya) satu atau lebih ekstremitas.",
+      "B": "Phocomelia adalah tidak ditemukannya segmen proksimal ekstremitas sehingga tangan/kaki menempel langsung pada badan (seperti anjing laut).",
+      "C": "Supernumerary merujuk pada jumlah ekstremitas/jari berlebih.",
+      "D": "Aplasia merujuk pada kegagalan perkembangan organ/jaringan secara umum.",
+      "E": "Mikromelia adalah ukuran ekstremitas yang abnormal kecil."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-050",
+    "no": 50,
+    "soal": "Seorang bayi perempuan berusia 3 bulan diperiksakan dengan kelainan pada kaki berupa gabungan Forefoot Adduction, Hindfoot Varus, dan Equinus Ankle. Apakah kemungkinan diagnosis kasus ini?",
+    "opsi": [
+      "Congenital Talipes Equinovarus (CTEV)",
+      "Talipes valgus",
+      "Talipes equinovalgus",
+      "Pes Planus",
+      "Metatarsus adductus"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. CTEV (*Clubfoot*) ditandai oleh trias deformitas anatomis: CAVE (Cavus, Forefoot Adduction, Hindfoot Varus, dan Ankle Equinus).\nB. Talipes valgus mengarah ke luar (eversi).\nC. Talipes equinovalgus kombinasi jinjit dan eversi.\nD. Pes planus adalah kaki datar (flat foot).\nE. Metatarsus adductus hanya melibatkan adduksi kaki depan tanpa hindfoot varus/equinus.",
+    "pembahasan_klinis": {
+      "A": "CTEV (Clubfoot) ditandai oleh trias deformitas anatomis: CAVE (Cavus, Forefoot Adduction, Hindfoot Varus, dan Ankle Equinus).",
+      "B": "Talipes valgus mengarah ke luar (eversi).",
+      "C": "Talipes equinovalgus kombinasi jinjit dan eversi.",
+      "D": "Pes planus adalah kaki datar (flat foot).",
+      "E": "Metatarsus adductus hanya melibatkan adduksi kaki depan tanpa hindfoot varus/equinus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-051",
+    "no": 51,
+    "soal": "Seorang laki-laki 82 tahun mengeluhkan nyeri Osteoarthritis tulang belakang. Manakah opsi obat antiinflamasi golongan NSAID selektif/preferensial COX-2 yang relatif aman diberikan untuk mengurangi nyeri sendi pada lansia?",
+    "opsi": [
+      "Meloxicam",
+      "Salisilat",
+      "Asam mefenamat",
+      "Prednison",
+      "Kolchisin"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Meloxicam adalah NSAID preferensial COX-2 yang efektif mengobati nyeri OA dengan risiko iritasi lambung lebih rendah dibanding NSAID non-selektif.\nB. Salisilat (aspirin) dosis tinggi iritatif pada gastrointestinal lansia.\nC. Asam mefenamat iritatif pada mukosa lambung.\nD. Prednison adalah kortikosteroid oral yang dapat memicu pengeroposan tulang (osteoporosis) pada lansia.\nE. Kolchisin spesifik untuk serangan gout akut.",
+    "pembahasan_klinis": {
+      "A": "Meloxicam adalah NSAID preferensial COX-2 yang efektif mengobati nyeri OA dengan risiko iritasi lambung lebih rendah dibanding NSAID non-selektif.",
+      "B": "Salisilat (aspirin) dosis tinggi iritatif pada gastrointestinal lansia.",
+      "C": "Asam mefenamat iritatif pada mukosa lambung.",
+      "D": "Prednison adalah kortikosteroid oral yang dapat memicu pengeroposan tulang (osteoporosis) pada lansia.",
+      "E": "Kolchisin spesifik untuk serangan gout akut."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-052",
+    "no": 52,
+    "soal": "Seorang laki-laki berumur 60 tahun menolak untuk dilakukan pemeriksaan fisik pada kakinya yang sakit oleh dokter. Apakah kaidah dasar bioetik yang disampaikan dan dihormati dari keputusan pasien tersebut?",
+    "opsi": [
+      "Autonomy",
+      "Beneficence",
+      "Justice",
+      "Confidentiality",
+      "Non-Maleficence"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Autonomy memberikan hak penuh kepada pasien yang kompeten untuk mengambil keputusan atas tubuhnya sendiri (*informed refusal*).\nB. Beneficence berfokus pada tindakan demi kebaikan pasien.\nC. Justice mengatur keadilan dan kesetaraan pelayanan.\nD. Confidentiality menjaga kerahasiaan medik.\nE. Non-maleficence berprinsip tidak memudaratkan atau merugikan pasien.",
+    "pembahasan_klinis": {
+      "A": "Autonomy memberikan hak penuh kepada pasien yang kompeten untuk mengambil keputusan atas tubuhnya sendiri (informed refusal).",
+      "B": "Beneficence berfokus pada tindakan demi kebaikan pasien.",
+      "C": "Justice mengatur keadilan dan kesetaraan pelayanan.",
+      "D": "Confidentiality menjaga kerahasiaan medik.",
+      "E": "Non-maleficence berprinsip tidak memudaratkan atau merugikan pasien."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-053",
+    "no": 53,
+    "soal": "Seorang laki-laki berusia 20 tahun mengalami fraktur terbuka tungkai bawah kiri (regio cruris) luka ukuran 3 cm. Apakah terapi profilaksis spesifik cepat yang harus diberikan untuk mencegah infeksi tetanus pada pasien fraktur terbuka berisiko?",
+    "opsi": [
+      "Antikoagulan",
+      "Trombosit",
+      "Obat vasokonstriksi",
+      "Anti Tetanus Serum (ATS) / Tetanus Immunoglobulin (TIG)",
+      "Toksoid tetanus saja"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Antikoagulan menambah pendarahan.\nB. Trombosit indikasi trombositopenia.\nC. Vasokonstriktor memicu iskemia jaringan distal.\nD. ATS / TIG memberikan kekebalan pasif secara cepat langsung mengikat toksin tetanus pada luka kontaminasi terbuka.\nE. Toksoid membutuhkan waktu untuk pembentukan antibodi aktif.",
+    "pembahasan_klinis": {
+      "A": "Antikoagulan menambah pendarahan.",
+      "B": "Trombosit indikasi trombositopenia.",
+      "C": "Vasokonstriktor memicu iskemia jaringan distal.",
+      "D": "ATS / TIG memberikan kekebalan pasif secara cepat langsung mengikat toksin tetanus pada luka kontaminasi terbuka.",
+      "E": "Toksoid membutuhkan waktu untuk pembentukan antibodi aktif."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-054",
+    "no": 54,
+    "soal": "Seorang perempuan usia 24 tahun datang ke IGD RS dengan keluhan nyeri pada bahu kanan setelah jatuh terpeleset. Pemeriksaan status lokalis: hematom pada daerah dada kanan atas, gerakan bahu terbatas, dan krepitasi positif. Apakah diagnosis yang paling mungkin?",
+    "opsi": [
+      "Fraktur Tertutup Clavicula",
+      "Fraktur Tertutup Sternum",
+      "Fraktur Scapula Dextra",
+      "Fraktur Tertutup Acromion",
+      "Fraktur Tertutup Glenoid Dextra"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Hematom di dada kanan atas (infraclavicular/supraclavicular) disertai krepitasi merupakan tanda klasik Fraktur Clavicula.\nB. Fraktur sternum di garis tengah dada anterior.\nC. Fraktur skapula terdapat di punggung atas posterior.\nD. Fraktur akromion tepat di puncak shoulder.\nE. Fraktur glenoid di dalam fossa artikularis bahu.",
+    "pembahasan_klinis": {
+      "A": "Hematom di dada kanan atas (infraclavicular/supraclavicular) disertai krepitasi merupakan tanda klasik Fraktur Clavicula.",
+      "B": "Fraktur sternum di garis tengah dada anterior.",
+      "C": "Fraktur skapula terdapat di punggung atas posterior.",
+      "D": "Fraktur akromion tepat di puncak shoulder.",
+      "E": "Fraktur glenoid di dalam fossa artikularis bahu."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-055",
+    "no": 55,
+    "soal": "Pada mekanisme transmisi neuromuskular, apakah yang dimaksud dengan Endplate Potential (EPP)?",
+    "opsi": [
+      "Terdapat pada motor endplate, bagian dari otot jantung",
+      "Selalu terjadi pada membran neuron presinaps",
+      "Terjadi akibat pembukaan saluran ion ligand-gated (nAChR) oleh pelepasan asetilkolin",
+      "Merupakan respon depolarisasi yang bersifat gagal atau tuntas (all-or-none)",
+      "Akan menimbulkan hiperpolarisasi pada serat otot lurik"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. EPP terjadi pada motor endplate otot rangka/lurik, bukan otot jantung.\nB. EPP terjadi pada membran post-sinaps otot.\nC. EPP timbul akibat pengikatan asetilkolin ke reseptor nikotinik (nAChR) yang membuka kanal ion ligand-gated sehingga kation ($Na^+$) masuk.\nD. EPP adalah potensial berjenjang (*graded potential*), bukan *all-or-none*.\nE. EPP menimbulkan depolarisasi lokal, bukan hiperpolarisasi.",
+    "pembahasan_klinis": {
+      "A": "EPP terjadi pada motor endplate otot rangka/lurik, bukan otot jantung.",
+      "B": "EPP terjadi pada membran post-sinaps otot.",
+      "C": "EPP timbul akibat pengikatan asetilkolin ke reseptor nikotinik (nAChR) yang membuka kanal ion ligand-gated sehingga kation (Na+) masuk.",
+      "D": "EPP adalah potensial berjenjang (graded potential), bukan all-or-none.",
+      "E": "EPP menimbulkan depolarisasi lokal, bukan hiperpolarisasi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-056",
+    "no": 56,
+    "soal": "Seorang dokter di UGD merawat pasien kecelakaan yang kesakitan. Dokter langsung memberikan pertolongan pertama, penanganan nyeri, dan perawatan medis terbaik untuk mengoptimalkan kesembuhan pasien. Tindakan dokter ini sesuai dengan penerapan kaidah dasar bioetik:",
+    "opsi": [
+      "Beneficence",
+      "Autonomy",
+      "Justice",
+      "Confidentiality",
+      "Non-maleficence"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Beneficence adalah prinsip berbuat baik, mengutamakan tindakan medis yang paling memberikan manfaat dan menguntungkan pasien secara maksimal.\nB. Autonomy menghormati hak keputusan pasien.\nC. Justice mengutamakan keadilan distributif.\nD. Confidentiality menjaga rahasia.\nE. Non-maleficence menekankan 'do no harm' atau mencegah bahaya.",
+    "pembahasan_klinis": {
+      "A": "Beneficence adalah prinsip berbuat baik, mengutamakan tindakan medis yang paling memberikan manfaat dan menguntungkan pasien secara maksimal.",
+      "B": "Autonomy menghormati hak keputusan pasien.",
+      "C": "Justice mengutamakan keadilan distributif.",
+      "D": "Confidentiality menjaga rahasia.",
+      "E": "Non-maleficence menekankan 'do no harm' atau mencegah bahaya."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-057",
+    "no": 57,
+    "soal": "Seorang laki-laki usia 20 tahun tidak dapat berjalan setelah terjatuh dari sepeda motor. Dilakukan pemeriksaan radiologis cruris dextra AP/Lat. Apakah fungsi utama pemeriksaan radiologis pada kejadian patah tulang (fraktur)?",
+    "opsi": [
+      "Mendiagnosis compartment syndrome",
+      "Menentukan luka terbuka atau tertutup",
+      "Mengetahui mekanisme cederanya",
+      "Mendeteksi derajat perdarahan sistemik",
+      "Mengetahui jenis, lokasi, serta kedudukan fragmen fraktur"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Compartment syndrome didiagnosis secara klinis dan pengukuran tekanan kompartemen.\nB. Terbuka atau tertutup dilihat dari pemeriksaan fisik (diskontinuitas kulit).\nC. Mekanisme cedera didapat dari anamnesis.\nD. Perdarahan dinilai dari tanda vital dan laboratorium.\nE. Foto rontgen digunakan untuk menilai garis fraktur, jenis fraktur, lokasi anatomi, serta kedudukan/pergeseran fragmen tulang.",
+    "pembahasan_klinis": {
+      "A": "Compartment syndrome didiagnosis secara klinis dan pengukuran tekanan kompartemen.",
+      "B": "Terbuka atau tertutup dilihat dari pemeriksaan fisik (diskontinuitas kulit).",
+      "C": "Mekanisme cedera didapat dari anamnesis.",
+      "D": "Perdarahan dinilai dari tanda vital dan laboratorium.",
+      "E": "Foto rontgen digunakan untuk menilai garis fraktur, jenis fraktur, lokasi anatomi, serta kedudukan/pergeseran fragmen tulang."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-058",
+    "no": 58,
+    "soal": "Seorang laki-laki mengalami fraktur cruris dan menunjukkan tanda-tanda Sindrom Kompartemen (pain out of proportion, pallor, paresthesia, pulselessness, paralysis). Apakah tindakan bedah darurat yang wajib segera dilakukan?",
+    "opsi": [
+      "Immobilisasi",
+      "Drainase",
+      "Fiksasi",
+      "Fasciotomi",
+      "Elevasi"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Imobilisasi saja tidak menurunkan tekanan kompartemen.\nB. Drainase tidak cukup membebaskan tekanan fasia yang kaku.\nC. Fiksasi tanpa fasciotomi memperparah iskemia otot.\nD. Fasciotomi dekompresi darurat dilakukan untuk membelah fasia yang menegang guna mencegah nekrosis otot dan saraf ireversibel.\nE. Elevasi berlebihan pada sindrom kompartemen justru menurunkan perfusi arteri.",
+    "pembahasan_klinis": {
+      "A": "Imobilisasi saja tidak menurunkan tekanan kompartemen.",
+      "B": "Drainase tidak cukup membebaskan tekanan fasia yang kaku.",
+      "C": "Fiksasi tanpa fasciotomi memperparah iskemia otot.",
+      "D": "Fasciotomi dekompresi darurat dilakukan untuk membelah fasia yang menegang guna mencegah nekrosis otot dan saraf ireversibel.",
+      "E": "Elevasi berlebihan pada sindrom kompartemen justru menurunkan perfusi arteri."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-059",
+    "no": 59,
+    "soal": "Seorang laki-laki usia 20 tahun mengalami fraktur cruris terbuka. Apakah penanganan utama dan tindakan operatif standar untuk fraktur terbuka?",
+    "opsi": [
+      "Skin traksi",
+      "Fiksasi eksterna tanpa pembersihan",
+      "Debridement pembersihan luka intensif dan fiksasi (fiksasi eksterna/interna)",
+      "Skeletal traksi saja",
+      "Pemasangan gips sirkuler langsung"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Skin traksi hanya bersifat sementara pada fraktur tertutup tertentu.\nB. Fiksasi tanpa debridement memicu osteomielitis berat.\nC. Penanganan standar fraktur terbuka adalah debridement pembersihan kontaminasi dan fiksasi tulang yang stabil.\nD. Skeletal traksi saja tidak membersihkan kontaminasi jaringan mati.\nE. Gips sirkuler langsung ditutup pada fraktur terbuka sangat berbahaya memicu anaerob/sindrom kompartemen.",
+    "pembahasan_klinis": {
+      "A": "Skin traksi hanya bersifat sementara pada fraktur tertutup tertentu.",
+      "B": "Fiksasi tanpa debridement memicu osteomielitis berat.",
+      "C": "Penanganan standar fraktur terbuka adalah debridement pembersihan kontaminasi dan fiksasi tulang yang stabil.",
+      "D": "Skeletal traksi saja tidak membersihkan kontaminasi jaringan mati.",
+      "E": "Gips sirkuler langsung ditutup pada fraktur terbuka sangat berbahaya memicu anaerob/sindrom kompartemen."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-060",
+    "no": 60,
+    "soal": "Seorang laki-laki usia 20 tahun mengalami fraktur clavicula sinistra tertutup non-displaced. Imobilisasi konservatif manakah yang paling sering dan standar digunakan untuk menyangga fraktur tersebut?",
+    "opsi": [
+      "Fiksasi eksterna",
+      "Velpeau bandage",
+      "U-Slab gips",
+      "Rings bandage / Figure of 8 bandage",
+      "Sling saja"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Fiksasi eksterna jarang pada klafikula tertutup sederhana.\nB. Velpeau bandage biasa untuk imobilisasi humerus/bahu.\nC. U-Slab untuk fraktur humerus.\nD. Ransel verban / Figure of 8 bandage (rings bandage) dikombinasikan dengan arm sling digunakan untuk mengimobilisasi fraktur clavicula tertutup.\nE. Arm sling saja kurang efektif menarik klavikula ke posterior.",
+    "pembahasan_klinis": {
+      "A": "Fiksasi eksterna jarang pada klafikula tertutup sederhana.",
+      "B": "Velpeau bandage biasa untuk imobilisasi humerus/bahu.",
+      "C": "U-Slab untuk fraktur humerus.",
+      "D": "Ransel verban / Figure of 8 bandage (rings bandage) dikombinasikan dengan arm sling digunakan untuk mengimobilisasi fraktur clavicula tertutup.",
+      "E": "Arm sling saja kurang efektif menarik klavikula ke posterior."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-061",
+    "no": 61,
+    "soal": "Seorang laki-laki usia 30 tahun dibawa ke UGD karena syok perdarahan. Akan dilakukan venasectio pada tungkai bawah di atas malleolus medialis. Pembuluh darah yang dimaksud adalah:",
+    "opsi": [
+      "V. femoralis",
+      "V. saphena parva",
+      "V. saphena magna",
+      "V. tibialis posterior",
+      "V. popliteal"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. V. femoralis di paha proksimal.\nB. V. saphena parva berjalan di lateral ankle.\nC. Vena saphena magna berjalan tepat di anterior malleolus medialis.\nD. V. tibialis posterior adalah vena profundus.\nE. V. popliteal di fossa poplitea.",
+    "pembahasan_klinis": {
+      "A": "V. femoralis di paha proksimal.",
+      "B": "V. saphena parva berjalan di lateral ankle.",
+      "C": "Vena saphena magna berjalan tepat di anterior malleolus medialis.",
+      "D": "V. tibialis posterior adalah vena profundus.",
+      "E": "V. popliteal di fossa poplitea."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-062",
+    "no": 62,
+    "soal": "Seorang laki-laki usia 46 tahun datang dengan keluhan kesulitan mengangkat kaki bagian depan (foot drop) dan kebas pada kulit dorsum pedis di sekitar sela ibu jari kaki. Saraf apakah yang mengalami gangguan?",
+    "opsi": [
+      "N. Suralis",
+      "N. Femoralis",
+      "N. Tibialis",
+      "N. Peroneus (fibularis) profundus",
+      "N. Saphenus"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. N. Suralis memberikan sensori pada dorsolateral pes.\nB. N. Femoralis mempersarafi ekstensor lutut.\nC. N. Tibialis mempersarafi plantar fleksi kaki.\nD. N. Peroneus profundus mempersarafi otot-otot kompartemen anterior cruris (m. tibialis anterior, dll) yang berfungsi melakukan dorsofleksi kaki; kelumpuhannya memicu *foot drop*.\nE. N. Saphenus memberikan sensori pada sisi medial tungkai.",
+    "pembahasan_klinis": {
+      "A": "N. Suralis memberikan sensori pada dorsolateral pes.",
+      "B": "N. Femoralis mempersarafi ekstensor lutut.",
+      "C": "N. Tibialis mempersarafi plantar fleksi kaki.",
+      "D": "N. Peroneus profundus mempersarafi otot-otot kompartemen anterior cruris (m. tibialis anterior, dll) yang berfungsi melakukan dorsofleksi kaki; kelumpuhannya memicu foot drop.",
+      "E": "N. Saphenus memberikan sensori pada sisi medial tungkai."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-063",
+    "no": 63,
+    "soal": "Seorang laki-laki, 55 tahun menderita Osteoarthritis dan akan diberikan Celecoxib (AINS selektif COX-2). Manakah riwayat penyakit di bawah ini yang menjadi kontraindikasi utama/peringatan risiko kardiovaskular pemberian obat tersebut?",
+    "opsi": [
+      "Angina pectoris / Penyakit Jantung Iskemik",
+      "Ulkus gaster",
+      "Hiperurisemia",
+      "Asma bronkial",
+      "Diabetes melitus"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Inhibitor selektif COX-2 (seperti Celecoxib) memiliki efek samping meningkatkan risiko kejadian tromboemboli kardiovaskular, infark miokard, dan Angina Pectoris.\nB. Celecoxib justru lebih aman untuk penderita ulkus gaster dibanding NSAID non-selektif.\nC. Bukan kontraindikasi utama kardiovaskular.\nD. Asma akibat aspirin dapat terjadi tetapi lebih dipicu inhibitor COX-1.\nE. Diabetes melitus bukan kontraindikasi mutlak.",
+    "pembahasan_klinis": {
+      "A": "Inhibitor selektif COX-2 (seperti Celecoxib) memiliki efek samping meningkatkan risiko kejadian tromboemboli kardiovaskular, infark miokard, dan Angina Pectoris.",
+      "B": "Celecoxib justru lebih aman untuk penderita ulkus gaster dibanding NSAID non-selektif.",
+      "C": "Bukan kontraindikasi utama kardiovaskular.",
+      "D": "Asma akibat aspirin dapat terjadi tetapi lebih dipicu inhibitor COX-1.",
+      "E": "Diabetes melitus bukan kontraindikasi mutlak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-064",
+    "no": 64,
+    "soal": "Seorang atlet basket jatuh dan mengalami trauma pergelangan tangan. Pada pemeriksaan palpasi di daerah Anatomical Snuffbox, didapatkan nyeri tekan yang hebat. Tulang carpal apakah yang paling mungkin mengalami fraktur?",
+    "opsi": [
+      "Os scaphoideum",
+      "Os triquetrum",
+      "Os lunatum",
+      "Os capitatum",
+      "Os pisiformis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Os scaphoideum membentuk dasar dari *anatomical snuffbox*; nyeri tekan di area ini sangat spesifik untuk fraktur skafoid.\nB. Os triquetrum terletak di medial karpal.\nC. Os lunatum berada di tengah barisan proksimal.\nD. Os capitatum di barisan distal karpal.\nE. Os pisiformis teraba menonjol di palmar medial pergelangan tangan.",
+    "pembahasan_klinis": {
+      "A": "Os scaphoideum membentuk dasar dari anatomical snuffbox; nyeri tekan di area ini sangat spesifik untuk fraktur skafoid.",
+      "B": "Os triquetrum terletak di medial karpal.",
+      "C": "Os lunatum berada di tengah barisan proksimal.",
+      "D": "Os capitatum di barisan distal karpal.",
+      "E": "Os pisiformis teraba menonjol di palmar medial pergelangan tangan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-065",
+    "no": 65,
+    "soal": "Seorang atlet mengalami cedera bahu. Struktur otot manakah yang merupakan penstabil utama (dynamic stabilizer) dari articulatio humeri?",
+    "opsi": [
+      "Ligamentum coracohumeralis",
+      "Ligamentum acromioclavicularis",
+      "Ligamen di sekitar articulatio humeri",
+      "Ligamentum coracoclavicularis",
+      "Otot rotator cuff"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Ligamentum coracohumeralis adalah penstabil pasif.\nB. Ligamentum acromioclavicularis menstabilkan acromion dan clavicula.\nC. Ligamen kapster bahu memberikan penstabilan pasif.\nD. Ligamentum coracoclavicularis menstabilkan sendi AC secara pasif.\nE. Otot rotator cuff berfungsi memegang kaput humeri masuk ke dalam cavitas glenoidalis saat bergerak.",
+    "pembahasan_klinis": {
+      "A": "Ligamentum coracohumeralis adalah penstabil pasif.",
+      "B": "Ligamentum acromioclavicularis menstabilkan acromion dan clavicula.",
+      "C": "Ligamen kapster bahu memberikan penstabilan pasif.",
+      "D": "Ligamentum coracoclavicularis menstabilkan sendi AC secara pasif.",
+      "E": "Otot rotator cuff berfungsi memegang kaput humeri masuk ke dalam cavitas glenoidalis saat bergerak."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-066",
+    "no": 66,
+    "soal": "Apakah bentuk keringanan hukum dalam Islam bagi seorang mukallaf dalam menjalankan ibadah pada keadaan tertentu (misalnya lutut sakit diperbolehkan shalat duduk/berbaring)?",
+    "opsi": [
+      "Mudharat",
+      "Darurat",
+      "Hukum taklifi",
+      "Rukhshah",
+      "Hukum wadh'i"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Mudharat adalah bahaya/kerugian yang harus dihindari.\nB. Darurat adalah kondisi terdesak yang mengancam jiwa.\nC. Hukum taklifi adalah khitab Allah yang menuntut pengerjaan/dituntut meninggalkan/pilihan.\nD. Rukhshah secara bahasa dan istilah fikih adalah keringanan hukum yang diberikan Allah kepada mukallaf karena adanya udzur/kesulitan tertentu.\nE. Hukum wadh'i adalah hukum yang menjadikan sesuatu sebagai sebab/syarat/halangan.",
+    "pembahasan_klinis": {
+      "A": "Mudharat adalah bahaya/kerugian yang harus dihindari.",
+      "B": "Darurat adalah kondisi terdesak yang mengancam jiwa.",
+      "C": "Hukum taklifi adalah khitab Allah yang menuntut pengerjaan/dituntut meninggalkan/pilihan.",
+      "D": "Rukhshah secara bahasa dan istilah fikih adalah keringanan hukum yang diberikan Allah kepada mukallaf karena adanya udzur/kesulitan tertentu.",
+      "E": "Hukum wadh'i adalah hukum yang menjadikan sesuatu sebagai sebab/syarat/halangan."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-067",
+    "no": 67,
+    "soal": "Seorang laki-laki, usia 45 tahun, datang dengan keluhan terdapat massa pada paha kanan. Dokter mendiagnosis tumor ganas yang berasal dari jaringan otot skelet/lurik. Apakah nama diagnosis tumor tersebut?",
+    "opsi": [
+      "Leiomioma",
+      "Leiomiosarkoma",
+      "Fibrosarkoma",
+      "Fibromatosis agresif",
+      "Rabdomiosarkoma"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Leiomioma adalah tumor jinak otot polos.\nB. Leiomiosarkoma adalah tumor ganas otot polos.\nC. Fibrosarkoma adalah tumor ganas dari fibroblas/jaringan ikat.\nD. Fibromatosis agresif adalah lesi jaringan ikat terinfiltrasi jinak secara patologi namun destruktif lokal.\nE. Rabdomiosarkoma (Rhabdomyosarcoma) adalah neoplasma ganas yang menunjukkan diferensiasi sel otot rangka (lurik).",
+    "pembahasan_klinis": {
+      "A": "Leiomioma adalah tumor jinak otot polos.",
+      "B": "Leiomiosarkoma adalah tumor ganas otot polos.",
+      "C": "Fibrosarkoma adalah tumor ganas dari fibroblas/jaringan ikat.",
+      "D": "Fibromatosis agresif adalah lesi jaringan ikat terinfiltrasi jinak secara patologi namun destruktif lokal.",
+      "E": "Rabdomiosarkoma (Rhabdomyosarcoma) adalah neoplasma ganas yang menunjukkan diferensiasi sel otot rangka (lurik)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-068",
+    "no": 68,
+    "soal": "Seorang laki-laki, usia 47 tahun, mendiagnosis Osteoarthritis pada sendi lutut. Berikut ini yang BUKAN merupakan kelainan/gejala patologis khas pada Osteoarthritis adalah:",
+    "opsi": [
+      "Krepitasi saat gerak sendi",
+      "Destruksi/pengelupasan primer pada tulang (seharusnya kartilago sendi)",
+      "Keterlibatan sendi bersifat oligoartikular / asimetris",
+      "Fissuring dan erosi kartilago sendi",
+      "Pembentukan kista subkondral dan osteofit"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Krepitasi timbul akibat gesekan permukaan sendi yang kasar pada OA.\nB. Osteoarthritis ditandai oleh degenerasi primer pada kartilago (tulang rawan) sendi, bukan destruksi primer pada tulang keras.\nC. OA umumnya mengenai sendi penopang beban secara asimetris/oligoartikular.\nD. Fissuring dan pengelupasan merupakan gambaran kerusakan kartilago sendi pada OA.\nE. Osteofit dan kista subkondral khas ditemukan pada radiografi OA.",
+    "pembahasan_klinis": {
+      "A": "Krepitasi timbul akibat gesekan permukaan sendi yang kasar pada OA.",
+      "B": "Osteoarthritis ditandai oleh degenerasi primer pada kartilago (tulang rawan) sendi, bukan destruksi primer pada tulang keras.",
+      "C": "OA umumnya mengenai sendi penopang beban secara asimetris/oligoartikular.",
+      "D": "Fissuring dan pengelupasan merupakan gambaran kerusakan kartilago sendi pada OA.",
+      "E": "Osteofit dan kista subkondral khas ditemukan pada radiografi OA."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-069",
+    "no": 69,
+    "soal": "Seorang perempuan berusia 42 tahun datang dengan keluhan nyeri dan kekakuan pagi hari pada sendi jari-jari tangan dan kaki selama 1 tahun. Asam urat normal (4 mg/dL). Apakah pemeriksaan laboratorium penunjang serologi spesifik untuk membedakan dan menegakkan diagnosis Rheumatoid Arthritis?",
+    "opsi": [
+      "Pemeriksaan darah rutin",
+      "Pemeriksaan Rheumatoid Factor (RF) & Anti-CCP",
+      "Pemeriksaan ureum dan kreatinin",
+      "Pemeriksaan transaminase (SGOT/SGPT)",
+      "Pemeriksaan C-reactive protein (CRP) saja"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Darah rutin hanya menunjukkan tanda inflamasi non-spesifik.\nB. Pemeriksaan Rheumatoid Factor (RF) dan anti-Cyclic Citrullinated Peptide (anti-CCP) merupakan penanda serologi spesifik untuk diagnostik Rheumatoid Arthritis.\nC. Ureum kreatinin menilai fungsi ginjal.\nD. Transaminase menilai fungsi hati.\nE. CRP hanya indikator reaktan fase akut non-spesifik.",
+    "pembahasan_klinis": {
+      "A": "Darah rutin hanya menunjukkan tanda inflamasi non-spesifik.",
+      "B": "Pemeriksaan Rheumatoid Factor (RF) dan anti-Cyclic Citrullinated Peptide (anti-CCP) merupakan penanda serologi spesifik untuk diagnostik Rheumatoid Arthritis.",
+      "C": "Ureum kreatinin menilai fungsi ginjal.",
+      "D": "Transaminase menilai fungsi hati.",
+      "E": "CRP hanya indikator reaktan fase akut non-spesifik."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-070",
+    "no": 70,
+    "soal": "Seorang atlet parkour melompat dari ketinggian 3 meter dan mengalami cedera di daerah ankle joint. Foto rontgen menemukan fraktur pada tulang tarsal tepat di bawah os talus. Apakah nama tulang tersebut?",
+    "opsi": [
+      "Os cuneiforme",
+      "Os naviculare",
+      "Os calcaneus",
+      "Os cuboideum",
+      "Os tibia"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Os cuneiforme terletak di distal naviculare.\nB. Os naviculare terletak di anterior caput tali.\nC. Os calcaneus (tulang tumit) terletak tepat di inferior/bawah os talus dan paling sering mengalami fraktur akibat beban kompresi jatuh dari ketinggian (*Lover's fracture*).\nD. Os cuboideum terletak di anterolateral calcaneus.\nE. Os tibia berada di superior os talus.",
+    "pembahasan_klinis": {
+      "A": "Os cuneiforme terletak di distal naviculare.",
+      "B": "Os naviculare terletak di anterior caput tali.",
+      "C": "Os calcaneus (tulang tumit) terletak tepat di inferior/bawah os talus dan paling sering mengalami fraktur akibat beban kompresi jatuh dari ketinggian (Lover's fracture).",
+      "D": "Os cuboideum terletak di anterolateral calcaneus.",
+      "E": "Os tibia berada di superior os talus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-071",
+    "no": 71,
+    "soal": "Seorang pemuda berusia 19 tahun dibawa ke UGD dengan perdarahan masif akibat luka tusuk pada spatium axillare mediale (lacuna axillaris medialis). Berdasarkan anatomi, apakah pembuluh darah yang melintasi celah tersebut dan paling mungkin mengalami trauma?",
+    "opsi": [
+      "Arteria transversa colli",
+      "Arteria suprascapularis",
+      "Arteria circumflexa scapulae",
+      "Arteria dan vena circumflexa scapulae",
+      "Arteria circumflexa humeri anterior"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Arteria transversa colli di regio leher posterior/bahu superior.\nB. Arteria suprascapularis melintasi incisura suprascapularis di superior skapula.\nC. Hanya menyebutkan arteri tanpa vena pasangan anatomisnya.\nD. Spatium axillare mediale (celah medial axilla/trigonum subscapulare) dilewati oleh Vasa circumflexa scapulae (Arteria dan Vena circumflexa scapulae).\nE. Arteria circumflexa humeri anterior melintasi spatium axillare laterale (quadrangular space).",
+    "pembahasan_klinis": {
+      "A": "Arteria transversa colli di regio leher posterior/bahu superior.",
+      "B": "Arteria suprascapularis melintasi incisura suprascapularis di superior skapula.",
+      "C": "Hanya menyebutkan arteri tanpa vena pasangan anatomisnya.",
+      "D": "Spatium axillare mediale (celah medial axilla/trigonum subscapulare) dilewati oleh Vasa circumflexa scapulae (Arteria dan Vena circumflexa scapulae).",
+      "E": "Arteria circumflexa humeri anterior melintasi spatium axillare laterale (quadrangular space)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-072",
+    "no": 72,
+    "soal": "Seorang pengendara motor mengalami kecelakaan. Pemeriksaan fisik di regio cruris anterior menemukan lebam, nyeri tekan, krepitasi, dan ketidakmampuan dorsofleksi kaki. Pada tulang manakah kemungkinan fraktur terjadi?",
+    "opsi": [
+      "Os femur",
+      "Os tibia",
+      "Os radius",
+      "Os calcaneus",
+      "Os talus"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Os femur ada di paha.\nB. Regio cruris anterior dibentuk oleh tulang Os Tibia (serta fibula).\nC. Os radius di lengan bawah.\nD. Os calcaneus di tumit.\nE. Os talus di ankle.",
+    "pembahasan_klinis": {
+      "A": "Os femur ada di paha.",
+      "B": "Regio cruris anterior dibentuk oleh tulang Os Tibia (serta fibula).",
+      "C": "Os radius di lengan bawah.",
+      "D": "Os calcaneus di tumit.",
+      "E": "Os talus di ankle."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-073",
+    "no": 73,
+    "soal": "Seorang pengendara motor mengalami fraktur regio cruris anterior dan kehilangan kemampuan dorsofleksi pergelangan kaki. Otot manakah di kompartemen anterior cruris yang mengalami kelumpuhan/paralisis?",
+    "opsi": [
+      "M. Tibialis anterior",
+      "M. Peroneus longus",
+      "M. Extensor digitorum brevis",
+      "M. Extensor hallucis brevis",
+      "M. Peroneus brevis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. M. Tibialis anterior adalah penggerak utama (*prime mover*) untuk dorsofleksi dan inversi kaki pada pergelangan kaki.\nB. M. Peroneus longus melakukan plantar fleksi dan eversi.\nC. M. Extensor digitorum brevis di dorsum pedis melemaskan falan.\nD. M. Extensor hallucis brevis meluruskan ibu jari kaki.\nE. M. Peroneus brevis melakukan eversi kaki.",
+    "pembahasan_klinis": {
+      "A": "M. Tibialis anterior adalah penggerak utama (prime mover) untuk dorsofleksi dan inversi kaki pada pergelangan kaki.",
+      "B": "M. Peroneus longus melakukan plantar fleksi dan eversi.",
+      "C": "M. Extensor digitorum brevis di dorsum pedis melemaskan falan.",
+      "D": "M. Extensor hallucis brevis meluruskan ibu jari kaki.",
+      "E": "M. Peroneus brevis melakukan eversi kaki."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-074",
+    "no": 74,
+    "soal": "Seorang perempuan 50 tahun mengalami fraktur 1/3 os clavicula kiri. Posisi/sikap leher manakah yang dapat merilekskan M. Sternocleidomastoideus dan meminimalkan tarikan nyeri pada fragmen klavikula?",
+    "opsi": [
+      "Fleksi leher",
+      "Laterofleksi leher ke kiri (sisi cedera)",
+      "Laterofleksi leher ke kanan",
+      "Retrofleksi leher ke kiri",
+      "Rotasi leher ke kanan"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Fleksi leher tidak spesifik merilekskan satu sisi M. SCM.\nB. Laterofleksi leher ke arah sisi yang patah (kiri) mendepetkan origo-insersi M. sternocleidomastoideus sehingga merilekskan tarikan otot pada fragmen proksimal klavikula kiri dan mengurangi nyeri.\nC. Laterofleksi ke kanan meregangkan SCM kiri dan memperparah nyeri.\nD. Retrofleksi tidak secara tepat mengistirahatkan fragmen.\nE. Rotasi ke kanan meregangkan M. SCM kiri.",
+    "pembahasan_klinis": {
+      "A": "Fleksi leher tidak spesifik merilekskan satu sisi M. SCM.",
+      "B": "Laterofleksi leher ke arah sisi yang patah (kiri) mendepetkan origo-insersi M. sternocleidomastoideus sehingga merilekskan tarikan otot pada fragmen proksimal klavikula kiri dan mengurangi nyeri.",
+      "C": "Laterofleksi ke kanan meregangkan SCM kiri dan memperparah nyeri.",
+      "D": "Retrofleksi tidak secara tepat mengistirahatkan fragmen.",
+      "E": "Rotasi ke kanan meregangkan M. SCM kiri."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-075",
+    "no": 75,
+    "soal": "Seorang perempuan 77 tahun datang dengan keluhan nyeri panggul kanan setelah jatuh. Pada pemeriksaan radiologi ditemukan fraktur panggul. Manakah daerah anatomi os femur yang paling sering mengalami fraktur pada pasien lansia?",
+    "opsi": [
+      "Trochanter minor",
+      "Collum femoris",
+      "Trochanter mayor",
+      "Fibula",
+      "Tibia"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Trochanter minor jarang terisolasi tanpa traksi iliopsoas masif.\nB. Collum femoris (leher femur) adalah lokasi tersering fraktur panggul (*hip fracture*) pada pasien lansia wanita pascamenopause akibat kerentanan osteoporosis.\nC. Trochanter mayor biasa akibat benturan langsung, lebih jarang dibanding kolum.\nD. Fibula berada di tungkai bawah.\nE. Tibia berada di tungkai bawah.",
+    "pembahasan_klinis": {
+      "A": "Trochanter minor jarang terisolasi tanpa traksi iliopsoas masif.",
+      "B": "Collum femoris (leher femur) adalah lokasi tersering fraktur panggul (hip fracture) pada pasien lansia wanita pascamenopause akibat kerentanan osteoporosis.",
+      "C": "Trochanter mayor biasa akibat benturan langsung, lebih jarang dibanding kolum.",
+      "D": "Fibula berada di tungkai bawah.",
+      "E": "Tibia berada di tungkai bawah."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-076",
+    "no": 76,
+    "soal": "Seorang perempuan 77 tahun fraktur collum femoris setelah terjatuh dari posisi berdiri. Apakah kondisi patologis metabolik tulang yang mendasari mudah terjadinya fraktur tersebut?",
+    "opsi": [
+      "Osteoarthritis",
+      "Rheumatoid arthritis",
+      "Osteoporosis",
+      "Penyakit autoimun",
+      "Gout arthritis"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Osteoarthritis adalah kelainan destruksi kartilago sendi.\nB. Rheumatoid arthritis adalah inflamasi autoimun sinovial.\nC. Osteoporosis ditandai oleh penurunan massa dan densitas mineral tulang serta kerusakan mikroarsitektur tulang yang menyebabkan tulang menjadi sangat rapuh dan mudah patah (*fragility fracture*).\nD. Penyakit autoimun umum tidak langsung memicu penipisan korteks tulang tanpa osteoporosis sekunder.\nE. Gout arthritis ditandai deposisi kristal asam urat.",
+    "pembahasan_klinis": {
+      "A": "Osteoarthritis adalah kelainan destruksi kartilago sendi.",
+      "B": "Rheumatoid arthritis adalah inflamasi autoimun sinovial.",
+      "C": "Osteoporosis ditandai oleh penurunan massa dan densitas mineral tulang serta kerusakan mikroarsitektur tulang yang menyebabkan tulang menjadi sangat rapuh dan mudah patah (fragility fracture).",
+      "D": "Penyakit autoimun umum tidak langsung memicu penipisan korteks tulang tanpa osteoporosis sekunder.",
+      "E": "Gout arthritis ditandai deposisi kristal asam urat."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-077",
+    "no": 77,
+    "soal": "Seorang perempuan 55 tahun mengalami Carpal Tunnel Syndrome. Pita jaringan ikat (retinakulum) manakah yang membentuk atap dari kanalis karpal (carpal tunnel) dan menekan N. Medianus?",
+    "opsi": [
+      "Fascia profunda manus",
+      "Aponeurosis palmaris",
+      "Ligamentum carpi volare",
+      "Retinaculum extensorum",
+      "Retinaculum flexorum (Ligamentum carpi transversum)"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. Fascia profunda manus melapisi struktur dalam otot.\nB. Aponeurosis palmaris terletak superfisial di telapak tangan.\nC. Ligamentum carpi volare terletak proksimal dari canalis carpi.\nD. Retinaculum extensorum terletak di bagian dorsal pergelangan tangan.\nE. Retinaculum flexorum (transverse carpal ligament) membentuk atap terowongan karpal yang menjepit N. medianus.",
+    "pembahasan_klinis": {
+      "A": "Fascia profunda manus melapisi struktur dalam otot.",
+      "B": "Aponeurosis palmaris terletak superfisial di telapak tangan.",
+      "C": "Ligamentum carpi volare terletak proksimal dari canalis carpi.",
+      "D": "Retinaculum extensorum terletak di bagian dorsal pergelangan tangan.",
+      "E": "Retinaculum flexorum (transverse carpal ligament) membentuk atap terowongan karpal yang menjepit N. medianus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-078",
+    "no": 78,
+    "soal": "Seorang laki-laki 48 tahun datang dengan keluhan benjolan pada punggung sebesar telur ayam. Benjolan agak lembek (konsistensi kenyal), tidak nyeri, mudah digerakkan dari jaringan sekitarnya, berbatas tegas di subkutan. Apakah diagnosis yang paling mungkin?",
+    "opsi": [
+      "Ganglion",
+      "Fibroma",
+      "Lipoma",
+      "Fibrosarkoma",
+      "Kondroma"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Ganglion berupa kista di dekat selubung tendon/sendi pergelangan.\nB. Fibroma berkonsistensi padat keras.\nC. Lipoma adalah tumor jinak sel lemak di jaringan subkutan berkonsistensi lunak/kenyal, bergerak bebas, dan tidak nyeri.\nD. Fibrosarkoma adalah massa ganas keras berbatas tidak tegas dan bertumbuh cepat.\nE. Kondroma adalah tumor jinak sel kartilago pada tulang.",
+    "pembahasan_klinis": {
+      "A": "Ganglion berupa kista di dekat selubung tendon/sendi pergelangan.",
+      "B": "Fibroma berkonsistensi padat keras.",
+      "C": "Lipoma adalah tumor jinak sel lemak di jaringan subkutan berkonsistensi lunak/kenyal, bergerak bebas, dan tidak nyeri.",
+      "D": "Fibrosarkoma adalah massa ganas keras berbatas tidak tegas dan bertumbuh cepat.",
+      "E": "Kondroma adalah tumor jinak sel kartilago pada tulang."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-079",
+    "no": 79,
+    "soal": "Patah tulang terbuka os femur yang menyebabkan perdarahan sangat hebat akibat robeknya cabang utama A. femoralis di bagian profunda/lateral paha. Arteri apakah yang dimaksud?",
+    "opsi": [
+      "A. profunda femoris",
+      "A. epigastrica superficialis",
+      "A. pudenda externa",
+      "A. epigastrica inferior",
+      "A. circumflexa femoris medialis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. A. profunda femoris adalah cabang terbesar A. femoralis yang berjalan ke profunda paha dan memberi perdarahan utama otot paha; pendarahannya sangat cepat fatal.\nB. A. epigastrica superficialis adalah cabang kecil ke dinding perut bawah.\nC. A. pudenda externa memperdarahi genitalia eksterna.\nD. A. epigastrica inferior cabang dari A. iliaca externa.\nE. A. circumflexa femoris medialis memperdarahi caput femoris.",
+    "pembahasan_klinis": {
+      "A": "A. profunda femoris adalah cabang terbesar A. femoralis yang berjalan ke profunda paha dan memberi perdarahan utama otot paha; pendarahannya sangat cepat fatal.",
+      "B": "A. epigastrica superficialis adalah cabang kecil ke dinding perut bawah.",
+      "C": "A. pudenda externa memperdarahi genitalia eksterna.",
+      "D": "A. epigastrica inferior cabang dari A. iliaca externa.",
+      "E": "A. circumflexa femoris medialis memperdarahi caput femoris."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-080",
+    "no": 80,
+    "soal": "Manakah di bawah ini faktor yang menentukan panjang awal filamen dan tingkat pembentukan *cross-bridge* yang mempengaruhi kekuatan kontraksi otot rangka?",
+    "opsi": [
+      "Myosin ATP-ase",
+      "Cara perangsangan",
+      "Panjang awal otot (panjang sarkomer awal)",
+      "Tegangan total",
+      "Jenis perangsangan"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Aktivitas Myosin ATPase menentukan kecepatan kontraksi (*fast vs slow twitch*).\nB. Cara perangsangan mempengaruhi rekrutmen unit motorik.\nC. Berdasarkan *length-tension relationship*, panjang awal otot (panjang sarkomer sebelum kontraksi) menentukan jumlah tumpang tindih aktin-miosin dan kekuatan tumpuan kontraksi fisiologis.\nD. Tegangan total adalah hasil akhir kontraksi.\nE. Jenis perangsangan menentukan tetani/single twitch.",
+    "pembahasan_klinis": {
+      "A": "Aktivitas Myosin ATPase menentukan kecepatan kontraksi (fast vs slow twitch).",
+      "B": "Cara perangsangan mempengaruhi rekrutmen unit motorik.",
+      "C": "Berdasarkan length-tension relationship, panjang awal otot (panjang sarkomer sebelum kontraksi) menentukan jumlah tumpang tindih aktin-miosin dan kekuatan tumpuan kontraksi fisiologis.",
+      "D": "Tegangan total adalah hasil akhir kontraksi.",
+      "E": "Jenis perangsangan menentukan tetani/single twitch."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-081",
+    "no": 81,
+    "soal": "Seorang wanita 50 tahun mengeluh nyeri dari pinggang hingga ke kaki terasa seperti sengatan listrik menjalar tiba-tiba, disertai lemas dan kesemutan setelah terpeleset. Saraf manakah yang mengalami iritasi/kompresi radiks?",
+    "opsi": [
+      "N. Cutaneus femoris posterior",
+      "N. Femoralis",
+      "N. Obturatorius",
+      "N. Gluteus inferior",
+      "N. Ischiadicus"
+    ],
+    "jawabanBenar": 4,
+    "pembahasan": "A. N. Cutaneus femoris posterior hanya menyalurkan rasa raba/sensorik paha posterior.\nB. N. Femoralis menyalurkan nyeri di paha anterior.\nC. N. Obturatorius menyalurkan nyeri paha dalam (medial).\nD. N. Gluteus inferior mempersarafi m. gluteus maximus.\nE. N. Ischiadicus (sciatic nerve) melayani radiasi nyeri khas shock-like (*sciatica*) dari pinggang/bokong hingga kaki.",
+    "pembahasan_klinis": {
+      "A": "N. Cutaneus femoris posterior hanya menyalurkan rasa raba/sensorik paha posterior.",
+      "B": "N. Femoralis menyalurkan nyeri di paha anterior.",
+      "C": "N. Obturatorius menyalurkan nyeri paha dalam (medial).",
+      "D": "N. Gluteus inferior mempersarafi m. gluteus maximus.",
+      "E": "N. Ischiadicus (sciatic nerve) melayani radiasi nyeri khas shock-like (sciatica) dari pinggang/bokong hingga kaki."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-082",
+    "no": 82,
+    "soal": "Seorang wanita 65 tahun mengalami Osteoporosis dengan T-score -3.0 SD pada pemeriksaan DXA. Manakah lini pertama kombinasi terapi farmakologis penjelas anti-resorptif yang tepat untuk pasien tersebut?",
+    "opsi": [
+      "Kalsium dan analog vitamin D3 saja",
+      "Teriparatid dan magnesium",
+      "Bifosfonat (misal Alendronat) serta Kalsium + Vitamin D3",
+      "SERM dan suplemen besi",
+      "HRT dan analog vitamin D3"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Kalsium dan Vit D3 adalah terapi suplemen dasar, bukan agen lini pertama tunggal anti-resorptif kuat untuk T-score -3.0.\nB. Teriparatid adalah anabolik lini kedua/kasus fraktur berat.\nC. Lini pertama pengobatan osteoporosis dengan T-score <= -2.5 adalah golongan Bifosfonat dikombinasikan dengan kecukupan Kalsium dan Vitamin D3.\nD. SERM kurang efektif dibanding bifosfonat pada usia 65 tahun.\nE. HRT bukan lini pertama pada wanita lansia karena risiko tromboemboli/kanker.",
+    "pembahasan_klinis": {
+      "A": "Kalsium dan Vit D3 adalah terapi suplemen dasar, bukan agen lini pertama tunggal anti-resorptif kuat untuk T-score -3.0.",
+      "B": "Teriparatid adalah anabolik lini kedua/kasus fraktur berat.",
+      "C": "Lini pertama pengobatan osteoporosis dengan T-score <= -2.5 adalah golongan Bifosfonat dikombinasikan dengan kecukupan Kalsium dan Vitamin D3.",
+      "D": "SERM kurang efektif dibanding bifosfonat pada usia 65 tahun.",
+      "E": "HRT bukan lini pertama pada wanita lansia karena risiko tromboemboli/kanker."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-083",
+    "no": 83,
+    "soal": "Seorang wanita melakukan percobaan bunuh diri dengan mengiris pergelangan tangan anterior. Hasil pemeriksaan UGD menunjukkan laserasi komplit pada N. Medianus di distal pergelangan tangan. Deformitas khas apakah yang dialami oleh pasien?",
+    "opsi": [
+      "Ape-Hand deformity",
+      "Drop-Hand deformity",
+      "Winging scapula",
+      "Claw-Hand deformity",
+      "Waiter's tip deformity"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Lesi N. Medianus di wrist menyebabkan atrofi eminensia tenar sehingga ibu jari sejajar dengan jari lain menyerupai tangan kera (Ape-Hand deformity).\nB. Drop-Hand (Wrist Drop) akibat cederanya N. Radialis.\nC. Winging scapula akibat cederanya N. Thoracicus Longus.\nD. Claw-Hand akibat cederanya N. Ulnaris.\nE. Waiter's tip deformity akibat cederanya pleksus brakialis proksimal (Erb-Duchenne palsy).",
+    "pembahasan_klinis": {
+      "A": "Lesi N. Medianus di wrist menyebabkan atrofi eminensia tenar sehingga ibu jari sejajar dengan jari lain menyerupai tangan kera (Ape-Hand deformity).",
+      "B": "Drop-Hand (Wrist Drop) akibat cederanya N. Radialis.",
+      "C": "Winging scapula akibat cederanya N. Thoracicus Longus.",
+      "D": "Claw-Hand akibat cederanya N. Ulnaris.",
+      "E": "Waiter's tip deformity akibat cederanya pleksus brakialis proksimal (Erb-Duchenne palsy)."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-084",
+    "no": 84,
+    "soal": "Manakah pernyataan yang tepat mengenai profil farmakokinetik Bisfosfonat (seperti Alendronat) pada pengobatan osteoporosis?",
+    "opsi": [
+      "Metabolit utama dihasilkan melalui perantaraan enzim hepar",
+      "Berikatan secara spesifik dengan reseptor estrogen sel target",
+      "Diabsorbsi sangat sedikit (<1-2%) di saluran cerna dan diserap langsung ke dalam matriks hidroksiapatit tulang, lalu diekskresikan dalam bentuk utuh oleh ginjal",
+      "Diabsorbsi sempurna hampir 100% di usus halus tanpa dipengaruhi makanan",
+      "Mengalami metabolisme lintas pertama (first-pass metabolism) masif di hepar"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Bisfosfonat tidak dimetabolisme oleh enzim hepar.\nB. Bisfosfonat tidak berikatan dengan reseptor estrogen.\nC. Bioavailabilitas oral bisfosfonat sangat kecil (<1%), selebihnya terikat kuat pada kristal hidroksiapatit tulang dan diekskresikan dalam bentuk tidak berubah melalui ginjal.\nD. Bioavailabilitasnya terganggu parah oleh adanya makanan/kation.\nE. Bisfosfonat tidak mengalami metabolisme hepar.",
+    "pembahasan_klinis": {
+      "A": "Bisfosfonat tidak dimetabolisme oleh enzim hepar.",
+      "B": "Bisfosfonat tidak berikatan dengan reseptor estrogen.",
+      "C": "Bioavailabilitas oral bisfosfonat sangat kecil (<1%), selebihnya terikat kuat pada kristal hidroksiapatit tulang dan diekskresikan dalam bentuk tidak berubah melalui ginjal.",
+      "D": "Bioavailabilitasnya terganggu parah oleh adanya makanan/kation.",
+      "E": "Bisfosfonat tidak mengalami metabolisme hepar."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-085",
+    "no": 85,
+    "soal": "Istilah tulang-belulang banyak disebut dalam Al-Qur'an berkaitan dengan tahapan pembentukan embrio manusia, dinyatakan dengan kata:",
+    "opsi": [
+      "Alaqah",
+      "'Idzaman",
+      "Nuthfah",
+      "Lahman",
+      "Mudghah"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. 'Alaqah berarti segumpal darah / sesuatu yang melekat.\nB. 'Idzaman (عِظَامًا) berarti tulang-belulang (QS. Al-Mu'minun: 14).\nC. Nuthfah berarti tetesan mani.\nD. Lahman berarti daging.\nE. Mudghah berarti segumpal daging.",
+    "pembahasan_klinis": {
+      "A": "'Alaqah berarti segumpal darah / sesuatu yang melekat.",
+      "B": "'Idzaman (عِظَامًا) berarti tulang-belulang (QS. Al-Mu'minun: 14).",
+      "C": "Nuthfah berarti tetesan mani.",
+      "D": "Lahman berarti daging.",
+      "E": "Mudghah berarti segumpal daging."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-086",
+    "no": 86,
+    "soal": "Seorang anak laki-laki 6 tahun mengalami penyempitan di saluran bronkus. Bagaimana gambaran jaringan histologi otot penyusun organ saluran napas (bronkus) tersebut?",
+    "opsi": [
+      "Mempunyai serat otot berbentuk fusiformis dengan satu inti di tengah",
+      "Mempunyai inti serat otot berderet-deret banyak di tepi",
+      "Setiap serat ototnya mengandung myofibril bergaris terang-gelap yang jelas",
+      "Mengandung otot volunter di bawah kendali kesadaran",
+      "Mempunyai serat otot yang bercabang-cabang dan diskus interkalaris"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Saluran respirasi (bronkus) disusun oleh otot polos (*smooth muscle*) yang berbentuk fusiformis dan memiliki 1 inti sel di tengah.\nB. Ciri otot rangka.\nC. Ciri otot lurik/rangka.\nD. Otot bronkus bersifat involunter.\nE. Ciri otot jantung.",
+    "pembahasan_klinis": {
+      "A": "Saluran respirasi (bronkus) disusun oleh otot polos (smooth muscle) yang berbentuk fusiformis dan memiliki 1 inti sel di tengah.",
+      "B": "Ciri otot rangka.",
+      "C": "Ciri otot lurik/rangka.",
+      "D": "Otot bronkus bersifat involunter.",
+      "E": "Ciri otot jantung."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-087",
+    "no": 87,
+    "soal": "Perempuan 45 tahun mengalami kekambuhan gout arthritis. Setelah meredakan nyeri akut, dokter memberikan obat untuk menurunkan kadar asam urat darah (hipourisemia). Obat apakah yang dimaksud?",
+    "opsi": [
+      "Indometazin",
+      "Allopurinol",
+      "Metamizol",
+      "Selekoksib",
+      "Kolkisin"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Indometazin adalah NSAID untuk nyeri akut.\nB. Allopurinol bekerja menghambat enzim Xanthine Oxidase sehingga menurunkan produksi dan kadar asam urat dalam darah.\nC. Metamizol adalah analgetik-antipiretik.\nD. Selekoksib adalah NSAID antiinflamasi.\nE. Kolkisin adalah analgetik spesifik untuk serangan gout akut, bukan penurun produksi asam urat jangka panjang.",
+    "pembahasan_klinis": {
+      "A": "Indometazin adalah NSAID untuk nyeri akut.",
+      "B": "Allopurinol bekerja menghambat enzim Xanthine Oxidase sehingga menurunkan produksi dan kadar asam urat dalam darah.",
+      "C": "Metamizol adalah analgetik-antipiretik.",
+      "D": "Selekoksib adalah NSAID antiinflamasi.",
+      "E": "Kolkisin adalah analgetik spesifik untuk serangan gout akut, bukan penurun produksi asam urat jangka panjang."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-088",
+    "no": 88,
+    "soal": "Seorang laki-laki berusia 25 tahun jatuh dari motor dengan fraktur terbuka regio cruris dextra 1/3 medial. Tampak perdarahan hebat dari arteri yang berjalan di sepanjang permukaan anterior membrana interossea cruris. Arteri apakah yang robek pada kasus tersebut?",
+    "opsi": [
+      "A. tibialis posterior",
+      "A. popliteal",
+      "A. femoralis",
+      "A. tibialis anterior",
+      "A. dorsalis pedis"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. A. tibialis posterior berjalan di kompartemen posterior profunda cruris.\nB. A. popliteal berada di fossa poplitea.\nC. A. femoralis berada di regio paha.\nD. A. tibialis anterior menembus bagian atas membrana interossea dan berjalan ke inferior di kompartemen cruris anterior.\nE. A. dorsalis pedis adalah kelanjutan A. tibialis anterior di distal ankle.",
+    "pembahasan_klinis": {
+      "A": "A. tibialis posterior berjalan di kompartemen posterior profunda cruris.",
+      "B": "A. popliteal berada di fossa poplitea.",
+      "C": "A. femoralis berada di regio paha.",
+      "D": "A. tibialis anterior menembus bagian atas membrana interossea dan berjalan ke inferior di kompartemen cruris anterior.",
+      "E": "A. dorsalis pedis adalah kelanjutan A. tibialis anterior di distal ankle."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-089",
+    "no": 89,
+    "soal": "Apa nama tulang tengkorak tempat ditemukannya struktur Crista Galli?",
+    "opsi": [
+      "Os. Frontale",
+      "Os. Sphenoidale",
+      "Os. Palatinum",
+      "Os. Ethmoidale",
+      "Os. Temporale"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Os. Frontale membentuk bagian dahi dan pars orbitalis.\nB. Os. Sphenoidale memuat sella turcica.\nC. Os. Palatinum membentuk palatum durum posterior.\nD. Crista galli adalah tonjolan median superior dari lamina cribrosa Os. Ethmoidale yang menjadi tempat melekatnya falx cerebri.\nE. Os. Temporale memuat meatus acusticus externus.",
+    "pembahasan_klinis": {
+      "A": "Os. Frontale membentuk bagian dahi dan pars orbitalis.",
+      "B": "Os. Sphenoidale memuat sella turcica.",
+      "C": "Os. Palatinum membentuk palatum durum posterior.",
+      "D": "Crista galli adalah tonjolan median superior dari lamina cribrosa Os. Ethmoidale yang menjadi tempat melekatnya falx cerebri.",
+      "E": "Os. Temporale memuat meatus acusticus externus."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-090",
+    "no": 90,
+    "soal": "Seorang wanita usia 55 tahun menderita Osteoarthritis lutut bilateral dengan Obesitas (BB 70 kg, TB 152 cm). Edukasi olahraga non-farmakologis aman penopang beban ringan manakah yang tepat disarankan?",
+    "opsi": [
+      "Diit rendah garam",
+      "Diit rendah purin",
+      "Lari maraton 30 menit sehari",
+      "Olahraga low-impact seperti bersepeda/renang rutin dan penurunan berat badan",
+      "Diit rendah lemak saja"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Diit rendah garam untuk hipertensi.\nB. Diit rendah purin untuk asam urat/gout.\nC. Lari memberi tumpuan kompresi tinggi yang memperparah OA lutut.\nD. Latihan *low-impact* (bersepeda statis/berenang) menguatkan otot quadriceps tanpa membebani kartilago sendi lutut, disertai penurunan berat badan.\nE. Diit rendah lemak saja tidak secara spesifik menyelesaikan gaya beban sendi.",
+    "pembahasan_klinis": {
+      "A": "Diit rendah garam untuk hipertensi.",
+      "B": "Diit rendah purin untuk asam urat/gout.",
+      "C": "Lari memberi tumpuan kompresi tinggi yang memperparah OA lutut.",
+      "D": "Latihan low-impact (bersepeda statis/berenang) menguatkan otot quadriceps tanpa membebani kartilago sendi lutut, disertai penurunan berat badan.",
+      "E": "Diit rendah lemak saja tidak secara spesifik menyelesaikan gaya beban sendi."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-091",
+    "no": 91,
+    "soal": "Manakah penyakit/kondisi di bawah ini yang dapat menjadi faktor risiko terjadinya Osteoporosis sekunder pada usia yang lebih muda?",
+    "opsi": [
+      "Kelebihan berat badan (obesitas)",
+      "Gagal Ginjal Kronik (CKD / Renal Osteodystrophy)",
+      "Riwayat penggunaan antibiotik",
+      "Penggunaan analgetik jangka panjang",
+      "Trauma mekanis berulang"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Obesitas justru cenderung meningkatkan densitas mineral tulang aksial.\nB. Gagal Ginjal Kronik menyebabkan gangguan aktivasi Vitamin D (1,25-dihydroxyvitamin D) dan hiperparatiroidisme sekunder yang memicu pengeroposan tulang berat (Renal Osteodystrophy / Osteoporosis sekunder).\nC. Antibiotik tidak mempengaruhi homeostasis kalsium tulang secara umum.\nD. Analgetik tidak mengganggu resorpsi kalsium.\nE. Trauma mekanis memicu fraktur, bukan pengeroposan jaringan metabolik tulang.",
+    "pembahasan_klinis": {
+      "A": "Obesitas justru cenderung meningkatkan densitas mineral tulang aksial.",
+      "B": "Gagal Ginjal Kronik menyebabkan gangguan aktivasi Vitamin D (1,25-dihydroxyvitamin D) dan hiperparatiroidisme sekunder yang memicu pengeroposan tulang berat (Renal Osteodystrophy / Osteoporosis sekunder).",
+      "C": "Antibiotik tidak mempengaruhi homeostasis kalsium tulang secara umum.",
+      "D": "Analgetik tidak mengganggu resorpsi kalsium.",
+      "E": "Trauma mekanis memicu fraktur, bukan pengeroposan jaringan metabolik tulang."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-092",
+    "no": 92,
+    "soal": "Seorang laki-laki 34 tahun tampak kesakitan pada kakinya setelah terjatuh saat berolahraga. Dokter segera melakukan pemeriksaan dan pertolongan untuk meredakan nyeri pasien. Prinsip bioetik manakah yang diterapkan oleh dokter?",
+    "opsi": [
+      "Non-maleficence",
+      "Justice",
+      "Beneficence",
+      "Confidentiality",
+      "Autonomy"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Non-maleficence mencegah timbulnya bahaya/kerusakan baru.\nB. Justice menegakkan keadilan tanpa diskriminasi.\nC. Beneficence berfokus mengambil langkah aktif untuk memberikan kebaikan, kenyamanan, dan meredakan penderitaan sakit pasien.\nD. Confidentiality menjaga rahasia pasien.\nE. Autonomy menghormati hak pilihan pasien.",
+    "pembahasan_klinis": {
+      "A": "Non-maleficence mencegah timbulnya bahaya/kerusakan baru.",
+      "B": "Justice menegakkan keadilan tanpa diskriminasi.",
+      "C": "Beneficence berfokus mengambil langkah aktif untuk memberikan kebaikan, kenyamanan, dan meredakan penderitaan sakit pasien.",
+      "D": "Confidentiality menjaga rahasia pasien.",
+      "E": "Autonomy menghormati hak pilihan pasien."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-093",
+    "no": 93,
+    "soal": "Seorang wanita, usia 23 tahun datang dengan benjolan kistik berukuran 1,5 cm pada punggung pergelangan tangan kanan. Pada eksisi didapatkan jaringan kistik berisi cairan sinovial dengan dinding dilapisi jaringan ikat tanpa epitel lining murni. Apakah diagnosis yang paling tepat?",
+    "opsi": [
+      "Ganglion",
+      "Miositis osifikans",
+      "Villonodular synovitis",
+      "Lipoma",
+      "Nodular fasciitis"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Kista Ganglion adalah benjolan kistik paling sering di pergelangan tangan, berisi cairan kental bening mukoide/sinovial, dan dilapisi dinding fibrosa tanpa lapisan epitel/sinovial sejati.\nB. Miositis osifikans adalah osifikasi heterotopik di otot.\nC. Tenosynovial giant cell tumor / villonodular synovitis adalah proliferasi jinak sinovium berpigmen hemosiderin.\nD. Lipoma terdiri atas proliferasi sel lemak.\nE. Nodular fasciitis adalah proliferasi psudo-sarkomatosa sel fibroblas/miobsoblas.",
+    "pembahasan_klinis": {
+      "A": "Kista Ganglion adalah benjolan kistik paling sering di pergelangan tangan, berisi cairan kental bening mukoide/sinovial, dan dilapisi dinding fibrosa tanpa lapisan epitel/sinovial sejati.",
+      "B": "Miositis osifikans adalah osifikasi heterotopik di otot.",
+      "C": "Tenosynovial giant cell tumor / villonodular synovitis adalah proliferasi jinak sinovium berpigmen hemosiderin.",
+      "D": "Lipoma terdiri atas proliferasi sel lemak.",
+      "E": "Nodular fasciitis adalah proliferasi psudo-sarkomatosa sel fibroblas/miobsoblas."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-094",
+    "no": 94,
+    "soal": "Seorang wanita, usia 55 tahun mengalami fraktur panggul patologis. Hasil pemeriksaan Histopatologi Anatomi (PA) menunjukkan gambaran proliferasi sel-sel kartilago anaplastik, pleomorfik, hiperkromatik, dan invasif. Apakah diagnosis yang paling tepat?",
+    "opsi": [
+      "Sarkoma osteogenik",
+      "Osteokondroma",
+      "Kondroma",
+      "Kondrosarkoma",
+      "Kondroblastoma"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Sarkoma osteogenik membentuk matriks osteoid langsung oleh sel ganas.\nB. Osteokondroma adalah exostosis kartilago benigna.\nC. Kondroma adalah tumor jinak sel kartilago matur tanpa atipia/anaplasia.\nD. Kondrosarkoma adalah keganasan primer tulang/kartilago ditandai oleh pementukan matriks kartilago oleh sel-sel kondroblas anaplastik dan hiperkromatik.\nE. Kondroblastoma adalah tumor jinak kartilago pada epifisis.",
+    "pembahasan_klinis": {
+      "A": "Sarkoma osteogenik membentuk matriks osteoid langsung oleh sel ganas.",
+      "B": "Osteokondroma adalah exostosis kartilago benigna.",
+      "C": "Kondroma adalah tumor jinak sel kartilago matur tanpa atipia/anaplasia.",
+      "D": "Kondrosarkoma adalah keganasan primer tulang/kartilago ditandai oleh pementukan matriks kartilago oleh sel-sel kondroblas anaplastik dan hiperkromatik.",
+      "E": "Kondroblastoma adalah tumor jinak kartilago pada epifisis."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-095",
+    "no": 95,
+    "soal": "Seorang wanita, usia 57 tahun datang dengan keluhan bengkak dan nyeri simetris pada sendi MCP, PIP digiti 2,3,4 dextra et sinistra serta kedua genu. Hasil pemeriksaanPA mikroskopis daerah sendi ditemukan radang kronis membran sinovium dan pembentukan jaringan Pannus. Apakah diagnosis penderita tersebut?",
+    "opsi": [
+      "Osteoartritis",
+      "Artritis Rheumatoid",
+      "Artropati kristal",
+      "Spondiloartrosis seronegatif",
+      "Artritis Gout"
+    ],
+    "jawabanBenar": 1,
+    "pembahasan": "A. Osteoartritis ditandai denudasi kartilago dan osteofit, bukan pannus simetris.\nB. Artritis Rheumatoid secara klasik ditandai polyarthritis simetris sendi kecil/besar dan pembentukan sinovitis proliferatif invasif (pannus).\nC. Artropati kristal akibat deposisi kristal asam urat/CPPD.\nD. Spondiloartrosis mengenai aksial vertebra/panggul.\nE. Artritis Gout ditandai tofus dan kristal MSU.",
+    "pembahasan_klinis": {
+      "A": "Osteoartritis ditandai denudasi kartilago dan osteofit, bukan pannus simetris.",
+      "B": "Artritis Rheumatoid secara klasik ditandai polyarthritis simetris sendi kecil/besar dan pembentukan sinovitis proliferatif invasif (pannus).",
+      "C": "Artropati kristal akibat deposisi kristal asam urat/CPPD.",
+      "D": "Spondiloartrosis mengenai aksial vertebra/panggul.",
+      "E": "Artritis Gout ditandai tofus dan kristal MSU."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-096",
+    "no": 96,
+    "soal": "Seorang wanita, usia 60 tahun mengalami fraktur setelah terpeleset ringan. Kadar kalsium dan fosfor serum darah dalam batas normal. Dokter menduga fraktur akibat penipisan trabekula dan reduksi massa tulang. Apakah diagnosis pasien tersebut?",
+    "opsi": [
+      "Osteogenesis imperfecta",
+      "Osteomalasia",
+      "Hiperparatiroidisme",
+      "Osteoporosis",
+      "Osteopetrosis"
+    ],
+    "jawabanBenar": 3,
+    "pembahasan": "A. Osteogenesis imperfecta adalah kelainan genetik kolagen tipe I sejak anak-anak.\nB. Osteomalasia ditandai gangguan mineralisasi osteoid (kadar kalsium/fosfat sering abnormal).\nC. Hiperparatiroid ditandai peningkatan kalsium serum dan penurunan fosfat.\nD. Osteoporosis ditandai penurunan kuantitas/massa matriks tulang dengan komposisi mineralisasi per unit matriks yang tetap normal (sehingga Ca dan P serum normal).\nE. Osteopetrosis ditandai sklerosis tulang berlebih.",
+    "pembahasan_klinis": {
+      "A": "Osteogenesis imperfecta adalah kelainan genetik kolagen tipe I sejak anak-anak.",
+      "B": "Osteomalasia ditandai gangguan mineralisasi osteoid (kadar kalsium/fosfat sering abnormal).",
+      "C": "Hiperparatiroid ditandai peningkatan kalsium serum dan penurunan fosfat.",
+      "D": "Osteoporosis ditandai penurunan kuantitas/massa matriks tulang dengan komposisi mineralisasi per unit matriks yang tetap normal (sehingga Ca dan P serum normal).",
+      "E": "Osteopetrosis ditandai sklerosis tulang berlebih."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-097",
+    "no": 97,
+    "soal": "Seorang pria usia 50 tahun pekerjaan petani datang dengan keluhan lutut kanan terasa nyeri saat berjalan jauh atau naik turun tangga. Pemeriksaan fisik pada sendi lutut kanan ditemukan krepitasi dan pembesaran tulang (*bone enlargement/osteofit*). Apakah diagnosis yang paling mungkin?",
+    "opsi": [
+      "Osteoartritis",
+      "Artritis Septik",
+      "Artritis Rematoid",
+      "Artritis Tuberkulosa",
+      "Artritis Gout"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Osteoartritis (OA genu) khas terjadi pada usia >50 tahun, penderita dengan aktivitas mekanis berat, ditandai nyeri beban, krepitasi, dan pembesaran tulang tepi sendi.\nB. Artritis Septik onset akut dengan tanda infeksi sistemik berat.\nC. Artritis Rematoid simetris dan mengenai sendi-sendi kecil tangan.\nD. Artritis Tuberkulosa indolent dengan destruksi monoartikular kronis infektif.\nE. Artritis Gout khas pada MTP-1 secara akut.",
+    "pembahasan_klinis": {
+      "A": "Osteoartritis (OA genu) khas terjadi pada usia >50 tahun, penderita dengan aktivitas mekanis berat, ditandai nyeri beban, krepitasi, dan pembesaran tulang tepi sendi.",
+      "B": "Artritis Septik onset akut dengan tanda infeksi sistemik berat.",
+      "C": "Artritis Rematoid simetris dan mengenai sendi-sendi kecil tangan.",
+      "D": "Artritis Tuberkulosa indolent dengan destruksi monoartikular kronis infektif.",
+      "E": "Artritis Gout khas pada MTP-1 secara akut."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-098",
+    "no": 98,
+    "soal": "Seorang laki-laki berusia 35 tahun datang ke klinik ortopedi karena mengalami nyeri, pembengkakan, dan timbulnya sinus yang mengeluarkan nanah dari paha kanan selama 2 bulan terakhir. Suhu tubuh 38,3 C. Pemeriksaan fisik: paha kanan merah, hangat, dan terdapat saluran sinus (*draining sinus*). Diagnosis yang paling mungkin adalah:",
+    "opsi": [
+      "Chondrosarcoma",
+      "Osteosarcoma",
+      "Chronic osteomyelitis",
+      "Compartment syndrome",
+      "Acute osteomyelitis"
+    ],
+    "jawabanBenar": 2,
+    "pembahasan": "A. Chondrosarcoma adalah keganasan kartilago tanpa sinus nanah.\nB. Osteosarcoma adalah keganasan pembentuk osteoid.\nC. Chronic osteomyelitis (Osteomielitis kronis) ditandai oleh gejala berlangsung >6 minggu, pembentukan *sequestrum/involucrum*, dan adanya saluran sinus drainase nanah yang persisten.\nD. Compartment syndrome adalah krisis iskemia kompartemen reaktif.\nE. Acute osteomyelitis berlangsung <2-3 minggu tanpa pembentukan saluran sinus matang.",
+    "pembahasan_klinis": {
+      "A": "Chondrosarcoma adalah keganasan kartilago tanpa sinus nanah.",
+      "B": "Osteosarcoma adalah keganasan pembentuk osteoid.",
+      "C": "Chronic osteomyelitis (Osteomielitis kronis) ditandai oleh gejala berlangsung >6 minggu, pembentukan sequestrum/involucrum, dan adanya saluran sinus drainase nanah yang persisten.",
+      "D": "Compartment syndrome adalah krisis iskemia kompartemen reaktif.",
+      "E": "Acute osteomyelitis berlangsung <2-3 minggu tanpa pembentukan saluran sinus matang."
+    },
+    "source_id": 1
+  },
+  {
+    "id": "kedkom-2021-099",
+    "no": 99,
+    "soal": "Seorang laki-laki berusia 55 tahun menderita Osteoarthritis dan riwayat ulkus peptikum/ulkus gaster. Dokter merencanakan pemberian Celecoxib per oral. Manakah penyakit komorbid kardiovaskular yang harus dievaluasi dan menjadi kontraindikasi utama pemberian obat tersebut?",
+    "opsi": [
+      "Angina pectoris / Penyakit jantung koroner",
+      "Diabetes melitus",
+      "Hiperurisemia",
+      "Ulkus gaster",
+      "Asma bronkial"
+    ],
+    "jawabanBenar": 0,
+    "pembahasan": "A. Celecoxib (inhibitor COX-2 selektif) terbukti secara klinis meningkatkan risiko kejadian trombotik kardiovaskular berat seperti Angina Pectoris dan Infark Miokard sehingga dikontraindikasikan pada PJK berat.\nB. Diabetes melitus bukan kontraindikasi langsung Celecoxib.\nC. Hiperurisemia bukan kontraindikasi Celecoxib.\nD. Ulkus gaster justru merupakan alasan pemilihan Celecoxib dibanding NSAID non-selektif.\nE. Asma bronkial bukan kontraindikasi mutlak inhibitor selektif COX-2.",
+    "pembahasan_klinis": {
+      "A": "Celecoxib (inhibitor COX-2 selektif) terbukti secara klinis meningkatkan risiko kejadian trombotik kardiovaskular berat seperti Angina Pectoris dan Infark Miokard sehingga dikontraindikasikan pada PJK berat.",
+      "B": "Diabetes melitus bukan kontraindikasi langsung Celecoxib.",
+      "C": "Hiperurisemia bukan kontraindikasi Celecoxib.",
+      "D": "Ulkus gaster justru merupakan alasan pemilihan Celecoxib dibanding NSAID non-selektif.",
+      "E": "Asma bronkial bukan kontraindikasi mutlak inhibitor selektif COX-2."
+    },
+    "source_id": 1
+  }
+]
