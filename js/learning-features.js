@@ -64,161 +64,284 @@ function computeBlockScores() {
 function drawRadarChart() {
   const canvas = document.getElementById('weaknessRadar');
   if (!canvas) return;
+
   const ctx = canvas.getContext('2d');
   const blockScores = computeBlockScores();
-  const entries = Object.entries(blockScores);
-
-  if (!entries.length) {
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#aaa';
-    ctx.font = '14px Nunito, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Belum ada data. Kerjakan kuis dulu!', canvas.width/2, canvas.height/2);
-    return;
-  }
-
-  /* Ambil max 8 blok yang paling banyak dikerjakan */
-  const sorted = entries
-    .sort((a,b) => b[1].n - a[1].n)
+  const entries = Object.entries(blockScores)
+    .sort((a, b) => b[1].n - a[1].n)
     .slice(0, 8);
 
-  const labels = sorted.map(([k]) => BLOCK_LABELS[k] || k);
-  const scores = sorted.map(([,v]) => Math.round(v.sum / v.n)); // 0-100
-
-  const N = labels.length;
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2;
-  const R  = Math.min(cx, cy) - 48;
   const isDark = document.documentElement.classList.contains('dark');
-
-  /* Colors */
-  const gridColor  = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
-  const labelColor = isDark ? 'rgba(255,255,255,0.7)'  : 'rgba(0,0,0,0.65)';
-  const fillColor  = 'rgba(88,204,2,0.22)';
-  const strokeColor= '#58cc02';
-  const dotColor   = '#58cc02';
-  const weakColor  = 'rgba(239,68,68,0.18)';
-  const weakStroke = '#ef4444';
+  const textColor = isDark ? 'rgba(255,255,255,0.78)' : 'rgba(0,0,0,0.68)';
+  const mutedColor = isDark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.38)';
+  const gridColor = isDark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)';
+  const green = '#58cc02';
+  const red = '#ef4444';
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  /* Draw grid circles */
-  [20,40,60,80,100].forEach(pct => {
+  if (!entries.length) {
+    ctx.fillStyle = mutedColor;
+    ctx.font = '14px Nunito, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(
+      'Belum ada data. Kerjakan kuis dulu!',
+      canvas.width / 2,
+      canvas.height / 2
+    );
+    return;
+  }
+
+  const labels = entries.map(([k]) => BLOCK_LABELS[k] || k);
+  const scores = entries.map(([, v]) => Math.round(v.sum / v.n));
+
+  /*
+   * Jika baru 1–2 blok, radar tidak informatif.
+   * Gunakan bar chart agar nilai mudah dibaca.
+   */
+  if (entries.length < 3) {
+    const left = 125;
+    const right = 42;
+    const top = 28;
+    const rowH = 72;
+    const barH = 18;
+    const barW = Math.max(120, canvas.width - left - right);
+
+    ctx.font = 'bold 12px Nunito, sans-serif';
+    ctx.textBaseline = 'middle';
+
+    scores.forEach((score, i) => {
+      const y = top + i * rowH + 24;
+      const color = score < 60 ? red : green;
+
+      /* Nama blok */
+      ctx.fillStyle = color;
+      ctx.textAlign = 'left';
+      ctx.fillText(labels[i], 12, y - 18);
+
+      /* Track */
+      ctx.fillStyle = gridColor;
+      ctx.beginPath();
+      ctx.roundRect(left, y - barH / 2, barW, barH, 9);
+      ctx.fill();
+
+      /* Progress */
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(
+        left,
+        y - barH / 2,
+        Math.max(4, barW * Math.min(score, 100) / 100),
+        barH,
+        9
+      );
+      ctx.fill();
+
+      /* Garis batas 60% */
+      const x60 = left + barW * 0.6;
+      ctx.save();
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = red;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x60, y - 14);
+      ctx.lineTo(x60, y + 14);
+      ctx.stroke();
+      ctx.restore();
+
+      /* Angka */
+      ctx.fillStyle = color;
+      ctx.textAlign = 'right';
+      ctx.font = 'bold 12px Nunito, sans-serif';
+      ctx.fillText(score + '%', canvas.width - 12, y);
+
+      /* Label 60% */
+      ctx.fillStyle = mutedColor;
+      ctx.font = '9px Nunito, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('60%', x60, y - 25);
+    });
+
+    /* Keterangan */
+    ctx.font = '10px Nunito, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+
+    ctx.fillStyle = red;
+    ctx.fillRect(12, canvas.height - 28, 9, 9);
+    ctx.fillStyle = textColor;
+    ctx.fillText('Di bawah 60% = perlu diperkuat', 27, canvas.height - 30);
+
+    ctx.fillStyle = green;
+    ctx.fillRect(12, canvas.height - 13, 9, 9);
+    ctx.fillStyle = textColor;
+    ctx.fillText('60% atau lebih = aman', 27, canvas.height - 15);
+
+    return;
+  }
+
+  /* =====================================================
+     3+ BLOK: RADAR CHART
+     ===================================================== */
+
+  const N = labels.length;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2 - 8;
+  const R = Math.min(cx, cy) - 48;
+
+  const fillColor = 'rgba(88,204,2,0.22)';
+  const strokeColor = green;
+  const weakColor = 'rgba(239,68,68,0.18)';
+
+  /* Grid */
+  [20, 40, 60, 80, 100].forEach(pct => {
     ctx.beginPath();
+
     for (let i = 0; i < N; i++) {
       const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
       const r = R * pct / 100;
       const x = cx + r * Math.cos(angle);
       const y = cy + r * Math.sin(angle);
+
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
+
     ctx.closePath();
     ctx.strokeStyle = gridColor;
     ctx.lineWidth = 1;
     ctx.stroke();
-    /* Label pct di kanan */
+
     if (pct < 100) {
-      ctx.fillStyle = isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)';
+      ctx.fillStyle = mutedColor;
       ctx.font = '9px Nunito, sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText(pct + '%', cx + R * pct / 100 * Math.cos(-Math.PI/2) + 3, cy + R * pct / 100 * Math.sin(-Math.PI/2));
+      ctx.textBaseline = 'middle';
+
+      const x = cx + 3;
+      const y = cy - R * pct / 100;
+
+      ctx.fillText(pct + '%', x, y);
     }
   });
 
-  /* Draw axes */
+  /* Axes */
   for (let i = 0; i < N; i++) {
     const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
+
     ctx.beginPath();
     ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
+    ctx.lineTo(
+      cx + R * Math.cos(angle),
+      cy + R * Math.sin(angle)
+    );
+
     ctx.strokeStyle = gridColor;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
-  /* Draw weak zone (< 60%) */
+  /* Zona lemah <60% */
   ctx.beginPath();
+
   for (let i = 0; i < N; i++) {
     const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
-    const r = R * 60 / 100;
+    const r = R * 0.6;
     const x = cx + r * Math.cos(angle);
     const y = cy + r * Math.sin(angle);
+
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   }
+
   ctx.closePath();
   ctx.fillStyle = weakColor;
   ctx.fill();
-  ctx.strokeStyle = weakStroke;
-  ctx.lineWidth = 1;
-  ctx.setLineDash([4, 3]);
+
+  ctx.strokeStyle = red;
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5, 4]);
   ctx.stroke();
   ctx.setLineDash([]);
 
-  /* Draw score polygon */
+  /* Polygon nilai */
   ctx.beginPath();
-  scores.forEach((s, i) => {
+
+  scores.forEach((score, i) => {
     const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
-    const r = R * Math.min(s, 100) / 100;
+    const r = R * Math.min(score, 100) / 100;
     const x = cx + r * Math.cos(angle);
     const y = cy + r * Math.sin(angle);
+
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
+
   ctx.closePath();
   ctx.fillStyle = fillColor;
   ctx.fill();
+
   ctx.strokeStyle = strokeColor;
   ctx.lineWidth = 2.5;
   ctx.stroke();
 
-  /* Dots + labels */
-  scores.forEach((s, i) => {
+  /* Titik, label dan score */
+  scores.forEach((score, i) => {
     const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
-    const r = R * Math.min(s, 100) / 100;
+    const r = R * Math.min(score, 100) / 100;
+
     const x = cx + r * Math.cos(angle);
     const y = cy + r * Math.sin(angle);
 
-    /* Dot */
+    const color = score < 60 ? red : green;
+
+    /* Titik */
     ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = s < 60 ? weakStroke : dotColor;
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
     ctx.fill();
+
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    /* Label axis */
-    const lx = cx + (R + 28) * Math.cos(angle);
-    const ly = cy + (R + 28) * Math.sin(angle);
-    ctx.fillStyle = s < 60 ? weakStroke : labelColor;
-    ctx.font = `bold 11px Nunito, sans-serif`;
+    /* Label blok */
+    const lx = cx + (R + 30) * Math.cos(angle);
+    const ly = cy + (R + 30) * Math.sin(angle);
+
+    ctx.fillStyle = color;
+    ctx.font = 'bold 11px Nunito, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(labels[i], lx, ly);
 
-    /* Score bubble */
-    ctx.fillStyle = s < 60 ? 'rgba(239,68,68,0.85)' : 'rgba(88,204,2,0.85)';
-    const bx = cx + (r + 14) * Math.cos(angle);
-    const by = cy + (r + 14) * Math.sin(angle);
+    /* Bubble nilai */
+    const bx = cx + (r + 15) * Math.cos(angle);
+    const by = cy + (r + 15) * Math.sin(angle);
+
     ctx.beginPath();
-    ctx.arc(bx, by, 13, 0, Math.PI * 2);
+    ctx.arc(bx, by, 14, 0, Math.PI * 2);
+    ctx.fillStyle = color;
     ctx.fill();
+
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 9px Nunito, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(s + '%', bx, by);
+    ctx.fillText(score + '%', bx, by);
   });
 
   /* Legend */
   ctx.font = '10px Nunito, sans-serif';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  ctx.fillStyle = weakStroke;
+
+  ctx.fillStyle = red;
   ctx.fillRect(12, canvas.height - 32, 10, 10);
-  ctx.fillStyle = labelColor;
+  ctx.fillStyle = textColor;
   ctx.fillText('Zona lemah (<60%)', 26, canvas.height - 32);
-  ctx.fillStyle = strokeColor;
+
+  ctx.fillStyle = green;
   ctx.fillRect(12, canvas.height - 16, 10, 10);
-  ctx.fillStyle = labelColor;
+  ctx.fillStyle = textColor;
   ctx.fillText('Akurasi kamu', 26, canvas.height - 16);
 }
 
@@ -446,9 +569,8 @@ function saveNoteForQuestion() {
 }
 
 function hookNoteToExplain() {
-  /* Observe explain div visibility — saat soal dijawab */
+  /* Elemen quiz sudah tersedia di app.html; jangan hentikan hook hanya karena timing DOM */
   const explainDiv = document.getElementById('explain');
-  if (!explainDiv) return;
 
   /* Save button */
   const saveBtn = document.getElementById('soalNoteSave');
@@ -463,21 +585,39 @@ function hookNoteToExplain() {
     });
   }
 
-  /* Hook ke applyAnsweredState untuk load note saat soal dijawab */
-  const origApply = window.applyAnsweredState;
-  if (origApply && !window.__noteHooked) {
-    window.__noteHooked = true;
-    window.applyAnsweredState = function() {
-      origApply.apply(this, arguments);
-      try {
-        const q = quiz && quiz[pos];
-        if (q) {
-          loadNoteForQuestion(q.id);
-          const wrap = document.getElementById('soalNoteWrap');
-          if (wrap) wrap.style.display = 'block';
-        }
-      } catch(e) {}
+  /* Hook applyAnsweredState setelah fungsi utama tersedia */
+  if (!window.__noteHooked) {
+    const installNoteHook = () => {
+      if (window.__noteHooked) return true;
+
+      const origApply = window.applyAnsweredState;
+      if (typeof origApply !== 'function') return false;
+
+      window.__noteHooked = true;
+      window.applyAnsweredState = function() {
+        origApply.apply(this, arguments);
+        try {
+          const q = quiz && quiz[pos];
+          if (q) {
+            loadNoteForQuestion(q.id);
+            const wrap = document.getElementById('soalNoteWrap');
+            if (wrap) wrap.style.display = 'block';
+          }
+        } catch(e) {}
+      };
+      return true;
     };
+
+    installNoteHook();
+
+    if (!window.__noteHookTimer) {
+      window.__noteHookTimer = setInterval(() => {
+        if (installNoteHook()) {
+          clearInterval(window.__noteHookTimer);
+          window.__noteHookTimer = null;
+        }
+      }, 100);
+    }
   }
 }
 
