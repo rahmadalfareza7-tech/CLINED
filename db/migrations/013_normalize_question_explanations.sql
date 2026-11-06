@@ -22,7 +22,7 @@ WITH normalized AS (
             x.q,
             '{pembahasanPilihan}',
             (
-              SELECT jsonb_agg(COALESCE(x.q->'pembahasan_klinis'->chr(65 + (i - 1)), ''::jsonb) ORDER BY i)
+              SELECT jsonb_agg(COALESCE(x.q->'pembahasan_klinis'->chr(65 + (i - 1)), to_jsonb(''::text)) ORDER BY i)
               FROM generate_series(1, jsonb_array_length(x.q->'opsi')) AS g(i)
             )
           ),

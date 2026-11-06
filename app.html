@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="CLINED">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="stylesheet" href="css/style.css?v=upi-rating-v4-clinical-quest-navfix">
+<link rel="stylesheet" href="css/style.css?v=materi-ppt-width-1">
 <link rel="stylesheet" href="css/polish.css?v=1">
 <link rel="stylesheet" href="css/clinical-quest.css?v=4">
 <link rel="stylesheet" href="css/clined-ui-fixes.css?v=1">
@@ -19,9 +19,23 @@
 <meta name="theme-color" content="#f7f7f2">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="css/motion.css?v=auth-layout-v2">
-<link rel="stylesheet" href="css/latihan-materi.css?v=1">
+<link rel="stylesheet" href="css/latihan-materi.css?v=7">
+<link rel="stylesheet" href="css/study-plus.css?v=10">
+<link rel="stylesheet" href="css/announcement.css?v=1">
 <link rel="stylesheet" href="css/card-collection.css?v=1">
-<link rel="stylesheet" href="css/learning-features.css?v=2">
+<link rel="stylesheet" href="css/learning-features.css?v=3">
+<link rel="stylesheet" href="css/ui-tweaks.css?v=1">
+<link rel="stylesheet" href="css/onboarding.css?v=4">
+<link rel="stylesheet" href="css/userbank.css?v=3">
+<link rel="stylesheet" href="css/social.css?v=9">
+<link rel="stylesheet" href="css/chat.css?v=1">
+<link rel="stylesheet" href="css/qcomments.css?v=2">
+<link rel="stylesheet" href="css/admin-people.css?v=1">
+<link rel="stylesheet" href="css/insights.css?v=7">
+<link rel="stylesheet" href="css/desktop.css?v=4">
+<link rel="stylesheet" href="css/home-ergonomic.css?v=9">
+<link rel="stylesheet" href="css/content-ergonomic.css?v=7">
+<link rel="stylesheet" href="css/top-notify.css?v=3">
 </head>
 <body class="auth-pending">
 
@@ -42,10 +56,6 @@
     <div class="duo-map-header">
       <div><h3>Mulai dari sini</h3></div>
 </div>
-    <div class="duo-unit-card">
-      <div><span class="duo-unit-label">UNIT 1 • CLINICAL REASONING</span><b>Bangun fondasi klinismu</b></div>
-      <button class="duo-unit-action ui-arrow" id="duoUnitStart" type="button" aria-label="Mulai Unit 1">→</button>
-    </div>
     <div class="duo-path" aria-label="Tahapan belajar">
       <button class="duo-node done" type="button" id="duoNode1"><span>✓</span><small>Mulai</small></button>
       <button class="duo-node current" type="button" id="duoNode2"><span>★</span><small>Kasus</small></button>
@@ -63,25 +73,23 @@
       <span class="duo-reward-icon xp">⚡</span>
       <div><b id="duoHudXp">0</b><small>XP</small></div>
     </div>
-    <div class="duo-reward-item">
-      <span class="duo-reward-icon goal">🎯</span>
-      <div><b id="duoHudGoal">0/5</b><small>Target hari ini</small></div>
-    </div>
+    <button type="button" class="duo-reward-item duo-cal" id="duoCalBtn" data-sp-open aria-label="Buka Rencana Belajar dan kalender ujian">
+      <span class="duo-reward-icon goal cal-ico" id="duoCalIco" aria-hidden="true">📅</span>
+      <div><b id="duoCalDays">＋</b><small id="duoCalLbl">Ujian</small></div>
+    </button>
     <div class="duo-reward-item">
       <span class="duo-reward-icon focus">💚</span>
       <div><b id="duoHudFocus">5</b><small>Energi</small></div>
     </div>
   </section>
 
-  <!-- Leaderboard teaser -->
-<div class="card leaderboard-teaser-card" id="leaderboardTeaserCard">
-  <div class="leaderboard-teaser-head">
-    <span>🏆 <b>Papan Peringkat Minggu Ini</b></span>
-    <button class="leaderboard-see-all" id="openLeaderboardBtn" type="button">Lihat semua →</button>
-  </div>
-  <div id="leaderboardTeaser" class="leaderboard-teaser-list">
-    <div class="leaderboard-loading">Memuat…</div>
-  </div>
+
+<div class="home-question-search" role="search">
+  <span aria-hidden="true">⌕</span>
+  <input id="homeQuestionSearch" type="search"
+         placeholder="Cari soal, diagnosis, obat, atau materi..."
+         aria-label="Cari soal dan materi" autocomplete="off">
+  <button id="homeQuestionSearchBtn" type="button">Cari</button>
 </div>
 
 <div class="card player-card">
@@ -107,12 +115,13 @@
     </div>
   </div>
 
+  <div class="card daily-home-card" id="dailyHomeCard"></div>
   <div id="resumeCard" class="card resume-card" hidden>
     <div class="section-title">Kuis tersimpan</div>
     <div id="resumeText" class="muted"></div>
     <div class="resume-actions">
-      <button class="primary" id="resumeBtn">Lanjutkan →</button>
-      <button class="secondary small-btn" id="discardResumeBtn">Hapus</button>
+      <button class="primary" id="resumeBtn">Lanjutkan</button>
+      <button class="secondary small-btn resume-del" id="discardResumeBtn" type="button" aria-label="Hapus kuis tersimpan" title="Hapus">🗑</button>
     </div>
   </div>
 <section class="exam-launcher card" id="examLauncher">
@@ -127,12 +136,23 @@
     </div>
   </section>
 
-  <button type="button" class="card home-materials-card home-materials-link" id="openMaterialsPage" aria-label="Buka Kumpulan Materi">
-    <span class="home-materials-leading"><span class="home-materials-icon">📚</span><span><b>Kumpulan Materi</b><small>Materi belajar per blok</small></span></span>
-    <span class="home-materials-arrow ui-arrow ui-arrow-caret" aria-hidden="true">›</span>
-  </button>
+  <div class="home-quick-row" id="homeQuickRow">
+    <button type="button" class="card home-materials-card home-materials-link home-quick-tile" id="openMaterialsPage" aria-label="Buka Kumpulan Materi">
+      <span class="home-materials-leading"><span class="home-materials-icon">📚</span><span><b>Materi</b></span></span>
+    </button>
+  </div>
 
-  <div class="card daily-home-card" id="dailyHomeCard"></div>
+  <!-- Leaderboard teaser -->
+<div class="card leaderboard-teaser-card" id="leaderboardTeaserCard">
+  <div class="leaderboard-teaser-head">
+    <span>🏆 <b>Papan Peringkat Minggu Ini</b></span>
+    <button class="leaderboard-see-all" id="openLeaderboardBtn" type="button">Lihat semua</button>
+  </div>
+  <div id="leaderboardTeaser" class="leaderboard-teaser-list">
+    <div class="leaderboard-loading">Memuat…</div>
+  </div>
+</div>
+
 <div class="stats">
     <div class="stat"><b id="totalStat">0</b><span>Total soal</span></div>
     <div class="stat"><b id="bookmarkStat">0</b><span>Bookmark</span></div>
@@ -151,18 +171,18 @@
       <button class="secondary menu-item" id="analyticsBtn"><span class="menu-icon">📈</span><span>Analitik Belajar</span></button>
       <button class="secondary menu-item" id="quickWrongBtn"><span class="menu-icon">🎯</span><span>Latihan Soal Salah</span></button>
       <button class="secondary menu-item" id="smartReviewBtn"><span class="menu-icon">🧠</span><span>Smart Review</span></button>
-      <button class="secondary menu-item" id="studyToolsBtn"><span class="menu-icon">🧠</span><span>Study Lab</span></button>
+      <button class="secondary menu-item" id="studyToolsBtn"><span class="menu-icon">🧰</span><span>Study Lab</span></button>
       <button class="secondary menu-item" id="clinicalDashboardBtn"><span class="menu-icon">🩺</span><span>Clinical Dashboard</span></button>
-      <button class="secondary menu-item" id="achievementBtn"><span class="menu-icon">🏆</span><span>Achievements</span></button>
+      <button class="secondary menu-item" id="achievementBtn"><span class="menu-icon">🏅</span><span>Achievements</span></button>
       <button class="secondary menu-item" id="leaderboardMenuBtn"><span class="menu-icon">🏆</span><span>Papan Peringkat</span></button>
+      <button class="secondary menu-item" id="questMenuBtn" type="button"><span class="menu-icon">🩺</span><span>Clinical Quest</span></button>
       <button class="secondary menu-item" id="studyTimerMenuBtn"><span class="menu-icon">⏱</span><span>Study Timer</span></button>
     </div>
   </div>
 
   <a class="feedback-card offline-feedback-card" id="feedback" href="https://docs.google.com/forms/d/e/1FAIpQLSeZVPSiH1Wp4z9PCt86CmtQqWIalJE3mHaJ5Rpyo0OWWu1Q5A/viewform?usp=header" target="_blank" rel="noopener noreferrer" data-google-form-url="https://docs.google.com/forms/d/e/1FAIpQLSeZVPSiH1Wp4z9PCt86CmtQqWIalJE3mHaJ5Rpyo0OWWu1Q5A/viewform?usp=header" aria-label="Buka Google Form Pesan dan Kesan">
     <span class="feedback-icon">📝</span>
-    <span class="feedback-content"><strong>Pesan &amp; Kesan</strong><small>Google Form • Beri masukan untuk CLINED</small></span>
-    <span class="ui-arrow" aria-hidden="true">›</span>
+    <span class="feedback-content"><strong>Pesan &amp; Kesan</strong></span>
   </a>
 </section>
 
@@ -352,7 +372,7 @@
     <div class="choice-grid mode-grid" id="kedkomModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="kedkomTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -375,7 +395,7 @@
     <div class="choice-grid mode-grid" id="kedkelModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="kedkelTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -398,7 +418,7 @@
     <div class="choice-grid mode-grid" id="mulsisModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="mulsisTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -459,7 +479,7 @@
     <div class="choice-grid mode-grid" id="ginjalModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="ginjalTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -483,7 +503,7 @@
     <div class="choice-grid mode-grid" id="modeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="timeChoices"></div>
-    <button class="primary" id="startBtn">Mulai Kuis →</button>
+    <button class="primary" id="startBtn">Mulai Kuis</button>
   </div>
 </section>
 
@@ -504,7 +524,7 @@
     <div class="choice-grid mode-grid" id="pancaIndraModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="pancaIndraTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -526,7 +546,7 @@
     <div class="choice-grid mode-grid" id="endokrineModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="endokrineTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -548,7 +568,7 @@
     <div class="choice-grid mode-grid" id="reproduksiModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="reproduksiTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -570,7 +590,7 @@
     <div class="choice-grid mode-grid" id="forensikModeChoices"></div>
     <div class="section-title sub-title">Batas waktu</div>
     <div class="choice-grid mode-grid" id="forensikTimeChoices"></div>
-    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button>
+    <button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button>
     <div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>
   </div>
 </section>
@@ -622,10 +642,11 @@
     </div>
     <div class="quiz-actions">
       <button class="secondary" id="prevBtn" hidden>← Soal Sebelumnya</button>
-      <button class="secondary" id="nextBtn" hidden>Selanjutnya →</button>
+      <button class="secondary" id="nextBtn" hidden>Selanjutnya</button>
     </div>
     <div class="quiz-foot-actions">
       <button class="text-btn" id="flagBtn">⚑ Tandai soal</button>
+      <button class="text-btn" id="reportQBtn" type="button">🚩 Laporkan soal</button>
       <span id="flagState" class="muted"></span>
     </div>
   </div>
@@ -652,7 +673,7 @@
     <button class="primary" id="againBtn">Kuis Lagi</button>
     <div class="result-actions">
       <button class="secondary" id="reviewWrongBtn">❌ Review Soal Salah</button>
-      <button class="secondary" id="reviewQuizBtn">📚 Lihat Pembahasan</button>
+      <button class="secondary" id="reviewQuizBtn">🔍 Tinjau Jawaban</button>
       <button class="secondary" id="resultHome">Kembali ke Beranda</button>
     </div>
   </div>
@@ -666,19 +687,21 @@
 </section>
 
 <section id="wrong" class="view">
-  <div class="card">
-    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>❌ Soal yang Sering Salah</b></div>
-    <div id="wrongSummary" class="history-summary"></div>
-    <div id="wrongList"></div>
+  <div class="card ins-card">
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>❌ Sering Salah</b></div>
+    <div id="wrongSummary" class="ins-kpis"></div>
+    <div id="wrongFilters" class="ins-filters"></div>
+    <div id="wrongList" class="ins-list"></div>
   </div>
+  <div id="wrongDock" class="ins-dock" hidden></div>
 </section>
 
 <section id="review" class="view">
   <div class="card">
-    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>📚 Review Pembahasan</b></div>
+    <div class="topline"><button class="back" data-home>‹ Beranda</button><b>🔍 Tinjau Jawaban</b></div>
     <div id="reviewSummary" class="muted"></div>
-    <div id="reviewList"></div>
   </div>
+  <div id="reviewList" class="ml-review-list"></div>
 </section>
 
 <section id="analytics" class="view">
@@ -709,29 +732,22 @@
 
 
 <section id="clinicalDashboard" class="view">
-  <div class="card dashboard-card">
+  <div class="card dashboard-card ins-card cd-card">
     <div class="topline"><button class="back" data-home>‹ Beranda</button><b>🩺 Clinical Dashboard</b></div>
-    <div class="dashboard-scope-panel">
-      <select id="dashboardDetailStatScope" class="dashboard-stat-select" aria-label="Pilih statistik BLOK">
-        <option value="SSP">SSP</option>
-      </select>
-      <button class="secondary small-btn" id="resetDetailBlockStatsBtn" type="button">Reset statistik BLOK</button>
+    <div class="cd-scope">
+      <select id="dashboardDetailStatScope" class="dashboard-stat-select" aria-label="Pilih statistik BLOK"><option value="SSP">SSP</option></select>
+      <button class="secondary small-btn" id="resetDetailBlockStatsBtn" type="button" aria-label="Reset statistik blok ini" title="Reset statistik blok ini">↺ Reset</button>
     </div>
-    <div class="study-hero dashboard-hero">
-      <span class="study-kicker">DASHBOARD KLINIS</span>
-      <h2>Performa klinismu.</h2>
+    <div id="cdHeadline" class="cd-headline"></div>
+    <div id="dashboardStats" class="cd-kpis"></div>
+    <div class="cd-grid">
+      <section class="cd-panel"><h3>🎯 Rekomendasi</h3><div id="dashboardRecommendations" class="cd-reco"></div></section>
+      <section class="cd-panel"><h3>🧭 Kemampuan klinis</h3>
+        <div class="radar-dashboard-block"><div id="dashboardRadarChart" class="radar-chart"></div><div id="dashboardRadarLegend" class="radar-legend"></div></div></section>
+      <section class="cd-panel"><h3>🗺️ Peta blok</h3><div id="dashboardWeaknessRadar" class="weakness-radar-wrap" role="img" aria-label="Peta kelemahan per blok"></div></section>
+      <section class="cd-panel"><h3>📈 Tren 14 hari</h3><div id="cdTrend"></div></section>
     </div>
-    <div class="radar-dashboard-block">
-      <div id="dashboardRadarChart" class="radar-chart"></div>
-      <div id="dashboardRadarLegend" class="radar-legend"></div>
-    </div>
-    <div class="section-title sub-title">🕸️ Weakness Radar per Blok</div>
-    <p class="weakness-radar-hint">Akurasi per BLOK dari semua riwayat kuismu, paling lemah di atas.</p>
-    <div id="dashboardWeaknessRadar" class="weakness-radar-wrap" role="img" aria-label="Peta kelemahan per blok"></div>
-    <div id="dashboardMission" class="daily-mission"></div>
-    <div id="dashboardStats" class="dashboard-stats"></div>
-    <div class="section-title sub-title">🎯 Rekomendasi</div>
-    <div id="dashboardRecommendations" class="dashboard-recommendations"></div>
+    <div id="dashboardMission" hidden></div>
   </div>
 </section>
 
@@ -751,18 +767,18 @@
       <button class="study-tool" id="smart10Btn"><span>⚡</span><b>Smart 10</b><small>10 soal acak</small></button>
       <button class="study-tool" id="smartReviewToolBtn"><span>🔁</span><b>Smart Review</b><small>Prioritas soal lemah</small></button>
       <button class="study-tool" id="libraryBtn"><span>🔎</span><b>Cari Soal</b><small>Telusuri semua arsip</small></button>
+      <button class="study-tool" id="reviewLibraryBtn"><span>📖</span><b>Review Soal</b><small>Baca soal, kunci, dan pembahasan</small></button>
     </div>
   </div>
 </section>
 
 <section id="smartReview" class="view">
-  <div class="card">
+  <div class="card ins-card">
     <div class="topline"><button class="back" id="backFromSmartReview" data-home>‹ Beranda</button><b>🧠 Smart Review</b></div>
-    <div class="study-hero"><span class="study-kicker">REVIEW TERJADWAL</span><h2>Ulangi materi yang paling perlu kamu kuasai.</h2><p>Prioritaskan soal yang sering salah dan lama belum direview.</p></div>
-    <div id="smartReviewSummary" class="history-summary"></div>
-    <div id="smartReviewList" class="smart-review-list"></div>
-    <button class="primary" id="smartReviewStartBtn" type="button">Mulai Smart Review</button>
+    <div id="smartReviewSummary" class="ins-kpis"></div>
+    <div id="smartReviewList" class="ins-list"></div>
   </div>
+  <div id="smartReviewDock" class="ins-dock" hidden><button class="primary" id="smartReviewStartBtn" type="button">Mulai review</button></div>
 </section>
 
 <section id="flashcards" class="view">
@@ -781,7 +797,7 @@
     <button class="primary" id="flashRevealBtn">Tampilkan Jawaban</button>
     <div class="flash-actions">
       <button class="secondary" id="flashPrevBtn">← Sebelumnya</button>
-      <button class="secondary" id="flashNextBtn">Berikutnya →</button>
+      <button class="secondary" id="flashNextBtn">Berikutnya</button>
     </div>
   </div>
 </section>
@@ -883,7 +899,7 @@
   <button type="button" class="floating-nav-item active" data-floating-nav="home" aria-label="Beranda"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.2v-6.1H9.2V21H4a1 1 0 0 1-1-1z"/></svg></span><span>Beranda</span></button>
   <button type="button" class="floating-nav-item" data-floating-nav="dashboard" aria-label="Clinical Dashboard"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/><path d="M3 20h18"/></svg></span><span>Dashboard</span></button>
   <button type="button" class="floating-nav-item" data-floating-nav="uab" aria-label="BLOK"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0 0 10 0V4M7 4H5m2 0v3m10-3h2m-2 0v3M12 16v3m0 0a3 3 0 0 0 3 3h1"/></svg></span><span>BLOK</span></button>
-  <button type="button" class="floating-nav-item" data-floating-nav="quest" aria-label="Clinical Quest"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="m9 9 2 2 4-4M9 15h6"/></svg></span><span>Quest</span></button>
+  <button type="button" class="floating-nav-item" data-floating-nav="status" aria-label="Status"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4.5"/></svg></span><span>Status</span></button>
   <button type="button" class="floating-nav-item" data-floating-nav="account" aria-label="Profil"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg></span><span>Profil</span></button>
 </nav>
 
@@ -908,8 +924,8 @@
   </div>
   <div class="card nested-card leaderboard-tabs-card">
     <div class="leaderboard-tabs" role="tablist">
-      <button class="lb-tab active" data-lb-tab="weekly" role="tab" aria-selected="true">Minggu Ini</button>
-      <button class="lb-tab" data-lb-tab="alltime" role="tab" aria-selected="false">All Time</button>
+      <button class="lb-tab active" data-lb-tab="weekly" role="tab" aria-selected="true">Weekly</button>
+      <button class="lb-tab" data-lb-tab="alltime" role="tab" aria-selected="false">Per BLOK</button>
     </div>
     <div id="leaderboardList" class="leaderboard-list" aria-live="polite">
       <div class="leaderboard-loading">Memuat…</div>
@@ -986,17 +1002,21 @@
     </form>
   </section>
 </div>
+<script src="js/ui-dialogs.js?v=1"></script>
+<script src="js/update-notice.js?v=1"></script>
+<script src="js/report-question.js?v=1"></script>
 <script src="js/photo-store.js?v=1"></script>
 <script src="js/photo-compress.js?v=2"></script>
-<script src="js/online-sync.js?v=5"></script>
+<script src="js/online-sync.js?v=7"></script>
 <script src="js/ability-classifier.js?v=1"></script>
-<script src="js/app.js?v=static-banks-v8"></script>
+<script src="js/app.js?v=static-banks-v23"></script>
 <script src="js/auth-gate.js?v=2"></script>
-<script src="js/content-manager.js?v=15"></script>
+<script src="js/admin-people.js?v=1"></script>
+<script src="js/content-manager.js?v=22"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v3"></script>
 <script src="js/inline-boot.js"></script>
 <script src="js/new-features.js?v=5"></script>
-<script src="js/clinical-quest.js?v=14"></script>
+<script src="js/clinical-quest.js?v=17"></script>
 
 <script id="clined-floating-dashboard-navigation-final">
 (function(){
@@ -1015,7 +1035,7 @@
     }
 
     function route(key){
-      const target={home:'home',dashboard:'clinicalDashboard',uab:'uabPage',quest:'clinicalQuestPage',account:'accountPage'}[key];
+      const target={home:'home',dashboard:'clinicalDashboard',uab:'uabPage',status:'hubPage',account:'accountPage'}[key];
       if(!target || !document.getElementById(target)) return;
 
       // Always use the application's single SPA router. This keeps its current
@@ -1033,8 +1053,8 @@
       if(key==='uab' && typeof window.syncUabStats==='function'){
         try{window.syncUabStats();}catch(e){console.warn(e);}
       }
-      if(key==='quest' && typeof window.renderClinicalQuest==='function'){
-        try{window.renderClinicalQuest();}catch(e){console.warn(e);}
+      if(key==='status' && window.CLINED_SOCIAL && window.CLINED_SOCIAL.openStatus){
+        try{window.CLINED_SOCIAL.openStatus();}catch(e){console.warn(e);}
       }
       if(key==='account' && typeof window.renderAccount==='function'){
         try{window.renderAccount();}catch(e){console.warn(e);}
@@ -1073,7 +1093,7 @@
 
     // Keep the selected item synchronized whenever the SPA router changes page.
     window.addEventListener('clined:view-change',function(e){
-      const map={home:'home',clinicalDashboard:'dashboard',uabPage:'uab',accountPage:'account'};
+      const map={home:'home',clinicalDashboard:'dashboard',uabPage:'uab',hubPage:'status',accountPage:'account'};
       if(map[e.detail]) setActive(map[e.detail]);
     });
     setActive('home');
@@ -1084,9 +1104,27 @@
 })();
 </script>
 
-<script src="js/card-collection.js?v=1"></script>
-<script src="js/latihan-materi.js?v=1"></script>
-<script src="js/learning-features.js?v=2"></script>
+<script src="js/card-collection.js?v=4"></script>
+<script src="js/latihan-materi.js?v=17"></script>
+<script src="js/qcomments.js?v=2"></script>
+<script src="js/learning-features.js?v=5"></script>
+<script src="js/study-plus.js?v=10"></script>
+<script src="js/item-stats.js?v=3"></script>
+<script src="js/onboarding.js?v=6"></script>
+<script src="js/userbank-parser.js?v=3"></script>
+<script src="js/userbank.js?v=5"></script>
+<script src="js/social.js?v=7"></script>
+<script src="js/chat.js?v=2"></script>
+<script src="js/xp-sync.js?v=1"></script>
+<script src="js/question-editor.js?v=1"></script>
+<script src="js/announcement.js?v=1"></script>
+<script src="js/insights.js?v=1"></script>
+<script src="js/glossary-match.js?v=1"></script>
+<script src="js/glossary.js?v=3"></script>
+<script src="js/usage.js?v=2"></script>
+<script src="js/resep-data.js?v=2"></script>
+<script src="js/resep-core.js?v=2"></script>
+<script src="js/resep.js?v=3"></script>
 </body>
 </html>
 

@@ -137,6 +137,9 @@
       return {scenario,question};
     })();
     const isCorrect=selected===s.answer;
+    const commentKey=window.CLINED_QC?.keyOf(
+      'clinical-case', s.source_id || `${q.id}-${step+1}`
+    );
     root.innerHTML=`<div class="clinical-quest-shell">
       <section class="card clinical-quest-step-card">
         <div class="cq-step-header">
@@ -156,20 +159,23 @@
         ${selected!=null?`<div class="quest-explanation">
           <b class="${isCorrect?'correct-label':'wrong-label'}">${isCorrect?'✔ Benar!':'❌ Belum tepat.'}</b>
           ${escQ(s.why)}
-        </div>`:''}
+        </div><div class="cq-comments-slot" data-cq-comments></div>`:''}
         <div class="quest-step-nav">
           <button type="button" class="secondary" data-quest-exit>← Kembali</button>
-          ${selected!=null?`<button type="button" class="primary" data-quest-next>${step===q.steps.length-1?'Lihat Hasil':'Lanjut →'}</button>`:''}
+          ${selected!=null?`<button type="button" class="primary" data-quest-next>${step===q.steps.length-1?'Lihat Hasil':'Lanjut'}</button>`:''}
         </div>
       </section>
     </div>`;
+    if(selected!=null && commentKey) {
+      window.CLINED_QC?.mount(root.querySelector('[data-cq-comments]'), commentKey);
+    }
     root.querySelectorAll('[data-quest-answer]').forEach(b=>b.addEventListener('click',()=>{answers[step]=Number(b.dataset.questAnswer);render();}));
     root.querySelector('[data-quest-exit]')?.addEventListener('click',()=>{active=null;render();});
     root.querySelector('[data-quest-next]')?.addEventListener('click',()=>{if(step<q.steps.length-1){step++;render();window.scrollTo({top:0,behavior:'auto'});}else finish();});
   }
   function finish(){
     const q=active;const correct=answers.reduce((n,a,i)=>n+(a===q.steps[i].answer?1:0),0);const st=state();st.completed=st.completed||{};st.completed[q.id]={correct,total:q.steps.length,at:new Date().toISOString()};save(st);
-    try{if(typeof window.addXP==='function')window.addXP(10+correct*5,`Clinical Quest • ${q.title}`);}catch(e){}
+    try{if(typeof window.addXP==='function')window.addXP(10+correct*5,`Clinical Quest • ${q.title}`,{kind:'quest',ref:'quest:'+(q.id||q.title)});}catch(e){}
     const pct=Math.round(correct/q.steps.length*100);const root=host();
     root.innerHTML=`<div class="clinical-quest-shell">
       <section class="card quest-result">
@@ -190,3 +196,9 @@
   window.openClinicalQuest=async()=>{active=null;await render();if(typeof window.show==='function')window.show('clinicalQuestPage');};
   document.addEventListener('DOMContentLoaded',()=>{document.getElementById('clinicalQuestPage')&&render();});
 })();
+
+/* v95: Clinical Quest dibuka dari Menu (tombol nav bawah diganti Status) */
+document.addEventListener('click', e => {
+  if (!e.target.closest('#questMenuBtn')) return;
+  try { window.show('clinicalQuestPage', { force: true }); window.renderClinicalQuest?.(); window.scrollTo(0, 0); } catch (err) { console.warn(err); }
+});

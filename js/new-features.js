@@ -74,7 +74,7 @@ window.CLINED_Leaderboard = (function () {
     if (!page) return;
     document.querySelectorAll('.view.active').forEach(v => v.classList.remove('active'));
     page.classList.add('active');
-    if (!lbData) load();
+    load();
   }
 
   document.getElementById('openLeaderboardBtn')?.addEventListener('click', openPage);

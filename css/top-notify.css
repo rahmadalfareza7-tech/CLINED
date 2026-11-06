@@ -1,0 +1,49 @@
+/* CLINED — notifikasi & dialog meluncur dari ATAS (v1). Dimuat paling akhir. */
+
+/* Toast: turun dari atas */
+html body .clined-toast {
+  top: calc(10px + env(safe-area-inset-top)) !important; bottom: auto !important; left: 50% !important;
+  width: max-content; max-width: min(92vw, 460px); text-align: center; line-height: 1.4; font-size: 14px;
+  transform: translate(-50%, -140%) !important; opacity: 0; z-index: 2147483002 !important;
+  transition: opacity .22s ease, transform .28s cubic-bezier(.2,.9,.3,1.1) !important;
+}
+html body .clined-toast.show { transform: translate(-50%, 0) !important; opacity: 1; }
+
+/* Dialog konfirmasi: kartu meluncur dari atas, latar gelap */
+.cdlg-layer { position: fixed; inset: 0; z-index: 2147483003; display: flex; justify-content: center; align-items: flex-start;
+  padding: calc(14px + env(safe-area-inset-top)) 14px 14px; background: rgba(15,23,28,.55); opacity: 0; transition: opacity .2s ease; overflow-y: auto; }
+.cdlg-layer.show { opacity: 1; }
+.cdlg-card { width: 100%; max-width: 440px; margin-top: 0; padding: 18px 16px 16px; border-radius: 22px;
+  background: var(--card, #fff); color: var(--text, #1f2d33); border: 2px solid var(--line, #e5e7eb); border-bottom-width: 5px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.35); transform: translateY(-120%); transition: transform .32s cubic-bezier(.2,.9,.3,1.05); }
+.cdlg-layer.show .cdlg-card { transform: none; }
+.cdlg-head { display: flex; gap: 12px; align-items: center; }
+.cdlg-ico { flex: 0 0 46px; height: 46px; display: grid; place-items: center; font-size: 24px; border-radius: 15px; background: rgba(255,150,0,.16); }
+.cdlg-card[data-tone=danger] .cdlg-ico { background: rgba(255,75,75,.15); }
+.cdlg-card[data-tone=info] .cdlg-ico { background: rgba(28,176,246,.15); }
+.cdlg-title { margin: 0; font-size: 17px; font-weight: 950; line-height: 1.25; }
+.cdlg-body { margin: 12px 0 0; display: grid; gap: 8px; font-size: 14px; font-weight: 700; line-height: 1.55; color: var(--muted, #5f6f76); }
+.cdlg-body p { margin: 0; }
+.cdlg-body ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.cdlg-body b { color: var(--text, #1f2d33); }
+.cdlg-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-top: 16px; }
+.cdlg-actions button { min-height: 50px; font-size: 14.5px; font-weight: 900; border-radius: 15px; white-space: normal; line-height: 1.2; }
+.cdlg-actions .cdlg-ok[data-tone=danger] { background: #ff4b4b; border-color: #d33a3a; color: #fff; }
+.cdlg-actions.single { grid-template-columns: 1fr; }
+:root.dark .cdlg-layer { background: rgba(0,0,0,.65); }
+@media (prefers-reduced-motion: reduce) { .cdlg-layer, .cdlg-card, html body .clined-toast { transition: none !important; } }
+
+/* Dialog laporan soal */
+.rq-cats { display: grid; gap: 8px; }
+.rq-cat { min-height: 46px; text-align: left; padding: 0 14px; border-radius: 14px; font-size: 14px; font-weight: 800; border: 2px solid var(--line, #e5e7eb); border-bottom-width: 4px; background: var(--card, #fff); color: var(--text, #1f2d33); }
+.rq-cat.on { border-color: #1cb0f6; background: rgba(28,176,246,.14); color: #0b7cb4; }
+.rq-note { width: 100%; box-sizing: border-box; min-height: 84px; padding: 12px 14px; font-size: 16px; border-radius: 14px; border: 2px solid var(--line, #e5e7eb); background: var(--surface, #f4f6f7); color: inherit; font-family: inherit; resize: vertical; }
+:root.dark .rq-cat.on { color: #7cd3ff; }
+
+/* Pemberitahuan versi baru: pil kecil dari atas */
+.upd-banner { position: fixed; left: 50%; top: calc(8px + env(safe-area-inset-top)); z-index: 2147483001; display: flex; align-items: center; gap: 8px; max-width: min(92vw, 380px); padding: 6px 8px 6px 14px; border-radius: 99px; background: #1186bd; color: #fff; font-size: 13.5px; font-weight: 800; box-shadow: 0 6px 18px rgba(0,0,0,.28); transform: translate(-50%, -160%); opacity: 0; transition: transform .3s cubic-bezier(.2,.9,.3,1.1), opacity .2s; }
+.upd-banner.show { transform: translate(-50%, 0); opacity: 1; }
+.upd-banner .upd-tx { white-space: nowrap; }
+.upd-banner .upd-btn { min-height: 36px; padding: 0 14px; border-radius: 99px; border: 0; background: #fff; color: #0b6a99; font-size: 13px; font-weight: 950; cursor: pointer; }
+.upd-banner .upd-x { min-height: 36px; width: 32px; padding: 0; border: 0; background: transparent; color: #fff; font-size: 14px; opacity: .8; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .upd-banner { transition: none; } }

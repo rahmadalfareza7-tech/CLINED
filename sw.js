@@ -1,4 +1,4 @@
-const CACHE='clined-web-v55-clinical-quest-rev1';
+const CACHE='clined-web-v98-chat-push-admin';
 const CORE=['./app.html', './index.html', './css/landing.css', './css/polish.css', './js/ability-classifier.js', './js/landing.js', './apple-touch-icon.png', './assets/clined-logo.png', './assets/flashcards/brain.svg', './assets/flashcards/ecg.svg', './assets/flashcards/eye.svg', './assets/flashcards/heart.svg', './assets/flashcards/kidney.svg', './assets/flashcards/liver.svg', './assets/flashcards/lung.svg', './assets/flashcards/skin.svg', './assets/normal-values.jpeg', './css/style.css', './css/motion.css', './favicon-32.png', './icon-192.png', './icon-512.png', './icon.svg', './js/app.js', './js/content-manager.js', './js/auth-gate.js', './js/photo-compress.js', './js/photo-store.js', './js/question-bank-engine.js', './manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
@@ -45,4 +45,26 @@ self.addEventListener('fetch',e=>{
     if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{});}
     return res;
   }).catch(()=>caches.match('./app.html'))));
+});
+
+// ───── Web Push (notifikasi chat) ─────
+self.addEventListener('push',e=>{
+  let d={}; try{d=e.data?e.data.json():{};}catch{}
+  const title=d.title||'CLINED';
+  e.waitUntil((async()=>{
+    // Kalau aplikasi sedang terbuka & terlihat, SSE/toast sudah menangani — jangan dobel.
+    const wins=await self.clients.matchAll({type:'window',includeUncontrolled:true});
+    if(wins.some(c=>c.visibilityState==='visible'&&c.focused))return;
+    await self.registration.showNotification(title,{body:d.body||'Pesan baru',tag:d.tag||'chat',renotify:true,icon:'./icon-192.png',badge:'./favicon-32.png',data:{url:d.url||'./app.html'},timestamp:Date.now()});
+  })());
+});
+self.addEventListener('notificationclick',e=>{
+  e.notification.close();
+  const url=new URL(e.notification.data?.url||'./app.html',self.registration.scope).href;
+  e.waitUntil((async()=>{
+    const wins=await self.clients.matchAll({type:'window',includeUncontrolled:true});
+    const id=new URL(url).searchParams.get('chat');
+    for(const c of wins){ if(c.url.startsWith(self.registration.scope)){ try{await c.focus();}catch{} c.postMessage({type:'open-chat',id}); return; } }
+    await self.clients.openWindow(url);
+  })());
 });

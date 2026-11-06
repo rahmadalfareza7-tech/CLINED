@@ -1,0 +1,59 @@
+/* BANK SOAL SAYA — mengikuti token CLINED (--card --line --surface --text --muted) */
+.ub-body{display:flex;flex-direction:column;gap:12px;margin-top:12px;padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+.ub-hero{display:flex;align-items:center;gap:12px;padding:14px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#1cb0f6,#16a4e8);border:2px solid #0c94ce;border-bottom-width:5px}
+.ub-hero-ico{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;font-size:24px;border-radius:15px;background:rgba(255,255,255,.22)}
+.ub-hero b{display:block;font-size:16px;font-weight:950}
+.ub-hero small{display:block;margin-top:3px;font-size:12.5px;font-weight:700;line-height:1.45;opacity:.95}
+.ub-hero-deck{background:linear-gradient(135deg,#58cc02,#46b800);border-color:#3a9c00}
+.ub-actions{display:flex;gap:10px;flex-wrap:wrap}
+.ub-actions>button{flex:1;min-width:130px}
+.ub-actions>.small-btn{min-width:110px}
+.ub-decks{display:flex;flex-direction:column;gap:10px}
+.ub-deck{display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:20px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card)}
+.ub-deck-main{flex:1;min-width:0}
+.ub-deck-main b{display:block;font-size:15px;font-weight:900;overflow-wrap:anywhere}
+.ub-deck-main small{display:block;margin-top:3px;font-size:12px;font-weight:800;color:var(--muted)}
+.ub-deck-btns{display:flex;gap:8px;flex:none}
+.ub-empty{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:26px 16px;border:2px dashed var(--line);border-radius:22px;background:var(--card);color:var(--muted)}
+.ub-empty span{font-size:30px}.ub-empty b{color:var(--text)}.ub-empty small{font-weight:700}
+.ub-note{margin:0;font-size:12px;font-weight:700;line-height:1.5;color:var(--muted)}
+.ub-info{padding:10px 12px;border-radius:14px;background:rgba(28,176,246,.12);border:1.5px solid rgba(28,176,246,.35);font-size:13px;font-weight:800}
+.ub-lab{display:block;margin:4px 0 6px;font-size:12.5px;font-weight:900;color:var(--text)}
+.ub-lab small{font-weight:700;color:var(--muted)}
+.ub-body textarea,.ub-body input[type=text],.ub-body select{width:100%;padding:12px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--text);font:inherit;font-size:14px;font-weight:700;line-height:1.5;resize:vertical}
+.ub-body textarea:focus,.ub-body input[type=text]:focus,.ub-body select:focus{outline:none;border-color:#1cb0f6;box-shadow:0 0 0 3px rgba(28,176,246,.18)}
+.ub-body input[hidden]{display:none}
+.ub-paste{min-height:200px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important;font-size:13px!important}
+.ub-more{border:2px solid var(--line);border-radius:14px;padding:4px 12px;background:var(--card)}
+.ub-more>summary{cursor:pointer;padding:9px 0;font-weight:900;font-size:13px;color:#1899d6;list-style:none}
+.ub-more>summary::-webkit-details-marker{display:none}
+.ub-more[open]>summary{border-bottom:1.5px dashed var(--line);margin-bottom:8px}
+.ub-example{margin:0 0 10px;padding:10px;border-radius:12px;background:var(--surface);font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;font-family:ui-monospace,Menlo,monospace}
+.ub-tips{margin:0 0 10px;padding-left:18px;font-size:12.5px;font-weight:700;line-height:1.6;color:var(--muted)}
+.ub-tips code{padding:1px 5px;border-radius:6px;background:var(--surface);font-size:11.5px}
+.ub-summary{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line)}
+.ub-summary b{font-size:14px;font-weight:950}.ub-summary span{font-size:12.5px;font-weight:800;color:var(--muted)}
+.ub-err{color:#ef4444;font-style:normal;font-weight:900}
+.ub-ok{color:#46a900;font-weight:900;font-size:12px}
+.ub-warn{color:#c27a00;font-weight:800;font-size:11.5px}
+:root.dark .ub-ok{color:#7be03a}:root.dark .ub-warn{color:#ffc24d}
+.ub-q{padding:13px;border-radius:20px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card)}
+.ub-q.bad{border-color:rgba(239,68,68,.55)}
+.ub-q-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ub-q-text{font-size:14.5px;font-weight:850;line-height:1.5;white-space:pre-line;overflow-wrap:anywhere}
+.ub-opts{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:5px}
+.ub-opts li{padding:7px 10px;border-radius:11px;background:var(--surface);font-size:13px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+.ub-opts li.key{background:rgba(88,204,2,.16);outline:1.5px solid rgba(88,204,2,.6)}
+.ub-opts li em{font-style:normal;font-size:10.5px;font-weight:900;margin-left:6px;padding:1px 7px;border-radius:99px;background:#58cc02;color:#fff}
+.ub-expl{margin-top:8px;font-size:12.5px;font-weight:700;line-height:1.5;color:var(--muted);white-space:pre-line}
+.ub-q-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ub-q-actions .small-btn{min-width:90px}
+.ub-danger{color:#ef4444!important}
+.ub-editor{padding:13px;border-radius:20px;border:2px solid #1cb0f6;border-bottom-width:4px;background:var(--card)}
+.ub-opt-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.ub-opt-row input[type=radio]{width:20px;height:20px;flex:none;accent-color:#58cc02}
+.ub-letter{flex:none;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--surface);font-size:11.5px;font-weight:900}
+.ub-opt-row input[type=text]{flex:1;min-width:0;padding:10px 12px}
+.ub-save{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:20px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card)}
+.ub-practice{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:20px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card)}
+.ub-po{display:block;margin-top:3px;font-size:12px;font-weight:700;line-height:1.45;color:var(--muted)}

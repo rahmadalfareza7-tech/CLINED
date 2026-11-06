@@ -1,0 +1,27 @@
+/* Diskusi per soal (v101) */
+.qc { display: grid; gap: 10px; margin-top: 14px; padding: 14px; border-radius: 18px; border: 2px solid var(--line, #e5e7eb); background: var(--card, #fff); text-align: left; }
+.qc-head { display: flex; align-items: center; gap: 8px; } .qc-head b { font-size: 14.5px; }
+.qc-n { min-width: 24px; padding: 1px 8px; border-radius: 99px; background: var(--surface, #eef1f2); font-size: 12px; font-weight: 900; text-align: center; } .qc-n:empty { display: none; }
+.qc-compose { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: end; }
+.qc-compose textarea { min-height: 48px; max-height: 140px; box-sizing: border-box; resize: none; padding: 12px 14px; border-radius: 16px; border: 2px solid var(--line, #e5e7eb); background: var(--surface, #f4f6f7); color: inherit; font: inherit; font-size: 16px; line-height: 1.35; }
+.qc-compose textarea:focus { outline: none; border-color: #1cb0f6; background: var(--card, #fff); }
+.qc-send { min-height: 48px; padding: 0 16px; border-radius: 14px; border: 0; border-bottom: 3px solid #1480b8; background: #1cb0f6; color: #fff; font: inherit; font-weight: 900; font-size: 14px; cursor: pointer; }
+.qc-send:disabled { opacity: .45; }
+.qc-list { display: grid; gap: 10px; }
+.qc-c { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 10px; }
+.qc-av { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 900; }
+.qc-body { min-width: 0; padding: 8px 12px 6px; border-radius: 16px; background: var(--surface, #f4f6f7); }
+.qc-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; } .qc-meta b { font-size: 13px; } .qc-meta time { font-size: 11px; font-weight: 800; opacity: .55; }
+.qc-badge { font-style: normal; font-size: 10px; font-weight: 900; padding: 1px 8px; border-radius: 99px; background: rgba(28,176,246,.16); color: #0b7cb4; }
+.qc-badge.b-admin { background: rgba(255,150,0,.18); color: #b86a00; } .qc-badge.b-mentor { background: rgba(88,204,2,.18); color: #3d8a00; }
+.qc-body p { margin: 4px 0 6px; font-size: 14px; font-weight: 600; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.qc-act { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.qc-v { min-height: 36px; padding: 0 12px; border-radius: 99px; border: 2px solid var(--line, #e5e7eb); background: var(--card, #fff); color: inherit; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+.qc-v.on.up { background: rgba(88,204,2,.18); border-color: #58cc02; } .qc-v.on.down { background: rgba(255,75,75,.14); border-color: #ff4b4b; }
+.qc-v:disabled { opacity: .5; cursor: default; }
+.qc-del { margin-left: auto; min-height: 36px; padding: 0 10px; border: 0; background: transparent; color: #d33; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; text-decoration: underline; }
+.qc-more { min-height: 44px; border-radius: 14px; border: 2px dashed var(--line, #e5e7eb); background: transparent; color: inherit; font: inherit; font-weight: 800; font-size: 13px; cursor: pointer; }
+.qc-empty, .qc-note { margin: 0; font-size: 13px; font-weight: 700; opacity: .7; line-height: 1.45; }
+.qc-skel { height: 56px; border-radius: 16px; background: linear-gradient(90deg, var(--surface, #eef1f2) 25%, var(--line, #e5e7eb) 50%, var(--surface, #eef1f2) 75%) 0 0 / 200% 100%; animation: qc-sh 1.2s infinite; }
+@keyframes qc-sh { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .qc-skel { animation: none; } }

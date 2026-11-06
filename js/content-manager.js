@@ -86,6 +86,31 @@
           <button type="button" class="admin-panel-tab" role="tab" data-content-tab="upi">UPI</button>
           <button type="button" class="admin-panel-tab" role="tab" data-content-tab="materi">Materi</button>
           <button type="button" class="admin-panel-tab" role="tab" data-content-tab="ninja">Ninja Nerd</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="reports">Laporan Soal</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="glossary">Glosarium</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="usage">Statistik</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="ann">Pengumuman</button>
+          <button type="button" class="admin-panel-tab" role="tab" data-content-tab="items">Analisis Soal</button>
+        </div>
+
+        <div class="acm-panel" data-content-panel="glossary" hidden></div>
+        <div class="acm-panel" data-content-panel="usage" hidden></div>
+        <div class="acm-panel" data-content-panel="ann" hidden></div>
+
+        <div class="acm-panel" data-content-panel="reports" hidden>
+          <div class="admin-content-intro"><b>Laporan soal dari mahasiswa</b><span>Soal dengan laporan terbanyak ada di atas. Buka editor untuk memperbaiki kunci atau teks, lalu laporan otomatis ditandai selesai.</span></div>
+          <div class="rp-filter" data-rp-filter role="tablist"></div>
+          <div data-rp-list class="admin-uab-packages"><p class="muted">Memuat…</p></div>
+          <p class="acm-message" data-content-message role="status"></p>
+        </div>
+
+        <div class="acm-panel" data-content-panel="items" hidden>
+          <div class="admin-content-intro"><b>Analisis butir soal</b><span>Statistik anonim dari semua pengguna. Soal diurutkan dari tingkat salah tertinggi. Tanda ⚠ berarti ada pilihan salah yang lebih sering dipilih daripada kunci, jadi kunci mungkin keliru atau soal ambigu.</span></div>
+          <div class="acm-grid">
+            <div class="acm-field"><label>Minimal jumlah jawaban</label><select data-items-min><option value="5">5</option><option value="10" selected>10</option><option value="30">30</option><option value="100">100</option></select></div>
+            <div class="acm-field"><label>Sumber</label><select data-items-source><option value="">Semua</option><option value="bank">Bank soal</option><option value="mat">Latihan Materi</option></select></div>
+          </div>
+          <div data-items-list class="admin-uab-packages"><p class="muted">Memuat…</p></div>
         </div>
 
         <div class="acm-panel" data-content-panel="uab">
@@ -171,7 +196,7 @@
       const loadMaterials=async()=>{try{const d=await request('/api/materials');materialMap=Object.fromEntries((d.materials||[]).map(x=>[String(x.block).toUpperCase(),x.url]));const b=materialForm.elements.block.value.toUpperCase(),url=materialMap[b]||'';materialForm.elements.url.value=url;materialCurrent.textContent=url?`Tersimpan: ${url}`:'Belum ada link tersimpan.';}catch(e){materialMessage.textContent=e.message||'Gagal memuat link materi.';}};
       materialForm.elements.block.addEventListener('change',loadMaterials);
       materialForm.addEventListener('submit',async e=>{e.preventDefault();try{const block=materialForm.elements.block.value,url=materialForm.elements.url.value.trim();const d=await request(`/api/admin/materials/${encodeURIComponent(block)}`,{method:'PUT',body:JSON.stringify({url})});materialMessage.textContent=d.message||'Link materi tersimpan.';await loadMaterials();await hydrateMaterials();}catch(e){materialMessage.textContent=e.message||'Gagal menyimpan link materi.';}});
-      materialDelete.addEventListener('click',async()=>{const block=materialForm.elements.block.value;if(!confirm(`Hapus link materi ${block}?`))return;try{const d=await request(`/api/admin/materials/${encodeURIComponent(block)}`,{method:'DELETE'});materialMessage.textContent=d.message||'Link materi dihapus.';await loadMaterials();await hydrateMaterials();}catch(e){materialMessage.textContent=e.message||'Gagal menghapus link materi.';}});
+      materialDelete.addEventListener('click',async()=>{const block=materialForm.elements.block.value;if(!(await clinedConfirm({title:`Hapus link materi ${block}?`,ok:'Ya, lanjut',tone:'danger'})))return;try{const d=await request(`/api/admin/materials/${encodeURIComponent(block)}`,{method:'DELETE'});materialMessage.textContent=d.message||'Link materi dihapus.';await loadMaterials();await hydrateMaterials();}catch(e){materialMessage.textContent=e.message||'Gagal menghapus link materi.';}});
       loadMaterials();
 
       const youtubeForm=box.querySelector('[data-admin-youtube-form]'), youtubeCurrent=box.querySelector('[data-youtube-current]'), youtubeMessage=box.querySelector('[data-youtube-message]'), youtubeDelete=box.querySelector('[data-delete-youtube]');
@@ -179,7 +204,7 @@
       const loadYoutube=async()=>{try{const d=await request('/api/youtube');youtubeMap=Object.fromEntries((d.links||[]).map(x=>[String(x.block).toUpperCase(),x.url]));const b=youtubeForm.elements.block.value.toUpperCase(),url=youtubeMap[b]||'';youtubeForm.elements.url.value=url;youtubeCurrent.textContent=url?`Tersimpan: ${url}`:'Belum ada link tersimpan.';}catch(e){youtubeMessage.textContent=e.message||'Gagal memuat link Ninja Nerd.';}};
       youtubeForm.elements.block.addEventListener('change',loadYoutube);
       youtubeForm.addEventListener('submit',async e=>{e.preventDefault();try{const block=youtubeForm.elements.block.value,url=youtubeForm.elements.url.value.trim();const d=await request(`/api/admin/youtube/${encodeURIComponent(block)}`,{method:'PUT',body:JSON.stringify({url})});youtubeMessage.textContent=d.message||'Link Ninja Nerd tersimpan.';await loadYoutube();}catch(e){youtubeMessage.textContent=e.message||'Gagal menyimpan link Ninja Nerd.';}});
-      youtubeDelete.addEventListener('click',async()=>{const block=youtubeForm.elements.block.value;if(!confirm(`Hapus link Ninja Nerd ${block}?`))return;try{const d=await request(`/api/admin/youtube/${encodeURIComponent(block)}`,{method:'DELETE'});youtubeMessage.textContent=d.message||'Link Ninja Nerd dihapus.';await loadYoutube();}catch(e){youtubeMessage.textContent=e.message||'Gagal menghapus link Ninja Nerd.';}});
+      youtubeDelete.addEventListener('click',async()=>{const block=youtubeForm.elements.block.value;if(!(await clinedConfirm({title:`Hapus link Ninja Nerd ${block}?`,ok:'Ya, lanjut',tone:'danger'})))return;try{const d=await request(`/api/admin/youtube/${encodeURIComponent(block)}`,{method:'DELETE'});youtubeMessage.textContent=d.message||'Link Ninja Nerd dihapus.';await loadYoutube();}catch(e){youtubeMessage.textContent=e.message||'Gagal menghapus link Ninja Nerd.';}});
       loadYoutube();
 
       const uabForm=box.querySelector('[data-admin-uab-form]'), uabFile=uabForm.elements.file, uabMeta=box.querySelector('[data-uab-file-meta]');
@@ -239,14 +264,14 @@
           }).join('');
           uabPackagesHost.querySelectorAll('[data-delete-uab-question]').forEach(btn=>btn.addEventListener('click',async e=>{
             e.preventDefault();e.stopPropagation();
-            if(!confirm('Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.'))return;
+            if(!(await clinedConfirm({title:'Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
             btn.disabled=true;
             try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabQuestion)}&questionId=${encodeURIComponent(btn.dataset.questionId)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Soal UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
             catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus soal.',true);btn.disabled=false;}
           }));
           uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn=>btn.addEventListener('click',async e=>{
             e.preventDefault();e.stopPropagation();
-            if(!confirm('Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.'))return;
+            if(!(await clinedConfirm({title:'Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
             btn.disabled=true;
             try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabPackage)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Bank UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
             catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus bank.',true);btn.disabled=false;}
@@ -282,7 +307,7 @@
           const f=latihanFilter.value; const rows=(d.packages||[]).filter(p=>f==='*'||String(p.block||'').toUpperCase()===f);
           latihanList.innerHTML=rows.length?rows.map(p=>`<div class="admin-uab-package"><div><b>${esc(p.title)}</b><small>${esc(p.block||'-')} • ${Number(p.question_count||0)} soal</small></div><button type="button" class="account-action material-delete-action" data-del-latihan="${esc(p.id)}">Hapus</button></div>`).join(''):'<p class="muted">Belum ada latihan materi.</p>';
           latihanList.querySelectorAll('[data-del-latihan]').forEach(b=>b.addEventListener('click',async()=>{
-            if(!confirm('Hapus paket latihan ini?'))return;
+            if(!(await clinedConfirm({title:'Hapus paket latihan ini?',ok:'Ya, lanjut',tone:'danger'})))return;
             try{await request('/api/content/packages/'+encodeURIComponent(b.dataset.delLatihan),{method:'DELETE'});message(box,'Paket latihan dihapus.');await renderLatihanList();}catch(err){message(box,err.message||'Gagal menghapus.',true);}
           }));
         }catch(err){latihanList.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat daftar.')}</p>`;}
@@ -305,24 +330,93 @@
       });
       renderLatihanList();
 
+      const FLAG_TXT={suspect_key:'⚠ Kunci mencurigakan',very_hard:'Sangat sulit',hard:'Sulit',too_easy:'Terlalu mudah'};
+      const renderItemsList=async()=>{
+        const host=box.querySelector('[data-items-list]'); if(!host)return;
+        host.innerHTML='<p class="muted">Memuat…</p>';
+        try{
+          const min=box.querySelector('[data-items-min]').value,src=box.querySelector('[data-items-source]').value;
+          const d=await request(`/api/admin/item-stats?min=${encodeURIComponent(min)}${src?`&source=${src}`:''}`);
+          if(!d.items.length){host.innerHTML=`<p class="muted">Belum ada soal dengan minimal ${esc(min)} jawaban. Total terekam: ${d.totals.answers} jawaban dari ${d.totals.items} soal.</p>`;return;}
+          host.innerHTML=`<p class="muted">${d.items.length} soal ditampilkan • total terekam ${d.totals.answers} jawaban dari ${d.totals.items} soal.</p>`+d.items.map(it=>{
+            const tot=Math.max(1,it.n);
+            const bars=it.optCounts.slice(0,5).map((c,k)=>{const pct=Math.round(c/tot*100);const ok=k===it.correctIdx;return `<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;margin-top:3px"><span style="width:14px">${'ABCDE'[k]}</span><div style="flex:1;height:8px;border-radius:99px;background:rgba(127,127,127,.18);overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:${ok?'#58cc02':'#ef4444'}"></i></div><span style="width:62px;text-align:right">${pct}%${ok?' ✓':''}</span></div>`;}).join('');
+            const flags=it.flags.map(f=>`<span style="font-size:11px;font-weight:900;padding:2px 8px;border-radius:99px;background:${f==='suspect_key'?'rgba(239,68,68,.14)':'rgba(127,127,127,.16)'}">${FLAG_TXT[f]||esc(f)}</span>`).join(' ');
+            return `<div class="admin-uab-package" style="display:block;padding:12px;margin-top:8px"><div style="display:flex;justify-content:space-between;gap:8px;font-weight:900;font-size:13px"><span>${esc(it.bank||it.source)} • ${it.n} jawaban</span><span>${it.wrongRate}% salah</span></div><p style="margin:6px 0;font-size:13px">${esc(it.snippet||'(tanpa teks)')}</p>${flags?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">${flags}</div>`:''}${bars}<small class="muted" style="display:block;margin-top:6px;word-break:break-all">ID: ${esc(it.id)}</small></div>`;
+          }).join('');
+        }catch(err){host.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat analisis.')}</p>`;}
+      };
+
+      const RP_CAT={key:'Kunci salah',typo:'Salah ketik',ambiguous:'Ambigu',explanation:'Pembahasan keliru',other:'Lainnya'};
+      const RP_ST=[['new','Baru'],['checked','Diperiksa'],['fixed','Diperbaiki'],['dismissed','Ditolak']];
+      let rpStatus='new';
+      const rpSetStatus=async(qid,status)=>{await request(`/api/admin/question-reports/${encodeURIComponent(qid)}`,{method:'PATCH',body:JSON.stringify({status})});};
+      const renderReports=async()=>{
+        const host=box.querySelector('[data-rp-list]'),filt=box.querySelector('[data-rp-filter]'); if(!host)return;
+        host.innerHTML='<p class="muted">Memuat…</p>';
+        try{
+          const d=await request(`/api/admin/question-reports?status=${rpStatus}`);
+          filt.innerHTML=RP_ST.map(([k,l])=>`<button type="button" class="ml-chip${k===rpStatus?' on':''}" data-rp-st="${k}">${l} <i style="font-style:normal;opacity:.7">${(d.counts||{})[k]||0}</i></button>`).join('');
+          if(!d.items.length){host.innerHTML='<p class="muted">Tidak ada laporan di status ini. 🎉</p>';return;}
+          host.innerHTML=d.items.map(it=>{
+            const cats=Object.keys(it.cats||{}).map(c=>`<span class="rp-badge">${esc(RP_CAT[c]||c)}</span>`).join(' ');
+            const notes=(it.notes||[]).map(n=>`<li>${esc(n)}</li>`).join('');
+            const open=rpStatus==='new'||rpStatus==='checked';
+            return `<div class="admin-uab-package rp-card" data-rp-q="${esc(it.question_id)}"><div class="rp-top"><b>${it.reporters||it.reports} pelapor</b><span class="muted">${esc(it.bank||it.source)}</span></div>
+              <p class="rp-snippet">${esc(it.snippet||'(tanpa teks)')}</p><div class="rp-cats">${cats}</div>${notes?`<ul class="rp-notes">${notes}</ul>`:''}
+              <div class="rp-actions">${it.source==='bank'?`<button type="button" class="secondary" data-rp-edit>✏️ Edit soal</button>`:''}${open?`<button type="button" class="secondary" data-rp-do="checked">Diperiksa</button><button type="button" class="secondary" data-rp-do="dismissed">Tolak</button>`:`<button type="button" class="secondary" data-rp-do="new">Buka lagi</button>`}</div><div data-rp-editor></div></div>`;
+          }).join('');
+        }catch(err){host.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat laporan.')}</p>`;}
+      };
+      const rpEditor=async(card)=>{
+        const qid=card.dataset.rpQ,slot=card.querySelector('[data-rp-editor]');
+        if(slot.innerHTML){slot.innerHTML='';return;}
+        slot.innerHTML='<p class="muted">Memuat soal…</p>';
+        try{
+          const d=await request(`/api/admin/question-reports/${encodeURIComponent(qid)}/question`),q=d.question,L='ABCDEF';
+          slot.innerHTML=`<div class="rp-editor"><p class="muted">Bank: ${esc(d.bankName||d.bankId)}</p>
+            <label>Soal</label><textarea rows="4" data-f="soal">${esc(q.soal)}</textarea>
+            <label>Pilihan jawaban <small>(pilih huruf = kunci)</small></label>
+            ${q.opsi.map((o,i)=>`<div class="rp-opt"><label class="rp-key"><input type="radio" name="k-${esc(qid)}" value="${i}" ${q.jawabanBenar===i?'checked':''}><span>${L[i]}</span></label><input type="text" data-o="${i}" value="${esc(o)}"></div>`).join('')}
+            <label>Pembahasan</label><textarea rows="5" data-f="pembahasan">${esc(q.pembahasan||'')}</textarea>
+            <div class="acm-actions"><button type="button" class="secondary" data-rp-cancel>Batal</button><button type="button" class="account-action acm-submit" data-rp-save data-bank="${esc(d.bankId)}">Simpan &amp; tandai diperbaiki</button></div></div>`;
+        }catch(err){slot.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat soal.')}</p>`;}
+      };
+      box.querySelector('[data-content-panel="reports"]')?.addEventListener('click',async e=>{
+        const st=e.target.closest('[data-rp-st]'); if(st){rpStatus=st.dataset.rpSt;return renderReports();}
+        const card=e.target.closest('[data-rp-q]'); if(!card)return;
+        const qid=card.dataset.rpQ;
+        if(e.target.closest('[data-rp-edit]'))return rpEditor(card);
+        if(e.target.closest('[data-rp-cancel]')){card.querySelector('[data-rp-editor]').innerHTML='';return;}
+        const act=e.target.closest('[data-rp-do]');
+        if(act){try{await rpSetStatus(qid,act.dataset.rpDo);message(box,'Status laporan diperbarui.');renderReports();}catch(err){message(box,err.message||'Gagal memperbarui.',true);}return;}
+        const save=e.target.closest('[data-rp-save]');
+        if(save){
+          const ed=card.querySelector('.rp-editor'),opsi=[...ed.querySelectorAll('[data-o]')].map(i=>i.value.trim()),k=ed.querySelector('input[type=radio]:checked');
+          if(!k){message(box,'Pilih huruf kunci jawaban dulu.',true);return;}
+          save.disabled=true;
+          try{
+            await request(`/api/admin/banks/${encodeURIComponent(save.dataset.bank)}/questions/${encodeURIComponent(qid)}`,{method:'PATCH',body:JSON.stringify({soal:ed.querySelector('[data-f=soal]').value,opsi,jawabanBenar:Number(k.value),pembahasan:ed.querySelector('[data-f=pembahasan]').value})});
+            await rpSetStatus(qid,'fixed');
+            message(box,'Soal diperbaiki dan dipublikasikan. Pengguna menerima versi baru saat memuat ulang.');renderReports();
+          }catch(err){save.disabled=false;message(box,err.message||'Gagal menyimpan.',true);}
+        }
+      });
+      box.querySelectorAll('[data-items-min],[data-items-source]').forEach(el=>el.addEventListener('change',renderItemsList));
       box.querySelectorAll('[data-content-tab]').forEach(tab=>tab.addEventListener('click',()=>{
-        box.querySelectorAll('[data-content-tab]').forEach(x=>x.classList.toggle('selected',x===tab));
+        box.querySelectorAll('[data-content-tab]').forEach(x=>{x.classList.toggle('selected',x===tab);x.setAttribute('aria-selected',x===tab?'true':'false');});
+        try{tab.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}catch{}
         box.querySelectorAll('[data-content-panel]').forEach(p=>p.hidden=p.dataset.contentPanel!==tab.dataset.contentTab);
         if(tab.dataset.contentTab==='latihan')renderLatihanList();
+        if(tab.dataset.contentTab==='items')renderItemsList();
+        if(tab.dataset.contentTab==='reports')renderReports();
       }));
     }
 
     if(isAdmin && !document.getElementById('adminLoginsPanel')){
       const logins=document.createElement('section'); logins.id='adminLoginsPanel'; logins.className='account-auth-card';
-      logins.innerHTML=`<div class="account-auth-top"><div><span class="account-auth-kicker">ADMIN • AKTIVITAS & PENGGUNA</span><h3>Aktivitas akun & role</h3><p>Riwayat login/logout dan perubahan role pengguna.</p></div><span class="account-security-badge secure" data-activity-count>0</span></div><div class="admin-panel-tabs" role="tablist"><button type="button" class="admin-panel-tab selected" data-admin-tab="activity">Aktivitas</button><button type="button" class="admin-panel-tab" data-admin-tab="users">Pengguna <span class="admin-tab-count" data-user-count>0</span></button></div><div data-admin-panel="activity"><div class="admin-activity-toolbar"><button type="button" class="admin-delete-btn danger clined-compact-action" data-reset-activity>Reset aktivitas login/logout</button></div><div data-activity-list class="muted">Memuat…</div></div><p class="muted" data-content-message></p><div data-admin-panel="users" hidden><div class="admin-users-scroll"><div data-users-list class="muted">Memuat…</div></div></div>`;
       account.append(logins);
-      const renderActivity=async()=>{const list=logins.querySelector('[data-activity-list]'),badge=logins.querySelector('[data-activity-count]');try{const d=await request('/api/admin/activity');const rows=d.activities||[];badge.textContent=rows.length;const userCount=Number(d.userCount||0);const userCountEl=logins.querySelector('[data-user-count]');if(userCountEl)userCountEl.textContent=userCount;const labels={login:'Login',logout:'Logout',role_changed:'Role diubah'};list.innerHTML=rows.length?`<div class="admin-activity-list">${rows.map(a=>`<article class="admin-activity-row"><div class="admin-activity-icon">${a.action==='login'?'↪':a.action==='logout'?'↩':'⚙'}</div><div class="admin-activity-main"><b>${esc(a.user?.name||'Akun dihapus')} <small>@${esc(a.user?.username||'-')}</small></b><span>${labels[a.action]||esc(a.action)}${a.action==='role_changed'&&a.metadata?.to?` • ${esc(a.metadata.from||'—')} → ${esc(a.metadata.to)}`:''}</span></div><time>${new Date(a.createdAt).toLocaleString('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</time></article>`).join('')}</div>`:'<p class="muted">Belum ada aktivitas akun.</p>';}
-catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
-      logins.querySelector('[data-reset-activity]').addEventListener('click',async()=>{if(!confirm('Reset semua aktivitas login/logout? Riwayat perubahan role tidak akan dihapus.'))return;const btn=logins.querySelector('[data-reset-activity]');btn.disabled=true;try{const d=await request('/api/admin/activity',{method:'DELETE',body:JSON.stringify({})});message(logins,d.message||'Aktivitas berhasil direset.');await renderActivity();}catch(e){message(logins,e.message||'Reset aktivitas gagal.',true);}finally{btn.disabled=false;}});
-      const renderUsers=async()=>{const list=logins.querySelector('[data-users-list]');try{const d=await request('/api/admin/users');const users=d.users||[];const userCountEl=logins.querySelector('[data-user-count]');if(userCountEl)userCountEl.textContent=users.length;list.innerHTML=users.length?`<div class="admin-users-list">${users.map(u=>`<div class="admin-user-row"><div><b>${esc(u.name)}</b><small>@${esc(u.username)}${u.lastLoginAt?` • login terakhir ${new Date(u.lastLoginAt).toLocaleString('id-ID',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}`:''}</small></div><div class="admin-user-actions"><select class="admin-role-select" data-role-user="${esc(u.id)}"><option value="student" ${u.role==='student'?'selected':''}>Student</option><option value="helper" ${u.role==='helper'?'selected':''}>Helper</option><option value="admin" ${u.role==='admin'?'selected':''}>Admin</option></select>${u.id!==window.CLINED_CURRENT_USER_ID?`<button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-user="${esc(u.id)}">Hapus</button>`:''}</div></div>`).join('')}</div>`:'<p class="muted">Belum ada pengguna.</p>';
-      list.querySelectorAll('[data-delete-user]').forEach(btn=>btn.addEventListener('click',async()=>{if(!confirm('Hapus pengguna ini? Data akun yang tersimpan akan dihapus. Konten publik yang dibuat akun ini tetap dipertahankan.'))return;btn.disabled=true;try{const d=await request(`/api/admin/users/${encodeURIComponent(btn.dataset.deleteUser)}`,{method:'DELETE'});message(logins,d.message||'Pengguna berhasil dihapus.');await renderUsers();await renderActivity();}catch(e){message(logins,e.message||'Pengguna gagal dihapus.',true);}finally{btn.disabled=false;}}));list.querySelectorAll('[data-role-user]').forEach(sel=>sel.addEventListener('change',async()=>{const old=sel.dataset.previous||sel.value;sel.disabled=true;try{const d=await request(`/api/admin/users/${encodeURIComponent(sel.dataset.roleUser)}/role`,{method:'PATCH',body:JSON.stringify({role:sel.value})});message(logins,d.message||'Role berhasil diperbarui.');await renderActivity();await renderUsers();}catch(e){sel.value=old;message(logins,e.message||'Role gagal diperbarui.',true);}finally{sel.disabled=false;}}));list.querySelectorAll('.admin-role-select').forEach(s=>s.dataset.previous=s.value);}catch(e){list.textContent=e.message||'Gagal memuat pengguna.';}};
-      logins.querySelectorAll('[data-admin-tab]').forEach(tab=>tab.addEventListener('click',async()=>{logins.querySelectorAll('[data-admin-tab]').forEach(x=>x.classList.toggle('selected',x===tab));logins.querySelectorAll('[data-admin-panel]').forEach(x=>x.hidden=x.dataset.adminPanel!==tab.dataset.adminTab);if(tab.dataset.adminTab==='users')await renderUsers();}));
-      renderActivity(); setInterval(renderActivity,60000);
+      window.CLINED_ADMIN_PEOPLE?.mount(logins,{request,confirm:o=>clinedConfirm(o),selfId:window.CLINED_CURRENT_USER_ID});
     }
   }
 
@@ -330,7 +424,7 @@ catch(e){list.textContent=e.message||'Gagal memuat aktivitas.';}};
     // Update [data-external-material] anchors (blok dengan link hardcoded di HTML)
     document.querySelectorAll('[data-external-material]').forEach(a=>{const section=a.closest('[data-block-key]');if(!section)return;const block=String(section.dataset.blockKey||'').toUpperCase();if(map[block]){a.href=map[block];}a.target='_blank';a.rel='noopener noreferrer';});
     // Re-render [data-materi-section] elements (blok yang fetch on-demand, mis: GINJAL, PANCA INDRA)
-    document.querySelectorAll('[data-materi-section]').forEach(host=>{const block=String(host.dataset.materiSection||'').toUpperCase();const url=map[block];if(url){host.innerHTML=`<a class="materi-button" href="${url.replace(/"/g,'&quot;')}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a>`;}else{host.innerHTML='';}});
+    document.querySelectorAll('[data-materi-section]').forEach(host=>{const block=String(host.dataset.materiSection||'').toUpperCase();const url=map[block];if(url){host.innerHTML=`<a class="materi-button" href="${url.replace(/"/g,'&quot;')}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI PPT">MATERI PPT</a>`;}else{host.innerHTML='';}});
     // Refresh halaman Materials kalau sedang aktif
     if(typeof window.renderMaterialsPage==='function' && document.getElementById('materialsPage')?.classList.contains('active')){window.renderMaterialsPage();}
   }catch(e){console.warn('Material links unavailable',e);}}

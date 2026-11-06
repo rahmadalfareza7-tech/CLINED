@@ -1342,3 +1342,57 @@ button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
   font-size: 12px !important;
   padding: 0 10px !important;
 }
+
+/* Pilihan aktif saat mode ujian — tidak menunjukkan benar/salah */
+.answer.picked,
+.answer.picked:hover,
+:root.dark .answer.picked,
+:root.dark .answer.picked:hover {
+  background: #dbeafe !important;
+  border: 2px solid #2563eb !important;
+  color: #1e3a8a !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.22), 0 4px 0 #2563eb !important;
+}
+.answer.picked .answer-letter {
+  background: #2563eb !important;
+  color: #fff !important;
+}
+:root.dark .answer.picked,
+:root.dark .answer.picked:hover {
+  background: #1e3a5f !important;
+  border-color: #60a5fa !important;
+  color: #eff6ff !important;
+}
+
+/* Bank Soal: mode baca mandiri */
+.library-review-detail {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid var(--border, #dbe2ea);
+  border-radius: 12px;
+}
+.library-review-detail > summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 4px 0;
+}
+.library-review-option {
+  margin-top: 9px;
+  padding: 11px;
+  border: 1px solid var(--border, #dbe2ea);
+  border-radius: 9px;
+}
+.library-review-option.is-key {
+  border: 2px solid #16a34a;
+  background: rgba(22, 163, 74, .08);
+}
+.library-review-option small {
+  display: block;
+  margin-top: 5px;
+  font-weight: 700;
+}
+.library-review-option p,
+.library-answer p {
+  margin: 7px 0 0;
+  line-height: 1.6;
+}

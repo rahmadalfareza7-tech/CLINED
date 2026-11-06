@@ -1,0 +1,15 @@
+/* UI TWEAKS — hapus panah dekoratif pada tombol/kartu. Dimuat paling akhir agar menimpa aturan lama.
+   Yang sengaja dipertahankan: tombol kembali (‹ ←), tombol tutup (×), dan caret buka-tutup menu (⌃). */
+.menu-item::after,.menu-item:after,
+.menu-grid .menu-item::after,.menu-grid .menu-item:after,
+.materi-button::after,a.materi-button::after,
+.latihan-materi-button::after{content:none!important;display:none!important}
+
+/* tombol "Mulai" di kartu unit: dulu bulat berisi panah, sekarang pil berisi teks */
+.duo-unit-action.ui-arrow,#duoUnitStart{width:auto!important;min-width:0!important;height:40px!important;padding:0 18px!important;
+  border-radius:14px!important;font-size:13px!important;font-weight:900!important;letter-spacing:.2px;white-space:nowrap}
+
+/* kartu yang dulunya punya panah di kanan: rapikan agar isi tetap penuh dan rata kiri */
+.home-materials-link{justify-content:flex-start!important}
+.feedback-card{justify-content:flex-start!important}
+.upi-block-arrow,.material-block-arrow,.home-materials-arrow{display:none!important}

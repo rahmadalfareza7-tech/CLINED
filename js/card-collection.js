@@ -136,24 +136,54 @@
 
   function showReveal(card) {
     const ov = document.createElement('div');
-    ov.className = 'card-reveal-overlay';
+    ov.className = 'pack-open-overlay';
     const dup = ownedCount(card.id) > 1;
-    ov.innerHTML = `<div class="card-result-wrap rarity-${card.rarity}" style="--rarity-color:${card.color}">
-      <div class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</div>
-      <img src="${card.img}" alt="${esc(card.name)}">
-      <h4>${esc(card.name)}</h4>
-      ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
-      ${dup ? '<small class="card-dup-note">Sudah punya kartu ini sebelumnya</small>' : ''}
-      <button type="button" class="ml-next" id="closeCardReveal">Lanjut</button>
+    ov.innerHTML = `<div class="pack-open-stage rarity-${card.rarity}" style="--rarity-color:${card.color}">
+      <button type="button" class="pack-tap" id="packTapZone" aria-label="Ketuk untuk membuka pack">
+        <img class="pack-open-img" src="assets/cards/fab-basket.png" alt="">
+        <span class="pack-tap-hint">Ketuk untuk membuka</span>
+      </button>
+      <div class="pack-flash"></div>
+      <div class="pack-card-flip">
+        <div class="pack-card-rays"></div>
+        <div class="pack-card-inner">
+          <div class="pack-card-back">
+            <span class="pack-card-back-mark">CLINED</span>
+            <span class="pack-card-back-sub">CARDS</span>
+          </div>
+          <div class="pack-card-front"><img src="${card.img}" alt="${esc(card.name)}"></div>
+        </div>
+      </div>
+      <div class="pack-result-info">
+        <div class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</div>
+        <h4>${esc(card.name)}</h4>
+        ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
+        ${dup ? '<small class="card-dup-note">Sudah punya kartu ini sebelumnya</small>' : ''}
+        <button type="button" class="ml-next" id="closeCardReveal">Lanjut</button>
+      </div>
     </div>`;
     document.body.appendChild(ov);
-    requestAnimationFrame(() => {
-      ov.classList.add('show');
-      if (card.rarity === 'epic' || card.rarity === 'legendary') setTimeout(() => burstConfetti(ov.firstElementChild, card.rarity), 150);
-    });
-    const close = () => { ov.classList.remove('show'); setTimeout(() => ov.remove(), 200); };
+    console.log("[GACHA DEBUG] showReveal appended", ov, "class=", ov.className, "z=", getComputedStyle(ov).zIndex, "opacity=", getComputedStyle(ov).opacity);
+    requestAnimationFrame(() => ov.classList.add('show'));
+
+    const stage = ov.querySelector('.pack-open-stage');
+    const open = () => {
+      if (stage.classList.contains('phase-burst')) return; // cegah tap dobel
+      stage.classList.add('phase-burst');
+      setTimeout(() => {
+        stage.classList.add('phase-flip');
+        setTimeout(() => {
+          stage.classList.add('phase-reveal');
+          if (card.rarity === 'epic' || card.rarity === 'legendary') burstConfetti(stage, card.rarity);
+        }, 620);
+      }, 480);
+    };
+    ov.querySelector('#packTapZone').addEventListener('click', open);
+    setTimeout(open, 2600); // auto-buka kalau user tidak tap, biar tidak nyangkut
+
+  const close = () => { ov.classList.remove('show'); setTimeout(() => ov.remove(), 200); };
     ov.querySelector('#closeCardReveal').addEventListener('click', close);
-    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    ov.addEventListener('click', e => { if (e.target === ov && stage.classList.contains('phase-reveal')) close(); });
   }
 
   function refreshShop() {
@@ -162,14 +192,16 @@
   }
   function bindShop() {
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
-    document.getElementById('buyCardPack')?.addEventListener('click', () => {
+    document.getElementById('buyCardPack')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const card = openPack();
       if (!card) return;
       hideShop();
       showReveal(card);
     });
   }
-  function blockScroll(e) { if (e.target.closest('.card-shop-sheet')) return; e.preventDefault(); }
+  function blockScroll(e) { e.preventDefault(); }
   function showShop() {
     let modal = document.getElementById('cardShopModal');
     if (!modal) {
@@ -181,11 +213,13 @@
       document.getElementById('csBackdrop').addEventListener('click', hideShop);
     }
     refreshShop();
+    document.getElementById('floatingDashboardNav')?.style.setProperty('display','none','important');
     requestAnimationFrame(() => modal.classList.add('open'));
     document.addEventListener('touchmove', blockScroll, { passive: false });
   }
   function hideShop() {
     document.getElementById('cardShopModal')?.classList.remove('open');
+    document.getElementById('floatingDashboardNav')?.style.removeProperty('display');
     document.removeEventListener('touchmove', blockScroll);
   }
 
@@ -208,7 +242,7 @@
       if (Math.abs(dx) > 6 || Math.abs(dy) > 6) moved = true;
       const nx = Math.min(Math.max(8, fabX + dx), window.innerWidth - fab.offsetWidth - 8);
       const ny = Math.min(Math.max(8, fabY + dy), window.innerHeight - fab.offsetHeight - 8);
-      fab.style.left = nx + 'px'; fab.style.top = ny + 'px'; fab.style.right = 'auto';
+      fab.style.left = nx + 'px'; fab.style.top = ny + 'px'; fab.style.right = 'auto'; fab.style.bottom = 'auto';
     };
     const end = () => {
       if (!dragging) return;
@@ -232,12 +266,20 @@
      kalau home-context aktif dan user sudah login (bukan auth-pending). */
   function syncHomeContext() {
     const b = document.body;
-    const visible = b.classList.contains('home-context') && !b.classList.contains('auth-pending');
+    const activeView = document.querySelector('.view.active');
+    const visible = activeView?.id === 'home' &&
+      !b.classList.contains('auth-pending') &&
+      !b.classList.contains('quiz-context');
     document.getElementById('cardShopFab')?.classList.toggle('is-visible', visible);
   }
+  window.addEventListener("clined:view-change", syncHomeContext);
   function watchHomeContext() {
     syncHomeContext();
-    new MutationObserver(syncHomeContext).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    new MutationObserver(syncHomeContext).observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+      subtree: true
+    });
   }
 
   function injectDiamondStatCell() {
@@ -265,4 +307,13 @@
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
 
   window.CLINED_CARD_SHOP = { show: showShop, hide: hideShop };
+})();
+
+/* v71: FAB memudar saat scroll */
+(function(){
+  let t=null;
+  window.addEventListener('scroll',function(){
+    const f=document.querySelector('.card-shop-fab'); if(!f) return;
+    f.classList.add('fab-idle'); clearTimeout(t); t=setTimeout(function(){f.classList.remove('fab-idle');},700);
+  },{passive:true});
 })();

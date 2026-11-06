@@ -1,0 +1,216 @@
+/* CLINED — Ergonomi Kelola Konten (admin) & Latihan Materi (v1). Dimuat paling akhir. */
+
+/* ───────── ADMIN: KELOLA KONTEN ───────── */
+#adminContentWorkspace .account-auth-top { align-items: flex-start; gap: 10px; }
+#adminContentWorkspace .account-auth-top h3 { font-size: 20px; }
+#adminContentWorkspace .account-auth-top p { font-size: 12.5px; }
+
+/* Tab: satu baris, geser horizontal, menempel di atas saat scroll */
+#adminContentWorkspace .admin-content-tabs {
+  display: flex !important; flex-wrap: nowrap !important; gap: 8px !important;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  position: sticky; top: 0; z-index: 25;
+  margin: 0 -14px 14px !important; padding: 8px 14px !important;
+  background: var(--card); border-bottom: 2px solid var(--line);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%);
+}
+#adminContentWorkspace .admin-content-tabs::-webkit-scrollbar { display: none; }
+#adminContentWorkspace .admin-content-tabs .admin-panel-tab {
+  flex: 0 0 auto !important; width: auto !important; scroll-snap-align: center;
+  min-height: 44px !important; padding: 0 16px !important; border-radius: 99px !important;
+  font-size: 13px !important; white-space: nowrap;
+}
+
+/* Panel & form */
+#adminContentWorkspace .acm-panel { gap: 14px; }
+#adminContentWorkspace .admin-content-intro { padding: 10px 12px; border-radius: 14px; background: var(--surface, rgba(127,127,127,.08)); border: 2px solid var(--line); }
+#adminContentWorkspace .admin-content-intro b { font-size: 15px; }
+#adminContentWorkspace .admin-content-intro span { font-size: 12px; }
+#adminContentWorkspace .acm-field select,
+#adminContentWorkspace .acm-field input:not([type=file]),
+#adminContentWorkspace .acm-field textarea { font-size: 16px !important; min-height: 48px; }
+#adminContentWorkspace .acm-field textarea { min-height: 96px; }
+#adminContentWorkspace .acm-field > label { font-size: 13px !important; }
+
+/* File picker: tombol penuh lebar, nama file di bawah */
+#adminContentWorkspace .admin-file-picker { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 10px; border: 2px dashed var(--line); border-radius: 16px; background: var(--surface, rgba(127,127,127,.06)); }
+#adminContentWorkspace .admin-file-btn { width: 100%; min-height: 48px; box-sizing: border-box; font-size: 14px !important; }
+#adminContentWorkspace .admin-file-selected { text-align: center; font-size: 12px; }
+
+/* Tombol aksi: selalu terlihat di atas nav melayang */
+#adminContentWorkspace .acm-submit {
+  position: sticky; bottom: calc(92px + env(safe-area-inset-bottom)); z-index: 20;
+  min-height: 52px; font-size: 15px !important; margin-top: 4px !important;
+  box-shadow: 0 -8px 14px -6px var(--card), 0 6px 0 rgba(0,0,0,.08);
+}
+#adminContentWorkspace .acm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#adminContentWorkspace .acm-actions .account-action { min-height: 48px; width: 100%; flex: none; }
+
+/* Daftar paket (bank UAB / latihan): kartu padat, tombol hapus jelas */
+#adminContentWorkspace .admin-uab-packages { gap: 8px; max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; padding-right: 2px; }
+#adminContentWorkspace .admin-uab-result-count { position: sticky; top: 0; z-index: 2; padding: 6px 2px; background: var(--card); }
+#adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 14px;
+}
+#adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) > div { min-width: 0; display: grid; gap: 2px; }
+#adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) b { font-size: 13.5px; line-height: 1.3; overflow-wrap: anywhere; }
+#adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) small { font-size: 11.5px; opacity: .7; }
+#adminContentWorkspace .admin-uab-packages .material-delete-action,
+#adminContentWorkspace .admin-delete-btn { flex: 0 0 auto; min-height: 40px !important; padding: 0 12px !important; font-size: 12.5px !important; width: auto !important; margin: 0 !important; }
+#adminContentWorkspace .admin-uab-package > summary { min-height: 56px; }
+#adminContentWorkspace .admin-uab-question-list { max-height: 46vh; overflow-y: auto; }
+#adminContentWorkspace .admin-uab-question-row { align-items: center; }
+
+/* Panel aktivitas & pengguna */
+#adminLoginsPanel .admin-panel-tabs { grid-template-columns: 1fr 1fr; gap: 8px; }
+#adminLoginsPanel .admin-panel-tab { min-height: 46px; font-size: 13.5px; }
+#adminLoginsPanel [data-activity-list], #adminLoginsPanel [data-users-list] { max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; }
+
+/* ───────── LATIHAN MATERI ───────── */
+#materiLatihanBody { gap: 10px; }
+#materiLatihanPage .exam-page-header p { display: none; }
+
+/* Hero jadi strip ringkas */
+.ml-hero { padding: 9px 12px; border-radius: 16px; border-bottom-width: 4px; box-shadow: none; gap: 10px; }
+.ml-hero-icon { width: 34px; height: 34px; flex-basis: 34px; font-size: 18px; border-radius: 11px; }
+.ml-hero b { font-size: 14.5px; }
+.ml-hero small { font-size: 11.5px; margin-top: 1px; }
+
+/* Toolbar lengket: cari + filter status */
+.ml-toolbar { position: sticky; top: 0; z-index: 15; display: grid; gap: 8px; margin: 0 -4px; padding: 6px 4px 8px; background: linear-gradient(to bottom, var(--bg) 82%, transparent); }
+.ml-toolbar .ml-search-input { padding: 11px 38px 11px 38px; font-size: 16px; min-height: 46px; border-radius: 14px; border-bottom-width: 3px; }
+.ml-lf { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 6px; flex-wrap: nowrap; }
+.ml-lf .ml-chip { min-height: 40px; padding: 0 6px; font-size: 12.5px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; }
+.ml-lf .ml-chip i { font-style: normal; font-size: 11px; opacity: .75; }
+.ml-search-info { margin: 0 2px; }
+
+/* Baris materi: padat (±58px), satu tampilan satu mata */
+.ml-list { gap: 8px; }
+.ml-row { gap: 2px; }
+.ml-item { min-height: 58px; padding: 9px 12px; gap: 10px; border-radius: 16px; }
+.ml-item-num { width: 32px; height: 32px; flex-basis: 32px; border-radius: 11px; font-size: 14px; }
+.ml-item-main { gap: 1px; }
+.ml-item-main b { font-size: 14px; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ml-item-main small { font-size: 11.5px; }
+.ml-item-cta { font-size: 11.5px; padding: 6px 10px; border-radius: 99px; background: rgba(28,176,246,.12); }
+.ml-item.mastered .ml-item-cta { background: rgba(88,204,2,.16); }
+.ml-item-bar { height: 5px; margin-top: 4px; }
+.ml-row-links { margin: -2px 0 2px; gap: 4px; }
+.ml-restart { min-height: 32px; font-size: 11.5px; }
+.ml-flagrow { min-height: 54px; }
+.ml-more { width: 100%; min-height: 48px; font-size: 14px !important; margin: 2px 0 4px; }
+.ml-more[hidden] { display: none !important; }
+.ml-skeleton { height: 58px; border-radius: 16px; }
+
+/* Layar soal: tombol & opsi nyaman untuk jempol */
+.ml-opt { min-height: 52px; }
+.ml-dock-row > button { min-height: 52px; }
+
+:root.dark #adminContentWorkspace .admin-content-tabs, :root.dark #adminContentWorkspace .admin-uab-result-count { background: #1c1c1e; }
+
+/* Tombol Hapus di daftar admin: merah, jelas berbahaya */
+#adminContentWorkspace .admin-uab-packages .material-delete-action,
+#adminContentWorkspace .admin-delete-btn { color: #e03a3a !important; border-color: rgba(255,75,75,.5) !important; background: rgba(255,75,75,.08) !important; }
+:root.dark #adminContentWorkspace .admin-uab-packages .material-delete-action,
+:root.dark #adminContentWorkspace .admin-delete-btn { color: #ff7a70 !important; background: rgba(255,69,58,.14) !important; }
+
+/* ───── v2: daftar paket admin — baris tidak boleh gepeng, tinggi mengikuti teks ───── */
+html body #adminContentWorkspace .admin-uab-packages {
+  display: flex !important; flex-direction: column !important; gap: 8px !important;
+  max-height: min(58vh, 560px) !important; overflow-y: auto !important; overflow-x: hidden !important;
+  overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  padding: 2px 4px 2px 0 !important; scrollbar-width: thin;
+}
+html body #adminContentWorkspace .admin-uab-packages > * { flex: 0 0 auto !important; }
+
+/* Baris latihan: judul wrap penuh, tombol Hapus tetap rapi di kanan */
+html body #adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) {
+  display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between !important;
+  gap: 12px !important; height: auto !important; min-height: 56px !important; padding: 10px 12px !important;
+  overflow: visible !important; border-radius: 14px !important;
+}
+html body #adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) > div {
+  flex: 1 1 auto !important; min-width: 0 !important; display: block !important;
+}
+html body #adminContentWorkspace .admin-uab-packages .admin-uab-package b {
+  display: block !important; white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
+  font-size: 13.5px !important; line-height: 1.35 !important; overflow-wrap: anywhere; word-break: normal;
+}
+html body #adminContentWorkspace .admin-uab-packages .admin-uab-package small {
+  display: block !important; margin-top: 3px !important; font-size: 11.5px !important; line-height: 1.3 !important;
+  white-space: normal !important; opacity: .7;
+}
+html body #adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) > button,
+html body #adminContentWorkspace .admin-uab-packages .material-delete-action,
+html body #adminContentWorkspace .admin-delete-btn {
+  flex: 0 0 auto !important; width: 76px !important; min-width: 76px !important; height: 40px !important; min-height: 40px !important;
+  padding: 0 !important; margin: 0 !important; border-radius: 12px !important; display: inline-grid !important; place-items: center;
+  font-size: 12.5px !important; font-weight: 900 !important; line-height: 1 !important; white-space: nowrap;
+  border: 2px solid rgba(255,75,75,.5) !important; border-bottom-width: 4px !important; box-shadow: none !important;
+}
+/* Bank UAB (details): ringkasan wrap penuh, tombol hapus bank tidak mengecil */
+html body #adminContentWorkspace .admin-uab-package > summary { height: auto !important; min-height: 56px !important; align-items: center !important; }
+html body #adminContentWorkspace .admin-uab-package > summary > span { flex: 1 1 auto !important; min-width: 0 !important; }
+html body #adminContentWorkspace .admin-uab-package > summary .admin-delete-btn { width: auto !important; min-width: 96px !important; padding: 0 12px !important; }
+html body #adminContentWorkspace .admin-uab-package .admin-uab-question-row b { white-space: normal !important; }
+
+/* Layar lebar (desktop/tablet): kartu lebih lega */
+@media (min-width: 640px) {
+  html body #adminContentWorkspace .admin-uab-packages { max-height: min(62vh, 620px) !important; }
+  html body #adminContentWorkspace .admin-uab-packages > .admin-uab-package:not(details) { padding: 12px 16px !important; }
+  html body #adminContentWorkspace .admin-uab-packages .admin-uab-package b { font-size: 14.5px !important; }
+}
+
+/* v3: latihan yang sudah selesai = hijau jelas */
+.ml-item.mastered { background: rgba(88,204,2,.16) !important; border-color: #58cc02 !important; border-bottom-color: #46a302 !important; }
+.ml-item.mastered .ml-item-num { background: #58cc02 !important; border-color: #46a302 !important; color: #fff !important; }
+.ml-item.mastered .ml-item-main b { color: #2f7a00; }
+.ml-item.mastered .ml-item-main small { color: #3d8f00; font-weight: 800; }
+.ml-item.mastered .ml-item-cta { background: #58cc02; color: #fff; }
+:root.dark .ml-item.mastered { background: rgba(88,204,2,.18) !important; }
+:root.dark .ml-item.mastered .ml-item-main b { color: #a8f060; }
+:root.dark .ml-item.mastered .ml-item-main small { color: #86d83c; }
+
+/* ───── Laporan Soal (admin) ───── */
+.rp-filter { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; }
+.rp-filter .ml-chip { min-height: 40px; padding: 0 4px; font-size: 12px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.rp-card { display: block !important; padding: 12px !important; }
+.rp-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.rp-snippet { margin: 6px 0; font-size: 13.5px; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+.rp-cats { display: flex; flex-wrap: wrap; gap: 6px; }
+.rp-badge { font-size: 11px; font-weight: 900; padding: 3px 9px; border-radius: 99px; background: rgba(255,75,75,.14); color: #d33a3a; }
+.rp-notes { margin: 8px 0 0; padding-left: 18px; font-size: 12.5px; opacity: .85; }
+.rp-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-top: 10px; }
+.rp-actions button { min-height: 44px; font-size: 13px; font-weight: 900; }
+.rp-editor { margin-top: 12px; padding-top: 12px; border-top: 2px dashed var(--line); display: grid; gap: 8px; }
+.rp-editor label { font-size: 12.5px; font-weight: 900; }
+.rp-editor textarea, .rp-editor input[type=text] { width: 100%; box-sizing: border-box; font-size: 16px; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); color: inherit; font-family: inherit; }
+.rp-opt { display: flex; gap: 8px; align-items: center; }
+.rp-opt input[type=text] { flex: 1; min-width: 0; }
+.rp-key { position: relative; flex: 0 0 44px; height: 44px; margin: 0; cursor: pointer; }
+.rp-key input { position: absolute; inset: 0; opacity: 0; margin: 0; width: 100%; height: 100%; cursor: pointer; }
+.rp-key span { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; font-weight: 950; border: 2px solid var(--line); border-bottom-width: 4px; background: var(--card); }
+.rp-key input:checked + span { background: #58cc02; border-color: #3a9c00; color: #fff; }
+.rp-editor .acm-actions { grid-template-columns: 1fr 1.6fr; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card:not(details) { display: block !important; flex-direction: initial !important; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card:not(details) > div { display: flex !important; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card .rp-snippet { display: block !important; white-space: normal !important; font-size: 13.5px !important; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card .rp-actions { display: grid !important; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card .rp-editor { display: grid !important; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card .rp-opt { display: flex !important; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card .rp-cats { display: flex !important; flex-wrap: wrap; }
+html body #adminContentWorkspace .admin-uab-packages > .rp-card .rp-top b { font-size: 13px !important; display: inline !important; }
+.rp-filter { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.rp-filter .ml-chip { min-height: 44px; font-size: 13px; }
+.rp-editor button { min-width: 0; }
+
+.crowd-stat { display: inline-block; margin: 0 0 10px; padding: 6px 12px; border-radius: 99px; font-size: 12.5px; font-weight: 900; background: rgba(28,176,246,.14); color: #0b7cb4; }
+:root.dark .crowd-stat { color: #7cd3ff; }
+
+/* ───── Flashcard UPI: jawaban di tengah kartu ───── */
+.upi-face-back { align-items: center; text-align: center; min-height: 300px; }
+.upi-face-back .upi-answer-label { margin-top: auto; margin-bottom: 10px; }
+.upi-face-back b[data-upi-answer] { font-size: clamp(22px, 5.6vw, 30px); line-height: 1.25; letter-spacing: -.3px; overflow-wrap: anywhere; }
+.upi-face-back p[data-upi-explanation] { max-width: 34ch; margin: 12px auto 0; font-size: 13px; line-height: 1.55; }
+.upi-face-back .upi-flip-cta { width: 100%; margin-top: auto; padding-top: 11px; }

@@ -1,0 +1,60 @@
+/* CLINED — Tata letak desktop PC (≥1100px). Semua aturan di dalam media query ini; tampilan HP/tablet tidak berubah. */
+@media (min-width: 1100px) and (hover: hover) and (pointer: fine) {
+  :root { --clined-content: 100%; }
+  html body main.app { width: min(100%, 1180px) !important; max-width: 1180px !important; padding-left: 32px !important; padding-right: 32px !important; }
+  html body .header { padding-top: 14px !important; }
+
+  /* BERANDA: dua kolom (alur kolom mengikuti urutan), peta belajar & statistik atas selebar penuh */
+  html body #home.active { display: block; column-count: 2; column-gap: 20px; }
+  html body #home > * { break-inside: avoid; }
+  html body #home > .duo-learning-map, html body #home > .duo-reward-strip { column-span: all; }
+  html body #home .duo-learning-map { padding: 14px 24px 12px !important; }
+  html body #home .duo-path { max-width: 640px; margin-inline: auto; }
+  html body #home #menuSectionContent.menu-grid, html body #home #menuSectionContent { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  html body #home .exam-launch-card { min-height: 96px !important; }
+  html body #home .duo-reward-item { min-height: 76px; }
+
+  /* Halaman satu kolom: lebar baca nyaman, di tengah (halaman lebar dikecualikan di bawah) */
+  html body .view { width: min(100%, 860px) !important; }
+  html body #quiz, html body #review { width: min(100%, 820px) !important; }
+  html body #result { width: min(100%, 700px) !important; }
+  html body #home, html body #clinicalDashboard, html body #wrong, html body #smartReview, html body #glossaryPage, html body #studyPlusPage,
+  html body #socialPage, html body #hubPage, html body #materiLatihanPage, html body #analytics, html body #userBankPage, html body #library { width: 100% !important; }
+  html body #duelPage { width: min(100%, 760px) !important; }
+
+  /* Clinical Dashboard */
+  html body #clinicalDashboard .cd-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+  html body #clinicalDashboard .cd-kpis { grid-template-columns: 1.4fr repeat(3, 1fr); }
+  html body #clinicalDashboard .cd-kpi.big { grid-column: auto; }
+  html body #clinicalDashboard .cd-bars { height: 140px; }
+
+  /* Sering Salah / Smart Review: daftar dua kolom, tombol latih tidak melebar */
+  html body #wrong .ins-list, html body #smartReview .ins-list { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  html body #wrong .ins-group, html body #wrong .ins-more { grid-column: 1 / -1; }
+  html body #smartReview .ins-note { grid-column: 1 / -1; }
+  html body .ins-dock { max-width: 460px; margin-inline: auto; }
+  html body .ins-kpis { max-width: 560px; }
+
+  /* Latihan Materi & Kelola Konten */
+  html body #materiLatihanBody .ml-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  html body #adminContentWorkspace .admin-uab-packages { max-height: 62vh; }
+
+  /* Teman & Duel */
+  html body #socialBody { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 16px; }
+  html body #socialBody > .soc-lives, html body #socialBody > .soc-invite { grid-column: 1 / -1; }
+  html body #duelBody { max-width: 760px; margin-inline: auto; width: 100%; }
+
+  /* Rencana Belajar */
+  html body #studyPlusBody { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 16px; }
+  html body #studyPlusBody .sp-hero { grid-column: 1 / -1; }
+
+  /* Navigasi bawah melayang: lebih lebar, tetap di tengah */
+  html body .floating-dashboard-nav { width: min(560px, calc(100vw - 48px)) !important; }
+  html body .ins-dock, html body .ml-dock { bottom: 96px; }
+  html body .card-shop-fab { right: 28px; }
+
+  /* Profil: avatar tidak kebesaran, formulir tidak melebar */
+  html body #accountAvatar { width: 120px !important; height: 120px !important; font-size: 52px !important; }
+  html body #accountPage { width: min(100%, 720px) !important; }
+  html body .account-change-avatar { margin-top: 2px; }
+}

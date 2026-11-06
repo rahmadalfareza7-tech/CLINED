@@ -267,7 +267,6 @@ function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern)}ca
       const xpEl=document.getElementById("xpTotal");
       const streakEl=document.getElementById("duoStreakValue");
       const dailyEl=document.getElementById("dailyStreakCount");
-      const hudXp=document.getElementById("duoHudXp");
       const hudStreak=document.getElementById("duoHudStreak");
       const hudGoal=document.getElementById("duoHudGoal");
       if(hudXp && xpEl) hudXp.textContent=(xpEl.textContent||"0").replace(/\\s*XP/i,"");
@@ -2031,7 +2030,7 @@ renderDailyStreak();
 renderDailyMission();
 renderHomeClinicalDashboard();
 
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+if("serviceWorker" in navigator){let __swHadController=!!navigator.serviceWorker.controller,__swRefreshing=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!__swHadController||__swRefreshing)return;__swRefreshing=true;window.location.reload();});window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}
 
 syncNavVisibility();
 
@@ -2272,6 +2271,7 @@ if($('achievementBtn'))$('achievementBtn').onclick=()=>{renderAchievements();sho
 if($('backFromAchievements'))$('backFromAchievements').onclick=()=>show('home');
 
 initSPAHistory();initTheme();renderBanks();renderCounts();renderModes();updateTimerUI();renderResume();renderXP();
+show((location.hash || "#home").slice(1), { fromHistory: true, instant: true, allowGuest: true });
 // Load the static bank manifest immediately so block pages get an enabled
 // "Mulai Kuis" button even before authentication state finishes resolving.
 loadServerBanks().catch(()=>{});

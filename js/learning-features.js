@@ -37,28 +37,34 @@ const BLOCK_LABELS = {
 };
 
 function computeBlockScores() {
-  /* Hitung akurasi per blok dari riwayat kuis */
+  /* Akurasi per blok dari riwayat kuis, dibobot jumlah soal (bukan rata-rata persen antar sesi). */
   try {
     const hist = JSON.parse(localStorage.getItem('gaster_v8_history') || '[]');
     const blocks = {};
-
     hist.forEach(h => {
-      if (!h.bank) return;
-      /* Cari block dari BANKS (global) atau STATIC_BANK_META */
-      let block = 'OTHER';
-      if (typeof BANKS !== 'undefined' && BANKS[h.bank]) {
-        block = BANKS[h.bank].block || 'OTHER';
-      } else if (typeof STATIC_BANK_META !== 'undefined') {
-        const meta = STATIC_BANK_META.find(m => m.id === h.bank);
-        if (meta) block = (meta.block || 'OTHER').replace(/^BLOK\s+/i, '');
-      }
-      if (!blocks[block]) blocks[block] = { sum: 0, n: 0 };
-      blocks[block].sum += Number(h.pct || 0);
+      let block = '';
+      if (h.block) block = String(h.block).replace(/^BLOK\s+/i, '').toUpperCase();          // Latihan Materi
+      else if (h.bank && typeof window.blockForBank === 'function') block = window.blockForBank(h.bank);
+      else if (h.bank && typeof BANKS !== 'undefined' && BANKS[h.bank]) block = String(BANKS[h.bank].block || '').replace(/^BLOK\s+/i, '').toUpperCase();
+      if (block === 'MUSKULO') block = 'MUSKULOSKELETAL';
+      if (!block || block === 'OTHER') return;
+      const total = Number(h.validTotal ?? h.total) || 0;
+      if (!total) return;
+      const correct = Number.isFinite(Number(h.correct)) && h.correct != null ? Number(h.correct) : Math.round(total * Number(h.pct || 0) / 100);
+      if (!blocks[block]) blocks[block] = { correct: 0, total: 0, n: 0, last: 0 };
+      blocks[block].correct += Math.min(correct, total);
+      blocks[block].total += total;
       blocks[block].n++;
+      blocks[block].last = Math.max(blocks[block].last, Date.parse(h.date || h.timestamp || '') || 0);
     });
-
     return blocks;
   } catch { return {}; }
+}
+
+function blockDisplay(key) {
+  if (BLOCK_LABELS[key]) return BLOCK_LABELS[key];
+  const t = String(key || '').toLowerCase().replace(/_/g, ' ');
+  return t.length <= 4 ? t.toUpperCase() : t.replace(/\b\w/g, c => c.toUpperCase());
 }
 
 /* Tingkat penguasaan per ambang akurasi. Dipakai untuk warna bar + label singkat. */
@@ -68,45 +74,80 @@ function scoreLevel(pct) {
   return { tier: 'ok', label: 'Kuat', color: '#58cc02' };
 }
 
-/* Render Weakness Radar sebagai daftar bar horizontal (HTML/CSS, bukan canvas).
-   Dipakai di halaman Analitik Belajar maupun Clinical Dashboard lewat targetId berbeda. */
+function blockPageId(key) {
+  const sec = [...document.querySelectorAll('section.view[data-block-key]')]
+    .find(el => String(el.dataset.blockKey).trim().toUpperCase() === String(key).toUpperCase());
+  return sec ? sec.id : '';
+}
+
+/* Weakness Radar: ringkasan + peringkat blok (paling lemah dulu) + tombol latihan.
+   Dipakai di Analitik Belajar dan Clinical Dashboard lewat targetId berbeda. */
 function renderWeaknessRadar(targetId = 'weaknessRadar') {
   const target = document.getElementById(targetId);
   if (!target) return;
 
-  const blockScores = computeBlockScores();
-  const entries = Object.entries(blockScores)
-    .sort((a, b) => (a[1].sum / a[1].n) - (b[1].sum / b[1].n)) // paling lemah dulu
-    .slice(0, 8);
-
-  if (!entries.length) {
-    target.innerHTML = `<div class="weakness-radar-empty">📊 Belum ada data.<br>Kerjakan beberapa kuis dulu untuk melihat peta kelemahanmu di sini.</div>`;
+  const scores = computeBlockScores();
+  const all = Object.entries(scores).map(([key, v]) => ({ key, ...v, pct: Math.round(v.correct / v.total * 100) }));
+  if (!all.length) {
+    target.innerHTML = `<div class="weakness-radar-empty"><span class="wr-empty-ico">🕸️</span><b>Belum ada data</b><small>Kerjakan beberapa kuis dulu, nanti peta kelemahanmu muncul di sini.</small></div>`;
     return;
   }
+  all.sort((a, b) => a.pct - b.pct || b.total - a.total);
+  const list = all.slice(0, 8);
+  const weakN = all.filter(x => x.pct < 60).length;
+  const midN = all.filter(x => x.pct >= 60 && x.pct < 80).length;
+  const okN = all.length - weakN - midN;
+  const tot = all.reduce((n, x) => n + x.total, 0);
+  const avg = Math.round(all.reduce((n, x) => n + x.correct, 0) / tot * 100);
+  const focus = all[0], fl = scoreLevel(focus.pct);
 
-  const rows = entries.map(([key, v]) => {
-    const label = BLOCK_LABELS[key] || key;
-    const pct = Math.round(v.sum / v.n);
-    const lv = scoreLevel(pct);
+  const rows = list.map((v, i) => {
+    const lv = scoreLevel(v.pct), pid = blockPageId(v.key);
     return `<div class="wr-row wr-${lv.tier}">
-      <div class="wr-row-top">
-        <span class="wr-label">${esc(label)}</span>
-        <span class="wr-pct">${pct}%</span>
+      <span class="wr-rank">${i + 1}</span>
+      <div class="wr-main">
+        <div class="wr-row-top">
+          <span class="wr-label">${esc(blockDisplay(v.key))}</span>
+          <span class="wr-pct">${v.pct}%</span>
+        </div>
+        <div class="wr-track" aria-hidden="true">
+          <div class="wr-fill" style="width:${Math.max(4, Math.min(100, v.pct))}%"></div>
+          <div class="wr-target" style="left:60%"></div>
+        </div>
+        <div class="wr-foot">
+          <small class="wr-meta"><span class="wr-badge">${lv.label}</span>${v.total} soal • ${v.n} sesi</small>
+          ${pid && lv.tier !== 'ok' ? `<button type="button" class="wr-go" data-wr-block="${esc(pid)}">Latihan</button>` : ''}
+        </div>
       </div>
-      <div class="wr-track">
-        <div class="wr-fill" style="width:${Math.max(4, Math.min(100, pct))}%"></div>
-        <div class="wr-target" style="left:60%"></div>
-      </div>
-      <small class="wr-meta">${v.n} percobaan • ${lv.label}</small>
     </div>`;
   }).join('');
 
-  target.innerHTML = `<div class="weakness-radar-list">${rows}</div>
+  target.innerHTML = `
+    <div class="wr-summary">
+      <div class="wr-avg"><b>${avg}%</b><small>rata-rata</small></div>
+      <div class="wr-chips">
+        <span class="wr-chip wr-weak"><i></i>${weakN} lemah</span>
+        <span class="wr-chip wr-mid"><i></i>${midN} cukup</span>
+        <span class="wr-chip wr-ok"><i></i>${okN} kuat</span>
+      </div>
+    </div>
+    <div class="wr-focus wr-${fl.tier}">
+      <span class="wr-focus-ico">${focus.pct < 60 ? '🎯' : focus.pct < 80 ? '📈' : '🏆'}</span>
+      <span>${focus.pct < 80 ? 'Fokus berikutnya: ' : 'Semua blok sudah kuat. Terendah: '}<b>${esc(blockDisplay(focus.key))}</b> (${focus.pct}%)</span>
+    </div>
+    <div class="weakness-radar-list">${rows}</div>
     <div class="wr-legend">
-      <span><i class="wr-dot wr-weak"></i>Di bawah 60% — perlu diperkuat</span>
-      <span><i class="wr-dot wr-ok"></i>80% ke atas — sudah kuat</span>
+      <span><i class="wr-dot wr-weak"></i>&lt; 60% perlu diperkuat</span>
+      <span><i class="wr-dot wr-mid"></i>60–79% cukup</span>
+      <span><i class="wr-dot wr-ok"></i>≥ 80% kuat</span>
+      <span class="wr-legend-line"><i class="wr-tick"></i>target 60%</span>
     </div>`;
 }
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-wr-block]');
+  if (btn && typeof window.show === 'function') window.show(btn.dataset.wrBlock);
+});
 
 /* esc() lokal (fallback bila esc global app.js belum ter-load duluan). */
 function esc(s) {
@@ -217,7 +258,7 @@ function renderSmartReviewByBlock() {
         <div class="sr-block-right">
           <div class="sr-due-badge">${due}</div>
           <button class="sr-start-btn" data-block="${block}" ${!due ? 'disabled' : ''}>
-            ${due ? 'Review →' : '✓ Lunas'}
+            ${due ? 'Review' : '✓ Lunas'}
           </button>
         </div>
       </div>`;
@@ -438,5 +479,5 @@ if (document.readyState === 'loading') {
 }
 
 /* Export untuk debugging */
-window.clinedLearning = { renderWeaknessRadar, renderSmartReviewByBlock, sm2Update, getSM2Data };
+window.clinedLearning = { renderWeaknessRadar, renderSmartReviewByBlock, sm2Update, getSM2Data, computeBlockScores, blockDisplay, scoreLevel, blockPageId, getSM2DueIds };
 })();

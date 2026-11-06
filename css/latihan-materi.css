@@ -1,22 +1,175 @@
-/* LATIHAN MATERI */
-.latihan-materi-section{margin-top:10px}
-.latihan-materi-button{background:#1cb0f6!important;border-color:#1899d6!important;box-shadow:0 4px 0 #1480b5!important;cursor:pointer;font-family:inherit}
-#materiLatihanBody{display:flex;flex-direction:column;gap:10px;padding-bottom:110px}
-.ml-muted{color:var(--muted);text-align:center;padding:24px 0;font-weight:800}
-.ml-item{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:14px 16px;border-radius:18px;border:2px solid var(--line);background:var(--card);color:var(--text);box-shadow:0 4px 0 var(--line);cursor:pointer;font-family:inherit}
-.ml-item span{display:flex;flex-direction:column;gap:2px}.ml-item b{font-size:16px;font-weight:900}.ml-item small{color:var(--muted);font-weight:800}.ml-item i{font-style:normal;color:#1cb0f6;font-weight:900;white-space:nowrap}
-.ml-empty{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center;padding:26px 16px;border:2px dashed var(--line);border-radius:18px;color:var(--muted)}.ml-empty b{color:var(--text)}
-.ml-progress{height:10px;background:var(--surface,#eee);border:2px solid var(--line);border-radius:99px;overflow:hidden}.ml-progress i{display:block;height:100%;background:#58cc02;border-radius:99px;transition:width .25s ease}
-.ml-count{font-size:12px;font-weight:900;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-.ml-question{font-size:17px;font-weight:850;line-height:1.5;color:var(--text);white-space:pre-line}
-.ml-options{display:flex;flex-direction:column;gap:9px}
-.ml-opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:13px 14px;border-radius:15px;border:2px solid var(--line);background:var(--card);color:var(--text);font-size:15px;line-height:1.45;cursor:pointer;font-family:inherit;box-shadow:0 3px 0 var(--line)}
-.ml-opt b{min-width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--surface,#eee);font-size:13px}
-.ml-opt:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-.ml-opt.ok{border-color:#58cc02;background:rgba(88,204,2,.14)}.ml-opt.ok b{background:#58cc02;color:#fff}
-.ml-opt.bad{border-color:#ff4b4b;background:rgba(255,75,75,.12)}.ml-opt.bad b{background:#ff4b4b;color:#fff}
+/* LATIHAN MATERI v2 — selaras dengan kuis utama & halaman UAB (token: --card --line --surface --text --muted --brand).
+   Mode gelap otomatis lewat token; warna benar/salah punya varian gelap eksplisit. */
+
+/* ── Tombol di halaman blok ── */
+.materi-button.latihan-materi-button{
+  background:#1cb0f6!important;border:2px solid #1899d6!important;border-bottom:5px solid #1480b5!important;
+  box-shadow:none!important;cursor:pointer;font-family:inherit;gap:8px
+}
+.materi-button.latihan-materi-button:active{transform:translateY(3px)!important;border-bottom-width:2px!important}
+.latihan-materi-section{margin-top:10px!important}
+.ml-btn-icon{font-size:18px;line-height:1}
+
+/* ── Halaman: header & wadah ── */
+#materiLatihanBody{display:flex;flex-direction:column;gap:12px;padding:0 2px calc(110px + env(safe-area-inset-bottom))}
+#materiLatihanPage.ml-running #materiLatihanBody{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+#materiLatihanPage.ml-running .exam-page-header p{display:none}
+#materiLatihanPage .exam-page-header h2{overflow-wrap:anywhere}
+
+/* ── Daftar materi ── */
+.ml-hero{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:22px;
+  background:linear-gradient(135deg,#1cb0f6,#16a4e8);color:#fff;border:2px solid #0c94ce;border-bottom-width:5px;box-shadow:0 5px 0 rgba(8,103,142,.18)}
+.ml-hero-icon{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;font-size:24px;border-radius:15px;background:rgba(255,255,255,.22)}
+.ml-hero b{display:block;font-size:16px;font-weight:900}
+.ml-hero small{display:block;margin-top:2px;font-size:12px;font-weight:700;opacity:.92;line-height:1.4}
+.ml-note{padding:9px 12px;border-radius:14px;border:2px dashed var(--line);color:var(--muted);font-size:12px;font-weight:800}
+.ml-list{display:flex;flex-direction:column;gap:10px}
+.ml-row{display:flex;flex-direction:column;gap:6px}
+.ml-item{display:flex;align-items:center;gap:12px;width:100%;min-height:76px;text-align:left;padding:12px 14px;
+  border-radius:20px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);
+  cursor:pointer;font-family:inherit;transition:transform .09s ease,border-color .15s ease,background-color .15s ease}
+.ml-item:active:not(:disabled){transform:translateY(3px);border-bottom-width:2px}
+.ml-item:disabled{opacity:.55;cursor:not-allowed}
+.ml-item-num{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:14px;
+  background:var(--surface);color:var(--muted);font-weight:900;font-size:16px;border:2px solid var(--line)}
+.ml-item-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ml-item-main b{font-size:15px;font-weight:900;line-height:1.3;overflow-wrap:anywhere;white-space:normal}
+.ml-item-main small{color:var(--muted);font-weight:800;font-size:12px}
+.ml-item-cta{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;color:#1899d6;font-weight:900;font-size:12px;white-space:nowrap}
+.ml-item-bar{display:block;height:6px;margin-top:3px;border-radius:99px;background:var(--surface);overflow:hidden}
+.ml-item-bar i{display:block;height:100%;border-radius:99px;background:#1cb0f6}
+.ml-item.in-progress{border-color:#1cb0f6;border-bottom-color:#1899d6}
+.ml-item.in-progress .ml-item-num{background:rgba(28,176,246,.14);border-color:#1cb0f6;color:#1899d6}
+.ml-item.mastered{border-color:var(--brand,#58cc02);border-bottom-color:var(--brand-dark,#46a900);background:var(--brand-soft,rgba(88,204,2,.10))}
+.ml-item.mastered .ml-item-num{background:var(--brand,#58cc02);border-color:var(--brand-dark,#46a900);color:#fff}
+.ml-item.mastered .ml-item-cta{color:var(--brand-dark,#46a900)}
+.ml-restart{align-self:flex-end;border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:800;padding:2px 8px;cursor:pointer;text-decoration:underline}
+
+.ml-empty{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;padding:28px 16px;
+  border:2px dashed var(--line);border-radius:22px;background:var(--card);color:var(--muted)}
+.ml-empty b{color:var(--text)}
+.ml-empty-icon{font-size:30px}
+.ml-skeleton{height:76px;border-radius:20px;background:linear-gradient(90deg,var(--surface),var(--card),var(--surface));background-size:200% 100%;
+  border:2px solid var(--line);animation:mlShimmer 1.2s linear infinite}
+@keyframes mlShimmer{to{background-position:-200% 0}}
+
+/* ── Halaman soal ── */
+.ml-card{margin-bottom:0!important}
+.ml-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ml-pill{font-size:11px;font-weight:900;color:#1899d6;background:rgba(28,176,246,.14);padding:6px 10px;border-radius:9px}
+.ml-live{display:flex;gap:10px;align-items:center;font-size:12px;font-weight:900;color:var(--muted)}
+.ml-fire{color:#ff9600}
+.ml-progress{height:10px;margin:12px 0;border-radius:99px;overflow:hidden;background:var(--surface);border:2px solid var(--line)}
+.ml-progress i{display:block;height:100%;border-radius:99px;background:var(--brand,#58cc02);transition:width .25s ease}
+.ml-question{font-size:19px;font-weight:850;line-height:1.5;letter-spacing:-.2px;margin:4px 0 14px;color:var(--text);white-space:pre-line;overflow-wrap:anywhere}
+.ml-options{display:grid;gap:9px}
+.ml-opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:13px 14px;border-radius:15px;
+  border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);
+  font-family:inherit;font-size:15px;font-weight:800;line-height:1.45;cursor:pointer;
+  transition:transform .09s ease,border-color .15s ease,background-color .15s ease}
+.ml-opt:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
 .ml-opt:disabled{cursor:default;opacity:1}
-.ml-explain{padding:14px;border-radius:15px;border:2px solid var(--line);background:var(--surface,#f4f4f4);color:var(--text);line-height:1.55;font-size:14px}.ml-explain p{margin:8px 0 0}
-.ml-next{width:100%;min-height:52px;border-radius:16px;border:2px solid #46a900;background:#58cc02;color:#fff;font-size:15px;font-weight:950;letter-spacing:.03em;box-shadow:0 4px 0 #3c9300;cursor:pointer;font-family:inherit}
-.ml-next.ml-alt{background:var(--card);color:var(--text);border-color:var(--line);box-shadow:0 4px 0 var(--line)}
-.ml-result{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 10px;text-align:center;color:var(--text)}.ml-score{font-size:56px;font-weight:950;color:#58cc02;line-height:1}.ml-result small{color:var(--muted);font-weight:800}
+.ml-letter{width:30px;height:30px;flex:0 0 30px;border-radius:50%;display:grid;place-items:center;background:var(--surface);
+  color:var(--text);font-size:12px;font-weight:900;transition:background-color .18s}
+.ml-opt-text{flex:1;min-width:0;padding-top:4px;overflow-wrap:anywhere}
+.ml-opt.ok{border-color:#58cc02;border-bottom-color:#46a900;background:rgba(88,204,2,.14)}
+.ml-opt.ok .ml-letter{background:#34c759;color:#fff}
+.ml-opt.bad{border-color:#ff4b4b;border-bottom-color:#e03a3a;background:rgba(255,75,75,.12)}
+.ml-opt.bad .ml-letter{background:#ff3b30;color:#fff}
+:root.dark .ml-opt.ok{background:#263c27;border-color:#30d158}
+:root.dark .ml-opt.bad{background:#42282b;border-color:#ff453a}
+:root.dark .ml-opt.ok .ml-letter{background:#30d158}
+:root.dark .ml-opt.bad .ml-letter{background:#ff453a}
+
+/* pembahasan: memakai kelas .explain / .option-review milik kuis utama */
+.ml-explain{display:block!important;margin-top:16px}
+.ml-explain .explain-title{margin-bottom:8px}
+.ml-explain .main-explain,.ml-explain .clinical-note{margin:8px 0;font-size:13px;line-height:1.55}
+.ml-review .option-review-text{white-space:pre-line;overflow-wrap:anywhere}
+.ml-review.is-picked.is-wrong{border-color:rgba(255,75,75,.55)}
+
+/* tombol lanjut menempel di bawah layar (fixed: sticky tidak jalan karena body/main memakai overflow) */
+.ml-dock{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:22px 16px calc(12px + env(safe-area-inset-bottom));
+  background:linear-gradient(to bottom,transparent,var(--bg) 42%);pointer-events:none}
+.ml-dock .primary{display:flex!important;box-shadow:0 8px 22px rgba(0,0,0,.18)!important}
+
+/* ── Hasil ── */
+.ml-result{text-align:center;padding:22px 16px!important;margin-bottom:0!important}
+.ml-result-emoji{font-size:44px;line-height:1}
+.ml-score{font-size:58px;font-weight:900;letter-spacing:-3px;color:var(--brand,#58cc02);line-height:1.1;margin:2px 0}
+.ml-result p{margin:0 0 10px}
+.ml-record{margin-top:10px;font-weight:900;font-size:13px;color:#ff9600}
+.ml-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:8px;margin-top:16px}
+.ml-stats div{padding:11px 6px;border-radius:16px;border:2px solid var(--line);border-bottom-width:4px;background:var(--surface)}
+.ml-stats b{display:block;font-size:20px;font-weight:900}
+.ml-stats span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:800}
+.ml-actions{display:flex;flex-direction:column;gap:10px}
+
+/* ── Kartu lanjutkan di beranda ── */
+.materi-latihan-resume-card{margin-top:16px}
+.materi-latihan-resume-card .section-title{margin-bottom:8px}
+.ml-resume-info{display:flex;flex-direction:column;gap:3px;line-height:1.4}
+.ml-resume-info small{color:var(--muted);font-weight:800}
+.materi-latihan-resume-card .ml-progress{margin:10px 0 12px}
+
+@media (max-width:380px){
+  .ml-item-cta{font-size:11px}
+  .ml-question{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){.ml-skeleton{animation:none}.ml-progress i{transition:none}}
+
+/* ── Tandai soal, laporkan, buka materi ── */
+.ml-flag{border:0;background:transparent;font:inherit;font-size:22px;line-height:1;color:var(--muted);cursor:pointer;padding:0 4px}
+.ml-flag.on{color:#ffb300}
+.ml-mini-btn{display:inline-flex;align-items:center;gap:6px;margin:4px 0 8px;padding:8px 12px;border-radius:12px;border:2px solid var(--line);border-bottom-width:3px;background:var(--card);color:#1899d6;font:inherit;font-size:12.5px;font-weight:900;cursor:pointer}
+.ml-report{display:block;margin:12px auto 0;border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:800;text-decoration:underline;cursor:pointer}
+.ml-flagrow{border-color:#ffb300;border-bottom-color:#e09e00;background:rgba(255,179,0,.10)}
+.ml-flagrow .ml-item-num{background:rgba(255,179,0,.2);border-color:#ffb300;font-size:18px}
+
+/* ── Navigasi antar soal, lewati, tinjau ── */
+.ml-nav{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.ml-nav::-webkit-scrollbar{display:none}
+.ml-dot{flex:0 0 auto;width:34px;height:34px;border-radius:11px;border:2px solid var(--line);border-bottom-width:3px;background:var(--card);color:var(--muted);font:inherit;font-size:12px;font-weight:900;cursor:pointer;display:grid;place-items:center}
+.ml-dot.ok{background:rgba(88,204,2,.18);border-color:#58cc02;color:#3f9c00}
+.ml-dot.bad{background:rgba(255,75,75,.14);border-color:#ff4b4b;color:#e03a3a}
+.ml-dot.cur{border-color:#1cb0f6;border-bottom-color:#1899d6;box-shadow:0 0 0 3px rgba(28,176,246,.22);color:#1899d6}
+:root.dark .ml-dot.ok{color:#7be03a}:root.dark .ml-dot.bad{color:#ff7a70}
+.ml-dock-row{display:flex;gap:10px;max-width:min(var(--content-max,760px),100%);margin:0 auto;pointer-events:auto}
+.ml-dock-row>button{flex:1;margin:0!important;pointer-events:auto}
+.ml-dock-row>.ml-prev{flex:0 0 36%}
+.ml-skip:disabled{opacity:.5}
+.ml-finish-early{align-self:center;border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:800;text-decoration:underline;cursor:pointer;padding:4px 8px}
+.ml-row-links{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.ml-chips{display:flex;gap:8px;flex-wrap:wrap}
+.ml-chip{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);color:var(--muted);font:inherit;font-size:12.5px;font-weight:900;padding:7px 13px;border-radius:99px;cursor:pointer}
+.ml-chip.on{border-color:#1cb0f6;border-bottom-color:#1899d6;background:rgba(28,176,246,.12);color:#1899d6}
+.ml-rv{margin-bottom:0!important}
+.ml-rv-q{font-size:16px!important;margin:8px 0 12px!important}
+.ml-rv-badge{font-size:11px;font-weight:900;padding:5px 10px;border-radius:9px;background:var(--surface);color:var(--muted)}
+.ml-rv-badge.ok{background:rgba(88,204,2,.16);color:#3f9c00}
+.ml-rv-badge.bad{background:rgba(255,75,75,.14);color:#e03a3a}
+:root.dark .ml-rv-badge.ok{color:#7be03a}:root.dark .ml-rv-badge.bad{color:#ff7a70}
+.ml-opt-static{cursor:default;font-size:14px;padding:10px 12px}
+.ml-opt-static:active{transform:none}
+.ml-tag{font-style:normal;font-size:10.5px;font-weight:900;margin-left:6px;padding:2px 7px;border-radius:99px;background:rgba(127,127,127,.18);color:var(--muted);white-space:nowrap}
+.ml-rv-detail{margin-top:10px}
+.ml-rv-detail>summary{cursor:pointer;font-weight:900;font-size:13px;color:#1899d6;padding:6px 0;list-style:none}
+.ml-rv-detail>summary::-webkit-details-marker{display:none}
+.ml-rv-detail[open]>summary{margin-bottom:6px}
+
+/* Tinjau Jawaban di kuis utama (UAB) memakai gaya yang sama */
+.ml-review-list{display:flex;flex-direction:column;gap:12px;margin-top:12px;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+
+.ml-explain .explain-title.bad{color:#ef4444}
+.ml-explain .explain-title.skip{color:var(--muted)}
+
+/* ── Cari materi ── */
+.ml-search{position:relative;display:flex;align-items:center}
+.ml-search-ico{position:absolute;left:14px;font-size:15px;opacity:.7;pointer-events:none}
+.ml-search-input{width:100%;padding:13px 40px 13px 40px;border-radius:16px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);font:inherit;font-size:14.5px;font-weight:800;outline:none;-webkit-appearance:none;appearance:none}
+.ml-search-input::placeholder{color:var(--muted);font-weight:700}
+.ml-search-input:focus{border-color:#1cb0f6;border-bottom-color:#1899d6;box-shadow:0 0 0 3px rgba(28,176,246,.18)}
+.ml-search-input::-webkit-search-cancel-button{display:none}
+.ml-search-clear{position:absolute;right:8px;width:30px;height:30px;border:0;border-radius:50%;background:var(--surface);color:var(--muted);font:inherit;font-size:13px;font-weight:900;cursor:pointer}
+.ml-search-clear[hidden],.ml-search-info[hidden],.ml-row[hidden],#mlNoMatch[hidden]{display:none!important}
+.ml-search-info{margin:-4px 2px 0;font-size:12px;font-weight:800;color:var(--muted)}

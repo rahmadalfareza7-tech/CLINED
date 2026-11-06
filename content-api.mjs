@@ -29,6 +29,37 @@ export async function contentApi({ request, response, url, user, pool, body, jso
       ORDER BY visibility DESC, updated_at DESC`, [user.id, module]);
     return json(response, 200, { packages: result.rows });
   }
+  // Edit jawaban & pembahasan satu soal paket (UAB / Latihan Materi). Admin/helper.
+  const editMatch = path.match(/^\/packages\/([^/]+)\/questions\/([^/]+)$/);
+  if (editMatch && (request.method === 'GET' || request.method === 'PATCH')) {
+    const packageId = decodeURIComponent(editMatch[1]), questionId = decodeURIComponent(editMatch[2]);
+    if (!['admin', 'helper'].includes(user.role)) return fail(response, 403, 'Hanya admin/helper yang dapat mengedit soal.');
+    if (!/^[0-9a-f-]{36}$/i.test(packageId)) return fail(response, 400, 'Paket tidak valid.');
+    const current = await pool.query('SELECT id,title,questions FROM content_packages WHERE id=$1 AND module IN (\'UAB\',\'MAT\')', [packageId]);
+    if (!current.rows.length) return fail(response, 404, 'Paket tidak ditemukan.');
+    const list = Array.isArray(current.rows[0].questions) ? current.rows[0].questions : [];
+    const idx = list.findIndex(x => String(x?.id) === questionId);
+    if (idx < 0) return fail(response, 404, 'Soal tidak ditemukan.');
+    if (request.method === 'GET') return json(response, 200, { question: list[idx], bankName: current.rows[0].title, bankId: packageId });
+    origin(request);
+    const input = await body(request, 60_000);
+    const soal = String(input.soal ?? '').trim();
+    const opsi = Array.isArray(input.opsi) ? input.opsi.map(x => String(x ?? '').trim()) : [];
+    const key = Number(input.jawabanBenar);
+    if (!soal || opsi.length < 2 || opsi.length > 6 || opsi.some(x => !x)) return fail(response, 400, 'Soal dan semua opsi harus diisi.');
+    if (!Number.isInteger(key) || key < 0 || key >= opsi.length) return fail(response, 400, 'Kunci jawaban tidak valid.');
+    const next = { ...list[idx], soal, opsi, jawabanBenar: key };
+    if (typeof input.pembahasan === 'string') next.pembahasan = input.pembahasan.trim().slice(0, 4000);
+    if (typeof input.catatanKlinis === 'string') next.catatanKlinis = input.catatanKlinis.trim().slice(0, 2000);
+    if (Array.isArray(input.pembahasanPilihan)) {
+      const per = opsi.map((_, i) => String(input.pembahasanPilihan[i] ?? '').trim().slice(0, 2000));
+      next.pembahasanPilihan = per;
+      if (next.pembahasan_klinis && typeof next.pembahasan_klinis === 'object') next.pembahasan_klinis = Object.fromEntries(per.map((t, i) => [String.fromCharCode(65 + i), t]));
+    }
+    list[idx] = next;
+    await pool.query('UPDATE content_packages SET questions=$1::jsonb, updated_at=now() WHERE id=$2', [JSON.stringify(list), packageId]);
+    return json(response, 200, { ok: true, question: next });
+  }
   // Admin/helper dapat menghapus satu soal UAB tanpa menghapus seluruh paket.
   // Dukungan query-string ditambahkan sebagai jalur yang lebih aman untuk deployment
   // serverless yang kadang tidak meneruskan DELETE ke nested dynamic route.

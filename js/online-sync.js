@@ -19,7 +19,33 @@
   localStorage.setItem=(key,value)=>{nativeSet(key,String(value));if(!suppress&&safe(key))markSet(key,String(value));};
   localStorage.removeItem=key=>{const was=safe(key)&&localStorage.getItem(key)!==null;nativeRemove(key);if(was&&!suppress)markDelete(key);};
   async function request(path,options={}){const r=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'Sinkronisasi gagal.');return d;}
-  function apply(state){suppress=true;try{for(const [key,item] of Object.entries(state||{})){if(!safe(key)||!item)continue;if(item.deleted)nativeRemove(key);else if(typeof item.value==='string')nativeSet(key,item.value);}}finally{suppress=false;}}
+  function apply(state){
+    let restoreXP=null;
+    const xpKey='gaster_v11_xp';
+    const xpNumber=raw=>{
+      if(typeof raw!=='string'||!/^\s*\d+\s*$/.test(raw))return null;
+      const n=Number(raw);
+      return Number.isSafeInteger(n)&&n>=0?n:null;
+    };
+    suppress=true;
+    try{
+      for(const [key,item] of Object.entries(state||{})){
+        if(!safe(key)||!item)continue;
+        if(key===xpKey){
+          const localRaw=localStorage.getItem(xpKey);
+          const localXP=xpNumber(localRaw);
+          const serverXP=item.deleted?null:xpNumber(item.value);
+          if(localXP!==null&&(serverXP===null||localXP>serverXP)){
+            restoreXP=localRaw;
+            continue;
+          }
+        }
+        if(item.deleted)nativeRemove(key);
+        else if(typeof item.value==='string')nativeSet(key,item.value);
+      }
+    }finally{suppress=false;}
+    if(restoreXP!==null)markSet(xpKey,restoreXP);
+  }
   function snapshot(serverState){for(const key of learningKeys())if(!serverState[key])enqueue({id:uuid(),type:'set',key,value:localStorage.getItem(key),updatedAt:new Date().toISOString()});}
   async function pull(force=false){let cursor=localStorage.getItem(CURSOR);let loops=0;while(loops++<10){
     // force berarti 'jalankan sekarang', BUKAN 'download full state'.
@@ -28,15 +54,62 @@
     const d=await request(path);
     if(d.mode==='full'){apply(d.state||{});snapshot(d.state||{});}else apply(d.changes||{});
     if(d.updatedAt){cursor=d.updatedAt;nativeSet(CURSOR,d.updatedAt);}
-    // Data dari akun lain (mis. login di perangkat lain) baru masuk lewat nativeSet,
-    // jadi tidak lewat hook localStorage.setItem di atas. Beri tahu UI lain (statistik,
-    // Card Shop, dsb.) supaya me-render ulang dari localStorage yang sudah diperbarui.
-    try{window.dispatchEvent(new CustomEvent('clined:sync-applied',{detail:{mode:d.mode}}));}catch{}
     if(!d.hasMore)return d;
   }
   return {mode:'delta',hasMore:true,updatedAt:cursor};
 }
-  async function sync({force=false}={}){if(sending||!navigator.onLine)return;const id=localStorage.getItem(ACTIVE_USER);if(!id)return;const needs=force||dirty||read(QUEUE,[]).length||(Date.now()-lastPullAt>=PERIODIC_PULL_MS);if(!needs)return;sending=true;try{await pull(force);const ops=read(QUEUE,[]);if(ops.length){const saved=await request('/api/sync',{method:'POST',body:JSON.stringify({operations:ops})});write(QUEUE,[]);apply(saved.changes||{});if(saved.updatedAt)localStorage.setItem(CURSOR,saved.updatedAt);}dirty=false;lastPullAt=Date.now();}catch{}finally{sending=false;}}
+  async function sync({force=false}={}){
+    if(sending||!navigator.onLine)return;
+    const id=localStorage.getItem(ACTIVE_USER);
+    if(!id)return;
+    const needs=force||dirty||read(QUEUE,[]).length||(Date.now()-lastPullAt>=PERIODIC_PULL_MS);
+    if(!needs)return;
+    sending=true;
+    try{
+      await pull(force);
+      const ops=read(QUEUE,[]);
+      const batches=[];
+      let batch=[];
+      for(const op of ops){
+        const candidate=[...batch,op];
+        if(batch.length&&new Blob([JSON.stringify({operations:candidate})]).size>120000){
+          batches.push(batch);
+          batch=[op];
+        }else{
+          batch=candidate;
+        }
+      }
+      if(batch.length)batches.push(batch);
+
+      for(const group of batches){
+        if(new Blob([JSON.stringify({operations:group})]).size>120000)continue;
+        const saved=await request('/api/sync',{
+          method:'POST',
+          body:JSON.stringify({operations:group})
+        });
+        const accepted=saved.changes||{};
+        const confirmed=group.filter(op=>{
+          if(!Object.prototype.hasOwnProperty.call(accepted,op.key))return false;
+          const result=accepted[op.key];
+          return op.type==='delete'
+            ? result?.deleted===true
+            : result?.deleted!==true&&result?.value===op.value;
+        });
+        if(confirmed.length){
+          const ids=new Set(confirmed.map(op=>op.id));
+          write(QUEUE,read(QUEUE,[]).filter(op=>!ids.has(op.id)));
+        }
+        apply(accepted);
+        if(saved.updatedAt)localStorage.setItem(CURSOR,saved.updatedAt);
+      }
+      dirty=read(QUEUE,[]).length>0;
+      lastPullAt=Date.now();
+    }catch{
+      dirty=true;
+    }finally{
+      sending=false;
+    }
+  }
   window.addEventListener('online',()=>sync({force:true}));window.addEventListener('pagehide',()=>sync());window.addEventListener('clined:auth-ready',()=>sync({force:true}));setInterval(()=>sync(),PERIODIC_PULL_MS);
   let dirtyTimer=0;
   window.CLINED_ONLINE_SYNC={sync,switchUser,clearLocalLearningData,markDirty:()=>{dirty=true;clearTimeout(dirtyTimer);dirtyTimer=setTimeout(()=>sync({force:true}),250)}};

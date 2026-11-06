@@ -1,4 +1,4 @@
-document.addEventListener('click',(event)=>{const feedback=event.target.closest('#feedback');if(!feedback)return;event.preventDefault();const url=feedback.dataset.googleFormUrl||localStorage.getItem('clined_google_form_url')||'';if(!url){alert('Link Google Form belum dikonfigurasi di paket aplikasi ini.');return;}const opened=window.open(url,'_blank','noopener,noreferrer');if(!opened)window.location.href=url;});const CLINED_SCHEMA_VERSION=4;(function migrateStorageSchema(){try{const current=Number(localStorage.getItem('clined_schema_version')||0);if(current<1){const aliases=[['xp','clined_xp'],['streak','clined_streak'],['gems','clined_gems']];aliases.forEach(([legacy,next])=>{if(localStorage.getItem(next)===null&&localStorage.getItem(legacy)!==null)localStorage.setItem(next,localStorage.getItem(legacy));});}if(current<2){if(!localStorage.getItem('clined_migrated_at'))localStorage.setItem('clined_migrated_at',new Date().toISOString());}if(current<3){}if(current<4){try{const wrong=JSON.parse(localStorage.getItem('gaster_v8_wrong_stats')||'[]');if(Array.isArray(wrong)){let changed=false;const normalized=wrong.map(item=>{if(!item||typeof item!=='object')return item;if(!item.lastWrong){item.lastWrong=item.lastSeen||new Date().toISOString();changed=true;}if(!Number.isFinite(Number(item.wrong))){item.wrong=1;changed=true;}return item;});if(changed)localStorage.setItem('gaster_v8_wrong_stats',JSON.stringify(normalized));}}catch{}}localStorage.setItem('clined_schema_version',String(CLINED_SCHEMA_VERSION));}catch(e){console.warn('CLINED storage migration skipped',e);}})();const $=id=>document.getElementById(id);const APP_VERSION="v36.8-static-banks-v18-materials";const KEY={theme:"gaster_v8_theme",book:"gaster_v8_bookmarks",hist:"gaster_v8_history",session:"gaster_v8_quiz_session",sound:"gaster_v8_sound",wrong:"gaster_v8_wrong_stats",goal:"gaster_v9_daily_goal",qstats:"gaster_v22_question_performance",abilityMap:"gaster_v22_question_ability_map",xp:"gaster_v11_xp",navVisible:"medical_rpg_nav_visible_v21",navPos:"medicalRpgNavPos_v21",dailyStreak:"gaster_daily_streak_v1"};let selectedCount=20,selectedBank="utama",quiz=[],pos=0,score=0,answered=false;let soundEnabled=true;let selectedAnswer=null,streak=0,sessionStart=0,timerSeconds=0,timerDuration=0,timerDeadline=0,timerId=null;let quizMode="study",flagged=new Set();let sessionXP=0,lastXPGain=0;let playerHP=100,wrongCombo=0,enemyHP=100;const get=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("CLINED storage write failed",e);return false}};const del=k=>{try{localStorage.removeItem(k)}catch{}};function showToast(message,isError){let t=document.getElementById('clinedToast');if(!t){t=document.createElement('div');t.id='clinedToast';t.className='clined-toast';document.body.appendChild(t);}t.textContent=message;t.classList.toggle('is-error',!!isError);t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),isError?3600:1800);}const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+document.addEventListener('click',(event)=>{const feedback=event.target.closest('#feedback');if(!feedback)return;event.preventDefault();const url=feedback.dataset.googleFormUrl||localStorage.getItem('clined_google_form_url')||'';if(!url){showToast('Link formulir masukan belum diatur. Hubungi admin.',true);return;}const opened=window.open(url,'_blank','noopener,noreferrer');if(!opened)window.location.href=url;});const CLINED_SCHEMA_VERSION=4;(function migrateStorageSchema(){try{const current=Number(localStorage.getItem('clined_schema_version')||0);if(current<1){const aliases=[['xp','clined_xp'],['streak','clined_streak'],['gems','clined_gems']];aliases.forEach(([legacy,next])=>{if(localStorage.getItem(next)===null&&localStorage.getItem(legacy)!==null)localStorage.setItem(next,localStorage.getItem(legacy));});}if(current<2){if(!localStorage.getItem('clined_migrated_at'))localStorage.setItem('clined_migrated_at',new Date().toISOString());}if(current<3){}if(current<4){try{const wrong=JSON.parse(localStorage.getItem('gaster_v8_wrong_stats')||'[]');if(Array.isArray(wrong)){let changed=false;const normalized=wrong.map(item=>{if(!item||typeof item!=='object')return item;if(!item.lastWrong){item.lastWrong=item.lastSeen||new Date().toISOString();changed=true;}if(!Number.isFinite(Number(item.wrong))){item.wrong=1;changed=true;}return item;});if(changed)localStorage.setItem('gaster_v8_wrong_stats',JSON.stringify(normalized));}}catch{}}localStorage.setItem('clined_schema_version',String(CLINED_SCHEMA_VERSION));}catch(e){console.warn('CLINED storage migration skipped',e);}})();const $=id=>document.getElementById(id);const APP_VERSION="v36.8-static-banks-v18-materials";const KEY={theme:"gaster_v8_theme",book:"gaster_v8_bookmarks",hist:"gaster_v8_history",session:"gaster_v8_quiz_session",sound:"gaster_v8_sound",wrong:"gaster_v8_wrong_stats",goal:"gaster_v9_daily_goal",qstats:"gaster_v22_question_performance",abilityMap:"gaster_v22_question_ability_map",xp:"gaster_v11_xp",navVisible:"medical_rpg_nav_visible_v21",navPos:"medicalRpgNavPos_v21",dailyStreak:"gaster_daily_streak_v1"};let selectedCount=20,selectedBank="utama",quiz=[],pos=0,score=0,answered=false;let soundEnabled=true;let selectedAnswer=null,streak=0,sessionStart=0,timerSeconds=0,timerDuration=0,timerDeadline=0,timerId=null;let quizMode="study",flagged=new Set();let sessionXP=0,lastXPGain=0;let playerHP=100,wrongCombo=0,enemyHP=100;const get=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("CLINED storage write failed",e);return false}};const del=k=>{try{localStorage.removeItem(k)}catch{}};function showToast(message,isError){let t=document.getElementById('clinedToast');if(!t){t=document.createElement('div');t.id='clinedToast';t.className='clined-toast';document.body.appendChild(t);}t.textContent=message;t.classList.toggle('is-error',!!isError);t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),Math.max(isError?4200:2200,String(message).length*55));}const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const letter=i=>String.fromCharCode(65+i);
 const qid=(bank,i,q)=>q.id || `${bank}-${q.no||i+1}`;
 // RPG progression: 100 levels, 100 XP per level.
@@ -23,16 +23,17 @@ function xpTitle(level){
   if(level>=5) return "Mahasiswa Klinik";
   return "Mahasiswa Pre-Klinik";
 }
-function addXP(amount,reason=""){
+function addXP(amount,reason="",meta){
   const before=Number(get(KEY.xp,0))||0;
   const gained=Math.max(0,Math.round(amount));
+  try{if(gained>0)window.CLINED_XP?.enqueue(meta?.kind||"quiz",meta?.ref||("rnd:"+Math.random().toString(36).slice(2,10)),gained);}catch(e){}
   const after=before+gained;
   set(KEY.xp,after);
   // Push XP immediately instead of waiting for the periodic sync interval.
   try{window.CLINED_ONLINE_SYNC?.markDirty?.();}catch(e){console.warn('XP sync trigger skipped',e);}
   lastXPGain=gained;sessionXP+=gained;
   renderXP();
-  showXPPopup(gained,reason, xpLevel(after)>xpLevel(before));
+  if(!meta?.silent)showXPPopup(gained,reason, xpLevel(after)>xpLevel(before));
   return {before,after,gained,leveledUp:xpLevel(after)>xpLevel(before)};
 }
 function renderXP(){
@@ -137,6 +138,14 @@ async function ensureServerBankLoaded(id){
   if(!key || !BANKS[key]) return false;
   const bank=BANKS[key];
   if(bank.loaded) return true;
+  // Preserve the v97.1 TRY OUT fix: UAB content packages are hydrated from
+  // /api/content/packages and already have their questions in memory. They are
+  // not rows in question_banks, so do not request /api/banks/server-uab-<id>.
+  if(key.startsWith('server-uab-') && Array.isArray(bank.data)){
+    bank.count=bank.data.length||bank.count;
+    bank.loaded=true;
+    return true;
+  }
   // Stable baseline: load the question JSON directly from the deployment, not Neon.
   // If admin has published a newer server version, server becomes the source of truth.
   if(bank.staticUrl && Number(bank.serverVersion||0)<=Number(bank.staticVersion||1)){
@@ -626,7 +635,7 @@ function renderResume(){
   const s=get(KEY.session,null);
   if(!s||!s.quiz?.length){$("resumeCard").hidden=true;return}
   $("resumeCard").hidden=false;
-  $("resumeText").textContent=`${BANKS[s.selectedBank||"utama"]?.name||"Kuis"} • Soal ${Math.min((s.pos||0)+1,s.quiz.length)} dari ${s.quiz.length} • ${s.score||0} benar • ${new Date(s.savedAt).toLocaleString("id-ID")}`;
+  $("resumeText").textContent=`${BANKS[s.selectedBank||"utama"]?.name||"Kuis"} • Soal ${Math.min((s.pos||0)+1,s.quiz.length)} dari ${s.quiz.length} • ${s.score||0} benar`;
 }
 $("resumeBtn").onclick=()=>{
   const s=get(KEY.session,null);if(!s)return;
@@ -642,7 +651,7 @@ $("resumeBtn").onclick=()=>{
   flagged=new Set(s.flagged||[]);
   show("quiz");renderQuestion(true);startTimer();
 };
-$("discardResumeBtn").onclick=()=>{if(confirm("Hapus progres kuis tersimpan?"))clearSession()};
+$("discardResumeBtn").onclick=async()=>{if(await clinedConfirm({title:"Hapus kuis tersimpan?",lines:["Progres kuis yang belum selesai akan dihapus dan tidak bisa dilanjutkan."],ok:"Hapus",cancel:"Batal",tone:"danger"}))clearSession()};
 
 
 function blockUiKey(block){return String(block||'').toLowerCase().replace(/[^a-z0-9]+(.)/g,(_,c)=>String(c).toUpperCase());}
@@ -659,7 +668,7 @@ function renderUniversalBlockControls(block,pageId){
   const existingControls=key==='' ? true : (page.querySelector('#'+key+'CountChoices')&&page.querySelector('#'+key+'ModeChoices')&&page.querySelector('#'+key+'TimeChoices'));
   if(!mount&&!existingControls){
     mount=document.createElement('div'); mount.dataset.universalBlockControls='1'; mount.className='card nested-card';
-    mount.innerHTML=`<div class="section-title">Jumlah soal</div><div class="choice-grid" id="${key}CountChoices"></div><div class="section-title sub-title">Mode</div><div class="choice-grid mode-grid" id="${key}ModeChoices"></div><div class="section-title sub-title">Batas waktu</div><div class="choice-grid mode-grid" id="${key}TimeChoices"></div><button class="primary block-disabled-start" type="button" disabled>Mulai Kuis →</button><div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>`;
+    mount.innerHTML=`<div class="section-title">Jumlah soal</div><div class="choice-grid" id="${key}CountChoices"></div><div class="section-title sub-title">Mode</div><div class="choice-grid mode-grid" id="${key}ModeChoices"></div><div class="section-title sub-title">Batas waktu</div><div class="choice-grid mode-grid" id="${key}TimeChoices"></div><button class="primary block-disabled-start" type="button" disabled>Mulai Kuis</button><div class="block-empty-note">Bank soal akan muncul di sini setelah dimasukkan.</div>`;
     page.appendChild(mount);
   }
   // The same renderer is used by every UAB block, regardless of whether the page originally had controls.
@@ -669,7 +678,7 @@ function renderBlockMateri(blockName,pageId){
   const block=String(blockName||'').toUpperCase();
   const host=document.querySelector(`#${pageId} [data-materi-section="${blockName}"]`)||document.querySelector(`#${pageId} [data-universal-material]`)||document.querySelector(`#${pageId} .materi-section`); if(!host)return;
   const fallback=CLINED_MATERIAL_URLS[block]||'';
-  const paint=(url,youtubeUrl)=>{host.innerHTML=`<div class="external-material-grid">${url?`<a class="materi-button" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a>`:''}${youtubeUrl?`<a class="materi-button" href="${esc(youtubeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buka NINJA NERD">NINJA NERD</a>`:''}</div>`;};
+  const paint=(url,youtubeUrl)=>{host.innerHTML=`<div class="external-material-grid">${url?`<a class="materi-button" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI PPT">MATERI PPT</a>`:''}${youtubeUrl?`<a class="materi-button" href="${esc(youtubeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buka NINJA NERD">NINJA NERD</a>`:''}</div>`;};
   paint(fallback,'');
   Promise.all([fetch('/api/materials',{credentials:'same-origin'}),fetch('/api/youtube',{credentials:'same-origin'})]).then(async([mr,yr])=>{const [md,yd]=await Promise.all([mr.ok?mr.json():{},yr.ok?yr.json():{}]);const m=(md.materials||[]).find(x=>String(x.block).toUpperCase()===block);const y=(yd.links||[]).find(x=>String(x.block).toUpperCase()===block);paint(m&&m.url?m.url:fallback,y&&y.url?y.url:'');}).catch(()=>paint(fallback,''));
 }
@@ -693,7 +702,7 @@ function renderEmptyBlockControls(key,blockOverride){
     modeBox.innerHTML=modes.map(([title,desc])=>`<button type="button" class="choice mode-choice disabled-choice" disabled><b>${title}</b><small>${desc}</small></button>`).join("");
     const times=[["Tanpa batas",0],["30 menit",1800],["60 menit",3600],["90 menit",5400]];
     timeBox.innerHTML=times.map(([label])=>`<button type="button" class="choice time-choice disabled-choice" disabled>${label}</button>`).join("");
-    if(startBtn){startBtn.disabled=true;startBtn.textContent='Mulai Kuis →';}
+    if(startBtn){startBtn.disabled=true;startBtn.textContent='Mulai Kuis';}
     if(note)note.textContent='Bank soal akan muncul setelah ditambahkan.';
     if(inline)inline.innerHTML='<span class="empty-bank-icon">🩺</span><div><b>Bank soal belum tersedia</b><small>Bank soal akan aktif otomatis saat ditambahkan.</small></div>';
     return;
@@ -702,7 +711,7 @@ function renderEmptyBlockControls(key,blockOverride){
   const bank=BANKS[selectedBank], max=Number(bank.count||bank.data?.length||0);
   const choices=[10,20,50,100].filter(n=>n<=max); if(max>0)choices.push(max);
   const unique=[...new Set(choices)]; if(!unique.includes(selectedCount)||selectedCount>max)selectedCount=unique[0]||max;
-  if(inline)inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>${esc(entries.length===1?bank.name:`${entries.length} bank tersedia`)}</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${Number(b.count||b.data?.length||0)} soal</span><i>${id===selectedBank?'✓':''}</i></button>`).join('')}</div></div>`;
+  if(inline)inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>${esc(entries.length===1?bank.name:`${entries.length} bank tersedia`)}</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${Number(b.count||b.data?.length||0)} soal</span><i>${id===selectedBank?'✓':''}</i></button><button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div>`).join('')}</div></div>`;
   inline?.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{selectedBank=btn.dataset.blockBank;selectedCount=10;renderEmptyBlockControls(key);});
   countBox.innerHTML=unique.map(n=>`<button type="button" class="choice ${selectedCount===n?'selected':''}" data-block-count="${n}">${n===max?'Semua':n}<small>${n===max?` (${max})`:' soal'}</small></button>`).join('');
   countBox.querySelectorAll('[data-block-count]').forEach(btn=>btn.onclick=()=>{selectedCount=Number(btn.dataset.blockCount);renderEmptyBlockControls(key);});
@@ -712,7 +721,7 @@ function renderEmptyBlockControls(key,blockOverride){
   const times=[[0,'Tanpa batas'],[1800,'30 menit'],[3600,'60 menit'],[5400,'90 menit']];
   timeBox.innerHTML=times.map(([sec,label])=>`<button type="button" class="choice time-choice ${timerDuration===sec?'selected':''}" data-block-time="${sec}">${label}</button>`).join('');
   timeBox.querySelectorAll('[data-block-time]').forEach(btn=>btn.onclick=()=>{timerDuration=Number(btn.dataset.blockTime);renderEmptyBlockControls(key);});
-  if(startBtn){startBtn.disabled=false;startBtn.textContent=`Mulai ${bank.name} →`;startBtn.onclick=()=>{timerSeconds=timerDuration;startQuiz();};}
+  if(startBtn){startBtn.disabled=false;startBtn.textContent=`Mulai ${bank.name}`;startBtn.onclick=()=>{timerSeconds=timerDuration;startQuiz();};}
   if(note)note.textContent=`${entries.length} bank aktif · ${max} soal tersedia.`;
 }
 
@@ -745,7 +754,7 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
     countBox.innerHTML=counts.map(n=>`<button type="button" class="choice disabled-choice" disabled>${n}<small> soal</small></button>`).join("");
     modeBox.innerHTML=[["study","📖Belajar","Pembahasan langsung setelah menjawab"],["exam","📝Ujian","Pembahasan dibuka setelah selesai"]].map(([id,title,desc])=>`<button type="button" class="choice mode-choice disabled-choice" disabled><b>${title}</b><small>${desc}</small></button>`).join("");
     timeBox.innerHTML=[[0,'Tanpa batas'],[1800,'30 menit'],[3600,'60 menit'],[5400,'90 menit']].map(([sec,label])=>`<button type="button" class="choice time-choice disabled-choice" disabled>${label}</button>`).join("");
-    if(startBtn){startBtn.disabled=true;startBtn.textContent='Mulai Kuis →';}
+    if(startBtn){startBtn.disabled=true;startBtn.textContent='Mulai Kuis';}
     if(note)note.textContent='Bank soal akan muncul setelah ditambahkan.';
     if(inline)inline.innerHTML='<span class="empty-bank-icon">🩺</span><div><b>Bank soal belum tersedia</b><small>Bank soal akan aktif otomatis saat ditambahkan.</small></div>';
     return;
@@ -760,8 +769,23 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
       const card=page?.querySelector('.bank-card');
       if(card)card.appendChild(inline); else page?.prepend(inline);
     }
-    inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>Bank soal tersedia</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${Number(b.count||b.data?.length||0)} soal</span><i>${id===selectedBank?'✓':''}</i></button>`).join('')}</div></div>`;
+    inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>Bank soal tersedia</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${Number(b.count||b.data?.length||0)} soal</span><i>${id===selectedBank?'✓':''}</i></button><button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div>`).join('')}</div></div>`;
     inline.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{if(btn.dataset.blockBank!==selectedBank){selectedBank=btn.dataset.blockBank;selectedCount=0;renderAvailableBlockControls(key,block,pageId);}});
+    inline.querySelectorAll('[data-review-bank]').forEach(btn=>btn.onclick=async()=>{
+      const bankId=btn.dataset.reviewBank;
+      try{
+        await loadServerBanks();
+        if(!BANKS[bankId]) throw Error("Bank soal tidak ditemukan.");
+        await ensureServerBankLoaded(bankId);
+        window.__clinedReviewBankId=bankId;
+        window.__clinedStandaloneReview=true;
+        renderReview("all");
+        show("review");
+        window.scrollTo({top:0,behavior:"auto"});
+      }catch(e){
+        showToast(e.message||"Bank soal gagal dimuat.",true);
+      }
+    });
   }
   countBox.innerHTML=counts.map(n=>`<button type="button" class="choice ${selectedCount===n?'selected':''}" data-n="${n}">${n===max?'Semua':n}<small>${n===max?` (${max})`:' soal'}</small></button>`).join('');
   countBox.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{selectedCount=Number(b.dataset.n);renderAvailableBlockControls(key,block,pageId);});
@@ -769,7 +793,7 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
   modeBox.querySelectorAll('.mode-choice').forEach(b=>b.onclick=()=>{quizMode=b.dataset.mode;renderAvailableBlockControls(key,block,pageId);});
   timeBox.innerHTML=[[0,'Tanpa batas'],[1800,'30 menit'],[3600,'60 menit'],[5400,'90 menit']].map(([sec,label])=>`<button type="button" class="choice time-choice ${Number(timerDuration||0)===sec?'selected':''}" data-sec="${sec}">${label}</button>`).join('');
   timeBox.querySelectorAll('.time-choice').forEach(b=>b.onclick=()=>{timerDuration=Number(b.dataset.sec);renderAvailableBlockControls(key,block,pageId);});
-  if(startBtn){startBtn.disabled=false;startBtn.textContent='Mulai Kuis →';startBtn.onclick=()=>{timerSeconds=timerDuration;startQuiz();};}
+  if(startBtn){startBtn.disabled=false;startBtn.textContent='Mulai Kuis';startBtn.onclick=()=>{timerSeconds=timerDuration;startQuiz();};}
   if(note)note.textContent=`${entries.length} bank aktif · ${max} soal tersedia.`;
 }
 
@@ -808,21 +832,31 @@ function getTimeSeconds(){
   return el ? Number(el.dataset.sec||0) : Number(timerDuration||0);
 }
 
-function confirmUabAiDisclaimer(){
+async function confirmUabAiDisclaimer(){
   const uabBlocks=new Set(['BM1','BM2','HNC','MP1','MP2','MPT','MUSKULOSKELETAL','RESPIRATORY','KARDIOLOGI','HEMATOLOGI','GIT','FORENSIK','GINJAL','ENDOKRINE','REPRODUKSI','SSP','PANCA INDRA','KEDKOM','KEDKEL','MULSIS']);
   const activeModule=String(window.CLINED_ACTIVE_MODULE||'').trim().toUpperCase();
   let activeBlock='';
   try{ activeBlock=String(blockForBank(selectedBank)||'').replace(/^BLOK\s+/i,'').trim().toUpperCase(); }catch{}
   const isUab=activeModule==='UAB'||uabBlocks.has(activeBlock)||String(selectedBank||'').toLowerCase().includes('server-uab');
   if(!isUab)return true;
-  const text='⚠️ PERINGATAN SOAL UAB\n\nJawaban dan pembahasan pada soal ini dapat dibuat atau dibantu oleh AI. AI dapat melakukan kesalahan atau memberikan informasi yang kurang tepat.\n\nMohon periksa kembali jawaban dan pembahasannya menggunakan sumber medis tepercaya sebelum menjadikannya acuan belajar.\n\nLanjut mengerjakan soal UAB?';
-  return window.confirm(text);
+  return clinedConfirm({
+    title:'Baca dulu sebelum mengerjakan soal UAB',
+    icon:'⚠️',
+    lines:[
+      'Sebagian jawaban dan pembahasan di soal UAB dibuat atau dibantu **AI**, jadi masih bisa ada yang keliru.',
+      ['Jangan jadikan ini satu-satunya sumber belajar.','Cek ulang ke buku, modul, atau materi dosen.','Kalau ada jawaban yang terasa janggal, ketuk **🚩 Laporkan soal**.'],
+      'Siap lanjut mengerjakan?'
+    ],
+    ok:'Mengerti, mulai',
+    cancel:'Kembali'
+  });
 }
 async function startQuiz(){
-  if(!confirmUabAiDisclaimer())return;
+  window.__clinedFinishing=false;
+  if(!(await confirmUabAiDisclaimer()))return;
   try{await loadServerBanks();await ensureServerBankLoaded(selectedBank);}catch{return;}
   if(!selectedCount || !currentBank().length){
-    alert("Bank soal belum tersedia.");
+    showToast("Bank soal belum tersedia.",true);
     return;
   }
   clearSession();
@@ -830,7 +864,7 @@ async function startQuiz(){
   renderDashboardBlockOptions();
   quiz=buildQuiz(selectedCount);
   if(!quiz.length){
-    alert("Tidak ada soal yang dapat dimuat dari bank ini.");
+    showToast("Tidak ada soal yang dapat dimuat dari bank ini.",true);
     return;
   }
   pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;
@@ -850,6 +884,14 @@ $("flagBtn").onclick=()=>{
   const id=quiz[pos].id;
   if(flagged.has(id))flagged.delete(id);else flagged.add(id);
   updateFlagUI();saveSession();
+};
+$("reportQBtn").onclick=()=>{
+  const q=quiz[pos]; if(!q)return;
+  const L="ABCDE";
+  const opsi=(q.opsi||[]).map((o,i)=>`${L[i]}. ${o}`).join("\n");
+  const kunci=q.jawabanBenar==null?"(belum ada)":`${L[q.jawabanBenar]}`;
+  const text=`[Laporan soal CLINED]\nBank: ${bankName()}\nNo. soal: ${q.no}\nID soal: ${q.id}\nSoal: ${q.soal}\n${opsi}\nKunci di aplikasi: ${kunci}\nMasalah: (tulis: kunci salah / ambigu / typo / lainnya)`;
+  window.clinedReportQuestion({id:q.id,source:"bank",bank:bankName(),soal:q.soal,text});
 };
 $("startBtn").onclick=startQuiz;
 $("againBtn").onclick=startQuiz;
@@ -924,7 +966,7 @@ function renderQuestion(resume=false){
   $("explain").style.display="none";
   $("nextBtn").hidden=!answered;
   $("nextBtn").style.display=answered?"block":"none";
-  $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
+  $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
   $("prevBtn").hidden=!(pos>0);
   $("prevBtn").style.display=pos>0?"block":"none";
   const b=get(KEY.book,[]);
@@ -933,10 +975,39 @@ function renderQuestion(resume=false){
   updateFlagUI();
   document.querySelectorAll(".answer").forEach(x=>x.onclick=()=>answer(+x.dataset.i));
   if(answered) applyAnsweredState();
+  if(quizMode==="exam"){examUI();document.querySelectorAll(".answer").forEach((b,j)=>b.classList.toggle("picked",j===q.selectedAnswer));}
+  else {const eb=$("examSubmitBtn");if(eb){eb.hidden=true;eb.style.display="none";}}
 }
+function mountBankQuestionComments(q, host){
+  if(!q || !host || !window.CLINED_QC?.mount) return;
+  const bank = String(q.bank || selectedBank || window.__clinedReviewBankId || 'bank-soal');
+  const id = String(q.id ?? q.no ?? '');
+  if(!id) return;
+  let slot = host.querySelector(':scope > .qcomments-slot');
+  if(!slot){
+    slot = document.createElement('div');
+    slot.className = 'qcomments-slot';
+    slot.dataset.bankComments = '1';
+    host.appendChild(slot);
+  }
+  window.CLINED_QC.mount(slot, window.CLINED_QC.keyOf(bank, id));
+}
+
 function applyAnsweredState(){
   const q=quiz[pos]; if(!q)return;
   const chosen=q.selectedAnswer ?? selectedAnswer;
+  if(quizMode==="exam"){
+    selectedAnswer=chosen;
+    answered=chosen!==null;
+    document.querySelectorAll(".answer").forEach((b,j)=>{
+      b.disabled=false;
+      b.classList.remove("correct","wrong");
+      b.classList.toggle("picked",j===chosen);
+    });
+    $("explain").style.display="none";
+    examUI();
+    return;
+  }
   document.querySelectorAll(".answer").forEach((b,j)=>{
     b.disabled=true;
     if(q.jawabanBenar!=null && j===q.jawabanBenar)b.classList.add("correct");
@@ -946,17 +1017,18 @@ function applyAnsweredState(){
   answered=chosen!==null;
   if(quizMode==="study"){
     $("explainText").innerHTML=allExplanations(q);
+    mountBankQuestionComments(q, $("explainText"));
     $("explain").style.display="block";
   }
   $("nextBtn").hidden=false;
   $("nextBtn").style.display="block";
-  $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
+  $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
 }
 function isNegativeStem(stem){
   return /\b(tidak benar|tidak tepat|yang salah|manakah yang salah|mana yang salah|kecuali|bukan merupakan|bukan yang|tidak sesuai|tidak termasuk)\b/i.test(stem||"");
 }
 function stripTruthLabel(s){
-  return String(s||"").replace(/^\s*(BENAR|SALAH)\s*[\.:—-]?\s*/i,"").trim();
+  return String(s||"").replace(/^\s*(BENAR|SALAH)\b\s*[\.:,;—–-]?\s*/i,"").trim();
 }
 function truthFromDetail(s){
   const m=String(s||"").match(/^\s*(BENAR|SALAH)\b/i);
@@ -988,32 +1060,123 @@ function allExplanations(q){
       </div>`;
     }).join("");
 }
+
+function answerExam(i){
+  const q=quiz[pos];
+  if(!q)return;
+  q.selectedAnswer=q.selectedAnswer===i?null:i;
+  selectedAnswer=q.selectedAnswer;
+  answered=selectedAnswer!==null;
+  document.querySelectorAll(".answer").forEach((b,j)=>{
+    b.disabled=false;
+    b.classList.remove("correct","wrong");
+    b.classList.toggle("picked",j===selectedAnswer);
+  });
+  examUI();
+  renderQuestionNav();
+  saveSession();
+}
+function examUI(){
+  if(quizMode!=="exam")return;
+  const last=pos===quiz.length-1;
+  $("nextBtn").hidden=last;
+  $("nextBtn").style.display=last?"none":"block";
+  $("nextBtn").textContent="Selanjutnya";
+  let b=$("examSubmitBtn");
+  if(!b){
+    b=document.createElement("button");
+    b.id="examSubmitBtn";
+    b.type="button";
+    b.className="primary exam-submit";
+    $("nextBtn").parentNode.insertBefore(b,$("nextBtn").nextSibling);
+    b.onclick=examSubmit;
+  }
+  const done=quiz.filter(q=>q.selectedAnswer!=null).length;
+  b.textContent=`Selesai & kumpulkan (${done}/${quiz.length} terjawab)`;
+  b.hidden=false;
+  b.style.display="block";
+}
+async function examSubmit(){
+  const left=quiz.filter(q=>q.selectedAnswer==null).length;
+  const ok=await clinedConfirm({
+    title:left?`Masih ${left} soal belum dijawab`:"Kumpulkan jawaban?",
+    tone:"info",
+    lines:[left
+      ?"Soal yang kosong akan dihitung salah. Kumpulkan sekarang?"
+      :"Setelah dikumpulkan, jawaban tidak bisa diubah. Nilai dan pembahasan akan muncul."],
+    ok:"Ya, kumpulkan",
+    cancel:"Periksa lagi"
+  });
+  if(ok)finish();
+}
+function gradeExam(){
+  let good=0,totalXP=0;
+  quiz.forEach(q=>{
+    if(q.graded)return;
+    q.graded=true;
+    const valid=q.jawabanBenar!=null&&!q.incomplete;
+    const chosen=q.selectedAnswer!=null;
+    const correct=valid&&chosen&&q.selectedAnswer===q.jawabanBenar;
+    if(correct)good++;
+    if(!chosen){
+      if(valid){
+        recordDailyQuestion();
+        recordQuestionPerformance(q,false);
+        recordWrong(q);
+      }
+      return;
+    }
+    recordDailyQuestion();
+    if(!valid){
+      addXP(5,"Soal dikerjakan",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id,silent:true});
+      totalXP+=5;
+      return;
+    }
+    recordQuestionPerformance(q,correct);
+    if(correct){
+      recordRight(q);
+      addXP(20,"Jawaban benar",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id,silent:true});
+      totalXP+=20;
+    }else{
+      recordWrong(q);
+      addXP(5,"Jawaban salah",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id,silent:true});
+      totalXP+=5;
+    }
+  });
+  score=good;
+  if(totalXP)showXPPopup(totalXP,"Ujian selesai");
+}
+
 function answer(i){
+  if(quizMode==="exam"){answerExam(i);return;}
   if(answered)return;
   answered=true;selectedAnswer=i;
   const q=quiz[pos];
   if(q.incomplete || q.jawabanBenar==null){
     recordDailyQuestion();
+    addXP(5,"Soal dikerjakan",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
     q.selectedAnswer=i;
     document.querySelectorAll(".answer").forEach(b=>b.disabled=true);
-    if(quizMode==="study"){$("explainText").innerHTML=allExplanations(q);$("explain").style.display="block";}
-    $("nextBtn").hidden=false;$("nextBtn").style.display="block";$("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
+    if(quizMode==="study"){$("explainText").innerHTML=allExplanations(q);
+    mountBankQuestionComments(q, $("explainText"));$("explain").style.display="block";}
+    $("nextBtn").hidden=false;$("nextBtn").style.display="block";$("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
     saveSession();return;
   }
   const good=i===q.jawabanBenar;
   recordDailyQuestion();
   recordQuestionPerformance(q,good);
+  if(good&&q.jawabanBenar!=null)recordRight(q);
   q.selectedAnswer=i;
   if(good){
     wrongCombo=0; renderHP();
     score++;streak++;const strike=dealClinicalStrike(q);celebrate();
     const gain=20 + Math.min(30,Math.max(0,(streak-1)*5));
-    addXP(gain,streak>1?`Jawaban benar • streak ${streak} 🔥`:"Jawaban benar");
+    addXP(gain,streak>1?`Jawaban benar • streak ${streak} 🔥`:"Jawaban benar",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
   }else{
     streak=0;
     const dmg=applyDamage();
       wrongFx();combatFx("damage",dmg);recordWrong(q);
-    addXP(5,"Tetap semangat—jawaban salah");
+    addXP(5,"Tetap semangat—jawaban salah",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
   }
   document.querySelectorAll(".answer").forEach((b,j)=>{
     b.disabled=true;
@@ -1025,11 +1188,12 @@ function answer(i){
   $("streakLive").textContent=streak>1?`🔥 ${streak} beruntun`:"";
   if(quizMode==="study"){
     $("explainText").innerHTML=allExplanations(q);
+    mountBankQuestionComments(q, $("explainText"));
     $("explain").style.display="block";
   }
   $("nextBtn").hidden=false;
   $("nextBtn").style.display="block";
-  $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil→":"Selanjutnya→";
+  $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
   saveSession();
 }
 function goToQuestion(target){
@@ -1045,12 +1209,17 @@ function goToQuestion(target){
 
 $("prevBtn").onclick=()=>goToQuestion(pos-1);
 $("nextBtn").onclick=()=>{
-  if(!answered){return;}
+  if(quizMode!=="exam"&&!answered)return;
   if(pos<quiz.length-1)goToQuestion(pos+1);
+  else if(quizMode==="exam")examSubmit();
   else finish();
 };
 
 function finish(reason="complete"){
+  if(window.__clinedFinishing)return;
+  window.__clinedFinishing=true;
+  if(quizMode==="exam")gradeExam();
+  window.__examReview=quizMode==="exam";
   stopTimer();
   const validTotal=quiz.filter(q=>q.jawabanBenar!=null&&!q.incomplete).length;
   const total=quiz.length,pct=validTotal?Math.round(score/validTotal*100):0,h=get(KEY.hist,[]);
@@ -1105,8 +1274,17 @@ function stopTimer(){if(timerId){cancelAnimationFrame(timerId);timerId=null}}
 function recordWrong(q){
   const w=get(KEY.wrong,[]);
   const idx=w.findIndex(x=>x.id===q.id);
-  if(idx>=0){w[idx].wrong++;w[idx].lastWrong=new Date().toISOString();}
+  if(idx>=0){w[idx].wrong++;w[idx].lastWrong=new Date().toISOString();w[idx].ok=0;delete w[idx].mastered;}
   else w.push({id:q.id,bank:q.bank||selectedBank,wrong:1,lastWrong:new Date().toISOString(),soal:q.soal,opsi:q.opsi,jawabanBenar:q.jawabanBenar,pembahasan:q.pembahasan,pembahasanPilihan:q.pembahasanPilihan,catatanKlinis:q.catatanKlinis});
+  set(KEY.wrong,w);
+}
+/* Jawaban benar pada soal yang pernah salah: 2 benar berturut-turut = dianggap dikuasai (tetap tersimpan, tidak ikut Smart Review). */
+function recordRight(q){
+  if(!q||q.id==null)return;
+  const w=get(KEY.wrong,[]),idx=w.findIndex(x=>x.id===q.id);
+  if(idx<0)return;
+  w[idx].ok=(Number(w[idx].ok)||0)+1;w[idx].lastOk=new Date().toISOString();
+  if(w[idx].ok>=2)w[idx].mastered=true;
   set(KEY.wrong,w);
 }
 function renderWrong(){
@@ -1120,28 +1298,144 @@ function renderWrong(){
 }
 $("wrongBtn").onclick=()=>{renderWrong();show("wrong")};
 
-function renderReview(){
-  $("reviewSummary").textContent=`${quiz.length} soal • ${score} benar`;
-  $("reviewList").innerHTML=quiz.map((q,idx)=>{
-    const negative=isNegativeStem(q.soal);
-    const selected=q.selectedAnswer;
-    const key=q.jawabanBenar;
-    return `<article class="review-card">
-      <div class="review-q"><b>Soal ${idx+1}</b><div>${esc(q.soal)}</div></div>
-      <div class="review-options">${q.opsi.map((o,i)=>{
-        const truth=negative ? (i===key?"SALAH":"BENAR") : (i===key?"BENAR":"SALAH");
-        const cls=i===key?"review-key":(selected===i?"review-user-wrong":"");
-        return `<div class="review-option ${cls}"><b>${letter(i)}.</b> ${esc(o)} ${i===key?'<span>✓ KUNCI</span>':selected===i?'<span>✕ Pilihanmu</span>':""}<small>Pernyataan ${truth==="BENAR"?"BENAR":"SALAH"} · ${esc(stripTruthLabel(q.pembahasanPilihan?.[i]||""))}</small></div>`;
-      }).join("")}</div>
-      <div class="review-concept"><b>🎯 Konsep inti:</b> ${esc(q.pembahasan||"")}</div>
-    </article>`;
-  }).join("");
+let reviewFilter='all';
+function reviewStatus(q){
+  if(q.incomplete||q.jawabanBenar==null)return 'nokey';
+  if(q.selectedAnswer==null)return 'skip';
+  return q.selectedAnswer===q.jawabanBenar?'ok':'bad';
 }
-$("reviewQuizBtn").onclick=()=>{renderReview();show("review")};
-$("reviewWrongBtn").onclick=()=>{const w=get(KEY.wrong,[]); const ids=new Set(w.map(x=>x.id)); quiz=quiz.filter(q=>ids.has(q.id)).map(q=>({...q,selectedAnswer:null})); if(!quiz.length){show("home");return} pos=0;score=0;sessionXP=0;answered=false;selectedAnswer=null;streak=0;timerDuration=getTimeSeconds();timerSeconds=timerDuration;show("quiz");renderQuestion();startTimer()};
+function reviewExplainHTML(q,st){
+  const negative=isNegativeStem(q.soal),selected=q.selectedAnswer,key=q.jawabanBenar;
+  const title=st==='ok'?'✅ Benar!':st==='bad'?'❌ Kurang tepat':st==='skip'?'⏭️ Belum dijawab':'ℹ️ Pembahasan';
+  return `<div class="explain ml-explain">
+    <div class="explain-title ${st}">${title}</div>
+    ${q.pembahasan?`<div class="main-explain"><b>🎯 Konsep inti:</b> ${esc(q.pembahasan)}</div>`:''}
+    ${q.catatanKlinis?`<div class="clinical-note"><b>🩺 Catatan klinis:</b> ${esc(q.catatanKlinis)}</div>`:''}
+    ${q.opsi.map((o,i)=>{
+      const isKey=i===key,truth=negative?(isKey?'SALAH':'BENAR'):(isKey?'BENAR':'SALAH');
+      const txt=stripTruthLabel(q.pembahasanPilihan?.[i]||'')||'Belum ada pembahasan khusus untuk opsi ini.';
+      return `<div class="option-review ml-review ${isKey?'is-correct':'is-wrong'}${selected===i?' is-picked':''}">
+        <div class="option-review-head"><b>${letter(i)}. ${esc(o)}</b><span>${isKey?'✓ KUNCI':selected===i?'✕ PILIHANMU':'✕ BUKAN KUNCI'}</span></div>
+        <div class="option-review-text">Pernyataan ${truth} · ${esc(txt)}</div></div>`;
+    }).join('')}
+  </div>`;
+}
+function renderReview(filter){
+  reviewFilter=filter||'all';
 
-$("quizBack").onclick=()=>{
-  if(confirm("Keluar dari kuis?Progres akan disimpan agar bisa dilanjutkan.")){
+  if(window.__clinedStandaloneReview){
+    const bankId=window.__clinedReviewBankId;
+    const bank=BANKS[bankId];
+    const questions=Array.isArray(bank?.data)?bank.data:[];
+    $("reviewSummary").textContent=`${bank?.name||bankId} • ${questions.length} soal • mode baca mandiri`;
+
+    const splitOptionExplanations=(text)=>{
+      const result={};
+      const source=String(text||"").replace(/\r\n/g,"\n");
+      const re=/(?:^|\n)\s*([A-E])\.\s*/g;
+      const matches=[...source.matchAll(re)];
+      if(matches.length<2) return result;
+      for(let n=0;n<matches.length;n++){
+        const start=matches[n].index+matches[n][0].length;
+        const end=n+1<matches.length?matches[n+1].index:source.length;
+        result[matches[n][1]]=source.slice(start,end).trim();
+      }
+      return result;
+    };
+    const detailFor=(q,i)=>{
+      const letter=String.fromCharCode(65+i);
+      const clinical=q.pembahasan_klinis;
+      if(clinical && typeof clinical==="object" && clinical[letter]) return clinical[letter];
+
+      const x=q.pembahasanPilihan;
+      if(Array.isArray(x) && x[i] && !/^Belum ada pembahasan/i.test(String(x[i]).trim())) return x[i];
+      if(x && typeof x==="object"){
+        const value=x[letter]??x[i]??x[String(i)];
+        if(value && !/^Belum ada pembahasan/i.test(String(value).trim())) return value;
+      }
+
+      return splitOptionExplanations(q.pembahasan)[letter]||"";
+    };
+    const coreForReview=(q)=>{
+      const direct=String(q.pembahasan||"").trim();
+      const parts=splitOptionExplanations(direct);
+      if(Object.keys(parts).length>=2) return "";
+      return direct;
+    };
+
+    $("reviewList").innerHTML=questions.length?questions.map((q,idx)=>{
+      const opts=Array.isArray(q.opsi)?q.opsi:[];
+      const rawKey=q.jawabanBenar;
+      const key=rawKey==null||rawKey===""||!Number.isInteger(Number(rawKey))?null:Number(rawKey);
+      const validKey=key!==null&&key>=0&&key<opts.length&&!q.incomplete;
+      const coreText=coreForReview(q);
+      const hasGeneral=!!coreText;
+      const hasClinical=String(q.catatanKlinis||"").trim();
+      const hasOptionDetails=opts.some((_,i)=>String(detailFor(q,i)||"").trim());
+
+      return `<article class="card ml-rv ${validKey?'ml-rv-study':'ml-rv-nokey'}">
+        <div class="ml-top">
+          <span class="ml-pill">${esc(bank?.name||bankId)} · Soal ${esc(q.no||idx+1)}</span>
+          <span class="ml-rv-badge">${validKey?'Kunci tersedia':'Kunci belum tersedia'}</span>
+        </div>
+        <div class="ml-question ml-rv-q">${esc(q.soal||"Teks soal tidak tersedia.")}</div>
+
+        <div class="ml-options">
+          ${opts.map((o,i)=>{
+            const isKey=validKey&&i===key;
+            const detail=String(detailFor(q,i)||"").trim();
+            return `<div class="ml-option-review${isKey?' is-correct':''}">
+              <div class="ml-opt ml-opt-static${isKey?' ok':''}">
+                <span class="ml-letter">${letter(i)}</span>
+                <span class="ml-opt-text">${esc(o)}${isKey?' <em class="ml-tag">Kunci jawaban</em>':''}</span>
+              </div>
+              <div class="ml-option-explanation">
+                <b>Penjelasan opsi ${letter(i)}</b>
+                <div>${detail?esc(stripTruthLabel(detail)):'Penjelasan khusus untuk opsi ini belum tersedia.'}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+
+        ${hasGeneral||hasClinical?`<section class="explain ml-explain">
+          ${hasGeneral?`<div class="main-explain"><b>Konsep inti</b><div>${esc(coreText)}</div></div>`:''}
+          ${hasClinical?`<div class="clinical-note"><b>Catatan klinis</b><div>${esc(q.catatanKlinis)}</div></div>`:''}
+        </section>`:''}
+        <details class="qcomments-details" data-qkey="${esc(window.CLINED_QC?.keyOf(bankId, q.id || `${bankId}-${q.no||idx+1}`) || '')}">
+          <summary>Diskusi soal</summary>
+          <div class="qcomments-slot"></div>
+        </details>
+      </article>`;
+    }).join(''):'<div class="ml-empty"><b>Belum ada soal pada bank ini.</b></div>';
+
+    window.CLINED_QC?.lazyDetails($("reviewList"));
+    return;
+  }
+
+  const sts=quiz.map(reviewStatus);
+  const cnt={all:quiz.length,bad:sts.filter(x=>x==='bad').length,skip:sts.filter(x=>x==='skip').length};
+  $("reviewSummary").textContent=`${quiz.length} soal • ${score} benar • ${cnt.bad} salah${cnt.skip?` • ${cnt.skip} dilewati`:''}`;
+  const chip=(k,label)=>`<button type="button" class="ml-chip${reviewFilter===k?' on':''}" data-rv-filter="${k}">${label} (${cnt[k]})</button>`;
+  const badge={ok:'✓ Benar',bad:'✕ Salah',skip:'⏭ Dilewati',nokey:'Tanpa kunci'};
+  const items=quiz.map((q,idx)=>({q,idx,st:sts[idx]})).filter(x=>reviewFilter==='all'||x.st===reviewFilter);
+  $("reviewList").innerHTML=`<div class="ml-chips">${chip('all','Semua')}${chip('bad','Salah')}${cnt.skip?chip('skip','Dilewati'):''}</div>`+
+    (items.length?items.map(({q,idx,st})=>{
+      const selected=q.selectedAnswer,key=q.jawabanBenar;
+      return `<article class="card ml-rv ml-rv-${st}">
+        <div class="ml-top"><span class="ml-pill">Soal ${idx+1}</span><span class="ml-rv-badge ${st==='nokey'?'':st}">${badge[st]}</span></div>
+        <div class="ml-question ml-rv-q">${esc(q.soal)}</div>
+        <div class="ml-options">${q.opsi.map((o,i)=>`<div class="ml-opt ml-opt-static${i===key?' ok':selected===i?' bad':''}"><span class="ml-letter">${letter(i)}</span><span class="ml-opt-text">${esc(o)}${i===key?' <em class="ml-tag">Kunci</em>':selected===i?' <em class="ml-tag">Jawabanmu</em>':''}</span></div>`).join('')}</div>
+        <details class="ml-rv-detail" data-qkey="${esc(window.CLINED_QC?.keyOf(q.bank || selectedBank, q.id || `${q.bank || selectedBank}-${q.no || ""}`) || "")}"${window.__examReview?" open":""}><summary>Lihat pembahasan</summary>${reviewExplainHTML(q,st)}<div class="qcomments-slot"></div></details>
+      </article>`;
+    }).join(''):'<div class="ml-empty"><span class="ml-empty-icon">🎉</span><b>Tidak ada soal di kategori ini</b></div>');
+  window.CLINED_QC?.lazyDetails($("reviewList"));
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rv-filter]');if(b&&$('review')?.classList.contains('active')){renderReview(b.dataset.rvFilter);window.scrollTo({top:0,behavior:'auto'});}});
+$("reviewQuizBtn").onclick=()=>{renderReview("all");show("review");window.scrollTo({top:0,behavior:"auto"})};
+$("reviewWrongBtn").onclick=()=>{const w=get(KEY.wrong,[]);const ids=new Set(w.map(x=>x.id));quiz=quiz.filter(q=>ids.has(q.id)).map(q=>({...q,selectedAnswer:null,graded:false}));if(!quiz.length){show("home");return}quizMode="study";window.__clinedFinishing=false;window.__examReview=false;pos=0;score=0;sessionXP=0;lastXPGain=0;answered=false;selectedAnswer=null;streak=0;wrongCombo=0;playerHP=100;enemyHP=100;timerDuration=0;timerSeconds=0;timerDeadline=0;flagged=new Set();show("quiz");renderQuestion();startTimer()};
+
+$("quizBack").onclick=async()=>{
+  if(await clinedConfirm({title:"Keluar dari kuis?",icon:"🚪",tone:"info",lines:["Progresmu **disimpan otomatis**, jadi bisa dilanjutkan nanti dari beranda."],ok:"Keluar",cancel:"Lanjut mengerjakan"})){
     saveSession();stopTimer();show("home");renderCounts();
   }
 };
@@ -1176,7 +1470,7 @@ function renderHistory(){
 $("bookmarksBtn").onclick=()=>{renderBookmarks();show("bookmarks")};
 $("historyBtn").onclick=()=>{renderHistory();show("history")};
 document.querySelectorAll("[data-home]").forEach(b=>b.onclick=()=>{show("home");renderCounts()});
-$("clearHistory").onclick=()=>{if(confirm("Hapus semua riwayat skor?")){set(KEY.hist,[]);renderHistory();renderCounts()}};
+$("clearHistory").onclick=async()=>{if(await clinedConfirm({title:"Hapus semua riwayat skor?",lines:["Seluruh riwayat skor akan dihapus dan tidak bisa dikembalikan."],ok:"Hapus semua",tone:"danger"})){set(KEY.hist,[]);renderHistory();renderCounts()}};
 
 
 function localDayKey(d=new Date()){
@@ -1240,6 +1534,7 @@ function recordDailyQuestion(){
   const before=calculateDailyStreak(data.counts);
   data.streak=before;
   set(KEY.dailyStreak,data);
+  try{const lg=get("clined_study_log_v1",{});const cut=new Date();cut.setDate(cut.getDate()-800);const ck=localDayKey(cut);Object.keys(lg).forEach(k=>{if(k<ck)delete lg[k];});lg[day]=Number(lg[day]||0)+1;set("clined_study_log_v1",lg);}catch{}
   renderDailyStreak();
   if(data.counts[day]===5) showStreakMilestone(before);
 }
@@ -1292,17 +1587,27 @@ function renderAnalytics(){
 }
 $("analyticsBtn").onclick=()=>{renderAnalytics();show("analytics")};
 
-function practiceWrong(){
-  const w=get(KEY.wrong,[]).filter(q=>q.jawabanBenar!=null);
-  if(!w.length){alert("Belum ada soal yang pernah dijawab salah.");return}
-  quiz=shuffle(w).slice(0,Math.min(20,w.length)).map(q=>({
-    id:q.id,bank:q.bank||selectedBank,source:BANKS[q.bank]?.name||q.bank,no:q.no,soal:q.soal,opsi:q.opsi,
-    jawabanBenar:q.jawabanBenar,pembahasan:q.pembahasan,pembahasanPilihan:q.pembahasanPilihan||[],catatanKlinis:q.catatanKlinis||"",incomplete:false,selectedAnswer:null
-  }));
+function wrongToQuiz(q){
+  return {id:q.id,bank:q.bank||selectedBank,source:BANKS[q.bank]?.name||q.bank,no:q.no,soal:q.soal,opsi:q.opsi,
+    jawabanBenar:q.jawabanBenar,pembahasan:q.pembahasan,pembahasanPilihan:q.pembahasanPilihan||[],catatanKlinis:q.catatanKlinis||"",incomplete:false,selectedAnswer:null};
+}
+function startCustomQuiz(list,{shuffleList=true,limit=20}={}){
+  const base=(list||[]).filter(q=>q&&q.jawabanBenar!=null&&Array.isArray(q.opsi));
+  if(!base.length){showToast("Belum ada soal untuk dilatih.");return false}
+  quiz=(shuffleList?shuffle(base):base).slice(0,limit).map(wrongToQuiz);
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
+  return true;
 }
-$("quickWrongBtn").onclick=practiceWrong;
+window.CLINED_startCustomQuiz=startCustomQuiz;
+function practiceWrong(ids){
+  const only=Array.isArray(ids)?new Set(ids):null;
+  const w=get(KEY.wrong,[]).filter(q=>q.jawabanBenar!=null&&!q.mastered&&(!only||only.has(q.id)));
+  if(!w.length){showToast("Belum ada soal yang pernah kamu jawab salah.");return}
+  startCustomQuiz(w);
+}
+window.CLINED_practiceWrong=practiceWrong;
+$("quickWrongBtn").onclick=()=>practiceWrong();
 
 /* ===== v31 premium study engine: Smart Review / spaced repetition ===== */
 function reviewPriority(item){
@@ -1368,7 +1673,7 @@ function dailyAnswered(){
 }
 function renderDailyMission(){
   const done=Math.min(20,dailyAnswered()), pct=Math.round(done/20*100);
-  const markup=`<div class="mission-top"><b>🎯 Misi hari ini · 20 soal</b><span class="mission-count">${done}/20</span></div><div class="mission-track"><i style="width:${pct}%"></i></div><small class="muted">${done>=20?"Misi selesai!🔥":"Sedikit lagi.Konsistensi>maraton."}</small>`;
+  const markup=`<div class="mission-top"><b>🎯 Misi hari ini · 20 soal</b><span class="mission-count">${done}/20</span></div><div class="mission-track"><i style="width:${pct}%"></i></div>${done>=20?'<small class="muted">Misi selesai! 🔥</small>':''}`;
   if($("dailyMission"))$("dailyMission").innerHTML=markup;
   if($("dailyHomeCard"))$("dailyHomeCard").innerHTML=markup;
 }
@@ -1378,7 +1683,7 @@ function rawToQuiz(bankId,idx){
   return {id:qid(bankId,idx,q),bank:bankId,source:q.source||BANKS[bankId].name,no:q.no||idx+1,soal:q.soal,
     opsi:order.map(i=>q.opsi[i]),jawabanBenar:q.jawabanBenar==null?null:order.indexOf(q.jawabanBenar),
     pembahasan:coreExplanation(q),pembahasanPilihan:order.map(i=>optionExplanation(q,i)||"Belum ada pembahasan khusus untuk opsi ini."),
-    catatanKlinis:q.catatanKlinis||"",incomplete:!!q.incomplete,selectedAnswer:null};
+    catatanKlinis:q.catatanKlinis||"",incomplete:!!q.incomplete,selectedAnswer:null,_order:order,rid:q.id};
 }
 function resolveQuestionRef(id){
   const raw=String(id||"");
@@ -1396,7 +1701,7 @@ function startSingleQuestion(bankId,idx){
 function startBookmarkDrill(){
   const ids=get(KEY.book,[]),rows=[];
   ids.forEach(id=>{const ref=resolveQuestionRef(id);if(ref)rows.push(rawToQuiz(ref.bankId,ref.idx));});
-  if(!rows.length){alert("Belum ada soal bookmark yang bisa ditemukan.Simpan beberapa soal dulu.");return;}
+  if(!rows.length){showToast("Belum ada soal bookmark. Simpan beberapa soal dulu.");return;}
   quiz=shuffle(rows).slice(0,Math.min(20,rows.length));selectedCount=quiz.length;selectedBank=quiz[0].bank;pos=0;score=0;streak=0;sessionXP=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
 }
@@ -1432,18 +1737,178 @@ function renderFlashcard(){
     : "";
   $("flashRevealBtn").textContent=ENH.flashShown?"Sembunyikan Jawaban":"Tampilkan Jawaban";
 }
-function renderLibrary(){
-  const query=String($("librarySearch")?.value||"").trim().toLowerCase(), filter=$("libraryBank")?.value||"all";
-  const pools=Object.entries(BANKS).filter(([id])=>filter==="all"||id===filter);
-  const results=[];
-  pools.forEach(([bankId,b])=>b.data.forEach((q,idx)=>{
-    const hay=[q.soal,q.pembahasan,...(q.opsi||[])].join("").toLowerCase();
-    if(!query||hay.includes(query))results.push({bankId,idx,q});
-  }));
-  const limited=results.slice(0,60);
-  $("librarySummary").textContent=query?`${results.length} hasil • menampilkan ${limited.length}`:`${results.length} soal tersedia`;
-  $("libraryResults").innerHTML=limited.length?limited.map(x=>`<article class="library-result"><div class="library-result-head"><b>${esc(BANKS[x.bankId].name)} • Soal ${x.q.no||x.idx+1}</b><small>Kunci ${x.q.jawabanBenar==null?"—":letter(x.q.jawabanBenar)}</small></div><p>${esc(x.q.soal)}</p><div class="library-answer">${esc(x.q.pembahasan||"Belum ada pembahasan khusus.")}</div><button class="secondary small-btn library-start" data-bank="${x.bankId}" data-idx="${x.idx}">▶ Latihan soal ini</button></article>`).join(""):'<div class="empty">Tidak ditemukan. Coba kata kunci lain.</div>';
-  document.querySelectorAll(".library-start").forEach(b=>b.onclick=()=>startSingleQuestion(b.dataset.bank,Number(b.dataset.idx)));
+let libraryRenderToken = 0;
+
+async function renderLibrary(){
+  const token = ++libraryRenderToken;
+  const query = String($("librarySearch")?.value || "").trim().toLowerCase();
+  const filter = window.__clinedReviewBankId || $("libraryBank")?.value || "all";
+  const summary = $("librarySummary");
+  const output = $("libraryResults");
+  if (!summary || !output) return;
+
+  summary.textContent = "Memuat bank soal dan Latihan Materi...";
+  output.innerHTML = "";
+
+  try {
+    if (typeof window.CLINED_BANKS_READY === "function") {
+      await window.CLINED_BANKS_READY();
+    }
+
+    const bankEntries = Object.entries(BANKS)
+      .filter(([id]) => filter === "all" || id === filter);
+
+    await Promise.allSettled(bankEntries.map(async ([id, bank]) => {
+      if (!bank.loaded && typeof window.CLINED_ENSURE_BANK_LOADED === "function") {
+        await window.CLINED_ENSURE_BANK_LOADED(id);
+      }
+    }));
+
+    const results = [];
+
+    for (const [bankId, bank] of bankEntries) {
+      for (const [idx, q] of (Array.isArray(bank.data) ? bank.data : []).entries()) {
+        const hay = [q.soal, q.pembahasan, ...(q.opsi || []),
+          ...(Array.isArray(q.pembahasanPilihan)
+            ? q.pembahasanPilihan
+            : Object.values(q.pembahasanPilihan || {}))]
+          .join(" ").toLowerCase();
+
+        if (!query || hay.includes(query)) {
+          results.push({
+            type: "bank",
+            bankId,
+            idx,
+            q,
+            title: bank.name || bankId
+          });
+        }
+      }
+    }
+
+    let packs = [];
+    try {
+      const response = await fetch("/api/content/packages?module=MAT", {
+        credentials: "same-origin",
+        cache: "no-store"
+      });
+      if (!response.ok) throw new Error("Paket Latihan Materi tidak dapat dimuat.");
+      const data = await response.json();
+      packs = Array.isArray(data.packages) ? data.packages : [];
+      try {
+        localStorage.setItem("materi_packs_cache_v1",
+          JSON.stringify({ at: Date.now(), packages: packs }));
+      } catch {}
+    } catch (err) {
+      try {
+        const cache = JSON.parse(localStorage.getItem("materi_packs_cache_v1") || "null");
+        if (Array.isArray(cache?.packages)) packs = cache.packages;
+      } catch {}
+      if (!packs.length) console.warn("Pencarian Latihan Materi:", err);
+    }
+
+    for (const pack of packs) {
+      const questions = Array.isArray(pack.questions) ? pack.questions : [];
+      questions.forEach((q, idx) => {
+        if (!q || !q.soal) return;
+        const opts = Array.isArray(q.opsi) ? q.opsi : [];
+        const explanations = q.pembahasanPilihan;
+        const expValues = Array.isArray(explanations)
+          ? explanations
+          : Object.values(explanations || {});
+        const hay = [
+          pack.title, pack.block, q.soal, q.pembahasan, q.catatan,
+          ...opts, ...expValues
+        ].join(" ").toLowerCase();
+
+        if (!query || hay.includes(query)) {
+          results.push({
+            type: "materi",
+            pack,
+            idx,
+            q,
+            title: `${pack.title || "Latihan Materi"} • ${pack.block || "Blok"}`
+          });
+        }
+      });
+    }
+
+    if (token !== libraryRenderToken) return;
+
+    const limited = results.slice(0, 60);
+    summary.textContent = query
+      ? `${results.length} hasil • menampilkan ${limited.length}`
+      : `${results.length} soal tersedia • bank soal dan Latihan Materi`;
+
+    output.innerHTML = limited.length ? limited.map((x, n) => {
+      const q = x.q;
+      const opts = Array.isArray(q.opsi) ? q.opsi : [];
+      const key = Number(q.jawabanBenar);
+      const explanations = q.pembahasanPilihan;
+      const explanationFor = i => {
+        if (Array.isArray(explanations)) return explanations[i] || "";
+        if (explanations && typeof explanations === "object")
+          return explanations[i] || explanations[String(i)] || "";
+        return "";
+      };
+
+      const optionHtml = opts.map((o, i) => {
+        const correct = q.jawabanBenar != null && i === key;
+        const exp = explanationFor(i);
+        return `<div class="library-review-option${correct ? " is-key" : ""}">
+          <b>${esc(letter(i))}. ${esc(o)}</b>
+          ${correct ? "<small>Kunci jawaban</small>" : ""}
+          ${exp ? `<p>${esc(exp)}</p>` : ""}
+        </div>`;
+      }).join("");
+
+      const action = x.type === "bank"
+        ? `<button class="secondary small-btn library-start"
+             data-bank="${esc(x.bankId)}" data-idx="${x.idx}">Latihan soal ini</button>`
+        : `<button class="secondary small-btn library-materi-open"
+             data-block="${esc(x.pack.block || "")}">Buka Latihan Materi</button>`;
+
+      return `<article class="library-result">
+        <div class="library-result-head">
+          <b>${esc(x.title)} • Soal ${esc(q.no || x.idx + 1)}</b>
+          <small>${x.type === "materi" ? "Latihan Materi" :
+            `Kunci ${q.jawabanBenar == null ? "Belum tersedia" : esc(letter(key))}`}</small>
+        </div>
+        <p>${esc(q.soal || "Teks soal tidak tersedia.")}</p>
+        <details class="library-review-detail">
+          <summary>Lihat kunci dan pembahasan</summary>
+          <div class="library-review-options">${optionHtml}</div>
+          <div class="library-answer">
+            <b>Pembahasan</b>
+            <p>${esc(q.pembahasan || q.catatan || "Belum ada pembahasan khusus.")}</p>
+          </div>
+        </details>
+        ${action}
+      </article>`;
+    }).join("") : '<div class="empty">Tidak ditemukan. Coba kata kunci lain.</div>';
+
+    output.querySelectorAll(".library-start").forEach(button => {
+      button.onclick = () => startSingleQuestion(
+        button.dataset.bank, Number(button.dataset.idx)
+      );
+    });
+
+    output.querySelectorAll(".library-materi-open").forEach(button => {
+      button.onclick = () => {
+        const block = button.dataset.block;
+        if (!block || !window.CLINED_LATIHAN_MATERI?.open) {
+          showToast?.("Blok Latihan Materi tidak tersedia.", true);
+          return;
+        }
+        window.CLINED_LATIHAN_MATERI.open(block, block, "home");
+      };
+    });
+  } catch (err) {
+    if (token !== libraryRenderToken) return;
+    summary.textContent = "Pencarian gagal dimuat.";
+    output.innerHTML = `<div class="empty">${esc(err.message || "Terjadi kesalahan.")}</div>`;
+    console.error("Cari Soal:", err);
+  }
 }
 function renderQuestionNav(){
   const box=$("questionNav");if(!box||!quiz.length)return;
@@ -1619,19 +2084,43 @@ function renderRadarChart(targetId='homeRadarChart',legendId='radarLegend',scope
   const target=$(targetId); if(!target)return;
   const selectedScope=scope||$('dashboardStatScope')?.value||dashboardBlock();
   const stats=clinicalAbilityStats(selectedScope);
-  const labels=stats.map(x=>x[0]), values=stats.map(x=>Math.max(0,Math.min(100,x[1])));
-  const W=320,H=300,cx=160,cy=146,R=96,n=6;
+  const labels=stats.map(x=>x[0]), values=stats.map(x=>Math.max(0,Math.min(100,x[1]))), has=stats.map(x=>x[2]>0);
+  const anyData=has.some(Boolean);
+  const W=380,H=320,cx=190,cy=158,R=98,n=labels.length;
+  const uid=targetId.replace(/\W/g,'');
   const pt=(r,i)=>{const a=(-Math.PI/2)+(i*2*Math.PI/n);return [cx+Math.cos(a)*r,cy+Math.sin(a)*r]};
   const poly=(r)=>Array.from({length:n},(_,i)=>pt(r,i).map(v=>v.toFixed(1)).join(',')).join(' ');
-  const dataPoly=values.map((v,i)=>pt(R*v/100,i).map(x=>x.toFixed(1)).join(',')).join(' ');
-  let svg=`<svg viewBox="0 0 ${W}${H}" role="img" aria-label="Grafik radar kemampuan klinis">`;
-  [R,R*.75,R*.5,R*.25].forEach(r=>svg+=`<polygon points="${poly(r)}" class="radar-grid"></polygon>`);
-  for(let i=0;i<n;i++){const [x,y]=pt(R,i),[lx,ly]=pt(R+22,i);svg+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" class="radar-axis"></line><text x="${lx}" y="${ly}" class="radar-label" text-anchor="middle" dominant-baseline="middle">${esc(labels[i])}</text>`;}
-  svg+=`<polygon points="${dataPoly}" class="radar-data"></polygon>`;
-  values.forEach((v,i)=>{const [x,y]=pt(R*v/100,i);svg+=`<circle cx="${x}" cy="${y}" r="4" class="radar-dot"></circle>`});
+  const dataPoly=values.map((v,i)=>pt(R*Math.max(v,anyData?3:0)/100,i).map(x=>x.toFixed(1)).join(',')).join(' ');
+  const lvl=v=>v<60?'weak':v<80?'mid':'ok';
+  // ability terlemah (hanya yang sudah punya data) untuk disorot
+  let weakest=-1; has.forEach((h,i)=>{if(h&&(weakest<0||values[i]<values[weakest]))weakest=i;});
+  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik radar kemampuan klinis">`;
+  svg+=`<defs><radialGradient id="rg${uid}" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#58cc02" stop-opacity=".10"/><stop offset="100%" stop-color="#58cc02" stop-opacity=".42"/></radialGradient></defs>`;
+  [1,.75,.5,.25].forEach((k,idx)=>{svg+=`<polygon points="${poly(R*k)}" class="radar-grid${idx===0?' radar-grid-outer':''}"></polygon>`;});
+  // penanda skala 50% & 100% di sumbu atas
+  svg+=`<text x="${cx+5}" y="${cy-R*.5+3}" class="radar-tick">50</text><text x="${cx+5}" y="${cy-R+3}" class="radar-tick">100</text>`;
+  for(let i=0;i<n;i++){
+    const [x,y]=pt(R,i),[lx,ly]=pt(R+24,i);
+    const anchor=Math.abs(lx-cx)<8?'middle':(lx>cx?'start':'end');
+    const dx=anchor==='middle'?0:(lx>cx?-8:8);
+    svg+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" class="radar-axis"></line>`;
+    svg+=`<text x="${(lx+dx).toFixed(1)}" y="${(ly-(has[i]?5:0)).toFixed(1)}" class="radar-label${i===weakest&&values[i]<60?' is-weak':''}" text-anchor="${anchor}" dominant-baseline="middle">${esc(labels[i])}</text>`;
+    if(has[i]) svg+=`<text x="${(lx+dx).toFixed(1)}" y="${(ly+8).toFixed(1)}" class="radar-value radar-value-${lvl(values[i])}" text-anchor="${anchor}" dominant-baseline="middle">${values[i]}%</text>`;
+  }
+  if(anyData){
+    svg+=`<polygon points="${dataPoly}" class="radar-data" fill="url(#rg${uid})"></polygon>`;
+    values.forEach((v,i)=>{ if(!has[i])return; const [x,y]=pt(R*Math.max(v,3)/100,i);
+      svg+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.5" class="radar-dot radar-dot-${lvl(v)}"></circle>`;});
+  } else {
+    svg+=`<text x="${cx}" y="${cy}" class="radar-empty-text" text-anchor="middle">Belum ada data</text><text x="${cx}" y="${cy+16}" class="radar-empty-sub" text-anchor="middle">Kerjakan soal blok ini dulu</text>`;
+  }
   svg+='</svg>';
   target.innerHTML=svg;
-  const legend=$(legendId); if(legend) legend.innerHTML=stats.map(([name,val,attempts,total])=>`<div class="radar-score"><span>${esc(name)}<small>${attempts?attempts+"/"+total+"soal•"+val+"%akurasi":"0/"+total+"soal•Belum ada data"}</small></span><b>${attempts?val+"%":"—"}</b></div>`).join('');
+  const legend=$(legendId);
+  if(legend) legend.innerHTML=stats.map(([name,val,attempts,total],i)=>{
+    const t=attempts?lvl(val):'none';
+    return `<div class="radar-score radar-${t}${i===weakest&&val<60?' is-focus':''}"><div class="radar-score-top"><span class="radar-score-name">${esc(name)}</span><b>${attempts?val+'%':'—'}</b></div><div class="radar-mini"><i style="width:${attempts?Math.max(4,val):0}%"></i></div><small>${attempts?`${attempts}/${total} soal`:`0/${total} soal`}</small></div>`;
+  }).join('');
 }
 function ensureHomeDashboardControls(){
   const panel=$("homeClinicalDashboard"); if(!panel)return;
@@ -1786,8 +2275,8 @@ function upiZoomInit(){
 function upiOpenEditQuestion(id){const card=upiGetCustomCards().find(c=>c.id===id);const m=$('upiEditQuestionModal');if(!card||!m)return;$('upiEditId').value=card.id;$('upiEditBlock').value=card.block;$('upiEditMaterial').value=card.material||'Histology';$('upiEditQuestion').value=card.prompt;$('upiEditAnswer').value=card.answer;$('upiEditImage').value='';const pv=$('upiEditImagePreview');pv.hidden=true;pv.innerHTML='<img alt="Preview gambar">';m.hidden=false;m.setAttribute('aria-hidden','false');}
 function upiCloseEditQuestion(){const m=$('upiEditQuestionModal');if(m){m.hidden=true;m.setAttribute('aria-hidden','true');}}
 async function upiSaveEditedQuestion(){await upiLoadCustomCards();const id=$('upiEditId')?.value,question=$('upiEditQuestion')?.value.trim(),answer=$('upiEditAnswer')?.value.trim(),material=$('upiEditMaterial')?.value,file=$('upiEditImage')?.files?.[0];if(!id||!question||!answer){showToast('Question dan Answer wajib diisi.');return;}const cards=upiGetCustomCards(),i=cards.findIndex(c=>c.id===id);if(i<0){upiCloseEditQuestion();return;}const previous=cards[i];cards[i]={...cards[i],prompt:question,answer,material};if(file){try{cards[i].image=await upiCompressImage(file,900,.7);}catch(e){showToast('Gambar gagal diproses.',true);return;}}let saved=false;try{saved=await upiSaveCustomCards(cards);}catch(e){showToast('Gagal menyimpan perubahan: penyimpanan perangkat tidak dapat menyimpan question ini. Coba gambar yang lebih kecil.',true);return;}if(!saved)return;const verify=upiGetCustomCards().find(c=>c.id===id);if(!verify||verify.prompt!==question){showToast('Gagal menyimpan perubahan. Coba lagi.',true);return;}upiCloseEditQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));if(typeof upiBuildMaterialPage==='function'){const b=cards[i].block;UPI_MATERIALS.forEach(mat=>{try{upiBuildMaterialPage(b,mat.id);}catch(e){}});}showToast('Question berhasil diperbarui.');}
-async function upiDeleteQuestion(id){await upiLoadCustomCards();const card=upiGetCustomCards().find(c=>c.id===id);if(!card)return;if(!confirm(`Hapus question "${card.prompt.slice(0,70)}${card.prompt.length>70?'…':''}"?`))return;try{await upiSaveCustomCards(upiGetCustomCards().filter(c=>c.id!==id));}catch(e){showToast('Question gagal dihapus. Coba lagi.',true);return;}Object.keys(localStorage).filter(k=>k.includes(card.id)).forEach(k=>localStorage.removeItem(k));upiCloseEditQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));showToast('Question dihapus.');}
-function upiCustomManagerHTML(block){const cards=upiGetCustomCards().filter(c=>c.block===block);if(!cards.length)return`<section class="upi-custom-manager card"><div class="section-title">Question saya</div><p class="upi-review-copy">Belum ada question custom di blok ini.</p></section>`;return`<section class="upi-custom-manager card"><div class="section-title">Question saya</div><div class="upi-custom-list">${cards.map(c=>`<div class="upi-custom-item"><button type="button" class="upi-custom-item-main" data-upi-edit-id="${esc(c.id)}"><span class="upi-custom-thumb"><img src="${esc(c.image)}" alt=""></span><span><b>${esc(c.prompt)}</b><small>${esc(c.material||'Materi')}</small></span><span class="upi-block-arrow">›</span></button><button type="button" class="upi-custom-item-delete" data-upi-del-id="${esc(c.id)}" aria-label="Hapus question" title="Hapus question">🗑</button></div>`).join('')}</div></section>`;}
+async function upiDeleteQuestion(id){await upiLoadCustomCards();const card=upiGetCustomCards().find(c=>c.id===id);if(!card)return;if(!(await clinedConfirm({title:'Hapus question ini?',lines:[`“${card.prompt.slice(0,70)}${card.prompt.length>70?'…':''}”`],ok:'Hapus',tone:'danger'})))return;try{await upiSaveCustomCards(upiGetCustomCards().filter(c=>c.id!==id));}catch(e){showToast('Question gagal dihapus. Coba lagi.',true);return;}Object.keys(localStorage).filter(k=>k.includes(card.id)).forEach(k=>localStorage.removeItem(k));upiCloseEditQuestion();upiRenderBlockSelector();upiEnsureDetailPages();UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));showToast('Question dihapus.');}
+function upiCustomManagerHTML(block){const cards=upiGetCustomCards().filter(c=>c.block===block);if(!cards.length)return`<section class="upi-custom-manager card"><div class="section-title">Question saya</div><p class="upi-review-copy">Belum ada question custom di blok ini.</p></section>`;return`<section class="upi-custom-manager card"><div class="section-title">Question saya</div><div class="upi-custom-list">${cards.map(c=>`<div class="upi-custom-item"><button type="button" class="upi-custom-item-main" data-upi-edit-id="${esc(c.id)}"><span class="upi-custom-thumb"><img src="${esc(c.image)}" alt=""></span><span><b>${esc(c.prompt)}</b><small>${esc(c.material||'Materi')}</small></span></button><button type="button" class="upi-custom-item-delete" data-upi-del-id="${esc(c.id)}" aria-label="Hapus question" title="Hapus question">🗑</button></div>`).join('')}</div></section>`;}
 function upiCardsForBlock(block){return UPI_FLASHCARDS.filter(c=>c.block===block).concat(upiGetCustomCards().filter(c=>c.block===block));}
 function upiReviewKey(){return UPI_REVIEW_PREFIX+upiSelectedBlock;}
 function upiGetReviews(){const raw=get(upiReviewKey(),{});return raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};}
@@ -1800,7 +2289,7 @@ function upiDetailId(block){return 'upiBlockPage_'+block;}
 function upiPageEl(block){return document.getElementById(upiDetailId(block));}
 function upiRenderBlockSelector(){const grid=$('upiBlockGrid');if(!grid)return;grid.innerHTML=UPI_BLOCKS.map(b=>{const count=upiCardsForBlock(b.id).length;const reviews=(()=>{const raw=get(UPI_REVIEW_PREFIX+b.id,{});return raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};})();const due=upiCardsForBlock(b.id).filter(c=>upiDue(c,reviews[c.id],Date.now())).length;return`<article class="upi-block-choice duo-upi-block" data-upi-block="${b.id}" role="listitem" tabindex="0" aria-label="Buka blok ${esc(b.name)}"><span class="upi-block-icon">${b.icon}</span><span class="upi-block-copy"><b>${esc(b.name)}</b><small>${esc(b.desc)}</small><em>${count} kartu${due?` • ${due} perlu diulang`:''}</em></span><span class="upi-block-arrow" aria-hidden="true">›</span></article>`;}).join('');grid.querySelectorAll('[data-upi-block]').forEach(card=>{const open=()=>upiOpenBlock(card.dataset.upiBlock);card.addEventListener('click',open);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});});}
 function upiEnsureDetailPages(){if(document.querySelector('.upi-block-detail-pages'))return;const host=document.createElement('div');host.className='upi-block-detail-pages';host.setAttribute('aria-hidden','true');host.innerHTML=UPI_BLOCKS.map(b=>`<section id="${upiDetailId(b.id)}" class="view exam-page-view upi-page upi-block-detail" data-upi-detail-block="${b.id}"></section>`).join('');document.querySelector('main.app')?.appendChild(host);UPI_BLOCKS.forEach(b=>upiBuildDetailPage(b));}
-function upiBuildDetailPage(b){const root=upiPageEl(b.id);if(!root)return;const cards=upiCardsForBlock(b.id),reviews=(()=>{const raw=get(UPI_REVIEW_PREFIX+b.id,{});return raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};})();const due=cards.filter(c=>upiDue(c,reviews[c.id],Date.now())).length;root.innerHTML=`<div class="exam-page-header upi-header"><button class="back-link" type="button" data-upi-back>‹ UPI</button><div><div class="eyebrow">UPI • ${esc(b.name.toUpperCase())}</div><h2>${esc(b.name)}</h2><p>Pilih jenis materi yang ingin kamu pelajari.</p></div></div><section class="upi-owned-block card"><div class="upi-owned-head"><span class="upi-block-icon">${b.icon}</span><div><b>${esc(b.name)}</b><small>${cards.length} kartu • ${due} perlu diulang</small></div></div><div class="upi-owned-content"><button class="upi-owned-create" type="button" data-upi-create-question="${esc(b.id)}">＋ Create Question</button><div class="upi-owned-questions" data-upi-owned-list="${esc(b.id)}"></div></div></section><section class="upi-material-section"><div class="section-title">Pilih materi</div><p class="upi-review-copy">Setiap materi memiliki deck flash card dan progres repetisi sendiri.</p><div class="upi-material-grid">${UPI_MATERIALS.map(m=>`<article class="upi-material-node" data-upi-material="${esc(m.id)}" data-upi-block="${esc(b.id)}" data-upi-material-start="1" role="button" tabindex="0"><span class="upi-material-icon">${m.icon}</span><span><b>${esc(m.id)}</b><small>${esc(m.desc)}</small></span><span class="upi-block-arrow">›</span></article>`).join('')}</div></section>${upiCustomManagerHTML(b.id)}`;root.querySelector('[data-upi-back]')?.addEventListener('click',()=>show('upiPage'));root.querySelector('[data-upi-create-question]')?.addEventListener('click',()=>upiOpenCreateQuestion(b.id));root.querySelectorAll('[data-upi-material]').forEach(el=>{const open=()=>upiOpenMaterial(b.id,el.dataset.upiMaterial);el.addEventListener('click',open);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});});}
+function upiBuildDetailPage(b){const root=upiPageEl(b.id);if(!root)return;const cards=upiCardsForBlock(b.id),reviews=(()=>{const raw=get(UPI_REVIEW_PREFIX+b.id,{});return raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};})();const due=cards.filter(c=>upiDue(c,reviews[c.id],Date.now())).length;root.innerHTML=`<div class="exam-page-header upi-header"><button class="back-link" type="button" data-upi-back>‹ UPI</button><div><div class="eyebrow">UPI • ${esc(b.name.toUpperCase())}</div><h2>${esc(b.name)}</h2><p>Pilih jenis materi yang ingin kamu pelajari.</p></div></div><section class="upi-owned-block card"><div class="upi-owned-head"><span class="upi-block-icon">${b.icon}</span><div><b>${esc(b.name)}</b><small>${cards.length} kartu • ${due} perlu diulang</small></div></div><div class="upi-owned-content"><button class="upi-owned-create" type="button" data-upi-create-question="${esc(b.id)}">＋ Create Question</button><div class="upi-owned-questions" data-upi-owned-list="${esc(b.id)}"></div></div></section><section class="upi-material-section"><div class="section-title">Pilih materi</div><p class="upi-review-copy">Setiap materi memiliki deck flash card dan progres repetisi sendiri.</p><div class="upi-material-grid">${UPI_MATERIALS.map(m=>`<article class="upi-material-node" data-upi-material="${esc(m.id)}" data-upi-block="${esc(b.id)}" data-upi-material-start="1" role="button" tabindex="0"><span class="upi-material-icon">${m.icon}</span><span><b>${esc(m.id)}</b><small>${esc(m.desc)}</small></span></article>`).join('')}</div></section>${upiCustomManagerHTML(b.id)}`;root.querySelector('[data-upi-back]')?.addEventListener('click',()=>show('upiPage'));root.querySelector('[data-upi-create-question]')?.addEventListener('click',()=>upiOpenCreateQuestion(b.id));root.querySelectorAll('[data-upi-material]').forEach(el=>{const open=()=>upiOpenMaterial(b.id,el.dataset.upiMaterial);el.addEventListener('click',open);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});});}
 function upiMaterialPageId(block,material){return `upiMaterialPage_${String(block)}_${String(material).replace(/[^a-zA-Z0-9_-]/g,'-')}`;}
 function upiEnsureMaterialPagesHost(){let host=document.querySelector('.upi-material-pages');if(!host){host=document.createElement('div');host.className='upi-material-pages';host.setAttribute('aria-hidden','true');document.querySelector('main.app')?.appendChild(host);}return host;}
 function upiOpenMaterial(block,material){if(!UPI_BLOCKS.some(b=>b.id===block)||!material)return false;try{upiSelectedBlock=block;localStorage.setItem(UPI_BLOCK_KEY,block);upiEnsureDetailPages();const host=upiEnsureMaterialPagesHost();if(!host)return false;upiBuildMaterialPage(block,material);const id=upiMaterialPageId(block,material);if(!document.getElementById(id))return false;show(id);return true;}catch(e){console.error('UPI open material failed',e);showToast('UPI gagal dibuka. Coba buka ulang UPI.');return false;}}
@@ -1813,19 +2302,19 @@ function upiPickMaterial(block,material){const cards=upiMaterialCards(block,mate
 function upiRenderMaterial(block,material,card){const root=document.getElementById(upiMaterialPageId(block,material));if(!root)return;const cards=upiMaterialCards(block,material),reviews=upiEnsureMaterialReviews(block,material),current=card||upiPickMaterial(block,material);root._upiCurrent=current;root._upiRevealed=false;const idx=Math.max(1,cards.findIndex(c=>c.id===current?.id)+1),setText=(sel,v)=>{const el=root.querySelector(sel);if(el)el.textContent=v;};setText('[data-upi-index]',current?`Kartu ${idx} / ${cards.length}`:'Belum ada kartu');setText('[data-upi-topic]',current?.topic||material);setText('[data-upi-prompt]',current?.prompt||`Belum ada kartu ${material} untuk blok ${block}.`);setText('[data-upi-answer]',current?.answer||'—');setText('[data-upi-explanation]',current?.explanation||'Tambahkan bank flash card untuk deck ini.');const img=root.querySelector('[data-upi-image]');if(img){img.src=current?.image||'assets/flashcards/heart.svg';img.alt=current?`Ilustrasi ${current.topic}`:'Belum ada kartu';img.style.cursor=current?'zoom-in':'default';img.onclick=e=>{e.stopPropagation();if(current)upiOpenImageZoom(current.image,current.topic||'Gambar flashcard');};}const flip=root.querySelector('[data-upi-flip]');if(flip){flip.classList.remove('is-flipped');flip.setAttribute('aria-pressed','false');flip.toggleAttribute('aria-disabled',!current);flip.setAttribute('aria-label',current?'Kartu flashcard. Ketuk untuk membuka jawaban.':'Belum ada kartu di deck ini.');}root.querySelector('[data-upi-rating]')?.setAttribute('hidden','');const due=cards.filter(c=>upiDue(c,reviews[c.id],Date.now())).length;setText('[data-upi-due]',String(due));}
 function upiToggleFlipMaterial(block,material){const root=document.getElementById(upiMaterialPageId(block,material));if(!root||!root._upiCurrent)return;const flip=root.querySelector('[data-upi-flip]');if(!flip)return;const flipped=flip.classList.toggle('is-flipped');flip.setAttribute('aria-pressed',String(flipped));if(flipped)upiRevealMaterial(block,material);}
 function upiRevealMaterial(block,material){const root=document.getElementById(upiMaterialPageId(block,material));if(!root||!root._upiCurrent)return;root._upiRevealed=true;root.querySelector('[data-upi-rating]')?.removeAttribute('hidden');}
-function upiRateMaterial(block,material,rating){const root=document.getElementById(upiMaterialPageId(block,material));if(!root||!root._upiCurrent||!root._upiRevealed)return;const card=root._upiCurrent,reviews=upiEnsureMaterialReviews(block,material),old=reviews[card.id]||{reps:0,interval:0,ease:2.5,lapses:0};const next={...old,lastRating:rating},day=86400000;if(rating==='again'){next.lapses=(old.lapses||0)+1;next.reps=0;next.interval=0;next.ease=Math.max(1.3,(old.ease||2.5)-0.2);next.dueAt=Date.now()+10*60000;}else if(rating==='hard'){next.reps=(old.reps||0)+1;next.ease=Math.max(1.5,(old.ease||2.5)-0.15);next.interval=Math.max(1,old.interval?Math.round(old.interval*1.2):1);next.dueAt=Date.now()+next.interval*day;}else if(rating==='good'){next.reps=(old.reps||0)+1;next.ease=Math.min(3.3,(old.ease||2.5)+0.05);next.interval=old.interval?Math.max(2,Math.round(old.interval*next.ease)):3;next.dueAt=Date.now()+next.interval*day;}else{next.reps=(old.reps||0)+1;next.ease=Math.min(3.5,(old.ease||2.5)+0.15);next.interval=old.interval?Math.max(4,Math.round(old.interval*next.ease*1.3)):7;next.dueAt=Date.now()+next.interval*day;}reviews[card.id]=next;set(UPI_REVIEW_PREFIX+block+'_'+material,reviews);showToast(rating==='again'?'Kartu akan diulang 10 menit lagi':`Kartu dijadwalkan ${next.interval} hari lagi`);upiRenderMaterial(block,material,upiPickMaterial(block,material));}
+function upiRateMaterial(block,material,rating){const root=document.getElementById(upiMaterialPageId(block,material));if(!root||!root._upiCurrent||!root._upiRevealed)return;try{addXP(5,"Kartu UPI",{kind:"upi",ref:"upi:"+root._upiCurrent.id});}catch(e){}const card=root._upiCurrent,reviews=upiEnsureMaterialReviews(block,material),old=reviews[card.id]||{reps:0,interval:0,ease:2.5,lapses:0};const next={...old,lastRating:rating},day=86400000;if(rating==='again'){next.lapses=(old.lapses||0)+1;next.reps=0;next.interval=0;next.ease=Math.max(1.3,(old.ease||2.5)-0.2);next.dueAt=Date.now()+10*60000;}else if(rating==='hard'){next.reps=(old.reps||0)+1;next.ease=Math.max(1.5,(old.ease||2.5)-0.15);next.interval=Math.max(1,old.interval?Math.round(old.interval*1.2):1);next.dueAt=Date.now()+next.interval*day;}else if(rating==='good'){next.reps=(old.reps||0)+1;next.ease=Math.min(3.3,(old.ease||2.5)+0.05);next.interval=old.interval?Math.max(2,Math.round(old.interval*next.ease)):3;next.dueAt=Date.now()+next.interval*day;}else{next.reps=(old.reps||0)+1;next.ease=Math.min(3.5,(old.ease||2.5)+0.15);next.interval=old.interval?Math.max(4,Math.round(old.interval*next.ease*1.3)):7;next.dueAt=Date.now()+next.interval*day;}reviews[card.id]=next;set(UPI_REVIEW_PREFIX+block+'_'+material,reviews);showToast(rating==='again'?'Kartu akan diulang 10 menit lagi':`Kartu dijadwalkan ${next.interval} hari lagi`);upiRenderMaterial(block,material,upiPickMaterial(block,material));}
 function upiPickNextCardForBlock(block){const cards=upiCardsForBlock(block),raw=get(UPI_REVIEW_PREFIX+block,{}),reviews=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{},now=Date.now();return cards.map(card=>({card,r:reviews[card.id]||{}})).sort((a,b)=>{const ad=upiDue(a.card,a.r,now),bd=upiDue(b.card,b.r,now);if(ad!==bd)return ad?-1:1;if((a.r.dueAt||0)!==(b.r.dueAt||0))return(a.r.dueAt||0)-(b.r.dueAt||0);return(a.r.reps||0)-(b.r.reps||0);})[0]?.card||cards[0]||null;}
 function upiRenderScoped(block,card){const root=upiPageEl(block);if(!root)return;upiEnsureReviewsForBlock(block);const cards=upiCardsForBlock(block),reviews=(()=>{const raw=get(UPI_REVIEW_PREFIX+block,{});return raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};})();const current=card||upiPickNextCardForBlock(block);root._upiCurrent=current;root._upiRevealed=false;const idx=Math.max(1,cards.findIndex(c=>c.id===current?.id)+1);const setText=(sel,v)=>{const el=root.querySelector(sel);if(el)el.textContent=v;};setText('[data-upi-index]',current?`Kartu ${idx} / ${cards.length}`:'Belum ada kartu');setText('[data-upi-topic]',current?.topic||'Belum tersedia');setText('[data-upi-prompt]',current?.prompt||'Belum ada kartu untuk blok ini.');setText('[data-upi-answer]',current?.answer||'—');setText('[data-upi-explanation]',current?.explanation||'Tambahkan bank flash card untuk blok ini.');const img=root.querySelector('[data-upi-image]');if(img){img.src=current?.image||'assets/flashcards/heart.svg';img.alt=current?`Ilustrasi ${current.topic}`:'Belum ada kartu';img.style.cursor=current?'zoom-in':'default';img.onclick=()=>current&&upiOpenImageZoom(current.image,current.topic||'Gambar flashcard');}root.querySelector('[data-upi-answer-wrap]')?.setAttribute('hidden','');root.querySelector('[data-upi-rating]')?.setAttribute('hidden','');const reveal=root.querySelector('[data-upi-reveal]');if(reveal){reveal.hidden=!current;reveal.textContent='';reveal.innerHTML='Buka jawaban <span>↗</span>';}setText('[data-upi-hint]',current?'TEBAK DULU':'BELUM ADA KARTU');upiRenderScopedMemory(block);}
 function upiEnsureReviewsForBlock(block){const raw=get(UPI_REVIEW_PREFIX+block,{}),reviews=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};let changed=false;upiCardsForBlock(block).forEach(card=>{if(!reviews[card.id]){reviews[card.id]={reps:0,interval:0,ease:2.5,dueAt:0,lapses:0,lastRating:null};changed=true;}});if(changed)set(UPI_REVIEW_PREFIX+block,reviews);return reviews;}
 function upiRenderScopedMemory(block){const root=upiPageEl(block),cards=upiCardsForBlock(block),reviews=upiEnsureReviewsForBlock(block),now=Date.now();const counts={again:0,hard:0,good:0,easy:0};cards.forEach(c=>{const r=reviews[c.id];if(r?.lastRating&&counts[r.lastRating]!==undefined)counts[r.lastRating]++;});const due=cards.filter(c=>upiDue(c,reviews[c.id],now)).length;const dueEl=root?.querySelector('[data-upi-due]');if(dueEl)dueEl.textContent=due;const bars=root?.querySelector('[data-upi-bars]');if(bars)bars.innerHTML=[['again',counts.again,'Salah'],['hard',counts.hard,'Sulit'],['good',counts.good,'Ingat'],['easy',counts.easy,'Mudah']].map(x=>`<div class="upi-memory-bar"><b>${x[1]}</b><small>${x[2]}</small></div>`).join('');const list=root?.querySelector('[data-upi-review-list]');if(!list)return;const ranked=cards.map(card=>({card,r:reviews[card.id]})).sort((a,b)=>{const ad=upiDue(a.card,a.r,now),bd=upiDue(b.card,b.r,now);if(ad!==bd)return ad?-1:1;return(a.r.dueAt||0)-(b.r.dueAt||0);});list.innerHTML=ranked.map(({card,r})=>`<div class="upi-review-item"><div class="mini-thumb"><img src="${card.image}" alt=""></div><div><b>${esc(card.answer)}</b><small>${esc(card.topic)} • ${r.reps||0}× direview</small></div><span class="upi-review-due">${upiDue(card,r,now)?'ULANG SEKARANG':upiFormatDue(r.dueAt)}</span></div>`).join('');}
 function upiRevealScoped(block){const root=upiPageEl(block);if(!root||!root._upiCurrent||root._upiRevealed)return;root._upiRevealed=true;root.querySelector('[data-upi-answer-wrap]')?.removeAttribute('hidden');root.querySelector('[data-upi-rating]')?.removeAttribute('hidden');const reveal=root.querySelector('[data-upi-reveal]');if(reveal)reveal.hidden=true;const hint=root.querySelector('[data-upi-hint]');if(hint)hint.textContent='JAWABAN TERBUKA';}
-function upiRateScoped(block,rating){const root=upiPageEl(block);if(!root||!root._upiCurrent||!root._upiRevealed)return;const card=root._upiCurrent,reviews=upiEnsureReviewsForBlock(block),old=reviews[card.id]||{reps:0,interval:0,ease:2.5,lapses:0};const next={...old,lastRating:rating},day=86400000;if(rating==='again'){next.lapses=(old.lapses||0)+1;next.reps=0;next.interval=0;next.ease=Math.max(1.3,(old.ease||2.5)-0.2);next.dueAt=Date.now()+10*60000;}else if(rating==='hard'){next.reps=(old.reps||0)+1;next.ease=Math.max(1.5,(old.ease||2.5)-0.15);next.interval=Math.max(1,old.interval?Math.round(old.interval*1.2):1);next.dueAt=Date.now()+next.interval*day;}else if(rating==='good'){next.reps=(old.reps||0)+1;next.ease=Math.min(3.3,(old.ease||2.5)+0.05);next.interval=old.interval?Math.max(2,Math.round(old.interval*next.ease)):3;next.dueAt=Date.now()+next.interval*day;}else{next.reps=(old.reps||0)+1;next.ease=Math.min(3.5,(old.ease||2.5)+0.15);next.interval=old.interval?Math.max(4,Math.round(old.interval*next.ease*1.3)):7;next.dueAt=Date.now()+next.interval*day;}reviews[card.id]=next;set(UPI_REVIEW_PREFIX+block,reviews);showToast(rating==='again'?'Kartu akan diulang 10 menit lagi':`Kartu dijadwalkan ${next.interval} hari lagi`);upiRenderScoped(block,upiPickNextCardForBlock(block));}
+function upiRateScoped(block,rating){const root=upiPageEl(block);if(!root||!root._upiCurrent||!root._upiRevealed)return;try{addXP(5,"Kartu UPI",{kind:"upi",ref:"upi:"+root._upiCurrent.id});}catch(e){}const card=root._upiCurrent,reviews=upiEnsureReviewsForBlock(block),old=reviews[card.id]||{reps:0,interval:0,ease:2.5,lapses:0};const next={...old,lastRating:rating},day=86400000;if(rating==='again'){next.lapses=(old.lapses||0)+1;next.reps=0;next.interval=0;next.ease=Math.max(1.3,(old.ease||2.5)-0.2);next.dueAt=Date.now()+10*60000;}else if(rating==='hard'){next.reps=(old.reps||0)+1;next.ease=Math.max(1.5,(old.ease||2.5)-0.15);next.interval=Math.max(1,old.interval?Math.round(old.interval*1.2):1);next.dueAt=Date.now()+next.interval*day;}else if(rating==='good'){next.reps=(old.reps||0)+1;next.ease=Math.min(3.3,(old.ease||2.5)+0.05);next.interval=old.interval?Math.max(2,Math.round(old.interval*next.ease)):3;next.dueAt=Date.now()+next.interval*day;}else{next.reps=(old.reps||0)+1;next.ease=Math.min(3.5,(old.ease||2.5)+0.15);next.interval=old.interval?Math.max(4,Math.round(old.interval*next.ease*1.3)):7;next.dueAt=Date.now()+next.interval*day;}reviews[card.id]=next;set(UPI_REVIEW_PREFIX+block,reviews);showToast(rating==='again'?'Kartu akan diulang 10 menit lagi':`Kartu dijadwalkan ${next.interval} hari lagi`);upiRenderScoped(block,upiPickNextCardForBlock(block));}
 function upiOpenBlock(block){if(!UPI_BLOCKS.some(b=>b.id===block))return;upiSelectedBlock=block;localStorage.setItem(UPI_BLOCK_KEY,block);upiEnsureDetailPages();show(upiDetailId(block));}
 
 function upiRenderMemory(){const cards=upiCardsForBlock(upiSelectedBlock),reviews=upiEnsureReviews(),now=Date.now();const counts={again:0,hard:0,good:0,easy:0},due=cards.filter(c=>upiDue(c,reviews[c.id],now)).length;Object.values(reviews).forEach(r=>{if(r.lastRating&&counts[r.lastRating]!==undefined)counts[r.lastRating]++;});const dueEl=$('upiDueCount');if(dueEl)dueEl.textContent=due;const bars=$('upiMemoryBars');if(bars)bars.innerHTML=[['again',counts.again,'Salah'],['hard',counts.hard,'Sulit'],['good',counts.good,'Ingat'],['easy',counts.easy,'Mudah']].map(x=>`<div class="upi-memory-bar"><b>${x[1]}</b><small>${x[2]}</small></div>`).join('');const list=$('upiReviewList');if(!list)return;const ranked=cards.map(card=>({card,r:reviews[card.id]})).sort((a,b)=>{const ad=upiDue(a.card,a.r,now),bd=upiDue(b.card,b.r,now);if(ad!==bd)return ad?-1:1;return(a.r.dueAt||0)-(b.r.dueAt||0);});list.innerHTML=ranked.map(({card,r})=>`<div class="upi-review-item"><div class="mini-thumb"><img src="${card.image}" alt=""></div><div><b>${esc(card.answer)}</b><small>${esc(card.topic)} • ${r.reps||0}× direview</small></div><span class="upi-review-due">${upiDue(card,r,now)?'ULANG SEKARANG':upiFormatDue(r.dueAt)}</span></div>`).join('');}
 function upiRenderCard(card){upiCurrentCard=card||upiPickNextCard();upiCardRevealed=false;const cards=upiCardsForBlock(upiSelectedBlock);const idx=Math.max(1,cards.findIndex(c=>c.id===upiCurrentCard?.id)+1);if($('upiCardIndex'))$('upiCardIndex').textContent=upiCurrentCard?`Kartu ${idx} / ${cards.length}`:'Belum ada kartu';if($('upiCardTopic'))$('upiCardTopic').textContent=upiCurrentCard?upiCurrentCard.topic:'Belum tersedia';if($('upiFlashImage')){$('upiFlashImage').src=upiCurrentCard?.image||'assets/flashcards/heart.svg';$('upiFlashImage').alt=upiCurrentCard?`Ilustrasi ${upiCurrentCard.topic}`:'Belum ada kartu';}if($('upiFlashPrompt'))$('upiFlashPrompt').textContent=upiCurrentCard?.prompt||'Belum ada kartu untuk blok ini.';if($('upiFlashAnswer'))$('upiFlashAnswer').textContent=upiCurrentCard?.answer||'—';if($('upiFlashExplanation'))$('upiFlashExplanation').textContent=upiCurrentCard?.explanation||'Tambahkan bank flash card untuk blok ini.';if($('upiAnswerWrap'))$('upiAnswerWrap').hidden=true;if($('upiRating'))$('upiRating').hidden=!upiCurrentCard;const reveal=$('upiRevealBtn');if(reveal){reveal.hidden=!upiCurrentCard;reveal.disabled=!upiCurrentCard;reveal.textContent='Buka jawaban';}const hint=document.querySelector('.upi-image-hint');if(hint)hint.textContent=upiCurrentCard?'TEBAK DULU':'BELUM ADA KARTU';upiRenderMemory();}
 function upiReveal(){if(!upiCurrentCard||upiCardRevealed)return;upiCardRevealed=true;if($('upiAnswerWrap'))$('upiAnswerWrap').hidden=false;if($('upiRating'))$('upiRating').hidden=false;const reveal=$('upiRevealBtn');if(reveal)reveal.hidden=true;const hint=document.querySelector('.upi-image-hint');if(hint)hint.textContent='JAWABAN TERBUKA';}
-function upiRate(rating){if(!upiCurrentCard||!upiCardRevealed)return;const reviews=upiEnsureReviews(),old=reviews[upiCurrentCard.id]||{reps:0,interval:0,ease:2.5,lapses:0};const next={...old,lastRating:rating};const day=86400000;if(rating==='again'){next.lapses=(old.lapses||0)+1;next.reps=0;next.interval=0;next.ease=Math.max(1.3,(old.ease||2.5)-0.2);next.dueAt=Date.now()+10*60000;}else if(rating==='hard'){next.reps=(old.reps||0)+1;next.ease=Math.max(1.5,(old.ease||2.5)-0.15);next.interval=Math.max(1,old.interval?Math.round(old.interval*1.2):1);next.dueAt=Date.now()+next.interval*day;}else if(rating==='good'){next.reps=(old.reps||0)+1;next.ease=Math.min(3.3,(old.ease||2.5)+0.05);next.interval=old.interval?Math.max(2,Math.round(old.interval*next.ease)):3;next.dueAt=Date.now()+next.interval*day;}else{next.reps=(old.reps||0)+1;next.ease=Math.min(3.5,(old.ease||2.5)+0.15);next.interval=old.interval?Math.max(4,Math.round(old.interval*next.ease*1.3)):7;next.dueAt=Date.now()+next.interval*day;}reviews[upiCurrentCard.id]=next;upiSaveReviews(reviews);showToast(rating==='again'?'Kartu akan diulang 10 menit lagi':`Kartu dijadwalkan ${next.interval} hari lagi`);upiRenderCard(upiPickNextCard());}
+function upiRate(rating){if(!upiCurrentCard||!upiCardRevealed)return;try{addXP(5,"Kartu UPI",{kind:"upi",ref:"upi:"+upiCurrentCard.id});}catch(e){}const reviews=upiEnsureReviews(),old=reviews[upiCurrentCard.id]||{reps:0,interval:0,ease:2.5,lapses:0};const next={...old,lastRating:rating};const day=86400000;if(rating==='again'){next.lapses=(old.lapses||0)+1;next.reps=0;next.interval=0;next.ease=Math.max(1.3,(old.ease||2.5)-0.2);next.dueAt=Date.now()+10*60000;}else if(rating==='hard'){next.reps=(old.reps||0)+1;next.ease=Math.max(1.5,(old.ease||2.5)-0.15);next.interval=Math.max(1,old.interval?Math.round(old.interval*1.2):1);next.dueAt=Date.now()+next.interval*day;}else if(rating==='good'){next.reps=(old.reps||0)+1;next.ease=Math.min(3.3,(old.ease||2.5)+0.05);next.interval=old.interval?Math.max(2,Math.round(old.interval*next.ease)):3;next.dueAt=Date.now()+next.interval*day;}else{next.reps=(old.reps||0)+1;next.ease=Math.min(3.5,(old.ease||2.5)+0.15);next.interval=old.interval?Math.max(4,Math.round(old.interval*next.ease*1.3)):7;next.dueAt=Date.now()+next.interval*day;}reviews[upiCurrentCard.id]=next;upiSaveReviews(reviews);showToast(rating==='again'?'Kartu akan diulang 10 menit lagi':`Kartu dijadwalkan ${next.interval} hari lagi`);upiRenderCard(upiPickNextCard());}
 
 const CLINED_UAB_BLOCKS=[
   ['BM1','🦴'],['BM2','🧬'],['HNC','👂'],['MP1','🩺'],['MP2','💊'],['MPT','🧪'],
@@ -1855,7 +2344,7 @@ function renderMaterialsPage(){
         const i=start+offset,url=mergedUrls[name];
         return `<button type="button" class="material-block-card${url?' has-material':''}" data-material-block="${esc(name)}" ${url?'':'aria-disabled="true"'}>
           <span class="material-block-number">${String(i+1).padStart(2,'0')}</span><span class="material-block-icon">${icon}</span>
-          <span class="material-block-copy"><b>${esc(name)}</b><small>${url?'Materi tersedia':'Materi belum tersedia'}</small></span><span class="material-block-arrow">›</span>
+          <span class="material-block-copy"><b>${esc(name)}</b><small>${url?'Materi tersedia':'Materi belum tersedia'}</small></span>
         </button>`;
       }).join('');
       return `<section class="materials-semester" aria-labelledby="materialsSemester${semester}"><div class="materials-semester-divider" id="materialsSemester${semester}"><span>SEMESTER ${semester}</span></div><div class="materials-semester-track">${cards}</div></section>`;
@@ -1873,7 +2362,7 @@ function renderMaterialsPage(){
         const i=start+offset,url=CLINED_MATERIAL_URLS[name];
         return `<button type="button" class="material-block-card${url?' has-material':''}" data-material-block="${esc(name)}" ${url?'':'aria-disabled="true"'}>
           <span class="material-block-number">${String(i+1).padStart(2,'0')}</span><span class="material-block-icon">${icon}</span>
-          <span class="material-block-copy"><b>${esc(name)}</b><small>${url?'Materi tersedia':'Materi belum tersedia'}</small></span><span class="material-block-arrow">›</span>
+          <span class="material-block-copy"><b>${esc(name)}</b><small>${url?'Materi tersedia':'Materi belum tersedia'}</small></span>
         </button>`;
       }).join('');
       return `<section class="materials-semester" aria-labelledby="materialsSemester${semester}"><div class="materials-semester-divider" id="materialsSemester${semester}"><span>SEMESTER ${semester}</span></div><div class="materials-semester-track">${cards}</div></section>`;
@@ -1983,9 +2472,9 @@ if($("dashboardDetailStatScope"))$("dashboardDetailStatScope").addEventListener(
   renderDashboardBlockOptions();
   renderHomeClinicalDashboard();renderClinicalDashboard();
 });
-function confirmResetBlock(){
+async function confirmResetBlock(){
   const block=currentBlockStatsScope();
-  if(confirm(`Reset statistik grafik untuk ${blockLabel(block)}? Statistik BLOK lain tidak akan berubah.`)) resetCurrentBlockStatistics();
+  if(await clinedConfirm({title:"Reset statistik blok ini?",lines:[`Statistik grafik untuk **${blockLabel(block)}** akan direset. Statistik blok lain tidak berubah.`],ok:"Reset",tone:"danger"})) resetCurrentBlockStatistics();
 }
 if($("resetBlockStatsBtn"))$("resetBlockStatsBtn").onclick=confirmResetBlock;
 if($("resetDetailBlockStatsBtn"))$("resetDetailBlockStatsBtn").onclick=confirmResetBlock;
@@ -2013,7 +2502,28 @@ if($("closeClinicalDashboard"))$("closeClinicalDashboard").onclick=()=>{
 if($("flashcardsBtn"))$("flashcardsBtn").onclick=initFlashcards;
 if($("bookmarkDrillBtn"))$("bookmarkDrillBtn").onclick=startBookmarkDrill;
 if($("smart10Btn"))$("smart10Btn").onclick=startSmart10;
+function openHomeQuestionSearch(){
+  const input = $("homeQuestionSearch");
+  const target = $("librarySearch");
+  if (target) target.value = String(input?.value || "").trim();
+  if ($("libraryBank")) $("libraryBank").value = "all";
+  window.__clinedReviewBankId = null;
+  show("library");
+  renderLibrary();
+}
+
+if ($("homeQuestionSearchBtn"))
+  $("homeQuestionSearchBtn").addEventListener("click", openHomeQuestionSearch);
+if ($("homeQuestionSearch"))
+  $("homeQuestionSearch").addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      openHomeQuestionSearch();
+    }
+  });
+
 if($("libraryBtn"))$("libraryBtn").onclick=()=>{renderLibrary();show("library");setTimeout(()=>$("librarySearch")?.focus(),120)};
+if($("reviewLibraryBtn"))$("reviewLibraryBtn").onclick=()=>{if($("librarySearch"))$("librarySearch").value="";if($("libraryBank"))$("libraryBank").value="all";renderLibrary();show("library")};
 if($("librarySearch"))$("librarySearch").addEventListener("input",renderLibrary);
 if($("libraryBank"))$("libraryBank").addEventListener("change",renderLibrary);
 if($("flashRevealBtn"))$("flashRevealBtn").onclick=()=>{ENH.flashShown=!ENH.flashShown;renderFlashcard()};
@@ -2085,7 +2595,7 @@ function exportAccountData(){
 function restoreAccountData(file){
   if(!file)return;
   const reader=new FileReader();
-  reader.onload=()=>{
+  reader.onload=async()=>{
     try{
       const payload=JSON.parse(String(reader.result||''));
       const safe=payload?.localStorage;
@@ -2094,7 +2604,7 @@ function restoreAccountData(file){
       const owned=/^(gaster_|clined_|medicalRpg|medical_rpg|current_block|last_worked|dashboard_block|alpha5_|clined_menu)/;
       const keys=Object.keys(safe).filter(k=>!blocked.has(k) && owned.test(k) && typeof safe[k]==='string');
       if(!keys.length) throw Error('Tidak ada data aplikasi yang bisa dipulihkan.');
-      if(!confirm(`Pulihkan ${keys.length} data aplikasi dari backup ini? Data lokal yang sama akan diperbarui.`)) return;
+      if(!(await clinedConfirm({title:'Pulihkan data dari backup?',icon:'♻️',tone:'info',lines:[`**${keys.length} data** akan dipulihkan. Data di perangkat ini yang sama akan ditimpa.`],ok:'Pulihkan'}))) return;
       keys.forEach(k=>localStorage.setItem(k,safe[k]));
       const profile=payload.profile;
       if(profile && typeof profile==='object'){
@@ -2115,7 +2625,7 @@ function restoreAccountData(file){
 async function deleteAccount(){
   const user=authCurrentUser();
   if(!user){showToast('Masuk dulu untuk menghapus akun');return;}
-  if(!confirm('Hapus akun CLINED ini? Akun tidak dapat dipulihkan. Data belajar yang tersimpan di browser tidak akan ikut terhapus.'))return;
+  if(!(await clinedConfirm({title:'Hapus akun CLINED?',lines:['Akun **tidak bisa dipulihkan** setelah dihapus.','Data belajar yang tersimpan di browser ini tidak ikut terhapus.'],ok:'Hapus akun',tone:'danger'})))return;
   try{await authApi('/account',{method:'DELETE',body:'{}'});authServerUser=null;try{window.CLINED_ONLINE_SYNC?.switchUser?.('');}catch{} renderAccount();showToast('Akun berhasil dihapus.');}
   catch(error){showToast(error?.message||'Akun tidak dapat dihapus.');}
 }
@@ -2142,6 +2652,52 @@ function authSyncProfile(user){
   const existing=getAccount();
   set(ACCOUNT_KEY,{...existing,name:user.name,username:user.username,avatar:existing.avatar||user.name.charAt(0).toUpperCase()||'C',authUserId:user.id});
 }
+async function authRestoreMissingLearningState(){
+  try{
+    if(!authServerUser)return;
+
+    const r=await fetch('/api/sync',{
+      method:'GET',
+      credentials:'same-origin',
+      headers:{'Content-Type':'application/json'}
+    });
+    if(!r.ok)return;
+
+    const d=await r.json().catch(()=>null);
+    const state=d?.state;
+    if(!state||typeof state!=='object')return;
+
+    const nativeSet=Object.getOwnPropertyDescriptor(Storage.prototype,'setItem')?.value;
+    if(typeof nativeSet!=='function')return;
+
+    const metaRaw=localStorage.getItem('clined_sync_meta_v1');
+    let meta={};
+    try{meta=JSON.parse(metaRaw||'{}')||{};}catch{}
+
+    let restored=0;
+
+    for(const [key,item] of Object.entries(state)){
+      if(!item||item.deleted||typeof item.value!=='string')continue;
+      if(localStorage.getItem(key)!==null)continue;
+
+      nativeSet.call(localStorage,key,item.value);
+
+      if(item.updatedAt){
+        meta[key]=item.updatedAt;
+      }
+
+      restored++;
+    }
+
+    if(restored){
+      nativeSet.call(localStorage,'clined_sync_meta_v1',JSON.stringify(meta));
+      try{renderXP();}catch{}
+      console.log('[CLINED] restored missing learning state:',restored);
+    }
+  }catch(e){
+    console.warn('CLINED learning-state recovery skipped',e);
+  }
+}
 function authScopeUser(user){
   if(!user)return;
   // Setiap akun punya ruang data belajar sendiri. Saat user berbeda, data lokal
@@ -2149,7 +2705,7 @@ function authScopeUser(user){
   try{window.CLINED_ONLINE_SYNC?.switchUser?.(user.id);}catch(error){console.warn('CLINED account scope skipped',error);}
 }
 async function authRestoreSession(){
-  try{const data=await authApi('/me',{method:'GET',headers:{}});authServerUser=data.user||null;authScopeUser(authServerUser);authSyncProfile(authServerUser);}
+  try{const data=await authApi('/me',{method:'GET',headers:{}});authServerUser=data.user||null;authScopeUser(authServerUser);authSyncProfile(authServerUser);if(authServerUser)await authRestoreMissingLearningState();}
   catch{authServerUser=null;}
   renderAccount();renderAccountAuthState();
   if(authServerUser){window.CLINED_AUTH_GATE?.unlock?.();show('home',{force:true});}
@@ -2178,13 +2734,13 @@ async function authCreateAccount(){
   const password=String($('authPassword').value||''),confirm=String($('authPasswordConfirm').value||'');
   if(password!==confirm)throw Error('Konfirmasi password tidak sama.');
   const data=await authApi('/register',{method:'POST',body:JSON.stringify({name,username,password})});
-  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);window.dispatchEvent(new Event('clined:auth-ready'));loadServerBanks().catch(()=>{});
+  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);await authRestoreMissingLearningState();window.dispatchEvent(new Event('clined:auth-ready'));loadServerBanks().catch(()=>{});
 }
 async function authLogin(){
   const identifier=String($('authLoginIdentifier').value||'').trim();
   const password=String($('authPassword').value||'');
   const data=await authApi('/login',{method:'POST',body:JSON.stringify({identifier,password})});
-  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);window.dispatchEvent(new Event('clined:auth-ready'));loadServerBanks().catch(()=>{});
+  authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);await authRestoreMissingLearningState();window.dispatchEvent(new Event('clined:auth-ready'));loadServerBanks().catch(()=>{});
 }
 async function authSubmit(event){
   event.preventDefault();if(authBusy)return;authBusy=true;authSetError('accountFormError','');
@@ -2193,10 +2749,42 @@ async function authSubmit(event){
   finally{authBusy=false;}
 }
 async function authLogout(){
-  try{await authApi('/logout',{method:'POST',body:'{}'});}catch{}
-  authServerUser=null;try{window.CLINED_ONLINE_SYNC?.switchUser?.('');}catch(error){console.warn('CLINED account cleanup skipped',error);}
-  // Logout manual harus kembali ke landing page (index.html), bukan tetap di app.html dengan modal login.
-  location.href='./index.html';
+  const logoutButton=$('logoutAccountBtn');
+  if(logoutButton)logoutButton.disabled=true;
+  try{
+    const queueKey='clined_online_sync_queue_v3';
+    const legacyQueueKey='clined_online_sync_queue_v2';
+    const pending=()=>{
+      try{
+        const current=JSON.parse(localStorage.getItem(queueKey)||'[]');
+        const legacy=JSON.parse(localStorage.getItem(legacyQueueKey)||'[]');
+        return (Array.isArray(current)?current.length:0)+(Array.isArray(legacy)?legacy.length:0);
+      }catch{return 1;}
+    };
+
+    if(!navigator.onLine){
+      throw Error('Kamu sedang offline. Sambungkan internet dan coba logout lagi agar progres tersinkron.');
+    }
+
+    const sync=window.CLINED_ONLINE_SYNC;
+    if(sync?.sync)await sync.sync({force:true});
+
+    if(pending()>0){
+      throw Error('Progres masih menunggu sinkronisasi. Coba lagi beberapa saat sebelum logout.');
+    }
+
+    await authApi('/logout',{method:'POST',body:'{}'});
+    authServerUser=null;
+    // Pertahankan data belajar lokal setelah logout.
+    // Jangan panggil switchUser('') karena fungsi tersebut menghapus
+    // data belajar, cursor, dan antrean sinkronisasi.
+    // Logout manual harus kembali ke landing page (index.html).
+    location.href='./index.html';
+  }catch(error){
+    console.error('CLINED logout ditunda:',error);
+    showToast(error?.message||'Logout gagal. Progres belajar tetap disimpan di perangkat ini.');
+    if(logoutButton)logoutButton.disabled=false;
+  }
 }
 function renderAccountAuthState(){
   const user=authCurrentUser(),title=$('accountAuthTitle'),sub=$('accountAuthSubtitle'),badge=$('accountSecurityBadge'),actions=$('accountAuthActions'),secure=$('accountSecurityActions');
@@ -2540,3 +3128,17 @@ document.addEventListener('click',e=>{
   timer=setInterval(check,30*1000);
   window.addEventListener('pagehide',()=>clearInterval(timer),{once:true});
 })();
+
+/* v96: edit soal dari layar kuis (admin/helper) */
+window.clinedEditCurrentQuiz=function(){
+  const q=quiz[pos]; if(!q||!q.rid||!q.bank)return showToast("Soal ini belum bisa diedit.",true);
+  const t={qid:q.rid,onSaved:raw=>{
+    const b=BANKS[q.bank];const i=b?.data?.findIndex(x=>String(x.id)===String(q.rid));if(i>=0)b.data[i]={...b.data[i],...raw};
+    const ord=q._order||raw.opsi.map((_,k)=>k);
+    q.soal=raw.soal;q.opsi=ord.map(k=>raw.opsi[k]);q.jawabanBenar=ord.indexOf(raw.jawabanBenar);
+    q.pembahasan=coreExplanation(raw);q.pembahasanPilihan=ord.map(k=>optionExplanation(raw,k)||"Belum ada pembahasan khusus untuk opsi ini.");q.catatanKlinis=raw.catatanKlinis||"";
+    try{renderQuestion(true);}catch(e){console.warn(e);}
+  }};
+  if(String(q.bank).startsWith("server-uab-"))t.packageId=String(q.bank).slice("server-uab-".length);else t.bankId=q.bank;
+  window.clinedEditQuestion(t);
+};
