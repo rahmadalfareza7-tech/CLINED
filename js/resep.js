@@ -1,14 +1,17 @@
-/* CLINED: Latihan Resep. Halaman sendiri di menu; UI di Shadow DOM supaya CSS global CLINED tidak ikut mengubahnya. */
+/* CLINED: Latihan Resep & Praktikum Farmakologi Blok Kedokteran Keluarga.
+   Halaman sendiri di menu; UI di Shadow DOM supaya CSS global CLINED tidak ikut mengubahnya. */
 (() => {
 'use strict';
 const BEST_KEY='clined_resep_best_v1';
+const LP_BEST_KEY='clined_resep_lp_best_v1';
 const gid=id=>document.getElementById(id);
-const {CASES,SEDIAAN,SINGK,PADAT,REV_SRC}=window.RESEP_DATA;
-const {n2r,r2n,checkResep,line1Of,rowsFromLines,FNAME}=window.RESEP_CORE;
+const {CASES,SEDIAAN,RACIKAN=[],TEORI_BSO={},SINGK,PADAT,REV_SRC}=window.RESEP_DATA;
+const {n2r,r2n,checkResep,line1Of,rowsFromLines,FNAME,evalLembarPengamatan}=window.RESEP_CORE;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=(a,n)=>shuffle(a).slice(0,n);
 const bestMap=()=>{try{const v=JSON.parse(localStorage.getItem(BEST_KEY)||'null');return v&&typeof v==='object'?v:{}}catch{return {}}};
+const lpBestMap=()=>{try{const v=JSON.parse(localStorage.getItem(LP_BEST_KEY)||'null');return v&&typeof v==='object'?v:{}}catch{return {}}};
 let sr=null,inited=false;
 const $=s=>sr.querySelector(s);
 const CSS=`:host{display:block;--green-soft:var(--brand-soft,#e6f7d4);--on-green:#fff;--red-soft:#ffe5e5;--red-dark:#d93a3a;--amber:#8a5d00;--amber-soft:#fff3c4;--rxb:#1c8ed8;--rxbs:#ddf1fd;--shadow:0 3px 0 rgba(31,42,35,.10);
@@ -46,6 +49,7 @@ main{display:grid;gap:14px;padding-top:4px}
 .badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:var(--green-soft);color:var(--green-dark)}
 .badge.warn{background:var(--amber-soft);color:var(--amber)}
 .badge.red{background:var(--red-soft);color:var(--red-dark)}
+.badge.blue{background:var(--rxbs);color:var(--rxb)}
 .progress{height:12px;background:var(--surface);border:2px solid var(--line);border-radius:99px;overflow:hidden}
 .progress i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .25s}
 .icon-btn{flex:none;width:42px;height:42px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);border-radius:14px;font-size:20px;font-weight:900;line-height:1;display:grid;place-items:center}
@@ -87,6 +91,7 @@ main{display:grid;gap:14px;padding-top:4px}
 .fb ul{margin:6px 0 0;padding-left:18px}
 .tag{display:inline-block;font-size:12px;font-weight:800;padding:3px 9px;border-radius:9px;margin:0 6px 6px 0}
 .tag.good{background:var(--green-soft);color:var(--green-dark)}.tag.bad{background:var(--red-soft);color:var(--red-dark)}
+.tag.warn{background:var(--amber-soft);color:var(--amber)}
 .rowfb{padding:10px 0;border-top:2px solid var(--line)}.rowfb:first-child{border-top:0;padding-top:0}
 /* kertas resep */
 .paper{background:var(--paper);color:var(--ink);border:1px solid #cfd6df;border-radius:6px;padding:18px 16px 20px;box-shadow:0 1px 0 #fff inset,0 6px 18px rgba(20,30,50,.12);position:relative}
@@ -122,7 +127,7 @@ label.l{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:0
 .fgrid{display:grid;gap:12px;margin-top:12px}
 @media(min-width:560px){.fgrid.c3{grid-template-columns:repeat(3,1fr)}.fgrid.c2{grid-template-columns:1fr 1fr}}
 .out{margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--green-soft);font-weight:900;font-size:17px;line-height:1.4}
-.seg{display:flex;gap:6px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
 .seg button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:12px;padding:6px 12px;font-weight:800;font-size:13px}
 .seg button[aria-pressed="true"]{background:var(--green);border-color:var(--green-dark);color:var(--on-green)}
 details.dt{border:2px solid var(--line);border-radius:16px;background:var(--card);padding:0}
@@ -133,7 +138,7 @@ details.dt>summary::after{content:"+";font-weight:900;color:var(--muted)}
 details.dt[open]>summary::after{content:"−"}
 details.dt>.in{padding:0 14px 14px}
 .item{padding:10px 0;border-top:2px solid var(--line)}.item:first-child{border-top:0}
-.kv{display:grid;gap:4px;font-size:14px;font-weight:600}.kv b{font-weight:800}
+.kv{display:grid;gap:6px;font-size:14px;font-weight:600}.kv b{font-weight:800}
 .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}
 .sc{display:grid;gap:10px;margin-top:10px}
 .sc .r{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-weight:800;font-size:14px}
@@ -149,20 +154,111 @@ details.dt>.in{padding:0 14px 14px}
 .answer .mk{color:#fff}
 .answer:not(.sel):not(.good):not(.bad):not(.alt) .mk{color:transparent}
 .answer.miss .mk{color:transparent}
+
+/* ===== BUNGKUS OBAT & LEMBAR PENGAMATAN (GAMBAR 1 & GAMBAR 2) ===== */
+.pkg-grid{display:grid;gap:14px;margin-top:12px}
+@media(min-width:680px){.pkg-grid{grid-template-columns:230px 1fr}}
+.pkg-photo-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px;position:relative;overflow:hidden;min-height:210px}
+.pkg-photo-box img{max-width:100%;max-height:195px;object-fit:contain;border-radius:8px;cursor:zoom-in;transition:transform .2s}
+.pkg-photo-box img:hover{transform:scale(1.04)}
+.pkg-zoom-hint{margin-top:8px;font-size:11.5px;font-weight:800;color:#4b5563;background:#f3f4f6;padding:4px 10px;border-radius:99px;border:1px solid #e5e7eb}
+.pkg-back{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:9px;align-content:start}
+.pkg-back-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-bottom:2px dashed var(--line);padding-bottom:8px}
+.pkg-back-list{display:grid;gap:6px;font-size:13.5px;line-height:1.45}
+.pkg-back-list.blurred{filter:blur(6px);user-select:none;pointer-events:none}
+.gol-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:800;border:1.5px solid var(--line);background:var(--card)}
+.gol-dot{width:20px;height:20px;border-radius:50%;border:2px solid #111;display:inline-grid;place-items:center;font-weight:900;font-size:11px;line-height:1;flex:none}
+.gol-dot.keras{background:#e11d48;color:#111}
+.gol-dot.bebas_terbatas{background:#1d4ed8;color:#fff}
+.gol-dot.bebas{background:#16a34a;color:#fff}
+.gol-dot.jamu{background:#fff;border-color:#15803d;color:#15803d;font-size:12px}
+.pno-box{background:#111;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800;line-height:1.3;display:inline-block}
+/* Lembar Pengamatan Worksheet (Gambar 2) */
+.lp-sheet{border:2px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin-top:12px}
+.lp-sheet-head{background:var(--surface);padding:12px 14px;border-bottom:2px solid var(--line);text-align:center}
+.lp-sheet-head h3{margin:0;font-size:15px;letter-spacing:.4px;text-transform:uppercase}
+.lp-form-grid{display:grid;gap:12px;padding:14px}
+@media(min-width:640px){.lp-form-grid{grid-template-columns:1fr 1fr}}
+.lp-col{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.lp-col.full{grid-column:1/-1}
+.lp-col.good{border-color:var(--green);background:var(--green-soft)}
+.lp-col.partial{border-color:#e0a800;background:var(--amber-soft)}
+.lp-col.bad{border-color:var(--red);background:var(--red-soft)}
+.lp-col-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:900}
+.lp-col-code{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--green);color:var(--on-green);font-size:12px;font-weight:900;flex:none}
+.lp-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.lp-chips button{border:1.5px solid var(--line);background:var(--card);border-radius:8px;padding:3px 8px;font-size:11.5px;font-weight:800}
+.lp-chips button:hover{border-color:var(--rxb)}
+/* Tabel Rekap Lembar Pengamatan */
+.lp-table-wrap{overflow-x:auto;border:2px solid var(--line);border-radius:16px;background:var(--card);margin-top:10px}
+table.lp-tbl{width:100%;border-collapse:collapse;min-width:960px;font-size:12.5px;line-height:1.45}
+table.lp-tbl th,table.lp-tbl td{border:1.5px solid var(--line);padding:9px 10px;vertical-align:top;text-align:left}
+table.lp-tbl th{background:var(--surface);font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2}
+table.lp-tbl td.lp-cell-hide{filter:blur(5px);cursor:pointer;user-select:none;transition:filter .15s}
+table.lp-tbl td.lp-cell-hide:hover{filter:blur(2px)}
+table.lp-tbl tr:nth-child(even) td{background:rgba(128,128,128,.04)}
+.tbl-thumb{width:54px;height:54px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px;padding:2px;cursor:zoom-in;display:block;margin-bottom:4px}
+/* Etiket Apotek YARSI */
+.etiket{border:2px solid #222;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.45;color:#111;max-width:360px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.etiket.putih{background:#ffffff}
+.etiket.biru{background:#bae6fd;border-color:#0369a1}
+.etiket-head{text-align:center;border-bottom:2px solid #222;padding-bottom:4px;margin-bottom:6px;font-weight:900;font-size:12px}
+/* Lightbox Modal */
+.rx-modal{position:fixed;inset:0;background:rgba(10,15,25,.82);z-index:9999;display:grid;place-items:center;padding:16px}
+.rx-modal[hidden]{display:none}
+.rx-modal-box{background:#fff;color:#111;border-radius:20px;max-width:560px;width:100%;padding:16px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.rx-modal-box img{max-width:100%;max-height:68vh;object-fit:contain;border-radius:10px}
 `;
+
 /* ===== STATE & ROUTER ===== */
 const STEPS_FULL=[{k:'v'},{k:'s1',n:1,w:20},{k:'s3',n:3,w:25},{k:'s4',n:4,w:35},{k:'s5',n:5,w:20},{k:'res'}];
 const STEPS_RX=[{k:'v'},{k:'s4',n:4,w:35},{k:'res'}];
 let STEPS=STEPS_FULL;
 const stOf=k=>STEPS_FULL.find(x=>x.k===k);
-const S={only:false,tab:'kasus',case:null,exam:false,step:0,f:null,chk:{},t0:0,tm:null,quiz:null,foc:{i:0,f:'l1'},sub:{sed:'kuis',sing:'kuis',pad:'kuis'}};
-const TABS=[['kasus','Kasus'],['sediaan','Sediaan'],['singkatan','Singkatan'],['padat','BSO padat'],['hitung','Hitung']];
+const S={
+  only:false,
+  tab:'kasus',
+  case:null,
+  exam:false,
+  step:0,
+  f:null,
+  chk:{},
+  t0:0,
+  tm:null,
+  quiz:null,
+  foc:{i:0,f:'l1'},
+  sub:{sed:'lp',sing:'kuis',pad:'kuis',pan:'racik'},
+  lp:{idx:0,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:''},tblFilter:'all',tblSearch:'',tblHide:false,revealed:{}},
+  racik:{idx:0,hideCalc:false}
+};
+const TABS=[['kasus','Kasus'],['sediaan','Sediaan & Bungkus'],['panduan','Panduan & Racikan'],['singkatan','Singkatan'],['padat','BSO padat'],['hitung','Hitung']];
 function renderTabs(){$('#tabs').hidden=false;$('#tabs').innerHTML=TABS.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${S.tab===k}" data-tab="${k}">${l}</button>`).join('')}
 function go(tab){stopTimer();S.tab=tab;S.quiz=null;S.case=null;renderTabs();render();scrollTo({top:0})}
-function render(){const m=$('#app');({kasus:viewKasus,sediaan:viewSediaan,singkatan:viewSingk,padat:viewPadat,hitung:viewHitung})[S.tab](m);fitAll()}
+function render(){const m=$('#app');({kasus:viewKasus,sediaan:viewSediaan,panduan:viewPanduan,singkatan:viewSingk,padat:viewPadat,hitung:viewHitung})[S.tab](m);fitAll()}
 const P=(label,act,dis,extra='')=>`<button class="primary" data-act="${act}" ${extra} ${dis?'disabled':''}>${label}</button>`;
 const X=(label,act,extra='')=>`<button class="secondary" data-act="${act}" ${extra}>${label}</button>`;
 const acts=(p,s)=>`<div class="actions ${s?'two':''}">${p}${s||''}</div>`;
+
+/* ===== HELPER VISUAL GOLONGAN OBAT ===== */
+const GOL_INFO={
+  keras:{label:'Obat Keras (Dengan Resep Dokter)',cls:'keras',sym:'K',warn:'HARUS DENGAN RESEP DOKTER'},
+  bebas_terbatas:{label:'Obat Bebas Terbatas',cls:'bebas_terbatas',sym:'●',warn:'AWAS! OBAT KERAS'},
+  bebas:{label:'Obat Bebas',cls:'bebas',sym:'●',warn:''},
+  jamu:{label:'Jamu / Obat Tradisional',cls:'jamu',sym:'🌿',warn:''}
+};
+const PNO_TEXT={
+  'P.No.1':'P.No.1: Awas! Obat Keras. Bacalah aturan memakainya.',
+  'P.No.2':'P.No.2: Awas! Obat Keras. Hanya untuk kumur, jangan ditelan.',
+  'P.No.3':'P.No.3: Awas! Obat Keras. Hanya untuk bagian luar dari badan.',
+  'P.No.4':'P.No.4: Awas! Obat Keras. Hanya untuk dibakar.',
+  'P.No.5':'P.No.5: Awas! Obat Keras. Tidak boleh ditelan.',
+  'P.No.6':'P.No.6: Awas! Obat Keras. Obat wasir, jangan ditelan.'
+};
+function golBadgeHtml(s){
+  const g=GOL_INFO[s.gol]||GOL_INFO.keras;
+  const pno=s.pNo&&PNO_TEXT[s.pNo]?`<div class="pno-box" style="margin-top:4px">${esc(PNO_TEXT[s.pNo])}</div>`:'';
+  return `<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="gol-pill"><span class="gol-dot ${g.cls}">${g.sym}</span><span>${esc(g.label)}</span></span>${s.pNo?`<span class="badge blue">${esc(s.pNo)}</span>`:''}</div>${pno}`;
+}
 
 /* ===== DAFTAR KASUS ===== */
 function viewKasus(m){
@@ -221,7 +317,7 @@ function stepS3(){
   const list=f.obatOpts.map((o,i)=>{const on=f.picks.includes(o),lc=o.toLowerCase();let cl='';
     if(d){if(j.req.includes(lc))cl=on?'good':'miss';else if(j.alt.includes(lc))cl=on?'alt':'';else cl=on?'bad':''}else if(on)cl='sel';
     return answerBtn(o+(d&&j.alt.includes(lc)?' (alternatif di catatan)':''),{cls:cl,dis:d,attr:`data-obat="${i}"`,mk:d&&cl==='bad'?'✕':'✓'})}).join('');
-  const fb=d?`<div role="status" class="fb ${j.hit===j.need&&!j.wrong?'good':'bad'}"><b>${j.hit} dari ${j.need} obat wajib terpilih${j.wrong?`, ${j.wrong} pilihan tidak sesuai`:''}.</b><div style="margin-top:8px"><span class="tag good">hijau benar</span><span class="tag bad">merah tidak sesuai</span><span class="tag" style="background:var(--amber-soft);color:var(--amber)">kuning terlewat</span><span class="tag" style="background:var(--blue-soft);color:var(--blue)">biru alternatif</span></div></div>`:'';
+  const fb=d?`<div role="status" class="fb ${j.hit===j.need&&!j.wrong?'good':'bad'}"><b>${j.hit} dari ${j.need} obat wajib terpilih${j.wrong?`, ${j.wrong} pilihan tidak sesuai`:''}.</b><div style="margin-top:8px"><span class="tag good">hijau benar</span><span class="tag bad">merah tidak sesuai</span><span class="tag" style="background:var(--amber-soft);color:var(--amber)">kuning terlewat</span><span class="tag" style="background:var(--rxbs);color:var(--rxb)">biru alternatif</span></div></div>`:'';
   const a=S.exam?acts(P('Lanjut','next'),prevBtn()):d?acts(P('Lanjut','next'),X('Coba lagi','retry')):acts(P('Periksa','check',!f.picks.length));
   return `<section class="card">${stepHead(st)}<h2>Pilih obat yang tepat</h2><p class="sub">Terapi kausal dan simtomatis. Pilih semua yang sesuai.</p><div class="answers">${list}</div>${fb}${a}</section>`;
 }
@@ -276,7 +372,7 @@ function saveBest(){const t=Math.round(scores().total),b=bestMap(),id=S.case.id+
 function finish(){['s1','s3','s4','s5'].forEach(k=>S.chk[k]=true);stopTimer();S.step=STEPS.length-1;saveBest();render();scrollTo({top:0})}
 function stepRes(){
   if(S.only)return stepResRx();
-  const c=S.case,sc=scores(),pass=sc.total>=80,r4=checkResep(c,S.f);
+  const c=S.case,sc=scores(),pass=sc.total>=80;
   const row=(l,v,mx)=>`<div class="r"><span>${l}</span><span>${Math.round(v)} / ${mx}</span><div class="progress"><i style="width:${100*v/mx}%"></i></div></div>`;
   return `<section class="card"><div class="step-h"><span class="badge ${pass?'':'warn'}">${pass?'Lulus':'Belum lulus (batas 80)'}</span><span class="muted">Kasus ${c.id}</span></div><div class="big">${Math.round(sc.total)}%</div><div class="sc">${row('Diagnosis',sc.s1,20)}${row('Pilihan obat',sc.s3,25)}${row('Resep',sc.s4,35)}${row('Informasi pasien',sc.s5,20)}</div></section>
   <section class="card"><h2>Resep yang kamu tulis</h2>${res4()}</section>
@@ -300,7 +396,8 @@ function drawQuiz(){
   if(z.i>=z.qs.length){const pct=Math.round(100*z.score/z.qs.length);
     m.innerHTML=`<div class="card"><div class="big">${pct}%</div><p class="sub" style="margin:6px 0 12px">${z.score} dari ${z.qs.length} benar</p><div class="progress"><i style="width:${pct}%"></i></div>${z.wrong.length?`<h3 style="margin-top:16px">Yang salah</h3>${z.wrong.map(w=>`<div class="item"><div>${esc(w.q)}</div><span class="tag good opt-text" style="margin-top:6px">${esc(w.a)}</span></div>`).join('')}`:'<p style="margin-top:14px">Semua benar.</p>'}${acts(P('Ulangi dengan soal baru','qagain'))}</div>`;return}
   const q=z.qs[z.i],d=z.ans!=null,pct=Math.round(100*z.i/z.qs.length);
-  m.innerHTML=`<div class="card"><div class="q-meta"><span>${esc(z.title)}</span><span>${z.i+1}/${z.qs.length}</span></div><div class="progress" style="margin-top:8px"><i style="width:${pct}%"></i></div><p class="q">${esc(q.q)}</p><div class="answers">${q.o.map((o,i)=>{let cl='';if(d){if(o===q.a)cl='good';else if(i===z.ans)cl='bad'}return answerBtn(o,{r:1,cls:cl,dis:d,attr:`data-ans="${i}"`,mk:cl==='bad'?'✕':cl==='good'?'✓':''})}).join('')}</div>${d?`<div class="fb ${q.o[z.ans]===q.a?'good':'bad'}"><b>${q.o[z.ans]===q.a?'Benar.':'Belum tepat.'}</b>${q.o[z.ans]===q.a?'':` Jawaban: <span class="opt-text">${esc(q.a)}</span>`}</div>${acts(P(z.i+1<z.qs.length?'Lanjut':'Lihat hasil','qnext'))}`:''}</div>`;
+  const imgHtml=q.img?`<div class="pkg-photo-box" style="margin-top:10px;min-height:150px"><img src="${esc(q.img)}" alt="Kemasan obat" data-zoom="${esc(q.img)}" data-zoom-title="Soal Kuis Sediaan"><span class="pkg-zoom-hint">🔍 Ketuk gambar untuk memperbesar</span></div>`:'';
+  m.innerHTML=`<div class="card"><div class="q-meta"><span>${esc(z.title)}</span><span>${z.i+1}/${z.qs.length}</span></div><div class="progress" style="margin-top:8px"><i style="width:${pct}%"></i></div>${imgHtml}<p class="q">${esc(q.q)}</p><div class="answers">${q.o.map((o,i)=>{let cl='';if(d){if(o===q.a)cl='good';else if(i===z.ans)cl='bad'}return answerBtn(o,{r:1,cls:cl,dis:d,attr:`data-ans="${i}"`,mk:cl==='bad'?'✕':cl==='good'?'✓':''})}).join('')}</div>${d?`<div class="fb ${q.o[z.ans]===q.a?'good':'bad'}"><b>${q.o[z.ans]===q.a?'Benar.':'Belum tepat.'}</b>${q.o[z.ans]===q.a?'':` Jawaban: <span class="opt-text">${esc(q.a)}</span>`}${q.exp?`<div style="margin-top:6px;font-size:13px">${esc(q.exp)}</div>`:''}</div>${acts(P(z.i+1<z.qs.length?'Lanjut':'Lihat hasil','qnext'))}`:''}</div>`;
 }
 function answer(i){const z=S.quiz,q=z.qs[z.i];if(z.ans!=null)return;z.ans=i;if(q.o[i]===q.a)z.score++;else z.wrong.push(q);drawQuiz()}
 /* pilihan pengecoh: tidak boleh satu kelompok, dan tidak boleh memuat / termuat dalam jawaban benar */
@@ -312,25 +409,402 @@ function opts(a,pool,n=3,grp=()=>''){
 }
 const subnav=(key,items)=>`<div class="seg" role="group" style="margin-top:12px">${items.map(([k,l])=>`<button aria-pressed="${S.sub[key]===k}" data-sub="${key}:${k}">${l}</button>`).join('')}</div>`;
 
-/* ===== SEDIAAN ===== */
-const fb=f=>f.startsWith('serbuk injeksi')?'serbuk injeksi':f.startsWith('suspensi')?'suspensi':f;
+/* ===== SEDIAAN BSO CAIR (26 OBAT GAMBAR 1 + LEMBAR PENGAMATAN GAMBAR 2) ===== */
+const fb=f=>f.startsWith('serbuk injeksi')?'serbuk injeksi':f.startsWith('suspensi')?'suspensi':f.startsWith('inhaler')?'inhaler':f;
 const rb=r=>/^injeksi/.test(r)?'injeksi':r.replace(/\s*\(.*\)/,'').trim();
 function viewSediaan(m){
-  m.innerHTML=`<div class="card"><h2>Kenali sediaan cair</h2><p class="sub">${SEDIAAN.length} produk dari praktikum BSO cair (Bu Risda).</p>${subnav('sed',[['kuis','Kuis'],['daftar','Daftar']])}</div><div id="quiz"></div><div id="list"></div>`;
-  if(S.sub.sed==='daftar'){$('#list').innerHTML=`<div class="card"><input class="f" id="q" placeholder="Cari produk atau zat aktif" aria-label="Cari"><div id="rows" style="margin-top:10px"></div></div>`;drawSed('')}
-  else if(!S.quiz)startQuiz(sedQs(),'Kuis sediaan');else drawQuiz();
+  const lpBest=lpBestMap(),doneCount=SEDIAAN.filter(s=>(lpBest[s.no]||0)>=80).length;
+  m.innerHTML=`<div class="card">
+    <div class="step-h"><span class="badge">Praktikum 2 · BSO Cair</span><span class="muted">DR. Dra. Risdawati Djohan, Apt., MKes</span></div>
+    <h2>26 Sediaan BSO Cair, Bungkus Obat &amp; Lembar Pengamatan</h2>
+    <p class="sub">Lengkap dengan foto bungkus asli &amp; label komposisi/dosis untuk 26 obat praktikum serta latihan Lembar Pengamatan kolom (a)–(f).</p>
+    ${subnav('sed',[['lp','📝 Lembar Pengamatan'],['tabel','📋 Tabel Kunci (a)–(f)'],['daftar','📦 Bungkus & Daftar (26)'],['kuis','🎯 Kuis']])}
+    <div style="margin-top:10px" class="sub">Progres Lembar Pengamatan: <b>${doneCount} / ${SEDIAAN.length}</b> obat lulus (≥80%)</div>
+  </div>
+  <div id="quiz"></div><div id="list"></div>`;
+  if(S.sub.sed==='lp')drawLembarPengamatan();
+  else if(S.sub.sed==='tabel')drawLpTable();
+  else if(S.sub.sed==='daftar'){$('#list').innerHTML=`<div class="card"><input class="f" id="q" placeholder="Cari nomor, nama praktikum, merek, zat aktif, atau bentuk sediaan..." aria-label="Cari"><div id="rows" style="margin-top:12px"></div></div>`;drawSed('')}
+  else if(!S.quiz)startQuiz(sedQs(),'Kuis 26 Sediaan BSO Cair');else drawQuiz();
 }
-function drawSed(q){q=q.toLowerCase();$('#rows').innerHTML=SEDIAAN.filter(s=>(s.n+s.k+s.f).toLowerCase().includes(q)).map(s=>`<details class="dt"><summary><span>${esc(s.n)} <span class="badge">${esc(s.f)}</span></span></summary><div class="in"><div class="kv"><div><b>Zat aktif:</b> ${esc(s.k)}</div><div><b>Rute:</b> ${esc(s.r)}</div><div><b>Dosis:</b> ${esc(s.d)}</div></div><div class="paper" style="margin-top:10px;padding:12px"><div class="keyp" style="font-size:18px">${esc(s.x)}</div></div></div></details>`).join('')||'<p class="sub">Tidak ada yang cocok.</p>'}
+
+function selectLpDrug(idx){
+  S.lp.idx=(idx+SEDIAAN.length)%SEDIAAN.length;
+  S.lp.checked=false;
+  S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:''};
+  drawLembarPengamatan();
+}
+
+function drawLembarPengamatan(){
+  const s=SEDIAAN[S.lp.idx]||SEDIAAN[0],lp=s.lp||{},f=S.lp.form,d=S.lp.checked,lpBest=lpBestMap();
+  const ev=d?evalLembarPengamatan(s,f):null;
+  const colCls=c=>!d?'':(c.ok?'good':c.partial?'partial':'bad');
+  const colTag=c=>!d?'':`<span class="tag ${c.ok?'good':c.partial?'warn':'bad'}" style="margin:0">${c.pts}/${c.max}</span>`;
+  const chipsA=['Solutio (Larutan)','Suspensi oral','Sirup kering (Dry syrup)','Elixir','Gargle (Obat kumur)','Guttae ophthalmicae (Tetes mata)','Guttae auriculares (Tetes telinga)','Guttae nasales (Tetes hidung)','Injeksi ampul','Serbuk injeksi (Vial)','Infus IV','Emulsi oral','Lotio topikal','Enema rektal','Vaginal douche','Nebules inhalasi','Turbuhaler (DPI)','Inhaler (MDI)'];
+  const chipsE=['Obat Keras (lingkaran merah K)','Obat Bebas Terbatas (lingkaran biru)','Obat Bebas (lingkaran hijau)','Jamu / Obat Tradisional','Simpan suhu <30°C, terlindung cahaya','Kocok dahulu sebelum dipakai','Rekonstitusi tahan maks. 7 hari'];
+
+  $('#list').innerHTML=`
+  <div class="card">
+    <div class="row between">
+      <div class="grow">
+        <label class="l" for="lpSelect">Pilih Obat Praktikum BSO Cair (1–26 sesuai daftar Gambar 1)</label>
+        <select class="f" id="lpSelect">
+          ${SEDIAAN.map((x,i)=>{const sc=lpBest[x.no];return `<option value="${i}" ${i===S.lp.idx?'selected':''}>#${x.no}. ${esc(x.praktikumNama)} — ${esc(x.n)} (${esc(x.tipePraktikum)})${sc!=null?` [Terbaik ${sc}%]`:''}</option>`}).join('')}
+        </select>
+      </div>
+      <div class="row" style="margin-top:16px">
+        <button class="secondary small" data-act="lpprev" title="Obat sebelumnya">‹</button>
+        <button class="secondary small" data-act="lpnext" title="Obat berikutnya">›</button>
+        <button class="secondary small" data-act="lprand">🎲 Acak</button>
+      </div>
+    </div>
+
+    <div class="pkg-grid">
+      <div class="pkg-photo-box">
+        <img src="${esc(s.img)}" alt="Bungkus ${esc(s.n)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)} (${esc(s.tipePraktikum)})">
+        <span class="pkg-zoom-hint">🔍 Klik foto bungkus untuk zoom</span>
+      </div>
+      <div class="pkg-back">
+        <div class="pkg-back-head">
+          <div>
+            <span class="badge">#${s.no} · ${esc(s.tipePraktikum)}</span>
+            <h3 style="margin:4px 0 2px">${esc(s.n)}</h3>
+            <div class="sub">Nama di daftar praktikum: <b>${esc(s.praktikumNama)}</b></div>
+          </div>
+          <button class="secondary small" data-act="lptogglelabel">${S.lp.hideLabel?'👁️ Lihat Label Bungkus':'🙈 Mode Ujian (Tutup Label)'}</button>
+        </div>
+        ${golBadgeHtml(s)}
+        <div class="pkg-back-list ${S.lp.hideLabel?'blurred':''}">
+          <div><b>Komposisi pada bungkus:</b> ${esc(lp.c||s.k)}</div>
+          <div><b>Indikasi:</b> ${esc(s.indikasi||'-')}</div>
+          <div><b>Dosis &amp; Aturan Pakai:</b> ${esc(lp.d||s.d)}</div>
+          <div><b>Kemasan &amp; Fisik/Organoleptis:</b> ${esc(s.kemasan||'-')} — ${esc(s.organoleptis||'-')}</div>
+          <div><b>Cara Penyimpanan:</b> ${esc(s.penyimpanan||'-')}</div>
+        </div>
+        ${S.lp.hideLabel?`<div class="hint">Mode ujian aktif: informasi label komposisi &amp; dosis diburamkan. Ketuk "Lihat Label Bungkus" bila ingin mengamati teks kemasan seperti saat praktikum.</div>`:''}
+      </div>
+    </div>
+
+    <div class="lp-sheet">
+      <div class="lp-sheet-head">
+        <h3>Lembar Pengamatan Praktikum BSO Cair</h3>
+        <div class="sub">Isi kolom (a) sampai (f) berdasarkan pengamatan bungkus obat #${s.no} (${esc(s.praktikumNama)}), lalu klik Periksa.</div>
+      </div>
+      <div class="lp-form-grid">
+        <div class="lp-col ${colCls(ev?.cols.a)}">
+          <div class="lp-col-title"><span><span class="lp-col-code">a</span> Nama Bentuk Sediaan</span>${colTag(ev?.cols.a)}</div>
+          <input class="f" data-lp="a" placeholder="Contoh: Suspensi oral — Sirup kering (Dry syrup)" value="${esc(f.a)}">
+          <div class="lp-chips">${chipsA.map(c=>`<button type="button" data-lpchip="a:${esc(c)}">${esc(c)}</button>`).join('')}</div>
+          ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.a.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.a.msg)}<br><b>Kunci (a):</b> ${esc(ev.cols.a.key)}</div>`:''}
+        </div>
+
+        <div class="lp-col ${colCls(ev?.cols.b)}">
+          <div class="lp-col-title"><span><span class="lp-col-code">b</span> Nama Obat &amp; Strength</span>${colTag(ev?.cols.b)}</div>
+          <input class="f" data-lp="b" placeholder="Contoh: Amoxsan Drops, 100 mg/ml" value="${esc(f.b)}">
+          ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.b.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.b.msg)}<br><b>Kunci (b):</b> ${esc(ev.cols.b.key)}</div>`:''}
+        </div>
+
+        <div class="lp-col ${colCls(ev?.cols.c)}">
+          <div class="lp-col-title"><span><span class="lp-col-code">c</span> Senyawa Aktif &amp; Komposisi</span>${colTag(ev?.cols.c)}</div>
+          <textarea class="f" rows="2" style="min-height:64px" data-lp="c" placeholder="Contoh: Amoksisilin trihidrat setara amoksisilin 100 mg/ml">${esc(f.c)}</textarea>
+          ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.c.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.c.msg)}<br><b>Kunci (c):</b> ${esc(ev.cols.c.key)}</div>`:''}
+        </div>
+
+        <div class="lp-col ${colCls(ev?.cols.d)}">
+          <div class="lp-col-title"><span><span class="lp-col-code">d</span> Cara Pemakaian &amp; Dosis</span>${colTag(ev?.cols.d)}</div>
+          <textarea class="f" rows="2" style="min-height:64px" data-lp="d" placeholder="Contoh: Oral (pipet tetes): Anak 20-40 mg/kgBB/hari dibagi 3 dosis (tiap 8 jam 1 ml) sesudah makan">${esc(f.d)}</textarea>
+          ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.d.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.d.msg)}<br><b>Kunci (d):</b> ${esc(ev.cols.d.key)}</div>`:''}
+        </div>
+
+        <div class="lp-col full ${colCls(ev?.cols.e)}">
+          <div class="lp-col-title"><span><span class="lp-col-code">e</span> Keterangan (Golongan Obat &amp; Cara Penyimpanan)</span>${colTag(ev?.cols.e)}</div>
+          <textarea class="f" rows="2" style="min-height:58px" data-lp="e" placeholder="Contoh: Obat Keras (lingkaran merah huruf K); simpan pada suhu <30°C, kering & terlindung cahaya">${esc(f.e)}</textarea>
+          <div class="lp-chips">${chipsE.map(c=>`<button type="button" data-lpchip="e:${esc(c)}">${esc(c)}</button>`).join('')}</div>
+          ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.e.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.e.msg)}<br><b>Kunci (e):</b> ${esc(ev.cols.e.key)}</div>`:''}
+        </div>
+
+        <div class="lp-col full ${colCls(ev?.cols.f)}">
+          <div class="lp-col-title"><span><span class="lp-col-code">f</span> Penulisan Resep (Baris R/ dan S)</span>${colTag(ev?.cols.f)}</div>
+          <div class="paper" style="padding:12px 14px">
+            <div class="ln"><span class="rm">R/</span><input data-lp="fR" placeholder="Drops Amoxsan 100 mg/ml fl. I" value="${esc(f.fR)}" autocomplete="off" spellcheck="false"></div>
+            <div class="ln l2" style="margin-top:6px"><span class="sm">S</span><input data-lp="fS" placeholder="3 dd gtt oral 1 ml pc" value="${esc(f.fS)}" autocomplete="off" spellcheck="false"></div>
+          </div>
+          ${d?`<div class="sub" style="margin-top:6px"><b>${ev.cols.f.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.f.msg)}<br><b>Kunci Resep (f):</b><div class="paper" style="margin-top:6px;padding:10px"><div class="keyp" style="font-size:17px">${esc(ev.cols.f.key)}</div></div></div>`:''}
+        </div>
+      </div>
+    </div>
+
+    ${d?`<div role="status" class="fb ${ev.pct>=80?'good':'bad'}">
+      <b>Skor Lembar Pengamatan #${s.no} (${esc(s.praktikumNama)}): ${ev.pct}% (${ev.pts}/${ev.max} poin)</b>
+      <div style="margin-top:6px">Alasan Pemilihan BSO (untuk Laporan Praktikum): ${esc(s.alasanBso)}</div>
+      <div style="margin-top:4px">Efek Samping &amp; Perhatian: ${esc(s.efekSamping)}</div>
+    </div>`:''}
+
+    <div class="actions two">
+      ${P(d?'Periksa Ulang Jawaban':'Periksa Lembar Pengamatan','lpcheck')}
+      ${X(d?'Kosongkan & Coba Lagi':'Isi Contoh Kunci Jawaban','lpfill')}
+    </div>
+  </div>`;
+}
+
+function drawLpTable(){
+  const flt=S.lp.tblFilter,q=S.lp.tblSearch.toLowerCase(),hide=S.lp.tblHide;
+  const rows=SEDIAAN.filter(s=>{
+    if(flt==='solutio'&&s.f!=='solutio')return false;
+    if(flt==='suspensi'&&!s.f.includes('suspensi'))return false;
+    if(flt==='emulsi'&&s.f!=='emulsi')return false;
+    if(flt==='injeksi'&&!s.r.includes('injeksi')&&!s.r.includes('infus'))return false;
+    if(flt==='inhalasi'&&s.r!=='inhalasi')return false;
+    if(q&&!(s.no+' '+s.n+' '+s.praktikumNama+' '+s.tipePraktikum+' '+s.k+' '+(s.lp?.a||'')+' '+(s.lp?.c||'')).toLowerCase().includes(q))return false;
+    return true;
+  });
+  const cell=(no,col,txt)=>{
+    const k=`${no}:${col}`,cl=hide&&!S.lp.revealed[k]?'lp-cell-hide':'';
+    return `<td class="${cl}" data-reveal="${k}">${esc(txt)}</td>`;
+  };
+  $('#list').innerHTML=`
+  <div class="card">
+    <div class="row between">
+      <div>
+        <h3>Tabel Kunci Lembar Pengamatan Praktikum BSO Cair (26 Obat)</h3>
+        <p class="sub">Format persis Lembar Pengamatan Praktikum BSO Cair (Gambar 2): kolom (a) s/d (f). Klik foto untuk memperbesar.</p>
+      </div>
+      <button class="secondary small" data-act="lptblhide">${hide?'👁️ Buka Semua Kunci':'🙈 Tutup Kunci (Mode Hafalan)'}</button>
+    </div>
+    <div class="seg" style="margin-top:10px">
+      ${[['all','Semua (26)'],['solutio','Solutio'],['suspensi','Suspensi'],['emulsi','Emulsi'],['injeksi','Injeksi/Infus/Pelarut'],['inhalasi','Inhalasi']].map(([k,l])=>`<button aria-pressed="${flt===k}" data-lpflt="${k}">${l}</button>`).join('')}
+    </div>
+    <input class="f" id="lpTblSearch" style="margin-top:10px" placeholder="Cari obat di tabel Lembar Pengamatan..." value="${esc(S.lp.tblSearch)}">
+    ${hide?`<div class="hint">Mode hafalan aktif: ketuk sel tabel yang buram untuk membuka kunci jawaban per kolom.</div>`:''}
+    <div class="lp-table-wrap">
+      <table class="lp-tbl">
+        <thead>
+          <tr>
+            <th style="width:42px">No</th>
+            <th style="width:140px">Bungkus &amp; Daftar</th>
+            <th style="width:150px">(a) Nama Bentuk Sediaan</th>
+            <th style="width:150px">(b) Nama Obat &amp; Strength</th>
+            <th style="width:180px">(c) Senyawa Aktif &amp; Komposisi</th>
+            <th style="width:190px">(d) Cara Pemakaian &amp; Dosis</th>
+            <th style="width:180px">(e) Golongan Obat &amp; Penyimpanan</th>
+            <th style="width:190px">(f) Penulisan Resep</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(s=>`<tr>
+            <td><b>${s.no}</b></td>
+            <td>
+              <img class="tbl-thumb" src="${esc(s.img)}" alt="${esc(s.praktikumNama)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)}">
+              <b>${esc(s.praktikumNama)}</b><br>
+              <span class="badge" style="margin-top:2px">${esc(s.tipePraktikum)}</span><br>
+              <button class="lnk" data-lpgoto="${s.no-1}">Latih obat ini →</button>
+            </td>
+            ${cell(s.no,'a',s.lp.a)}
+            ${cell(s.no,'b',s.lp.b)}
+            ${cell(s.no,'c',s.lp.c)}
+            ${cell(s.no,'d',s.lp.d)}
+            ${cell(s.no,'e',s.lp.e)}
+            <td class="${hide&&!S.lp.revealed[s.no+':f']?'lp-cell-hide':''}" data-reveal="${s.no}:f"><div class="mono" style="white-space:pre-wrap;font-size:12px;color:var(--pen)">${esc(s.x)}</div></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function drawSed(q){
+  q=q.toLowerCase();
+  $('#rows').innerHTML=SEDIAAN.filter(s=>(s.no+' '+s.n+' '+s.praktikumNama+' '+s.tipePraktikum+' '+s.k+' '+s.f+' '+s.r).toLowerCase().includes(q)).map(s=>`
+  <details class="dt">
+    <summary>
+      <span class="row" style="gap:8px">
+        <span class="badge">#${s.no}</span>
+        <span><b>${esc(s.praktikumNama)}</b> — ${esc(s.n)}</span>
+        <span class="badge blue">${esc(s.tipePraktikum)}</span>
+        <span class="badge">${esc(s.f)}</span>
+      </span>
+    </summary>
+    <div class="in">
+      <div class="pkg-grid" style="margin-top:6px">
+        <div class="pkg-photo-box">
+          <img src="${esc(s.img)}" alt="Bungkus ${esc(s.n)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)}">
+          <span class="pkg-zoom-hint">🔍 Klik bungkus untuk memperbesar</span>
+        </div>
+        <div class="kv">
+          ${golBadgeHtml(s)}
+          <div><b>(a) Bentuk Sediaan:</b> ${esc(s.lp?.a||s.f)}</div>
+          <div><b>(b) Nama &amp; Strength:</b> ${esc(s.lp?.b||s.n)}</div>
+          <div><b>(c) Komposisi / Zat Aktif:</b> ${esc(s.lp?.c||s.k)}</div>
+          <div><b>(d) Rute &amp; Dosis:</b> ${esc(s.lp?.d||`${s.r} — ${s.d}`)}</div>
+          <div><b>(e) Penyimpanan &amp; Kemasan:</b> ${esc(s.kemasan||'-')} · ${esc(s.penyimpanan||'-')}</div>
+          <div><b>Indikasi &amp; Alasan BSO:</b> ${esc(s.indikasi||'-')} (${esc(s.alasanBso||'-')})</div>
+        </div>
+      </div>
+      <div class="paper" style="margin-top:10px;padding:12px"><div class="keyp" style="font-size:18px">${esc(s.x)}</div></div>
+      <div style="margin-top:8px"><button class="secondary small" data-lpgoto="${s.no-1}">📝 Latih di Lembar Pengamatan #${s.no}</button></div>
+    </div>
+  </details>`).join('')||'<p class="sub">Tidak ada yang cocok.</p>';
+}
+
 function sedQs(){
   const qs=[];
-  for(const s of pick(SEDIAAN,10)){
-    const t=Math.floor(Math.random()*4);
-    if(t===0)qs.push({q:`Bentuk sediaan ${s.n}?`,a:s.f,o:opts(s.f,SEDIAAN.map(x=>x.f),3,fb)});
-    if(t===1)qs.push({q:`Rute pemakaian ${s.n}?`,a:s.r,o:opts(s.r,SEDIAAN.map(x=>x.r),3,rb)});
-    if(t===2)qs.push({q:`Zat aktif dan kekuatan ${s.n}?`,a:s.k,o:opts(s.k,SEDIAAN.map(x=>x.k),3)});
-    if(t===3)qs.push({q:`Pilih resep yang tepat untuk ${s.n}`,a:s.x,o:opts(s.x,SEDIAAN.map(x=>x.x),3)});
+  for(const s of pick(SEDIAAN,12)){
+    const t=Math.floor(Math.random()*5);
+    if(t===0)qs.push({img:s.img,q:`Perhatikan foto kemasan obat #${s.no} (${s.praktikumNama}). Apa bentuk sediaan dan cara pemberiannya?`,a:s.lp?.a||s.f,o:opts(s.lp?.a||s.f,SEDIAAN.map(x=>x.lp?.a||x.f),3),exp:`Komposisi: ${s.k} · Rute: ${s.r}`});
+    if(t===1)qs.push({img:s.img,q:`Rute pemakaian untuk sediaan ${s.n} (${s.tipePraktikum})?`,a:s.r,o:opts(s.r,SEDIAAN.map(x=>x.r),3,rb),exp:s.lp?.d});
+    if(t===2)qs.push({img:s.img,q:`Senyawa aktif dan kekuatan (strength) pada bungkus ${s.n}?`,a:s.k,o:opts(s.k,SEDIAAN.map(x=>x.k),3),exp:s.lp?.c});
+    if(t===3)qs.push({img:s.img,q:`Pilih penulisan resep (kolom f Lembar Pengamatan) yang tepat untuk ${s.n}:`,a:s.x,o:opts(s.x,SEDIAAN.map(x=>x.x),3),exp:s.lp?.d});
+    if(t===4){
+      const golAns=s.lp?.e||GOL_INFO[s.gol]?.label;
+      qs.push({img:s.img,q:`Golongan obat dan cara penyimpanan untuk ${s.n}?`,a:golAns,o:opts(golAns,SEDIAAN.map(x=>x.lp?.e||x.penyimpanan),3),exp:`Kemasan: ${s.kemasan}`});
+    }
   }
   return qs;
+}
+
+/* ===== PANDUAN PRAKTIKUM & 6 RESEP RACIKAN FK YARSI ===== */
+function viewPanduan(m){
+  m.innerHTML=`<div class="card">
+    <div class="step-h"><span class="badge">Buku Penuntun Praktikum FK YARSI</span><span class="muted">Blok Kedokteran Keluarga</span></div>
+    <h2>Panduan Praktikum, 6 Resep Racikan &amp; Teori BSO</h2>
+    <p class="sub">Materi lengkap Praktikum 1 (BSO Padat &amp; ½ Padat — Drs. Dharma Permana, Apt., PhD) dan Praktikum 2 (BSO Cair — DR. Dra. Risdawati Djohan, Apt., MKes).</p>
+    ${subnav('pan',[['racik','⚗️ 6 Resep Racikan Lab'],['teori','📖 Teori & Etiket'],['kuis','🎯 Kuis Praktikum']])}
+  </div>
+  <div id="quiz"></div><div id="list"></div>`;
+  if(S.sub.pan==='racik')drawRacikan();
+  else if(S.sub.pan==='teori')drawTeoriPanduan();
+  else if(!S.quiz)startQuiz(panduanQs(),'Kuis Panduan Praktikum & Racikan');else drawQuiz();
+}
+
+function drawRacikan(){
+  const r=RACIKAN[S.racik.idx]||RACIKAN[0],hide=S.racik.hideCalc;
+  $('#list').innerHTML=`
+  <div class="card">
+    <div class="seg">
+      ${RACIKAN.map((x,i)=>`<button aria-pressed="${i===S.racik.idx}" data-racik="${i}">${i+1}. ${esc(x.nama.split('(')[0].trim())}</button>`).join('')}
+    </div>
+    <div style="margin-top:14px">
+      <div class="step-h"><span class="badge">${esc(r.praktikum)}</span><span class="badge blue">${esc(r.bso)}</span></div>
+      <h2>${esc(r.nama)}</h2>
+      <p class="sub">Pasien: <b>${esc(r.pro)}</b> · Indikasi/Kasus: ${esc(r.keluhan)}</p>
+    </div>
+
+    <div class="fgrid c2" style="margin-top:12px">
+      <div>
+        <label class="l">Resep &amp; Formula Standar</label>
+        <div class="paper" style="padding:14px"><div class="keyp" style="font-size:18px">${esc(r.resep)}</div></div>
+      </div>
+      <div>
+        <label class="l">Etiket Obat (${r.etiket==='putih'?'Etiket Putih — Obat Dalam':'Etiket Biru — Obat Luar'})</label>
+        <div class="etiket ${r.etiket}">
+          <div class="etiket-head">APOTEK YARSI<br><span style="font-weight:600;font-size:11px">Jl. Letjen Suprapto, Cempaka Putih, Jakarta Pusat</span></div>
+          <div style="white-space:pre-line;font-weight:800">${esc(r.etiketTeks)}</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="row between">
+        <h3>1. Perhitungan Penimbangan Bahan / Tablet</h3>
+        <button class="secondary small" data-act="racikhide">${hide?'👁️ Tampilkan Hasil Hitung':'🙈 Sembunyikan Hasil (Latihan Hitung)'}</button>
+      </div>
+      <div class="lp-table-wrap" style="margin-top:8px">
+        <table class="lp-tbl" style="min-width:520px">
+          <thead><tr><th>Nama Bahan Obat</th><th>Perhitungan Proporsi / Dosis</th><th>Jumlah yang Diambil / Ditimbang</th></tr></thead>
+          <tbody>
+            ${r.perhitungan.map((p,i)=>`<tr>
+              <td><b>${esc(p.bahan)}</b></td>
+              <td class="${hide&&!S.lp.revealed['rc:'+i]?'lp-cell-hide':''}" data-reveal="rc:${i}">${esc(p.rumus)}</td>
+              <td class="${hide&&!S.lp.revealed['ra:'+i]?'lp-cell-hide':''}" data-reveal="ra:${i}"><b>${esc(p.ambil)}</b></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <h3>2. Fungsi Tiap Bahan Obat dalam Resep (Laporan Praktikum)</h3>
+      <div class="lp-table-wrap" style="margin-top:8px">
+        <table class="lp-tbl" style="min-width:520px">
+          <thead><tr><th>Bahan</th><th>Fungsi Farmasetik / Farmakologik</th><th>Keterangan &amp; Alasan</th></tr></thead>
+          <tbody>
+            ${r.fungsiBahan.map((f,i)=>`<tr>
+              <td><b>${esc(f.bahan)}</b></td>
+              <td class="${hide&&!S.lp.revealed['rf:'+i]?'lp-cell-hide':''}" data-reveal="rf:${i}"><span class="badge">${esc(f.peran)}</span></td>
+              <td>${esc(f.ket)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <h3>3. Cara Kerja / Pembuatan di Laboratorium</h3>
+      <ol style="margin:6px 0 0;padding-left:20px;display:grid;gap:6px;font-size:14px">
+        ${r.langkah.map(l=>`<li>${esc(l)}</li>`).join('')}
+      </ol>
+    </div>
+  </div>`;
+}
+
+function drawTeoriPanduan(){
+  $('#list').innerHTML=`
+  <div class="card">
+    <h3>Perbedaan 3 Jenis BSO Cair: Solutio vs Suspensi vs Emulsi</h3>
+    <p class="sub">Berdasarkan diagram penggolongan BSO Cair pada Buku Penuntun Praktikum hal. 13.</p>
+    <div class="lp-table-wrap" style="margin-top:8px">
+      <table class="lp-tbl" style="min-width:640px">
+        <thead><tr><th>Jenis BSO Cair</th><th>Tampilan Fisik</th><th>Sifat Zat &amp; Fase</th><th>Zat Tambahan Khas</th><th>Aturan Kocok</th><th>Contoh Sediaan Praktikum</th></tr></thead>
+        <tbody>
+          ${(TEORI_BSO.perbandinganCair||[]).map(x=>`<tr>
+            <td><b>${esc(x.jenis)}</b></td>
+            <td>${esc(x.tampilan)}</td>
+            <td>${esc(x.komponen)}</td>
+            <td>${esc(x.zatTambahan)}</td>
+            <td><b>${esc(x.kocok)}</b></td>
+            <td>${esc(x.contoh)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Fungsi Bahan Obat dalam Resep Racikan</h3>
+    <p class="sub">Wajib dijelaskan pada Laporan Praktikum pembuatan obat racikan (Buku Panduan hal. 18).</p>
+    <div style="margin-top:8px">
+      ${(TEORI_BSO.fungsiBahan||[]).map(f=>`<div class="item"><b>${esc(f.istilah)}</b><div>${esc(f.arti)}</div><div class="sub" style="margin-top:2px">Contoh: ${esc(f.contoh)}</div></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Aturan Pemilihan Etiket Putih vs Etiket Biru</h3>
+    <div class="fgrid c2">
+      ${(TEORI_BSO.etiket||[]).map((e,i)=>`<div class="etiket ${i===0?'putih':'biru'}">
+        <div class="etiket-head">${esc(e.warna.toUpperCase())}</div>
+        <div><b>Peruntukan:</b> ${esc(e.untuk)}</div>
+        <div style="margin-top:6px"><b>Contoh:</b> ${esc(e.contoh)}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function panduanQs(){
+  const raw=[
+    {q:'Pada resep racikan Pulveres: R/ Parasetamol 125 mg, Luminal 7,5 mg, Sach. Lact. q.s., m.f. pulv. d.t.d. no. X. Berapa tablet Parasetamol 500 mg dan Luminal 30 mg yang diambil?',a:'2 ½ tablet Parasetamol 500 mg (1250 mg) dan 2 ½ tablet Luminal 30 mg (75 mg)',o:['2 ½ tablet Parasetamol 500 mg (1250 mg) dan 2 ½ tablet Luminal 30 mg (75 mg)','1 ¼ tablet Parasetamol 500 mg dan 1 ¼ tablet Luminal 30 mg','5 tablet Parasetamol 500 mg dan 5 tablet Luminal 30 mg','10 tablet Parasetamol 500 mg dan 2 ½ tablet Luminal 30 mg'],exp:'Karena ada d.t.d. no. X: Parasetamol 125 mg × 10 = 1250 mg (1250/500 = 2,5 tab); Luminal 7,5 mg × 10 = 75 mg (75/30 = 2,5 tab).'},
+    {q:'Pada resep racikan Kapsul Asma (R/ Teofilin 100 mg, Salbutamol 2 mg, Prednison 5 mg, m.f. pulv. d.t.d. no. X da in caps), berapa tablet yang diambil bila tersedia Teofilin 200 mg, Salbutamol 4 mg, dan Prednison 5 mg?',a:'5 tab Teofilin 200 mg + 5 tab Salbutamol 4 mg + 10 tab Prednison 5 mg',o:['5 tab Teofilin 200 mg + 5 tab Salbutamol 4 mg + 10 tab Prednison 5 mg','10 tab Teofilin 200 mg + 10 tab Salbutamol 4 mg + 10 tab Prednison 5 mg','2 tab Teofilin 200 mg + 2 tab Salbutamol 4 mg + 5 tab Prednison 5 mg','5 tab Teofilin 200 mg + 10 tab Salbutamol 4 mg + 5 tab Prednison 5 mg'],exp:'Teofilin: 100×10 = 1000 mg (5 tab @200 mg); Salbutamol: 2×10 = 20 mg (5 tab @4 mg); Prednison: 5×10 = 50 mg (10 tab @5 mg).'},
+    {q:'Pada pembuatan Unguentum 2-4 sebanyak 25 gram (R/ Acid. salicyl. 2%, Sulfur pp. 4%, Vas. flav. ad 25), berapa berat masing-masing bahan dan etiket apa yang digunakan?',a:'Acid. salicyl. 0,5 g; Sulfur pp. 1 g; Vaselin flavum 23,5 g — Etiket Biru (Obat Luar)',o:['Acid. salicyl. 0,5 g; Sulfur pp. 1 g; Vaselin flavum 23,5 g — Etiket Biru (Obat Luar)','Acid. salicyl. 2 g; Sulfur pp. 4 g; Vaselin flavum 19 g — Etiket Biru','Acid. salicyl. 0,5 g; Sulfur pp. 1 g; Vaselin flavum 25 g — Etiket Putih','Acid. salicyl. 1 g; Sulfur pp. 2 g; Vaselin flavum 22 g — Etiket Biru'],exp:'2% × 25 g = 0,5 g; 4% × 25 g = 1 g; Vaselin ad 25 g = 25 − 1,5 = 23,5 g. Karena salep kulit topikal, gunakan Etiket Biru.'},
+    {q:'Mengapa kristal Acidum salicylicum ditetesi ±10 tetes alkohol (etanol) terlebih dahulu saat membuat Salep 2-4 di lumpang?',a:'Untuk melarutkan kristal asam salisilat agar halus dan tidak mengiritasi kulit',o:['Untuk melarutkan kristal asam salisilat agar halus dan tidak mengiritasi kulit','Sebagai pengawet salep terhadap jamur','Untuk mencairkan vaselin flavum menjadi emulsi','Sebagai corrigens odoris (pengharum salep)'],exp:'Asam salisilat berbentuk kristal jarum yang tajam; tetesan etanol melarutkannya sebelum dicampur sulfur dan basis vaselin.'},
+    {q:'Pada pembuatan Potio Nigra (OBH) 100 gram dari formula standar 300 gram (Ammon. chlor. 6, Succus liq. 10, S.A.S.A. 6, Aq. dest. ad 300), berapa jumlah bahan yang ditimbang?',a:'Ammon. chlor. 2 g, Succus liq. 3,3 g, S.A.S.A. 2 g, dan Aquadest 92,7 g',o:['Ammon. chlor. 2 g, Succus liq. 3,3 g, S.A.S.A. 2 g, dan Aquadest 92,7 g','Ammon. chlor. 6 g, Succus liq. 10 g, S.A.S.A. 6 g, dan Aquadest 78 g','Ammon. chlor. 3 g, Succus liq. 5 g, S.A.S.A. 3 g, dan Aquadest 89 g','Ammon. chlor. 1 g, Succus liq. 1,65 g, S.A.S.A. 1 g, dan Aquadest 96,35 g'],exp:'Faktor konversi = 100/300 = 1/3. Ammon. chlor = 2 g; Succus liq = 3,3 g; SASA = 2 g; Aquadest = 100 − (2+3,3+2) = 92,7 g.'},
+    {q:'Mengapa S.A.S.A. (Solutio Ammoniae Spirituosa Anisata) pada pembuatan Potio Nigra ditimbang langsung di dalam botol wadah obat dan dimasukkan terakhir?',a:'Karena mengandung amonia & minyak adas manis dalam alkohol yang mudah menguap',o:['Karena mengandung amonia & minyak adas manis dalam alkohol yang mudah menguap','Karena S.A.S.A. berbentuk serbuk kasar yang harus digerus panas','Karena S.A.S.A. berfungsi sebagai suspending agent','Karena S.A.S.A. hanya larut dalam minyak ikan'],exp:'SASA bersifat volatil (mudah menguap), sehingga ditimbang di botol wadah obat agar tidak menguap di lumpang.'},
+    {q:'Apa fungsi PGA (Pulvis Gummi Arabici) pada resep Suspensi Lotio Kummerfeldi?',a:'Suspending agent (zat pensuspensi) agar Sulfur pp. dan Camphora terdispersi merata',o:['Suspending agent (zat pensuspensi) agar Sulfur pp. dan Camphora terdispersi merata','Remedium cardinale untuk mematikan bakteri jerawat','Corrigens odoris untuk memberi bau mawar','Pelarut kristal kamfer'],exp:'Dalam suspensi Lotio Kummerfeldi, zat padat tidak larut (Sulfur pp & Camphora) membutuhkan PGA sebagai suspending agent.'},
+    {q:'Etiket dan peringatan khusus apa yang wajib ditempelkan pada botol Suspensi Lotio Kummerfeldi (S 2 dd loc. dol.)?',a:'Etiket Biru (OBAT LUAR) + tulisan "KOCOK SEBELUM DIPAKAI"',o:['Etiket Biru (OBAT LUAR) + tulisan "KOCOK SEBELUM DIPAKAI"','Etiket Putih (Obat Dalam) + tulisan "Habiskan"','Etiket Biru + tulisan "Hanya untuk kumur, jangan ditelan"','Etiket Putih tanpa perlu dikocok'],exp:'Lotio Kummerfeldi adalah suspensi topikal kulit, sehingga menggunakan Etiket Biru (Obat Luar) dan wajib dikocok sebelum dipakai.'},
+    {q:'Pada pembuatan Emulsi Minyak Ikan (Emulsum Ol. Iecoris Aselli) 100 ml dengan PGA 13,95 g, berapa volume Aqua pro corpus emulsi yang ditambahkan sekaligus untuk membuat corpus emulsi?',a:'20,9 ml (1,5 × berat PGA)',o:['20,9 ml (1,5 × berat PGA)','13,95 ml (1 × berat PGA)','46,5 ml (sama dengan berat minyak ikan)','92,7 ml'],exp:'Rumus Aqua pro corpus untuk PGA = 1,5 × berat PGA = 1,5 × 13,95 g = 20,925 ml (≈ 20,9 ml), digerus cepat dan searah.'},
+    {q:'Apa fungsi Oleum Cinnamomi (minyak kayu manis) pada resep Emulsum Olei Iecoris Aselli?',a:'Corrigens odoris & saporis (menutupi bau dan rasa amis minyak ikan)',o:['Corrigens odoris & saporis (menutupi bau dan rasa amis minyak ikan)','Emulgator utama pembentuk corpus emulsi','Remedium cardinale sumber Vitamin A dan D','Vehiculum pembawa fase air'],exp:'Ol. Cinnamomi ditambahkan 2 tetes di akhir untuk memperbaiki bau (odoris) dan rasa (saporis) amis dari minyak ikan.'},
+    {q:'Manakah perbandingan yang BENAR antara Solutio, Suspensi, dan Emulsi menurut buku panduan praktikum BSO Cair?',a:'Solutio: jernih (zat padat larut); Suspensi: keruh (zat padat tidak larut); Emulsi: kental (minyak & air + emulgator)',o:['Solutio: jernih (zat padat larut); Suspensi: keruh (zat padat tidak larut); Emulsi: kental (minyak & air + emulgator)','Solutio: keruh; Suspensi: jernih; Emulsi: serbuk kering','Solutio wajib dikocok dahulu; Suspensi tidak boleh dikocok','Emulsi tidak memerlukan zat pengemulsi (emulgator)'],exp:'Diagram hal. 13: Solution = jernih (obat padat larut); Suspension = keruh (obat padat tidak larut); Emulsion = kental (minyak & air).'},
+    {q:'Bahan obat dalam resep yang berfungsi membantu atau memperkuat efek bahan obat utama (Remedium cardinale) disebut...',a:'Remedium adjuvans',o:['Remedium adjuvans','Vehiculum / Constituens','Corrigens saporis','Suspending agent'],exp:'Remedium cardinale = obat utama; Remedium adjuvans = penunjang/penguat; Corrigens = memperbaiki rasa/bau/warna; Vehiculum = pembawa.'}
+  ];
+  return shuffle(raw).map(q=>({...q,o:shuffle(q.o)}));
 }
 
 /* ===== SINGKATAN ===== */
@@ -382,12 +856,20 @@ function insertAt(txt){
 }
 function addRow(focus=true){S.f.rows.push({l1:'',l2:''});viewCase($('#app'));fitAll();if(focus){const i=S.f.rows.length-1;S.foc={i,f:'l1'};const t=sr.querySelector(`.blk[data-i="${i}"] textarea[data-f="l1"]`);t&&t.focus();renderQuick()}}
 
-/* ===== EVENTS ===== */
+/* ===== LIGHTBOX MODAL ZOOM BUNGKUS ===== */
+function openZoom(src,title){
+  const m=$('#rxModal');if(!m)return;
+  $('#rxModalImg').src=src;
+  $('#rxModalTitle').textContent=title||'Kemasan Obat';
+  m.hidden=false;
+}
+function closeZoom(){const m=$('#rxModal');if(m)m.hidden=true}
 
+/* ===== EVENTS ===== */
 function ensure(){
   if(!gid('resepPage')){
     const s=document.createElement('section');s.id='resepPage';s.className='view';
-    s.innerHTML='<div class="card ub-head"><div class="topline"><button class="back" type="button" data-home>‹ Beranda</button><b>✍️ Latihan Resep</b></div><p class="muted" style="margin:6px 0 0;font-size:13px">Latihan menulis resep untuk praktikum farmakologi. Kunci dari catatan mahasiswa, bukan sumber resmi.</p></div><div id="resepHost"></div>';
+    s.innerHTML='<div class="card ub-head"><div class="topline"><button class="back" type="button" data-home>‹ Beranda</button><b>✍️ Latihan Resep &amp; Praktikum Farmakologi</b></div><p class="muted" style="margin:6px 0 0;font-size:13px">20 Kasus RUM, 26 Bungkus &amp; Lembar Pengamatan BSO Cair, serta 6 Resep Racikan Panduan Praktikum FK YARSI.</p></div><div id="resepHost"></div>';
     const anchor=gid('glossaryPage')||gid('analytics')||document.querySelector('main .view:last-of-type');
     anchor&&anchor.parentNode?anchor.parentNode.insertBefore(s,anchor):document.body.appendChild(s);
   }
@@ -401,7 +883,7 @@ function ensure(){
 function init(){
   if(inited)return;inited=true;
   const host=gid('resepHost');sr=host.attachShadow({mode:'open'});
-  sr.innerHTML='<style>'+CSS+'</style><nav class="tabs" id="tabs" role="tablist" aria-label="Menu latihan resep"></nav><main id="app"></main>';
+  sr.innerHTML='<style>'+CSS+'</style><nav class="tabs" id="tabs" role="tablist" aria-label="Menu latihan resep"></nav><main id="app"></main><div class="rx-modal" id="rxModal" hidden><div class="rx-modal-box"><div class="row between" style="margin-bottom:10px"><b id="rxModalTitle">Kemasan Obat</b><button class="secondary small" data-act="closezoom">Tutup ✕</button></div><img id="rxModalImg" src="" alt="Perbesaran bungkus obat"></div></div>';
   const dark=()=>host.classList.toggle('rxdark',document.documentElement.classList.contains('dark'));
   dark();new MutationObserver(dark).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
   bind();renderTabs();render();
@@ -409,17 +891,62 @@ function init(){
 function bind(){
 sr.addEventListener('mousedown',e=>{if(e.target.closest('.quick button'))e.preventDefault()});
 sr.addEventListener('click',e=>{
+  const img=e.target.closest('[data-zoom]');
+  if(img)return openZoom(img.dataset.zoom,img.dataset.zoomTitle);
+  if(e.target.id==='rxModal')return closeZoom();
+  const rev=e.target.closest('[data-reveal]');
+  if(rev){const k=rev.dataset.reveal;S.lp.revealed[k]=!S.lp.revealed[k];rev.classList.toggle('lp-cell-hide',!S.lp.revealed[k]);return}
   const t=e.target.closest('button');if(!t)return;
   if(t.dataset.tab)return go(t.dataset.tab);
   if(t.classList.contains('case'))return openCase(+t.dataset.case,false);
   if(t.dataset.ins!=null)return insertAt(t.dataset.ins);
   if(t.dataset.mode){S.only=t.dataset.mode==='rx';return render()}
   if(t.dataset.sub){const[k,v]=t.dataset.sub.split(':');S.sub[k]=v;S.quiz=null;return render()}
+  if(t.dataset.racik!=null){S.racik.idx=+t.dataset.racik;S.lp.revealed={};return drawRacikan()}
+  if(t.dataset.lpgoto!=null){S.sub.sed='lp';selectLpDrug(+t.dataset.lpgoto);render();return scrollTo({top:0})}
+  if(t.dataset.lpflt!=null){S.lp.tblFilter=t.dataset.lpflt;return drawLpTable()}
+  if(t.dataset.lpchip!=null){
+    const idx=t.dataset.lpchip.indexOf(':'),col=t.dataset.lpchip.slice(0,idx),val=t.dataset.lpchip.slice(idx+1);
+    const cur=S.lp.form[col]||'';
+    S.lp.form[col]=cur?(cur.includes(val)?cur:`${cur}; ${val}`):val;
+    const inp=sr.querySelector(`[data-lp="${col}"]`);if(inp)inp.value=S.lp.form[col];
+    return;
+  }
   if(t.dataset.ans!=null)return answer(+t.dataset.ans);
   if(t.dataset.dx!=null){S.f.dx=S.f.dxOpts[+t.dataset.dx];return viewCase($('#app'))}
   if(t.dataset.obat!=null){const o=S.f.obatOpts[+t.dataset.obat];S.f.picks=S.f.picks.includes(o)?S.f.picks.filter(x=>x!==o):[...S.f.picks,o];return viewCase($('#app'))}
   if(t.dataset.l5!=null){const i=+t.dataset.l5,f=S.f;f.l5=f.l5.includes(i)?f.l5.filter(x=>x!==i):[...f.l5,i];if(STEPS[S.step].k==='res'&&!S.only)saveBest();const y=scrollY;viewCase($('#app'));scrollTo({top:y});return}
   const a=t.dataset.act;if(!a)return;
+  if(a==='closezoom')return closeZoom();
+  if(a==='lpprev')return selectLpDrug(S.lp.idx-1);
+  if(a==='lpnext')return selectLpDrug(S.lp.idx+1);
+  if(a==='lprand')return selectLpDrug(Math.floor(Math.random()*SEDIAAN.length));
+  if(a==='lptogglelabel'){S.lp.hideLabel=!S.lp.hideLabel;return drawLembarPengamatan()}
+  if(a==='lpcheck'){
+    S.lp.checked=true;
+    const s=SEDIAAN[S.lp.idx],ev=evalLembarPengamatan(s,S.lp.form);
+    const b=lpBestMap();if(!b[s.no]||ev.pct>=b[s.no]){b[s.no]=ev.pct;try{localStorage.setItem(LP_BEST_KEY,JSON.stringify(b))}catch{}}
+    viewSediaan($('#app'));
+    const fbEl=sr.querySelector('.fb');return fbEl&&fbEl.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+  if(a==='lpfill'){
+    const s=SEDIAAN[S.lp.idx],lp=s.lp||{};
+    if(S.lp.checked){S.lp.checked=false;S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:''};return drawLembarPengamatan()}
+    const rxLines=String(s.x||'').split('\n');
+    S.lp.form={
+      a:lp.a||s.f,
+      b:lp.b||`${s.n}, ${s.k}`,
+      c:lp.c||s.k,
+      d:lp.d||`${s.r}: ${s.d}`,
+      e:lp.e||s.penyimpanan||'',
+      fR:rxLines[0]?.replace(/^\s*R\/\s*/i,'')||'',
+      fS:rxLines.slice(1).join(' ').replace(/^\s*S\s*/i,'')||''
+    };
+    S.lp.checked=true;
+    return drawLembarPengamatan();
+  }
+  if(a==='lptblhide'){S.lp.tblHide=!S.lp.tblHide;S.lp.revealed={};return drawLpTable()}
+  if(a==='racikhide'){S.racik.hideCalc=!S.racik.hideCalc;S.lp.revealed={};return drawRacikan()}
   const st=STEPS[S.step]&&STEPS[S.step].k;
   if(a==='todo'){const best=bestMap(),td=CASES.filter(c=>((best[c.id+(S.only?'r':'')]||{}).pct||0)<80);if(td.length)openCase(td[Math.floor(Math.random()*td.length)].id,false);return}
   if(a==='exam')return openCase(CASES[Math.floor(Math.random()*CASES.length)].id,true);
@@ -427,7 +954,7 @@ sr.addEventListener('click',e=>{
   if(a==='again')return openCase(S.case.id,S.exam);
   if(a==='next'){S.step++;S.focusH=true;if(STEPS[S.step].k==='res')return finish();viewCase($('#app'));fitAll();return scrollTo({top:0})}
   if(a==='prev'){S.step=Math.max(0,S.step-1);viewCase($('#app'));fitAll();return scrollTo({top:0})}
-  if(a==='check'){S.chk[st]=true;viewCase($('#app'));fitAll();const fb=sr.querySelector('.fb');return fb&&fb.scrollIntoView({block:'center',behavior:'smooth'})}
+  if(a==='check'){S.chk[st]=true;viewCase($('#app'));fitAll();const fbEl=sr.querySelector('.fb');return fbEl&&fbEl.scrollIntoView({block:'center',behavior:'smooth'})}
   if(a==='retry'){S.chk[st]=false;if(st==='s1')S.f.dx='';if(st==='s3')S.f.picks=[];viewCase($('#app'));fitAll();return scrollTo({top:0})}
   if(a==='submit')return finish();
   if(a==='addrow')return addRow();
@@ -443,16 +970,22 @@ sr.addEventListener('input',e=>{
     return calc();
   }
   if(t.id==='q'&&S.tab==='sediaan')return drawSed(t.value);
+  if(t.id==='lpTblSearch'&&S.tab==='sediaan'){S.lp.tblSearch=t.value;const pos=t.selectionStart;drawLpTable();const el=$('#lpTblSearch');if(el){el.focus();el.setSelectionRange(pos,pos)}return}
+  if(t.dataset.lp){S.lp.form[t.dataset.lp]=t.value;return}
   const f=S.f;if(!f)return;
   if(t.matches('.paper textarea')){f.rows[+t.closest('.blk').dataset.i][t.dataset.f]=t.value;return fit(t)}
   if(t.dataset.pro!=null)f.pro=t.value;
   if(t.dataset.usia!=null)f.usia=t.value;
   if(t.id==='note')f.note=t.value;
 });
-sr.addEventListener('change',e=>{if(e.target.id==='c2c')calc()});
-sr.addEventListener('focusin',e=>{const t=e.target;if(t.matches&&t.matches('.paper textarea')){const n={i:+t.closest('.blk').dataset.i,f:t.dataset.f};if(n.f!==S.foc.f||n.i!==S.foc.i){S.foc=n;renderQuick()}}});
+sr.addEventListener('change',e=>{
+  if(e.target.id==='c2c')return calc();
+  if(e.target.id==='lpSelect')return selectLpDrug(+e.target.value);
+});
+sr.addEventListener('focusin',e=>{const t=e.target;if(t.matches&&t.matches('.paper textarea')&&t.closest('.blk')){const n={i:+t.closest('.blk').dataset.i,f:t.dataset.f};if(n.f!==S.foc.f||n.i!==S.foc.i){S.foc=n;renderQuick()}}});
 sr.addEventListener('keydown',e=>{
-  const t=e.target;if(!t.matches||!t.matches('.paper textarea')||e.key!=='Enter'||e.isComposing)return;
+  if(e.key==='Escape')closeZoom();
+  const t=e.target;if(!t.matches||!t.matches('.paper textarea')||!t.closest('.blk')||e.key!=='Enter'||e.isComposing)return;
   e.preventDefault();const i=+t.closest('.blk').dataset.i;
   if(t.dataset.f==='l1')return sr.querySelector(`.blk[data-i="${i}"] textarea[data-f="l2"]`).focus();
   const nx=sr.querySelector(`.blk[data-i="${i+1}"] textarea[data-f="l1"]`);

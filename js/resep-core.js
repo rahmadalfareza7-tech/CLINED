@@ -1,4 +1,4 @@
-/* CLINED: logika murni penilaian resep (tanpa DOM). Dites di tests/resep-core.test.mjs. */
+/* CLINED: logika murni penilaian resep & Lembar Pengamatan BSO Cair (tanpa DOM). Dites di tests/resep-core.test.mjs. */
 (() => {
 'use strict';
 /* ===== UTIL ===== */
@@ -19,8 +19,8 @@ const nameOk=(u,spec)=>{const un=norm(u);if(!un)return false;return spec.n.some(
 const kuatN=s=>String(s||'').toLowerCase().replace(/\s+/g,'').replace(/(\d),(\d)/g,'$1.$2');
 
 /* ===== BACA BARIS R/ YANG DITULIS BEBAS ===== */
-const FORM={tab:'tab',tablet:'tab',caps:'caps',cap:'caps',kaps:'caps',kapsul:'caps',capsul:'caps',syr:'syr',syrup:'syr',sirup:'syr',sir:'syr',susp:'susp',suspensi:'susp',drops:'drops',drop:'drops',inj:'inj',injeksi:'inj',sach:'sach',sachet:'sach',inhaler:'inhaler',gtt:'drops'};
-const FNAME={tab:'Tab.',caps:'Caps.',syr:'Syr.',susp:'Susp.',drops:'Drops',inj:'Inj.',sach:'Sach.',inhaler:'Inhaler'};
+const FORM={tab:'tab',tablet:'tab',caps:'caps',cap:'caps',kaps:'caps',kapsul:'caps',capsul:'caps',syr:'syr',syrup:'syr',sirup:'syr',sir:'syr',susp:'susp',suspensi:'susp',drops:'drops',drop:'drops',inj:'inj',injeksi:'inj',sach:'sach',sachet:'sach',inhaler:'inhaler',gtt:'drops',sol:'sol',solutio:'sol',emuls:'emuls',emulsi:'emuls',lotio:'lotio',lotion:'lotio',enema:'enema',garg:'garg',gargle:'garg',turbuhaler:'inhaler',nebules:'sol'};
+const FNAME={tab:'Tab.',caps:'Caps.',syr:'Syr.',susp:'Susp.',drops:'Drops',inj:'Inj.',sach:'Sach.',inhaler:'Inhaler',sol:'Sol.',emuls:'Emuls.',lotio:'Lotio',enema:'Enema',garg:'Garg.'};
 function parseLine1(str){
   let s=String(str||'').replace(/½/g,'1/2').replace(/^\s*r\s*\/\s*/i,' ');
   let b='';
@@ -75,8 +75,79 @@ function checkResep(c,f){
 }
 const line1Of=k=>`${k.bl||FNAME[k.b]||k.b} ${k.o}${k.k?' '+k.k:''} ${typeof k.j==='string'?k.j:'no. '+n2r(k.j)}`;
 
+/* ===== PENILAIAN LEMBAR PENGAMATAN PRAKTIKUM BSO CAIR (Gambar 2: Kolom a s/d f) ===== */
+function normText(s){
+  return String(s||'').toLowerCase().replace(/(\d),(\d)/g,'$1.$2').replace(/\s+/g,' ').trim();
+}
+function matchKw(text,kwList){
+  const t=normText(text),tn=norm(text);
+  if(!t)return[];
+  return(kwList||[]).filter(k=>{
+    const kl=normText(k),kn=norm(k);
+    return t.includes(kl)||(kn.length>=3&&tn.includes(kn));
+  });
+}
+function evalLembarPengamatan(item,form){
+  const lp=item.lp||{},u=form||{};
+  /* (a) Nama Bentuk Sediaan */
+  const hitA=matchKw(u.a,lp.kwA);
+  const okA=hitA.length>=1;
+  const colA={ok:okA,pts:okA?2:0,max:2,hit:hitA,key:lp.a||item.f,
+    msg:okA?`Sesuai (${hitA.slice(0,3).join(', ')})`:'Sebutkan jenis BSO cair & bentuk spesifiknya (misal Solutio/Suspensi/Emulsi + sirup/tetes/infus/lotio)'};
 
-const RESEP_CORE={n2r,r2n,parseLine1,parseS,parseJ,evalRow,checkResep,line1Of,rowsFromLines,stripS,FNAME};
+  /* (b) Nama Obat & Strength */
+  const hitB=matchKw(u.b,lp.kwB);
+  const hasNumB=/\d/.test(String(u.b||''))||(item.no===17&&hitB.length>=1);
+  const hasNameB=hitB.some(k=>/[a-z]{3}/i.test(k));
+  const ptsB=(hasNameB?1:0)+(hasNumB&&hitB.length>=1?1:0);
+  const colB={ok:ptsB===2,partial:ptsB===1,pts:ptsB,max:2,hit:hitB,key:lp.b||`${item.n}, ${item.k}`,
+    msg:ptsB===2?'Nama obat dan kekuatan/strength tepat':ptsB===1?'Lengkapi baik nama obat maupun kekuatan/strength-nya':'Tulis nama produk obat beserta kekuatannya (mg/ml, %, IU, atau g)'};
+
+  /* (c) Senyawa Aktif & Komposisi */
+  const hitC=matchKw(u.c,lp.kwC);
+  const okC=hitC.length>=1;
+  const colC={ok:okC,pts:okC?2:0,max:2,hit:hitC,key:lp.c||item.k,
+    msg:okC?`Zat aktif terbaca (${hitC.slice(0,3).join(', ')})`:'Tuliskan senyawa aktif / komposisi beserta takarannya'};
+
+  /* (d) Cara Pemakaian & Dosis */
+  const hitD=matchKw(u.d,lp.kwD);
+  const ptsD=hitD.length>=2?2:(hitD.length===1?1:0);
+  const colD={ok:ptsD===2,partial:ptsD===1,pts:ptsD,max:2,hit:hitD,key:lp.d||`${item.r} — ${item.d}`,
+    msg:ptsD===2?'Cara pemakaian (rute) dan dosis sesuai':ptsD===1?'Lengkapi rute pemberian sekaligus frekuensi/dosisnya':'Sebutkan cara pemakaian (oral/tetes/injeksi/oles/inhalasi) dan dosisnya'};
+
+  /* (e) Golongan Obat & Cara Penyimpanan */
+  const te=normText(u.e);
+  const golMap={
+    keras:['keras','lingkaran merah','huruf k'],
+    bebas_terbatas:['bebas terbatas','lingkaran biru','p.no','p no'],
+    bebas:['obat bebas','lingkaran hijau','bebas','suplemen'],
+    jamu:['jamu','tradisional','herbal','bebas']
+  };
+  const golKws=golMap[item.gol]||[];
+  const golOk=golKws.some(g=>te.includes(g))||(item.no===13&&te.includes('bebas'));
+  const storeOk=['30','25','sejuk','kering','cahaya','kocok','suhu','steril'].some(w=>te.includes(w));
+  const ptsE=(golOk?1:0)+(storeOk?1:0);
+  const colE={ok:ptsE===2,partial:ptsE===1,pts:ptsE,max:2,hit:matchKw(u.e,lp.kwE),key:lp.e||item.penyimpanan,
+    msg:ptsE===2?'Golongan obat dan cara penyimpanan tepat':ptsE===1?(golOk?'Golongan obat benar, tambahkan cara penyimpanan (<30°C / terlindung cahaya / kocok dahulu)':'Cara penyimpanan benar, tambahkan golongan obat (Obat Keras / Bebas Terbatas / Bebas)'):'Sebutkan golongan obat (Keras/Bebas Terbatas/Bebas) dan cara penyimpanannya'};
+
+  /* (f) Penulisan Resep (R/ dan S) */
+  const fText=normText((u.fR||u.fS)?`R/ ${u.fR||''}\nS ${u.fS||''}`:(u.f||''));
+  const hasR=/\br\s*\/|\b(sol|susp|syr|drops|gtt|inj|emuls|lotio|fl|vial|amp|ampul|tube|strip|no)\b/i.test(fText)||fText.length>8;
+  const nameTokens=[item.n,item.praktikumNama,...(lp.kwB||[]),...(lp.kwC||[])].map(normText).filter(x=>x.length>=4);
+  const hasDrug=nameTokens.some(tok=>fText.includes(tok)||norm(fText).includes(norm(tok)));
+  const hasSigna=/\b(\d+\s*dd|o\s*\d+\s*h|prn|p\.r\.n|pro\s*inj(?:eksi)?|imm|i\.m\.m|gtt|uc|u\.c|u\s+c|inf|cth|puff|dose|extend|loc|grg|garg|supp|applic|rekonstitusi)\b/i.test(fText);
+  const ptsF=(hasDrug?1:0)+(hasSigna&&hasR?1:0);
+  const colF={ok:ptsF===2,partial:ptsF===1,pts:ptsF,max:2,key:lp.f||item.x,
+    msg:ptsF===2?'Penulisan R/ dan Signa (S) sesuai':ptsF===1?(hasDrug?'Baris R/ terbaca, lengkapi baris Signa (S aturan pakai)':'Aturan pakai terbaca, pastikan nama obat/sediaan di baris R/ tepat'):'Tuliskan baris R/ (bentuk sediaan, nama obat, jumlah) dan baris S (aturan pakai)'};
+
+  const cols={a:colA,b:colB,c:colC,d:colD,e:colE,f:colF};
+  const pts=colA.pts+colB.pts+colC.pts+colD.pts+colE.pts+colF.pts;
+  const max=12;
+  return{cols,pts,max,pct:Math.round(100*pts/max)};
+}
+
+const RESEP_CORE={n2r,r2n,parseLine1,parseS,parseJ,evalRow,checkResep,line1Of,rowsFromLines,stripS,FNAME,evalLembarPengamatan};
+globalThis.RESEP_CORE=RESEP_CORE;
 if(typeof module!=='undefined'&&module.exports)module.exports=RESEP_CORE;
-window.RESEP_CORE=RESEP_CORE;
+if(typeof window!=='undefined')window.RESEP_CORE=RESEP_CORE;
 })();
