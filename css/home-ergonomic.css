@@ -284,3 +284,99 @@ html body #home .home-quick-row > .home-quick-tile, html body #home #openMateria
 html body #home .home-quick-tile b { font-size: 12.5px !important; white-space: nowrap; }
 html body #home .home-quick-tile .home-materials-icon { width: 36px !important; height: 36px !important; flex-basis: 36px !important; font-size: 19px !important; }
 html body #home #hubBtn .home-materials-icon { background: rgba(124,92,255,.18) !important; }
+
+/* v10: Tombol besar Latihan Farmako / Latihan Resep di Pilih Ujian Beranda + Layout Mobile #resepPage */
+html body #home .exam-launch-card.farmako {
+  grid-column: 1 / -1 !important;
+  min-height: 92px !important;
+  padding: 14px 16px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  text-align: left !important;
+  border-radius: 20px !important;
+  border: 2px solid #0d9488 !important;
+  border-bottom-width: 5px !important;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 55%, #e0f2fe 100%) !important;
+  color: #0f172a !important;
+  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.14) !important;
+}
+:root.dark html body #home .exam-launch-card.farmako {
+  background: linear-gradient(135deg, #064e3b 0%, #115e59 55%, #0c4a6e 100%) !important;
+  border-color: #2dd4bf !important;
+  color: #f8fafc !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+}
+html body #home .exam-launch-card.farmako .exam-launch-icon {
+  width: 60px !important;
+  height: 60px !important;
+  flex: 0 0 60px !important;
+  font-size: 28px !important;
+  border-radius: 18px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #0d9488 !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 0 #0f766e !important;
+}
+html body #home .exam-launch-card.farmako .exam-launch-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+html body #home .exam-launch-card.farmako .exam-launch-copy b {
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.2px !important;
+  line-height: 1.2 !important;
+  color: #0f766e !important;
+}
+:root.dark html body #home .exam-launch-card.farmako .exam-launch-copy b {
+  color: #5eead4 !important;
+}
+html body #home .exam-launch-card.farmako .exam-launch-copy small {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  color: #334155 !important;
+  white-space: normal !important;
+}
+:root.dark html body #home .exam-launch-card.farmako .exam-launch-copy small {
+  color: #cbd5e1 !important;
+}
+html body #resepPage {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+}
+html body #resepPage .ub-head {
+  padding: 12px 14px !important;
+  margin-bottom: 10px !important;
+}
+html body #resepPage .ub-head .topline {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+html body #resepPage .ub-head .back {
+  min-height: 40px !important;
+  padding: 0 12px !important;
+  border-radius: 12px !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  flex: none !important;
+}
+html body #resepPage #resepHost {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+

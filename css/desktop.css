@@ -19,7 +19,8 @@
   html body #quiz, html body #review { width: min(100%, 820px) !important; }
   html body #result { width: min(100%, 700px) !important; }
   html body #home, html body #clinicalDashboard, html body #wrong, html body #smartReview, html body #glossaryPage, html body #studyPlusPage,
-  html body #socialPage, html body #hubPage, html body #materiLatihanPage, html body #analytics, html body #userBankPage, html body #library { width: 100% !important; }
+  html body #socialPage, html body #hubPage, html body #materiLatihanPage, html body #analytics, html body #userBankPage, html body #library,
+  html body #resepPage { width: 100% !important; }
   html body #duelPage { width: min(100%, 760px) !important; }
 
   /* Clinical Dashboard */

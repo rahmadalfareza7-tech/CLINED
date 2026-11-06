@@ -10,27 +10,53 @@ const r2n=s=>{s=String(s||'').toUpperCase();if(!/^[IVXLC]+$/.test(s))return 0;le
 const norm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
 const lev=(a,b)=>{const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]};
 const WAKTU=new Set(['ac','pc','prn','nocte','mane','1/2h','sublingual']);
-const UNIT=new Set(['tab','caps','tablet','kapsul','kaps']);
+const UNIT=new Set(['tab','caps','tablet','kapsul','kaps','cap','sach','sachet','bungkus','bks','pulv','pulveres']);
 function toks(s){return String(s||'').toLowerCase().replace(/½/g,'1/2').replace(/(\d),(\d)/g,'$1.$2').split(/[^a-z0-9./]+/).filter(Boolean).map(t=>{const n=r2n(t);return n?String(n):t.replace(/^\.+|\.+$/g,'')}).filter(Boolean)}
-function parseS(str){const raw=String(str||'').toLowerCase().replace(/1\s*\/\s*2\s*h/g,'1/2h').replace(/\ba\.\s?c\b\.?/g,'ac').replace(/\bp\.\s?c\b\.?/g,'pc').replace(/\bp\.\s?r\.\s?n\b\.?/g,'prn').replace(/\bd\.\s?d\b\.?/g,'dd');const m=raw.match(/(\d+)\s*dd/);const dd=m?+m[1]:null;const t=toks(raw.replace(/(\d+)\s*dd/,' ')).filter(x=>x!=='s');
-  return{dd,q:new Set(t.filter(x=>!WAKTU.has(x)&&!UNIT.has(x))),w:new Set(t.filter(x=>WAKTU.has(x)))}}
+function parseS(str){
+  const raw=String(str||'').toLowerCase()
+    .replace(/1\s*\/\s*2\s*h/g,'1/2h')
+    .replace(/\ba\.\s*c\b\.?/g,'ac')
+    .replace(/\bp\.\s*c\b\.?/g,'pc')
+    .replace(/\bp\.\s*r\.\s*n\b\.?/g,'prn')
+    .replace(/\bd\.\s*d\b\.?/g,'dd')
+    .replace(/\bi\.\s*m\.\s*m\b\.?/g,'imm')
+    .replace(/\bu\.\s*c\b\.?/g,'uc')
+    .replace(/\bu\.\s*e\b\.?/g,'ue')
+    .replace(/\bo\.\s*d\.\s*s\b\.?/g,'ods')
+    .replace(/\ba\.\s*d\.\s*s\b\.?/g,'ads')
+    .replace(/\ba\.\s*s\b\.?/g,'as')
+    .replace(/\ba\.\s*d\b\.?/g,'ad')
+    .replace(/\bo\.\s*d\b\.?/g,'od')
+    .replace(/\bo\.\s*s\b\.?/g,'os')
+    .replace(/\bgtt\.?\s*ophth?\b\.?/g,'gtt opth')
+    .replace(/\bgtt\.?\s*auric(?:ulares)?\b\.?/g,'gtt auris')
+    .replace(/\b(puff|semprot|semprotan|hisap|hisapan)\b/g,'dose')
+    .replace(/\b(sublingualis|sl)\b/g,'sublingual')
+    .replace(/\bpagi\b/g,'mane')
+    .replace(/\bmalam\b/g,'nocte');
+  const m=raw.match(/(\d+)\s*dd/);
+  const dd=m?+m[1]:null;
+  const t=toks(raw.replace(/(\d+)\s*dd/,' ')).filter(x=>x!=='s');
+  return{dd,q:new Set(t.filter(x=>!WAKTU.has(x)&&!UNIT.has(x))),w:new Set(t.filter(x=>WAKTU.has(x)))}
+}
 function parseJ(str){const s=String(str||'').toLowerCase().replace(/\bno\.?/,' ').trim();const last=s.split(/\s+/).pop(),n=r2n(last.toUpperCase())||(/^\d+$/.test(last)?+last:0);return{n,t:new Set(toks(s))}}
 const nameOk=(u,spec)=>{const un=norm(u);if(!un)return false;return spec.n.some(x=>{const nx=norm(x);return un.includes(nx)||(nx.includes(un)&&un.length>=5)||lev(un,nx)<=Math.max(1,Math.floor(nx.length*.2))})};
-const kuatN=s=>String(s||'').toLowerCase().replace(/\s+/g,'').replace(/(\d),(\d)/g,'$1.$2');
+const kuatN=s=>String(s||'').toLowerCase().replace(/\s+/g,'').replace(/(\d),(\d)/g,'$1.$2').replace(/^1000mg$/,'1g').replace(/^(\d+(?:\.\d+)?)gr(?:am)?$/,'$1g').replace(/µg|ug/g,'mcg');
 
 /* ===== BACA BARIS R/ YANG DITULIS BEBAS ===== */
-const FORM={tab:'tab',tablet:'tab',caps:'caps',cap:'caps',kaps:'caps',kapsul:'caps',capsul:'caps',syr:'syr',syrup:'syr',sirup:'syr',sir:'syr',susp:'susp',suspensi:'susp',drops:'drops',drop:'drops',inj:'inj',injeksi:'inj',sach:'sach',sachet:'sach',inhaler:'inhaler',gtt:'drops',sol:'sol',solutio:'sol',emuls:'emuls',emulsi:'emuls',lotio:'lotio',lotion:'lotio',enema:'enema',garg:'garg',gargle:'garg',turbuhaler:'inhaler',nebules:'sol'};
+const FORM={tab:'tab',tablet:'tab',caps:'caps',cap:'caps',kaps:'caps',kapsul:'caps',capsul:'caps',syr:'syr',syrup:'syr',sirup:'syr',sir:'syr',susp:'susp',suspensi:'susp',drops:'drops',drop:'drops',tetes:'drops',inj:'inj',injeksi:'inj',sach:'sach',sachet:'sach',inhaler:'inhaler',gtt:'drops',sol:'sol',solutio:'sol',emuls:'emuls',emulsi:'emuls',lotio:'lotio',lotion:'lotio',enema:'enema',garg:'garg',gargle:'garg',turbuhaler:'inhaler',nebules:'sol'};
 const FNAME={tab:'Tab.',caps:'Caps.',syr:'Syr.',susp:'Susp.',drops:'Drops',inj:'Inj.',sach:'Sach.',inhaler:'Inhaler',sol:'Sol.',emuls:'Emuls.',lotio:'Lotio',enema:'Enema',garg:'Garg.'};
 function parseLine1(str){
   let s=String(str||'').replace(/½/g,'1/2').replace(/^\s*r\s*\/\s*/i,' ');
   let b='';
-  s=s.replace(/(^|[^a-z])(tablet|tab|caps|cap|kapsul|kaps|capsul|syrup|syr|sirup|sir|suspensi|susp|drops|drop|injeksi|inj|sachet|sach|inhaler|gtt)\b\.?/i,(m,pre,w)=>{b=FORM[w.toLowerCase()];return pre+' '});
+  s=s.replace(/(^|[^a-z])(tablet|tab|caps|cap|kapsul|kaps|capsul|syrup|syr|sirup|sir|suspensi|susp|drops|drop|tetes|injeksi|inj|sachet|sach|inhaler|turbuhaler|gtt)\b\.?/gi,(m,pre,w)=>{if(!b)b=FORM[w.toLowerCase()];return pre+' '});
   let k='';
-  s=s.replace(/(\d+(?:[.,]\d+)?)\s*(mg|mcg|µg|gr|g|iu|%)(?![a-z])(?:\s*\/\s*(\d+(?:[.,]\d+)?)?\s*(ml|mg|g)(?![a-z]))?/i,(m,n,u,d,du)=>{k=n+(u==='%'?'':' ')+u.toLowerCase()+(du?'/'+(d?d+' ':'')+du.toLowerCase():'');return ' '});
+  s=s.replace(/(\d+(?:[.,]\d+)?)\s*(mg|mcg|µg|ug|gr|gram|g|iu|%)(?![a-z])(?:\s*\/\s*(\d+(?:[.,]\d+)?)?\s*(ml|mg|g|dose|puff)(?![a-z]))?/i,(m,n,u,d,du)=>{const uNorm=u.toLowerCase().replace(/^gr(?:am)?$/,'g').replace(/^(?:µg|ug)$/,'mcg');k=n+(uNorm==='%'?'':' ')+uNorm+(du?'/'+(d?d+' ':'')+du.toLowerCase():'');return ' '});
   let j='';
-  s=s.replace(/(^|[^a-z])(no|fl|flac|vial|amp|tube)\.?\s*([ivxlc]+|\d+)(?![a-z0-9])/i,(m,pre,w,n)=>{w=w.toLowerCase();j=w==='no'?n.toUpperCase():(w==='flac'?'fl':w)+' '+n.toUpperCase();return pre+' '});
+  s=s.replace(/(^|[^a-z])(no|fl|flac|flakon|fls|vial|amp|ampul|tube|strip|botol|btl|kolf)\.?\s*([ivxlc]+|\d+)(?![a-z0-9])/i,(m,pre,w,n)=>{w=w.toLowerCase();const wn=(w==='flac'||w==='flakon'||w==='fls'||w==='botol'||w==='btl')?'fl':(w==='ampul'?'amp':w);j=wn==='no'?n.toUpperCase():wn+' '+n.toUpperCase();return pre+' '});
   if(!j){const m=s.match(/\s(\d+|[ivx]+)\s*$/i);if(m&&(/^\d+$/.test(m[1])||r2n(m[1]))){j=m[1].toUpperCase();s=s.slice(0,m.index)}}
-  const o=s.replace(/\b(opth|oculi|auris|naris|nasi)\b/gi,' ').replace(/[^\p{L}\p{N}\s-]/gu,' ').replace(/\s+/g,' ').trim();
+  if(!b&&/^(vial|amp)\b/i.test(j))b='inj';
+  const o=s.replace(/\b(ophth?|oculi|auris|auric(?:ulares)?|naris|nasi|nasales|mata|telinga|hidung)\b/gi,' ').replace(/[^\p{L}\p{N}\s-]/gu,' ').replace(/\s+/g,' ').trim();
   return{b,o,k,j};
 }
 const stripS=s=>String(s||'').replace(/^\s*(s|sig|signa)\s*[.:]?\s+/i,'');
@@ -46,8 +72,12 @@ function evalRow(key,u){
     if(!best||sc>best.sc)best={dd,q,w,sc,sp};
   }
   const add=(ok,label,exp)=>res.push({ok,label,exp});
-  add(u.b===key.b,'bentuk sediaan',FNAME[key.b]||key.b);
-  if(key.k)add(kuatN(u.k)===kuatN(key.k),'kekuatan',key.k);
+  const allowedB=[key.b,...(key.bAlt||[])];
+  add(allowedB.includes(u.b),'bentuk sediaan',FNAME[key.b]||key.b);
+  if(key.k){
+    const allowedK=[key.k,...(key.kAlt||[])].map(kuatN);
+    add(allowedK.includes(kuatN(u.k)),'kekuatan',key.k);
+  }
   const j=parseJ(u.j);let jok,jnote='';
   if(typeof key.j==='number'){const dq=Number([...main.q].find(x=>/^\d+$/.test(x))||1),daily=(main.dd||1)*dq;
     jok=j.n===key.j||(j.n>0&&j.n%daily===0);if(jok&&j.n!==key.j)jnote=` (catatan: ${n2r(key.j)})`;add(jok,'jumlah (no.)',n2r(key.j)+jnote)}
@@ -124,7 +154,7 @@ function evalLembarPengamatan(item,form){
     jamu:['jamu','tradisional','herbal','bebas']
   };
   const golKws=golMap[item.gol]||[];
-  const golOk=golKws.some(g=>te.includes(g))||(item.no===13&&te.includes('bebas'));
+  const golOk=golKws.some(g=>te.includes(g))||(item.no===13&&(te.includes('bebas')||te.includes('lingkaran hijau')||te.includes('lingkaran biru')))||(item.no===23&&(te.includes('keras')||te.includes('lingkaran merah')||te.includes('bebas terbatas')||te.includes('lingkaran biru')));
   const storeOk=['30','25','sejuk','kering','cahaya','kocok','suhu','steril'].some(w=>te.includes(w));
   const ptsE=(golOk?1:0)+(storeOk?1:0);
   const colE={ok:ptsE===2,partial:ptsE===1,pts:ptsE,max:2,hit:matchKw(u.e,lp.kwE),key:lp.e||item.penyimpanan,

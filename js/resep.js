@@ -14,64 +14,70 @@ const bestMap=()=>{try{const v=JSON.parse(localStorage.getItem(BEST_KEY)||'null'
 const lpBestMap=()=>{try{const v=JSON.parse(localStorage.getItem(LP_BEST_KEY)||'null');return v&&typeof v==='object'?v:{}}catch{return {}}};
 let sr=null,inited=false;
 const $=s=>sr.querySelector(s);
-const CSS=`:host{display:block;--green-soft:var(--brand-soft,#e6f7d4);--on-green:#fff;--red-soft:#ffe5e5;--red-dark:#d93a3a;--amber:#8a5d00;--amber-soft:#fff3c4;--rxb:#1c8ed8;--rxbs:#ddf1fd;--shadow:0 3px 0 rgba(31,42,35,.10);
-  --paper:#fffffc;--paper-line:#c9d3df;--pen:#1d3a99;--ink:#2a2d33;--font:inherit;--hand:'Kalam','Segoe Print','Bradley Hand','Comic Sans MS',cursive;color:var(--text);font:600 15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+const CSS=`:host{display:block;width:100%;max-width:100%;min-width:0;overflow-x:hidden;padding-bottom:calc(115px + env(safe-area-inset-bottom,0px));--green-soft:var(--brand-soft,#e6f7d4);--on-green:#fff;--red-soft:#ffe5e5;--red-dark:#d93a3a;--amber:#8a5d00;--amber-soft:#fff3c4;--rxb:#1c8ed8;--rxbs:#ddf1fd;--shadow:0 3px 0 rgba(31,42,35,.10);
+  --paper:#fffffc;--paper-line:#c9d3df;--pen:#1d3a99;--ink:#2a2d33;--font:inherit;--hand:'Kalam','Segoe Print','Bradley Hand','Comic Sans MS',cursive;color:var(--text);font:600 15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;box-sizing:border-box;-webkit-font-smoothing:antialiased}
 a{color:var(--rxb);font-weight:800}
 :host(.rxdark){--red-soft:#3b2022;--amber:#f2c86b;--amber-soft:#3a2f12;--rxb:#6cc4f5;--rxbs:#12303f;--shadow:0 3px 0 rgba(0,0,0,.35)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;color:var(--text);font:600 15px/1.5 var(--font);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid rgba(28,142,216,.45);outline-offset:2px}
 .eyebrow{font-size:12px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;color:var(--green-dark)}
-h1{font-size:26px;line-height:1.1;margin:2px 0 4px;font-weight:900;letter-spacing:-.5px}
-h2{font-size:19px;line-height:1.25;margin:0 0 6px;font-weight:900;letter-spacing:-.2px;text-wrap:balance}
-h3{font-size:16px;margin:0 0 8px;font-weight:800;line-height:1.35}
-p{margin:0}
-.muted,.sub{color:var(--muted);font-size:13px;font-weight:600}
-.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:8px;overflow-x:auto;padding:10px 2px 12px;margin:0 -2px;scrollbar-width:none}
+h1{font-size:24px;line-height:1.15;margin:2px 0 4px;font-weight:900;letter-spacing:-.4px;overflow-wrap:anywhere}
+h2{font-size:18px;line-height:1.3;margin:0 0 6px;font-weight:900;letter-spacing:-.2px;overflow-wrap:anywhere}
+h3{font-size:15.5px;margin:0 0 8px;font-weight:800;line-height:1.35;overflow-wrap:anywhere}
+p{margin:0;overflow-wrap:anywhere}
+.muted,.sub{color:var(--muted);font-size:13px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
+.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:7px;overflow-x:auto;padding:8px 2px 10px;margin:0;width:100%;max-width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);padding:8px 16px;border-radius:16px;font-weight:800;font-size:14px}
+.tab{flex:none;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);padding:8px 14px;border-radius:15px;font-weight:800;font-size:13.5px;white-space:nowrap}
 .tab[aria-selected="true"]{background:var(--green);border-color:var(--green-dark);color:var(--on-green)}
-main{display:grid;gap:14px;padding-top:4px}
-.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);min-width:0}
-.note{background:var(--amber-soft);color:var(--amber);border-radius:16px;padding:11px 14px;font-size:13px;font-weight:700;line-height:1.45}
-.primary{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:2px solid var(--green-dark);border-bottom-width:4px;background:var(--green);color:var(--on-green);border-radius:16px;padding:12px 16px;font-weight:900;font-size:16px;text-align:center}
+main,#list,#quiz,#rows{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:100%;max-width:100%;min-width:0}
+main{padding-top:4px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:15px;box-shadow:var(--shadow);width:100%;max-width:100%;min-width:0;overflow:hidden}
+@media(max-width:480px){
+  .card{padding:12px;border-radius:18px}
+  h1{font-size:20px}
+  h2{font-size:16.5px}
+  h3{font-size:15px}
+}
+.note{background:var(--amber-soft);color:var(--amber);border-radius:16px;padding:11px 14px;font-size:13px;font-weight:700;line-height:1.45;width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere}
+.primary{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;border:2px solid var(--green-dark);border-bottom-width:4px;background:var(--green);color:var(--on-green);border-radius:15px;padding:11px 14px;font-weight:900;font-size:15px;text-align:center;line-height:1.25}
 .primary:active{transform:translateY(2px);border-bottom-width:2px}
-.secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);border-radius:16px;padding:12px 16px;font-weight:800;font-size:15px;text-align:center}
+.secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);border-radius:15px;padding:11px 14px;font-weight:800;font-size:14px;text-align:center;line-height:1.25}
 .secondary:active{transform:translateY(2px);border-bottom-width:2px}
 .primary:disabled,.secondary:disabled{opacity:.5}
-.small{width:auto;min-height:38px;padding:7px 14px;font-size:14px;border-radius:13px}
-.actions{display:grid;gap:10px;margin-top:16px}
-@media(min-width:520px){.actions.two{grid-template-columns:1fr 1fr}}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.small{width:auto;min-height:38px;padding:7px 12px;font-size:13px;border-radius:12px}
+.actions{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:14px}
+@media(min-width:520px){.actions.two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
 .between{justify-content:space-between}
 .grow{flex:1;min-width:0}
-.badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:var(--green-soft);color:var(--green-dark)}
+.badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:var(--green-soft);color:var(--green-dark);max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.3}
 .badge.warn{background:var(--amber-soft);color:var(--amber)}
 .badge.red{background:var(--red-soft);color:var(--red-dark)}
 .badge.blue{background:var(--rxbs);color:var(--rxb)}
-.progress{height:12px;background:var(--surface);border:2px solid var(--line);border-radius:99px;overflow:hidden}
+.progress{height:12px;background:var(--surface);border:2px solid var(--line);border-radius:99px;overflow:hidden;width:100%}
 .progress i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .25s}
 .icon-btn{flex:none;width:42px;height:42px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);border-radius:14px;font-size:20px;font-weight:900;line-height:1;display:grid;place-items:center}
 /* daftar kasus */
-.cases{display:grid;gap:10px}
-@media(min-width:620px){.cases{grid-template-columns:1fr 1fr}}
-.case{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;padding:12px 14px}
+.cases{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;width:100%;min-width:0}
+@media(min-width:620px){.cases{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.case{display:flex;gap:12px;align-items:center;width:100%;min-width:0;text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;padding:12px 14px}
 .case:active{transform:translateY(2px);border-bottom-width:2px}
 .case .no{flex:none;width:38px;height:38px;border-radius:12px;background:var(--green-soft);color:var(--green-dark);display:grid;place-items:center;font-weight:900;font-size:16px}
 .case.done .no{background:var(--green);color:var(--on-green)}
-.case .t{font-weight:800;font-size:14px;line-height:1.35}
+.case .t{font-weight:800;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
 .case .d{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
 /* langkah kasus */
-.bar{display:flex;gap:10px;align-items:center}
-.bar .progress{flex:1}
+.bar{display:flex;gap:10px;align-items:center;width:100%;min-width:0}
+.bar .progress{flex:1;min-width:0}
 .timer{font-weight:900;font-size:14px;font-variant-numeric:tabular-nums;color:var(--muted);min-width:46px;text-align:right}
 .timer.late{color:var(--red)}
-.step-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
-.vignette{font-size:16px;line-height:1.6;font-weight:600}
+.step-h{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px;min-width:0}
+.vignette{font-size:15.5px;line-height:1.6;font-weight:600;overflow-wrap:anywhere}
 .pt{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--surface);font-size:13px;font-weight:700}
-.answers{display:grid;gap:8px;margin-top:12px}
-.answer{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:15px;padding:12px 14px;font-weight:700;font-size:15px;line-height:1.4;color:var(--text)}
+.answers{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:12px;width:100%;min-width:0}
+.answer{display:flex;gap:10px;align-items:flex-start;width:100%;min-width:0;text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:15px;padding:11px 12px;font-weight:700;font-size:14.5px;line-height:1.4;color:var(--text)}
 .answer:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
 .answer:disabled{cursor:default}
 .answer .mk{flex:none;width:22px;height:22px;margin-top:1px;border-radius:7px;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:900;color:transparent}
@@ -85,70 +91,78 @@ main{display:grid;gap:14px;padding-top:4px}
 .answer.miss{border-color:#e0a800;background:var(--amber-soft)}
 .answer.miss .mk{border-color:#e0a800}
 .answer.alt{border-color:var(--rxb);background:var(--rxbs)}
-.fb{margin-top:14px;padding:13px 14px;border-radius:16px;background:var(--surface);font-size:14px;font-weight:600;line-height:1.55}
+.fb{margin-top:14px;padding:12px 13px;border-radius:16px;background:var(--surface);font-size:13.5px;font-weight:600;line-height:1.55;width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere}
 .fb.good{background:var(--green-soft)}.fb.bad{background:var(--red-soft)}
 .fb b{font-weight:900}
 .fb ul{margin:6px 0 0;padding-left:18px}
-.tag{display:inline-block;font-size:12px;font-weight:800;padding:3px 9px;border-radius:9px;margin:0 6px 6px 0}
+.tag{display:inline-block;font-size:12px;font-weight:800;padding:3px 9px;border-radius:9px;margin:0 5px 5px 0;max-width:100%;overflow-wrap:anywhere}
 .tag.good{background:var(--green-soft);color:var(--green-dark)}.tag.bad{background:var(--red-soft);color:var(--red-dark)}
 .tag.warn{background:var(--amber-soft);color:var(--amber)}
-.rowfb{padding:10px 0;border-top:2px solid var(--line)}.rowfb:first-child{border-top:0;padding-top:0}
+.rowfb{padding:10px 0;border-top:2px solid var(--line);min-width:0}.rowfb:first-child{border-top:0;padding-top:0}
 /* kertas resep */
-.paper{background:var(--paper);color:var(--ink);border:1px solid #cfd6df;border-radius:6px;padding:18px 16px 20px;box-shadow:0 1px 0 #fff inset,0 6px 18px rgba(20,30,50,.12);position:relative}
+.paper{background:var(--paper);color:var(--ink);border:1px solid #cfd6df;border-radius:8px;padding:14px 12px 16px;box-shadow:0 1px 0 #fff inset,0 6px 18px rgba(20,30,50,.12);position:relative;width:100%;max-width:100%;min-width:0;overflow:hidden}
 .lh{text-align:center;padding-bottom:8px;border-bottom:3px double #44484f;margin-bottom:6px}
-.lh-name{font:800 18px var(--font);letter-spacing:.2px;color:var(--ink)}
-.lh-sub{font:600 11.5px/1.5 var(--font);color:#5b616b}
-.pdate{text-align:right;font:400 17px var(--hand);color:var(--pen);margin:6px 0 10px}
-.blk{margin-bottom:8px}
-.ln{display:flex;gap:8px;align-items:flex-end}
-.ln.l2{padding-left:26px;margin-top:-2px}
-.rm{flex:none;font:700 27px/1.2 var(--hand);color:var(--pen);width:34px}
-.sm{flex:none;font:700 22px/1.3 var(--hand);color:var(--pen);width:20px;text-align:center}
-.paper textarea,.paper input{display:block;flex:1;min-width:0;width:100%;font:400 21px/1.45 var(--hand);color:var(--pen);background:transparent;border:0;border-bottom:1.5px dotted var(--paper-line);border-radius:0;padding:0 2px;resize:none;overflow:hidden;box-shadow:none}
-.paper textarea::placeholder,.paper input::placeholder{color:#9aa4b2;font-size:16px}
+.lh-name{font:800 16px var(--font);letter-spacing:.2px;color:var(--ink)}
+.lh-sub{font:600 11px/1.45 var(--font);color:#5b616b}
+.pdate{text-align:right;font:400 15px var(--hand);color:var(--pen);margin:6px 0 10px}
+.blk{margin-bottom:8px;min-width:0}
+.ln{display:flex;gap:6px;align-items:flex-end;min-width:0}
+.ln.l2{padding-left:20px;margin-top:-2px}
+.rm{flex:none;font:700 24px/1.2 var(--hand);color:var(--pen);width:30px}
+.sm{flex:none;font:700 20px/1.3 var(--hand);color:var(--pen);width:18px;text-align:center}
+.paper textarea,.paper input{display:block;flex:1;min-width:0;width:100%;font:400 18.5px/1.45 var(--hand);color:var(--pen);background:transparent;border:0;border-bottom:1.5px dotted var(--paper-line);border-radius:0;padding:0 2px;resize:none;overflow:hidden;box-shadow:none}
+.paper textarea::placeholder,.paper input::placeholder{color:#9aa4b2;font-size:15px}
 .paper textarea:focus,.paper input:focus{outline:0;border-bottom:1.5px solid var(--pen)}
-.paraf{display:block;margin:2px 0 0 auto;width:62px;height:18px;color:var(--pen);opacity:.75}
+.paraf{display:block;margin:2px 0 0 auto;width:58px;height:16px;color:var(--pen);opacity:.75}
 .sep{height:0;border-top:1px solid var(--paper-line);margin:4px 0 10px}
-.pro{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
-.pro label{display:flex;gap:6px;align-items:flex-end;flex:1;min-width:140px;font:700 16px var(--hand);color:var(--pen)}
-.keyp{font:400 20px/1.5 var(--hand);color:var(--pen);white-space:pre-wrap}
-.quick{display:flex;gap:6px;overflow-x:auto;padding:10px 2px 2px;margin-top:10px;scrollbar-width:none}
+.pro{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.pro label{display:flex;gap:6px;align-items:flex-end;flex:1;min-width:120px;font:700 15px var(--hand);color:var(--pen)}
+.keyp{font:400 17.5px/1.5 var(--hand);color:var(--pen);white-space:pre-wrap;overflow-wrap:anywhere}
+.quick{display:flex;gap:6px;overflow-x:auto;padding:10px 2px 2px;margin-top:10px;scrollbar-width:none;width:100%;max-width:100%;-webkit-overflow-scrolling:touch}
 .quick::-webkit-scrollbar{display:none}
-.quick button{flex:none;border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:11px;padding:5px 10px;font:800 13px var(--font);color:var(--text)}
-.hint{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:8px}
+.quick button{flex:none;border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:11px;padding:5px 10px;font:800 12.5px var(--font);color:var(--text)}
+.hint{font-size:12px;color:var(--muted);font-weight:700;margin-top:8px;line-height:1.45;overflow-wrap:anywhere}
 /* kuis */
-.q{font-size:19px;font-weight:850;line-height:1.45;margin:14px 0 4px;text-wrap:balance}
+.q{font-size:17.5px;font-weight:850;line-height:1.45;margin:12px 0 4px;overflow-wrap:anywhere}
 .q-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--muted);font-weight:800}
-.opt-text{white-space:pre-line}
+.opt-text{white-space:pre-line;overflow-wrap:anywhere;min-width:0;flex:1}
 /* daftar, form, hitung */
-input.f,select.f,textarea.f{font:700 15px var(--font);color:var(--text);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:11px 12px;width:100%;min-width:0}
-textarea.f{min-height:84px;resize:vertical;font-weight:600}
+input.f,select.f,textarea.f{font:700 15px var(--font);color:var(--text);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%;max-width:100%;min-width:0}
+textarea.f{min-height:80px;resize:vertical;font-weight:600}
 label.l{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:0 0 4px}
-.fgrid{display:grid;gap:12px;margin-top:12px}
-@media(min-width:560px){.fgrid.c3{grid-template-columns:repeat(3,1fr)}.fgrid.c2{grid-template-columns:1fr 1fr}}
-.out{margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--green-soft);font-weight:900;font-size:17px;line-height:1.4}
-.seg{display:flex;gap:6px;flex-wrap:wrap}
-.seg button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:12px;padding:6px 12px;font-weight:800;font-size:13px}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px;width:100%;min-width:0}
+@media(min-width:560px){.fgrid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.fgrid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.out{margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--green-soft);font-weight:900;font-size:16px;line-height:1.4;overflow-wrap:anywhere}
+.seg{display:flex;gap:6px;flex-wrap:wrap;width:100%;min-width:0}
+.seg button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:12px;padding:7px 11px;font-weight:800;font-size:12.5px;line-height:1.25;text-align:center;min-width:0;overflow-wrap:anywhere}
 .seg button[aria-pressed="true"]{background:var(--green);border-color:var(--green-dark);color:var(--on-green)}
-details.dt{border:2px solid var(--line);border-radius:16px;background:var(--card);padding:0}
+.seg.sub-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+@media(min-width:600px){.seg.sub-seg.cols4{grid-template-columns:repeat(4,minmax(0,1fr))}.seg.sub-seg.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.racik-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:100%;min-width:0}
+@media(min-width:600px){.racik-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.racik-grid button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:13px;padding:8px 9px;font-weight:800;font-size:12.5px;line-height:1.25;text-align:left;display:flex;align-items:center;gap:7px;min-width:0}
+.racik-grid button .rno{flex:none;width:22px;height:22px;border-radius:7px;background:var(--surface);color:var(--text);display:grid;place-items:center;font-size:11.5px;font-weight:900}
+.racik-grid button[aria-pressed="true"]{background:var(--green);border-color:var(--green-dark);color:var(--on-green)}
+.racik-grid button[aria-pressed="true"] .rno{background:rgba(255,255,255,.24);color:#fff}
+details.dt{border:2px solid var(--line);border-radius:16px;background:var(--card);padding:0;width:100%;max-width:100%;min-width:0;overflow:hidden}
 details.dt+details.dt{margin-top:8px}
-details.dt>summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:800;display:flex;gap:8px;justify-content:space-between;align-items:center}
+details.dt>summary{list-style:none;cursor:pointer;padding:12px 13px;font-weight:800;display:flex;gap:8px;justify-content:space-between;align-items:center;min-width:0}
 details.dt>summary::-webkit-details-marker{display:none}
-details.dt>summary::after{content:"+";font-weight:900;color:var(--muted)}
+details.dt>summary::after{content:"+";font-weight:900;color:var(--muted);flex:none}
 details.dt[open]>summary::after{content:"−"}
-details.dt>.in{padding:0 14px 14px}
-.item{padding:10px 0;border-top:2px solid var(--line)}.item:first-child{border-top:0}
-.kv{display:grid;gap:6px;font-size:14px;font-weight:600}.kv b{font-weight:800}
-.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}
+details.dt>.in{padding:0 13px 13px;min-width:0;overflow-wrap:anywhere}
+.item{padding:10px 0;border-top:2px solid var(--line);min-width:0}.item:first-child{border-top:0}
+.kv{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-size:13.5px;font-weight:600;min-width:0;overflow-wrap:anywhere}.kv b{font-weight:800}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;overflow-wrap:anywhere}
 .sc{display:grid;gap:10px;margin-top:10px}
 .sc .r{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-weight:800;font-size:14px}
 .sc .r .progress{grid-column:1/-1;height:10px}
-.big{font-size:44px;line-height:1;font-weight:900;letter-spacing:-1px}
+.big{font-size:40px;line-height:1;font-weight:900;letter-spacing:-1px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 .paper textarea:disabled,.paper input:disabled{opacity:1;-webkit-text-fill-color:var(--pen);color:var(--pen)}
 .blk-f{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:2px;min-height:24px}
-.lnk{border:0;background:none;padding:6px 0;font:700 12px var(--font);color:#7a828d;text-decoration:underline;min-height:32px}
+.lnk{border:0;background:none;padding:6px 0;font:700 12px var(--font);color:var(--rxb);text-decoration:underline;min-height:30px;text-align:left}
 .ln:not(.l2){align-items:flex-start}
 .tabs[hidden]{display:none}
 .answer .mk{color:#fff}
@@ -156,50 +170,73 @@ details.dt>.in{padding:0 14px 14px}
 .answer.miss .mk{color:transparent}
 
 /* ===== BUNGKUS OBAT & LEMBAR PENGAMATAN (GAMBAR 1 & GAMBAR 2) ===== */
-.pkg-grid{display:grid;gap:14px;margin-top:12px}
-@media(min-width:680px){.pkg-grid{grid-template-columns:230px 1fr}}
-.pkg-photo-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px;position:relative;overflow:hidden;min-height:210px}
-.pkg-photo-box img{max-width:100%;max-height:195px;object-fit:contain;border-radius:8px;cursor:zoom-in;transition:transform .2s}
+.pkg-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px;width:100%;min-width:0}
+@media(min-width:680px){.pkg-grid{grid-template-columns:220px minmax(0,1fr)}}
+.pkg-photo-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px;position:relative;overflow:hidden;min-height:190px;width:100%;min-width:0}
+.pkg-photo-box img{max-width:100%;max-height:185px;object-fit:contain;border-radius:8px;cursor:zoom-in;transition:transform .2s}
 .pkg-photo-box img:hover{transform:scale(1.04)}
-.pkg-zoom-hint{margin-top:8px;font-size:11.5px;font-weight:800;color:#4b5563;background:#f3f4f6;padding:4px 10px;border-radius:99px;border:1px solid #e5e7eb}
-.pkg-back{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:9px;align-content:start}
-.pkg-back-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-bottom:2px dashed var(--line);padding-bottom:8px}
-.pkg-back-list{display:grid;gap:6px;font-size:13.5px;line-height:1.45}
+.pkg-zoom-hint{margin-top:8px;font-size:11px;font-weight:800;color:#4b5563;background:#f3f4f6;padding:4px 10px;border-radius:99px;border:1px solid #e5e7eb;text-align:center}
+.pkg-back{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-content:start;width:100%;min-width:0}
+.pkg-back-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;border-bottom:2px dashed var(--line);padding-bottom:8px;min-width:0}
+.pkg-back-list{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-size:13px;line-height:1.45;min-width:0;overflow-wrap:anywhere}
 .pkg-back-list.blurred{filter:blur(6px);user-select:none;pointer-events:none}
-.gol-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:800;border:1.5px solid var(--line);background:var(--card)}
+.gol-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:99px;font-size:11.5px;font-weight:800;border:1.5px solid var(--line);background:var(--card);max-width:100%}
 .gol-dot{width:20px;height:20px;border-radius:50%;border:2px solid #111;display:inline-grid;place-items:center;font-weight:900;font-size:11px;line-height:1;flex:none}
 .gol-dot.keras{background:#e11d48;color:#111}
 .gol-dot.bebas_terbatas{background:#1d4ed8;color:#fff}
 .gol-dot.bebas{background:#16a34a;color:#fff}
 .gol-dot.jamu{background:#fff;border-color:#15803d;color:#15803d;font-size:12px}
-.pno-box{background:#111;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800;line-height:1.3;display:inline-block}
+.pno-box{background:#111;color:#fff;padding:4px 9px;border-radius:7px;font-size:11px;font-weight:800;line-height:1.35;display:inline-block;max-width:100%;overflow-wrap:anywhere}
 /* Lembar Pengamatan Worksheet (Gambar 2) */
-.lp-sheet{border:2px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin-top:12px}
-.lp-sheet-head{background:var(--surface);padding:12px 14px;border-bottom:2px solid var(--line);text-align:center}
-.lp-sheet-head h3{margin:0;font-size:15px;letter-spacing:.4px;text-transform:uppercase}
-.lp-form-grid{display:grid;gap:12px;padding:14px}
-@media(min-width:640px){.lp-form-grid{grid-template-columns:1fr 1fr}}
-.lp-col{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.lp-sheet{border:2px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin-top:12px;width:100%;max-width:100%;min-width:0}
+.lp-sheet-head{background:var(--surface);padding:11px 12px;border-bottom:2px solid var(--line);text-align:center}
+.lp-sheet-head h3{margin:0;font-size:14.5px;letter-spacing:.3px;text-transform:uppercase}
+.lp-form-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding:12px;width:100%;min-width:0}
+@media(min-width:640px){.lp-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lp-col{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:11px;display:flex;flex-direction:column;gap:6px;min-width:0;width:100%}
 .lp-col.full{grid-column:1/-1}
 .lp-col.good{border-color:var(--green);background:var(--green-soft)}
 .lp-col.partial{border-color:#e0a800;background:var(--amber-soft)}
 .lp-col.bad{border-color:var(--red);background:var(--red-soft)}
-.lp-col-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:900}
-.lp-col-code{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--green);color:var(--on-green);font-size:12px;font-weight:900;flex:none}
-.lp-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
-.lp-chips button{border:1.5px solid var(--line);background:var(--card);border-radius:8px;padding:3px 8px;font-size:11.5px;font-weight:800}
+.lp-col-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-weight:900;min-width:0}
+.lp-col-code{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:7px;background:var(--green);color:var(--on-green);font-size:12px;font-weight:900;flex:none}
+.lp-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px;min-width:0}
+.lp-chips button{border:1.5px solid var(--line);background:var(--card);border-radius:8px;padding:4px 8px;font-size:11px;font-weight:800;text-align:left;max-width:100%;overflow-wrap:anywhere}
 .lp-chips button:hover{border-color:var(--rxb)}
-/* Tabel Rekap Lembar Pengamatan */
-.lp-table-wrap{overflow-x:auto;border:2px solid var(--line);border-radius:16px;background:var(--card);margin-top:10px}
-table.lp-tbl{width:100%;border-collapse:collapse;min-width:960px;font-size:12.5px;line-height:1.45}
-table.lp-tbl th,table.lp-tbl td{border:1.5px solid var(--line);padding:9px 10px;vertical-align:top;text-align:left}
-table.lp-tbl th{background:var(--surface);font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2}
-table.lp-tbl td.lp-cell-hide{filter:blur(5px);cursor:pointer;user-select:none;transition:filter .15s}
-table.lp-tbl td.lp-cell-hide:hover{filter:blur(2px)}
+/* Tabel Rekap Lembar Pengamatan & Scroll Horizontal Desktop */
+.lp-scroll-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:7px 10px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;font-size:12px;font-weight:800}
+.lp-scroll-btns{display:flex;gap:6px;align-items:center}
+.lp-scroll-btns button{border:1.5px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:9px;padding:5px 10px;font-size:12px;font-weight:900}
+.lp-table-wrap{width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;border:2px solid var(--line);border-radius:14px;background:var(--card);margin-top:8px;scrollbar-width:thin;cursor:grab}
+.lp-table-wrap:active{cursor:grabbing}
+.lp-table-wrap::-webkit-scrollbar{height:10px}
+.lp-table-wrap::-webkit-scrollbar-track{background:var(--surface);border-radius:8px}
+.lp-table-wrap::-webkit-scrollbar-thumb{background:var(--green);border-radius:8px}
+table.lp-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-size:12.5px;line-height:1.45}
+table.lp-tbl th,table.lp-tbl td{border:1.5px solid var(--line);padding:9px 10px;vertical-align:top;text-align:left;overflow-wrap:anywhere}
+table.lp-tbl th{background:var(--surface);font-weight:900;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2}
+table.lp-tbl td.lp-cell-hide,.lp-mcard-val.lp-cell-hide{filter:blur(5px);cursor:pointer;user-select:none;transition:filter .15s}
+table.lp-tbl td.lp-cell-hide:hover,.lp-mcard-val.lp-cell-hide:hover{filter:blur(2px)}
 table.lp-tbl tr:nth-child(even) td{background:rgba(128,128,128,.04)}
-.tbl-thumb{width:54px;height:54px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px;padding:2px;cursor:zoom-in;display:block;margin-bottom:4px}
+.tbl-thumb{width:54px;height:54px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px;padding:2px;cursor:zoom-in;display:block;margin-bottom:4px;flex:none}
+/* Tabel Responsif (Racikan & Teori berubah jadi Kartu Rapi di Mobile) */
+@media(max-width:640px){
+  .lp-table-wrap.resp-wrap{overflow-x:visible;border:0;background:transparent;cursor:default}
+  table.lp-tbl.resp-tbl{min-width:0!important;width:100%!important;display:grid;gap:10px}
+  table.lp-tbl.resp-tbl thead{display:none}
+  table.lp-tbl.resp-tbl tbody{display:grid;gap:10px;width:100%}
+  table.lp-tbl.resp-tbl tr{display:grid;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:11px 12px;width:100%}
+  table.lp-tbl.resp-tbl td{border:0;padding:3px 0;background:transparent!important;display:block;width:100%}
+  table.lp-tbl.resp-tbl td::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);margin-bottom:2px}
+}
+/* Kartu Rekap Lembar Pengamatan (a)-(f) untuk Mobile */
+.lp-mcards{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:10px;width:100%;min-width:0}
+.lp-mcard{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;min-width:0}
+.lp-mcard-head{display:flex;gap:10px;align-items:center;border-bottom:2px dashed var(--line);padding-bottom:8px;min-width:0}
+.lp-mcard-item{background:var(--card);border:1.5px solid var(--line);border-radius:11px;padding:8px 10px;font-size:12.5px;line-height:1.45;min-width:0;overflow-wrap:anywhere}
+.lp-mcard-lbl{font-size:11px;font-weight:900;color:var(--green-dark);text-transform:uppercase;margin-bottom:2px;display:block}
 /* Etiket Apotek YARSI */
-.etiket{border:2px solid #222;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.45;color:#111;max-width:360px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.etiket{border:2px solid #222;border-radius:10px;padding:12px 13px;font-size:12.5px;line-height:1.45;color:#111;width:100%;max-width:360px;box-shadow:0 2px 6px rgba(0,0,0,.08);overflow-wrap:anywhere}
 .etiket.putih{background:#ffffff}
 .etiket.biru{background:#bae6fd;border-color:#0369a1}
 .etiket-head{text-align:center;border-bottom:2px solid #222;padding-bottom:4px;margin-bottom:6px;font-weight:900;font-size:12px}
@@ -215,6 +252,7 @@ const STEPS_FULL=[{k:'v'},{k:'s1',n:1,w:20},{k:'s3',n:3,w:25},{k:'s4',n:4,w:35},
 const STEPS_RX=[{k:'v'},{k:'s4',n:4,w:35},{k:'res'}];
 let STEPS=STEPS_FULL;
 const stOf=k=>STEPS_FULL.find(x=>x.k===k);
+const isMobileViewport=()=>typeof window!=='undefined'&&window.innerWidth<640;
 const S={
   only:false,
   tab:'kasus',
@@ -228,7 +266,7 @@ const S={
   quiz:null,
   foc:{i:0,f:'l1'},
   sub:{sed:'lp',sing:'kuis',pad:'kuis',pan:'racik'},
-  lp:{idx:0,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:''},tblFilter:'all',tblSearch:'',tblHide:false,revealed:{}},
+  lp:{idx:0,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:''},tblFilter:'all',tblSearch:'',tblHide:false,tblMode:'auto',revealed:{}},
   racik:{idx:0,hideCalc:false}
 };
 const TABS=[['kasus','Kasus'],['sediaan','Sediaan & Bungkus'],['panduan','Panduan & Racikan'],['singkatan','Singkatan'],['padat','BSO padat'],['hitung','Hitung']];
@@ -327,9 +365,9 @@ function stepS4(){
   const date=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
   const blocks=f.rows.map((r,i)=>`<div class="blk" data-i="${i}"><div class="ln"><span class="rm">R/</span><textarea rows="1" data-f="l1" aria-label="Baris R/ obat ${i+1}" placeholder="Tab. Contoh 100 mg no. X" autocomplete="off" autocapitalize="sentences" spellcheck="false" ${d?'disabled':''}>${esc(r.l1)}</textarea></div><div class="ln l2"><span class="sm">S</span><textarea rows="1" data-f="l2" aria-label="Baris S obat ${i+1}" placeholder="3 dd tab I pc" autocomplete="off" autocapitalize="off" spellcheck="false" ${d?'disabled':''}>${esc(r.l2)}</textarea></div><div class="blk-f">${!d&&f.rows.length>1?`<button class="lnk" data-act="delrow" data-i="${i}">hapus R/ ini</button>`:'<span></span>'}${SVG_PARAF}</div></div>`).join('');
   const paper=`<div class="paper"><div class="lh"><div class="lh-name">dr. ____________________</div><div class="lh-sub">SIP ______________ · Praktik umum</div></div><div class="pdate">${date}</div>${blocks}<div class="sep"></div><div class="pro"><label>Pro: <input data-pro placeholder="Tn. A" autocomplete="off" aria-label="Pro (nama pasien)" value="${esc(f.pro)}" ${d?'disabled':''}></label><label>Umur: <input data-usia placeholder="45 th" inputmode="numeric" autocomplete="off" aria-label="Umur pasien" value="${esc(f.usia)}" ${d?'disabled':''}></label></div></div>`;
-  const tools=d?'':`<div class="row" style="margin-top:10px"><button class="secondary small" data-act="addrow">+ Tambah R/</button></div>${S.exam?'':`<div class="quick" id="quick" role="toolbar" aria-label="Sisipkan singkatan"></div>`}`;
+  const tools=d?'':`<div class="row between" style="margin-top:10px"><button class="secondary small" data-act="addrow">+ Tambah R/ (${f.rows.length}${!S.exam?`/${c.rows.length}`:''})</button>${!S.exam&&f.rows.length<c.rows.length?`<span class="sub">Kasus ini memiliki ${c.rows.length} obat pada kunci resep</span>`:''}</div>${S.exam?'':`<div class="quick" id="quick" role="toolbar" aria-label="Sisipkan singkatan"></div>`}`;
   const a=S.exam?acts(P('Lanjut','next'),prevBtn()):d?acts(P('Lanjut','next'),X('Perbaiki resep','retry')):acts(P('Periksa resep','check'));
-  return `<section class="card">${stepHead(st)}<h2>Tulis resepnya</h2>${S.only?`<details class="dt" style="margin-bottom:12px"><summary>Petunjuk: diagnosis dan obat</summary><div class="in"><div><b>Diagnosis:</b> ${esc(c.dx)}</div><div style="margin-top:6px"><b>Obat:</b> ${esc([...c.p,...c.a].join(', '))}</div></div></details>`:''}<p class="sub" style="margin-bottom:12px">Pasien: ${esc(c.pro)}, ${c.usia} tahun. Tulis tiap obat seperti di kertas resep: baris R/ (bentuk, nama, kekuatan, jumlah) lalu baris S (aturan pakai).</p>${paper}${tools}${d?res4():''}${a}</section>`;
+  return `<section class="card">${stepHead(st)}<h2>Tulis resepnya</h2>${S.only?`<details class="dt" style="margin-bottom:12px"><summary>Petunjuk: diagnosis dan obat</summary><div class="in"><div><b>Diagnosis:</b> ${esc(c.dx)}</div><div style="margin-top:6px"><b>Obat:</b> ${esc([...c.p,...c.a].join(', '))}</div></div></details>`:''}<p class="sub" style="margin-bottom:12px">Pasien: <b>${esc(c.pro)}</b>, <b>${c.usia} tahun</b>. Tulis tiap obat seperti di kertas resep: baris R/ (bentuk, nama, kekuatan, jumlah) lalu baris S (aturan pakai).</p>${paper}${tools}${d?res4():''}${a}</section>`;
 }
 function keyHtml(c){
   const blocks=c.rows.map(k=>`<div class="blk"><div class="ln"><span class="rm">R/</span><div class="keyp">${esc(line1Of(k))}</div></div><div class="ln l2"><span class="sm">S</span><div class="keyp">${esc(k.s)}</div></div><div class="blk-f"><span></span>${SVG_PARAF}</div></div>`).join('');
@@ -407,7 +445,7 @@ function opts(a,pool,n=3,grp=()=>''){
   let c=[...new Set(pool)].filter(ok);
   return shuffle([a,...pick(c,n)]);
 }
-const subnav=(key,items)=>`<div class="seg" role="group" style="margin-top:12px">${items.map(([k,l])=>`<button aria-pressed="${S.sub[key]===k}" data-sub="${key}:${k}">${l}</button>`).join('')}</div>`;
+const subnav=(key,items)=>`<div class="seg sub-seg cols${items.length}" role="group" style="margin-top:12px">${items.map(([k,l])=>`<button aria-pressed="${S.sub[key]===k}" data-sub="${key}:${k}">${l}</button>`).join('')}</div>`;
 
 /* ===== SEDIAAN BSO CAIR (26 OBAT GAMBAR 1 + LEMBAR PENGAMATAN GAMBAR 2) ===== */
 const fb=f=>f.startsWith('serbuk injeksi')?'serbuk injeksi':f.startsWith('suspensi')?'suspensi':f.startsWith('inhaler')?'inhaler':f;
@@ -417,7 +455,7 @@ function viewSediaan(m){
   m.innerHTML=`<div class="card">
     <div class="step-h"><span class="badge">Praktikum 2 · BSO Cair</span><span class="muted">DR. Dra. Risdawati Djohan, Apt., MKes</span></div>
     <h2>26 Sediaan BSO Cair, Bungkus Obat &amp; Lembar Pengamatan</h2>
-    <p class="sub">Lengkap dengan foto bungkus asli &amp; label komposisi/dosis untuk 26 obat praktikum serta latihan Lembar Pengamatan kolom (a)–(f).</p>
+    <p class="sub">Lengkap dengan foto bungkus asli &amp; label komposisi/dosis yang telah diverifikasi untuk 26 obat praktikum serta latihan Lembar Pengamatan kolom (a)–(f).</p>
     ${subnav('sed',[['lp','📝 Lembar Pengamatan'],['tabel','📋 Tabel Kunci (a)–(f)'],['daftar','📦 Bungkus & Daftar (26)'],['kuis','🎯 Kuis']])}
     <div style="margin-top:10px" class="sub">Progres Lembar Pengamatan: <b>${doneCount} / ${SEDIAAN.length}</b> obat lulus (≥80%)</div>
   </div>
@@ -452,9 +490,9 @@ function drawLembarPengamatan(){
           ${SEDIAAN.map((x,i)=>{const sc=lpBest[x.no];return `<option value="${i}" ${i===S.lp.idx?'selected':''}>#${x.no}. ${esc(x.praktikumNama)} — ${esc(x.n)} (${esc(x.tipePraktikum)})${sc!=null?` [Terbaik ${sc}%]`:''}</option>`}).join('')}
         </select>
       </div>
-      <div class="row" style="margin-top:16px">
-        <button class="secondary small" data-act="lpprev" title="Obat sebelumnya">‹</button>
-        <button class="secondary small" data-act="lpnext" title="Obat berikutnya">›</button>
+      <div class="row" style="margin-top:8px">
+        <button class="secondary small" data-act="lpprev" title="Obat sebelumnya">‹ Sebelumnya</button>
+        <button class="secondary small" data-act="lpnext" title="Obat berikutnya">Berikutnya ›</button>
         <button class="secondary small" data-act="lprand">🎲 Acak</button>
       </div>
     </div>
@@ -549,6 +587,7 @@ function drawLembarPengamatan(){
 
 function drawLpTable(){
   const flt=S.lp.tblFilter,q=S.lp.tblSearch.toLowerCase(),hide=S.lp.tblHide;
+  const viewMode=S.lp.tblMode==='auto'?(isMobileViewport()?'cards':'table'):S.lp.tblMode;
   const rows=SEDIAAN.filter(s=>{
     if(flt==='solutio'&&s.f!=='solutio')return false;
     if(flt==='suspensi'&&!s.f.includes('suspensi'))return false;
@@ -562,6 +601,10 @@ function drawLpTable(){
     const k=`${no}:${col}`,cl=hide&&!S.lp.revealed[k]?'lp-cell-hide':'';
     return `<td class="${cl}" data-reveal="${k}">${esc(txt)}</td>`;
   };
+  const mitem=(no,col,lbl,txt,isMono=false)=>{
+    const k=`${no}:${col}`,cl=hide&&!S.lp.revealed[k]?'lp-cell-hide':'';
+    return `<div class="lp-mitem ${cl}" data-reveal="${k}"><b>(${col}) ${lbl}</b><div class="${isMono?'mono':''}" style="${isMono?'white-space:pre-wrap;font-size:12.5px;color:var(--pen);margin-top:2px':''}">${esc(txt)}</div></div>`;
+  };
   $('#list').innerHTML=`
   <div class="card">
     <div class="row between">
@@ -569,46 +612,81 @@ function drawLpTable(){
         <h3>Tabel Kunci Lembar Pengamatan Praktikum BSO Cair (26 Obat)</h3>
         <p class="sub">Format persis Lembar Pengamatan Praktikum BSO Cair (Gambar 2): kolom (a) s/d (f). Klik foto untuk memperbesar.</p>
       </div>
-      <button class="secondary small" data-act="lptblhide">${hide?'👁️ Buka Semua Kunci':'🙈 Tutup Kunci (Mode Hafalan)'}</button>
+      <div class="row">
+        <button class="secondary small" data-act="lptblmode">${viewMode==='cards'?'📋 Tampilan Tabel Geser':'📱 Tampilan Kartu'}</button>
+        <button class="secondary small" data-act="lptblhide">${hide?'👁️ Buka Semua Kunci':'🙈 Mode Hafalan'}</button>
+      </div>
     </div>
     <div class="seg" style="margin-top:10px">
       ${[['all','Semua (26)'],['solutio','Solutio'],['suspensi','Suspensi'],['emulsi','Emulsi'],['injeksi','Injeksi/Infus/Pelarut'],['inhalasi','Inhalasi']].map(([k,l])=>`<button aria-pressed="${flt===k}" data-lpflt="${k}">${l}</button>`).join('')}
     </div>
     <input class="f" id="lpTblSearch" style="margin-top:10px" placeholder="Cari obat di tabel Lembar Pengamatan..." value="${esc(S.lp.tblSearch)}">
-    ${hide?`<div class="hint">Mode hafalan aktif: ketuk sel tabel yang buram untuk membuka kunci jawaban per kolom.</div>`:''}
-    <div class="lp-table-wrap">
-      <table class="lp-tbl">
-        <thead>
-          <tr>
-            <th style="width:42px">No</th>
-            <th style="width:140px">Bungkus &amp; Daftar</th>
-            <th style="width:150px">(a) Nama Bentuk Sediaan</th>
-            <th style="width:150px">(b) Nama Obat &amp; Strength</th>
-            <th style="width:180px">(c) Senyawa Aktif &amp; Komposisi</th>
-            <th style="width:190px">(d) Cara Pemakaian &amp; Dosis</th>
-            <th style="width:180px">(e) Golongan Obat &amp; Penyimpanan</th>
-            <th style="width:190px">(f) Penulisan Resep</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows.map(s=>`<tr>
-            <td><b>${s.no}</b></td>
-            <td>
-              <img class="tbl-thumb" src="${esc(s.img)}" alt="${esc(s.praktikumNama)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)}">
-              <b>${esc(s.praktikumNama)}</b><br>
-              <span class="badge" style="margin-top:2px">${esc(s.tipePraktikum)}</span><br>
-              <button class="lnk" data-lpgoto="${s.no-1}">Latih obat ini →</button>
-            </td>
-            ${cell(s.no,'a',s.lp.a)}
-            ${cell(s.no,'b',s.lp.b)}
-            ${cell(s.no,'c',s.lp.c)}
-            ${cell(s.no,'d',s.lp.d)}
-            ${cell(s.no,'e',s.lp.e)}
-            <td class="${hide&&!S.lp.revealed[s.no+':f']?'lp-cell-hide':''}" data-reveal="${s.no}:f"><div class="mono" style="white-space:pre-wrap;font-size:12px;color:var(--pen)">${esc(s.x)}</div></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
+    ${hide?`<div class="hint">Mode hafalan aktif: ketuk sel/kotak yang buram untuk membuka kunci jawaban per kolom.</div>`:''}
+
+    ${viewMode==='cards'?`
+      <div class="lp-mcards">
+        ${rows.map(s=>`<div class="lp-mcard">
+          <div class="lp-mcard-head">
+            <img src="${esc(s.img)}" alt="${esc(s.praktikumNama)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)}">
+            <div>
+              <div class="row" style="gap:6px"><span class="badge">#${s.no}</span><span class="badge blue">${esc(s.tipePraktikum)}</span></div>
+              <div style="font-weight:800;font-size:15px;margin-top:3px">${esc(s.praktikumNama)} — ${esc(s.n)}</div>
+              <div style="margin-top:4px">${golBadgeHtml(s)}</div>
+            </div>
+            <button class="secondary small" data-lpgoto="${s.no-1}">📝 Latih</button>
+          </div>
+          <div class="lp-mcard-grid">
+            ${mitem(s.no,'a','Nama Bentuk Sediaan',s.lp.a)}
+            ${mitem(s.no,'b','Nama Obat & Strength',s.lp.b)}
+            ${mitem(s.no,'c','Senyawa Aktif & Komposisi',s.lp.c)}
+            ${mitem(s.no,'d','Cara Pemakaian & Dosis',s.lp.d)}
+            ${mitem(s.no,'e','Golongan Obat & Penyimpanan',s.lp.e)}
+            ${mitem(s.no,'f','Penulisan Resep',s.x,true)}
+          </div>
+        </div>`).join('')||'<p class="sub">Tidak ada obat yang cocok.</p>'}
+      </div>
+    `:`
+      <div class="lp-scroll-bar">
+        <span>↔️ Geser tabel ke samping untuk melihat kolom (a) sampai (f)</span>
+        <div class="lp-scroll-btns">
+          <button class="secondary small" type="button" data-act="lpscrollL">◀ Geser Kiri</button>
+          <button class="secondary small" type="button" data-act="lpscrollR">Geser Kanan ▶</button>
+        </div>
+      </div>
+      <div class="lp-table-wrap" id="lpMainTblWrap" style="margin-top:6px">
+        <table class="lp-tbl">
+          <thead>
+            <tr>
+              <th style="width:42px">No</th>
+              <th style="width:140px">Bungkus &amp; Daftar</th>
+              <th style="width:150px">(a) Nama Bentuk Sediaan</th>
+              <th style="width:150px">(b) Nama Obat &amp; Strength</th>
+              <th style="width:185px">(c) Senyawa Aktif &amp; Komposisi</th>
+              <th style="width:195px">(d) Cara Pemakaian &amp; Dosis</th>
+              <th style="width:185px">(e) Golongan Obat &amp; Penyimpanan</th>
+              <th style="width:195px">(f) Penulisan Resep</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(s=>`<tr>
+              <td><b>${s.no}</b></td>
+              <td>
+                <img class="tbl-thumb" src="${esc(s.img)}" alt="${esc(s.praktikumNama)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)}">
+                <b>${esc(s.praktikumNama)}</b><br>
+                <span class="badge" style="margin-top:2px">${esc(s.tipePraktikum)}</span><br>
+                <button class="lnk" data-lpgoto="${s.no-1}">Latih obat ini →</button>
+              </td>
+              ${cell(s.no,'a',s.lp.a)}
+              ${cell(s.no,'b',s.lp.b)}
+              ${cell(s.no,'c',s.lp.c)}
+              ${cell(s.no,'d',s.lp.d)}
+              ${cell(s.no,'e',s.lp.e)}
+              <td class="${hide&&!S.lp.revealed[s.no+':f']?'lp-cell-hide':''}" data-reveal="${s.no}:f"><div class="mono" style="white-space:pre-wrap;font-size:12px;color:var(--pen)">${esc(s.x)}</div></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    `}
   </div>`;
 }
 
@@ -676,12 +754,13 @@ function viewPanduan(m){
   else if(!S.quiz)startQuiz(panduanQs(),'Kuis Panduan Praktikum & Racikan');else drawQuiz();
 }
 
+const RACIK_SHORT=['Pulveres Parasetamol','Kapsul Racikan Asma','Unguentum 2-4 (Salep)','Potio Nigra (OBH)','Lotio Kummerfeldi','Emulsi Minyak Ikan'];
 function drawRacikan(){
   const r=RACIKAN[S.racik.idx]||RACIKAN[0],hide=S.racik.hideCalc;
   $('#list').innerHTML=`
   <div class="card">
-    <div class="seg">
-      ${RACIKAN.map((x,i)=>`<button aria-pressed="${i===S.racik.idx}" data-racik="${i}">${i+1}. ${esc(x.nama.split('(')[0].trim())}</button>`).join('')}
+    <div class="seg racik-grid" role="group" aria-label="Pilih resep racikan">
+      ${RACIKAN.map((x,i)=>`<button aria-pressed="${i===S.racik.idx}" data-racik="${i}">${i+1}. ${esc(RACIK_SHORT[i]||x.nama.split('(')[0].trim())}</button>`).join('')}
     </div>
     <div style="margin-top:14px">
       <div class="step-h"><span class="badge">${esc(r.praktikum)}</span><span class="badge blue">${esc(r.bso)}</span></div>
@@ -708,14 +787,14 @@ function drawRacikan(){
         <h3>1. Perhitungan Penimbangan Bahan / Tablet</h3>
         <button class="secondary small" data-act="racikhide">${hide?'👁️ Tampilkan Hasil Hitung':'🙈 Sembunyikan Hasil (Latihan Hitung)'}</button>
       </div>
-      <div class="lp-table-wrap" style="margin-top:8px">
-        <table class="lp-tbl" style="min-width:520px">
+      <div class="lp-table-wrap resp-wrap" style="margin-top:8px">
+        <table class="lp-tbl resp-tbl">
           <thead><tr><th>Nama Bahan Obat</th><th>Perhitungan Proporsi / Dosis</th><th>Jumlah yang Diambil / Ditimbang</th></tr></thead>
           <tbody>
             ${r.perhitungan.map((p,i)=>`<tr>
-              <td><b>${esc(p.bahan)}</b></td>
-              <td class="${hide&&!S.lp.revealed['rc:'+i]?'lp-cell-hide':''}" data-reveal="rc:${i}">${esc(p.rumus)}</td>
-              <td class="${hide&&!S.lp.revealed['ra:'+i]?'lp-cell-hide':''}" data-reveal="ra:${i}"><b>${esc(p.ambil)}</b></td>
+              <td data-label="Nama Bahan Obat"><b>${esc(p.bahan)}</b></td>
+              <td data-label="Perhitungan Proporsi / Dosis" class="${hide&&!S.lp.revealed['rc:'+i]?'lp-cell-hide':''}" data-reveal="rc:${i}">${esc(p.rumus)}</td>
+              <td data-label="Jumlah yang Diambil / Ditimbang" class="${hide&&!S.lp.revealed['ra:'+i]?'lp-cell-hide':''}" data-reveal="ra:${i}"><b>${esc(p.ambil)}</b></td>
             </tr>`).join('')}
           </tbody>
         </table>
@@ -724,14 +803,14 @@ function drawRacikan(){
 
     <div style="margin-top:16px">
       <h3>2. Fungsi Tiap Bahan Obat dalam Resep (Laporan Praktikum)</h3>
-      <div class="lp-table-wrap" style="margin-top:8px">
-        <table class="lp-tbl" style="min-width:520px">
+      <div class="lp-table-wrap resp-wrap" style="margin-top:8px">
+        <table class="lp-tbl resp-tbl">
           <thead><tr><th>Bahan</th><th>Fungsi Farmasetik / Farmakologik</th><th>Keterangan &amp; Alasan</th></tr></thead>
           <tbody>
             ${r.fungsiBahan.map((f,i)=>`<tr>
-              <td><b>${esc(f.bahan)}</b></td>
-              <td class="${hide&&!S.lp.revealed['rf:'+i]?'lp-cell-hide':''}" data-reveal="rf:${i}"><span class="badge">${esc(f.peran)}</span></td>
-              <td>${esc(f.ket)}</td>
+              <td data-label="Bahan"><b>${esc(f.bahan)}</b></td>
+              <td data-label="Fungsi Farmasetik / Farmakologik" class="${hide&&!S.lp.revealed['rf:'+i]?'lp-cell-hide':''}" data-reveal="rf:${i}"><span class="badge">${esc(f.peran)}</span></td>
+              <td data-label="Keterangan & Alasan">${esc(f.ket)}</td>
             </tr>`).join('')}
           </tbody>
         </table>
@@ -752,17 +831,17 @@ function drawTeoriPanduan(){
   <div class="card">
     <h3>Perbedaan 3 Jenis BSO Cair: Solutio vs Suspensi vs Emulsi</h3>
     <p class="sub">Berdasarkan diagram penggolongan BSO Cair pada Buku Penuntun Praktikum hal. 13.</p>
-    <div class="lp-table-wrap" style="margin-top:8px">
-      <table class="lp-tbl" style="min-width:640px">
+    <div class="lp-table-wrap resp-wrap" style="margin-top:8px">
+      <table class="lp-tbl resp-tbl">
         <thead><tr><th>Jenis BSO Cair</th><th>Tampilan Fisik</th><th>Sifat Zat &amp; Fase</th><th>Zat Tambahan Khas</th><th>Aturan Kocok</th><th>Contoh Sediaan Praktikum</th></tr></thead>
         <tbody>
           ${(TEORI_BSO.perbandinganCair||[]).map(x=>`<tr>
-            <td><b>${esc(x.jenis)}</b></td>
-            <td>${esc(x.tampilan)}</td>
-            <td>${esc(x.komponen)}</td>
-            <td>${esc(x.zatTambahan)}</td>
-            <td><b>${esc(x.kocok)}</b></td>
-            <td>${esc(x.contoh)}</td>
+            <td data-label="Jenis BSO Cair"><b>${esc(x.jenis)}</b></td>
+            <td data-label="Tampilan Fisik">${esc(x.tampilan)}</td>
+            <td data-label="Sifat Zat & Fase">${esc(x.komponen)}</td>
+            <td data-label="Zat Tambahan Khas">${esc(x.zatTambahan)}</td>
+            <td data-label="Aturan Kocok"><b>${esc(x.kocok)}</b></td>
+            <td data-label="Contoh Sediaan Praktikum">${esc(x.contoh)}</td>
           </tr>`).join('')}
         </tbody>
       </table>
@@ -845,7 +924,7 @@ function calc(){
 /* ===== KERTAS RESEP: tinggi otomatis, sisip singkatan, Enter pindah baris ===== */
 const fit=t=>{t.style.height='auto';t.style.height=t.scrollHeight+'px'};
 const fitAll=()=>{sr.querySelectorAll('.paper textarea').forEach(fit);renderQuick()};
-const Q1=['Tab.','Caps.','Syr.','Susp.','Drops','Inj.','Sach.','no.','fl I'],Q2=['1 dd','2 dd','3 dd','tab I','caps I','ac','pc','prn','mane','nocte','1/2h ac','gtt'];
+const Q1=['Tab.','Caps.','Syr.','Susp.','Drops','Inj.','Sach.','Inhaler','mg','ml','no.','fl. I','tb. I','vial I'],Q2=['1 dd','2 dd','3 dd','4 dd','tab I','caps I','cth I','cth II','gtt','puff I','ac','pc','prn','mane','nocte','ue','imm'];
 function renderQuick(){const q=$('#quick');if(!q)return;const f=S.foc.f;q.innerHTML=(f==='l2'?Q2:Q1).map(x=>`<button type="button" data-ins="${esc(x)}">${esc(x)}</button>`).join('')}
 function insertAt(txt){
   const t=sr.querySelector(`.blk[data-i="${S.foc.i}"] textarea[data-f="${S.foc.f}"]`);if(!t||t.disabled)return;
@@ -878,6 +957,18 @@ function ensure(){
     const b=document.createElement('button');b.className='secondary menu-item';b.id='resepBtn';b.type='button';
     b.innerHTML='<span class="menu-icon">✍️</span><span>Latihan Resep</span>';
     menu.insertBefore(b,gid('glossaryBtn')||gid('studyPlusBtn')||null);
+  }
+  const launcher=gid('examLauncher');
+  if(launcher&&!gid('openResepLauncher')){
+    const grid=launcher.querySelector('.exam-launcher-grid,.exam-launch-grid');
+    if(grid){
+      const lb=document.createElement('button');
+      lb.className='exam-launch-card farmako';
+      lb.id='openResepLauncher';
+      lb.type='button';
+      lb.innerHTML='<span class="exam-launch-icon">✍️</span><span class="exam-launch-copy"><b>LATIHAN FARMAKO &amp; RESEP</b><small>20 Kasus Tulis Resep · 26 Bungkus &amp; Lembar Pengamatan BSO Cair · 6 Resep Racikan</small></span>';
+      grid.appendChild(lb);
+    }
   }
 }
 function init(){
@@ -946,6 +1037,16 @@ sr.addEventListener('click',e=>{
     return drawLembarPengamatan();
   }
   if(a==='lptblhide'){S.lp.tblHide=!S.lp.tblHide;S.lp.revealed={};return drawLpTable()}
+  if(a==='lptblmode'){
+    const cur=S.lp.tblMode==='auto'?(isMobileViewport()?'cards':'table'):S.lp.tblMode;
+    S.lp.tblMode=cur==='cards'?'table':'cards';
+    return drawLpTable();
+  }
+  if(a==='lpscrollL'||a==='lpscrollR'){
+    const w=$('#lpMainTblWrap');
+    if(w)w.scrollBy({left:a==='lpscrollR'?340:-340,behavior:'smooth'});
+    return;
+  }
   if(a==='racikhide'){S.racik.hideCalc=!S.racik.hideCalc;S.lp.revealed={};return drawRacikan()}
   const st=STEPS[S.step]&&STEPS[S.step].k;
   if(a==='todo'){const best=bestMap(),td=CASES.filter(c=>((best[c.id+(S.only?'r':'')]||{}).pct||0)<80);if(td.length)openCase(td[Math.floor(Math.random()*td.length)].id,false);return}
@@ -993,8 +1094,8 @@ sr.addEventListener('keydown',e=>{
 });
 
 }
-function open(){ensure();if(!gid('resepPage'))return;window.show('resepPage');init()}
-document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('button');if(!t)return;if(t.id==='resepBtn')return open();if(t.matches('#resepPage [data-home]')){stopTimer();return window.show('home')}});
+function open(){ensure();if(!gid('resepPage'))return;window.show('resepPage');init();scrollTo({top:0})}
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('button');if(!t)return;if(t.id==='resepBtn'||t.id==='openResepLauncher')return open();if(t.matches('#resepPage [data-home]')){stopTimer();return window.show('home')}});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure);else ensure();
 window.CLINED_RESEP={open};
 })();

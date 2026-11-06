@@ -84,3 +84,117 @@ test('parseLine1 dan checkResep membaca dan menilai resep dengan benar', () => {
   const score = checkResep(c1, f1);
   assert.equal(score.pct, 100);
 });
+
+test('Seluruh 20 CASES pada fitur Kasus / Tulis Resep mendapat skor 100% baik untuk kunci utama maupun variasi penulisan mahasiswa', () => {
+  const { CASES } = RESEP_DATA;
+  const { checkResep, line1Of } = RESEP_CORE;
+  assert.equal(CASES.length, 20, 'Harus ada 20 kasus klinis');
+
+  // 1. Pastikan seluruh 20 kasus mendapat 100% dengan kunci utamanya (line1Of(k) & k.s)
+  for (const c of CASES) {
+    const f = {
+      pro: c.pro,
+      usia: `${c.usia} th`,
+      rows: c.rows.map(k => ({ l1: line1Of(k), l2: k.s }))
+    };
+    const res = checkResep(c, f);
+    assert.equal(res.pct, 100, `Kasus #${c.id} (${c.ringkas}) harus 100% dengan kunci utama, dapat ${res.pct}%: ${JSON.stringify(res.out)}`);
+
+    // Pastikan setiap alternatif sAlt & variasi obat pengganti (v) juga 100%
+    for (let i = 0; i < c.rows.length; i++) {
+      const k = c.rows[i];
+      if (Array.isArray(k.sAlt)) {
+        for (const sa of k.sAlt) {
+          const rowsAlt = c.rows.map((r, idx) => ({ l1: line1Of(r), l2: idx === i ? sa : r.s }));
+          const resAlt = checkResep(c, { pro: c.pro, usia: String(c.usia), rows: rowsAlt });
+          assert.equal(resAlt.pct, 100, `Kasus #${c.id} sAlt "${sa}" pada obat ${k.o} harus 100%, dapat ${resAlt.pct}%`);
+        }
+      }
+      if (Array.isArray(k.v)) {
+        for (const v of k.v) {
+          const merged = { ...k, ...v };
+          const rowsVar = c.rows.map((r, idx) => ({ l1: idx === i ? line1Of(merged) : line1Of(r), l2: idx === i ? merged.s : r.s }));
+          const resVar = checkResep(c, { pro: c.pro, usia: String(c.usia), rows: rowsVar });
+          assert.equal(resVar.pct, 100, `Kasus #${c.id} variasi obat "${merged.o}" harus 100%, dapat ${resVar.pct}%`);
+        }
+      }
+    }
+  }
+
+  // 2. Uji variasi penulisan natural mahasiswa pada kasus-kasus khusus
+  // Kasus 6 (Askariasis Anak): Susp. Pirantel pamoat + cth II + Syr. Ferriz
+  const c6 = CASES.find(c => c.id === 6);
+  const res6 = checkResep(c6, {
+    pro: c6.pro,
+    usia: `${c6.usia} tahun`,
+    rows: [
+      { l1: 'Susp. Pirantel pamoat 125 mg/5 ml fl. I', l2: '1 dd cth II pc' },
+      { l1: 'Syr. Ferriz 15 mg/5 ml btl I', l2: '1 dd 1/2 cth ac' }
+    ]
+  });
+  assert.equal(res6.pct, 100, `Kasus 6 variasi Susp. + cth II harus 100%, dapat ${res6.pct}%`);
+
+  // Kasus 7 (Konjungtivitis): Gtt. ophth. Kloramfenikol 0,5% fl. I + S 6 dd gtt I o.d.s.
+  const c7 = CASES.find(c => c.id === 7);
+  const res7 = checkResep(c7, {
+    pro: c7.pro,
+    usia: String(c7.usia),
+    rows: [
+      { l1: 'Gtt. ophth. Chloramphenicol 0,5% fl. I', l2: '6 dd gtt I o.d.s.' }
+    ]
+  });
+  assert.equal(res7.pct, 100, `Kasus 7 variasi Gtt. ophth. + o.d.s. harus 100%, dapat ${res7.pct}%`);
+
+  // Kasus 10 (Asma): Turbuhaler Budesonid & Inhaler Salbutamol dengan puff
+  const c10 = CASES.find(c => c.id === 10);
+  const res10 = checkResep(c10, {
+    pro: c10.pro,
+    usia: String(c10.usia),
+    rows: [
+      { l1: 'Turbuhaler Budesonid fl. I', l2: '2 dd puff I' },
+      { l1: 'Inhaler Salbutamol fl I', l2: '2 dd puff I prn' }
+    ]
+  });
+  assert.equal(res10.pct, 100, `Kasus 10 variasi puff harus 100%, dapat ${res10.pct}%`);
+
+  // Kasus 14 (OMSA): Caps. Amoksisilin + Tetes telinga Kloramfenikol 1% fl. I + S 3 dd gtt II a.s.
+  const c14 = CASES.find(c => c.id === 14);
+  const res14 = checkResep(c14, {
+    pro: c14.pro,
+    usia: String(c14.usia),
+    rows: [
+      { l1: 'Caps. Amoxicillin 500 mg no. XXI', l2: '3 dd caps I pc' },
+      { l1: 'Tetes telinga Kloramfenikol 1% fl. I', l2: '3 dd gtt II a.s.' }
+    ]
+  });
+  assert.equal(res14.pct, 100, `Kasus 14 variasi 1% + a.s. harus 100%, dapat ${res14.pct}%`);
+
+  // Kasus 17 (Disentri amuba): Sach. Oralit + S 3 dd sach I add aqua 200 ml
+  const c17 = CASES.find(c => c.id === 17);
+  const res17 = checkResep(c17, {
+    pro: c17.pro,
+    usia: String(c17.usia),
+    rows: [
+      { l1: 'Tab. Metronidazole 500 mg no. XXI', l2: '3 dd tab I pc' },
+      { l1: 'Caps. Paromomisin 250 mg no. XXI', l2: '3 dd caps I pc' },
+      { l1: 'Sach. Oralit no. X', l2: '3 dd sach I add aqua 200 ml' },
+      { l1: 'Tab. Parasetamol 500 mg no. X', l2: '3 dd tab I prn' },
+      { l1: 'Tab. Hyoscine 10 mg no. X', l2: '3 dd tab I prn' }
+    ]
+  });
+  assert.equal(res17.pct, 100, `Kasus 17 variasi sach I harus 100%, dapat ${res17.pct}%`);
+
+  // Kasus 19 (Pielonefritis): R/ Ceftriaxone 1 g vial I + S i.m.m.
+  const c19 = CASES.find(c => c.id === 19);
+  const res19 = checkResep(c19, {
+    pro: c19.pro,
+    usia: String(c19.usia),
+    rows: [
+      { l1: 'Ceftriaxone 1 g vial I', l2: 'i.m.m.' },
+      { l1: 'Tab. Ciprofloxacin 500 mg no. XIV', l2: '2 dd tab I pc' },
+      { l1: 'Tab. Paracetamol 500 mg no. X', l2: '3 dd tab I prn' }
+    ]
+  });
+  assert.equal(res19.pct, 100, `Kasus 19 variasi Ceftriaxone vial I + i.m.m. harus 100%, dapat ${res19.pct}%`);
+});
+
