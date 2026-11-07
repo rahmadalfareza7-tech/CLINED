@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
+import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
 import { push, isOnline, openStream, connectionCount } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
@@ -120,4 +120,26 @@ test('combatStats & Sudden Death 3 nyawa (knockout)', () => {
   assert.equal(v.me.hearts, 0);
   assert.equal(v.me.eliminated, true);
 });
+
+test('rankFromRp & calcMatchRpDelta menghitung Tier Rank dan RP dengan benar', () => {
+  const b3 = rankFromRp(0);
+  assert.equal(b3.fullName, 'Bronze III');
+  assert.equal(b3.neededRp, 200);
+
+  const g1 = rankFromRp(750);
+  assert.equal(g1.fullName, 'Gold I');
+  assert.equal(g1.key, 'gold');
+
+  const my = rankFromRp(2450);
+  assert.equal(my.fullName, 'Mythic Glory');
+  assert.equal(my.key, 'mythic');
+
+  // Proteksi Bronze saat kalah -> 0 RP
+  assert.equal(calcMatchRpDelta({ outcome: 'loss', currentRp: 120 }), 0);
+  // Kalah di Silver -> -12 RP
+  assert.equal(calcMatchRpDelta({ outcome: 'loss', currentRp: 300 }), -12);
+  // Menang dengan Sudden Death Knockout + streak 3 + wager 50 -> 30 + 12 + 10 + 10 = 62 RP
+  assert.equal(calcMatchRpDelta({ outcome: 'win', currentRp: 300, streak: 3, mode: 'sudden_death', wager: 50, reason: 'knockout' }), 62);
+});
+
 

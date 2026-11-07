@@ -35,6 +35,102 @@
     ['skull', '💀', 'Awas nyawa!'],
     ['pray', '🙏', 'GGWP!']
   ];
+  const RANK_TIERS = [
+    { key: 'bronze',   name: 'Bronze',   sub: 'Koas Muda',         icon: '🥉', minRp: 0,    maxRp: 199,      color: '#cd7f32', divisions: 3 },
+    { key: 'silver',   name: 'Silver',   sub: 'Residen Tangguh',   icon: '🥈', minRp: 200,  maxRp: 449,      color: '#94a3b8', divisions: 3 },
+    { key: 'gold',     name: 'Gold',     sub: 'Spesialis Arena',   icon: '🥇', minRp: 450,  maxRp: 799,      color: '#facc15', divisions: 3 },
+    { key: 'platinum', name: 'Platinum', sub: 'Konsultan Unggul',  icon: '💎', minRp: 800,  maxRp: 1199,     color: '#2dd4bf', divisions: 3 },
+    { key: 'diamond',  name: 'Diamond',  sub: 'Gladiator Klinik',  icon: '🔮', minRp: 1200, maxRp: 1699,     color: '#38bdf8', divisions: 3 },
+    { key: 'master',   name: 'Master',   sub: 'Grandmaster Medis', icon: '🔥', minRp: 1700, maxRp: 2299,     color: '#ec4899', divisions: 3 },
+    { key: 'mythic',   name: 'Mythic',   sub: 'Dewa Klinik',       icon: '👑', minRp: 2300, maxRp: Infinity, color: '#fde047', divisions: 1 }
+  ];
+  function rankFromRp(rawRp = 0) {
+    const rp = Math.max(0, Math.floor(Number(rawRp) || 0));
+    let idx = 0;
+    for (let i = 0; i < RANK_TIERS.length; i++) if (rp >= RANK_TIERS[i].minRp) idx = i;
+    const tier = RANK_TIERS[idx];
+    const nextTier = RANK_TIERS[idx + 1] || null;
+    let division = 'Glory', stars = 1, progressPct = 100;
+    if (tier.divisions === 3 && Number.isFinite(tier.maxRp)) {
+      const span = tier.maxRp - tier.minRp + 1;
+      const within = Math.max(0, rp - tier.minRp);
+      const divSpan = span / 3;
+      const divIdx = Math.min(2, Math.floor(within / divSpan));
+      division = ['III', 'II', 'I'][divIdx];
+      const withinDiv = within - divIdx * divSpan;
+      stars = Math.min(3, Math.max(1, Math.floor((withinDiv / divSpan) * 3) + 1));
+      progressPct = Math.min(100, Math.max(0, Math.round((within / span) * 100)));
+    } else {
+      stars = Math.max(1, Math.floor((rp - tier.minRp) / 50) + 1);
+      progressPct = 100;
+    }
+    const fullName = tier.divisions > 1 ? `${tier.name} ${division}` : 'Mythic Glory';
+    const nextRp = nextTier ? nextTier.minRp : null;
+    const neededRp = nextRp != null ? Math.max(0, nextRp - rp) : 0;
+    return {
+      rp, tierIdx: idx, key: tier.key, name: tier.name, division, fullName, sub: tier.sub,
+      icon: tier.icon, color: tier.color, stars, minRp: tier.minRp, nextRp, neededRp,
+      nextTierName: nextTier ? `${nextTier.icon} ${nextTier.name} III` : '👑 Puncak Mythic Glory',
+      progressPct
+    };
+  }
+  const getRank = obj => (obj && obj.fullName ? obj : rankFromRp(obj?.rp ?? 0));
+  const rankStarsHTML = rk => rk.key === 'mythic'
+    ? `<span class="duel-stars mythic">★ ×${rk.stars}</span>`
+    : `<span class="duel-stars">${'★'.repeat(rk.stars || 1)}${'☆'.repeat(Math.max(0, 3 - (rk.stars || 1)))}</span>`;
+  const rankPill = (rawRank, showRp = true) => {
+    const rk = getRank(rawRank);
+    return `<span class="duel-rank-pill tier-${esc(rk.key)}">${rk.icon} <b>${esc(rk.fullName)}</b>${showRp ? ` <small>${rk.rp} RP</small>` : ''}</span>`;
+  };
+  function openRankModal() {
+    document.querySelector('.duel-rank-layer')?.remove();
+    const myRk = getRank(S.myStats?.rank || { rp: S.myStats?.rp || 0 });
+    const layer = document.createElement('div');
+    layer.className = 'cdlg-layer duel-rank-layer';
+    const rows = RANK_TIERS.map(t => {
+      const isMe = t.key === myRk.key;
+      const range = Number.isFinite(t.maxRp) ? `${t.minRp} – ${t.maxRp} RP` : `${t.minRp}+ RP`;
+      const divs = t.divisions === 3 ? 'Divisi III → II → I' : 'Mythic Glory ★';
+      return `<div class="duel-tier-row tier-${t.key}${isMe ? ' current' : ''}">
+        <span class="duel-tier-ico">${t.icon}</span>
+        <div class="duel-tier-info">
+          <b>${esc(t.name)} <small>(${esc(t.sub)})</small> ${isMe ? '<em class="duel-tier-you">📍 Rank Kamu</em>' : ''}</b>
+          <span>${divs} • <strong>${range}</strong></span>
+        </div>
+      </div>`;
+    }).join('');
+    layer.innerHTML = `<div class="cdlg-card duel-rank-modal" role="dialog" aria-modal="true" aria-labelledby="rkModalT">
+      <div class="cdlg-head"><span class="cdlg-ico" aria-hidden="true">${myRk.icon}</span><h3 class="cdlg-title" id="rkModalT">Sistem Rank &amp; Tier Arena Duel</h3></div>
+      <div class="cdlg-body duel-rank-modal-body">
+        <div class="duel-rank-mybox tier-${esc(myRk.key)}">
+          <div class="duel-rank-myhead">
+            <span class="duel-rank-bigico">${myRk.icon}</span>
+            <div>
+              <small>RANK SAAT INI</small>
+              <b>${esc(myRk.fullName)} • ${myRk.rp} RP</b>
+              <span>${esc(myRk.sub)} • ${myRk.nextRp ? `Kurang ${myRk.neededRp} RP ke ${myRk.nextTierName}` : 'Puncak Tertinggi Arena!'}</span>
+            </div>
+          </div>
+        </div>
+        <div class="duel-rank-rules">
+          <b>⚡ Aturan Perolehan Rank Points (RP):</b>
+          <ul>
+            <li>🏆 <b>Menang Duel:</b> <code>+30 RP</code> dasar + bonus Knockout Sudden Death (<code>+12 RP</code>) + bonus Win Streak (s/d <code>+15 RP</code>) + bonus Taruhan (s/d <code>+10 RP</code>).</li>
+            <li>🤝 <b>Hasil Seri (Draw):</b> <code>+8 RP</code> untuk kedua petarung.</li>
+            <li>🛡️ <b>Proteksi Koas Muda (Bronze):</b> Di tier Bronze (<code>0–199 RP</code>), kalah duel <b>tidak mengurangi RP (0 RP)</b>!</li>
+            <li>⚔️ <b>Tier Silver ke Atas:</b> Kalah mengurangi <code>-12</code> s/d <code>-18 RP</code>.</li>
+          </ul>
+        </div>
+        <div class="duel-tier-list">${rows}</div>
+      </div>
+      <div class="cdlg-actions"><button type="button" class="primary" data-rk-close>Siap Bertarung! ⚔️</button></div>
+    </div>`;
+    const close = () => { layer.classList.remove('show'); setTimeout(() => layer.remove(), 220); };
+    layer.addEventListener('click', e => { if (e.target === layer || e.target.closest('[data-rk-close]')) close(); });
+    document.body.appendChild(layer);
+    requestAnimationFrame(() => layer.classList.add('show'));
+  }
+
   try {
     const saved = JSON.parse(localStorage.getItem(PREF) || '{}');
     if (saved && typeof saved === 'object') {
@@ -144,7 +240,7 @@
     S.mine = a.mine || [];
     S.invites = a.invites || [];
     S.openRooms = a.openRooms || [];
-    S.myStats = a.myStats || { wins: 0, losses: 0, draws: 0, total: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' } };
+    S.myStats = a.myStats || { wins: 0, losses: 0, draws: 0, total: 0, rp: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' }, rank: rankFromRp(0) };
     S.h2h = a.h2h || {};
     S.leaderboard = a.leaderboard || [];
     dot();
@@ -182,26 +278,39 @@
 
   function lobbyHTML() {
     const F = S.F || { friends: [], incoming: [], outgoing: [], blocked: [] };
-    const st = S.myStats || { wins: 0, losses: 0, draws: 0, total: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' } };
+    const st = S.myStats || { wins: 0, losses: 0, draws: 0, total: 0, rp: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' } };
+    const rk = getRank(st.rank || { rp: st.rp || 0 });
     const bankOpts = S.banks.map(b => `<option value="${esc(b.id)}"${b.id === S.bank ? ' selected' : ''}>${esc(b.name)} (${b.count} soal)</option>`).join('');
     const curBankName = S.banks.find(b => b.id === S.bank)?.name || 'Bank Soal Pilihan';
 
-    // 1. Arena Hero Banner + Career Stats + Quick Match CTA
+    // 1. Arena Hero Banner + Rank Tier Emblem + RP Progress + Career Stats + Quick Match CTA
     const heroHTML = `
     <div class="card duel-hero">
       <div class="duel-hero-glow" aria-hidden="true"></div>
       <div class="duel-hero-top">
-        <div class="duel-hero-badge">
-          <span class="duel-rank-ico">${st.title?.icon || '⚔️'}</span>
-          <div>
-            <small>GELAR ARENA KLINIK</small>
-            <b>${esc(st.title?.name || 'Petarung Baru')}</b>
+        <button type="button" class="duel-hero-badge tier-${esc(rk.key)}" data-soc-rank-modal title="Klik untuk melihat daftar Tier Rank Duel">
+          <span class="duel-rank-ico">${rk.icon}</span>
+          <div class="duel-hero-rank-txt">
+            <small>RANK ARENA • ${esc(rk.sub.toUpperCase())}</small>
+            <b>${esc(rk.fullName)} ${rankStarsHTML(rk)}</b>
+          </div>
+        </button>
+        <div class="duel-hero-right">
+          <button type="button" class="duel-tier-info-btn" data-soc-rank-modal>🏆 Info Rank</button>
+          <div class="duel-dia-pill" title="Diamond milikmu untuk Gacha Kartu Organ">
+            <span>💎</span><b data-diamond-count>${esc(getDiamonds())}</b>
           </div>
         </div>
-        <div class="duel-dia-pill" title="Diamond milikmu untuk Gacha Kartu Organ">
-          <span>💎</span><b data-diamond-count>${esc(getDiamonds())}</b>
-        </div>
       </div>
+
+      <div class="duel-rp-box">
+        <div class="duel-rp-head">
+          <span>⚡ <b>${rk.rp} RP</b> (Rank Points)</span>
+          <small>${rk.nextRp ? `Kurang <b>${rk.neededRp} RP</b> ke ${rk.nextTierName}` : '👑 Puncak Mythic Glory!'}</small>
+        </div>
+        <div class="duel-rp-track"><i style="width:${rk.progressPct}%"></i></div>
+      </div>
+
       <div class="duel-stat-grid">
         <div class="duel-stat-box win">
           <small>🏆 MENANG</small>
@@ -223,7 +332,7 @@
         <button type="button" class="duel-quick-btn" data-soc-quick>
           <span class="duel-quick-ico">⚡</span>
           <span class="duel-quick-txt">
-            <b>Cari Lawan Cepat (Quick Match)</b>
+            <b>Cari Lawan Cepat (Ranked Match)</b>
             <small>${esc(curBankName)} • ${S.count} soal • ${S.mode === 'sudden_death' ? '💀 Sudden Death' : '🏆 Klasik'}${S.wager ? ` • 💰 ${S.wager} EXP` : ''}</small>
           </span>
           <span class="duel-quick-go">GAS ›</span>
@@ -257,15 +366,18 @@
     </div>`).join('');
 
     // 3. Open Arena Rooms (Poin 1: Lobi Tantangan Terbuka)
-    const openRows = (S.openRooms || []).map(r => `<div class="duel-open-room">
-      ${avatar(r.from || {})}
-      <div class="soc-who">
-        <b>${esc(r.from?.name || 'Petarung')} <small class="duel-open-user">@${esc(r.from?.username || '')}</small></b>
-        <small>📚 ${esc(r.bank?.name || 'Bank Soal')} • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}</small>
-        <div class="duel-tags-row">${modePill(r.mode)}${wagerPill(r.wager)}${h2hBadge(r.from?.id)}</div>
-      </div>
-      <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">⚡ Lawan!</button>
-    </div>`).join('');
+    const openRows = (S.openRooms || []).map(r => {
+      const host = r.host || r.from || {};
+      return `<div class="duel-open-room">
+        ${avatar(host)}
+        <div class="soc-who">
+          <b>${esc(host.name || 'Petarung')} <small class="duel-open-user">@${esc(host.username || '')}</small></b>
+          <small>📚 ${esc(r.bank?.name || 'Bank Soal')} • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}</small>
+          <div class="duel-tags-row">${rankPill(host.rank, false)}${modePill(r.mode)}${wagerPill(r.wager)}${h2hBadge(host.id)}</div>
+        </div>
+        <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">⚡ Lawan!</button>
+      </div>`;
+    }).join('');
 
     const openArenaHTML = `
     <div class="card soc-card duel-arena-card">
@@ -337,15 +449,16 @@
     </div>`).join('') : '<p class="soc-empty">Belum ada teman untuk ditantang. Tambahkan teman di menu Sosial!</p>';
     const quickHTML = `<div class="card soc-card"><div class="soc-title"><span>👥</span><div><h3>Tantang Teman &amp; Rekor H2H</h3><small class="soc-hint">Lihat rekor pertemuan Head-to-Head dengan temanmu</small></div></div><div class="soc-sec">${quick}</div><button type="button" class="secondary soc-big" data-soc-hub="teman">Kelola Teman di Sosial ›</button></div>`;
 
-    // 6. Papan Peringkat Raja Duel / Gladiator Klinik (Poin 9)
+    // 6. Papan Peringkat Ranked Gladiator Duel (Poin 9 + Sistem Rank RP)
     const lbRows = (S.leaderboard || []).map(p => {
       const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
+      const pTier = getRank(p.tier || { rp: p.rp || 0 });
       return `<div class="duel-lb-row${p.me ? ' me' : ''}">
         <span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
         ${avatar(p)}
         <div class="soc-who">
           <b>${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
-          <small>${p.title?.icon || '⚔️'} ${esc(p.title?.name || 'Duelist')} • @${esc(p.username)}</small>
+          <div class="duel-tags-row">${rankPill(pTier, true)}</div>
         </div>
         <div class="duel-lb-score">
           <b>${p.wins} Menang</b>
@@ -354,7 +467,10 @@
       </div>`;
     }).join('');
     const lbHTML = `<div class="card soc-card duel-lb-card">
-      <div class="soc-title"><span>👑</span><div><h3>Papan Peringkat Gladiator Duel</h3><small class="soc-hint">Top petarung dengan kemenangan duel terbanyak</small></div></div>
+      <div class="soc-title between">
+        <div class="duel-title-left"><span>👑</span><div><h3>Leaderboard Rank Gladiator</h3><small class="soc-hint">Peringkat berdasarkan Rank Points (RP) &amp; Kemenangan</small></div></div>
+        <button type="button" class="secondary duel-mini-btn" data-soc-rank-modal>🏆 Daftar Tier</button>
+      </div>
       ${lbRows ? `<div class="duel-lb-list">${lbRows}</div>` : '<p class="soc-empty">Belum ada rekor duel tercatat. Jadilah Gladiator pertama yang meraih kemenangan!</p>'}
     </div>`;
 
@@ -562,6 +678,8 @@
     const D = S.D; if (!D) return '<p class="soc-empty">Duel tidak ditemukan.</p>';
     const opp = D.opponent, oppName = esc(opp?.name || D.invited?.name || 'Lawan');
     const isSD = D.mode === 'sudden_death';
+    const myRk = getRank(D.me?.rank || S.myStats?.rank || { rp: S.myStats?.rp || 0 });
+    const oppRk = opp ? getRank(opp.rank || { rp: 0 }) : null;
 
     if (D.status === 'cancelled') {
       return `<div class="card soc-card soc-center"><div class="soc-emoji">🚫</div><h3>Duel dibatalkan</h3><button type="button" class="primary soc-big" data-soc-lobby>Kembali ke Arena</button></div>`;
@@ -572,7 +690,7 @@
           <div class="soc-vs-av">${avatar(opp || {})}<b class="duel-vs-glow">VS</b>${avatar(D.me)}</div>
           <h3>⚔️ ${oppName} menantangmu!</h3>
           <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
-          <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
+          <div class="duel-tags-row center">${oppRk ? rankPill(oppRk) : ''}${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
           <button type="button" class="primary soc-big" data-soc-accept="${esc(D.code)}">⚔️ Terima Tantangan</button>
           <button type="button" class="secondary soc-big" data-soc-decline="${esc(D.id)}">Tolak</button>
         </div>`;
@@ -581,7 +699,7 @@
         <div class="soc-emoji soc-pulse">⏳</div>
         <h3>${D.invited ? `Menunggu ${oppName}…` : (D.isPublic ? '🌐 Menunggu Penantang di Lobi Publik…' : '🔒 Menunggu Lawan via Kode…')}</h3>
         <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
-        <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}</div>
+        <div class="duel-tags-row center">${rankPill(myRk)}${modePill(D.mode)}${wagerPill(D.wager)}</div>
         <div class="soc-code" aria-label="Kode duel">${esc(D.code)}</div>
         <div class="soc-btns2"><button type="button" class="secondary" data-soc-copy="${esc(D.code)}">📋 Salin Kode</button><button type="button" class="primary" data-soc-share="${esc(D.code)}">📤 Bagikan</button></div>
         <button type="button" class="secondary soc-big soc-danger" data-soc-leave>Batalkan Ruang Duel</button>
@@ -590,8 +708,18 @@
     if (D.status === 'finished') {
       const R = D.result, win = R.winnerId === D.me.id, draw = !R.winnerId;
       const rw = claimDuelReward(D);
-      const bar = (name, s, me, fObj) => `<div class="soc-score${me ? ' me' : ''}">
+      const rpDelta = Number.isFinite(Number(R.rpDelta)) ? Number(R.rpDelta) : (win ? 30 : draw ? 8 : (myRk.rp < 200 ? 0 : -12));
+      const newRk = getRank(R.newRank || myRk);
+      const rpPillClass = rpDelta > 0 ? 'rp-up' : rpDelta < 0 ? 'rp-down' : 'rp-shield';
+      const rpLabel = rpDelta > 0
+        ? `📈 +${rpDelta} RP`
+        : rpDelta < 0
+          ? `📉 ${rpDelta} RP`
+          : '🛡️ +0 RP (Proteksi Bronze)';
+
+      const bar = (name, s, me, fObj, rkObj) => `<div class="soc-score${me ? ' me' : ''}">
         <small>${esc(name)}</small>
+        ${rkObj ? `<div class="duel-score-rank">${rankPill(rkObj, false)}</div>` : ''}
         <b>${s.score}<em>/${D.total}</em></b>
         <span>⏱ ${s.done ? fmtMs(s.timeMs) : 'belum selesai'}</span>
         <div class="duel-res-sub">
@@ -601,6 +729,23 @@
       </div>`;
       const review = R.review.map(q => `<details class="soc-rev"><summary><span class="soc-rn ${q.myChoice === q.correctIdx ? 'ok' : 'bad'}">${q.i + 1}</span>${esc(q.soal.slice(0, 90))}${q.soal.length > 90 ? '…' : ''}</summary>
         <ul>${q.opsi.map((o, i) => `<li class="${i === q.correctIdx ? 'ok' : ''}">${L5[i]}. ${esc(o)} ${i === q.correctIdx ? '✓' : ''}${i === q.myChoice ? ' <em>kamu</em>' : ''}${i === q.oppChoice ? ' <em class="opp">lawan</em>' : ''}</li>`).join('')}</ul>${q.myChoice === -1 ? '<p class="soc-pemb">⏰ Kamu tidak menjawab tepat waktu.</p>' : ''}${q.pembahasan ? `<p class="soc-pemb">${esc(q.pembahasan)}</p>` : ''}</details>`).join('');
+
+      const rankResultCard = `
+        <div class="duel-rank-result-card tier-${esc(newRk.key)}">
+          ${R.rankUp ? `<div class="duel-rankup-banner">🎉 NAIK RANK! Selamat, kamu naik ke <b>${newRk.icon} ${esc(newRk.fullName)}</b>!</div>` : ''}
+          <div class="duel-rank-result-top">
+            <div class="duel-rank-result-left">
+              <span class="duel-rank-ico">${newRk.icon}</span>
+              <div>
+                <b>${esc(newRk.fullName)} ${rankStarsHTML(newRk)}</b>
+                <small>${esc(newRk.sub)} • Total ${newRk.rp} RP</small>
+              </div>
+            </div>
+            <span class="duel-rp-delta ${rpPillClass}">${rpLabel}</span>
+          </div>
+          <div class="duel-rp-track"><i style="width:${newRk.progressPct}%"></i></div>
+          <small class="duel-rp-sub">${newRk.nextRp ? `Kurang ${newRk.neededRp} RP menuju ${newRk.nextTierName}` : '👑 Kamu berada di puncak Mythic Glory!'}</small>
+        </div>`;
 
       const rewardBanner = (win || draw) && rw ? `
         <div class="duel-reward-banner ${win ? 'win' : 'draw'}">
@@ -617,8 +762,9 @@
         <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
         <h3>${draw ? 'Pertarungan Seri!' : win ? 'Kamu Menang!' : `${oppName} Menang`}</h3>
         <p>${reasonText(R.reason, win, draw)}</p>
+        ${rankResultCard}
         ${rewardBanner}
-        <div class="soc-scores">${bar('Kamu', R.me, true, D.me)}${bar(opp?.name || 'Lawan', R.opponent, false, opp)}</div>
+        <div class="soc-scores">${bar('Kamu', R.me, true, D.me, newRk)}${bar(opp?.name || 'Lawan', R.opponent, false, opp, oppRk)}</div>
         <button type="button" class="duel-share-win-btn" data-soc-share-duel>📣 Pamerkan Hasil Duel ke Status</button>
         <div class="soc-btns2"><button type="button" class="secondary" data-soc-lobby>Ke Lobi Arena</button><button type="button" class="primary" data-soc-rematch>⚔️ Tanding Ulang</button></div>
       </div>
@@ -643,6 +789,7 @@
             <b>Kamu</b>
             <span>${mineN}/${D.total} soal • ✅ ${myLiveScore}</span>
             <div class="duel-fighter-meta">
+              ${rankPill(myRk, false)}
               ${isSD ? renderHearts(D.me.hearts ?? 3, D.maxHearts || 3) : ''}
               ${(D.me.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${D.me.streak}x</span>` : ''}
             </div>
@@ -660,6 +807,7 @@
             <b>${oppName}</b>
             <span>${opp?.answered ?? 0}/${D.total} soal • 🎯 ${oppLiveScore}</span>
             <div class="duel-fighter-meta">
+              ${oppRk ? rankPill(oppRk, false) : ''}
               ${isSD ? renderHearts(opp?.hearts ?? 3, D.maxHearts || 3) : ''}
               ${(opp?.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${opp.streak}x</span>` : ''}
             </div>
@@ -788,6 +936,7 @@
     const ds = t.dataset || {};
     if (t.id === 'shareStatusBtn') return openComposer(resultContext());
     if ('socShareDuel' in ds) return openComposer(duelResultContext());
+    if ('socRankModal' in ds) return openRankModal();
     if ('socTab' in ds) { S.hubTab = ds.socTab; if (S.hubTab === 'status') S.feed = null; return renderHub(); }
     if ('socHub' in ds) return openHub(ds.socHub);
     if ('socRefreshLobby' in ds) return guard(() => renderLobby(true));
