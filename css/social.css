@@ -13,8 +13,8 @@
 .soc-card h3 { margin: 0; font-size: 17px; font-weight: 900; letter-spacing: -.01em; }
 .soc-card h4 { margin: 0 0 6px; font-size: 12px; font-weight: 900; opacity: .7; text-transform: uppercase; letter-spacing: .05em; }
 .soc-title { display: flex; align-items: center; gap: 10px; }
-.soc-title.between { justify-content: space-between; flex-wrap: wrap; }
-.duel-title-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.soc-title.between { justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.duel-title-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 190px; }
 .soc-title > span, .duel-title-left > span {
   width: 40px; height: 40px; flex: none;
   display: grid; place-items: center;
@@ -24,7 +24,7 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
   font-size: 20px;
 }
-.soc-body button { min-height: 48px; font-size: 14px; font-weight: 900; border-radius: 14px; padding: 0 14px; white-space: nowrap; transition: transform .12s ease, box-shadow .12s ease, background .15s ease; }
+.soc-body button { width: auto; min-height: 46px; font-size: 14px; font-weight: 900; border-radius: 14px; padding: 0 14px; white-space: nowrap; transition: transform .12s ease, box-shadow .12s ease, background .15s ease; }
 .soc-body button:active:not(:disabled) { transform: translateY(2px); }
 .soc-body select, .soc-body input[type=text] {
   width: 100%; box-sizing: border-box; min-height: 50px; font-size: 15.5px; font-weight: 800;
@@ -33,7 +33,7 @@
   background: var(--surface, #f4f6f7); color: inherit; font-family: inherit;
 }
 .soc-hint, .soc-empty { margin: 0; font-size: 12.5px; font-weight: 700; opacity: .72; line-height: 1.45; }
-.soc-big { width: 100%; min-height: 52px !important; font-size: 15px !important; }
+.soc-big { width: 100% !important; min-height: 52px !important; font-size: 15px !important; }
 
 /* ───────── HERO ARENA BANNER (NON-FLAT 3D) ───────── */
 .duel-hero {
@@ -68,6 +68,9 @@
   display: inline-flex !important;
   align-items: center;
   gap: 10px;
+  width: auto !important;
+  flex: 1 1 200px;
+  min-width: 0;
   min-height: 52px !important;
   padding: 6px 14px 6px 8px !important;
   border-radius: 16px !important;
@@ -79,7 +82,7 @@
   text-align: left;
   box-shadow: none;
 }
-.duel-hero-rank-txt { display: grid; gap: 1px; }
+.duel-hero-rank-txt { display: grid; gap: 1px; min-width: 0; }
 .duel-rank-ico {
   width: 38px; height: 38px; flex: none;
   display: grid; place-items: center;
@@ -94,6 +97,9 @@
   font-weight: 900;
   letter-spacing: .07em;
   color: #bae6fd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .duel-hero-badge b {
   font-size: 15px;
@@ -102,6 +108,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 .duel-stars {
   color: #fde047;
@@ -120,10 +127,11 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-shrink: 0;
 }
 .duel-tier-info-btn {
-  min-height: 36px !important;
+  width: auto !important;
+  min-height: 38px !important;
   padding: 0 12px !important;
   border-radius: 99px !important;
   background: rgba(255,255,255,.14) !important;
@@ -143,6 +151,7 @@
   font-size: 14px;
   font-weight: 950;
   color: #e0f2fe;
+  white-space: nowrap;
 }
 .duel-rp-box {
   position: relative;
@@ -178,21 +187,43 @@
   transition: width .4s ease;
 }
 
-/* Rank Pill Badges per Tier */
+/* Rank Pill Badges per Tier — NEVER break words mid-syllable */
 .duel-rank-pill {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
-  gap: 4px;
-  padding: 2px 9px;
+  gap: 5px;
+  padding: 3px 10px;
   border-radius: 99px;
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 900;
   border: 1.5px solid rgba(148, 163, 184, .4);
   background: rgba(15, 23, 42, .08);
-  line-height: 1.35;
+  line-height: 1.3;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  flex-shrink: 0;
 }
-.duel-rank-pill b { font-size: 11px !important; font-weight: 950; display: inline !important; }
-.duel-rank-pill small { font-size: 10px; font-weight: 800; opacity: .82; display: inline !important; }
+.duel-rank-pill b {
+  font-size: 11.5px !important;
+  font-weight: 950 !important;
+  display: inline !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  overflow: visible !important;
+}
+.duel-rank-pill small {
+  font-size: 10.5px !important;
+  font-weight: 800 !important;
+  opacity: .85 !important;
+  display: inline !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
 .duel-rank-pill.tier-bronze   { background: rgba(180, 83, 9, .14);   color: #9a3412; border-color: rgba(180, 83, 9, .38); }
 .duel-rank-pill.tier-silver   { background: rgba(100, 116, 139, .16); color: #334155; border-color: rgba(100, 116, 139, .4); }
 .duel-rank-pill.tier-gold     { background: rgba(234, 179, 8, .18);   color: #854d0e; border-color: rgba(234, 179, 8, .5); }
@@ -1002,8 +1033,8 @@
 .soc-avwrap .soc-av { width: 42px; height: 42px; }
 .soc-avwrap .soc-mood { position: absolute; right: -6px; bottom: -6px; font-size: 17px; background: var(--card, #fff); border-radius: 99px; padding: 1px; line-height: 1; box-shadow: 0 0 0 2px var(--line, #e5e7eb); }
 .soc-post-head { grid-template-columns: 42px minmax(0, 1fr) auto; }
-.soc-who small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.soc-tag { font-style: normal; font-size: 11px; font-weight: 900; padding: 3px 9px; border-radius: 99px; }
+.soc-who > small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.soc-tag { font-style: normal; font-size: 11px; font-weight: 900; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
 .soc-tag.me { background: rgba(28,176,246,.16); color: #0b7cb4; }
 .soc-tag.fr { background: rgba(88,204,2,.18); color: #3d8c00; }
 :root.dark .soc-tag.me { color: #7cd3ff; } :root.dark .soc-tag.fr { color: #9be15a; }
@@ -1011,6 +1042,29 @@
 .soc-body .soc-del { width: auto; min-width: 38px; padding: 0 10px; display: inline-flex; align-items: center; gap: 4px; }
 .soc-del small { font-size: 11px; font-weight: 900; }
 .stc-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.stc-pub { font-weight: 800; opacity: .7; font-size: 12px; }
+.soc-emptybox .secondary { margin-top: 6px; }
+.soc-body .soc-cbtn { min-height: 38px; padding: 0 12px; font-size: 12.5px; }
+.soc-body .soc-compose { min-height: 48px; }
+.soc-filter button { min-height: 38px !important; font-size: 13px; }
+.soc-post { gap: 10px; }
+
+/* v96 editor soal */
+.qe-card { max-height: 88vh; display: flex; flex-direction: column; }
+.qe-body { overflow-y: auto; display: grid; gap: 8px; min-height: 0; }
+.qe-lab { font-weight: 900; font-size: 13px; margin-top: 6px; } .qe-lab small { font-weight: 700; opacity: .65; }
+.qe-body textarea, .qe-body input[type=text] { width: 100%; box-sizing: border-box; border: 2px solid var(--line, #e5e7eb); border-radius: 12px; padding: 8px 10px; font: inherit; font-size: 14px; background: var(--card, #fff); color: inherit; }
+.qe-opt { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; align-items: start; }
+.qe-key { display: grid; justify-items: center; gap: 2px; padding-top: 6px; font-weight: 900; }
+.qe-opt-fields { display: grid; gap: 6px; }
+.qe-note { margin: 0; font-size: 12px; }
+.admin-mentor-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+.admin-mentor-toggle input { width: 18px; height: 18px; }
+
+.soc-tabs.three { grid-template-columns: repeat(3, 1fr); }
+.soc-tabs.three button { font-size: 12.5px; padding: 0 4px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.soc-warn { display: grid; gap: 2px; padding: 10px 12px; border-radius: 14px; background: rgba(255,150,0,.14); border: 2px solid rgba(255,150,0,.5); font-size: 12.5px; font-weight: 700; line-height: 1.45; }
+-items: center; gap: 8px; }
 .stc-pub { font-weight: 800; opacity: .7; font-size: 12px; }
 .soc-emptybox .secondary { margin-top: 6px; }
 .soc-body .soc-cbtn { min-height: 38px; padding: 0 12px; font-size: 12.5px; }

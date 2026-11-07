@@ -232,24 +232,25 @@ html body #home button.duo-cal[data-urg=none] { border-style: dashed !important;
 :root.dark html body #home .duo-cal .cal-dy { color: #f2f2f7; }
 
 /* v6: FAB gacha tanpa background — hanya keranjang + diamond */
-html body .card-shop-fab, html body .card-shop-fab.is-visible {
-  background: none !important; border: 0 !important; box-shadow: none !important; backdrop-filter: none !important;
-  width: 56px !important; min-height: 60px !important; padding: 0 !important; gap: 0 !important; border-radius: 0 !important;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+html body .card-shop-fab:not(.is-visible) {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
-html body .card-shop-fab .fab-basket-img { width: 44px !important; height: 44px !important; filter: drop-shadow(0 3px 3px rgba(0,0,0,.35)) !important; }
+html body .card-shop-fab.is-visible {
+  background: none !important; border: 0 !important; box-shadow: none !important; backdrop-filter: none !important;
+  width: 72px !important; min-height: 78px !important; padding: 0 !important; gap: 0 !important; border-radius: 0 !important;
+  display: flex !important; flex-direction: column; align-items: center; justify-content: center;
+}
+html body .card-shop-fab .fab-basket-img { width: 64px !important; height: 64px !important; filter: drop-shadow(0 3px 3px rgba(0,0,0,.35)) !important; }
 html body .card-shop-fab .fab-dia {
-  background: none !important; padding: 0 !important; margin-top: -2px; border-radius: 0 !important;
-  font: 900 12px system-ui, sans-serif !important; color: var(--text, #1f2937) !important; white-space: nowrap;
+  background: none !important; padding: 0 !important; margin-top: -4px; border-radius: 0 !important;
+  font: 900 14px system-ui, sans-serif !important; color: var(--text, #1f2937) !important; white-space: nowrap;
   text-shadow: 0 0 3px var(--card, #fff), 0 0 3px var(--card, #fff), 0 0 6px var(--card, #fff);
 }
 :root.dark html body .card-shop-fab .fab-dia { color: #f2f2f7 !important; text-shadow: 0 0 3px #000, 0 0 6px #000; }
 html body .card-shop-fab:active { transform: scale(.94); }
-
-/* v7: keranjang gacha lebih besar */
-html body .card-shop-fab, html body .card-shop-fab.is-visible { width: 72px !important; min-height: 78px !important; }
-html body .card-shop-fab .fab-basket-img { width: 64px !important; height: 64px !important; }
-html body .card-shop-fab .fab-dia { font-size: 14px !important; margin-top: -4px; }
 
 /* v7: tombol Lanjutkan & hapus tidak boleh menempel */
 html body #home .resume-card { column-gap: 12px; }

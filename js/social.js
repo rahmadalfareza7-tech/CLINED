@@ -369,13 +369,15 @@
     const openRows = (S.openRooms || []).map(r => {
       const host = r.host || r.from || {};
       return `<div class="duel-open-room">
-        ${avatar(host)}
-        <div class="soc-who">
-          <b>${esc(host.name || 'Petarung')} <small class="duel-open-user">@${esc(host.username || '')}</small></b>
-          <small>📚 ${esc(r.bank?.name || 'Bank Soal')} • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}</small>
-          <div class="duel-tags-row">${rankPill(host.rank, false)}${modePill(r.mode)}${wagerPill(r.wager)}${h2hBadge(host.id)}</div>
+        <div class="duel-open-top">
+          ${avatar(host)}
+          <div class="soc-who">
+            <b>${esc(host.name || 'Petarung')} <small class="duel-open-user">@${esc(host.username || '')}</small></b>
+            <small>📚 ${esc(r.bank?.name || 'Bank Soal')} • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}</small>
+          </div>
+          <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">⚡ Lawan!</button>
         </div>
-        <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">⚡ Lawan!</button>
+        <div class="duel-tags-row">${rankPill(host.rank, false)}${modePill(r.mode)}${wagerPill(r.wager)}${h2hBadge(host.id)}</div>
       </div>`;
     }).join('');
 
@@ -456,13 +458,15 @@
       return `<div class="duel-lb-row${p.me ? ' me' : ''}">
         <span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
         ${avatar(p)}
-        <div class="soc-who">
-          <b>${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
-          <div class="duel-tags-row">${rankPill(pTier, true)}</div>
-        </div>
-        <div class="duel-lb-score">
-          <b>${p.wins} Menang</b>
-          <small>${p.winRate}% WR • ${p.total} laga</small>
+        <div class="duel-lb-main">
+          <div class="duel-lb-top">
+            <b class="duel-lb-name">${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
+            <span class="duel-lb-wins">🏆 ${p.wins} Menang</span>
+          </div>
+          <div class="duel-lb-bottom">
+            ${rankPill(pTier, true)}
+            <small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small>
+          </div>
         </div>
       </div>`;
     }).join('');

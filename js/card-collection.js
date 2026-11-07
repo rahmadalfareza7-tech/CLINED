@@ -11,10 +11,30 @@
   const QUIZ_PER_DIAMOND = 5; // 1 diamond setiap N soal benar
 
   const CARD_CATALOG = [
-    { id: 'pulmo', name: 'PULMO', rarity: 'common', color: '#00c9d4', fact: 'Menukar O2 dan CO2 tiap napas', strength: 'Napas', img: 'assets/cards/card-pulmo.png' },
-    { id: 'cor', name: 'COR', rarity: 'rare', color: '#e8435a', fact: 'Berdetak ~100.000 kali sehari', strength: 'Sirkulasi', img: 'assets/cards/card-cor.png' },
-    { id: 'cerebrum', name: 'CEREBRUM', rarity: 'epic', color: '#4ade80', fact: 'Pusat kendali seluruh tubuh', strength: 'Telekinesis', img: 'assets/cards/card-cerebrum.png' },
-    { id: 'skull', name: 'SKULL', rarity: 'legendary', color: '#f5c97a', fact: 'Seperti helm perang alami', strength: 'Terkuat', img: 'assets/cards/card-skull.png' },
+    // Common (7 kartu)
+    { id: 'pulmo',      name: 'PULMO',      rarity: 'common',    color: '#00c9d4', fact: 'Menukar O2 dan CO2 tiap napas (Built-in AC)',              strength: 'Hurricane',     img: 'assets/cards/card-pulmo.png' },
+    { id: 'gaster',     name: 'GASTER',     rarity: 'common',    color: '#f97316', fact: 'Asam lambung pH 1.5–2 mampu melebur makanan',               strength: 'Acid Melt',     img: 'assets/cards/card-gaster.png' },
+    { id: 'intestinum', name: 'INTESTINUM', rarity: 'common',    color: '#ec4899', fact: 'Panjang lekukan usus mencapai ~7 meter',                    strength: 'Super Absorb',  img: 'assets/cards/card-intestinum.png' },
+    { id: 'vesica',     name: 'VESICA',     rarity: 'common',    color: '#0ea5e9', fact: 'Kandung kemih elastis penampung hingga 500 ml',             strength: 'Hydro Burst',   img: 'assets/cards/card-vesica.png' },
+    { id: 'auris',      name: 'AURIS',      rarity: 'common',    color: '#0d9488', fact: 'Rumah bagi tulang terkecil tubuh (stapes) & koklea',       strength: 'Sonic Wave',    img: 'assets/cards/card-auris.png' },
+    { id: 'thyroidea',  name: 'THYROIDEA',  rarity: 'common',    color: '#e11d48', fact: 'Kelenjar kupu-kupu pengatur suhu & metabolisme tubuh',     strength: 'Turbo Boost',   img: 'assets/cards/card-thyroidea.png' },
+    { id: 'cutis',      name: 'CUTIS',      rarity: 'common',    color: '#ea580c', fact: 'Organ terluas & terberat pelindung seluruh tubuh',          strength: 'Armor Shield',  img: 'assets/cards/card-cutis.png' },
+    // Rare (6 kartu)
+    { id: 'cor',        name: 'COR',        rarity: 'rare',      color: '#e8435a', fact: 'Berdetak ~100.000 kali sehari tanpa henti',                 strength: 'Marathoner',    img: 'assets/cards/card-cor.png' },
+    { id: 'hepar',      name: 'HEPAR',      rarity: 'rare',      color: '#d97706', fact: 'Satu-satunya organ dalam yang bisa beregenerasi utuh',      strength: 'Detox Shield',  img: 'assets/cards/card-hepar.png' },
+    { id: 'pancreas',   name: 'PANCREAS',   rarity: 'rare',      color: '#eab308', fact: 'Penghasil insulin pengatur gula darah & enzim cerna',       strength: 'Sugar Balance', img: 'assets/cards/card-pancreas.png' },
+    { id: 'ren',        name: 'REN',        rarity: 'rare',      color: '#9333ea', fact: 'Sepasang ginjal menyaring ~180 liter cairan sehari',        strength: 'Ultra Filter',  img: 'assets/cards/card-ren.png' },
+    { id: 'costae',     name: 'COSTAE',     rarity: 'rare',      color: '#3b82f6', fact: '12 pasang tulang rusuk pelindung jantung & paru',           strength: 'Iron Cage',     img: 'assets/cards/card-costae.png' },
+    { id: 'vertebra',   name: 'VERTEBRA',   rarity: 'rare',      color: '#10b981', fact: '33 ruas tulang belakang penyangga postur & medula',         strength: 'Pillar Force',  img: 'assets/cards/card-vertebra.png' },
+    // Epic (5 kartu)
+    { id: 'cerebrum',   name: 'CEREBRUM',   rarity: 'epic',      color: '#4ade80', fact: 'Pusat kendali seluruh tubuh dengan ~86 miliar neuron',     strength: 'Telekinesis',   img: 'assets/cards/card-cerebrum.png' },
+    { id: 'oculus',     name: 'OCULUS',     rarity: 'epic',      color: '#4f46e5', fact: 'Resolusi setara 576 Megapiksel & 10 juta warna',            strength: 'Laser Vision',  img: 'assets/cards/card-oculus.png' },
+    { id: 'splen',      name: 'SPLEN',      rarity: 'epic',      color: '#be185d', fact: 'Markas daur ulang eritrosit & cadangan sistem imun',        strength: 'Blood Guard',   img: 'assets/cards/card-splen.png' },
+    { id: 'uterus',     name: 'UTERUS',     rarity: 'epic',      color: '#db2777', fact: 'Organ otot super elastis tempat tumbuh kehidupan baru',     strength: 'Life Cradle',   img: 'assets/cards/card-uterus.png' },
+    { id: 'neuron',     name: 'NEURON',     rarity: 'epic',      color: '#0284c7', fact: 'Menghantarkan sinyal listrik dengan kecepatan 400 km/jam',  strength: 'Thunder Bolt',  img: 'assets/cards/card-neuron.png' },
+    // Legendary (2 kartu)
+    { id: 'skull',      name: 'SKULL',      rarity: 'legendary', color: '#f5c97a', fact: 'Helm perang alami terkuat pelindung otak',                  strength: 'Strongest',     img: 'assets/cards/card-skull.png' },
+    { id: 'leukocytus', name: 'LEUKOCYTUS', rarity: 'legendary', color: '#7c3aed', fact: 'Pasukan elit pembasmi bakteri, virus & patogen berbahaya',  strength: 'Immunity Max',  img: 'assets/cards/card-leukocytus.png' },
   ];
   const RARITY_LABEL = { common: 'Common', rare: 'Rare', epic: 'Epic', legendary: 'Legendary' };
   const RARITY_ORDER = ['common', 'rare', 'epic', 'legendary'];
@@ -72,13 +92,15 @@
 
   function buildGrid() {
     const owned = getCards();
+    const admin = isAdmin();
     return CARD_CATALOG.map(card => {
       const n = owned.filter(c => c.id === card.id).length;
-      const cls = 'coll-card-slot rarity-' + card.rarity + (n ? '' : ' locked');
-      return `<div class="${cls}" style="--card-color:${card.color}">
+      const unlocked = n > 0 || admin;
+      const cls = 'coll-card-slot rarity-' + card.rarity + (unlocked ? ' is-unlocked' : ' locked');
+      return `<div class="${cls}" style="--card-color:${card.color}" ${unlocked ? `data-preview-card="${esc(card.id)}" role="button" tabindex="0" title="Ketuk untuk melihat kartu ${esc(card.name)}"` : ''}>
         <img src="${card.img}" alt="${esc(card.name)}" loading="lazy">
         <b>${esc(card.name)}</b>
-        ${n ? `<small>x${n}</small>` : '<small>🔒</small>'}
+        ${n ? `<small>x${n}</small>` : (admin ? '<small>👑</small>' : '<small>🔒</small>')}
       </div>`;
     }).join('');
   }
@@ -88,7 +110,7 @@
     const owned = getCards(), uniqueOwned = new Set(owned.map(c => c.id)).size;
     return `<div class="card-shop-sheet">
       <div class="card-shop-head">
-        <div><span class="card-shop-eyebrow">CLINED CARDS</span><h3>Card Shop</h3><p>Kumpulkan semua kartu organ!</p></div>
+        <div><span class="card-shop-eyebrow">CLINED CARDS</span><h3>Card Shop</h3><p>Kumpulkan ${CARD_CATALOG.length} variasi kartu organ &amp; anatomi!</p></div>
         <button type="button" class="card-shop-close" id="closeCardShop" aria-label="Tutup">✕</button>
       </div>
       <div class="card-shop-dia-row">
@@ -98,8 +120,8 @@
       <div class="card-pack-card">
         <img class="card-pack-img" src="assets/cards/fab-basket.png" alt="Organ Pack">
         <div class="card-pack-info">
-          <b>Organ Pack</b>
-          <small>1 kartu acak • chance LEGENDARY!</small>
+          <b>Organ Pack (${CARD_CATALOG.length} Seri Kartu)</b>
+          <small>1 kartu acak • Ketuk kartu milikmu untuk perbesar!</small>
           <div class="card-rarity-odds">
             <span>Common 50%</span><span class="odd-rare">Rare 30%</span><span class="odd-epic">Epic 15%</span><span class="odd-legendary">Legendary 5%</span>
           </div>
@@ -186,6 +208,33 @@
     ov.addEventListener('click', e => { if (e.target === ov && stage.classList.contains('phase-reveal')) close(); });
   }
 
+  function showCardPreview(card) {
+    if (!card) return;
+    document.querySelector('.card-preview-overlay')?.remove();
+    const n = ownedCount(card.id);
+    const ov = document.createElement('div');
+    ov.className = 'pack-open-overlay card-preview-overlay show';
+    ov.innerHTML = `<div class="pack-open-stage phase-reveal rarity-${card.rarity}" style="--rarity-color:${card.color}">
+      <div class="pack-card-flip">
+        <div class="pack-card-rays"></div>
+        <div class="pack-card-inner">
+          <div class="pack-card-front"><img src="${card.img}" alt="${esc(card.name)}"></div>
+        </div>
+      </div>
+      <div class="pack-result-info">
+        <div class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</div>
+        <h4>${esc(card.name)}</h4>
+        ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
+        <small class="card-dup-note">⚡ Strength: <b>${esc(card.strength || '-')}</b> • Dimiliki: <b>x${n}</b></small>
+        <button type="button" class="ml-next" id="closeCardPreview">Tutup</button>
+      </div>
+    </div>`;
+    document.body.appendChild(ov);
+    const close = () => { ov.classList.remove('show'); setTimeout(() => ov.remove(), 180); };
+    ov.querySelector('#closeCardPreview')?.addEventListener('click', close);
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  }
+
   function refreshShop() {
     const c = document.getElementById('cardShopContainer');
     if (c) { c.innerHTML = buildShop(); bindShop(); }
@@ -199,6 +248,13 @@
       if (!card) return;
       hideShop();
       showReveal(card);
+    });
+    document.querySelectorAll('#cardShopContainer [data-preview-card]').forEach(el => {
+      el.addEventListener('click', () => {
+        const cid = el.getAttribute('data-preview-card');
+        const card = CARD_CATALOG.find(c => c.id === cid);
+        if (card) showCardPreview(card);
+      });
     });
   }
   function blockScroll(e) { e.preventDefault(); }
