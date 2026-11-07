@@ -113,10 +113,17 @@ main{padding-top:4px}
 .paper textarea,.paper input{display:block;flex:1;min-width:0;width:100%;font:700 15.5px/1.55 var(--font);color:var(--pen);background:transparent;border:0;border-bottom:1.5px dashed var(--paper-line);border-radius:0;padding:2px 4px;resize:none;overflow:hidden;box-shadow:none}
 .paper textarea::placeholder,.paper input::placeholder{color:#94a3b8;font-weight:600;font-size:14px}
 .paper textarea:focus,.paper input:focus{outline:0;border-bottom:2px solid var(--pen)}
-.paraf{display:block;margin:2px 0 0 auto;width:54px;height:15px;color:var(--pen);opacity:.7}
-.sep{height:0;border-top:1.5px solid var(--paper-line);margin:8px 0 12px}
-.pro{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
-.pro label{display:flex;gap:6px;align-items:center;flex:1;min-width:130px;font:800 14px var(--font);color:var(--ink)}
+.paraf{display:block;margin:2px 0 0 auto;width:54px;height:15px;color:var(--pen);opacity:.85}
+.paraf-btn{display:inline-flex;align-items:center;gap:8px;border:1.5px dashed var(--pen);background:rgba(30,58,138,.05);color:var(--pen);border-radius:10px;padding:6px 12px;font:800 12.5px var(--font);cursor:pointer;transition:all .15s;margin-left:auto}
+.paraf-btn:hover:not(:disabled){background:rgba(30,58,138,.12)}
+.paraf-btn.signed{border-style:solid;background:#ecfdf5;border-color:#059669;color:#065f46}
+.paraf-btn .paraf{margin:0;width:50px;height:15px;color:currentColor}
+.sep{height:0;border-top:1.5px solid var(--paper-line);margin:10px 0 12px}
+.pro-title{font:800 11.5px var(--font);text-transform:uppercase;letter-spacing:.3px;color:#475569;margin-bottom:6px}
+.pro{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:4px}
+@media(min-width:520px){.pro{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pro label{display:flex;flex-direction:column;align-items:stretch;gap:3px;font:800 12.5px var(--font);color:#334155;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:7px 10px}
+.pro label input{font:700 15px var(--font);color:var(--pen);border-bottom:1.5px dashed var(--paper-line);padding:2px 0}
 .keyp{font:700 15px/1.65 var(--font);color:var(--pen);white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
 .quick{display:flex;gap:6px;overflow-x:auto;padding:10px 2px 2px;margin-top:10px;scrollbar-width:none;width:100%;max-width:100%;-webkit-overflow-scrolling:touch}
 .quick::-webkit-scrollbar{display:none}
@@ -282,7 +289,7 @@ const S={
   quiz:null,
   foc:{i:0,f:'l1'},
   sub:{sed:'lp',sing:'kuis',pad:'kuis',pan:'racik'},
-  lp:{idx:0,examMode:false,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:''},tblFilter:'all',tblSearch:'',tblHide:false,tblMode:'auto',revealed:{}},
+  lp:{idx:0,examMode:false,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''},tblFilter:'all',tblSearch:'',tblHide:false,tblMode:'auto',revealed:{}},
   racik:{idx:0,hideCalc:false}
 };
 const TABS=[['kasus','Kasus'],['sediaan','Sediaan & Bungkus'],['panduan','Panduan & Racikan'],['singkatan','Singkatan'],['padat','BSO padat'],['hitung','Hitung']];
@@ -333,7 +340,7 @@ function openCase(id,exam){
   const n=Math.max(0,10-c.p.length-Math.min(2,c.a.length));
   const obatOpts=shuffle([...c.p,...pick(c.a,2),...pick(pool,n)]);
   S.case=c;S.exam=!!exam;S.step=0;S.chk={};S.foc={i:0,f:'l1'};
-  S.f={dx:'',dxOpts,obatOpts,picks:[],rows:[{l1:'',l2:''}],pro:'',usia:'',l5:[],note:''};
+  S.f={dx:'',dxOpts,obatOpts,picks:[],rows:[{l1:'',l2:'',paraf:false}],pro:'',usia:'',l5:[],note:''};
   S.t0=Date.now();startTimer();render();scrollTo({top:0});
 }
 const left=()=>900-Math.floor((Date.now()-S.t0)/1000);
@@ -379,11 +386,11 @@ const SVG_PARAF='<svg class="paraf" viewBox="0 0 62 18" fill="none" stroke="curr
 function stepS4(){
   const c=S.case,f=S.f,d=!!S.chk.s4,st=stOf('s4');
   const date=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-  const blocks=f.rows.map((r,i)=>`<div class="blk" data-i="${i}"><div class="ln"><span class="rm">R/</span><textarea rows="1" data-f="l1" aria-label="Baris R/ obat ${i+1}" placeholder="Tab. Contoh 100 mg no. X" autocomplete="off" autocapitalize="sentences" spellcheck="false" ${d?'disabled':''}>${esc(r.l1)}</textarea></div><div class="ln l2"><span class="sm">S</span><textarea rows="1" data-f="l2" aria-label="Baris S obat ${i+1}" placeholder="3 dd tab I pc" autocomplete="off" autocapitalize="off" spellcheck="false" ${d?'disabled':''}>${esc(r.l2)}</textarea></div><div class="blk-f">${!d&&f.rows.length>1?`<button class="lnk" data-act="delrow" data-i="${i}">hapus R/ ini</button>`:'<span></span>'}${SVG_PARAF}</div></div>`).join('');
-  const paper=`<div class="paper"><div class="lh"><div class="lh-name">dr. ____________________</div><div class="lh-sub">SIP ______________ · Praktik umum</div></div><div class="pdate">${date}</div>${blocks}<div class="sep"></div><div class="pro"><label>Pro: <input data-pro placeholder="Tn. A" autocomplete="off" aria-label="Pro (nama pasien)" value="${esc(f.pro)}" ${d?'disabled':''}></label><label>Umur: <input data-usia placeholder="45 th" inputmode="numeric" autocomplete="off" aria-label="Umur pasien" value="${esc(f.usia)}" ${d?'disabled':''}></label></div></div>`;
+  const blocks=f.rows.map((r,i)=>`<div class="blk" data-i="${i}"><div class="ln"><span class="rm">R/</span><textarea rows="1" data-f="l1" aria-label="Baris R/ obat ${i+1}" placeholder="Tab. Contoh 100 mg no. X" autocomplete="off" autocapitalize="sentences" spellcheck="false" ${d?'disabled':''}>${esc(r.l1)}</textarea></div><div class="ln l2"><span class="sm">S</span><textarea rows="1" data-f="l2" aria-label="Baris S obat ${i+1}" placeholder="3 dd tab I pc" autocomplete="off" autocapitalize="off" spellcheck="false" ${d?'disabled':''}>${esc(r.l2)}</textarea></div><div class="blk-f" style="margin-top:6px">${!d&&f.rows.length>1?`<button class="lnk" type="button" data-act="delrow" data-i="${i}">hapus R/ ini</button>`:'<span></span>'}<button type="button" class="paraf-btn ${r.paraf?'signed':''}" data-act="toggleparaf" data-i="${i}" ${d?'disabled':''}>${r.paraf?`<span>✓ Tanda Tangan / Paraf</span>${SVG_PARAF}`:'✍️ + Tambahkan Tanda Tangan / Paraf'}</button></div></div>`).join('');
+  const paper=`<div class="paper"><div class="lh"><div class="lh-name">dr. ____________________</div><div class="lh-sub">SIP ______________ · Praktik umum</div></div><div class="pdate">${date}</div>${blocks}<div class="sep"></div><div class="pro-title">Identitas Pasien &amp; Umur:</div><div class="pro"><label><span>Pro (Nama Pasien):</span><input data-pro placeholder="Contoh: Tn. A / Ny. S / An. R" autocomplete="off" aria-label="Pro (nama pasien)" value="${esc(f.pro)}" ${d?'disabled':''}></label><label><span>Umur Pasien:</span><input data-usia placeholder="Contoh: 45 th" autocomplete="off" aria-label="Umur pasien" value="${esc(f.usia)}" ${d?'disabled':''}></label></div></div>`;
   const tools=d?'':`<div class="row between" style="margin-top:10px"><button class="secondary small" data-act="addrow">+ Tambah R/ (${f.rows.length}${!S.exam?`/${c.rows.length}`:''})</button>${!S.exam&&f.rows.length<c.rows.length?`<span class="sub">Kasus ini memiliki ${c.rows.length} obat pada kunci resep</span>`:''}</div>${S.exam?'':`<div class="quick" id="quick" role="toolbar" aria-label="Sisipkan singkatan"></div>`}`;
   const a=S.exam?acts(P('Lanjut','next'),prevBtn()):d?acts(P('Lanjut','next'),X('Perbaiki resep','retry')):acts(P('Periksa resep','check'));
-  return `<section class="card">${stepHead(st)}<h2>Tulis resepnya</h2>${S.only?`<details class="dt" style="margin-bottom:12px"><summary>Petunjuk: diagnosis dan obat</summary><div class="in"><div><b>Diagnosis:</b> ${esc(c.dx)}</div><div style="margin-top:6px"><b>Obat:</b> ${esc([...c.p,...c.a].join(', '))}</div></div></details>`:''}<p class="sub" style="margin-bottom:12px">Pasien: <b>${esc(c.pro)}</b>, <b>${c.usia} tahun</b>. Tulis tiap obat seperti di kertas resep: baris R/ (bentuk, nama, kekuatan, jumlah) lalu baris S (aturan pakai).</p>${paper}${tools}${d?res4():''}${a}</section>`;
+  return `<section class="card">${stepHead(st)}<h2>Tulis resepnya</h2>${S.only?`<details class="dt" style="margin-bottom:12px"><summary>Petunjuk: diagnosis dan obat</summary><div class="in"><div><b>Diagnosis:</b> ${esc(c.dx)}</div><div style="margin-top:6px"><b>Obat:</b> ${esc([...c.p,...c.a].join(', '))}</div></div></details>`:''}<p class="sub" style="margin-bottom:12px">Pasien: <b>${esc(c.pro)}</b>, <b>${c.usia} tahun</b>. Tulis tiap obat seperti di kertas resep: baris R/ (bentuk, nama, kekuatan, jumlah), baris S (aturan pakai), klik tombol <b>Tambahkan Tanda Tangan / Paraf</b>, serta lengkapi <b>Identitas Pasien (Pro &amp; Umur)</b> di bawah resep.</p>${paper}${tools}${d?res4():''}${a}</section>`;
 }
 function keyHtml(c){
   const blocks=c.rows.map(k=>`<div class="blk"><div class="ln"><span class="rm">R/</span><div class="keyp">${esc(line1Of(k))}</div></div><div class="ln l2"><span class="sm">S</span><div class="keyp">${esc(k.s)}</div></div><div class="blk-f"><span></span>${SVG_PARAF}</div></div>`).join('');
@@ -400,7 +407,7 @@ function res4(){
   const rows=r.out.map(o=>o.miss?`<div class="rowfb"><b>${esc(o.u.o)}</b> <span class="tag bad">tidak ada di kunci</span><div class="sub">Bisa benar secara klinis, tapi tidak ada di catatan sehingga dihitung tambahan (−1).</div></div>`:
     `<div class="rowfb"><b>${esc(o.u.o)}</b> <span class="muted">${o.r.pts}/${o.r.max}</span><div style="margin-top:6px">${o.r.res.map(x=>`<span class="tag ${x.ok?'good':'bad'}">${x.ok?'✓':'✕'} ${x.label}${x.ok?'':': '+esc(x.exp)}</span>`).join('')}</div></div>`).join('');
   const none=r.out.length?'':`<div class="rowfb"><span class="muted">Belum ada obat yang terbaca. Tulis nama obat di baris R/.</span></div>`;
-  return `<div role="status" class="fb ${r.pct>=80?'good':'bad'}"><b>Skor resep ${r.pct}%</b><div style="margin-top:8px">${rows}${none}${r.missing.length?`<div class="rowfb"><span class="tag bad">belum ada</span> ${r.missing.map(k=>esc(k.o)).join(', ')}</div>`:''}<div class="rowfb"><span class="tag ${r.proOk?'good':'bad'}">${r.proOk?'✓':'✕'} Pro: ${esc(c.pro)}</span><span class="tag ${r.usiaOk?'good':'bad'}">${r.usiaOk?'✓':'✕'} Umur: ${c.usia} th</span></div></div>
+  return `<div role="status" class="fb ${r.pct>=80?'good':'bad'}"><b>Skor resep ${r.pct}%</b><div style="margin-top:8px">${rows}${none}${r.missing.length?`<div class="rowfb"><span class="tag bad">belum ada</span> ${r.missing.map(k=>esc(k.o)).join(', ')}</div>`:''}<div class="rowfb"><span class="tag ${r.parafOk?'good':'bad'}">${r.parafOk?'✓':'✕'} Tanda tangan / Paraf dokter</span><span class="tag ${r.proOk?'good':'bad'}">${r.proOk?'✓':'✕'} Pro: ${esc(c.pro)}</span><span class="tag ${r.usiaOk?'good':'bad'}">${r.usiaOk?'✓':'✕'} Umur: ${c.usia} th</span></div></div>
   <details class="dt" style="margin-top:6px"><summary>Lihat resep kunci</summary><div class="in">${keyHtml(c)}</div></details>${revHtml(c)}${c.cat?`<p class="sub" style="margin-top:10px">${esc(c.cat)}</p>`:''}</div>`;
 }
 function l5List(interactive){
@@ -485,7 +492,7 @@ function viewSediaan(m){
 function selectLpDrug(idx){
   S.lp.idx=(idx+SEDIAAN.length)%SEDIAAN.length;
   S.lp.checked=false;
-  S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:''};
+  S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''};
   drawLembarPengamatan();
 }
 
@@ -599,12 +606,40 @@ function drawLembarPengamatan(){
         </div>
 
         <div class="lp-col full ${colCls(ev?.cols.f)}">
-          <div class="lp-col-title"><span><span class="lp-col-code">f</span> Penulisan Resep (Baris R/ dan S)</span>${colTag(ev?.cols.f)}</div>
-          <div class="paper" style="padding:12px 14px">
+          <div class="lp-col-title"><span><span class="lp-col-code">f</span> Penulisan Resep (Baris R/, S, Tanda Tangan &amp; Identitas Pasien)</span>${colTag(ev?.cols.f)}</div>
+          <div class="paper" style="padding:14px 16px">
+            <div class="lh"><div class="lh-name">dr. ____________________</div><div class="lh-sub">SIP ______________ · Praktik umum</div></div>
+            <div class="pdate">${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
             <div class="ln"><span class="rm">R/</span><input data-lp="fR" placeholder="${exam?'Tulis baris R/ ...':'Drops Amoxsan 100 mg/ml fl. I'}" value="${esc(f.fR)}" autocomplete="off" spellcheck="false"></div>
             <div class="ln l2" style="margin-top:6px"><span class="sm">S</span><input data-lp="fS" placeholder="${exam?'Tulis baris S (signatura) ...':'3 dd gtt oral 1 ml pc'}" value="${esc(f.fS)}" autocomplete="off" spellcheck="false"></div>
+            <div class="blk-f" style="margin-top:8px">
+              <span></span>
+              <button type="button" class="paraf-btn ${f.fParaf?'signed':''}" data-act="lpparaf">
+                ${f.fParaf?`<span>✓ Tanda Tangan / Paraf Ditambahkan</span>${SVG_PARAF}`:'✍️ + Tambahkan Tanda Tangan / Paraf'}
+              </button>
+            </div>
+            <div class="sep"></div>
+            <div class="pro-title">Identitas Pasien &amp; Umur:</div>
+            <div class="pro">
+              <label><span>Pro (Nama Pasien):</span><input data-lp="fPro" placeholder="${exam?'Tulis nama pasien (Pro)...':'Contoh: Tn. A / An. B'}" value="${esc(f.fPro||'')}" autocomplete="off"></label>
+              <label><span>Umur Pasien:</span><input data-lp="fUmur" placeholder="${exam?'Tulis umur pasien...':'Contoh: 25 th / 5 th'}" value="${esc(f.fUmur||'')}" autocomplete="off"></label>
+            </div>
           </div>
-          ${d?`<div class="sub" style="margin-top:6px"><b>${ev.cols.f.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.f.msg)}<br><b>Kunci Resep (f):</b><div class="paper" style="margin-top:6px;padding:10px"><div class="keyp">${esc(ev.cols.f.key)}</div></div></div>`:''}
+          ${d?`<div class="sub" style="margin-top:6px">
+            <div style="margin-bottom:4px">
+              <span class="tag ${ev.cols.f.parafOk?'good':'bad'}">${ev.cols.f.parafOk?'✓':'✕'} Tanda Tangan / Paraf</span>
+              <span class="tag ${ev.cols.f.proOk?'good':'bad'}">${ev.cols.f.proOk?'✓':'✕'} Pro (Nama Pasien)</span>
+              <span class="tag ${ev.cols.f.umurOk?'good':'bad'}">${ev.cols.f.umurOk?'✓':'✕'} Umur Pasien</span>
+            </div>
+            <b>${ev.cols.f.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.f.msg)}<br>
+            <b>Kunci Resep (f):</b>
+            <div class="paper" style="margin-top:6px;padding:12px">
+              <div class="keyp">${esc(ev.cols.f.key)}</div>
+              <div class="blk-f" style="margin-top:4px"><span></span>${SVG_PARAF}</div>
+              <div class="sep"></div>
+              <div class="keyp" style="font-size:13.5px">Pro: ${esc(f.fPro||'Tn. A / An. B')} &nbsp;·&nbsp; Umur: ${esc(f.fUmur||'25 th')}</div>
+            </div>
+          </div>`:''}
         </div>
       </div>
     </div>
@@ -967,7 +1002,7 @@ function insertAt(txt){
   t.value=pre+add+post;const p=(pre+add).length;t.focus();t.setSelectionRange(p,p);
   S.f.rows[S.foc.i][S.foc.f]=t.value;fit(t);
 }
-function addRow(focus=true){S.f.rows.push({l1:'',l2:''});viewCase($('#app'));fitAll();if(focus){const i=S.f.rows.length-1;S.foc={i,f:'l1'};const t=sr.querySelector(`.blk[data-i="${i}"] textarea[data-f="l1"]`);t&&t.focus();renderQuick()}}
+function addRow(focus=true){S.f.rows.push({l1:'',l2:'',paraf:false});viewCase($('#app'));fitAll();if(focus){const i=S.f.rows.length-1;S.foc={i,f:'l1'};const t=sr.querySelector(`.blk[data-i="${i}"] textarea[data-f="l1"]`);t&&t.focus();renderQuick()}}
 
 /* ===== LIGHTBOX MODAL ZOOM BUNGKUS ===== */
 function openZoom(src,title){
@@ -1040,6 +1075,8 @@ sr.addEventListener('click',e=>{
   if(a==='lpnext')return selectLpDrug(S.lp.idx+1);
   if(a==='lprand')return selectLpDrug(Math.floor(Math.random()*SEDIAAN.length));
   if(a==='lptogglelabel'){S.lp.hideLabel=!S.lp.hideLabel;return drawLembarPengamatan()}
+  if(a==='lpparaf'){S.lp.form.fParaf=!S.lp.form.fParaf;return drawLembarPengamatan()}
+  if(a==='toggleparaf'){const idx=+t.dataset.i;if(S.f?.rows?.[idx]){S.f.rows[idx].paraf=!S.f.rows[idx].paraf;viewCase($('#app'));fitAll()}return}
   if(a==='lpcheck'){
     S.lp.checked=true;
     const s=SEDIAAN[S.lp.idx],ev=evalLembarPengamatan(s,S.lp.form);
@@ -1049,7 +1086,7 @@ sr.addEventListener('click',e=>{
   }
   if(a==='lpfill'){
     const s=SEDIAAN[S.lp.idx],lp=s.lp||{};
-    if(S.lp.checked){S.lp.checked=false;S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:''};return drawLembarPengamatan()}
+    if(S.lp.checked){S.lp.checked=false;S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''};return drawLembarPengamatan()}
     const rxLines=String(s.x||'').split('\n');
     S.lp.form={
       a:lp.a||s.f,
@@ -1058,7 +1095,10 @@ sr.addEventListener('click',e=>{
       d:lp.d||`${s.r}: ${s.d}`,
       e:lp.e||s.penyimpanan||'',
       fR:rxLines[0]?.replace(/^\s*R\/\s*/i,'')||'',
-      fS:rxLines.slice(1).join(' ').replace(/^\s*S\s*/i,'')||''
+      fS:rxLines.slice(1).join(' ').replace(/^\s*S\s*/i,'')||'',
+      fParaf:true,
+      fPro:'Tn. A',
+      fUmur:'28 th'
     };
     S.lp.checked=true;
     return drawLembarPengamatan();

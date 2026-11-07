@@ -100,8 +100,12 @@ function checkResep(c,f){
   c.rows.forEach((k,i)=>{if(!used.has(i))max+=evalRow(k,{b:'',k:'',j:'',s:''}).max});
   const proOk=String(f.pro||'').trim().toLowerCase().startsWith(c.pro.split(' ')[0].toLowerCase());
   const usiaOk=Number(String(f.usia||'').replace(/\D/g,''))===c.usia;
-  pts+=(proOk?1:0)+(usiaOk?1:0);max+=2;
-  return{out,missing,proOk,usiaOk,pct:Math.round(100*Math.max(0,pts-extra)/max),extra};
+  const activeRows=(f.rows||[]).filter(r=>r.l1.trim()||r.l2.trim());
+  const checkParaf=activeRows.some(r=>typeof r.paraf==='boolean');
+  const parafOk=checkParaf?(activeRows.length>0&&activeRows.every(r=>r.paraf)):true;
+  pts+=(proOk?1:0)+(usiaOk?1:0)+(checkParaf?(parafOk?1:0):0);
+  max+=2+(checkParaf?1:0);
+  return{out,missing,proOk,usiaOk,parafOk,pct:Math.round(100*Math.max(0,pts-extra)/max),extra};
 }
 const line1Of=k=>`${k.bl||FNAME[k.b]||k.b} ${k.o}${k.k?' '+k.k:''} ${typeof k.j==='string'?k.j:'no. '+n2r(k.j)}`;
 
@@ -160,15 +164,30 @@ function evalLembarPengamatan(item,form){
   const colE={ok:ptsE===2,partial:ptsE===1,pts:ptsE,max:2,hit:matchKw(u.e,lp.kwE),key:lp.e||item.penyimpanan,
     msg:ptsE===2?'Golongan obat dan cara penyimpanan tepat':ptsE===1?(golOk?'Golongan obat benar, tambahkan cara penyimpanan (<30°C / terlindung cahaya / kocok dahulu)':'Cara penyimpanan benar, tambahkan golongan obat (Obat Keras / Bebas Terbatas / Bebas)'):'Sebutkan golongan obat (Keras/Bebas Terbatas/Bebas) dan cara penyimpanannya'};
 
-  /* (f) Penulisan Resep (R/ dan S) */
+  /* (f) Penulisan Resep (R/, S, Paraf/TTD, serta Identitas Pasien Pro & Umur) */
   const fText=normText((u.fR||u.fS)?`R/ ${u.fR||''}\nS ${u.fS||''}`:(u.f||''));
   const hasR=/\br\s*\/|\b(sol|susp|syr|drops|gtt|inj|emuls|lotio|fl|vial|amp|ampul|tube|strip|no)\b/i.test(fText)||fText.length>8;
   const nameTokens=[item.n,item.praktikumNama,...(lp.kwB||[]),...(lp.kwC||[])].map(normText).filter(x=>x.length>=4);
   const hasDrug=nameTokens.some(tok=>fText.includes(tok)||norm(fText).includes(norm(tok)));
   const hasSigna=/\b(\d+\s*dd|o\s*\d+\s*h|prn|p\.r\.n|pro\s*inj(?:eksi)?|imm|i\.m\.m|gtt|uc|u\.c|u\s+c|inf|cth|puff|dose|extend|loc|grg|garg|supp|applic|rekonstitusi)\b/i.test(fText);
-  const ptsF=(hasDrug?1:0)+(hasSigna&&hasR?1:0);
-  const colF={ok:ptsF===2,partial:ptsF===1,pts:ptsF,max:2,key:lp.f||item.x,
-    msg:ptsF===2?'Penulisan R/ dan Signa (S) sesuai':ptsF===1?(hasDrug?'Baris R/ terbaca, lengkapi baris Signa (S aturan pakai)':'Aturan pakai terbaca, pastikan nama obat/sediaan di baris R/ tepat'):'Tuliskan baris R/ (bentuk sediaan, nama obat, jumlah) dan baris S (aturan pakai)'};
+  const checkExtra=('fParaf' in u)||('fPro' in u)||('fUmur' in u);
+  const parafOk=checkExtra?!!u.fParaf:true;
+  const proOk=checkExtra?String(u.fPro||'').trim().length>=2:true;
+  const umurOk=checkExtra?/\d/.test(String(u.fUmur||'')):true;
+  const rxBodyOk=hasDrug&&hasSigna&&hasR;
+  const extraOk=parafOk&&proOk&&umurOk;
+  const ptsF=(rxBodyOk&&extraOk)?2:((hasDrug||hasSigna||(checkExtra&&(parafOk||proOk)))?1:0);
+  let msgF='Tuliskan baris R/ (bentuk sediaan, nama obat, jumlah), baris S (aturan pakai), tambahkan tanda tangan/paraf, serta isi Pro & Umur pasien';
+  if(ptsF===2)msgF='Penulisan R/, Signa (S), Tanda Tangan/Paraf, serta Identitas Pasien (Pro & Umur) lengkap dan sesuai';
+  else if(rxBodyOk&&!extraOk){
+    const miss=[];
+    if(!parafOk)miss.push('klik tombol "✍️ Tambahkan Tanda Tangan / Paraf"');
+    if(!proOk)miss.push('isi nama pasien (Pro)');
+    if(!umurOk)miss.push('isi umur pasien');
+    msgF=`Baris R/ dan S sudah tepat, namun jangan lupa: ${miss.join(', ')}`;
+  }else if(hasDrug&&!hasSigna)msgF='Baris R/ terbaca, lengkapi baris Signa (S aturan pakai), paraf, dan identitas pasien';
+  else if(!hasDrug&&hasSigna)msgF='Aturan pakai terbaca, pastikan nama obat/sediaan di baris R/ tepat';
+  const colF={ok:ptsF===2,partial:ptsF===1,pts:ptsF,max:2,parafOk,proOk,umurOk,key:lp.f||item.x,msg:msgF};
 
   const cols={a:colA,b:colB,c:colC,d:colD,e:colE,f:colF};
   const pts=colA.pts+colB.pts+colC.pts+colD.pts+colE.pts+colF.pts;
