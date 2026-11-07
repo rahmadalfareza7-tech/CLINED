@@ -14,33 +14,33 @@ const bestMap=()=>{try{const v=JSON.parse(localStorage.getItem(BEST_KEY)||'null'
 const lpBestMap=()=>{try{const v=JSON.parse(localStorage.getItem(LP_BEST_KEY)||'null');return v&&typeof v==='object'?v:{}}catch{return {}}};
 let sr=null,inited=false;
 const $=s=>sr.querySelector(s);
-const CSS=`:host{display:block;width:100%;max-width:100%;min-width:0;overflow-x:hidden;padding-bottom:calc(115px + env(safe-area-inset-bottom,0px));--green-soft:var(--brand-soft,#e6f7d4);--on-green:#fff;--red-soft:#ffe5e5;--red-dark:#d93a3a;--amber:#8a5d00;--amber-soft:#fff3c4;--rxb:#1c8ed8;--rxbs:#ddf1fd;--shadow:0 3px 0 rgba(31,42,35,.10);
-  --paper:#fffffc;--paper-line:#c9d3df;--pen:#1d3a99;--ink:#2a2d33;--font:inherit;--hand:'Kalam','Segoe Print','Bradley Hand','Comic Sans MS',cursive;color:var(--text);font:600 15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+const CSS=`:host{display:block;width:100%;max-width:100%;min-width:0;overflow-x:hidden;overflow-wrap:normal;word-break:normal;hyphens:none;padding-bottom:calc(115px + env(safe-area-inset-bottom,0px));--green-soft:var(--brand-soft,#e6f7d4);--on-green:#fff;--red-soft:#ffe5e5;--red-dark:#d93a3a;--amber:#8a5d00;--amber-soft:#fff3c4;--rxb:#1c8ed8;--rxbs:#ddf1fd;--shadow:0 3px 0 rgba(31,42,35,.08);
+  --paper:#ffffff;--paper-line:#cbd5e1;--pen:#1e3a8a;--ink:#0f172a;--font:'Plus Jakarta Sans',Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--hand:'Plus Jakarta Sans',Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);font:600 15px/1.55 var(--font);box-sizing:border-box;-webkit-font-smoothing:antialiased}
 a{color:var(--rxb);font-weight:800}
 :host(.rxdark){--red-soft:#3b2022;--amber:#f2c86b;--amber-soft:#3a2f12;--rxb:#6cc4f5;--rxbs:#12303f;--shadow:0 3px 0 rgba(0,0,0,.35)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;overflow-wrap:normal;word-break:normal}
 button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid rgba(28,142,216,.45);outline-offset:2px}
 .eyebrow{font-size:12px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;color:var(--green-dark)}
-h1{font-size:24px;line-height:1.15;margin:2px 0 4px;font-weight:900;letter-spacing:-.4px;overflow-wrap:anywhere}
-h2{font-size:18px;line-height:1.3;margin:0 0 6px;font-weight:900;letter-spacing:-.2px;overflow-wrap:anywhere}
-h3{font-size:15.5px;margin:0 0 8px;font-weight:800;line-height:1.35;overflow-wrap:anywhere}
-p{margin:0;overflow-wrap:anywhere}
-.muted,.sub{color:var(--muted);font-size:13px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
-.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:7px;overflow-x:auto;padding:8px 2px 10px;margin:0;width:100%;max-width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+h1{font-size:23px;line-height:1.22;margin:2px 0 6px;font-weight:900;letter-spacing:-.3px;overflow-wrap:break-word}
+h2{font-size:18.5px;line-height:1.32;margin:0 0 6px;font-weight:900;letter-spacing:-.2px;overflow-wrap:break-word}
+h3{font-size:16px;margin:0 0 8px;font-weight:800;line-height:1.38;overflow-wrap:break-word}
+p{margin:0;overflow-wrap:break-word}
+.muted,.sub{color:var(--muted);font-size:13.5px;font-weight:600;line-height:1.55;overflow-wrap:break-word}
+.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:8px;overflow-x:auto;padding:8px 2px 12px;margin:0;width:100%;max-width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);padding:8px 14px;border-radius:15px;font-weight:800;font-size:13.5px;white-space:nowrap}
+.tab{flex:none;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);padding:9px 15px;border-radius:15px;font-weight:800;font-size:13.5px;white-space:nowrap}
 .tab[aria-selected="true"]{background:var(--green);border-color:var(--green-dark);color:var(--on-green)}
-main,#list,#quiz,#rows{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:100%;max-width:100%;min-width:0}
+main,#list,#quiz,#rows{display:flex;flex-direction:column;gap:14px;width:100%;max-width:100%;min-width:0}
 main{padding-top:4px}
-.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:15px;box-shadow:var(--shadow);width:100%;max-width:100%;min-width:0;overflow:hidden}
+.card{display:block;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow);width:100%;max-width:100%;min-width:0;overflow:hidden}
 @media(max-width:480px){
-  .card{padding:12px;border-radius:18px}
+  .card{padding:14px;border-radius:18px}
   h1{font-size:20px}
-  h2{font-size:16.5px}
+  h2{font-size:17px}
   h3{font-size:15px}
 }
-.note{background:var(--amber-soft);color:var(--amber);border-radius:16px;padding:11px 14px;font-size:13px;font-weight:700;line-height:1.45;width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere}
+.note{background:var(--amber-soft);color:var(--amber);border-radius:16px;padding:12px 15px;font-size:13.5px;font-weight:700;line-height:1.5;width:100%;max-width:100%;min-width:0;overflow-wrap:break-word}
 .primary{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;border:2px solid var(--green-dark);border-bottom-width:4px;background:var(--green);color:var(--on-green);border-radius:15px;padding:11px 14px;font-weight:900;font-size:15px;text-align:center;line-height:1.25}
 .primary:active{transform:translateY(2px);border-bottom-width:2px}
 .secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);border-radius:15px;padding:11px 14px;font-weight:800;font-size:14px;text-align:center;line-height:1.25}
@@ -52,7 +52,7 @@ main{padding-top:4px}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
 .between{justify-content:space-between}
 .grow{flex:1;min-width:0}
-.badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:var(--green-soft);color:var(--green-dark);max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.3}
+.badge{display:inline-flex;align-items:center;font-size:11.5px;font-weight:800;letter-spacing:.2px;padding:4px 10px;border-radius:99px;background:var(--green-soft);color:var(--green-dark);max-width:100%;white-space:normal;overflow-wrap:break-word;line-height:1.3}
 .badge.warn{background:var(--amber-soft);color:var(--amber)}
 .badge.red{background:var(--red-soft);color:var(--red-dark)}
 .badge.blue{background:var(--rxbs);color:var(--rxb)}
@@ -66,18 +66,18 @@ main{padding-top:4px}
 .case:active{transform:translateY(2px);border-bottom-width:2px}
 .case .no{flex:none;width:38px;height:38px;border-radius:12px;background:var(--green-soft);color:var(--green-dark);display:grid;place-items:center;font-weight:900;font-size:16px}
 .case.done .no{background:var(--green);color:var(--on-green)}
-.case .t{font-weight:800;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.case .t{font-weight:800;font-size:14.5px;line-height:1.4;overflow-wrap:break-word}
 .case .d{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
 /* langkah kasus */
 .bar{display:flex;gap:10px;align-items:center;width:100%;min-width:0}
 .bar .progress{flex:1;min-width:0}
 .timer{font-weight:900;font-size:14px;font-variant-numeric:tabular-nums;color:var(--muted);min-width:46px;text-align:right}
 .timer.late{color:var(--red)}
-.step-h{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px;min-width:0}
-.vignette{font-size:15.5px;line-height:1.6;font-weight:600;overflow-wrap:anywhere}
-.pt{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--surface);font-size:13px;font-weight:700}
+.step-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;min-width:0}
+.vignette{font-size:15.5px;line-height:1.65;font-weight:600;overflow-wrap:break-word}
+.pt{margin-top:10px;padding:11px 14px;border-radius:14px;background:var(--surface);font-size:13.5px;font-weight:700;line-height:1.45}
 .answers{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:12px;width:100%;min-width:0}
-.answer{display:flex;gap:10px;align-items:flex-start;width:100%;min-width:0;text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:15px;padding:11px 12px;font-weight:700;font-size:14.5px;line-height:1.4;color:var(--text)}
+.answer{display:flex;gap:10px;align-items:flex-start;width:100%;min-width:0;text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:15px;padding:12px 13px;font-weight:700;font-size:14.5px;line-height:1.45;color:var(--text)}
 .answer:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
 .answer:disabled{cursor:default}
 .answer .mk{flex:none;width:22px;height:22px;margin-top:1px;border-radius:7px;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:900;color:transparent}
@@ -91,69 +91,70 @@ main{padding-top:4px}
 .answer.miss{border-color:#e0a800;background:var(--amber-soft)}
 .answer.miss .mk{border-color:#e0a800}
 .answer.alt{border-color:var(--rxb);background:var(--rxbs)}
-.fb{margin-top:14px;padding:12px 13px;border-radius:16px;background:var(--surface);font-size:13.5px;font-weight:600;line-height:1.55;width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere}
+.fb{margin-top:14px;padding:13px 15px;border-radius:16px;background:var(--surface);font-size:14px;font-weight:600;line-height:1.6;width:100%;max-width:100%;min-width:0;overflow-wrap:break-word}
 .fb.good{background:var(--green-soft)}.fb.bad{background:var(--red-soft)}
 .fb b{font-weight:900}
 .fb ul{margin:6px 0 0;padding-left:18px}
-.tag{display:inline-block;font-size:12px;font-weight:800;padding:3px 9px;border-radius:9px;margin:0 5px 5px 0;max-width:100%;overflow-wrap:anywhere}
+.tag{display:inline-block;font-size:12px;font-weight:800;padding:4px 9px;border-radius:9px;margin:0 5px 5px 0;max-width:100%;overflow-wrap:break-word}
 .tag.good{background:var(--green-soft);color:var(--green-dark)}.tag.bad{background:var(--red-soft);color:var(--red-dark)}
 .tag.warn{background:var(--amber-soft);color:var(--amber)}
 .rowfb{padding:10px 0;border-top:2px solid var(--line);min-width:0}.rowfb:first-child{border-top:0;padding-top:0}
-/* kertas resep */
-.paper{background:var(--paper);color:var(--ink);border:1px solid #cfd6df;border-radius:8px;padding:14px 12px 16px;box-shadow:0 1px 0 #fff inset,0 6px 18px rgba(20,30,50,.12);position:relative;width:100%;max-width:100%;min-width:0;overflow:hidden}
-.lh{text-align:center;padding-bottom:8px;border-bottom:3px double #44484f;margin-bottom:6px}
-.lh-name{font:800 16px var(--font);letter-spacing:.2px;color:var(--ink)}
-.lh-sub{font:600 11px/1.45 var(--font);color:#5b616b}
-.pdate{text-align:right;font:400 15px var(--hand);color:var(--pen);margin:6px 0 10px}
-.blk{margin-bottom:8px;min-width:0}
-.ln{display:flex;gap:6px;align-items:flex-end;min-width:0}
-.ln.l2{padding-left:20px;margin-top:-2px}
-.rm{flex:none;font:700 24px/1.2 var(--hand);color:var(--pen);width:30px}
-.sm{flex:none;font:700 20px/1.3 var(--hand);color:var(--pen);width:18px;text-align:center}
-.paper textarea,.paper input{display:block;flex:1;min-width:0;width:100%;font:400 18.5px/1.45 var(--hand);color:var(--pen);background:transparent;border:0;border-bottom:1.5px dotted var(--paper-line);border-radius:0;padding:0 2px;resize:none;overflow:hidden;box-shadow:none}
-.paper textarea::placeholder,.paper input::placeholder{color:#9aa4b2;font-size:15px}
-.paper textarea:focus,.paper input:focus{outline:0;border-bottom:1.5px solid var(--pen)}
-.paraf{display:block;margin:2px 0 0 auto;width:58px;height:16px;color:var(--pen);opacity:.75}
-.sep{height:0;border-top:1px solid var(--paper-line);margin:4px 0 10px}
+/* kertas resep ergonomis */
+.paper{background:var(--paper);color:var(--ink);border:2px solid #cbd5e1;border-radius:14px;padding:16px 16px 18px;box-shadow:0 2px 10px rgba(15,23,42,.06);position:relative;width:100%;max-width:100%;min-width:0;overflow:hidden}
+.lh{text-align:center;padding-bottom:10px;border-bottom:3px double #334155;margin-bottom:10px}
+.lh-name{font:800 15.5px var(--font);letter-spacing:.2px;color:var(--ink)}
+.lh-sub{font:600 11.5px/1.45 var(--font);color:#475569}
+.pdate{text-align:right;font:700 13px var(--font);color:#475569;margin:4px 0 12px}
+.blk{margin-bottom:10px;min-width:0}
+.ln{display:flex;gap:8px;align-items:flex-end;min-width:0}
+.ln.l2{padding-left:22px;margin-top:4px}
+.rm{flex:none;font:900 19px/1.3 var(--font);color:var(--pen);width:28px}
+.sm{flex:none;font:900 16.5px/1.35 var(--font);color:var(--pen);width:18px;text-align:center}
+.paper textarea,.paper input{display:block;flex:1;min-width:0;width:100%;font:700 15.5px/1.55 var(--font);color:var(--pen);background:transparent;border:0;border-bottom:1.5px dashed var(--paper-line);border-radius:0;padding:2px 4px;resize:none;overflow:hidden;box-shadow:none}
+.paper textarea::placeholder,.paper input::placeholder{color:#94a3b8;font-weight:600;font-size:14px}
+.paper textarea:focus,.paper input:focus{outline:0;border-bottom:2px solid var(--pen)}
+.paraf{display:block;margin:2px 0 0 auto;width:54px;height:15px;color:var(--pen);opacity:.7}
+.sep{height:0;border-top:1.5px solid var(--paper-line);margin:8px 0 12px}
 .pro{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
-.pro label{display:flex;gap:6px;align-items:flex-end;flex:1;min-width:120px;font:700 15px var(--hand);color:var(--pen)}
-.keyp{font:400 17.5px/1.5 var(--hand);color:var(--pen);white-space:pre-wrap;overflow-wrap:anywhere}
+.pro label{display:flex;gap:6px;align-items:center;flex:1;min-width:130px;font:800 14px var(--font);color:var(--ink)}
+.keyp{font:700 15px/1.65 var(--font);color:var(--pen);white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
 .quick{display:flex;gap:6px;overflow-x:auto;padding:10px 2px 2px;margin-top:10px;scrollbar-width:none;width:100%;max-width:100%;-webkit-overflow-scrolling:touch}
 .quick::-webkit-scrollbar{display:none}
-.quick button{flex:none;border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:11px;padding:5px 10px;font:800 12.5px var(--font);color:var(--text)}
-.hint{font-size:12px;color:var(--muted);font-weight:700;margin-top:8px;line-height:1.45;overflow-wrap:anywhere}
+.quick button{flex:none;border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:11px;padding:6px 11px;font:800 12.5px var(--font);color:var(--text)}
+.hint{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:8px;line-height:1.5;overflow-wrap:break-word}
 /* kuis */
-.q{font-size:17.5px;font-weight:850;line-height:1.45;margin:12px 0 4px;overflow-wrap:anywhere}
+.q{font-size:17px;font-weight:800;line-height:1.5;margin:12px 0 6px;overflow-wrap:break-word}
 .q-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--muted);font-weight:800}
-.opt-text{white-space:pre-line;overflow-wrap:anywhere;min-width:0;flex:1}
+.opt-text{white-space:pre-line;overflow-wrap:break-word;min-width:0;flex:1}
 /* daftar, form, hitung */
-input.f,select.f,textarea.f{font:700 15px var(--font);color:var(--text);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%;max-width:100%;min-width:0}
+input.f,select.f,textarea.f{font:700 14.5px/1.45 var(--font);color:var(--text);background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;width:100%;max-width:100%;min-width:0}
 textarea.f{min-height:80px;resize:vertical;font-weight:600}
-label.l{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:0 0 4px}
-.fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px;width:100%;min-width:0}
-@media(min-width:560px){.fgrid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.fgrid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.out{margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--green-soft);font-weight:900;font-size:16px;line-height:1.4;overflow-wrap:anywhere}
-.seg{display:flex;gap:6px;flex-wrap:wrap;width:100%;min-width:0}
-.seg button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:12px;padding:7px 11px;font-weight:800;font-size:12.5px;line-height:1.25;text-align:center;min-width:0;overflow-wrap:anywhere}
+label.l{display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin:0 0 6px}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:12px;width:100%;min-width:0}
+@media(min-width:600px){.fgrid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.fgrid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.out{margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--green-soft);font-weight:900;font-size:16px;line-height:1.45;overflow-wrap:break-word}
+.seg{display:flex;gap:7px;flex-wrap:wrap;width:100%;min-width:0}
+.seg button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:12px;padding:8px 12px;font-weight:800;font-size:13px;line-height:1.3;text-align:center;min-width:0}
 .seg button[aria-pressed="true"]{background:var(--green);border-color:var(--green-dark);color:var(--on-green)}
-.seg.sub-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-@media(min-width:600px){.seg.sub-seg.cols4{grid-template-columns:repeat(4,minmax(0,1fr))}.seg.sub-seg.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.racik-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:100%;min-width:0}
-@media(min-width:600px){.racik-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.racik-grid button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:13px;padding:8px 9px;font-weight:800;font-size:12.5px;line-height:1.25;text-align:left;display:flex;align-items:center;gap:7px;min-width:0}
-.racik-grid button .rno{flex:none;width:22px;height:22px;border-radius:7px;background:var(--surface);color:var(--text);display:grid;place-items:center;font-size:11.5px;font-weight:900}
+.seg.sub-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(min-width:640px){.seg.sub-seg.cols4{grid-template-columns:repeat(4,minmax(0,1fr))}.seg.sub-seg.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.racik-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;min-width:0}
+@media(min-width:640px){.racik-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.racik-grid button{border:2px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:14px;padding:9px 11px;font-weight:800;font-size:13px;line-height:1.3;text-align:left;display:flex;align-items:center;gap:8px;min-width:0}
+.racik-grid button .rno{flex:none;width:24px;height:24px;border-radius:8px;background:var(--surface);color:var(--text);display:grid;place-items:center;font-size:12px;font-weight:900}
+.racik-grid button .rlbl{min-width:0;flex:1;overflow-wrap:break-word}
 .racik-grid button[aria-pressed="true"]{background:var(--green);border-color:var(--green-dark);color:var(--on-green)}
-.racik-grid button[aria-pressed="true"] .rno{background:rgba(255,255,255,.24);color:#fff}
+.racik-grid button[aria-pressed="true"] .rno{background:rgba(255,255,255,.25);color:#fff}
 details.dt{border:2px solid var(--line);border-radius:16px;background:var(--card);padding:0;width:100%;max-width:100%;min-width:0;overflow:hidden}
 details.dt+details.dt{margin-top:8px}
-details.dt>summary{list-style:none;cursor:pointer;padding:12px 13px;font-weight:800;display:flex;gap:8px;justify-content:space-between;align-items:center;min-width:0}
+details.dt>summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:800;display:flex;gap:8px;justify-content:space-between;align-items:center;min-width:0}
 details.dt>summary::-webkit-details-marker{display:none}
 details.dt>summary::after{content:"+";font-weight:900;color:var(--muted);flex:none}
 details.dt[open]>summary::after{content:"−"}
-details.dt>.in{padding:0 13px 13px;min-width:0;overflow-wrap:anywhere}
-.item{padding:10px 0;border-top:2px solid var(--line);min-width:0}.item:first-child{border-top:0}
-.kv{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-size:13.5px;font-weight:600;min-width:0;overflow-wrap:anywhere}.kv b{font-weight:800}
-.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;overflow-wrap:anywhere}
+details.dt>.in{padding:0 14px 14px;min-width:0;overflow-wrap:break-word}
+.item{padding:11px 0;border-top:2px solid var(--line);min-width:0;line-height:1.55}.item:first-child{border-top:0}
+.kv{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;font-size:13.5px;font-weight:600;line-height:1.55;min-width:0;overflow-wrap:break-word}.kv b{font-weight:800}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;overflow-wrap:break-word}
 .sc{display:grid;gap:10px;margin-top:10px}
 .sc .r{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-weight:800;font-size:14px}
 .sc .r .progress{grid-column:1/-1;height:10px}
@@ -162,7 +163,7 @@ details.dt>.in{padding:0 13px 13px;min-width:0;overflow-wrap:anywhere}
 
 .paper textarea:disabled,.paper input:disabled{opacity:1;-webkit-text-fill-color:var(--pen);color:var(--pen)}
 .blk-f{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:2px;min-height:24px}
-.lnk{border:0;background:none;padding:6px 0;font:700 12px var(--font);color:var(--rxb);text-decoration:underline;min-height:30px;text-align:left}
+.lnk{border:0;background:none;padding:6px 0;font:700 12.5px var(--font);color:var(--rxb);text-decoration:underline;min-height:30px;text-align:left}
 .ln:not(.l2){align-items:flex-start}
 .tabs[hidden]{display:none}
 .answer .mk{color:#fff}
@@ -170,76 +171,91 @@ details.dt>.in{padding:0 13px 13px;min-width:0;overflow-wrap:anywhere}
 .answer.miss .mk{color:transparent}
 
 /* ===== BUNGKUS OBAT & LEMBAR PENGAMATAN (GAMBAR 1 & GAMBAR 2) ===== */
-.pkg-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px;width:100%;min-width:0}
-@media(min-width:680px){.pkg-grid{grid-template-columns:220px minmax(0,1fr)}}
+.pkg-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:14px;width:100%;min-width:0}
+@media(min-width:680px){.pkg-grid{grid-template-columns:230px minmax(0,1fr)}}
 .pkg-photo-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px;position:relative;overflow:hidden;min-height:190px;width:100%;min-width:0}
 .pkg-photo-box img{max-width:100%;max-height:185px;object-fit:contain;border-radius:8px;cursor:zoom-in;transition:transform .2s}
 .pkg-photo-box img:hover{transform:scale(1.04)}
-.pkg-zoom-hint{margin-top:8px;font-size:11px;font-weight:800;color:#4b5563;background:#f3f4f6;padding:4px 10px;border-radius:99px;border:1px solid #e5e7eb;text-align:center}
-.pkg-back{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;align-content:start;width:100%;min-width:0}
-.pkg-back-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;border-bottom:2px dashed var(--line);padding-bottom:8px;min-width:0}
-.pkg-back-list{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-size:13px;line-height:1.45;min-width:0;overflow-wrap:anywhere}
+.pkg-zoom-hint{margin-top:8px;font-size:11.5px;font-weight:800;color:#4b5563;background:#f3f4f6;padding:4px 10px;border-radius:99px;border:1px solid #e5e7eb;text-align:center}
+.pkg-back{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:14px;display:grid;grid-template-columns:minmax(0,1fr);gap:9px;align-content:start;width:100%;min-width:0}
+.pkg-back-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;border-bottom:2px dashed var(--line);padding-bottom:10px;min-width:0}
+.pkg-back-list{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;font-size:13.5px;line-height:1.55;min-width:0;overflow-wrap:break-word}
 .pkg-back-list.blurred{filter:blur(6px);user-select:none;pointer-events:none}
-.gol-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:99px;font-size:11.5px;font-weight:800;border:1.5px solid var(--line);background:var(--card);max-width:100%}
+.gol-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:99px;font-size:12px;font-weight:800;border:1.5px solid var(--line);background:var(--card);max-width:100%}
 .gol-dot{width:20px;height:20px;border-radius:50%;border:2px solid #111;display:inline-grid;place-items:center;font-weight:900;font-size:11px;line-height:1;flex:none}
 .gol-dot.keras{background:#e11d48;color:#111}
 .gol-dot.bebas_terbatas{background:#1d4ed8;color:#fff}
 .gol-dot.bebas{background:#16a34a;color:#fff}
 .gol-dot.jamu{background:#fff;border-color:#15803d;color:#15803d;font-size:12px}
-.pno-box{background:#111;color:#fff;padding:4px 9px;border-radius:7px;font-size:11px;font-weight:800;line-height:1.35;display:inline-block;max-width:100%;overflow-wrap:anywhere}
+.pno-box{background:#111;color:#fff;padding:5px 10px;border-radius:8px;font-size:11.5px;font-weight:800;line-height:1.4;display:inline-block;max-width:100%;overflow-wrap:break-word}
 /* Lembar Pengamatan Worksheet (Gambar 2) */
-.lp-sheet{border:2px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin-top:12px;width:100%;max-width:100%;min-width:0}
-.lp-sheet-head{background:var(--surface);padding:11px 12px;border-bottom:2px solid var(--line);text-align:center}
-.lp-sheet-head h3{margin:0;font-size:14.5px;letter-spacing:.3px;text-transform:uppercase}
-.lp-form-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding:12px;width:100%;min-width:0}
+.lp-sheet{border:2px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin-top:14px;width:100%;max-width:100%;min-width:0}
+.lp-sheet-head{background:var(--surface);padding:12px 14px;border-bottom:2px solid var(--line);text-align:center}
+.lp-sheet-head h3{margin:0 0 2px;font-size:15px;letter-spacing:.3px;text-transform:uppercase}
+.lp-form-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:14px;width:100%;min-width:0}
 @media(min-width:640px){.lp-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.lp-col{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:11px;display:flex;flex-direction:column;gap:6px;min-width:0;width:100%}
+.lp-col{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:7px;min-width:0;width:100%}
 .lp-col.full{grid-column:1/-1}
 .lp-col.good{border-color:var(--green);background:var(--green-soft)}
 .lp-col.partial{border-color:#e0a800;background:var(--amber-soft)}
 .lp-col.bad{border-color:var(--red);background:var(--red-soft)}
-.lp-col-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-weight:900;min-width:0}
-.lp-col-code{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:7px;background:var(--green);color:var(--on-green);font-size:12px;font-weight:900;flex:none}
+.lp-col-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:900;min-width:0}
+.lp-col-code{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--green);color:var(--on-green);font-size:12px;font-weight:900;flex:none;margin-right:4px}
 .lp-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px;min-width:0}
-.lp-chips button{border:1.5px solid var(--line);background:var(--card);border-radius:8px;padding:4px 8px;font-size:11px;font-weight:800;text-align:left;max-width:100%;overflow-wrap:anywhere}
+.lp-chips button{border:1.5px solid var(--line);background:var(--card);border-radius:8px;padding:5px 9px;font-size:11.5px;font-weight:800;text-align:left;max-width:100%}
 .lp-chips button:hover{border-color:var(--rxb)}
-/* Tabel Rekap Lembar Pengamatan & Scroll Horizontal Desktop */
-.lp-scroll-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:7px 10px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;font-size:12px;font-weight:800}
+/* Tabel Rekap Lembar Pengamatan & Scroll Horizontal Desktop/Tablet/Mobile */
+.lp-scroll-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding:8px 12px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;font-size:12.5px;font-weight:800}
 .lp-scroll-btns{display:flex;gap:6px;align-items:center}
 .lp-scroll-btns button{border:1.5px solid var(--line);border-bottom-width:3px;background:var(--card);border-radius:9px;padding:5px 10px;font-size:12px;font-weight:900}
-.lp-table-wrap{width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;border:2px solid var(--line);border-radius:14px;background:var(--card);margin-top:8px;scrollbar-width:thin;cursor:grab}
+.lp-table-wrap{display:block;width:0;min-width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:2px solid var(--line);border-radius:14px;background:var(--card);margin-top:8px;scrollbar-width:thin;cursor:grab}
 .lp-table-wrap:active{cursor:grabbing}
 .lp-table-wrap::-webkit-scrollbar{height:10px}
 .lp-table-wrap::-webkit-scrollbar-track{background:var(--surface);border-radius:8px}
 .lp-table-wrap::-webkit-scrollbar-thumb{background:var(--green);border-radius:8px}
-table.lp-tbl{width:100%;border-collapse:collapse;min-width:1040px;font-size:12.5px;line-height:1.45}
-table.lp-tbl th,table.lp-tbl td{border:1.5px solid var(--line);padding:9px 10px;vertical-align:top;text-align:left;overflow-wrap:anywhere}
+table.lp-tbl{width:100%;border-collapse:collapse;min-width:1120px;font-size:13px;line-height:1.5}
+table.lp-tbl th,table.lp-tbl td{border:1.5px solid var(--line);padding:10px 12px;vertical-align:top;text-align:left;overflow-wrap:break-word;word-break:normal}
 table.lp-tbl th{background:var(--surface);font-weight:900;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2}
-table.lp-tbl td.lp-cell-hide,.lp-mcard-val.lp-cell-hide{filter:blur(5px);cursor:pointer;user-select:none;transition:filter .15s}
-table.lp-tbl td.lp-cell-hide:hover,.lp-mcard-val.lp-cell-hide:hover{filter:blur(2px)}
+table.lp-tbl td.lp-cell-hide,.lp-mitem.lp-cell-hide,.calc-hide.lp-cell-hide{filter:blur(5px);cursor:pointer;user-select:none;transition:filter .15s}
+table.lp-tbl td.lp-cell-hide:hover,.lp-mitem.lp-cell-hide:hover,.calc-hide.lp-cell-hide:hover{filter:blur(2px)}
 table.lp-tbl tr:nth-child(even) td{background:rgba(128,128,128,.04)}
 .tbl-thumb{width:54px;height:54px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px;padding:2px;cursor:zoom-in;display:block;margin-bottom:4px;flex:none}
-/* Tabel Responsif (Racikan & Teori berubah jadi Kartu Rapi di Mobile) */
-@media(max-width:640px){
-  .lp-table-wrap.resp-wrap{overflow-x:visible;border:0;background:transparent;cursor:default}
-  table.lp-tbl.resp-tbl{min-width:0!important;width:100%!important;display:grid;gap:10px}
-  table.lp-tbl.resp-tbl thead{display:none}
-  table.lp-tbl.resp-tbl tbody{display:grid;gap:10px;width:100%}
-  table.lp-tbl.resp-tbl tr{display:grid;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:11px 12px;width:100%}
-  table.lp-tbl.resp-tbl td{border:0;padding:3px 0;background:transparent!important;display:block;width:100%}
-  table.lp-tbl.resp-tbl td::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);margin-bottom:2px}
-}
 /* Kartu Rekap Lembar Pengamatan (a)-(f) untuk Mobile */
-.lp-mcards{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:10px;width:100%;min-width:0}
-.lp-mcard{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;min-width:0}
-.lp-mcard-head{display:flex;gap:10px;align-items:center;border-bottom:2px dashed var(--line);padding-bottom:8px;min-width:0}
-.lp-mcard-item{background:var(--card);border:1.5px solid var(--line);border-radius:11px;padding:8px 10px;font-size:12.5px;line-height:1.45;min-width:0;overflow-wrap:anywhere}
-.lp-mcard-lbl{font-size:11px;font-weight:900;color:var(--green-dark);text-transform:uppercase;margin-bottom:2px;display:block}
+.lp-mcards{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:12px;width:100%;min-width:0}
+.lp-mcard{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:14px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;width:100%;min-width:0}
+.lp-mcard-head{display:flex;gap:12px;align-items:flex-start;border-bottom:2px dashed var(--line);padding-bottom:10px;min-width:0;flex-wrap:wrap}
+.lp-mcard-head img{width:64px;height:64px;object-fit:contain;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:4px;flex:none;cursor:zoom-in}
+.lp-mcard-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;min-width:0}
+@media(min-width:600px){.lp-mcard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lp-mitem{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.5;min-width:0;overflow-wrap:break-word}
+.lp-mitem>b{display:block;font-size:11.5px;font-weight:900;color:var(--green-dark);text-transform:uppercase;letter-spacing:.2px;margin-bottom:3px}
+/* Layout Ergonomis Panduan, Racikan & Perbandingan BSO */
+.racik-summary{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:11px 14px;margin-top:10px;font-size:13.5px;line-height:1.55}
+.calc-list,.func-list{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:10px;width:100%;min-width:0}
+.calc-item,.func-item{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;min-width:0}
+@media(min-width:680px){
+  .calc-item{grid-template-columns:190px minmax(0,1fr) auto;align-items:center;gap:12px}
+  .func-item{grid-template-columns:190px 210px minmax(0,1fr);align-items:start;gap:12px}
+}
+.calc-name,.func-name{font-weight:900;font-size:14.5px;color:var(--text);line-height:1.35}
+.calc-formula{font-size:13.5px;color:var(--muted);font-weight:700;line-height:1.45}
+.calc-take{display:inline-flex;align-items:center;justify-self:start;background:var(--green-soft);color:var(--green-dark);font-weight:900;font-size:13px;padding:6px 11px;border-radius:10px;line-height:1.35}
+.func-desc{font-size:13.5px;line-height:1.55;color:var(--text)}
+.step-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.step-list li{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1.5px solid var(--line);border-radius:13px;padding:10px 13px;font-size:14px;line-height:1.55}
+.step-list li .sno{flex:none;width:24px;height:24px;border-radius:8px;background:var(--green);color:var(--on-green);font-weight:900;font-size:12.5px;display:grid;place-items:center;margin-top:1px}
+.bso-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px;width:100%;min-width:0}
+@media(min-width:780px){.bso-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.bso-card{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.bso-card-head{border-bottom:2px dashed var(--line);padding-bottom:8px}
+.bso-card-head h4{margin:0;font-size:15.5px;font-weight:900;color:var(--text)}
+.bso-kv{font-size:13px;line-height:1.5}
+.bso-kv b{display:block;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);margin-bottom:1px}
 /* Etiket Apotek YARSI */
-.etiket{border:2px solid #222;border-radius:10px;padding:12px 13px;font-size:12.5px;line-height:1.45;color:#111;width:100%;max-width:360px;box-shadow:0 2px 6px rgba(0,0,0,.08);overflow-wrap:anywhere}
+.etiket{border:2px solid #1e293b;border-radius:12px;padding:14px 15px;font-size:13px;line-height:1.55;color:#0f172a;width:100%;box-shadow:0 2px 8px rgba(15,23,42,.08);overflow-wrap:break-word}
 .etiket.putih{background:#ffffff}
-.etiket.biru{background:#bae6fd;border-color:#0369a1}
-.etiket-head{text-align:center;border-bottom:2px solid #222;padding-bottom:4px;margin-bottom:6px;font-weight:900;font-size:12px}
+.etiket.biru{background:#e0f2fe;border-color:#0369a1}
+.etiket-head{text-align:center;border-bottom:2px solid #1e293b;padding-bottom:6px;margin-bottom:8px;font-weight:900;font-size:13px;letter-spacing:.3px}
 /* Lightbox Modal */
 .rx-modal{position:fixed;inset:0;background:rgba(10,15,25,.82);z-index:9999;display:grid;place-items:center;padding:16px}
 .rx-modal[hidden]{display:none}
@@ -754,73 +770,72 @@ function viewPanduan(m){
   else if(!S.quiz)startQuiz(panduanQs(),'Kuis Panduan Praktikum & Racikan');else drawQuiz();
 }
 
-const RACIK_SHORT=['Pulveres Parasetamol','Kapsul Racikan Asma','Unguentum 2-4 (Salep)','Potio Nigra (OBH)','Lotio Kummerfeldi','Emulsi Minyak Ikan'];
+const RACIK_SHORT=['Pulveres Parasetamol','Kapsul Racikan Asma','Salep 2-4 (Unguentum)','Potio Nigra (OBH)','Lotio Kummerfeldi','Emulsi Minyak Ikan'];
 function drawRacikan(){
   const r=RACIKAN[S.racik.idx]||RACIKAN[0],hide=S.racik.hideCalc;
+  const [prakShort,prakDosen]=(r.praktikum||'').split('—').map(s=>s.trim());
   $('#list').innerHTML=`
   <div class="card">
-    <div class="seg racik-grid" role="group" aria-label="Pilih resep racikan">
-      ${RACIKAN.map((x,i)=>`<button aria-pressed="${i===S.racik.idx}" data-racik="${i}">${i+1}. ${esc(RACIK_SHORT[i]||x.nama.split('(')[0].trim())}</button>`).join('')}
+    <div class="racik-grid" role="group" aria-label="Pilih resep racikan">
+      ${RACIKAN.map((x,i)=>`<button aria-pressed="${i===S.racik.idx}" data-racik="${i}"><span class="rno">${i+1}</span><span class="rlbl">${esc(RACIK_SHORT[i]||x.nama)}</span></button>`).join('')}
     </div>
-    <div style="margin-top:14px">
-      <div class="step-h"><span class="badge">${esc(r.praktikum)}</span><span class="badge blue">${esc(r.bso)}</span></div>
+    <div style="margin-top:16px">
+      <div class="step-h">
+        <span class="badge">${esc(prakShort||r.praktikum)}</span>
+        <span class="badge blue">${esc(r.bso)}</span>
+        ${prakDosen?`<span class="muted">Pengampu: ${esc(prakDosen)}</span>`:''}
+      </div>
       <h2>${esc(r.nama)}</h2>
-      <p class="sub">Pasien: <b>${esc(r.pro)}</b> · Indikasi/Kasus: ${esc(r.keluhan)}</p>
+      <div class="racik-summary">
+        <div><b>Pasien:</b> ${esc(r.pro)}</div>
+        <div style="margin-top:3px"><b>Indikasi / Skenario Praktikum:</b> ${esc(r.keluhan)}</div>
+      </div>
     </div>
 
-    <div class="fgrid c2" style="margin-top:12px">
+    <div class="fgrid c2" style="margin-top:14px">
       <div>
         <label class="l">Resep &amp; Formula Standar</label>
-        <div class="paper" style="padding:14px"><div class="keyp" style="font-size:18px">${esc(r.resep)}</div></div>
+        <div class="paper"><div class="keyp">${esc(r.resep)}</div></div>
       </div>
       <div>
         <label class="l">Etiket Obat (${r.etiket==='putih'?'Etiket Putih — Obat Dalam':'Etiket Biru — Obat Luar'})</label>
         <div class="etiket ${r.etiket}">
           <div class="etiket-head">APOTEK YARSI<br><span style="font-weight:600;font-size:11px">Jl. Letjen Suprapto, Cempaka Putih, Jakarta Pusat</span></div>
-          <div style="white-space:pre-line;font-weight:800">${esc(r.etiketTeks)}</div>
+          <div style="white-space:pre-line;font-weight:700">${esc(r.etiketTeks)}</div>
         </div>
       </div>
     </div>
 
-    <div style="margin-top:16px">
+    <div style="margin-top:18px">
       <div class="row between">
-        <h3>1. Perhitungan Penimbangan Bahan / Tablet</h3>
-        <button class="secondary small" data-act="racikhide">${hide?'👁️ Tampilkan Hasil Hitung':'🙈 Sembunyikan Hasil (Latihan Hitung)'}</button>
+        <h3 style="margin:0">1. Perhitungan Penimbangan Bahan / Tablet</h3>
+        <button class="secondary small" data-act="racikhide">${hide?'👁️ Tampilkan Hasil Hitung':'🙈 Mode Latihan Hitung'}</button>
       </div>
-      <div class="lp-table-wrap resp-wrap" style="margin-top:8px">
-        <table class="lp-tbl resp-tbl">
-          <thead><tr><th>Nama Bahan Obat</th><th>Perhitungan Proporsi / Dosis</th><th>Jumlah yang Diambil / Ditimbang</th></tr></thead>
-          <tbody>
-            ${r.perhitungan.map((p,i)=>`<tr>
-              <td data-label="Nama Bahan Obat"><b>${esc(p.bahan)}</b></td>
-              <td data-label="Perhitungan Proporsi / Dosis" class="${hide&&!S.lp.revealed['rc:'+i]?'lp-cell-hide':''}" data-reveal="rc:${i}">${esc(p.rumus)}</td>
-              <td data-label="Jumlah yang Diambil / Ditimbang" class="${hide&&!S.lp.revealed['ra:'+i]?'lp-cell-hide':''}" data-reveal="ra:${i}"><b>${esc(p.ambil)}</b></td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
+      ${hide?`<div class="hint">Ketuk bagian yang buram untuk membuka perhitungan per bahan obat.</div>`:''}
+      <div class="calc-list">
+        ${r.perhitungan.map((p,i)=>`<div class="calc-item">
+          <div class="calc-name">${esc(p.bahan)}</div>
+          <div class="calc-formula calc-hide ${hide&&!S.lp.revealed['rc:'+i]?'lp-cell-hide':''}" data-reveal="rc:${i}">${esc(p.rumus)}</div>
+          <div class="calc-take calc-hide ${hide&&!S.lp.revealed['ra:'+i]?'lp-cell-hide':''}" data-reveal="ra:${i}">Diambil: ${esc(p.ambil)}</div>
+        </div>`).join('')}
       </div>
     </div>
 
-    <div style="margin-top:16px">
+    <div style="margin-top:18px">
       <h3>2. Fungsi Tiap Bahan Obat dalam Resep (Laporan Praktikum)</h3>
-      <div class="lp-table-wrap resp-wrap" style="margin-top:8px">
-        <table class="lp-tbl resp-tbl">
-          <thead><tr><th>Bahan</th><th>Fungsi Farmasetik / Farmakologik</th><th>Keterangan &amp; Alasan</th></tr></thead>
-          <tbody>
-            ${r.fungsiBahan.map((f,i)=>`<tr>
-              <td data-label="Bahan"><b>${esc(f.bahan)}</b></td>
-              <td data-label="Fungsi Farmasetik / Farmakologik" class="${hide&&!S.lp.revealed['rf:'+i]?'lp-cell-hide':''}" data-reveal="rf:${i}"><span class="badge">${esc(f.peran)}</span></td>
-              <td data-label="Keterangan & Alasan">${esc(f.ket)}</td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
+      <div class="func-list">
+        ${r.fungsiBahan.map((f,i)=>`<div class="func-item">
+          <div class="func-name">${esc(f.bahan)}</div>
+          <div class="calc-hide ${hide&&!S.lp.revealed['rf:'+i]?'lp-cell-hide':''}" data-reveal="rf:${i}"><span class="badge">${esc(f.peran)}</span></div>
+          <div class="func-desc">${esc(f.ket)}</div>
+        </div>`).join('')}
       </div>
     </div>
 
-    <div style="margin-top:16px">
+    <div style="margin-top:18px">
       <h3>3. Cara Kerja / Pembuatan di Laboratorium</h3>
-      <ol style="margin:6px 0 0;padding-left:20px;display:grid;gap:6px;font-size:14px">
-        ${r.langkah.map(l=>`<li>${esc(l)}</li>`).join('')}
+      <ol class="step-list">
+        ${r.langkah.map((l,i)=>`<li><span class="sno">${i+1}</span><span>${esc(l)}</span></li>`).join('')}
       </ol>
     </div>
   </div>`;
@@ -831,20 +846,18 @@ function drawTeoriPanduan(){
   <div class="card">
     <h3>Perbedaan 3 Jenis BSO Cair: Solutio vs Suspensi vs Emulsi</h3>
     <p class="sub">Berdasarkan diagram penggolongan BSO Cair pada Buku Penuntun Praktikum hal. 13.</p>
-    <div class="lp-table-wrap resp-wrap" style="margin-top:8px">
-      <table class="lp-tbl resp-tbl">
-        <thead><tr><th>Jenis BSO Cair</th><th>Tampilan Fisik</th><th>Sifat Zat &amp; Fase</th><th>Zat Tambahan Khas</th><th>Aturan Kocok</th><th>Contoh Sediaan Praktikum</th></tr></thead>
-        <tbody>
-          ${(TEORI_BSO.perbandinganCair||[]).map(x=>`<tr>
-            <td data-label="Jenis BSO Cair"><b>${esc(x.jenis)}</b></td>
-            <td data-label="Tampilan Fisik">${esc(x.tampilan)}</td>
-            <td data-label="Sifat Zat & Fase">${esc(x.komponen)}</td>
-            <td data-label="Zat Tambahan Khas">${esc(x.zatTambahan)}</td>
-            <td data-label="Aturan Kocok"><b>${esc(x.kocok)}</b></td>
-            <td data-label="Contoh Sediaan Praktikum">${esc(x.contoh)}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
+    <div class="bso-grid">
+      ${(TEORI_BSO.perbandinganCair||[]).map((x,i)=>`<div class="bso-card">
+        <div class="bso-card-head">
+          <span class="badge ${i===0?'':i===1?'blue':'warn'}" style="margin-bottom:5px">BSO Cair #${i+1}</span>
+          <h4>${esc(x.jenis)}</h4>
+        </div>
+        <div class="bso-kv"><b>Tampilan Fisik</b><div>${esc(x.tampilan)}</div></div>
+        <div class="bso-kv"><b>Sifat Zat &amp; Fase</b><div>${esc(x.komponen)}</div></div>
+        <div class="bso-kv"><b>Zat Tambahan Khas</b><div>${esc(x.zatTambahan)}</div></div>
+        <div class="bso-kv"><b>Aturan Kocok</b><div><span class="badge ${x.kocok.includes('WAJIB')?'warn':''}">${esc(x.kocok)}</span></div></div>
+        <div class="bso-kv"><b>Contoh Sediaan Praktikum</b><div>${esc(x.contoh)}</div></div>
+      </div>`).join('')}
     </div>
   </div>
 
@@ -946,29 +959,21 @@ function closeZoom(){const m=$('#rxModal');if(m)m.hidden=true}
 
 /* ===== EVENTS ===== */
 function ensure(){
+  gid('resepBtn')?.remove();
+  gid('openResepLauncher')?.remove();
   if(!gid('resepPage')){
     const s=document.createElement('section');s.id='resepPage';s.className='view';
-    s.innerHTML='<div class="card ub-head"><div class="topline"><button class="back" type="button" data-home>‹ Beranda</button><b>✍️ Latihan Resep &amp; Praktikum Farmakologi</b></div><p class="muted" style="margin:6px 0 0;font-size:13px">20 Kasus RUM, 26 Bungkus &amp; Lembar Pengamatan BSO Cair, serta 6 Resep Racikan Panduan Praktikum FK YARSI.</p></div><div id="resepHost"></div>';
+    s.innerHTML='<div class="card ub-head"><div class="topline"><button class="back" type="button" data-back-kedkel>‹ BLOK KEDKEL</button><b>✍️ Latihan Resep &amp; Praktikum Farmakologi</b></div><p class="muted" style="margin:6px 0 0;font-size:13px">Blok Kedokteran Keluarga — 20 Kasus RUM, 26 Bungkus &amp; Lembar Pengamatan BSO Cair, serta 6 Resep Racikan Panduan Praktikum FK YARSI.</p></div><div id="resepHost"></div>';
     const anchor=gid('glossaryPage')||gid('analytics')||document.querySelector('main .view:last-of-type');
     anchor&&anchor.parentNode?anchor.parentNode.insertBefore(s,anchor):document.body.appendChild(s);
   }
-  const menu=gid('menuSectionContent');
-  if(menu&&!gid('resepBtn')){
-    const b=document.createElement('button');b.className='secondary menu-item';b.id='resepBtn';b.type='button';
-    b.innerHTML='<span class="menu-icon">✍️</span><span>Latihan Resep</span>';
-    menu.insertBefore(b,gid('glossaryBtn')||gid('studyPlusBtn')||null);
-  }
-  const launcher=gid('examLauncher');
-  if(launcher&&!gid('openResepLauncher')){
-    const grid=launcher.querySelector('.exam-launcher-grid,.exam-launch-grid');
-    if(grid){
-      const lb=document.createElement('button');
-      lb.className='exam-launch-card farmako';
-      lb.id='openResepLauncher';
-      lb.type='button';
-      lb.innerHTML='<span class="exam-launch-icon">✍️</span><span class="exam-launch-copy"><b>LATIHAN FARMAKO &amp; RESEP</b><small>20 Kasus Tulis Resep · 26 Bungkus &amp; Lembar Pengamatan BSO Cair · 6 Resep Racikan</small></span>';
-      grid.appendChild(lb);
-    }
+  const kedkel=gid('blokKedkelPage');
+  if(kedkel&&!gid('openResepKedkel')){
+    const wrap=document.createElement('div');
+    wrap.className='materi-section resep-kedkel-section';
+    wrap.innerHTML='<button class="materi-button resep-kedkel-button" id="openResepKedkel" type="button" aria-label="Buka Latihan Resep Farmakologi">✍️ LATIHAN RESEP &amp; PRAKTIKUM FARMAKOLOGI</button>';
+    const anchor=kedkel.querySelector('.latihan-materi-section')||kedkel.querySelector('.materi-section')||kedkel.querySelector('.exam-page-header');
+    if(anchor)anchor.insertAdjacentElement('afterend',wrap);else kedkel.prepend(wrap);
   }
 }
 function init(){
@@ -1095,7 +1100,7 @@ sr.addEventListener('keydown',e=>{
 
 }
 function open(){ensure();if(!gid('resepPage'))return;window.show('resepPage');init();scrollTo({top:0})}
-document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('button');if(!t)return;if(t.id==='resepBtn'||t.id==='openResepLauncher')return open();if(t.matches('#resepPage [data-home]')){stopTimer();return window.show('home')}});
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('button');if(!t)return;if(t.id==='openResepKedkel')return open();if(t.matches('#resepPage [data-back-kedkel],#resepPage [data-home]')){stopTimer();return window.show(gid('blokKedkelPage')?'blokKedkelPage':'home')}});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure);else ensure();
 window.CLINED_RESEP={open};
 })();

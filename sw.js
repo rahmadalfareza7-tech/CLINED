@@ -1,4 +1,4 @@
-const CACHE='clined-web-v100-resep-mobile-fix';
+const CACHE='clined-web-v101-kedkel-resep';
 const CORE=['./app.html', './index.html', './css/landing.css', './css/polish.css', './js/ability-classifier.js', './js/landing.js', './apple-touch-icon.png', './assets/clined-logo.png', './assets/flashcards/brain.svg', './assets/flashcards/ecg.svg', './assets/flashcards/eye.svg', './assets/flashcards/heart.svg', './assets/flashcards/kidney.svg', './assets/flashcards/liver.svg', './assets/flashcards/lung.svg', './assets/flashcards/skin.svg', './assets/normal-values.jpeg', './css/style.css', './css/motion.css', './favicon-32.png', './icon-192.png', './icon-512.png', './icon.svg', './js/app.js', './js/content-manager.js', './js/auth-gate.js', './js/photo-compress.js', './js/photo-store.js', './js/question-bank-engine.js', './manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
@@ -32,7 +32,7 @@ self.addEventListener('fetch',e=>{
   const liveAsset = /\.(?:html|css|js|mjs|webmanifest)$/i.test(url.pathname) || url.pathname==='/' || url.pathname==='/sw.js';
   if(liveAsset){
     e.respondWith(
-      fetch(req).then(res=>{
+      fetch(req,{cache:'no-cache'}).then(res=>{
         if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{});}
         return res;
       }).catch(()=>caches.match(req).then(cached=>cached||caches.match('./app.html').then(fallback=>fallback||new Response('Offline',{status:503}))))
