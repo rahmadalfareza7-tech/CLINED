@@ -284,18 +284,121 @@ const S={
   step:0,
   f:null,
   chk:{},
+  xpGiven:null,
+  caseXpTotal:0,
+  sessionXp:0,
   t0:0,
   tm:null,
   quiz:null,
   foc:{i:0,f:'l1'},
   sub:{sed:'lp',sing:'kuis',pad:'kuis',pan:'racik'},
-  lp:{idx:0,examMode:false,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''},tblFilter:'all',tblSearch:'',tblHide:false,tblMode:'auto',revealed:{}},
+  lp:{idx:0,examMode:false,hideLabel:false,checked:false,isExample:false,xpCols:{},lastXpGain:0,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''},tblFilter:'all',tblSearch:'',tblHide:false,tblMode:'auto',revealed:{}},
   racik:{idx:0,hideCalc:false}
 };
+
+/* ===== REWARD EXP FARMAKOLOGI (+10 EXP SETIAP JAWABAN BENAR) ===== */
+const XP_PER_CORRECT=10;
+function getTotalXP(){
+  try{
+    const raw=localStorage.getItem('gaster_v11_xp');
+    return Math.max(0,Number(raw?JSON.parse(raw):0)||0);
+  }catch{return 0;}
+}
+function updateHeaderXP(){
+  const el=gid('resepXpLiveBadge');
+  if(!el)return;
+  const total=getTotalXP();
+  el.textContent=`⚡ ${total} XP${S.sessionXp?` (+${S.sessionXp} EXP sesi ini)`:''}`;
+}
+function awardFarmakoXP(correctCount,reason,refPrefix,silentPopup=false){
+  const n=Math.max(0,Math.floor(Number(correctCount)||0));
+  if(!n)return 0;
+  const totalGain=n*XP_PER_CORRECT;
+  S.sessionXp=(S.sessionXp||0)+totalGain;
+  const stamp=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  const xpBefore=getTotalXP();
+  if(typeof window!=='undefined'&&typeof window.addXP==='function'){
+    const label=n===1?`${reason} (+${XP_PER_CORRECT} EXP)`:`${reason} (${n} benar × ${XP_PER_CORRECT} EXP)`;
+    for(let i=0;i<n;i++){
+      const isLast=(i===n-1);
+      try{
+        window.addXP(
+          XP_PER_CORRECT,
+          label,
+          {
+            kind:'materi',
+            ref:`${refPrefix||'farmako'}:${i}:${stamp}`.slice(0,80),
+            silent:silentPopup||n>1||!isLast
+          }
+        );
+      }catch{}
+    }
+    const xpAfter=getTotalXP();
+    const leveledUp=Math.floor(xpAfter/100)>Math.floor(xpBefore/100);
+    if(!silentPopup&&n>1&&typeof window.showXPPopup==='function'){
+      try{window.showXPPopup(totalGain,label,leveledUp);}catch{}
+    }
+  }
+  updateHeaderXP();
+  return totalGain;
+}
+function awardCaseStepXP(st,silentPopup=false){
+  const c=S.case,f=S.f;
+  if(!c||!f||!S.xpGiven)return 0;
+  let n=0,reason=`Kasus #${c.id}`;
+  if(st==='s1'){
+    if(f.dx===c.dx&&!S.xpGiven.s1){
+      S.xpGiven.s1=true;
+      n=1;
+      reason=`Kasus #${c.id} • Diagnosis benar`;
+    }
+  }else if(st==='s3'){
+    const j=judge3();
+    for(const p of f.picks){
+      const lc=p.toLowerCase();
+      if((j.req.includes(lc)||j.alt.includes(lc))&&!S.xpGiven.s3[lc]){
+        S.xpGiven.s3[lc]=true;
+        n++;
+      }
+    }
+    reason=`Kasus #${c.id} • Pilihan obat benar`;
+  }else if(st==='s4'){
+    const r=checkResep(c,f);
+    for(const o of r.out){
+      if(!o.miss&&o.r&&o.r.pts===o.r.max&&!S.xpGiven.s4Rows[o.idx]){
+        S.xpGiven.s4Rows[o.idx]=true;
+        n++;
+      }
+    }
+    const activeRows=(f.rows||[]).filter(x=>x.l1.trim()||x.l2.trim());
+    if(r.parafOk&&activeRows.length>0&&activeRows.every(x=>x.paraf)&&!S.xpGiven.s4Paraf){
+      S.xpGiven.s4Paraf=true;
+      n++;
+    }
+    if(r.proOk&&r.usiaOk&&!S.xpGiven.s4Id){
+      S.xpGiven.s4Id=true;
+      n++;
+    }
+    reason=`Kasus #${c.id} • Penulisan resep benar`;
+  }else if(st==='s5'){
+    for(const idx of f.l5){
+      if(!S.xpGiven.s5[idx]){
+        S.xpGiven.s5[idx]=true;
+        n++;
+      }
+    }
+    reason=`Kasus #${c.id} • Informasi pasien benar`;
+  }
+  if(!n)return 0;
+  const gained=awardFarmakoXP(n,reason,`farmako:case:${c.id}:${st}`,silentPopup);
+  S.caseXpTotal=(S.caseXpTotal||0)+gained;
+  return gained;
+}
+
 const TABS=[['kasus','Kasus'],['sediaan','Sediaan & Bungkus'],['panduan','Panduan & Racikan'],['singkatan','Singkatan'],['padat','BSO padat'],['hitung','Hitung']];
 function renderTabs(){$('#tabs').hidden=false;$('#tabs').innerHTML=TABS.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${S.tab===k}" data-tab="${k}">${l}</button>`).join('')}
 function go(tab){stopTimer();S.tab=tab;S.quiz=null;S.case=null;renderTabs();render();scrollTo({top:0})}
-function render(){const m=$('#app');({kasus:viewKasus,sediaan:viewSediaan,panduan:viewPanduan,singkatan:viewSingk,padat:viewPadat,hitung:viewHitung})[S.tab](m);fitAll()}
+function render(){updateHeaderXP();const m=$('#app');({kasus:viewKasus,sediaan:viewSediaan,panduan:viewPanduan,singkatan:viewSingk,padat:viewPadat,hitung:viewHitung})[S.tab](m);fitAll()}
 const P=(label,act,dis,extra='')=>`<button class="primary" data-act="${act}" ${extra} ${dis?'disabled':''}>${label}</button>`;
 const X=(label,act,extra='')=>`<button class="secondary" data-act="${act}" ${extra}>${label}</button>`;
 const acts=(p,s)=>`<div class="actions ${s?'two':''}">${p}${s||''}</div>`;
@@ -327,7 +430,7 @@ function viewKasus(m){
   if(S.case)return viewCase(m);
   const best=bestMap(),passed=CASES.filter(c=>((best[c.id+(S.only?'r':'')]||{}).pct||0)>=80).length,todo=CASES.filter(c=>((best[c.id+(S.only?'r':'')]||{}).pct||0)<80);
   m.innerHTML=`<div class="note"><b>Penting.</b> Kunci jawaban dari catatan mahasiswa (Bella &amp; Syaf), bukan sumber resmi. Bagian yang bertentangan ditandai dan kedua versi diterima. Buka Catatan verifikasi di hasil tiap kasus.</div>
-  <div class="card"><h2>Latihan kasus</h2><p class="sub">Diagnosis, pilihan obat, resep, dan informasi dinilai. Langkah 2 dan 6 cukup dibaca (catatan dr. Lilian).</p>
+  <div class="card"><h2>Latihan kasus</h2><p class="sub">Diagnosis, pilihan obat, resep, dan informasi dinilai. Setiap jawaban benar memberikan <b>+10 EXP</b>.</p>
   <div class="seg" role="group" aria-label="Jenis latihan" style="margin-top:12px"><button aria-pressed="${!S.only}" data-mode="full">Lengkap (6 langkah)</button><button aria-pressed="${S.only}" data-mode="rx">Tulis resep saja</button></div><p class="sub" style="margin-top:8px">${S.only?'Langsung tulis resep. Diagnosis dan obat tersedia di Petunjuk bila perlu.':''}</p><div class="progress" style="margin-top:10px"><i style="width:${100*passed/CASES.length}%"></i></div><p class="sub" style="margin-top:6px">Lulus ${passed} dari ${CASES.length} kasus (nilai 80 ke atas)</p><div class="actions two">${P('Kasus acak yang belum lulus','todo',!todo.length)}${X('Mode ujian acak (15 menit)','exam')}</div></div>
   <div class="cases">${CASES.map(c=>{const bo=best[c.id+(S.only?'r':'')],b=bo&&bo.pct;return `<button class="case ${b>=80?'done':''}" data-case="${c.id}"><span class="no">${b>=80?'✓':c.id}</span><span class="grow"><span class="t">${esc(c.ringkas)}</span><br><span class="d">${b!=null?`Terbaik ${b}%`:'Belum dicoba'}</span></span></button>`}).join('')}</div>`;
 }
@@ -340,6 +443,8 @@ function openCase(id,exam){
   const n=Math.max(0,10-c.p.length-Math.min(2,c.a.length));
   const obatOpts=shuffle([...c.p,...pick(c.a,2),...pick(pool,n)]);
   S.case=c;S.exam=!!exam;S.step=0;S.chk={};S.foc={i:0,f:'l1'};
+  S.xpGiven={s1:false,s3:{},s4Rows:{},s4Paraf:false,s4Id:false,s5:{}};
+  S.caseXpTotal=0;
   S.f={dx:'',dxOpts,obatOpts,picks:[],rows:[{l1:'',l2:'',paraf:false}],pro:'',usia:'',l5:[],note:''};
   S.t0=Date.now();startTimer();render();scrollTo({top:0});
 }
@@ -356,7 +461,7 @@ function viewCase(m){
   m.innerHTML=head+recap+({v:stepV,s1:stepS1,s3:stepS3,s4:stepS4,s5:stepS5,res:stepRes})[st.k]();
   if(S.focusH){S.focusH=false;const h=m.querySelector('h2,.big');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}}
 }
-const stepHead=st=>S.only?`<div class="step-h"><span class="badge">Tulis resep</span></div>`:`<div class="step-h"><span class="badge">Langkah ${st.n}</span><span class="muted">bobot ${st.w}</span></div>`;
+const stepHead=st=>S.only?`<div class="step-h"><span class="badge">Tulis resep</span><span class="badge blue">⚡ +10 EXP / benar</span></div>`:`<div class="step-h"><span class="badge">Langkah ${st.n}</span><span class="muted">bobot ${st.w}</span><span class="badge blue">⚡ +10 EXP / benar</span></div>`;
 const prevBtn=()=>S.exam?X('Sebelumnya','prev'):'';
 function stepV(){
   const c=S.case;
@@ -366,19 +471,19 @@ function answerBtn(label,{r,cls='',dis,attr,mk}){return `<button class="answer $
 function stepS1(){
   const c=S.case,f=S.f,d=!!S.chk.s1,st=stOf('s1');
   const list=f.dxOpts.map((o,i)=>{let cl='';if(d)cl=o===c.dx?'good':(o===f.dx?'bad':'');else if(o===f.dx)cl='sel';return answerBtn(o,{r:1,cls:cl,dis:d,attr:`data-dx="${i}"`,mk:'●'})}).join('');
-  const fb=d?`<div role="status" class="fb ${f.dx===c.dx?'good':'bad'}"><b>${f.dx===c.dx?'Benar.':'Jawaban: '+esc(c.dx)}</b><details class="dt" style="margin-top:10px"><summary>Langkah 2: tujuan terapi (baca saja)</summary><div class="in"><ul>${c.tujuan.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div></details></div>`:'';
+  const fb=d?`<div role="status" class="fb ${f.dx===c.dx?'good':'bad'}"><b>${f.dx===c.dx?'Benar. <span class="tag good" style="margin-left:6px">⚡ +10 EXP</span>':'Jawaban: '+esc(c.dx)}</b><details class="dt" style="margin-top:10px"><summary>Langkah 2: tujuan terapi (baca saja)</summary><div class="in"><ul>${c.tujuan.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div></details></div>`:'';
   const a=S.exam?acts(P('Lanjut','next'),prevBtn()):d?acts(P('Lanjut','next'),X('Coba lagi','retry')):acts(P('Periksa','check',!f.dx));
   return `<section class="card">${stepHead(st)}<h2>Apa diagnosis pasien?</h2><div class="answers">${list}</div>${fb}${a}</section>`;
 }
 function judge3(){const c=S.case,f=S.f,req=c.p.map(x=>x.toLowerCase()),alt=c.a.map(x=>x.toLowerCase());
-  const hit=f.picks.filter(p=>req.includes(p.toLowerCase())).length,wrong=f.picks.filter(p=>!req.includes(p.toLowerCase())&&!alt.includes(p.toLowerCase())).length;
-  return{req,alt,hit,wrong,need:req.length}}
+  const hit=f.picks.filter(p=>req.includes(p.toLowerCase())).length,altHit=f.picks.filter(p=>alt.includes(p.toLowerCase())).length,wrong=f.picks.filter(p=>!req.includes(p.toLowerCase())&&!alt.includes(p.toLowerCase())).length;
+  return{req,alt,hit,altHit,wrong,need:req.length}}
 function stepS3(){
-  const c=S.case,f=S.f,d=!!S.chk.s3,st=stOf('s3'),j=judge3();
+  const c=S.case,f=S.f,d=!!S.chk.s3,st=stOf('s3'),j=judge3(),correctDrugs=j.hit+(j.altHit||0);
   const list=f.obatOpts.map((o,i)=>{const on=f.picks.includes(o),lc=o.toLowerCase();let cl='';
     if(d){if(j.req.includes(lc))cl=on?'good':'miss';else if(j.alt.includes(lc))cl=on?'alt':'';else cl=on?'bad':''}else if(on)cl='sel';
     return answerBtn(o+(d&&j.alt.includes(lc)?' (alternatif di catatan)':''),{cls:cl,dis:d,attr:`data-obat="${i}"`,mk:d&&cl==='bad'?'✕':'✓'})}).join('');
-  const fb=d?`<div role="status" class="fb ${j.hit===j.need&&!j.wrong?'good':'bad'}"><b>${j.hit} dari ${j.need} obat wajib terpilih${j.wrong?`, ${j.wrong} pilihan tidak sesuai`:''}.</b><div style="margin-top:8px"><span class="tag good">hijau benar</span><span class="tag bad">merah tidak sesuai</span><span class="tag" style="background:var(--amber-soft);color:var(--amber)">kuning terlewat</span><span class="tag" style="background:var(--rxbs);color:var(--rxb)">biru alternatif</span></div></div>`:'';
+  const fb=d?`<div role="status" class="fb ${j.hit===j.need&&!j.wrong?'good':'bad'}"><b>${j.hit} dari ${j.need} obat wajib terpilih${j.wrong?`, ${j.wrong} pilihan tidak sesuai`:''}.${correctDrugs?` <span class="tag good" style="margin-left:6px">⚡ +${correctDrugs*XP_PER_CORRECT} EXP (${correctDrugs} obat benar)</span>`:''}</b><div style="margin-top:8px"><span class="tag good">hijau benar</span><span class="tag bad">merah tidak sesuai</span><span class="tag" style="background:var(--amber-soft);color:var(--amber)">kuning terlewat</span><span class="tag" style="background:var(--rxbs);color:var(--rxb)">biru alternatif</span></div></div>`:'';
   const a=S.exam?acts(P('Lanjut','next'),prevBtn()):d?acts(P('Lanjut','next'),X('Coba lagi','retry')):acts(P('Periksa','check',!f.picks.length));
   return `<section class="card">${stepHead(st)}<h2>Pilih obat yang tepat</h2><p class="sub">Terapi kausal dan simtomatis. Pilih semua yang sesuai.</p><div class="answers">${list}</div>${fb}${a}</section>`;
 }
@@ -404,10 +509,12 @@ function revHtml(c){
 }
 function res4(){
   const c=S.case,r=checkResep(c,S.f);
+  const activeRows=(S.f.rows||[]).filter(x=>x.l1.trim()||x.l2.trim());
+  const rxCorrectCount=r.out.filter(o=>!o.miss&&o.r&&o.r.pts===o.r.max).length+(r.parafOk&&activeRows.length>0&&activeRows.every(x=>x.paraf)?1:0)+(r.proOk&&r.usiaOk?1:0);
   const rows=r.out.map(o=>o.miss?`<div class="rowfb"><b>${esc(o.u.o)}</b> <span class="tag bad">tidak ada di kunci</span><div class="sub">Bisa benar secara klinis, tapi tidak ada di catatan sehingga dihitung tambahan (−1).</div></div>`:
-    `<div class="rowfb"><b>${esc(o.u.o)}</b> <span class="muted">${o.r.pts}/${o.r.max}</span><div style="margin-top:6px">${o.r.res.map(x=>`<span class="tag ${x.ok?'good':'bad'}">${x.ok?'✓':'✕'} ${x.label}${x.ok?'':': '+esc(x.exp)}</span>`).join('')}</div></div>`).join('');
+    `<div class="rowfb"><b>${esc(o.u.o)}</b> <span class="muted">${o.r.pts}/${o.r.max}</span> ${o.r.pts===o.r.max?'<span class="tag good">⚡ +10 EXP</span>':''}<div style="margin-top:6px">${o.r.res.map(x=>`<span class="tag ${x.ok?'good':'bad'}">${x.ok?'✓':'✕'} ${x.label}${x.ok?'':': '+esc(x.exp)}</span>`).join('')}</div></div>`).join('');
   const none=r.out.length?'':`<div class="rowfb"><span class="muted">Belum ada obat yang terbaca. Tulis nama obat di baris R/.</span></div>`;
-  return `<div role="status" class="fb ${r.pct>=80?'good':'bad'}"><b>Skor resep ${r.pct}%</b><div style="margin-top:8px">${rows}${none}${r.missing.length?`<div class="rowfb"><span class="tag bad">belum ada</span> ${r.missing.map(k=>esc(k.o)).join(', ')}</div>`:''}<div class="rowfb"><span class="tag ${r.parafOk?'good':'bad'}">${r.parafOk?'✓':'✕'} Tanda tangan / Paraf dokter</span><span class="tag ${r.proOk?'good':'bad'}">${r.proOk?'✓':'✕'} Pro: ${esc(c.pro)}</span><span class="tag ${r.usiaOk?'good':'bad'}">${r.usiaOk?'✓':'✕'} Umur: ${c.usia} th</span></div></div>
+  return `<div role="status" class="fb ${r.pct>=80?'good':'bad'}"><b>Skor resep ${r.pct}%${rxCorrectCount?` <span class="tag good" style="margin-left:6px">⚡ +${rxCorrectCount*XP_PER_CORRECT} EXP (${rxCorrectCount} benar)</span>`:''}</b><div style="margin-top:8px">${rows}${none}${r.missing.length?`<div class="rowfb"><span class="tag bad">belum ada</span> ${r.missing.map(k=>esc(k.o)).join(', ')}</div>`:''}<div class="rowfb"><span class="tag ${r.parafOk?'good':'bad'}">${r.parafOk?'✓':'✕'} Tanda tangan / Paraf dokter</span><span class="tag ${r.proOk?'good':'bad'}">${r.proOk?'✓':'✕'} Pro: ${esc(c.pro)}</span><span class="tag ${r.usiaOk?'good':'bad'}">${r.usiaOk?'✓':'✕'} Umur: ${c.usia} th</span></div></div>
   <details class="dt" style="margin-top:6px"><summary>Lihat resep kunci</summary><div class="in">${keyHtml(c)}</div></details>${revHtml(c)}${c.cat?`<p class="sub" style="margin-top:10px">${esc(c.cat)}</p>`:''}</div>`;
 }
 function l5List(interactive){
@@ -417,7 +524,7 @@ function l5List(interactive){
 function stepS5(){
   const c=S.case,f=S.f,d=!!S.chk.s5,st=stOf('s5');
   const note=`<label class="l" for="note" style="margin-top:12px">Catatan jawabanmu (opsional)</label><textarea class="f" id="note" placeholder="Efek samping, cara pakai, kontrol, pesan penting" >${esc(f.note)}</textarea>`;
-  const body=d?`<p class="sub" style="margin-top:12px">Ketuk poin yang sudah kamu sebut.</p><div class="answers">${l5List(true)}</div><div class="fb"><b>Kamu sebut ${f.l5.length} dari ${c.l5.length}</b></div>`:'';
+  const body=d?`<p class="sub" style="margin-top:12px">Ketuk poin yang sudah kamu sebut (setiap poin benar mendapat +10 EXP).</p><div class="answers">${l5List(true)}</div><div class="fb ${f.l5.length?'good':''}"><b>Kamu sebut ${f.l5.length} dari ${c.l5.length}${f.l5.length?` <span class="tag good" style="margin-left:6px">⚡ +${f.l5.length*XP_PER_CORRECT} EXP</span>`:''}</b></div>`:'';
   const a=S.exam?acts(P('Kumpulkan dan lihat skor','submit'),prevBtn()):d?acts(P('Lihat hasil','next')):acts(P('Buka kunci','check'));
   return `<section class="card">${stepHead(st)}<h2>Informasi untuk pasien</h2><p class="sub">Efek samping, cara pakai, kontrol, dan pesan penting. Ucapkan atau tulis dulu, lalu buka kunci.</p>${note}${body}${a}</section>`;
 }
@@ -430,14 +537,23 @@ function scores(){
   o.total=S.only?o.s4*100/35:o.s1+o.s3+o.s4+o.s5;return o;
 }
 function saveBest(){const t=Math.round(scores().total),b=bestMap(),id=S.case.id+(S.only?'r':''),o=b[id];if(!o||t>=o.pct){b[id]={pct:t,at:Date.now()};try{localStorage.setItem(BEST_KEY,JSON.stringify(b))}catch{}}}
-function finish(){['s1','s3','s4','s5'].forEach(k=>S.chk[k]=true);stopTimer();S.step=STEPS.length-1;saveBest();render();scrollTo({top:0})}
+function finish(){
+  ['s1','s3','s4','s5'].forEach(k=>S.chk[k]=true);
+  const stepsToAward=S.only?['s4']:['s1','s3','s4','s5'];
+  let newlyGained=0;
+  for(const k of stepsToAward){newlyGained+=awardCaseStepXP(k,true)}
+  if(newlyGained>0&&typeof window!=='undefined'&&typeof window.showXPPopup==='function'){
+    try{window.showXPPopup(newlyGained,`Kasus #${S.case.id} selesai (+${newlyGained} EXP)`,false);}catch{}
+  }
+  stopTimer();S.step=STEPS.length-1;saveBest();render();scrollTo({top:0});
+}
 function stepRes(){
   if(S.only)return stepResRx();
   const c=S.case,sc=scores(),pass=sc.total>=80;
   const row=(l,v,mx)=>`<div class="r"><span>${l}</span><span>${Math.round(v)} / ${mx}</span><div class="progress"><i style="width:${100*v/mx}%"></i></div></div>`;
-  return `<section class="card"><div class="step-h"><span class="badge ${pass?'':'warn'}">${pass?'Lulus':'Belum lulus (batas 80)'}</span><span class="muted">Kasus ${c.id}</span></div><div class="big">${Math.round(sc.total)}%</div><div class="sc">${row('Diagnosis',sc.s1,20)}${row('Pilihan obat',sc.s3,25)}${row('Resep',sc.s4,35)}${row('Informasi pasien',sc.s5,20)}</div></section>
+  return `<section class="card"><div class="step-h"><span class="badge ${pass?'':'warn'}">${pass?'Lulus':'Belum lulus (batas 80)'}</span><span class="muted">Kasus ${c.id}</span>${S.caseXpTotal?`<span class="badge blue">⚡ +${S.caseXpTotal} EXP diperoleh</span>`:''}</div><div class="big">${Math.round(sc.total)}%</div><div class="sc">${row('Diagnosis',sc.s1,20)}${row('Pilihan obat',sc.s3,25)}${row('Resep',sc.s4,35)}${row('Informasi pasien',sc.s5,20)}</div></section>
   <section class="card"><h2>Resep yang kamu tulis</h2>${res4()}</section>
-  <section class="card"><h2>Informasi untuk pasien</h2><p class="sub">Ketuk poin yang sudah kamu sebut, skor ikut berubah.</p><div class="answers">${l5List(true)}</div></section>
+  <section class="card"><h2>Informasi untuk pasien</h2><p class="sub">Ketuk poin yang sudah kamu sebut, skor dan EXP (+10 EXP/poin) ikut bertambah.</p><div class="answers">${l5List(true)}</div></section>
   <details class="dt"><summary>Langkah 2: tujuan terapi (baca saja)</summary><div class="in"><ul>${c.tujuan.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div></details>
   <details class="dt"><summary>Langkah 6: monitoring dan evaluasi (baca saja)</summary><div class="in"><ul>${c.mon.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div></details>
   ${acts(P('Ulangi kasus','again'),X('Kasus lain','list'))}`;
@@ -445,7 +561,7 @@ function stepRes(){
 
 function stepResRx(){
   const c=S.case,sc=scores(),pass=sc.total>=80;
-  return `<section class="card"><div class="step-h"><span class="badge ${pass?'':'warn'}">${pass?'Lulus':'Belum lulus (batas 80)'}</span><span class="muted">Kasus ${c.id} · tulis resep saja</span></div><div class="big">${Math.round(sc.total)}%</div></section>
+  return `<section class="card"><div class="step-h"><span class="badge ${pass?'':'warn'}">${pass?'Lulus':'Belum lulus (batas 80)'}</span><span class="muted">Kasus ${c.id} · tulis resep saja</span>${S.caseXpTotal?`<span class="badge blue">⚡ +${S.caseXpTotal} EXP diperoleh</span>`:''}</div><div class="big">${Math.round(sc.total)}%</div></section>
   <section class="card"><h2>Resep yang kamu tulis</h2>${res4()}</section>
   ${acts(P('Ulangi kasus','again'),X('Kasus lain','list'))}`;
 }
@@ -455,12 +571,22 @@ function startQuiz(qs,title){S.quiz={qs,i:0,score:0,ans:null,wrong:[],title};dra
 function drawQuiz(){
   const z=S.quiz,m=$('#quiz');if(!z||!m)return;
   if(z.i>=z.qs.length){const pct=Math.round(100*z.score/z.qs.length);
-    m.innerHTML=`<div class="card"><div class="big">${pct}%</div><p class="sub" style="margin:6px 0 12px">${z.score} dari ${z.qs.length} benar</p><div class="progress"><i style="width:${pct}%"></i></div>${z.wrong.length?`<h3 style="margin-top:16px">Yang salah</h3>${z.wrong.map(w=>`<div class="item"><div>${esc(w.q)}</div><span class="tag good opt-text" style="margin-top:6px">${esc(w.a)}</span></div>`).join('')}`:'<p style="margin-top:14px">Semua benar.</p>'}${acts(P('Ulangi dengan soal baru','qagain'))}</div>`;return}
+    m.innerHTML=`<div class="card"><div class="step-h"><span class="badge">${esc(z.title)}</span><span class="badge blue">⚡ +${z.score*XP_PER_CORRECT} EXP diperoleh</span></div><div class="big">${pct}%</div><p class="sub" style="margin:6px 0 12px">${z.score} dari ${z.qs.length} benar · <b>⚡ +${z.score*XP_PER_CORRECT} EXP</b></p><div class="progress"><i style="width:${pct}%"></i></div>${z.wrong.length?`<h3 style="margin-top:16px">Yang salah</h3>${z.wrong.map(w=>`<div class="item"><div>${esc(w.q)}</div><span class="tag good opt-text" style="margin-top:6px">${esc(w.a)}</span></div>`).join('')}`:'<p style="margin-top:14px">Semua benar.</p>'}${acts(P('Ulangi dengan soal baru','qagain'))}</div>`;return}
   const q=z.qs[z.i],d=z.ans!=null,pct=Math.round(100*z.i/z.qs.length);
   const imgHtml=q.img?`<div class="pkg-photo-box" style="margin-top:10px;min-height:150px"><img src="${esc(q.img)}" alt="Kemasan obat" data-zoom="${esc(q.img)}" data-zoom-title="Soal Kuis Sediaan"><span class="pkg-zoom-hint">🔍 Ketuk gambar untuk memperbesar</span></div>`:'';
-  m.innerHTML=`<div class="card"><div class="q-meta"><span>${esc(z.title)}</span><span>${z.i+1}/${z.qs.length}</span></div><div class="progress" style="margin-top:8px"><i style="width:${pct}%"></i></div>${imgHtml}<p class="q">${esc(q.q)}</p><div class="answers">${q.o.map((o,i)=>{let cl='';if(d){if(o===q.a)cl='good';else if(i===z.ans)cl='bad'}return answerBtn(o,{r:1,cls:cl,dis:d,attr:`data-ans="${i}"`,mk:cl==='bad'?'✕':cl==='good'?'✓':''})}).join('')}</div>${d?`<div class="fb ${q.o[z.ans]===q.a?'good':'bad'}"><b>${q.o[z.ans]===q.a?'Benar.':'Belum tepat.'}</b>${q.o[z.ans]===q.a?'':` Jawaban: <span class="opt-text">${esc(q.a)}</span>`}${q.exp?`<div style="margin-top:6px;font-size:13px">${esc(q.exp)}</div>`:''}</div>${acts(P(z.i+1<z.qs.length?'Lanjut':'Lihat hasil','qnext'))}`:''}</div>`;
+  m.innerHTML=`<div class="card"><div class="q-meta"><span>${esc(z.title)} · ⚡ +10 EXP / benar</span><span>${z.i+1}/${z.qs.length}</span></div><div class="progress" style="margin-top:8px"><i style="width:${pct}%"></i></div>${imgHtml}<p class="q">${esc(q.q)}</p><div class="answers">${q.o.map((o,i)=>{let cl='';if(d){if(o===q.a)cl='good';else if(i===z.ans)cl='bad'}return answerBtn(o,{r:1,cls:cl,dis:d,attr:`data-ans="${i}"`,mk:cl==='bad'?'✕':cl==='good'?'✓':''})}).join('')}</div>${d?`<div class="fb ${q.o[z.ans]===q.a?'good':'bad'}"><b>${q.o[z.ans]===q.a?'Benar! <span class="tag good" style="margin-left:6px">⚡ +10 EXP</span>':'Belum tepat.'}</b>${q.o[z.ans]===q.a?'':` Jawaban: <span class="opt-text">${esc(q.a)}</span>`}${q.exp?`<div style="margin-top:6px;font-size:13px">${esc(q.exp)}</div>`:''}</div>${acts(P(z.i+1<z.qs.length?'Lanjut':'Lihat hasil','qnext'))}`:''}</div>`;
 }
-function answer(i){const z=S.quiz,q=z.qs[z.i];if(z.ans!=null)return;z.ans=i;if(q.o[i]===q.a)z.score++;else z.wrong.push(q);drawQuiz()}
+function answer(i){
+  const z=S.quiz,q=z.qs[z.i];if(z.ans!=null)return;
+  z.ans=i;
+  if(q.o[i]===q.a){
+    z.score++;
+    awardFarmakoXP(1,`${z.title} • Jawaban benar`,`farmako:quiz:${S.tab}:${z.i}`);
+  }else{
+    z.wrong.push(q);
+  }
+  drawQuiz();
+}
 /* pilihan pengecoh: tidak boleh satu kelompok, dan tidak boleh memuat / termuat dalam jawaban benar */
 function opts(a,pool,n=3,grp=()=>''){
   const al=String(a).toLowerCase(),g=grp(a);
@@ -476,7 +602,7 @@ const rb=r=>/^injeksi/.test(r)?'injeksi':r.replace(/\s*\(.*\)/,'').trim();
 function viewSediaan(m){
   const lpBest=lpBestMap(),doneCount=SEDIAAN.filter(s=>(lpBest[s.no]||0)>=80).length;
   m.innerHTML=`<div class="card">
-    <div class="step-h"><span class="badge">Praktikum 2 · BSO Cair</span><span class="muted">DR. Dra. Risdawati Djohan, Apt., MKes</span></div>
+    <div class="step-h"><span class="badge">Praktikum 2 · BSO Cair</span><span class="muted">DR. Dra. Risdawati Djohan, Apt., MKes</span><span class="badge blue">⚡ +10 EXP / benar</span></div>
     <h2>26 Sediaan BSO Cair, Bungkus Obat &amp; Lembar Pengamatan</h2>
     <p class="sub">Lengkap dengan foto bungkus asli &amp; label komposisi/dosis yang telah diverifikasi untuk 26 obat praktikum serta latihan Lembar Pengamatan kolom (a)–(f).</p>
     ${subnav('sed',[['lp','📝 Lembar Pengamatan'],['tabel','📋 Tabel Kunci (a)–(f)'],['daftar','📦 Bungkus & Daftar (26)'],['kuis','🎯 Kuis']])}
@@ -492,6 +618,9 @@ function viewSediaan(m){
 function selectLpDrug(idx){
   S.lp.idx=(idx+SEDIAAN.length)%SEDIAAN.length;
   S.lp.checked=false;
+  S.lp.isExample=false;
+  S.lp.xpCols={};
+  S.lp.lastXpGain=0;
   S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''};
   drawLembarPengamatan();
 }
@@ -500,7 +629,7 @@ function drawLembarPengamatan(){
   const s=SEDIAAN[S.lp.idx]||SEDIAAN[0],lp=s.lp||{},f=S.lp.form,d=S.lp.checked,exam=!!S.lp.examMode,lpBest=lpBestMap();
   const ev=d?evalLembarPengamatan(s,f):null;
   const colCls=c=>!d?'':(c.ok?'good':c.partial?'partial':'bad');
-  const colTag=c=>!d?'':`<span class="tag ${c.ok?'good':c.partial?'warn':'bad'}" style="margin:0">${c.pts}/${c.max}</span>`;
+  const colTag=c=>!d?'':`<span class="tag ${c.ok?'good':c.partial?'warn':'bad'}" style="margin:0">${c.pts}/${c.max}${c.ok&&!S.lp.isExample?' · ⚡+10 EXP':''}</span>`;
   const chipsA=['Solutio (Larutan)','Suspensi oral','Sirup kering (Dry syrup)','Elixir','Gargle (Obat kumur)','Guttae ophthalmicae (Tetes mata)','Guttae auriculares (Tetes telinga)','Guttae nasales (Tetes hidung)','Injeksi ampul','Serbuk injeksi (Vial)','Infus IV','Emulsi oral','Lotio topikal','Enema rektal','Vaginal douche','Nebules inhalasi','Turbuhaler (DPI)','Inhaler (MDI)'];
   const chipsE=['Obat Keras (lingkaran merah K)','Obat Bebas Terbatas (lingkaran biru)','Obat Bebas (lingkaran hijau)','Jamu / Obat Tradisional','Simpan suhu <30°C, terlindung cahaya','Kocok dahulu sebelum dipakai','Rekonstitusi tahan maks. 7 hari'];
 
@@ -645,7 +774,8 @@ function drawLembarPengamatan(){
     </div>
 
     ${d?`<div role="status" class="fb ${ev.pct>=80?'good':'bad'}">
-      <b>Skor Lembar Pengamatan #${s.no} (${esc(s.praktikumNama)} — ${esc(s.n)}): ${ev.pct}% (${ev.pts}/${ev.max} poin)</b>
+      <b>Skor Lembar Pengamatan #${s.no} (${esc(s.praktikumNama)} — ${esc(s.n)}): ${ev.pct}% (${ev.pts}/${ev.max} poin)${!S.lp.isExample&&Object.keys(S.lp.xpCols||{}).length?` <span class="tag good" style="margin-left:6px">⚡ +${Object.keys(S.lp.xpCols).length*XP_PER_CORRECT} EXP (${Object.keys(S.lp.xpCols).length} kolom benar)</span>`:''}</b>
+      ${S.lp.isExample?`<div style="margin-top:4px;font-size:13px" class="muted">💡 Mode contoh kunci jawaban aktif — klik "Kosongkan &amp; Coba Lagi" dan tulis jawaban sendiri untuk mendapat <b>+10 EXP</b> tiap kolom benar.</div>`:''}
       <div style="margin-top:6px"><b>Alasan Pemilihan BSO:</b> ${esc(s.alasanBso)}</div>
       <div style="margin-top:4px"><b>Efek Samping &amp; Perhatian:</b> ${esc(s.efekSamping)}</div>
     </div>`:''}
@@ -977,11 +1107,26 @@ function padQs(){return pick(PADAT,12).map(p=>{const same=PADAT.filter(x=>x.g===
 
 /* ===== HITUNG ===== */
 function viewHitung(m){
-  m.innerHTML=`<div class="note">Alat bantu hitung untuk latihan. Dosis tetap mengikuti pedoman dan dosen.</div>
+  m.innerHTML=`<div class="note">Alat bantu hitung dosis &amp; latihan soal perhitungan resep. Setiap jawaban benar di kuis hitung mendapat <b>+10 EXP</b>.</div>
+  <div id="quiz"></div>
   <div class="card"><h2>Jumlah obat (no.)</h2><p class="sub">Dosis × frekuensi × hari menjadi angka Romawi di resep.</p><div class="fgrid c3"><div><label class="l" for="c1a">Jumlah per minum</label><input class="f" id="c1a" type="number" min="0" step="0.5" value="1" inputmode="decimal"></div><div><label class="l" for="c1b">Kali sehari (dd)</label><input class="f" id="c1b" type="number" min="0" value="3" inputmode="numeric"></div><div><label class="l" for="c1c">Lama (hari)</label><input class="f" id="c1c" type="number" min="0" value="5" inputmode="numeric"></div></div><div class="out" id="o1"></div></div>
   <div class="card"><h2>Dosis per berat badan</h2><p class="sub">Contoh dari catatan: ibuprofen 10 mg/kgBB/dosis, sirup 100 mg/5 ml.</p><div class="fgrid c2"><div><label class="l" for="c2a">Berat badan (kg)</label><input class="f" id="c2a" type="number" min="0" value="15" inputmode="decimal"></div><div><label class="l" for="c2b">Dosis (mg/kgBB)</label><input class="f" id="c2b" type="number" min="0" value="10" inputmode="decimal"></div><div><label class="l" for="c2c">Dosis tersebut per</label><select class="f" id="c2c"><option value="1">dosis</option><option value="d">hari (dibagi)</option></select></div><div><label class="l" for="c2d">Dibagi berapa dosis/hari</label><input class="f" id="c2d" type="number" min="1" value="3" inputmode="numeric"></div><div><label class="l" for="c2e">Kekuatan sirup (mg)</label><input class="f" id="c2e" type="number" min="0" value="100" inputmode="decimal"></div><div><label class="l" for="c2f">per berapa ml</label><input class="f" id="c2f" type="number" min="0" value="5" inputmode="decimal"></div></div><div class="out" id="o2"></div></div>
   <div class="card"><h2>Angka Romawi</h2><div class="fgrid c2"><div><label class="l" for="c3a">Angka</label><input class="f" id="c3a" type="number" min="1" max="399" value="15"></div><div><label class="l" for="c3b">Romawi</label><input class="f" id="c3b" value="XV"></div></div><div class="out" id="o3">XV</div></div>`;
   calc();
+  if(!S.quiz)startQuiz(hitungQs(),'Kuis Hitung Dosis & Romawi');else drawQuiz();
+}
+function hitungQs(){
+  const raw=[
+    {q:'Pasien diresepkan Amoksisilin 500 mg dengan signatura S 3 dd tab I pc selama 5 hari. Berapa jumlah obat (no.) dalam angka Romawi?',a:'no. XV (15 tablet)',o:['no. XV (15 tablet)','no. X (10 tablet)','no. XII (12 tablet)','no. XX (20 tablet)'],exp:'1 tablet × 3 kali/hari × 5 hari = 15 tablet → ditulis no. XV.'},
+    {q:'Anak berat badan 15 kg membutuhkan Ibuprofen 10 mg/kgBB/kali. Sediaan yang ada: Suspensi Ibuprofen 100 mg/5 ml. Berapa dosis sekali minum?',a:'150 mg → 7,5 ml (1 ½ sendok takar 5 ml)',o:['150 mg → 7,5 ml (1 ½ sendok takar 5 ml)','100 mg → 5 ml (1 sendok takar 5 ml)','150 mg → 5 ml (1 sendok takar 5 ml)','300 mg → 15 ml (3 sendok takar 5 ml)'],exp:'Dosis = 15 kg × 10 mg = 150 mg/kali. Volume = (150 mg / 100 mg) × 5 ml = 7,5 ml.'},
+    {q:'Pasien diresepkan obat S 2 dd tab ½ selama 6 hari. Berapa jumlah tablet yang ditulis pada baris R/ (no.)?',a:'no. VI (6 tablet)',o:['no. VI (6 tablet)','no. XII (12 tablet)','no. III (3 tablet)','no. X (10 tablet)'],exp:'0,5 tablet × 2 kali/hari × 6 hari = 6 tablet → ditulis no. VI.'},
+    {q:'Anak berat badan 12 kg diresepkan Amoksisilin 25 mg/kgBB/hari dibagi dalam 3 dosis (tiap 8 jam). Sirup tersedia 125 mg/5 ml. Berapa ml sekali minum?',a:'100 mg/kali → 4 ml tiap 8 jam',o:['100 mg/kali → 4 ml tiap 8 jam','300 mg/kali → 12 ml tiap 8 jam','125 mg/kali → 5 ml tiap 8 jam','75 mg/kali → 3 ml tiap 8 jam'],exp:'Total harian = 12 × 25 = 300 mg/hari. Per dosis (÷3) = 100 mg/kali → (100/125) × 5 ml = 4 ml.'},
+    {q:'Untuk terapi hipertensi kronis selama 30 hari dengan aturan pakai S 1 dd tab I, bagaimana penulisan jumlah obat dalam angka Romawi?',a:'no. XXX',o:['no. XXX','no. XX','no. XL','no. XV'],exp:'1 × 1 × 30 hari = 30 tablet → angka Romawi 30 adalah XXX.'},
+    {q:'Jika pada resep tertulis "Tab. Parasetamol 500 mg no. XVIII", berapa jumlah tablet yang diserahkan kepada pasien?',a:'18 tablet',o:['18 tablet','16 tablet','13 tablet','28 tablet'],exp:'X (10) + V (5) + III (3) = 18 tablet.'},
+    {q:'Pasien diresepkan kapsul antibiotik S 4 dd caps I selama 6 hari. Berapa jumlah kapsul dalam angka Romawi?',a:'no. XXIV (24 kapsul)',o:['no. XXIV (24 kapsul)','no. XXVI (26 kapsul)','no. XIX (19 kapsul)','no. XX (20 kapsul)'],exp:'1 kapsul × 4 kali/hari × 6 hari = 24 kapsul → ditulis no. XXIV.'},
+    {q:'Anak 10 kg membutuhkan Parasetamol 12 mg/kgBB/kali. Sediaan Sirup Parasetamol 120 mg/5 ml. Berapa ml yang diberikan tiap kali minum?',a:'120 mg → 5 ml (1 sendok takar / cth I)',o:['120 mg → 5 ml (1 sendok takar / cth I)','60 mg → 2,5 ml (½ sendok takar)','240 mg → 10 ml (2 sendok takar)','100 mg → 4 ml'],exp:'10 kg × 12 mg = 120 mg/kali. Karena kekuatan sirup 120 mg/5 ml, maka volume sekali minum = 5 ml (cth I).'}
+  ];
+  return shuffle(raw).map(q=>({...q,o:shuffle(q.o)}));
 }
 function calc(){
   const v=id=>Number($('#'+id)?.value)||0;if(!$('#o1'))return;
@@ -1019,7 +1164,7 @@ function ensure(){
   gid('openResepLauncher')?.remove();
   if(!gid('resepPage')){
     const s=document.createElement('section');s.id='resepPage';s.className='view';
-    s.innerHTML='<div class="card ub-head"><div class="topline"><button class="back" type="button" data-back-kedkel>‹ BLOK KEDKEL</button><b>✍️ Latihan Resep &amp; Praktikum Farmakologi</b></div><p class="muted" style="margin:6px 0 0;font-size:13px">Blok Kedokteran Keluarga — 20 Kasus RUM, 26 Bungkus &amp; Lembar Pengamatan BSO Cair, serta 6 Resep Racikan Panduan Praktikum FK YARSI.</p></div><div id="resepHost"></div>';
+    s.innerHTML='<div class="card ub-head"><div class="topline" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><button class="back" type="button" data-back-kedkel>‹ BLOK KEDKEL</button><b>✍️ Latihan Resep &amp; Praktikum Farmakologi</b></div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="background:rgba(22,163,74,.14);color:#16a34a;padding:5px 10px;border-radius:99px;font-weight:800;font-size:12px">⚡ +10 EXP / Jawaban Benar</span><span id="resepXpLiveBadge" style="background:rgba(37,99,235,.14);color:#2563eb;padding:5px 11px;border-radius:99px;font-weight:900;font-size:12.5px">⚡ 0 XP</span></div></div><p class="muted" style="margin:6px 0 0;font-size:13px">Blok Kedokteran Keluarga — Setiap jawaban benar di Kasus, Tulis Resep, Lembar Pengamatan, Kuis Sediaan, Racikan, Singkatan, BSO Padat, &amp; Hitung mendapat <b>+10 EXP</b>.</p></div><div id="resepHost"></div>';
     const anchor=gid('glossaryPage')||gid('analytics')||document.querySelector('main .view:last-of-type');
     anchor&&anchor.parentNode?anchor.parentNode.insertBefore(s,anchor):document.body.appendChild(s);
   }
@@ -1031,9 +1176,10 @@ function ensure(){
     const anchor=kedkel.querySelector('.latihan-materi-section')||kedkel.querySelector('.materi-section')||kedkel.querySelector('.exam-page-header');
     if(anchor)anchor.insertAdjacentElement('afterend',wrap);else kedkel.prepend(wrap);
   }
+  updateHeaderXP();
 }
 function init(){
-  if(inited)return;inited=true;
+  if(inited){updateHeaderXP();return;}inited=true;
   const host=gid('resepHost');sr=host.attachShadow({mode:'open'});
   sr.innerHTML='<style>'+CSS+'</style><nav class="tabs" id="tabs" role="tablist" aria-label="Menu latihan resep"></nav><main id="app"></main><div class="rx-modal" id="rxModal" hidden><div class="rx-modal-box"><div class="row between" style="margin-bottom:10px"><b id="rxModalTitle">Kemasan Obat</b><button class="secondary small" data-act="closezoom">Tutup ✕</button></div><img id="rxModalImg" src="" alt="Perbesaran bungkus obat"></div></div>';
   const dark=()=>host.classList.toggle('rxdark',document.documentElement.classList.contains('dark'));
@@ -1068,7 +1214,13 @@ sr.addEventListener('click',e=>{
   if(t.dataset.ans!=null)return answer(+t.dataset.ans);
   if(t.dataset.dx!=null){S.f.dx=S.f.dxOpts[+t.dataset.dx];return viewCase($('#app'))}
   if(t.dataset.obat!=null){const o=S.f.obatOpts[+t.dataset.obat];S.f.picks=S.f.picks.includes(o)?S.f.picks.filter(x=>x!==o):[...S.f.picks,o];return viewCase($('#app'))}
-  if(t.dataset.l5!=null){const i=+t.dataset.l5,f=S.f;f.l5=f.l5.includes(i)?f.l5.filter(x=>x!==i):[...f.l5,i];if(STEPS[S.step].k==='res'&&!S.only)saveBest();const y=scrollY;viewCase($('#app'));scrollTo({top:y});return}
+  if(t.dataset.l5!=null){
+    const i=+t.dataset.l5,f=S.f;
+    f.l5=f.l5.includes(i)?f.l5.filter(x=>x!==i):[...f.l5,i];
+    awardCaseStepXP('s5');
+    if(STEPS[S.step].k==='res'&&!S.only)saveBest();
+    const y=scrollY;viewCase($('#app'));scrollTo({top:y});return;
+  }
   const a=t.dataset.act;if(!a)return;
   if(a==='closezoom')return closeZoom();
   if(a==='lpprev')return selectLpDrug(S.lp.idx-1);
@@ -1080,13 +1232,30 @@ sr.addEventListener('click',e=>{
   if(a==='lpcheck'){
     S.lp.checked=true;
     const s=SEDIAAN[S.lp.idx],ev=evalLembarPengamatan(s,S.lp.form);
+    if(!S.lp.isExample){
+      if(!S.lp.xpCols)S.lp.xpCols={};
+      let newOk=0;
+      for(const k of ['a','b','c','d','e','f']){
+        if(ev.cols[k]?.ok&&!S.lp.xpCols[k]){
+          S.lp.xpCols[k]=true;
+          newOk++;
+        }
+      }
+      if(newOk>0)awardFarmakoXP(newOk,`Lembar Pengamatan #${s.no} (${s.praktikumNama})`,`farmako:lp:${s.no}`);
+    }
     const b=lpBestMap();if(!b[s.no]||ev.pct>=b[s.no]){b[s.no]=ev.pct;try{localStorage.setItem(LP_BEST_KEY,JSON.stringify(b))}catch{}}
     viewSediaan($('#app'));
     const fbEl=sr.querySelector('.fb');return fbEl&&fbEl.scrollIntoView({block:'center',behavior:'smooth'});
   }
   if(a==='lpfill'){
     const s=SEDIAAN[S.lp.idx],lp=s.lp||{};
-    if(S.lp.checked){S.lp.checked=false;S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''};return drawLembarPengamatan()}
+    if(S.lp.checked){
+      S.lp.checked=false;
+      S.lp.isExample=false;
+      S.lp.xpCols={};
+      S.lp.form={a:'',b:'',c:'',d:'',e:'',fR:'',fS:'',fParaf:false,fPro:'',fUmur:''};
+      return drawLembarPengamatan();
+    }
     const rxLines=String(s.x||'').split('\n');
     S.lp.form={
       a:lp.a||s.f,
@@ -1100,6 +1269,7 @@ sr.addEventListener('click',e=>{
       fPro:'Tn. A',
       fUmur:'28 th'
     };
+    S.lp.isExample=true;
     S.lp.checked=true;
     return drawLembarPengamatan();
   }
@@ -1122,7 +1292,12 @@ sr.addEventListener('click',e=>{
   if(a==='again')return openCase(S.case.id,S.exam);
   if(a==='next'){S.step++;S.focusH=true;if(STEPS[S.step].k==='res')return finish();viewCase($('#app'));fitAll();return scrollTo({top:0})}
   if(a==='prev'){S.step=Math.max(0,S.step-1);viewCase($('#app'));fitAll();return scrollTo({top:0})}
-  if(a==='check'){S.chk[st]=true;viewCase($('#app'));fitAll();const fbEl=sr.querySelector('.fb');return fbEl&&fbEl.scrollIntoView({block:'center',behavior:'smooth'})}
+  if(a==='check'){
+    S.chk[st]=true;
+    awardCaseStepXP(st);
+    viewCase($('#app'));fitAll();
+    const fbEl=sr.querySelector('.fb');return fbEl&&fbEl.scrollIntoView({block:'center',behavior:'smooth'});
+  }
   if(a==='retry'){S.chk[st]=false;if(st==='s1')S.f.dx='';if(st==='s3')S.f.picks=[];viewCase($('#app'));fitAll();return scrollTo({top:0})}
   if(a==='submit')return finish();
   if(a==='addrow')return addRow();
@@ -1161,7 +1336,7 @@ sr.addEventListener('keydown',e=>{
 });
 
 }
-function open(){ensure();if(!gid('resepPage'))return;window.show('resepPage');init();scrollTo({top:0})}
+function open(){ensure();if(!gid('resepPage'))return;window.show('resepPage');init();updateHeaderXP();scrollTo({top:0})}
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('button');if(!t)return;if(t.id==='openResepKedkel')return open();if(t.matches('#resepPage [data-back-kedkel],#resepPage [data-home]')){stopTimer();return window.show(gid('blokKedkelPage')?'blokKedkelPage':'home')}});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensure);else ensure();
 window.CLINED_RESEP={open};
