@@ -6,11 +6,90 @@
   const toast = (m, e) => window.showToast?.(m, !!e);
   const L5 = 'ABCDEF';
   const PREF = 'clined_duel_pref';
-  const S = { tab: 'status', hubTab: 'status', openC: new Set(), comments: {}, feed: null, F: null, mine: [], invites: [], banks: [], bank: '', count: 10, sec: 30, D: null, fb: null, busy: false, tick: null, skew: 0, sentFor: -1 };
+  const CLAIM_KEY = 'clined_duel_claims_v1';
+  const DIA_KEY = 'clined_diamonds_v1';
+  const S = {
+    tab: 'status', hubTab: 'status', openC: new Set(), comments: {}, feed: null, F: null,
+    mine: [], invites: [], openRooms: [], myStats: null, h2h: {}, leaderboard: [],
+    banks: [], bank: '', count: 10, sec: 30, mode: 'classic', wager: 0, isPublic: true,
+    D: null, fb: null, busy: false, tick: null, skew: 0, sentFor: -1,
+    emotes: {}, oppFlash: null
+  };
   const MOODS = [['mantap', '😎', 'Mantap'], ['lumayan', '🙂', 'Lumayan'], ['berat', '😵', 'Berat'], ['semangat', '🔥', 'Semangat'], ['doa', '🙏', 'Doa']];
   const REACTS = ['🔥', '👏', '💪', '😂', '❤️'];
   const SECS = [[0, '∞'], [15, '15'], [30, '30'], [45, '45'], [60, '60']];
-  try { Object.assign(S, JSON.parse(localStorage.getItem(PREF) || '{}')); } catch {}
+  const MODES = [
+    ['classic', '🏆', 'Mode Klasik', 'Adu skor tertinggi & waktu tercepat sampai soal habis'],
+    ['sudden_death', '💀', 'Sudden Death 3 ❤️', '3 nyawa (❤️❤️❤️) — salah 3x langsung Knockout!']
+  ];
+  const WAGERS = [
+    [0, '🛡️', 'Santai', '0 EXP', 'Main fokus tanpa taruhan'],
+    [20, '💰', 'Taruhan', '20 EXP', 'Menang +50 EXP & +2 💎'],
+    [50, '🔥', 'High Stakes', '50 EXP', 'Menang +80 EXP & +3 💎']
+  ];
+  const DUEL_EMOTES = [
+    ['fire', '🔥', 'Gas terus!'],
+    ['shock', '😱', 'Soal sulit!'],
+    ['bolt', '⚡', 'Kejar kalau bisa!'],
+    ['brain', '🧠', 'Hafal nih!'],
+    ['skull', '💀', 'Awas nyawa!'],
+    ['pray', '🙏', 'GGWP!']
+  ];
+  try {
+    const saved = JSON.parse(localStorage.getItem(PREF) || '{}');
+    if (saved && typeof saved === 'object') {
+      if (saved.bank) S.bank = saved.bank;
+      if ([5, 10, 15].includes(Number(saved.count))) S.count = Number(saved.count);
+      if ([0, 15, 30, 45, 60].includes(Number(saved.sec))) S.sec = Number(saved.sec);
+      if (['classic', 'sudden_death'].includes(saved.mode)) S.mode = saved.mode;
+      if ([0, 20, 50].includes(Number(saved.wager))) S.wager = Number(saved.wager);
+      if (typeof saved.isPublic === 'boolean') S.isPublic = saved.isPublic;
+    }
+  } catch {}
+
+  const getDiamonds = () => {
+    try {
+      const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      if (u && u.role === 'admin') return '∞';
+      return Math.max(0, parseInt(localStorage.getItem(DIA_KEY) || '0', 10) || 0);
+    } catch { return 0; }
+  };
+  const addDiamonds = n => {
+    try {
+      const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      if (u && u.role === 'admin') return;
+      const cur = Math.max(0, parseInt(localStorage.getItem(DIA_KEY) || '0', 10) || 0);
+      const next = Math.max(0, cur + n);
+      localStorage.setItem(DIA_KEY, String(next));
+      document.querySelectorAll('[data-diamond-count]').forEach(el => { el.textContent = String(next); });
+    } catch {}
+  };
+  const claimDuelReward = D => {
+    if (!D || D.status !== 'finished' || !D.result) return null;
+    const R = D.result, win = R.winnerId === D.me.id, draw = !R.winnerId;
+    const wager = Number(D.wager) || 0;
+    const mode = D.mode || 'classic';
+    const xpGain = win ? (30 + wager) : draw ? 10 : 0;
+    const diaGain = win ? (1 + (wager >= 50 ? 2 : wager >= 20 ? 1 : 0) + (mode === 'sudden_death' ? 1 : 0)) : 0;
+    try {
+      const claims = JSON.parse(localStorage.getItem(CLAIM_KEY) || '{}') || {};
+      if (!claims[D.id]) {
+        claims[D.id] = { at: Date.now(), xpGain, diaGain, win, draw };
+        localStorage.setItem(CLAIM_KEY, JSON.stringify(claims));
+        if (diaGain > 0) addDiamonds(diaGain);
+        if (xpGain > 0 && typeof window.addXP === 'function') {
+          try {
+            window.addXP(xpGain, win ? `Menang Duel Klinik (+${xpGain} EXP)` : `Seri Duel Klinik (+${xpGain} EXP)`, {
+              kind: 'materi',
+              ref: `duel-local:${D.id}`.slice(0, 80),
+              silent: false
+            });
+          } catch {}
+        }
+      }
+    } catch {}
+    return { xpGain, diaGain, wager };
+  };
 
   async function api(path, opt = {}) {
     const r = await fetch(path, { credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, ...opt, body: opt.body ? JSON.stringify(opt.body) : undefined });
@@ -28,9 +107,9 @@
       document.getElementById('socialPage')?.remove(); document.getElementById('duelPage')?.remove(); document.getElementById('hubPage')?.remove();
       const anchor = $('analytics') || document.querySelector('main .view:last-of-type');
       const mk = (id, html) => { const s = document.createElement('section'); s.id = id; s.className = 'view'; s.innerHTML = html; anchor?.parentNode ? anchor.parentNode.insertBefore(s, anchor) : document.body.appendChild(s); };
-      mk('socialPage', '<div class="card ub-head"><div class="topline"><button class="back" type="button" data-soc-home>‹ Beranda</button><b>⚔️ Duel</b></div></div><div id="socialBody" class="soc-body"></div>');
+      mk('socialPage', '<div class="card ub-head"><div class="topline"><button class="back" type="button" data-soc-home>‹ Beranda</button><b>⚔️ Arena Duel Klinik</b></div></div><div id="socialBody" class="soc-body"></div>');
       mk('hubPage', '<div class="card ub-head"><div class="topline"><button class="back" type="button" data-soc-home>‹ Beranda</button><b>👥 Sosial</b></div></div><div id="hubBody" class="soc-body"></div>');
-      mk('duelPage', '<div class="card ub-head"><div class="topline"><button class="back" type="button" data-soc-lobby>‹ Duel</button><b id="duelTitle">⚔️ Duel</b></div></div><div id="duelBody" class="soc-body"></div>');
+      mk('duelPage', '<div class="card ub-head"><div class="topline"><button class="back" type="button" data-soc-lobby>‹ Arena Duel</button><b id="duelTitle">⚔️ Duel</b></div></div><div id="duelBody" class="soc-body"></div>');
     }
     const ra = document.querySelector('#result .result-actions');
     if (ra && !$('shareStatusBtn')) {
@@ -55,51 +134,238 @@
     }
   }
   const setDot = (id, n) => { const d = $(id); if (d) { d.textContent = n > 9 ? '9+' : n; d.hidden = !n; } };
-  const dot = () => { setDot('socDot', S.invites.length); setDot('hubDot', (S.F?.incoming?.length || 0) + (window.CLINED_CHAT?.unread || 0)); };
+  const dot = () => { setDot('socDot', S.invites.length + (S.openRooms?.length || 0)); setDot('hubDot', (S.F?.incoming?.length || 0) + (window.CLINED_CHAT?.unread || 0)); };
   window.addEventListener('clined:chat-unread', dot);
 
   /* ───────── data ───────── */
   async function loadLobby() {
     const [f, a] = await Promise.all([api('/api/friends'), api('/api/duels/active')]);
-    S.F = f; S.mine = a.mine || []; S.invites = a.invites || []; dot();
+    S.F = f;
+    S.mine = a.mine || [];
+    S.invites = a.invites || [];
+    S.openRooms = a.openRooms || [];
+    S.myStats = a.myStats || { wins: 0, losses: 0, draws: 0, total: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' } };
+    S.h2h = a.h2h || {};
+    S.leaderboard = a.leaderboard || [];
+    dot();
   }
   async function loadBanks() {
     if (S.banks.length) return;
     try { const d = await api('/api/banks'); S.banks = (d.banks || []).filter(b => Number(b.count) >= 5).sort((a, b) => String(a.name).localeCompare(String(b.name), 'id')); } catch {}
     if (!S.banks.some(b => b.id === S.bank)) S.bank = S.banks[0]?.id || '';
   }
-  const savePref = () => { try { localStorage.setItem(PREF, JSON.stringify({ bank: S.bank, count: S.count, sec: S.sec })); } catch {} };
+  const savePref = () => { try { localStorage.setItem(PREF, JSON.stringify({ bank: S.bank, count: S.count, sec: S.sec, mode: S.mode, wager: S.wager, isPublic: S.isPublic })); } catch {} };
 
-  /* ───────── LOBI ───────── */
-  const person = p => `<div class="soc-who"><b>${esc(p.name)}</b><small>@${esc(p.username)}${p.online ? ' • <span class="soc-on">● online</span>' : ''}</small></div>`;
+  /* ───────── LOBI & ARENA VISUAL ───────── */
   const initials = n => esc(String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase());
-  const avatar = (p, cls = '') => `<span class="soc-av ${cls}${p.online ? ' on' : ''}" aria-hidden="true">${initials(p.name)}</span>`;
+  const avatar = (p, cls = '') => `<span class="soc-av ${cls}${p?.online ? ' on' : ''}" aria-hidden="true">${initials(p?.name)}</span>`;
+  const modePill = m => m === 'sudden_death'
+    ? '<span class="duel-tag sd">💀 Sudden Death 3❤️</span>'
+    : '<span class="duel-tag cls">🏆 Klasik</span>';
+  const wagerPill = w => Number(w) >= 50
+    ? '<span class="duel-tag wager hi">🔥 Taruhan 50 EXP</span>'
+    : Number(w) >= 20
+      ? '<span class="duel-tag wager">💰 Taruhan 20 EXP</span>'
+      : '<span class="duel-tag free">🛡️ Santai</span>';
+  const h2hBadge = uid => {
+    const rec = uid && S.h2h?.[uid];
+    if (!rec || !(rec.wins || rec.losses || rec.draws)) return '<span class="h2h-pill new">⚔️ Belum pernah duel</span>';
+    const lead = rec.wins > rec.losses ? 'win' : rec.wins < rec.losses ? 'lose' : 'even';
+    return `<span class="h2h-pill ${lead}">⚔️ H2H: ${rec.wins}M – ${rec.losses}K${rec.draws ? ` – ${rec.draws}S` : ''}</span>`;
+  };
+  const renderHearts = (hearts = 3, max = 3) => {
+    const h = Math.max(0, Math.min(max, Number(hearts ?? max)));
+    let out = '<span class="duel-hearts" aria-label="Sisa nyawa">';
+    for (let i = 0; i < max; i++) out += `<i class="${i < h ? 'alive' : 'lost'}">${i < h ? '❤️' : '🖤'}</i>`;
+    return out + '</span>';
+  };
+
   function lobbyHTML() {
     const F = S.F || { friends: [], incoming: [], outgoing: [], blocked: [] };
-    const bankOpts = S.banks.map(b => `<option value="${esc(b.id)}"${b.id === S.bank ? ' selected' : ''}>${esc(b.name)} (${b.count})</option>`).join('');
-    const secLabel = S.sec ? `${S.sec} dtk/soal` : 'tanpa batas';
+    const st = S.myStats || { wins: 0, losses: 0, draws: 0, total: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' } };
+    const bankOpts = S.banks.map(b => `<option value="${esc(b.id)}"${b.id === S.bank ? ' selected' : ''}>${esc(b.name)} (${b.count} soal)</option>`).join('');
+    const curBankName = S.banks.find(b => b.id === S.bank)?.name || 'Bank Soal Pilihan';
+
+    // 1. Arena Hero Banner + Career Stats + Quick Match CTA
+    const heroHTML = `
+    <div class="card duel-hero">
+      <div class="duel-hero-glow" aria-hidden="true"></div>
+      <div class="duel-hero-top">
+        <div class="duel-hero-badge">
+          <span class="duel-rank-ico">${st.title?.icon || '⚔️'}</span>
+          <div>
+            <small>GELAR ARENA KLINIK</small>
+            <b>${esc(st.title?.name || 'Petarung Baru')}</b>
+          </div>
+        </div>
+        <div class="duel-dia-pill" title="Diamond milikmu untuk Gacha Kartu Organ">
+          <span>💎</span><b data-diamond-count>${esc(getDiamonds())}</b>
+        </div>
+      </div>
+      <div class="duel-stat-grid">
+        <div class="duel-stat-box win">
+          <small>🏆 MENANG</small>
+          <b>${st.wins}</b>
+          <span>${st.losses}K • ${st.draws}S</span>
+        </div>
+        <div class="duel-stat-box rate">
+          <small>📈 WIN RATE</small>
+          <b>${st.winRate}%</b>
+          <span>${st.total} total laga</span>
+        </div>
+        <div class="duel-stat-box streak">
+          <small>🔥 STREAK</small>
+          <b>${st.streak}x</b>
+          <span>Rekor: ${st.bestStreak || 0}x</span>
+        </div>
+      </div>
+      <div class="duel-quick-wrap">
+        <button type="button" class="duel-quick-btn" data-soc-quick>
+          <span class="duel-quick-ico">⚡</span>
+          <span class="duel-quick-txt">
+            <b>Cari Lawan Cepat (Quick Match)</b>
+            <small>${esc(curBankName)} • ${S.count} soal • ${S.mode === 'sudden_death' ? '💀 Sudden Death' : '🏆 Klasik'}${S.wager ? ` • 💰 ${S.wager} EXP` : ''}</small>
+          </span>
+          <span class="duel-quick-go">GAS ›</span>
+        </button>
+      </div>
+    </div>`;
+
+    // 2. Active duels & incoming friend invites
     const mine = S.mine.map(d => {
-      const opp = d.opponent, title = d.status === 'waiting' ? `Kode ${esc(d.code)}` : `vs ${esc(opp?.name || 'lawan')}`;
-      return `<button type="button" class="soc-live" data-soc-open="${esc(d.id)}"><span class="soc-live-ico">${d.status === 'waiting' ? '⏳' : '🔥'}</span><span class="soc-who"><b>${title}</b><small>${d.status === 'waiting' ? 'Menunggu lawan' : `${d.me.answered}/${d.total} soal`}</small></span><span class="soc-go">Lanjut ›</span></button>`;
+      const opp = d.opponent, title = d.status === 'waiting' ? `Ruang ${esc(d.code)}` : `vs ${esc(opp?.name || 'Lawan')}`;
+      return `<button type="button" class="soc-live" data-soc-open="${esc(d.id)}">
+        <span class="soc-live-ico">${d.status === 'waiting' ? '⏳' : '🔥'}</span>
+        <span class="soc-who">
+          <b>${title}</b>
+          <small>${d.status === 'waiting' ? 'Menunggu penantang masuk…' : `Berlangsung • ${d.me.answered}/${d.total} soal`} • ${d.mode === 'sudden_death' ? '💀 3❤️' : '🏆 Klasik'}</small>
+        </span>
+        <span class="soc-go">Masuk ›</span>
+      </button>`;
     }).join('');
-    const inv = S.invites.map(i => `<div class="soc-invite"><div class="soc-who"><b>${esc(i.from?.name || 'Teman')} menantangmu!</b><small>${esc(i.bank.name)} • ${i.total} soal</small></div><div class="soc-btns"><button type="button" class="primary" data-soc-accept="${esc(i.code)}">Terima</button><button type="button" class="secondary" data-soc-decline="${esc(i.id)}" aria-label="Tolak">✕</button></div></div>`).join('');
-    const fr = F.friends.map(f => `<div class="soc-friend">${avatar(f)}<div class="soc-who"><b>${esc(f.name)}</b><small>@${esc(f.username)}${f.online ? ' • <span class="soc-on">online</span>' : ''}</small></div>
+
+    const inv = S.invites.map(i => `<div class="soc-invite">
+      <div class="soc-who">
+        <b>⚔️ ${esc(i.from?.name || 'Teman')} menantangmu!</b>
+        <small>${esc(i.bank.name)} • ${i.total} soal</small>
+        <div class="duel-tags-row">${modePill(i.mode)}${wagerPill(i.wager)}</div>
+      </div>
+      <div class="soc-btns">
+        <button type="button" class="primary" data-soc-accept="${esc(i.code)}">⚡ Terima</button>
+        <button type="button" class="secondary" data-soc-decline="${esc(i.id)}" aria-label="Tolak">✕</button>
+      </div>
+    </div>`).join('');
+
+    // 3. Open Arena Rooms (Poin 1: Lobi Tantangan Terbuka)
+    const openRows = (S.openRooms || []).map(r => `<div class="duel-open-room">
+      ${avatar(r.from || {})}
+      <div class="soc-who">
+        <b>${esc(r.from?.name || 'Petarung')} <small class="duel-open-user">@${esc(r.from?.username || '')}</small></b>
+        <small>📚 ${esc(r.bank?.name || 'Bank Soal')} • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}</small>
+        <div class="duel-tags-row">${modePill(r.mode)}${wagerPill(r.wager)}${h2hBadge(r.from?.id)}</div>
+      </div>
+      <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">⚡ Lawan!</button>
+    </div>`).join('');
+
+    const openArenaHTML = `
+    <div class="card soc-card duel-arena-card">
+      <div class="soc-title between">
+        <div class="duel-title-left"><span>🌐</span><div><h3>Tantangan Terbuka</h3><small class="soc-hint">Masuk langsung 1-klik tanpa ketik kode</small></div></div>
+        <button type="button" class="secondary duel-mini-btn" data-soc-refresh-lobby aria-label="Segarkan lobi">🔄 Segarkan</button>
+      </div>
+      ${openRows ? `<div class="duel-open-list">${openRows}</div>` : `<div class="duel-open-empty">
+        <span>🏟️</span>
+        <div><b>Belum ada ruang terbuka yang menunggu lawan</b><small>Klik <b>⚡ Cari Lawan Cepat</b> di atas atau buat ruang publik agar teman/mahasiswa lain yang online bisa langsung melawanmu!</small></div>
+      </div>`}
+    </div>`;
+
+    // 4. Custom Duel Setup (with Mode, Wager, Visibility)
+    const setupHTML = `
+    <div class="card soc-card soc-setup">
+      <div class="soc-title"><span>⚙️</span><div><h3>Atur Arena Duel</h3><small class="soc-hint">Pilih bank soal, mode permainan, dan taruhan EXP</small></div></div>
+      <label class="duel-field-label" for="socBank">📚 Bank Soal Ujian</label>
+      <select id="socBank" data-soc-bank aria-label="Bank soal">${bankOpts || '<option value="">Memuat…</option>'}</select>
+
+      <div class="duel-field-label">🎮 Mode Pertarungan</div>
+      <div class="duel-mode-grid" role="radiogroup" aria-label="Mode duel">
+        ${MODES.map(([k, ico, name, desc]) => `
+          <button type="button" role="radio" aria-checked="${S.mode === k}" class="duel-mode-card ${k}${S.mode === k ? ' on' : ''}" data-soc-mode="${k}">
+            <div class="duel-mode-head"><span class="duel-mode-ico">${ico}</span><b>${name}</b></div>
+            <small>${desc}</small>
+          </button>
+        `).join('')}
+      </div>
+
+      <div class="soc-opt-row"><span class="soc-lab">Jumlah<small>Soal duel</small></span><div class="soc-seg n3" role="radiogroup" aria-label="Jumlah soal">${[5, 10, 15].map(n => `<button type="button" role="radio" aria-checked="${S.count === n}" class="${S.count === n ? 'on' : ''}" data-soc-count="${n}">${n} Soal</button>`).join('')}</div></div>
+      <div class="soc-opt-row"><span class="soc-lab">Waktu<small>Detik / soal</small></span><div class="soc-seg n5" role="radiogroup" aria-label="Batas waktu per soal">${SECS.map(([v, l]) => `<button type="button" role="radio" aria-checked="${S.sec === v}" class="${S.sec === v ? 'on' : ''}" data-soc-sec="${v}">${l}</button>`).join('')}</div></div>
+
+      <div class="duel-field-label">💎 Taruhan &amp; Hadiah Pemenang</div>
+      <div class="duel-wager-row" role="radiogroup" aria-label="Taruhan EXP">
+        ${WAGERS.map(([w, ico, name, badge, sub]) => `
+          <button type="button" role="radio" aria-checked="${S.wager === w}" class="duel-wager-btn${S.wager === w ? ' on' : ''}" data-soc-wager="${w}">
+            <span class="duel-wager-ico">${ico}</span>
+            <b>${name} <em>(${badge})</em></b>
+            <small>${sub}</small>
+          </button>
+        `).join('')}
+      </div>
+
+      <div class="soc-opt-row">
+        <span class="soc-lab">Visibilitas<small>Ruang duel</small></span>
+        <div class="soc-seg n2" role="radiogroup" aria-label="Visibilitas ruang">
+          <button type="button" role="radio" aria-checked="${S.isPublic}" class="${S.isPublic ? 'on' : ''}" data-soc-vis="1">🌐 Publik (Lobi)</button>
+          <button type="button" role="radio" aria-checked="${!S.isPublic}" class="${!S.isPublic ? 'on' : ''}" data-soc-vis="0">🔒 Privat (Kode)</button>
+        </div>
+      </div>
+
+      <button type="button" class="primary soc-big duel-create-btn" data-soc-create>🔑 Buat Ruang Duel (${S.isPublic ? 'Publik' : 'Privat'})</button>
+      <div class="soc-join">
+        <input id="socCode" data-soc-code type="text" inputmode="text" autocapitalize="characters" autocomplete="off" maxlength="6" placeholder="KODE 6 DIGIT" aria-label="Kode duel">
+        <button type="button" class="secondary" data-soc-join>Gabung Kode</button>
+      </div>
+    </div>`;
+
+    // 5. Tantang Teman + Rekor Head-to-Head (Poin 9)
+    const quick = F.friends.length ? F.friends.map(f => `<div class="soc-friend quick">
+      ${avatar(f)}
+      <div class="soc-who">
+        <b>${esc(f.name)}</b>
+        <small>@${esc(f.username)}${f.online ? ' • <span class="soc-on">● online</span>' : ''}</small>
+        <div class="duel-tags-row">${h2hBadge(f.id)}</div>
+      </div>
+      <button type="button" class="primary soc-fight" data-soc-challenge="${esc(f.id)}" aria-label="Tantang ${esc(f.name)}">⚔️ Tantang</button>
+    </div>`).join('') : '<p class="soc-empty">Belum ada teman untuk ditantang. Tambahkan teman di menu Sosial!</p>';
+    const quickHTML = `<div class="card soc-card"><div class="soc-title"><span>👥</span><div><h3>Tantang Teman &amp; Rekor H2H</h3><small class="soc-hint">Lihat rekor pertemuan Head-to-Head dengan temanmu</small></div></div><div class="soc-sec">${quick}</div><button type="button" class="secondary soc-big" data-soc-hub="teman">Kelola Teman di Sosial ›</button></div>`;
+
+    // 6. Papan Peringkat Raja Duel / Gladiator Klinik (Poin 9)
+    const lbRows = (S.leaderboard || []).map(p => {
+      const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
+      return `<div class="duel-lb-row${p.me ? ' me' : ''}">
+        <span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
+        ${avatar(p)}
+        <div class="soc-who">
+          <b>${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
+          <small>${p.title?.icon || '⚔️'} ${esc(p.title?.name || 'Duelist')} • @${esc(p.username)}</small>
+        </div>
+        <div class="duel-lb-score">
+          <b>${p.wins} Menang</b>
+          <small>${p.winRate}% WR • ${p.total} laga</small>
+        </div>
+      </div>`;
+    }).join('');
+    const lbHTML = `<div class="card soc-card duel-lb-card">
+      <div class="soc-title"><span>👑</span><div><h3>Papan Peringkat Gladiator Duel</h3><small class="soc-hint">Top petarung dengan kemenangan duel terbanyak</small></div></div>
+      ${lbRows ? `<div class="duel-lb-list">${lbRows}</div>` : '<p class="soc-empty">Belum ada rekor duel tercatat. Jadilah Gladiator pertama yang meraih kemenangan!</p>'}
+    </div>`;
+
+    // Friends list for Sosial -> Teman tab
+    const fr = F.friends.map(f => `<div class="soc-friend">${avatar(f)}<div class="soc-who"><b>${esc(f.name)}</b><small>@${esc(f.username)}${f.online ? ' • <span class="soc-on">online</span>' : ''}</small><div class="duel-tags-row">${h2hBadge(f.id)}</div></div>
       <button type="button" class="primary soc-fight" data-soc-challenge="${esc(f.id)}" aria-label="Tantang ${esc(f.name)}">⚔️ Tantang</button>
       <details class="soc-more"><summary aria-label="Opsi lainnya">⋯</summary><div class="soc-btns"><button type="button" class="secondary" data-soc-remove="${esc(f.id)}" data-name="${esc(f.name)}">Hapus teman</button><button type="button" class="secondary soc-danger" data-soc-block="${esc(f.id)}" data-name="${esc(f.name)}">Blokir</button></div></details></div>`).join('');
     const incoming = F.incoming.map(f => `<div class="soc-friend">${avatar(f)}<div class="soc-who"><b>${esc(f.name)}</b><small>@${esc(f.username)}</small></div><div class="soc-btns"><button type="button" class="primary" data-soc-respond="${f.linkId}" data-accept="1">Terima</button><button type="button" class="secondary" data-soc-respond="${f.linkId}" data-accept="0" aria-label="Tolak">✕</button></div></div>`).join('');
     const outgoing = F.outgoing.map(f => `<div class="soc-friend">${avatar(f)}<div class="soc-who"><b>${esc(f.name)}</b><small>Menunggu • @${esc(f.username)}</small></div><button type="button" class="secondary" data-soc-remove="${esc(f.id)}" data-quiet="1">Batal</button></div>`).join('');
     const blocked = F.blocked.map(f => `<div class="soc-friend">${avatar(f)}<div class="soc-who"><b>${esc(f.name)}</b><small>@${esc(f.username)}</small></div><button type="button" class="secondary" data-soc-unblock="${esc(f.id)}">Buka</button></div>`).join('');
-    const duelHTML0 = `
-    ${inv}${mine ? `<div class="soc-lives">${mine}</div>` : ''}
-    <div class="card soc-card soc-setup"><div class="soc-title"><span>⚔️</span><h3>Atur duel</h3></div>
-      <select id="socBank" data-soc-bank aria-label="Bank soal">${bankOpts || '<option value="">Memuat…</option>'}</select>
-      <div class="soc-opt-row"><span class="soc-lab">Soal</span><div class="soc-seg n3" role="radiogroup" aria-label="Jumlah soal">${[5, 10, 15].map(n => `<button type="button" role="radio" aria-checked="${S.count === n}" class="${S.count === n ? 'on' : ''}" data-soc-count="${n}">${n}</button>`).join('')}</div></div>
-      <div class="soc-opt-row"><span class="soc-lab">Waktu <small>(detik/soal)</small></span><div class="soc-seg n5" role="radiogroup" aria-label="Batas waktu per soal">${SECS.map(([v, l]) => `<button type="button" role="radio" aria-checked="${S.sec === v}" class="${S.sec === v ? 'on' : ''}" data-soc-sec="${v}">${l}</button>`).join('')}</div></div>
-      <button type="button" class="primary soc-big" data-soc-create>🔑 Buat kode duel</button>
-      <div class="soc-join"><input id="socCode" data-soc-code type="text" inputmode="text" autocapitalize="characters" autocomplete="off" maxlength="6" placeholder="KODE" aria-label="Kode duel"><button type="button" class="secondary" data-soc-join>Gabung</button></div>
-    </div>`;
-    const quick = F.friends.length ? F.friends.map(f => `<div class="soc-friend quick">${avatar(f)}<div class="soc-who"><b>${esc(f.name)}</b><small>@${esc(f.username)}${f.online ? ' • <span class="soc-on">online</span>' : ''}</small></div><button type="button" class="primary soc-fight" data-soc-challenge="${esc(f.id)}" aria-label="Tantang ${esc(f.name)}">⚔️ Tantang</button></div>`).join('') : '<p class="soc-empty">Belum ada teman untuk ditantang.</p>';
-    const quickHTML = `<div class="card soc-card"><div class="soc-title"><span>👥</span><h3>Tantang teman</h3></div><div class="soc-sec">${quick}</div><button type="button" class="secondary soc-big" data-soc-hub="teman">Kelola teman di Sosial ›</button></div>`;
+
     const friendsHTML0 = `
     <div class="card soc-card"><div class="soc-title"><span>👥</span><h3>Teman</h3></div>
       ${incoming ? `<div class="soc-sec"><h4>Permintaan masuk</h4>${incoming}</div>` : ''}
@@ -108,8 +374,11 @@
       ${outgoing ? `<div class="soc-sec"><h4>Menunggu dijawab</h4>${outgoing}</div>` : ''}
       ${blocked ? `<details class="soc-sec"><summary>Diblokir (${F.blocked.length})</summary>${blocked}</details>` : ''}
     </div>`;
-    return { duel: duelHTML0 + quickHTML, friends: friendsHTML0 };
+
+    const duelAll = `${heroHTML}${inv}${mine ? `<div class="soc-lives">${mine}</div>` : ''}${openArenaHTML}${setupHTML}${quickHTML}${lbHTML}`;
+    return { duel: duelAll, friends: friendsHTML0 };
   }
+
   const timeAgo = t => { const m = Math.floor((Date.now() - t) / 60000); return m < 1 ? 'baru saja' : m < 60 ? `${m} mnt lalu` : m < 1440 ? `${Math.floor(m / 60)} jam lalu` : `${Math.floor(m / 1440)} hari lalu`; };
   function commentsHTML(id) {
     const list = S.comments[id];
@@ -180,14 +449,34 @@
     try { const h = JSON.parse(localStorage.getItem('gaster_v8_history') || '[]')[0]; if (h) return { examName: String(h.bankName || h.bank || '').slice(0, 60), scorePct: Number.isFinite(Number(h.pct)) ? Number(h.pct) : null, fromResult: true }; } catch {}
     return { fromResult: true };
   }
+  function duelResultContext() {
+    const D = S.D;
+    if (!D || D.status !== 'finished' || !D.result) return {};
+    const R = D.result, win = R.winnerId === D.me.id, draw = !R.winnerId;
+    const opp = D.opponent, oppTag = opp?.username ? `@${opp.username}` : (opp?.name || 'lawan');
+    const pct = D.total ? Math.round((R.me.score / D.total) * 100) : null;
+    const modeTag = D.mode === 'sudden_death' ? 'Mode Sudden Death 💀' : 'Mode Klasik 🏆';
+    const msg = draw
+      ? `Duel sengit ${modeTag} lawan ${oppTag} berakhir SERI (${R.me.score}/${D.total})! 🤝⚡ Siapa berani tantang berikutnya?`
+      : win
+        ? `Menang Duel ${modeTag} (${R.me.score}/${D.total}) lawan ${oppTag} di Arena CLINED! 🏆🔥${R.reason === 'knockout' ? ' (KNOCKOUT! 💀)' : ''} Ayo siapa berani tantang berikutnya? ⚔️`
+        : `Duel seru ${modeTag} (${R.me.score}/${D.total}) lawan ${oppTag}! 💪🔥 Saatnya balas dendam di laga berikutnya!`;
+    return {
+      examName: `Duel: ${String(D.bank?.name || 'Klinik').slice(0, 48)}`,
+      scorePct: pct,
+      mood: win ? 'mantap' : draw ? 'semangat' : 'lumayan',
+      message: msg,
+      fromResult: false
+    };
+  }
 
   async function renderLobby(reload = true) {
     ensureShell();
     const body = $('socialBody'); if (!body) return;
-    if (reload) { if (!S.F) body.innerHTML = '<p class="soc-empty">Memuat…</p>'; try { await Promise.all([loadLobby(), loadBanks()]); } catch (e) { body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; } }
+    if (reload) { if (!S.F) body.innerHTML = '<p class="soc-empty">Memuat Arena Duel…</p>'; try { await Promise.all([loadLobby(), loadBanks()]); } catch (e) { body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; } }
     const keep = { code: $('socCode')?.value };
     body.innerHTML = lobbyHTML().duel;
-    if (keep.code) $('socCode').value = keep.code;
+    if (keep.code && $('socCode')) $('socCode').value = keep.code;
   }
   const hubTabs = () => { const tab = (k, label, extra = '') => `<button type="button" role="tab" aria-selected="${S.hubTab === k}" class="${S.hubTab === k ? 'on' : ''}" data-soc-tab="${k}">${label}${extra}</button>`;
     return `<div class="soc-tabs three" role="tablist">${tab('status', '📣 Status')}${tab('chat', '💬 Chat', `<i class="soc-dot inline" data-chat-dot ${window.CLINED_CHAT?.unread ? '' : 'hidden'}>${window.CLINED_CHAT?.unread > 9 ? '9+' : window.CLINED_CHAT?.unread || 0}</i>`)}${tab('teman', '👥 Teman', S.F?.incoming?.length ? ` <i class="soc-dot inline">${S.F.incoming.length}</i>` : '')}</div>`; };
@@ -212,7 +501,7 @@
   const openHub = (tab) => { if (tab) S.hubTab = tab; if (S.hubTab === 'status') S.feed = null; window.show('hubPage'); renderHub(); };
   const openLobby = () => { window.show('socialPage'); renderLobby(); };
 
-  /* ───────── RUANG DUEL ───────── */
+  /* ───────── RUANG DUEL & EMOTE REALTIME ───────── */
   const nowS = () => Date.now() + S.skew;
   const syncD = d => { S.D = d; if (d?.serverNow) S.skew = d.serverNow - Date.now(); };
   function stopTick() { clearInterval(S.tick); S.tick = null; }
@@ -221,7 +510,7 @@
     const D = S.D; if (!D || D.status !== 'active' || activeView() !== 'duelPage') return stopTick();
     const now = nowS();
     if (now < D.startedAt) { const el = $('duelGo'); if (el) el.textContent = Math.max(1, Math.ceil((D.startedAt - now) / 1000)); return; }
-    if ($('duelGo')) { renderDuel(); return; }                       // hitungan mundur selesai → tampilkan soal 1
+    if ($('duelGo')) { renderDuel(); return; }
     const clock = $('duelClock'); if (clock && !D.perQ) clock.textContent = fmtMs(D.deadlineAt - now);
     if (!D.perQ) return;
     const qi = D.myAnswers.length; if (qi >= D.total || S.fb != null) return;
@@ -230,57 +519,210 @@
     if (sec) sec.textContent = Math.max(0, Math.ceil(left / 1000));
     if (left <= 0 && S.sentFor !== qi) { S.sentFor = qi; answer(-1).catch(() => { S.sentFor = -1; }); }
   }
-  const reasonText = (r, win, draw) => draw ? 'Skor dan waktu sama persis.' : ({ score: 'Skor lebih tinggi.', speed: 'Skor sama, selesai lebih cepat.', forfeit: win ? 'Lawan menyerah.' : 'Kamu menyerah.', finished: 'Waktu habis, kamu lebih dulu selesai.' }[r] || '');
+  const reasonText = (r, win, draw) => draw
+    ? 'Skor dan waktu kedua petarung sama persis!'
+    : ({
+      knockout: win ? '💀 KNOCKOUT! Lawan kehabisan 3 nyawa (❤️❤️❤️)!' : '💔 GUGUR! Kamu kehabisan 3 nyawa (❤️❤️❤️).',
+      score: 'Skor jawaban benar lebih tinggi.',
+      speed: 'Skor seri, tetapi diselesaikan lebih cepat!',
+      forfeit: win ? '🏳️ Lawan menyerah dari arena.' : '🏳️ Kamu memilih menyerah.',
+      finished: '⏰ Waktu habis, diselesaikan lebih unggul.'
+    }[r] || '');
   const secText = ms => ms ? `${ms / 1000} dtk/soal` : 'tanpa batas waktu';
+
+  function emoteBubbleHTML(side) {
+    const em = S.emotes[side];
+    if (!em || Date.now() > em.until) return `<div class="duel-emote-slot" id="duelEmote_${side}"></div>`;
+    return `<div class="duel-emote-slot" id="duelEmote_${side}"><div class="duel-emote-bubble"><span>${esc(em.emoji)}</span><b>${esc(em.text)}</b></div></div>`;
+  }
+  function showEmoteBubble(side, emoji, text) {
+    S.emotes[side] = { emoji, text, until: Date.now() + 3600 };
+    const slot = $(`duelEmote_${side}`);
+    if (slot) {
+      slot.innerHTML = `<div class="duel-emote-bubble"><span>${esc(emoji)}</span><b>${esc(text)}</b></div>`;
+    }
+    setTimeout(() => {
+      if (S.emotes[side] && Date.now() >= S.emotes[side].until) {
+        const s = $(`duelEmote_${side}`);
+        if (s) s.innerHTML = '';
+      }
+    }, 3650);
+  }
+  function emoteBarHTML() {
+    return `<div class="duel-emote-bar" role="group" aria-label="Kirim stiker cepat ke lawan">
+      ${DUEL_EMOTES.map(([k, emoji, txt]) => `
+        <button type="button" class="duel-emote-btn" data-soc-emote="${k}" title="${esc(txt)}">
+          <span>${emoji}</span><small>${esc(txt)}</small>
+        </button>
+      `).join('')}
+    </div>`;
+  }
 
   function duelHTML() {
     const D = S.D; if (!D) return '<p class="soc-empty">Duel tidak ditemukan.</p>';
-    const opp = D.opponent, oppName = esc(opp?.name || D.invited?.name || 'lawan');
-    if (D.status === 'cancelled') return `<div class="card soc-card soc-center"><div class="soc-emoji">🚫</div><h3>Duel dibatalkan</h3><button type="button" class="primary soc-big" data-soc-lobby>Kembali</button></div>`;
+    const opp = D.opponent, oppName = esc(opp?.name || D.invited?.name || 'Lawan');
+    const isSD = D.mode === 'sudden_death';
+
+    if (D.status === 'cancelled') {
+      return `<div class="card soc-card soc-center"><div class="soc-emoji">🚫</div><h3>Duel dibatalkan</h3><button type="button" class="primary soc-big" data-soc-lobby>Kembali ke Arena</button></div>`;
+    }
     if (D.status === 'waiting') {
-      if (!D.isHost) return `<div class="card soc-card soc-center"><div class="soc-vs-av">${avatar(opp || {})}<b>VS</b>${avatar(D.me)}</div><h3>${oppName} menantangmu!</h3><p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p><button type="button" class="primary soc-big" data-soc-accept="${esc(D.code)}">⚔️ Terima tantangan</button><button type="button" class="secondary soc-big" data-soc-decline="${esc(D.id)}">Tolak</button></div>`;
-      return `<div class="card soc-card soc-center"><div class="soc-emoji soc-pulse">⏳</div><h3>${D.invited ? `Menunggu ${oppName}…` : 'Menunggu lawan…'}</h3><p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
+      if (!D.isHost) {
+        return `<div class="card soc-card soc-center duel-wait-card">
+          <div class="soc-vs-av">${avatar(opp || {})}<b class="duel-vs-glow">VS</b>${avatar(D.me)}</div>
+          <h3>⚔️ ${oppName} menantangmu!</h3>
+          <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
+          <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
+          <button type="button" class="primary soc-big" data-soc-accept="${esc(D.code)}">⚔️ Terima Tantangan</button>
+          <button type="button" class="secondary soc-big" data-soc-decline="${esc(D.id)}">Tolak</button>
+        </div>`;
+      }
+      return `<div class="card soc-card soc-center duel-wait-card">
+        <div class="soc-emoji soc-pulse">⏳</div>
+        <h3>${D.invited ? `Menunggu ${oppName}…` : (D.isPublic ? '🌐 Menunggu Penantang di Lobi Publik…' : '🔒 Menunggu Lawan via Kode…')}</h3>
+        <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
+        <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}</div>
         <div class="soc-code" aria-label="Kode duel">${esc(D.code)}</div>
-        <div class="soc-btns2"><button type="button" class="secondary" data-soc-copy="${esc(D.code)}">📋 Salin</button><button type="button" class="primary" data-soc-share="${esc(D.code)}">📤 Bagikan</button></div>
-        <button type="button" class="secondary soc-big soc-danger" data-soc-leave>Batalkan duel</button></div>`;
+        <div class="soc-btns2"><button type="button" class="secondary" data-soc-copy="${esc(D.code)}">📋 Salin Kode</button><button type="button" class="primary" data-soc-share="${esc(D.code)}">📤 Bagikan</button></div>
+        <button type="button" class="secondary soc-big soc-danger" data-soc-leave>Batalkan Ruang Duel</button>
+      </div>`;
     }
     if (D.status === 'finished') {
       const R = D.result, win = R.winnerId === D.me.id, draw = !R.winnerId;
-      const bar = (name, s, me) => `<div class="soc-score${me ? ' me' : ''}"><small>${esc(name)}</small><b>${s.score}<em>/${D.total}</em></b><span>⏱ ${s.done ? fmtMs(s.timeMs) : 'belum selesai'}</span></div>`;
+      const rw = claimDuelReward(D);
+      const bar = (name, s, me, fObj) => `<div class="soc-score${me ? ' me' : ''}">
+        <small>${esc(name)}</small>
+        <b>${s.score}<em>/${D.total}</em></b>
+        <span>⏱ ${s.done ? fmtMs(s.timeMs) : 'belum selesai'}</span>
+        <div class="duel-res-sub">
+          ${isSD ? renderHearts(fObj?.hearts ?? 3, D.maxHearts || 3) : ''}
+          ${(fObj?.maxStreak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 Max Streak ${fObj.maxStreak}x</span>` : ''}
+        </div>
+      </div>`;
       const review = R.review.map(q => `<details class="soc-rev"><summary><span class="soc-rn ${q.myChoice === q.correctIdx ? 'ok' : 'bad'}">${q.i + 1}</span>${esc(q.soal.slice(0, 90))}${q.soal.length > 90 ? '…' : ''}</summary>
         <ul>${q.opsi.map((o, i) => `<li class="${i === q.correctIdx ? 'ok' : ''}">${L5[i]}. ${esc(o)} ${i === q.correctIdx ? '✓' : ''}${i === q.myChoice ? ' <em>kamu</em>' : ''}${i === q.oppChoice ? ' <em class="opp">lawan</em>' : ''}</li>`).join('')}</ul>${q.myChoice === -1 ? '<p class="soc-pemb">⏰ Kamu tidak menjawab tepat waktu.</p>' : ''}${q.pembahasan ? `<p class="soc-pemb">${esc(q.pembahasan)}</p>` : ''}</details>`).join('');
-      return `<div class="card soc-card soc-center soc-result ${draw ? 'draw' : win ? 'win' : 'lose'}"><div class="soc-emoji">${draw ? '🤝' : win ? '🏆' : '💪'}</div>
-        <h3>${draw ? 'Seri!' : win ? 'Kamu menang!' : `${oppName} menang`}</h3><p>${reasonText(R.reason, win, draw)}</p>
-        <div class="soc-scores">${bar('Kamu', R.me, true)}${bar(opp?.name || 'Lawan', R.opponent, false)}</div>
-        <div class="soc-btns2"><button type="button" class="secondary" data-soc-lobby>Selesai</button><button type="button" class="primary" data-soc-rematch>⚔️ Duel lagi</button></div></div>
-        <div class="card soc-card"><h4>Ulasan soal</h4>${review}</div>`;
+
+      const rewardBanner = (win || draw) && rw ? `
+        <div class="duel-reward-banner ${win ? 'win' : 'draw'}">
+          <div class="duel-reward-title">${win ? '🎁 HADIAH KEMENANGAN ARENA' : '🤝 BONUS PARTISIPASI DUEL'}</div>
+          <div class="duel-reward-pills">
+            ${rw.xpGain ? `<span class="duel-rw-pill xp">⚡ +${rw.xpGain} EXP</span>` : ''}
+            ${rw.diaGain ? `<span class="duel-rw-pill dia">💎 +${rw.diaGain} Diamond</span>` : ''}
+            ${win && rw.wager ? `<span class="duel-rw-pill wager">💰 Menang Taruhan ${rw.wager} EXP</span>` : ''}
+          </div>
+        </div>` : '';
+
+      return `<div class="card soc-card soc-center soc-result ${draw ? 'draw' : win ? 'win' : 'lose'}">
+        <div class="soc-emoji">${draw ? '🤝' : R.reason === 'knockout' && win ? '💀🏆' : win ? '🏆' : '💪'}</div>
+        <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
+        <h3>${draw ? 'Pertarungan Seri!' : win ? 'Kamu Menang!' : `${oppName} Menang`}</h3>
+        <p>${reasonText(R.reason, win, draw)}</p>
+        ${rewardBanner}
+        <div class="soc-scores">${bar('Kamu', R.me, true, D.me)}${bar(opp?.name || 'Lawan', R.opponent, false, opp)}</div>
+        <button type="button" class="duel-share-win-btn" data-soc-share-duel>📣 Pamerkan Hasil Duel ke Status</button>
+        <div class="soc-btns2"><button type="button" class="secondary" data-soc-lobby>Ke Lobi Arena</button><button type="button" class="primary" data-soc-rematch>⚔️ Tanding Ulang</button></div>
+      </div>
+      <div class="card soc-card"><h4>📝 Pembahasan &amp; Perbandingan Jawaban</h4>${review}</div>`;
     }
-    // aktif
+
+    // ───────── DUEL AKTIF (ARENA TOP BAR + TUG OF WAR + EMOTE) ─────────
     const pct = n => Math.round((n / D.total) * 100), mineN = D.myAnswers.length;
-    const board = `<div class="duel-board"><div class="duel-side me">${avatar(D.me)}<div><b>Kamu</b><span>${mineN}/${D.total} • ✅ ${D.me.score}</span></div><i style="--w:${pct(mineN)}%"></i></div><div class="duel-vs"><span>VS</span>${D.perQ ? '' : `<small id="duelClock">${fmtMs(D.deadlineAt - nowS())}</small>`}</div><div class="duel-side opp">${avatar(opp || {}, 'opp')}<div><b>${oppName}</b><span>${opp?.answered ?? 0}/${D.total}</span></div><i style="--w:${pct(opp?.answered ?? 0)}%"></i></div></div>`;
-    if (nowS() < D.startedAt) return board + `<div class="card soc-card soc-center"><p>Bersiap…</p><div class="soc-count" id="duelGo">${Math.max(1, Math.ceil((D.startedAt - nowS()) / 1000))}</div><p class="soc-hint">${D.total} soal • ${secText(D.perQ)}</p></div>`;
+    const myLiveScore = D.me.liveScore ?? D.me.score ?? 0;
+    const oppLiveScore = opp?.liveScore ?? 0;
+    const lead = myLiveScore - oppLiveScore;
+    const tugPct = Math.max(12, Math.min(88, 50 + lead * Math.round(36 / Math.max(3, D.total / 2))));
+    const flash = S.oppFlash && Date.now() < S.oppFlash.until ? S.oppFlash : null;
+
+    const board = `
+    <div class="duel-arena-board">
+      <div class="duel-board">
+        <div class="duel-side me${(D.me.streak || 0) >= 2 ? ' on-fire' : ''}">
+          ${emoteBubbleHTML('me')}
+          ${avatar(D.me)}
+          <div class="duel-fighter-info">
+            <b>Kamu</b>
+            <span>${mineN}/${D.total} soal • ✅ ${myLiveScore}</span>
+            <div class="duel-fighter-meta">
+              ${isSD ? renderHearts(D.me.hearts ?? 3, D.maxHearts || 3) : ''}
+              ${(D.me.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${D.me.streak}x</span>` : ''}
+            </div>
+          </div>
+          <i style="--w:${pct(mineN)}%"></i>
+        </div>
+        <div class="duel-vs">
+          <span class="duel-vs-badge">VS</span>
+          ${D.perQ ? `<small class="duel-mode-mini">${isSD ? '💀 3❤️' : '🏆'}</small>` : `<small id="duelClock">${fmtMs(D.deadlineAt - nowS())}</small>`}
+        </div>
+        <div class="duel-side opp${(opp?.streak || 0) >= 2 ? ' on-fire' : ''}">
+          ${emoteBubbleHTML('opp')}
+          ${avatar(opp || {}, 'opp')}
+          <div class="duel-fighter-info">
+            <b>${oppName}</b>
+            <span>${opp?.answered ?? 0}/${D.total} soal • 🎯 ${oppLiveScore}</span>
+            <div class="duel-fighter-meta">
+              ${isSD ? renderHearts(opp?.hearts ?? 3, D.maxHearts || 3) : ''}
+              ${(opp?.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${opp.streak}x</span>` : ''}
+            </div>
+          </div>
+          <i style="--w:${pct(opp?.answered ?? 0)}%"></i>
+        </div>
+      </div>
+
+      <div class="duel-tug" title="Indikator Tarik Tambang Keunggulan Skor">
+        <div class="duel-tug-head">
+          <span class="me-side">⚡ Kamu (${myLiveScore})</span>
+          <b class="${lead > 0 ? 'lead-me' : lead < 0 ? 'lead-opp' : ''}">${lead > 0 ? `Unggul +${lead} Poin 🔥` : lead < 0 ? `Tertinggal ${lead} Poin ⚠️` : 'Skor Seimbang ⚖️'}</b>
+          <span class="opp-side">${oppName} (${oppLiveScore}) ⚡</span>
+        </div>
+        <div class="duel-tug-track">
+          <i class="duel-tug-fill" style="width:${tugPct}%"></i>
+          <span class="duel-tug-knot" style="left:${tugPct}%">⚔️</span>
+        </div>
+      </div>
+
+      ${flash ? `<div class="duel-opp-flash ${flash.ok ? 'ok' : 'bad'}">${esc(flash.text)}</div>` : ''}
+    </div>`;
+
+    if (nowS() < D.startedAt) {
+      return board + `<div class="card soc-card soc-center duel-countdown-card">
+        <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
+        <p>Siapkan dirimu! Pertarungan dimulai dalam…</p>
+        <div class="soc-count" id="duelGo">${Math.max(1, Math.ceil((D.startedAt - nowS()) / 1000))}</div>
+        <p class="soc-hint">${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
+      </div>` + emoteBarHTML();
+    }
+
     const fbIdx = S.fb != null && S.fb === mineN - 1 ? S.fb : null, qi = fbIdx != null ? fbIdx : mineN;
     let main;
-    if (qi >= D.total) main = `<div class="card soc-card soc-center"><div class="soc-emoji soc-pulse">⏳</div><h3>Menunggu ${oppName}…</h3><p>Kamu selesai: ✅ ${D.me.score}/${D.total}. Hasil muncul begitu lawan selesai.</p></div>`;
-    else {
+    if (qi >= D.total) {
+      main = `<div class="card soc-card soc-center"><div class="soc-emoji soc-pulse">⏳</div><h3>Menunggu ${oppName} menyelesaikan soal…</h3><p>Skormu: ✅ ${D.me.score}/${D.total}. Kirim stiker di bawah sambil menunggu lawan!</p></div>`;
+    } else {
       const q = D.questions[qi], a = fbIdx != null ? D.myAnswers[qi] : null, timed = D.perQ > 0;
-      main = `<div class="card soc-card">${timed && !a ? `<div class="soc-qtimer"><i id="duelQBar" style="width:100%"></i><b id="duelQSec">${D.perQ / 1000}</b></div>` : ''}<small class="soc-qn">Soal ${qi + 1} dari ${D.total}</small><p class="soc-q">${esc(q.soal)}</p>
+      main = `<div class="card soc-card duel-qcard">
+        ${timed && !a ? `<div class="soc-qtimer"><i id="duelQBar" style="width:100%"></i><b id="duelQSec">${D.perQ / 1000}</b></div>` : ''}
+        <div class="duel-qmeta">
+          <small class="soc-qn">SOAL ${qi + 1} DARI ${D.total}</small>
+          ${(D.me.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 Combo Streak ${D.me.streak}x!</span>` : ''}
+        </div>
+        <p class="soc-q">${esc(q.soal)}</p>
         <div class="soc-opts">${q.opsi.map((o, i) => { const cls = a ? (i === a.correctIdx ? 'ok' : i === a.choice ? 'bad' : '') : ''; return `<button type="button" class="soc-opt ${cls}" data-soc-opt="${i}" ${a ? 'disabled' : ''}><span class="soc-l">${L5[i]}</span><span>${esc(o)}</span></button>`; }).join('')}</div>
-        ${a ? `<div class="soc-fb ${a.ok ? 'ok' : 'bad'}"><b>${a.ok ? '✅ Benar!' : a.choice === -1 ? '⏰ Waktu habis' : '❌ Kurang tepat'}</b>${!timed && a.pembahasan ? `<p>${esc(a.pembahasan)}</p>` : ''}</div>${timed ? '' : `<button type="button" class="primary soc-big" data-soc-next>${qi + 1 < D.total ? 'Lanjut ›' : 'Selesai ›'}</button>`}` : ''}</div>`;
+        ${a ? `<div class="soc-fb ${a.ok ? 'ok' : 'bad'}"><b>${a.ok ? `✅ Tepat sekali!${(D.me.streak || 0) >= 2 ? ` (🔥 Streak ${D.me.streak}x)` : ''}` : a.choice === -1 ? `⏰ Waktu habis!${isSD ? ' (-1 ❤️ Nyawa)' : ''}` : `❌ Kurang tepat!${isSD ? ' (-1 ❤️ Nyawa)' : ''}`}</b>${!timed && a.pembahasan ? `<p>${esc(a.pembahasan)}</p>` : ''}</div>${timed ? '' : `<button type="button" class="primary soc-big" data-soc-next>${qi + 1 < D.total ? 'Soal Berikutnya ›' : 'Lihat Hasil ›'}</button>`}` : ''}
+      </div>`;
     }
-    return board + main + `<button type="button" class="secondary soc-big soc-danger" data-soc-leave>Menyerah</button>`;
+    return board + emoteBarHTML() + main + `<button type="button" class="secondary soc-big soc-danger" data-soc-leave>🏳️ Menyerah dari Duel</button>`;
   }
+
   function renderDuel() {
     ensureShell();
     const b = $('duelBody'); if (!b) return;
     const D = S.D;
-    $('duelTitle').textContent = D?.status === 'finished' ? '🏁 Hasil duel' : '⚔️ Duel';
+    $('duelTitle').textContent = D?.status === 'finished' ? '🏁 Hasil Arena Duel' : (D?.mode === 'sudden_death' ? '💀 Duel Sudden Death' : '⚔️ Arena Duel');
     b.innerHTML = duelHTML();
     if (D?.status === 'active') startTick(); else stopTick();
   }
   async function openDuel(id) {
     S.fb = null; window.show('duelPage');
-    $('duelBody') && ($('duelBody').innerHTML = '<p class="soc-empty">Memuat…</p>');
+    $('duelBody') && ($('duelBody').innerHTML = '<p class="soc-empty">Memuat ruang duel…</p>');
     try { syncD((await api('/api/duels/' + encodeURIComponent(id))).duel); } catch (e) { S.D = null; toast(e.message, true); return openLobby(); }
     renderDuel();
   }
@@ -293,9 +735,30 @@
   const guard = async fn => { if (S.busy) return; S.busy = true; try { await fn(); } catch (e) { toast(e.message || 'Terjadi kesalahan.', true); } finally { S.busy = false; } };
   async function createDuel(friendId) {
     if (!S.bank) return toast('Pilih bank soal dulu.', true);
-    const d = await api('/api/duels', { method: 'POST', body: { bankId: S.bank, count: S.count, seconds: S.sec, ...(friendId ? { friendId } : {}) } });
+    const d = await api('/api/duels', {
+      method: 'POST',
+      body: {
+        bankId: S.bank,
+        count: S.count,
+        seconds: S.sec,
+        mode: S.mode,
+        wager: S.wager,
+        isPublic: friendId ? false : S.isPublic,
+        ...(friendId ? { friendId } : {})
+      }
+    });
     syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
     if (friendId) toast('Tantangan terkirim ⚔️');
+  }
+  async function quickMatch() {
+    if (!S.bank && S.banks.length) S.bank = S.banks[0].id;
+    if (!S.bank) return toast('Pilih bank soal dulu.', true);
+    const d = await api('/api/duels/quick', {
+      method: 'POST',
+      body: { bankId: S.bank, count: S.count, seconds: S.sec, mode: S.mode, wager: S.wager }
+    });
+    syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
+    toast(d.matched ? '⚡ Lawan ditemukan! Bersiap bertarung!' : '🌐 Ruang publik dibuat! Menunggu lawan masuk…');
   }
   async function joinByCode(code) {
     const d = await api('/api/duels/join', { method: 'POST', body: { code } });
@@ -308,6 +771,13 @@
     syncD(d.duel); S.fb = idx; renderDuel();
     if (S.D.perQ > 0 && S.D.status === 'active' && idx + 1 < S.D.total) setTimeout(() => { if (S.fb === idx) { S.fb = null; if (activeView() === 'duelPage') renderDuel(); } }, 1100);
   }
+  async function sendEmote(key) {
+    const D = S.D; if (!D) return;
+    const item = DUEL_EMOTES.find(e => e[0] === key);
+    if (!item) return;
+    showEmoteBubble('me', item[1], item[2]);
+    try { await api(`/api/duels/${encodeURIComponent(D.id)}/emote`, { method: 'POST', body: { emote: key } }); } catch {}
+  }
 
   document.addEventListener('click', e => {
     const t = e.target.closest('button, summary'); if (!t) return;
@@ -317,8 +787,15 @@
     if (t.matches('[data-soc-lobby]')) { S.D = null; stopTick(); return openLobby(); }
     const ds = t.dataset || {};
     if (t.id === 'shareStatusBtn') return openComposer(resultContext());
+    if ('socShareDuel' in ds) return openComposer(duelResultContext());
     if ('socTab' in ds) { S.hubTab = ds.socTab; if (S.hubTab === 'status') S.feed = null; return renderHub(); }
     if ('socHub' in ds) return openHub(ds.socHub);
+    if ('socRefreshLobby' in ds) return guard(() => renderLobby(true));
+    if ('socQuick' in ds) return guard(() => quickMatch());
+    if ('socMode' in ds) { S.mode = ds.socMode; savePref(); return renderLobby(false); }
+    if ('socWager' in ds) { S.wager = Number(ds.socWager); savePref(); return renderLobby(false); }
+    if ('socVis' in ds) { S.isPublic = ds.socVis === '1'; savePref(); return renderLobby(false); }
+    if ('socEmote' in ds) { sendEmote(ds.socEmote); return; }
     if ('socComment' in ds) {
       const id = ds.socComment;
       if (S.openC.has(id)) { S.openC.delete(id); return renderHub(false); }
@@ -361,18 +838,21 @@
     if ('socNext' in ds) { S.fb = null; return renderDuel(); }
     if ('socCopy' in ds) { try { navigator.clipboard.writeText(ds.socCopy); toast('Kode disalin 📋'); } catch { toast('Kode: ' + ds.socCopy); } return; }
     if ('socShare' in ds) {
-      const text = `Ayo duel soal di CLINED! Masukkan kode ${ds.socShare} di menu Teman & Duel.`;
+      const text = `Ayo duel soal di Arena CLINED! Masukkan kode ${ds.socShare} di menu Duel.`;
       if (navigator.share) return navigator.share({ text }).catch(() => {});
       try { navigator.clipboard.writeText(text); toast('Ajakan disalin 📋'); } catch {} return;
     }
     if ('socLeave' in ds) return guard(async () => {
       const D = S.D, act = D?.status === 'active';
-      if (act && !(await clinedConfirm({ title: 'Menyerah dari duel?', lines: ['Kamu dianggap **kalah** dan lawan menang.'], ok: 'Menyerah', cancel: 'Lanjut main', tone: 'danger' }))) return;
+      if (act && !(await clinedConfirm({ title: 'Menyerah dari duel?', lines: ['Kamu dianggap **kalah** dan lawan langsung menang.'], ok: 'Menyerah', cancel: 'Lanjut main', tone: 'danger' }))) return;
       await api(`/api/duels/${encodeURIComponent(D.id)}/leave`, { method: 'POST', body: {} });
       S.D = null; stopTick(); openLobby();
     });
     if ('socRematch' in ds) return guard(async () => {
-      const D = S.D, opp = D?.opponent; S.bank = D.bank.id; S.count = D.total; S.sec = (D.perQ || 0) / 1000;
+      const D = S.D, opp = D?.opponent;
+      S.bank = D.bank.id; S.count = D.total; S.sec = (D.perQ || 0) / 1000;
+      if (D.mode) S.mode = D.mode;
+      if (D.wager != null) S.wager = D.wager;
       const friend = opp && S.F?.friends?.some(f => f.id === opp.id);
       await createDuel(friend ? opp.id : undefined);
     });
@@ -392,13 +872,13 @@
       await api('/api/friends/block', { method: 'POST', body: { userId: ds.socBlock } }); await refreshActive();
     });
   });
-  document.addEventListener('change', e => { if (e.target.matches('[data-soc-bank]')) { S.bank = e.target.value; savePref(); } });
+  document.addEventListener('change', e => { if (e.target.matches('[data-soc-bank]')) { S.bank = e.target.value; savePref(); renderLobby(false); } });
   document.addEventListener('input', e => { if (e.target.matches('[data-soc-code]')) e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); });
   document.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
     if (e.target.matches?.('[data-soc-user]')) $('hubBody')?.querySelector('[data-soc-add]')?.click();
     if (e.target.matches?.('[data-soc-cinput]')) e.target.closest('.soc-cform')?.querySelector('[data-soc-csend]')?.click();
-    if (e.target.matches?.('[data-soc-code]')) $('socialBody').querySelector('[data-soc-join]')?.click();
+    if (e.target.matches?.('[data-soc-code]')) $('socialBody')?.querySelector('[data-soc-join]')?.click();
   });
 
   /* ───────── realtime ───────── */
@@ -427,12 +907,23 @@
     if (activeView() === 'hubPage' && S.hubTab === 'status') loadFeed().then(() => { const open = [...S.openC]; Promise.all(open.map(id => api('/api/status/comments?id=' + encodeURIComponent(id)).then(d => { S.comments[id] = d.comments || []; }).catch(() => {}))).then(() => renderHub(false)); });
   }
   function onDuel(m) {
-    const n = m.from?.name || 'Temanmu';
+    const n = m.from?.name || 'Lawan';
     const here = S.D && S.D.id === m.id && activeView() === 'duelPage';
+    if (m.kind === 'emote') {
+      if (here && m.emote) showEmoteBubble('opp', m.emote.emoji, m.emote.text);
+      return;
+    }
+    if (m.kind === 'progress' && here) {
+      S.oppFlash = {
+        text: m.ok ? `⚡ ${n} menjawab BENAR soal #${(m.idx ?? 0) + 1}!` : `💥 ${n} salah di soal #${(m.idx ?? 0) + 1}!`,
+        ok: !!m.ok,
+        until: Date.now() + 3400
+      };
+    }
     if (m.kind === 'invite') toast(`⚔️ ${n} menantangmu duel!`);
-    else if (m.kind === 'joined' && !here) toast(`⚔️ ${n} bergabung ke duelmu`);
+    else if (m.kind === 'joined' && !here) toast(`⚔️ ${n} bergabung ke duelmu!`);
     else if (m.kind === 'declined') toast(`${n} menolak tantanganmu`);
-    else if (m.kind === 'finished' && !here) toast('🏁 Duel selesai, lihat hasilnya di Teman & Duel');
+    else if (m.kind === 'finished' && !here) toast('🏁 Duel selesai, lihat hasilnya di menu Duel');
     if (here) refreshDuel();
     loadLobby().then(() => { if (activeView() === 'socialPage') renderLobby(false); }).catch(() => {});
   }

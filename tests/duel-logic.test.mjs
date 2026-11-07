@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
+import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
 import { push, isOnline, openStream, connectionCount } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
@@ -98,3 +98,26 @@ test('timer: jawaban kosong (-1) dihitung salah dan duel selesai lebih cepat dar
   assert.equal(v.perQ, 5000); assert.equal(v.qStartAt, 12000 + REVEAL_MS); assert.equal(v.deadlineAt, 1000 + 3 * 5000 + 60_000); assert.ok(v.serverNow > 0);
   assert.equal(v.myAnswers[1].choice, -1);
 });
+
+test('combatStats & Sudden Death 3 nyawa (knockout)', () => {
+  const cs = combatStats(A([true, true, false, true]), 'sudden_death');
+  assert.equal(cs.streak, 1);
+  assert.equal(cs.maxStreak, 2);
+  assert.equal(cs.wrong, 1);
+  assert.equal(cs.hearts, 2);
+  assert.equal(cs.eliminated, false);
+
+  const sdDuel = duel(
+    A([false, false, false]),
+    A([true]),
+    { questions: Q(10), answers: { _meta: { mode: 'sudden_death', wager: 20, isPublic: true }, H: A([false, false, false]), G: A([true]) } }
+  );
+  assert.deepEqual(duelMeta(sdDuel), { mode: 'sudden_death', wager: 20, isPublic: true });
+  assert.deepEqual(decide(sdDuel, 5000), { winnerId: 'G', reason: 'knockout' });
+  const v = viewFor(sdDuel, 'H');
+  assert.equal(v.mode, 'sudden_death');
+  assert.equal(v.wager, 20);
+  assert.equal(v.me.hearts, 0);
+  assert.equal(v.me.eliminated, true);
+});
+
