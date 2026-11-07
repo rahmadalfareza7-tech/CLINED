@@ -282,7 +282,7 @@ const S={
   quiz:null,
   foc:{i:0,f:'l1'},
   sub:{sed:'lp',sing:'kuis',pad:'kuis',pan:'racik'},
-  lp:{idx:0,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:''},tblFilter:'all',tblSearch:'',tblHide:false,tblMode:'auto',revealed:{}},
+  lp:{idx:0,examMode:false,hideLabel:false,checked:false,form:{a:'',b:'',c:'',d:'',e:'',fR:'',fS:''},tblFilter:'all',tblSearch:'',tblHide:false,tblMode:'auto',revealed:{}},
   racik:{idx:0,hideCalc:false}
 };
 const TABS=[['kasus','Kasus'],['sediaan','Sediaan & Bungkus'],['panduan','Panduan & Racikan'],['singkatan','Singkatan'],['padat','BSO padat'],['hitung','Hitung']];
@@ -490,7 +490,7 @@ function selectLpDrug(idx){
 }
 
 function drawLembarPengamatan(){
-  const s=SEDIAAN[S.lp.idx]||SEDIAAN[0],lp=s.lp||{},f=S.lp.form,d=S.lp.checked,lpBest=lpBestMap();
+  const s=SEDIAAN[S.lp.idx]||SEDIAAN[0],lp=s.lp||{},f=S.lp.form,d=S.lp.checked,exam=!!S.lp.examMode,lpBest=lpBestMap();
   const ev=d?evalLembarPengamatan(s,f):null;
   const colCls=c=>!d?'':(c.ok?'good':c.partial?'partial':'bad');
   const colTag=c=>!d?'':`<span class="tag ${c.ok?'good':c.partial?'warn':'bad'}" style="margin:0">${c.pts}/${c.max}</span>`;
@@ -499,11 +499,22 @@ function drawLembarPengamatan(){
 
   $('#list').innerHTML=`
   <div class="card">
+    <div class="row between" style="padding-bottom:12px;margin-bottom:12px;border-bottom:2px dashed var(--line)">
+      <div>
+        <div class="eyebrow">Mode Pengerjaan</div>
+        <div class="sub">${exam?'Mode Ujian aktif: seluruh panduan, label teks, chip bantuan, dan contoh jawaban disembunyikan.':'Mode Latihan aktif: dilengkapi panduan label kemasan, chip bantuan, dan contoh penulisan.'}</div>
+      </div>
+      <div class="seg" role="group" aria-label="Pilih mode Lembar Pengamatan" style="width:auto">
+        <button type="button" aria-pressed="${!exam}" data-lpexam="0">📖 Mode Latihan (Ada Panduan)</button>
+        <button type="button" aria-pressed="${exam}" data-lpexam="1">🎯 Mode Ujian (Tanpa Panduan)</button>
+      </div>
+    </div>
+
     <div class="row between">
       <div class="grow">
-        <label class="l" for="lpSelect">Pilih Obat Praktikum BSO Cair (1–26 sesuai daftar Gambar 1)</label>
+        <label class="l" for="lpSelect">${exam?'Pilih Nomor Soal Obat Praktikum (1–26)':'Pilih Obat Praktikum BSO Cair (1–26 sesuai daftar Gambar 1)'}</label>
         <select class="f" id="lpSelect">
-          ${SEDIAAN.map((x,i)=>{const sc=lpBest[x.no];return `<option value="${i}" ${i===S.lp.idx?'selected':''}>#${x.no}. ${esc(x.praktikumNama)} — ${esc(x.n)} (${esc(x.tipePraktikum)})${sc!=null?` [Terbaik ${sc}%]`:''}</option>`}).join('')}
+          ${SEDIAAN.map((x,i)=>{const sc=lpBest[x.no];return `<option value="${i}" ${i===S.lp.idx?'selected':''}>${exam?`Soal Obat Praktikum #${x.no}`:`#${x.no}. ${esc(x.praktikumNama)} — ${esc(x.n)} (${esc(x.tipePraktikum)})`}${sc!=null?` [Terbaik ${sc}%]`:''}</option>`}).join('')}
         </select>
       </div>
       <div class="row" style="margin-top:8px">
@@ -513,90 +524,100 @@ function drawLembarPengamatan(){
       </div>
     </div>
 
-    <div class="pkg-grid">
-      <div class="pkg-photo-box">
-        <img src="${esc(s.img)}" alt="Bungkus ${esc(s.n)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)} (${esc(s.tipePraktikum)})">
-        <span class="pkg-zoom-hint">🔍 Klik foto bungkus untuk zoom</span>
+    ${exam?`
+      <div class="pkg-photo-box" style="margin-top:14px;min-height:230px;padding:16px">
+        <div class="step-h" style="justify-content:center;margin-bottom:10px">
+          <span class="badge warn">🎯 SOAL UJIAN · OBAT PRAKTIKUM #${s.no}</span>
+        </div>
+        <img src="${esc(s.img)}" style="max-height:230px" alt="Kemasan Obat Praktikum #${s.no}" data-zoom="${esc(s.img)}" data-zoom-title="Soal Ujian Obat Praktikum #${s.no}">
+        <span class="pkg-zoom-hint">🔍 Ketuk foto bungkus obat untuk memperbesar &amp; membaca kemasan</span>
       </div>
-      <div class="pkg-back">
-        <div class="pkg-back-head">
-          <div>
-            <span class="badge">#${s.no} · ${esc(s.tipePraktikum)}</span>
-            <h3 style="margin:4px 0 2px">${esc(s.n)}</h3>
-            <div class="sub">Nama di daftar praktikum: <b>${esc(s.praktikumNama)}</b></div>
+    `:`
+      <div class="pkg-grid">
+        <div class="pkg-photo-box">
+          <img src="${esc(s.img)}" alt="Bungkus ${esc(s.n)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)} (${esc(s.tipePraktikum)})">
+          <span class="pkg-zoom-hint">🔍 Klik foto bungkus untuk zoom</span>
+        </div>
+        <div class="pkg-back">
+          <div class="pkg-back-head">
+            <div>
+              <span class="badge">#${s.no} · ${esc(s.tipePraktikum)}</span>
+              <h3 style="margin:4px 0 2px">${esc(s.n)}</h3>
+              <div class="sub">Nama di daftar praktikum: <b>${esc(s.praktikumNama)}</b></div>
+            </div>
+            <button class="secondary small" data-act="lptogglelabel">${S.lp.hideLabel?'👁️ Lihat Label Bungkus':'🙈 Tutup Teks Label'}</button>
           </div>
-          <button class="secondary small" data-act="lptogglelabel">${S.lp.hideLabel?'👁️ Lihat Label Bungkus':'🙈 Mode Ujian (Tutup Label)'}</button>
+          ${golBadgeHtml(s)}
+          <div class="pkg-back-list ${S.lp.hideLabel?'blurred':''}">
+            <div><b>Komposisi pada bungkus:</b> ${esc(lp.c||s.k)}</div>
+            <div><b>Indikasi:</b> ${esc(s.indikasi||'-')}</div>
+            <div><b>Dosis &amp; Aturan Pakai:</b> ${esc(lp.d||s.d)}</div>
+            <div><b>Kemasan &amp; Fisik/Organoleptis:</b> ${esc(s.kemasan||'-')} — ${esc(s.organoleptis||'-')}</div>
+            <div><b>Cara Penyimpanan:</b> ${esc(s.penyimpanan||'-')}</div>
+          </div>
+          ${S.lp.hideLabel?`<div class="hint">Teks label diburamkan. Ketuk "Lihat Label Bungkus" untuk menampilkan kembali, atau gunakan "🎯 Mode Ujian (Tanpa Panduan)" di atas untuk ujian penuh.</div>`:''}
         </div>
-        ${golBadgeHtml(s)}
-        <div class="pkg-back-list ${S.lp.hideLabel?'blurred':''}">
-          <div><b>Komposisi pada bungkus:</b> ${esc(lp.c||s.k)}</div>
-          <div><b>Indikasi:</b> ${esc(s.indikasi||'-')}</div>
-          <div><b>Dosis &amp; Aturan Pakai:</b> ${esc(lp.d||s.d)}</div>
-          <div><b>Kemasan &amp; Fisik/Organoleptis:</b> ${esc(s.kemasan||'-')} — ${esc(s.organoleptis||'-')}</div>
-          <div><b>Cara Penyimpanan:</b> ${esc(s.penyimpanan||'-')}</div>
-        </div>
-        ${S.lp.hideLabel?`<div class="hint">Mode ujian aktif: informasi label komposisi &amp; dosis diburamkan. Ketuk "Lihat Label Bungkus" bila ingin mengamati teks kemasan seperti saat praktikum.</div>`:''}
       </div>
-    </div>
+    `}
 
     <div class="lp-sheet">
       <div class="lp-sheet-head">
-        <h3>Lembar Pengamatan Praktikum BSO Cair</h3>
-        <div class="sub">Isi kolom (a) sampai (f) berdasarkan pengamatan bungkus obat #${s.no} (${esc(s.praktikumNama)}), lalu klik Periksa.</div>
+        <h3>Lembar Pengamatan Praktikum BSO Cair ${exam?`(Mode Ujian — Obat #${s.no})`:''}</h3>
+        <div class="sub">${exam?`Amati foto kemasan Obat #${s.no} di atas dan isi kolom (a) s/d (f) tanpa panduan.`:`Isi kolom (a) sampai (f) berdasarkan pengamatan bungkus obat #${s.no} (${esc(s.praktikumNama)}), lalu klik Periksa.`}</div>
       </div>
       <div class="lp-form-grid">
         <div class="lp-col ${colCls(ev?.cols.a)}">
           <div class="lp-col-title"><span><span class="lp-col-code">a</span> Nama Bentuk Sediaan</span>${colTag(ev?.cols.a)}</div>
-          <input class="f" data-lp="a" placeholder="Contoh: Suspensi oral — Sirup kering (Dry syrup)" value="${esc(f.a)}">
-          <div class="lp-chips">${chipsA.map(c=>`<button type="button" data-lpchip="a:${esc(c)}">${esc(c)}</button>`).join('')}</div>
+          <input class="f" data-lp="a" placeholder="${exam?'Tulis nama bentuk sediaan...':'Contoh: Suspensi oral — Sirup kering (Dry syrup)'}" value="${esc(f.a)}">
+          ${exam?'':`<div class="lp-chips">${chipsA.map(c=>`<button type="button" data-lpchip="a:${esc(c)}">${esc(c)}</button>`).join('')}</div>`}
           ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.a.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.a.msg)}<br><b>Kunci (a):</b> ${esc(ev.cols.a.key)}</div>`:''}
         </div>
 
         <div class="lp-col ${colCls(ev?.cols.b)}">
           <div class="lp-col-title"><span><span class="lp-col-code">b</span> Nama Obat &amp; Strength</span>${colTag(ev?.cols.b)}</div>
-          <input class="f" data-lp="b" placeholder="Contoh: Amoxsan Drops, 100 mg/ml" value="${esc(f.b)}">
+          <input class="f" data-lp="b" placeholder="${exam?'Tulis nama dagang/obat beserta kekuatannya...':'Contoh: Amoxsan Drops, 100 mg/ml'}" value="${esc(f.b)}">
           ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.b.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.b.msg)}<br><b>Kunci (b):</b> ${esc(ev.cols.b.key)}</div>`:''}
         </div>
 
         <div class="lp-col ${colCls(ev?.cols.c)}">
           <div class="lp-col-title"><span><span class="lp-col-code">c</span> Senyawa Aktif &amp; Komposisi</span>${colTag(ev?.cols.c)}</div>
-          <textarea class="f" rows="2" style="min-height:64px" data-lp="c" placeholder="Contoh: Amoksisilin trihidrat setara amoksisilin 100 mg/ml">${esc(f.c)}</textarea>
+          <textarea class="f" rows="2" style="min-height:64px" data-lp="c" placeholder="${exam?'Tulis zat aktif dan komposisi sesuai kemasan...':'Contoh: Amoksisilin trihidrat setara amoksisilin 100 mg/ml'}">${esc(f.c)}</textarea>
           ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.c.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.c.msg)}<br><b>Kunci (c):</b> ${esc(ev.cols.c.key)}</div>`:''}
         </div>
 
         <div class="lp-col ${colCls(ev?.cols.d)}">
           <div class="lp-col-title"><span><span class="lp-col-code">d</span> Cara Pemakaian &amp; Dosis</span>${colTag(ev?.cols.d)}</div>
-          <textarea class="f" rows="2" style="min-height:64px" data-lp="d" placeholder="Contoh: Oral (pipet tetes): Anak 20-40 mg/kgBB/hari dibagi 3 dosis (tiap 8 jam 1 ml) sesudah makan">${esc(f.d)}</textarea>
+          <textarea class="f" rows="2" style="min-height:64px" data-lp="d" placeholder="${exam?'Tulis rute/cara pemakaian dan dosis...':'Contoh: Oral (pipet tetes): Anak 20-40 mg/kgBB/hari dibagi 3 dosis (tiap 8 jam 1 ml) sesudah makan'}">${esc(f.d)}</textarea>
           ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.d.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.d.msg)}<br><b>Kunci (d):</b> ${esc(ev.cols.d.key)}</div>`:''}
         </div>
 
         <div class="lp-col full ${colCls(ev?.cols.e)}">
           <div class="lp-col-title"><span><span class="lp-col-code">e</span> Keterangan (Golongan Obat &amp; Cara Penyimpanan)</span>${colTag(ev?.cols.e)}</div>
-          <textarea class="f" rows="2" style="min-height:58px" data-lp="e" placeholder="Contoh: Obat Keras (lingkaran merah huruf K); simpan pada suhu <30°C, kering & terlindung cahaya">${esc(f.e)}</textarea>
-          <div class="lp-chips">${chipsE.map(c=>`<button type="button" data-lpchip="e:${esc(c)}">${esc(c)}</button>`).join('')}</div>
+          <textarea class="f" rows="2" style="min-height:58px" data-lp="e" placeholder="${exam?'Tulis golongan obat (Keras/Bebas Terbatas/Bebas/Jamu) dan cara penyimpanannya...':'Contoh: Obat Keras (lingkaran merah huruf K); simpan pada suhu <30°C, kering & terlindung cahaya'}">${esc(f.e)}</textarea>
+          ${exam?'':`<div class="lp-chips">${chipsE.map(c=>`<button type="button" data-lpchip="e:${esc(c)}">${esc(c)}</button>`).join('')}</div>`}
           ${d?`<div class="sub" style="margin-top:4px"><b>${ev.cols.e.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.e.msg)}<br><b>Kunci (e):</b> ${esc(ev.cols.e.key)}</div>`:''}
         </div>
 
         <div class="lp-col full ${colCls(ev?.cols.f)}">
           <div class="lp-col-title"><span><span class="lp-col-code">f</span> Penulisan Resep (Baris R/ dan S)</span>${colTag(ev?.cols.f)}</div>
           <div class="paper" style="padding:12px 14px">
-            <div class="ln"><span class="rm">R/</span><input data-lp="fR" placeholder="Drops Amoxsan 100 mg/ml fl. I" value="${esc(f.fR)}" autocomplete="off" spellcheck="false"></div>
-            <div class="ln l2" style="margin-top:6px"><span class="sm">S</span><input data-lp="fS" placeholder="3 dd gtt oral 1 ml pc" value="${esc(f.fS)}" autocomplete="off" spellcheck="false"></div>
+            <div class="ln"><span class="rm">R/</span><input data-lp="fR" placeholder="${exam?'Tulis baris R/ ...':'Drops Amoxsan 100 mg/ml fl. I'}" value="${esc(f.fR)}" autocomplete="off" spellcheck="false"></div>
+            <div class="ln l2" style="margin-top:6px"><span class="sm">S</span><input data-lp="fS" placeholder="${exam?'Tulis baris S (signatura) ...':'3 dd gtt oral 1 ml pc'}" value="${esc(f.fS)}" autocomplete="off" spellcheck="false"></div>
           </div>
-          ${d?`<div class="sub" style="margin-top:6px"><b>${ev.cols.f.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.f.msg)}<br><b>Kunci Resep (f):</b><div class="paper" style="margin-top:6px;padding:10px"><div class="keyp" style="font-size:17px">${esc(ev.cols.f.key)}</div></div></div>`:''}
+          ${d?`<div class="sub" style="margin-top:6px"><b>${ev.cols.f.ok?'✓':'Catatan:'}</b> ${esc(ev.cols.f.msg)}<br><b>Kunci Resep (f):</b><div class="paper" style="margin-top:6px;padding:10px"><div class="keyp">${esc(ev.cols.f.key)}</div></div></div>`:''}
         </div>
       </div>
     </div>
 
     ${d?`<div role="status" class="fb ${ev.pct>=80?'good':'bad'}">
-      <b>Skor Lembar Pengamatan #${s.no} (${esc(s.praktikumNama)}): ${ev.pct}% (${ev.pts}/${ev.max} poin)</b>
-      <div style="margin-top:6px">Alasan Pemilihan BSO (untuk Laporan Praktikum): ${esc(s.alasanBso)}</div>
-      <div style="margin-top:4px">Efek Samping &amp; Perhatian: ${esc(s.efekSamping)}</div>
+      <b>Skor Lembar Pengamatan #${s.no} (${esc(s.praktikumNama)} — ${esc(s.n)}): ${ev.pct}% (${ev.pts}/${ev.max} poin)</b>
+      <div style="margin-top:6px"><b>Alasan Pemilihan BSO:</b> ${esc(s.alasanBso)}</div>
+      <div style="margin-top:4px"><b>Efek Samping &amp; Perhatian:</b> ${esc(s.efekSamping)}</div>
     </div>`:''}
 
     <div class="actions two">
-      ${P(d?'Periksa Ulang Jawaban':'Periksa Lembar Pengamatan','lpcheck')}
-      ${X(d?'Kosongkan & Coba Lagi':'Isi Contoh Kunci Jawaban','lpfill')}
+      ${P(d?'Periksa Ulang Jawaban':(exam?'🎯 Kumpulkan & Nilai Lembar Pengamatan':'Periksa Lembar Pengamatan'),'lpcheck')}
+      ${exam?(d?X('Kosongkan & Coba Lagi','lpfill'):X('🎲 Ganti Soal Obat Acak','lprand')):X(d?'Kosongkan & Coba Lagi':'Isi Contoh Kunci Jawaban','lpfill')}
     </div>
   </div>`;
 }
@@ -1000,6 +1021,7 @@ sr.addEventListener('click',e=>{
   if(t.dataset.sub){const[k,v]=t.dataset.sub.split(':');S.sub[k]=v;S.quiz=null;return render()}
   if(t.dataset.racik!=null){S.racik.idx=+t.dataset.racik;S.lp.revealed={};return drawRacikan()}
   if(t.dataset.lpgoto!=null){S.sub.sed='lp';selectLpDrug(+t.dataset.lpgoto);render();return scrollTo({top:0})}
+  if(t.dataset.lpexam!=null){S.lp.examMode=t.dataset.lpexam==='1';S.lp.checked=false;return drawLembarPengamatan()}
   if(t.dataset.lpflt!=null){S.lp.tblFilter=t.dataset.lpflt;return drawLpTable()}
   if(t.dataset.lpchip!=null){
     const idx=t.dataset.lpchip.indexOf(':'),col=t.dataset.lpchip.slice(0,idx),val=t.dataset.lpchip.slice(idx+1);
