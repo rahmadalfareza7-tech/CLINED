@@ -1160,5 +1160,10 @@
   function boot() { ensureShell(); connect(); }
   setInterval(() => { ensureShell(); connect(); }, 5000);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
-  window.CLINED_SOCIAL = { openChat: () => { S.hubTab = 'chat'; renderHub(); }, openStatus: () => { S.hubTab = 'status'; S.feed = null; renderHub(); }, open: openLobby, refresh: () => renderLobby(true) };
+  window.CLINED_SOCIAL = { gladiatorRowsHTML: list => (list || []).map(p => {
+      const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
+      const pTier = getRank(p.tier || { rp: p.rp || 0 });
+      const pCard = p.me ? (getMyShowcaseCard() || p.card) : p.card;
+      return `<div class="duel-lb-row${p.me ? ' me' : ''}"><span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>${avatar(p)}<div class="duel-lb-main"><div class="duel-lb-top"><b class="duel-lb-name">${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b><span class="duel-lb-wins">🏆 ${p.wins} Menang</span></div><div class="duel-lb-bottom">${rankPill(pTier, true)}${cardPill(pCard)}<small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small></div></div></div>`;
+    }).join(''), openChat: () => { S.hubTab = 'chat'; renderHub(); }, openStatus: () => { S.hubTab = 'status'; S.feed = null; renderHub(); }, open: openLobby, refresh: () => renderLobby(true) };
 })();

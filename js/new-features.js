@@ -19,7 +19,20 @@ window.CLINED_Leaderboard = (function () {
     } catch { listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat.</div>'; }
   }
 
+  async function renderGladiator(listEl) {
+    listEl.innerHTML = '<div class="leaderboard-loading">Memuat Rank Gladiator…</div>';
+    try {
+      const r = await fetch('/api/duels/active', { credentials: 'same-origin', cache: 'no-store' });
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      if (lbTab !== 'gladiator') return;
+      const html = window.CLINED_SOCIAL?.gladiatorRowsHTML?.(d.leaderboardFull || d.leaderboard);
+      listEl.innerHTML = html ? `<div class="duel-lb-list">${html}</div>` : '<div class="leaderboard-loading">Belum ada rekor duel. Jadilah Gladiator pertama!</div>';
+    } catch { if (lbTab === 'gladiator') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat Rank Gladiator. Masuk akun dulu.</div>'; }
+  }
+
   function render(listEl, tab) {
+    if (tab === 'gladiator') return renderGladiator(listEl);
     if (!lbData) return;
     const rankings = [...lbData.rankings];
     if (tab === 'alltime') rankings.sort((a, b) => b.xpAllTime - a.xpAllTime);
