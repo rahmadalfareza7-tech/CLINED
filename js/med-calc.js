@@ -657,6 +657,8 @@
       ['scores', '🧠 GCS & CURB-65'],
       ['lytes', '🧪 Elektrolit']
     ];
+    const prevTabs = host.querySelector('.medcalc-tabs');
+    const prevLeft = prevTabs ? prevTabs.scrollLeft : 0;
     host.innerHTML = `
       <div class="medcalc-head">
         <div>
@@ -673,6 +675,16 @@
         ${renderActiveTabBody()}
       </div>
     `;
+    const tabsEl = host.querySelector('.medcalc-tabs');
+    if (tabsEl) {
+      tabsEl.scrollLeft = prevLeft;
+      const act = tabsEl.querySelector('.medcalc-tab.active');
+      if (act) {
+        const l = act.offsetLeft - 8, r = act.offsetLeft + act.offsetWidth + 8;
+        if (l < tabsEl.scrollLeft) tabsEl.scrollLeft = l;
+        else if (r > tabsEl.scrollLeft + tabsEl.clientWidth) tabsEl.scrollLeft = r - tabsEl.clientWidth;
+      }
+    }
   }
 
   function ensureModal() {
@@ -694,6 +706,7 @@
       }
       const tabBtn = e.target.closest('[data-mc-tab]');
       if (tabBtn) {
+        if (tabBtn.parentElement?.dataset.justDragged) return;
         S.tab = tabBtn.getAttribute('data-mc-tab') || 'peds';
         renderModalContent();
         return;
@@ -717,6 +730,32 @@
         setTimeout(() => { copyBtn.textContent = prev; }, 1400);
       }
     });
+
+    // Geser tab ke samping: drag mouse + roda mouse (sentuhan memakai scroll native)
+    let drag = null;
+    modal.addEventListener('pointerdown', e => {
+      const t = e.target.closest('.medcalc-tabs');
+      if (!t || e.pointerType === 'touch') return;
+      drag = { el: t, x: e.clientX, left: t.scrollLeft, moved: false };
+    });
+    window.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 4) { drag.moved = true; drag.el.classList.add('dragging'); }
+      drag.el.scrollLeft = drag.left - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      if (!drag) return;
+      const d = drag; drag = null;
+      setTimeout(() => d.el.classList.remove('dragging'), 0);
+      if (d.moved) { d.el.dataset.justDragged = '1'; setTimeout(() => delete d.el.dataset.justDragged, 60); }
+    });
+    modal.addEventListener('wheel', e => {
+      const t = e.target.closest('.medcalc-tabs');
+      if (!t || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      t.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }, { passive: false });
 
     modal.addEventListener('input', e => {
       const m = e.target.getAttribute('data-mc-model');
