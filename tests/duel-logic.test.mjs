@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
+import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
 import { push, isOnline, openStream, connectionCount } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
@@ -112,7 +112,7 @@ test('combatStats & Sudden Death 3 nyawa (knockout)', () => {
     A([true]),
     { questions: Q(10), answers: { _meta: { mode: 'sudden_death', wager: 20, isPublic: true }, H: A([false, false, false]), G: A([true]) } }
   );
-  assert.deepEqual(duelMeta(sdDuel), { mode: 'sudden_death', wager: 20, isPublic: true });
+  assert.deepEqual(duelMeta(sdDuel), { mode: 'sudden_death', wager: 20, isPublic: true, hostCard: null, guestCard: null });
   assert.deepEqual(decide(sdDuel, 5000), { winnerId: 'G', reason: 'knockout' });
   const v = viewFor(sdDuel, 'H');
   assert.equal(v.mode, 'sudden_death');
@@ -141,5 +141,33 @@ test('rankFromRp & calcMatchRpDelta menghitung Tier Rank dan RP dengan benar', (
   // Menang dengan Sudden Death Knockout + streak 3 + wager 50 -> 30 + 12 + 10 + 10 = 62 RP
   assert.equal(calcMatchRpDelta({ outcome: 'win', currentRp: 300, streak: 3, mode: 'sudden_death', wager: 50, reason: 'knockout' }), 62);
 });
+
+test('cleanShowcaseCard & Kartu Andalan pada duelMeta dan viewFor', () => {
+  assert.equal(cleanShowcaseCard(null), null);
+  assert.equal(cleanShowcaseCard({ id: 'invalid_id', star: 3 }), null);
+  assert.deepEqual(cleanShowcaseCard({ id: 'cor', star: 9 }), { id: 'cor', star: 5 });
+  assert.deepEqual(cleanShowcaseCard('leukocytus'), { id: 'leukocytus', star: 1 });
+
+  const d = duel(A([true]), A([false]), {
+    answers: {
+      _meta: {
+        mode: 'classic',
+        wager: 10,
+        isPublic: true,
+        hostCard: { id: 'cor', star: 4 },
+        guestCard: { id: 'cerebrum', star: 5 }
+      },
+      H: A([true]),
+      G: A([false])
+    }
+  });
+  const vH = viewFor(d, 'H');
+  assert.deepEqual(vH.me.card, { id: 'cor', star: 4 });
+  assert.deepEqual(vH.opponent.card, { id: 'cerebrum', star: 5 });
+  const vG = viewFor(d, 'G');
+  assert.deepEqual(vG.me.card, { id: 'cerebrum', star: 5 });
+  assert.deepEqual(vG.opponent.card, { id: 'cor', star: 4 });
+});
+
 
 

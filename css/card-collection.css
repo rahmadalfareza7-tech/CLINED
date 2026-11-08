@@ -1,4 +1,4 @@
-/* CLINED Card Shop */
+/* CLINED Card Shop, Showcase Card, Star-Up & Holographic Foil */
 
 .card-shop-fab {
   position: fixed;
@@ -41,55 +41,228 @@
 .card-shop-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, .5); opacity: 0; transition: opacity .2s ease; }
 .card-shop-modal.open .card-shop-backdrop { opacity: 1; }
 .card-shop-sheet {
-  position: relative; width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto;
+  position: relative; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
   background: var(--card, #fff); color: var(--text, #111); border-radius: 26px 26px 0 0;
-  padding: 18px 18px calc(20px + env(safe-area-inset-bottom, 0px));
+  padding: 18px 18px calc(24px + env(safe-area-inset-bottom, 0px));
   transform: translateY(100%); transition: transform .25s cubic-bezier(.2, .8, .3, 1);
-  display: flex; flex-direction: column; gap: 14px;
+  display: flex; flex-direction: column; gap: 13px;
 }
 .card-shop-modal.open .card-shop-sheet { transform: translateY(0); }
 .card-shop-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .card-shop-eyebrow { font: 900 11px system-ui, sans-serif; letter-spacing: .06em; color: #a855f7; }
-.card-shop-head h3 { margin: 2px 0 2px; font-size: 22px; font-weight: 950; }
-.card-shop-head p { margin: 0; color: var(--muted, #6b7280); font-size: 13px; font-weight: 700; }
-.card-shop-close { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line, #e5e7eb); background: var(--surface, #f4f4f4); color: var(--text, #111); font-size: 15px; cursor: pointer; flex: none; }
+.card-shop-head h3 { margin: 2px 0 2px; font-size: 21px; font-weight: 950; }
+.card-shop-head p { margin: 0; color: var(--muted, #6b7280); font-size: 12.5px; font-weight: 700; line-height: 1.4; }
+.card-shop-close { width: 34px !important; height: 34px; border-radius: 50%; border: 2px solid var(--line, #e5e7eb); background: var(--surface, #f4f4f4); color: var(--text, #111); font-size: 15px; cursor: pointer; flex: none; padding: 0; }
 
 .card-shop-dia-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
 .card-shop-dia-badge { display: inline-flex; align-items: center; gap: 5px; font: 900 15px system-ui, sans-serif; background: rgba(168, 85, 247, .12); color: #7c3aed; padding: 5px 12px; border-radius: 99px; }
-.card-shop-dia-hint { font-size: 11px; color: var(--muted, #6b7280); font-weight: 700; }
+.card-shop-dia-hint { font-size: 11.5px; color: var(--muted, #6b7280); font-weight: 800; }
 
-.card-pack-card { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 18px; border: 2px solid var(--line, #e5e7eb); background: linear-gradient(135deg, rgba(168, 85, 247, .1), rgba(124, 58, 237, .05)); }
-.card-pack-img { width: 64px; height: 64px; object-fit: contain; flex: none; }
-.card-pack-info { display: flex; flex-direction: column; gap: 3px; }
-.card-pack-info b { font-size: 17px; font-weight: 950; }
-.card-pack-info small { color: var(--muted, #6b7280); font-weight: 700; }
+/* ══════════════ Kartu Andalan (Equipped Showcase Banner) ══════════════ */
+.card-equipped-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 13px;
+  border-radius: 18px;
+  border: 2px solid color-mix(in srgb, var(--card-color, #a855f7) 58%, var(--line, #e5e7eb));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--card-color, #a855f7) 15%, var(--card, #fff)), color-mix(in srgb, var(--card-color, #a855f7) 4%, var(--card, #fff)));
+  box-shadow: 0 4px 14px rgba(15, 23, 42, .06);
+}
+.card-equipped-banner.empty {
+  border-style: dashed;
+  background: var(--surface, #f8fafc);
+}
+.card-equipped-empty-ico {
+  width: 48px; height: 64px; border-radius: 12px; background: rgba(168, 85, 247, .12);
+  display: grid; place-items: center; font-size: 24px; flex: none;
+}
+.card-equipped-thumb {
+  position: relative;
+  width: 56px;
+  height: 78px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex: none;
+  cursor: pointer;
+  border: 2px solid var(--card-color, #a855f7);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .18);
+}
+.card-equipped-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-star-pill {
+  position: absolute; bottom: 3px; right: 3px; z-index: 3;
+  background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff;
+  font: 900 9.5px system-ui, sans-serif; padding: 1px 5px; border-radius: 99px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.card-equipped-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.card-equipped-topline { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+.card-equipped-kicker { font: 900 10px system-ui, sans-serif; letter-spacing: .05em; color: #7c3aed; }
+.card-equipped-stars { font-size: 12px; color: #f59e0b; letter-spacing: 1px; font-weight: 900; }
+.card-equipped-info > b { font-size: 15px; font-weight: 950; color: var(--text, #111); }
+.card-equipped-info > b small { font-size: 11px; font-weight: 800; color: var(--muted, #6b7280); }
+.card-equipped-buff {
+  display: inline-flex; align-items: center; gap: 4px; align-self: flex-start;
+  font-size: 11.5px; font-weight: 800; color: #065f46;
+  background: #d1fae5; border: 1px solid #6ee7b7; border-radius: 8px;
+  padding: 2px 8px; margin-top: 2px;
+}
+body.dark .card-equipped-buff { background: rgba(16, 185, 129, .18); color: #6ee7b7; border-color: rgba(16, 185, 129, .35); }
+.card-equipped-desc { font-size: 11px; color: var(--muted, #6b7280); font-weight: 700; line-height: 1.35; margin-top: 2px; }
+
+/* Home Player Card Showcase Pill */
+.home-equipped-card-pill {
+  width: auto !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 11px 5px 6px;
+  border-radius: 14px;
+  border: 2px solid color-mix(in srgb, var(--card-color, #a855f7) 55%, var(--line, #e5e7eb));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--card-color, #a855f7) 14%, var(--card, #fff)), var(--card, #fff));
+  color: var(--text, #111);
+  cursor: pointer;
+  text-align: left;
+  margin-top: 6px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, .06);
+  transition: transform .15s ease;
+}
+.home-equipped-card-pill:active { transform: scale(.98); }
+.home-equipped-card-pill img {
+  width: 28px; height: 39px; object-fit: cover; border-radius: 6px;
+  border: 1.5px solid var(--card-color, #a855f7); flex: none;
+}
+.home-equipped-card-pill .hec-txt { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.home-equipped-card-pill .hec-txt small { font-size: 9.5px; font-weight: 900; color: #7c3aed; letter-spacing: .04em; }
+.home-equipped-card-pill .hec-txt b { font-size: 11.5px; font-weight: 900; color: var(--text, #111); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.card-pack-card { display: flex; align-items: center; gap: 14px; padding: 13px; border-radius: 18px; border: 2px solid var(--line, #e5e7eb); background: linear-gradient(135deg, rgba(168, 85, 247, .1), rgba(124, 58, 237, .05)); }
+.card-pack-img { width: 60px; height: 60px; object-fit: contain; flex: none; }
+.card-pack-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.card-pack-info b { font-size: 16px; font-weight: 950; }
+.card-pack-info small { color: var(--muted, #6b7280); font-weight: 700; font-size: 12px; line-height: 1.35; }
 .card-rarity-odds { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
 .card-rarity-odds span { font: 800 10px system-ui, sans-serif; padding: 2px 7px; border-radius: 99px; background: var(--surface, #eee); color: var(--muted, #555); }
 .card-rarity-odds .odd-rare { background: rgba(59, 130, 246, .15); color: #2563eb; }
 .card-rarity-odds .odd-epic { background: rgba(168, 85, 247, .15); color: #7c3aed; }
 .card-rarity-odds .odd-legendary { background: rgba(245, 201, 122, .25); color: #b8860b; }
 
-.card-buy-btn { width: 100%; min-height: 52px; border-radius: 16px; border: 2px solid #6d28d9; background: linear-gradient(160deg, #a855f7, #7c3aed); color: #fff; font: 950 15px system-ui, sans-serif; letter-spacing: .02em; box-shadow: 0 4px 0 #4c1d95; cursor: pointer; }
+.card-buy-btn { width: 100%; min-height: 50px; border-radius: 16px; border: 2px solid #6d28d9; background: linear-gradient(160deg, #a855f7, #7c3aed); color: #fff; font: 950 15px system-ui, sans-serif; letter-spacing: .02em; box-shadow: 0 4px 0 #4c1d95; cursor: pointer; }
+.card-buy-btn s { opacity: .7; font-weight: 700; margin-right: 4px; }
 .card-buy-btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
 
-.card-collection-head { display: flex; align-items: center; justify-content: space-between; font-weight: 900; font-size: 13px; color: var(--muted, #6b7280); text-transform: uppercase; letter-spacing: .04em; }
-.card-collection-head b { color: var(--text, #111); font-size: 15px; }
-.card-collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px; }
-.coll-card-slot { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px 10px; border-radius: 14px; border: 2px solid color-mix(in srgb, var(--card-color) 50%, var(--line, #e5e7eb)); background: color-mix(in srgb, var(--card-color) 8%, var(--card, #fff)); min-width: 0; }
+.card-collection-head { display: flex; align-items: center; justify-content: space-between; font-weight: 900; font-size: 12.5px; color: var(--muted, #6b7280); text-transform: uppercase; letter-spacing: .04em; }
+.card-collection-head b { color: var(--text, #111); font-size: 14.5px; }
+.card-collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 10px; }
+.coll-card-slot {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 4px 9px; border-radius: 14px;
+  border: 2px solid color-mix(in srgb, var(--card-color) 50%, var(--line, #e5e7eb));
+  background: color-mix(in srgb, var(--card-color) 8%, var(--card, #fff));
+  min-width: 0; overflow: hidden;
+}
+.coll-card-slot.is-equipped {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, .32), 0 6px 14px rgba(245, 158, 11, .18);
+}
+.coll-equip-tag {
+  position: absolute; top: 3px; left: 4px; z-index: 4;
+  background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff;
+  font: 900 8px system-ui, sans-serif; padding: 1.5px 5px; border-radius: 99px;
+  letter-spacing: .03em; box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+.coll-star-badge {
+  position: absolute; top: 3px; right: 4px; z-index: 4;
+  background: rgba(15, 23, 42, .78); color: #fde047;
+  font: 900 9px system-ui, sans-serif; padding: 1px 5px; border-radius: 99px;
+}
+.coll-star-badge.star-4, .coll-star-badge.star-5 {
+  background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff;
+}
 .coll-card-slot.is-unlocked { cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
-.coll-card-slot.is-unlocked:hover, .coll-card-slot.is-unlocked:active { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(15, 23, 42, .12); }
-.coll-card-slot img { width: 58px; height: 81px; object-fit: contain; border-radius: 8px; }
+.coll-card-slot.is-unlocked:hover, .coll-card-slot.is-unlocked:active { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(15, 23, 42, .14); }
+.coll-card-art { position: relative; width: 60px; height: 84px; border-radius: 8px; overflow: hidden; }
+.coll-card-art img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; display: block; }
 .coll-card-slot b { font-size: 10px; font-weight: 900; text-align: center; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.coll-card-slot small { font-size: 10px; font-weight: 800; color: var(--muted, #6b7280); }
+.coll-card-slot small { font-size: 9.5px; font-weight: 800; color: var(--muted, #6b7280); white-space: nowrap; }
 .coll-card-slot.locked { opacity: .4; filter: grayscale(1); }
 
-/* ══════════════ Pack Opening Sequence (ala TCG) ══════════════ */
-.pack-open-overlay { position: fixed; inset: 0; z-index: 2147483001; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 35%, rgba(88, 28, 135, .35), rgba(0, 0, 0, .82)); opacity: 0; transition: opacity .25s ease; padding: 20px; }
-.pack-open-overlay.show { opacity: 1; }
-.pack-open-stage { position: relative; width: 100%; max-width: 300px; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* ══════════════ Efek Hologram Foil & Star-Up (★2–★5) ══════════════ */
+.coll-card-art.holo-tier-3::after,
+.coll-card-art.holo-tier-4::after,
+.coll-card-art.holo-tier-5::after,
+.pack-card-front.holo-tier-3::after,
+.pack-card-front.holo-tier-4::after,
+.pack-card-front.holo-tier-5::after,
+.card-equipped-thumb.holo-tier-3::after,
+.card-equipped-thumb.holo-tier-4::after,
+.card-equipped-thumb.holo-tier-5::after,
+.duel-vs-card-art.holo-tier-3::after,
+.duel-vs-card-art.holo-tier-4::after,
+.duel-vs-card-art.holo-tier-5::after {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(255, 255, 255, .45) 44%,
+    rgba(168, 85, 247, .35) 50%,
+    rgba(56, 189, 248, .35) 54%,
+    rgba(253, 224, 71, .45) 58%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  animation: clined-holo-sweep 3.2s ease-in-out infinite;
+}
+.pack-card-front.holo-tier-4::after,
+.pack-card-front.holo-tier-5::after,
+.coll-card-art.holo-tier-5::after,
+.duel-vs-card-art.holo-tier-4::after,
+.duel-vs-card-art.holo-tier-5::after {
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 0, 128, .35) 36%,
+    rgba(255, 230, 0, .48) 45%,
+    rgba(0, 255, 180, .42) 52%,
+    rgba(0, 174, 255, .45) 60%,
+    rgba(255, 255, 255, .62) 66%,
+    transparent 80%
+  );
+  animation-duration: 2.4s;
+}
+.pack-card-front.holo-tier-5,
+.duel-vs-card-art.holo-tier-5 {
+  box-shadow: 0 0 24px rgba(250, 204, 21, .65), 0 0 42px rgba(236, 72, 153, .45) !important;
+  border-color: #fde047 !important;
+}
+@keyframes clined-holo-sweep {
+  0% { transform: translateX(-65%) rotate(12deg); opacity: .35; }
+  50% { opacity: .95; }
+  100% { transform: translateX(65%) rotate(12deg); opacity: .35; }
+}
 
-/* Fase 1: pack menunggu diketuk, berdenyut pelan */
-.pack-tap { position: relative; background: none; border: none; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 14px; animation: pack-idle-pulse 1.6s ease-in-out infinite; }
+.pack-card-star-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 4;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  font: 950 12px system-ui, sans-serif;
+  padding: 2px 8px;
+  border-radius: 99px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .35);
+}
+
+/* ══════════════ Pack Opening & Preview Sequence (ala TCG) ══════════════ */
+.pack-open-overlay { position: fixed; inset: 0; z-index: 2147483001; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 35%, rgba(88, 28, 135, .42), rgba(0, 0, 0, .86)); opacity: 0; transition: opacity .25s ease; padding: 16px; overflow-y: auto; }
+.pack-open-overlay.show { opacity: 1; }
+.pack-open-stage { position: relative; width: 100%; max-width: 330px; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: auto; }
+
+.pack-tap { position: relative; background: none; border: none; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 14px; animation: pack-idle-pulse 1.6s ease-in-out infinite; width: auto !important; }
 .pack-open-img { width: 140px; height: 140px; object-fit: contain; filter: drop-shadow(0 0 22px var(--rarity-color, #a855f7)); }
 .pack-tap-hint { font: 900 13px system-ui, sans-serif; color: #fff; background: rgba(255, 255, 255, .12); padding: 5px 14px; border-radius: 99px; letter-spacing: .02em; }
 @keyframes pack-idle-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.045); } }
@@ -104,32 +277,72 @@
   100% { transform: scale(.2) rotate(0); opacity: 0; }
 }
 
-/* Flash cahaya saat pack pecah */
 .pack-flash { position: absolute; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, var(--rarity-color, #a855f7) 45%, transparent 72%); opacity: 0; pointer-events: none; }
 .phase-burst .pack-flash { animation: pack-flash-pop .55s ease .35s both; }
 @keyframes pack-flash-pop { 0% { opacity: 0; transform: scale(.3); } 35% { opacity: 1; } 100% { opacity: 0; transform: scale(6); } }
 
-/* Fase 2: kartu terbang masuk sambil membalik (3D flip) */
-.pack-card-flip { position: relative; width: 190px; height: 266px; perspective: 900px; opacity: 0; transform: translateY(26px) scale(.85); }
+.pack-card-flip { position: relative; width: 186px; height: 260px; perspective: 900px; opacity: 0; transform: translateY(26px) scale(.85); }
 .phase-flip .pack-card-flip, .phase-reveal .pack-card-flip { opacity: 1; transform: translateY(0) scale(1); transition: opacity .35s ease, transform .5s cubic-bezier(.2, .8, .3, 1.15); }
-.pack-card-rays { position: absolute; inset: -60px; background: repeating-conic-gradient(from 0deg, var(--rarity-color, #a855f7) 0deg 4deg, transparent 4deg 16deg); opacity: 0; border-radius: 50%; filter: blur(1px); }
-.rarity-epic .pack-card-rays, .rarity-legendary .pack-card-rays { animation: rays-spin 6s linear infinite; }
+.pack-card-rays { position: absolute; inset: -55px; background: repeating-conic-gradient(from 0deg, var(--rarity-color, #a855f7) 0deg 4deg, transparent 4deg 16deg); opacity: 0; border-radius: 50%; filter: blur(1px); pointer-events: none; }
+.rarity-epic .pack-card-rays, .rarity-legendary .pack-card-rays, .holo-tier-4 .pack-card-rays, .holo-tier-5 .pack-card-rays { animation: rays-spin 6s linear infinite; }
 .phase-flip .pack-card-rays, .phase-reveal .pack-card-rays { opacity: .35; transition: opacity .5s ease .1s; }
 @keyframes rays-spin { to { transform: rotate(360deg); } }
 
-.pack-card-inner { position: relative; width: 100%; height: 100%; }.phase-flip .pack-card-inner, .phase-reveal .pack-card-inner { opacity: 0; transform: scale(.88); transition: opacity .25s ease, transform .35s ease; }.phase-reveal .pack-card-inner { opacity: 1; transform: scale(1); }.pack-card-back, .pack-card-front { position: absolute; inset: 0; border-radius: 16px; backface-visibility: visible; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }.pack-card-back { background: linear-gradient(155deg, #7c3aed, #4c1d95); flex-direction: column; gap: 2px; border: 3px solid rgba(255, 255, 255, .25); opacity: 0; }.pack-card-front { transform: none; background: #fff; border: 3px solid var(--rarity-color, #a855f7); overflow: hidden; }.pack-card-front img { width: 100%; height: 100%; object-fit: cover; }
+.pack-card-inner { position: relative; width: 100%; height: 100%; }
+.phase-flip .pack-card-inner, .phase-reveal .pack-card-inner { opacity: 0; transform: scale(.88); transition: opacity .25s ease, transform .35s ease; }
+.phase-reveal .pack-card-inner { opacity: 1; transform: scale(1); }
+.pack-card-back, .pack-card-front { position: absolute; inset: 0; border-radius: 16px; backface-visibility: visible; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.pack-card-back { background: linear-gradient(155deg, #7c3aed, #4c1d95); flex-direction: column; gap: 2px; border: 3px solid rgba(255, 255, 255, .25); opacity: 0; }
+.pack-card-front { transform: none; background: #fff; border: 3px solid var(--rarity-color, #a855f7); overflow: hidden; }
 .pack-card-front img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Fase 3: info kartu (nama, fakta, tombol) muncul di bawah kartu */
-.pack-result-info { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .3s ease, transform .3s ease; width: 100%; }
+.pack-result-info { margin-top: 14px; display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .3s ease, transform .3s ease; width: 100%; }
 .phase-reveal .pack-result-info { opacity: 1; transform: translateY(0); pointer-events: auto; transition-delay: .1s; }
-.card-reveal-rarity { font: 950 12px system-ui, sans-serif; letter-spacing: .06em; padding: 3px 12px; border-radius: 99px; color: #fff; background: var(--rarity-color, #888); text-transform: uppercase; }
-.pack-result-info h4 { margin: 2px 0 0; font-size: 21px; font-weight: 950; color: #fff; }
-.pack-result-info p { margin: 0; font-size: 13px; color: rgba(255, 255, 255, .75); font-weight: 700; max-width: 260px; }
-.pack-result-info .card-dup-note { color: rgba(255, 255, 255, .55); font-size: 11px; }
-.pack-result-info .ml-next { margin-top: 10px; max-width: 220px; }
-
-
+.card-reveal-badges { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.card-reveal-rarity { font: 950 11.5px system-ui, sans-serif; letter-spacing: .06em; padding: 3px 11px; border-radius: 99px; color: #fff; background: var(--rarity-color, #888); text-transform: uppercase; }
+.card-reveal-stars { font: 950 14px system-ui, sans-serif; color: #fde047; letter-spacing: 1.5px; text-shadow: 0 2px 6px rgba(0,0,0,.45); }
+.card-starup-banner {
+  background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff;
+  font: 900 12px system-ui, sans-serif; padding: 4px 12px; border-radius: 99px;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, .4);
+}
+.pack-result-info h4 { margin: 2px 0 0; font-size: 20px; font-weight: 950; color: #fff; }
+.pack-result-info p { margin: 0; font-size: 12.5px; color: rgba(255, 255, 255, .82); font-weight: 700; max-width: 280px; line-height: 1.4; }
+.card-reveal-buff-box {
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .24);
+  color: #fff;
+  border-radius: 12px;
+  padding: 7px 11px;
+  font-size: 11.5px;
+  font-weight: 700;
+  max-width: 300px;
+  width: 100%;
+  line-height: 1.4;
+}
+.card-reveal-buff-box b { color: #fde047; font-weight: 900; }
+.pack-result-info .card-dup-note { color: rgba(255, 255, 255, .68); font-size: 11px; font-weight: 700; }
+.card-reveal-actions, .card-preview-btn-stack {
+  display: flex; flex-direction: column; gap: 7px; width: 100%; max-width: 260px; margin-top: 6px;
+}
+.card-equip-btn {
+  width: 100%; min-height: 40px; border-radius: 13px;
+  border: 2px solid #f59e0b; background: linear-gradient(135deg, #fbbf24, #d97706);
+  color: #111827; font: 900 13px system-ui, sans-serif; cursor: pointer;
+  padding: 8px 12px; box-shadow: 0 3px 0 #92400e;
+}
+.card-equip-btn.is-active {
+  border-color: #10b981; background: linear-gradient(135deg, #34d399, #059669);
+  color: #fff; box-shadow: 0 3px 0 #065f46;
+}
+.card-starup-btn {
+  width: 100%; min-height: 40px; border-radius: 13px;
+  border: 2px solid #ec4899; background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: #fff; font: 900 12.5px system-ui, sans-serif; cursor: pointer;
+  padding: 8px 12px; box-shadow: 0 3px 0 #6d28d9;
+}
+.card-starup-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.pack-result-info .ml-next { margin-top: 2px; max-width: 260px; width: 100%; min-height: 40px; }
 
 .card-confetti-layer { position: absolute; inset: 0; overflow: visible; pointer-events: none; z-index: 5; }
 .card-confetti-layer i { position: absolute; top: 40%; left: 50%; width: 8px; height: 12px; border-radius: 2px; opacity: 0; transform: translate(-50%, -50%); animation: confetti-burst 1s cubic-bezier(.15, .7, .3, 1) forwards; }
@@ -139,7 +352,7 @@
   100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)) scale(1); }
 }
 
-.diamond-earn-pop { position: fixed; top: 18%; left: 50%; transform: translateX(-50%); z-index: 3000; background: #7c3aed; color: #fff; font-weight: 900; font-size: 14px; padding: 10px 18px; border-radius: 99px; box-shadow: 0 6px 18px rgba(124, 58, 247, .4); animation: dia-pop 1.6s ease forwards; }
+.diamond-earn-pop { position: fixed; top: 18%; left: 50%; transform: translateX(-50%); z-index: 3000; background: #7c3aed; color: #fff; font-weight: 900; font-size: 14px; padding: 10px 18px; border-radius: 99px; box-shadow: 0 6px 18px rgba(124, 58, 247, .4); animation: dia-pop 1.6s ease forwards; white-space: nowrap; }
 @keyframes dia-pop {
   0% { opacity: 0; transform: translate(-50%, 10px) scale(.8); }
   15% { opacity: 1; transform: translate(-50%, 0) scale(1); }

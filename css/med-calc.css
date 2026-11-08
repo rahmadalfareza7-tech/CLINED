@@ -1,0 +1,368 @@
+/* CLINED Medical Calculator & Pediatric Dose Saku (Pre-Klinik & Koas) */
+
+.medcalc-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  visibility: hidden;
+  pointer-events: none;
+}
+.medcalc-modal.open {
+  visibility: visible;
+  pointer-events: auto;
+}
+.medcalc-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, .58);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.medcalc-modal.open .medcalc-backdrop { opacity: 1; }
+
+.medcalc-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--card, #ffffff);
+  color: var(--text, #0f172a);
+  border-radius: 26px 26px 0 0;
+  border-top: 3px solid #0ea5e9;
+  padding: 16px 16px calc(26px + env(safe-area-inset-bottom, 0px));
+  transform: translateY(100%);
+  transition: transform .25s cubic-bezier(.2, .8, .3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 -10px 40px rgba(15, 23, 42, .25);
+}
+@media (min-width: 680px) {
+  .medcalc-modal { align-items: center; padding: 20px; }
+  .medcalc-sheet { border-radius: 24px; border: 2px solid var(--line, #e2e8f0); max-height: 88vh; }
+}
+.medcalc-modal.open .medcalc-sheet { transform: translateY(0); }
+
+.medcalc-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.medcalc-eyebrow {
+  font: 900 10.5px system-ui, sans-serif;
+  letter-spacing: .07em;
+  color: #0284c7;
+  text-transform: uppercase;
+}
+.medcalc-head h3 {
+  margin: 2px 0;
+  font-size: 20px;
+  font-weight: 950;
+  line-height: 1.2;
+}
+.medcalc-head p {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted, #64748b);
+  line-height: 1.35;
+}
+.medcalc-close {
+  width: 36px !important;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--line, #e2e8f0);
+  background: var(--surface, #f1f5f9);
+  color: var(--text, #0f172a);
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  flex: none;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* Tabs */
+.medcalc-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 2px 6px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.medcalc-tabs::-webkit-scrollbar { display: none; }
+.medcalc-tab {
+  width: auto !important;
+  flex: none;
+  padding: 8px 13px;
+  border-radius: 14px;
+  border: 2px solid var(--line, #e2e8f0);
+  border-bottom-width: 3.5px;
+  background: var(--surface, #f8fafc);
+  color: var(--text, #0f172a);
+  font-size: 12.5px;
+  font-weight: 850;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.medcalc-tab.active {
+  background: #0ea5e9;
+  border-color: #0369a1;
+  color: #ffffff;
+}
+
+/* Preset chips */
+.medcalc-presets-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.medcalc-label-sm {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--muted, #64748b);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.medcalc-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.medcalc-preset-chip {
+  width: auto !important;
+  padding: 5px 10px;
+  border-radius: 99px;
+  border: 1.5px solid var(--line, #cbd5e1);
+  background: var(--surface, #f8fafc);
+  color: var(--text, #0f172a);
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .12s ease;
+}
+.medcalc-preset-chip:hover, .medcalc-preset-chip.active {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, .14);
+  color: #0369a1;
+}
+body.dark .medcalc-preset-chip.active { color: #7dd3fc; }
+
+/* Form Grid */
+.medcalc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.medcalc-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 460px) {
+  .medcalc-grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.medcalc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.medcalc-field.full {
+  grid-column: 1 / -1;
+}
+.medcalc-field label {
+  font-size: 11.5px;
+  font-weight: 850;
+  color: var(--muted, #64748b);
+  line-height: 1.25;
+}
+.medcalc-field input,
+.medcalc-field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 11px;
+  border-radius: 12px;
+  border: 2px solid var(--line, #cbd5e1);
+  background: var(--surface, #f8fafc);
+  color: var(--text, #0f172a);
+  font: 800 14.5px system-ui, sans-serif;
+  box-sizing: border-box;
+}
+.medcalc-field input:focus,
+.medcalc-field select:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  background: var(--card, #ffffff);
+}
+
+/* Result Cards */
+.medcalc-res-card {
+  padding: 14px;
+  border-radius: 18px;
+  border: 2px solid rgba(14, 165, 233, .35);
+  background: linear-gradient(145deg, rgba(14, 165, 233, .09), rgba(16, 185, 129, .06));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.medcalc-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+.medcalc-kpi {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--card, #ffffff);
+  border: 1.5px solid var(--line, #e2e8f0);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.medcalc-kpi small {
+  font-size: 10.5px;
+  font-weight: 900;
+  color: var(--muted, #64748b);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+.medcalc-kpi b {
+  font-size: 18px;
+  font-weight: 950;
+  color: #0284c7;
+  line-height: 1.2;
+}
+body.dark .medcalc-kpi b { color: #38bdf8; }
+.medcalc-kpi.green b { color: #059669; }
+body.dark .medcalc-kpi.green b { color: #34d399; }
+.medcalc-kpi.amber b { color: #d97706; }
+body.dark .medcalc-kpi.amber b { color: #fbbf24; }
+.medcalc-kpi span {
+  font-size: 11.5px;
+  font-weight: 750;
+  color: var(--text, #334155);
+  line-height: 1.35;
+}
+
+.medcalc-rx-box {
+  padding: 11px 13px;
+  border-radius: 14px;
+  background: #eff6ff;
+  border: 1.5px dashed #3b82f6;
+  color: #1e3a8a;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+body.dark .medcalc-rx-box {
+  background: rgba(30, 58, 138, .28);
+  border-color: #60a5fa;
+  color: #dbeafe;
+}
+.medcalc-rx-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.medcalc-rx-top small {
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.medcalc-copy-btn {
+  width: auto !important;
+  padding: 5px 11px;
+  border-radius: 99px;
+  border: 1.5px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 850;
+  cursor: pointer;
+}
+.medcalc-rx-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13.5px;
+  font-weight: 800;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.medcalc-formula-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+@media (max-width: 440px) {
+  .medcalc-formula-strip { grid-template-columns: 1fr; }
+}
+.medcalc-fbox {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--line, #e2e8f0);
+  font-size: 11.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.medcalc-fbox small { font-size: 10px; font-weight: 850; color: var(--muted, #64748b); }
+.medcalc-fbox b { font-size: 13.5px; font-weight: 900; color: var(--text, #0f172a); }
+
+/* Interactive Score Checklists (GCS / CURB-65) */
+.medcalc-section-title {
+  font-size: 13.5px;
+  font-weight: 950;
+  margin: 4px 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.medcalc-check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.medcalc-check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--line, #e2e8f0);
+  background: var(--card, #ffffff);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 750;
+  text-align: left;
+}
+.medcalc-check-item input {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  accent-color: #0ea5e9;
+}
+.medcalc-check-item.checked {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, .1);
+}
+.medcalc-note {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted, #64748b);
+  line-height: 1.45;
+  padding: 8px 11px;
+  border-radius: 12px;
+  background: var(--surface, #f8fafc);
+}

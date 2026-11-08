@@ -165,12 +165,13 @@
     const R = D.result, win = R.winnerId === D.me.id, draw = !R.winnerId;
     const wager = Number(D.wager) || 0;
     const mode = D.mode || 'classic';
-    const xpGain = win ? (30 + wager) : draw ? 10 : 0;
+    const cardBonusXp = win ? (window.CLINED_CARDS?.getBonusDuelXp?.() || 0) : 0;
+    const xpGain = win ? (30 + wager + cardBonusXp) : draw ? 10 : 0;
     const diaGain = win ? (1 + (wager >= 50 ? 2 : wager >= 20 ? 1 : 0) + (mode === 'sudden_death' ? 1 : 0)) : 0;
     try {
       const claims = JSON.parse(localStorage.getItem(CLAIM_KEY) || '{}') || {};
       if (!claims[D.id]) {
-        claims[D.id] = { at: Date.now(), xpGain, diaGain, win, draw };
+        claims[D.id] = { at: Date.now(), xpGain, cardBonusXp, diaGain, win, draw };
         localStorage.setItem(CLAIM_KEY, JSON.stringify(claims));
         if (diaGain > 0) addDiamonds(diaGain);
         if (xpGain > 0 && typeof window.addXP === 'function') {
@@ -184,7 +185,7 @@
         }
       }
     } catch {}
-    return { xpGain, diaGain, wager };
+    return { xpGain, cardBonusXp, diaGain, wager };
   };
 
   async function api(path, opt = {}) {
@@ -255,6 +256,44 @@
   /* ───────── LOBI & ARENA VISUAL ───────── */
   const initials = n => esc(String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase());
   const avatar = (p, cls = '') => `<span class="soc-av ${cls}${p?.online ? ' on' : ''}" aria-hidden="true">${initials(p?.name)}</span>`;
+  const resolveCard = raw => {
+    if (!raw || !raw.id) return null;
+    if (window.CLINED_CARDS?.getCardById) return window.CLINED_CARDS.getCardById(raw.id, raw.star || 1);
+    return null;
+  };
+  const getMyShowcaseCard = () => window.CLINED_CARDS?.getEquipped?.() || null;
+  const cardPill = rawCard => {
+    const c = rawCard?.name ? rawCard : resolveCard(rawCard);
+    if (!c) return '';
+    return `<span class="duel-card-pill rarity-${esc(c.rarity)} ${esc(c.holoClass || '')}" style="--card-color:${esc(c.color)}" title="Kartu Andalan: ${esc(c.name)} (★${c.star})">
+      <img src="${esc(c.img)}" alt="${esc(c.name)}">
+      <b>${esc(c.name)}</b>
+      <small>★${c.star}</small>
+    </span>`;
+  };
+  const vsCardShowcaseHTML = (meName, myCardRaw, oppName, oppCardRaw) => {
+    const mc = myCardRaw?.name ? myCardRaw : (resolveCard(myCardRaw) || getMyShowcaseCard());
+    const oc = oppCardRaw?.name ? oppCardRaw : resolveCard(oppCardRaw);
+    const slot = (label, card, isMe) => card
+      ? `<div class="duel-vs-card-slot ${isMe ? 'me' : 'opp'} rarity-${esc(card.rarity)}">
+          <div class="duel-vs-card-art ${esc(card.holoClass || '')}" style="--card-color:${esc(card.color)}">
+            <img src="${esc(card.img)}" alt="${esc(card.name)}">
+            <span class="duel-vs-card-star">★${card.star}</span>
+          </div>
+          <b>${esc(card.name)}</b>
+          <small>${esc(label)} • ⚡ ${esc(card.strength || 'Aura')}</small>
+        </div>`
+      : `<div class="duel-vs-card-slot empty ${isMe ? 'me' : 'opp'}">
+          <div class="duel-vs-card-art empty"><span>🃏</span></div>
+          <b>Tanpa Kartu</b>
+          <small>${esc(label)}</small>
+        </div>`;
+    return `<div class="duel-vs-cards-clash">
+      ${slot(meName || 'Kamu', mc, true)}
+      <div class="duel-vs-clash-mid">⚔️<small>CLASH</small></div>
+      ${slot(oppName || 'Lawan', oc, false)}
+    </div>`;
+  };
   const modePill = m => m === 'sudden_death'
     ? '<span class="duel-tag sd">💀 Sudden Death 3❤️</span>'
     : '<span class="duel-tag cls">🏆 Klasik</span>';
@@ -328,6 +367,28 @@
           <span>Rekor: ${st.bestStreak || 0}x</span>
         </div>
       </div>
+
+      ${(() => {
+        const eq = getMyShowcaseCard();
+        return eq ? `<div class="duel-hero-card-strip rarity-${esc(eq.rarity)}">
+          <div class="duel-hero-card-thumb ${esc(eq.holoClass || '')}" style="--card-color:${esc(eq.color)}">
+            <img src="${esc(eq.img)}" alt="${esc(eq.name)}">
+            <span>★${eq.star}</span>
+          </div>
+          <div class="duel-hero-card-txt">
+            <small>🌟 KARTU ANDALAN ARENA • ${esc(eq.starsText)}</small>
+            <b>${esc(eq.name)} • ⚡ ${esc(eq.buff.short)}</b>
+          </div>
+          <button type="button" class="duel-tier-info-btn" data-soc-open-cards>🃏 Ganti</button>
+        </div>` : `<div class="duel-hero-card-strip empty">
+          <div class="duel-hero-card-txt">
+            <small>🃏 KARTU ANDALAN BELUM DIPASANG</small>
+            <b>Buka Card Shop untuk pasang Kartu Organ &amp; aktifkan bonus EXP Duel!</b>
+          </div>
+          <button type="button" class="duel-tier-info-btn" data-soc-open-cards>🃏 Card Shop</button>
+        </div>`;
+      })()}
+
       <div class="duel-quick-wrap">
         <button type="button" class="duel-quick-btn" data-soc-quick>
           <span class="duel-quick-ico">⚡</span>
@@ -377,7 +438,7 @@
           </div>
           <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">⚡ Lawan!</button>
         </div>
-        <div class="duel-tags-row">${rankPill(host.rank, false)}${modePill(r.mode)}${wagerPill(r.wager)}${h2hBadge(host.id)}</div>
+        <div class="duel-tags-row">${rankPill(host.rank, false)}${cardPill(host.card)}${modePill(r.mode)}${wagerPill(r.wager)}${h2hBadge(host.id)}</div>
       </div>`;
     }).join('');
 
@@ -455,6 +516,7 @@
     const lbRows = (S.leaderboard || []).map(p => {
       const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
       const pTier = getRank(p.tier || { rp: p.rp || 0 });
+      const pCard = p.me ? (getMyShowcaseCard() || p.card) : p.card;
       return `<div class="duel-lb-row${p.me ? ' me' : ''}">
         <span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
         ${avatar(p)}
@@ -465,6 +527,7 @@
           </div>
           <div class="duel-lb-bottom">
             ${rankPill(pTier, true)}
+            ${cardPill(pCard)}
             <small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small>
           </div>
         </div>
@@ -691,7 +754,7 @@
     if (D.status === 'waiting') {
       if (!D.isHost) {
         return `<div class="card soc-card soc-center duel-wait-card">
-          <div class="soc-vs-av">${avatar(opp || {})}<b class="duel-vs-glow">VS</b>${avatar(D.me)}</div>
+          ${vsCardShowcaseHTML('Kamu', D.me?.card, opp?.name || 'Penantang', opp?.card)}
           <h3>⚔️ ${oppName} menantangmu!</h3>
           <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
           <div class="duel-tags-row center">${oppRk ? rankPill(oppRk) : ''}${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
@@ -703,7 +766,7 @@
         <div class="soc-emoji soc-pulse">⏳</div>
         <h3>${D.invited ? `Menunggu ${oppName}…` : (D.isPublic ? '🌐 Menunggu Penantang di Lobi Publik…' : '🔒 Menunggu Lawan via Kode…')}</h3>
         <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
-        <div class="duel-tags-row center">${rankPill(myRk)}${modePill(D.mode)}${wagerPill(D.wager)}</div>
+        <div class="duel-tags-row center">${rankPill(myRk)}${cardPill(D.me?.card || getMyShowcaseCard())}${modePill(D.mode)}${wagerPill(D.wager)}</div>
         <div class="soc-code" aria-label="Kode duel">${esc(D.code)}</div>
         <div class="soc-btns2"><button type="button" class="secondary" data-soc-copy="${esc(D.code)}">📋 Salin Kode</button><button type="button" class="primary" data-soc-share="${esc(D.code)}">📤 Bagikan</button></div>
         <button type="button" class="secondary soc-big soc-danger" data-soc-leave>Batalkan Ruang Duel</button>
@@ -721,9 +784,9 @@
           ? `📉 ${rpDelta} RP`
           : '🛡️ +0 RP (Proteksi Bronze)';
 
-      const bar = (name, s, me, fObj, rkObj) => `<div class="soc-score${me ? ' me' : ''}">
+      const bar = (name, s, me, fObj, rkObj, cRaw) => `<div class="soc-score${me ? ' me' : ''}">
         <small>${esc(name)}</small>
-        ${rkObj ? `<div class="duel-score-rank">${rankPill(rkObj, false)}</div>` : ''}
+        <div class="duel-score-rank">${rkObj ? rankPill(rkObj, false) : ''}${cardPill(cRaw)}</div>
         <b>${s.score}<em>/${D.total}</em></b>
         <span>⏱ ${s.done ? fmtMs(s.timeMs) : 'belum selesai'}</span>
         <div class="duel-res-sub">
@@ -756,6 +819,7 @@
           <div class="duel-reward-title">${win ? '🎁 HADIAH KEMENANGAN ARENA' : '🤝 BONUS PARTISIPASI DUEL'}</div>
           <div class="duel-reward-pills">
             ${rw.xpGain ? `<span class="duel-rw-pill xp">⚡ +${rw.xpGain} EXP</span>` : ''}
+            ${win && rw.cardBonusXp ? `<span class="duel-rw-pill xp">🃏 Kartu Andalan +${rw.cardBonusXp} EXP</span>` : ''}
             ${rw.diaGain ? `<span class="duel-rw-pill dia">💎 +${rw.diaGain} Diamond</span>` : ''}
             ${win && rw.wager ? `<span class="duel-rw-pill wager">💰 Menang Taruhan ${rw.wager} EXP</span>` : ''}
           </div>
@@ -768,7 +832,7 @@
         <p>${reasonText(R.reason, win, draw)}</p>
         ${rankResultCard}
         ${rewardBanner}
-        <div class="soc-scores">${bar('Kamu', R.me, true, D.me, newRk)}${bar(opp?.name || 'Lawan', R.opponent, false, opp, oppRk)}</div>
+        <div class="soc-scores">${bar('Kamu', R.me, true, D.me, newRk, D.me?.card || getMyShowcaseCard())}${bar(opp?.name || 'Lawan', R.opponent, false, opp, oppRk, opp?.card)}</div>
         <button type="button" class="duel-share-win-btn" data-soc-share-duel>📣 Pamerkan Hasil Duel ke Status</button>
         <div class="soc-btns2"><button type="button" class="secondary" data-soc-lobby>Ke Lobi Arena</button><button type="button" class="primary" data-soc-rematch>⚔️ Tanding Ulang</button></div>
       </div>
@@ -794,6 +858,7 @@
             <span>${mineN}/${D.total} soal • ✅ ${myLiveScore}</span>
             <div class="duel-fighter-meta">
               ${rankPill(myRk, false)}
+              ${cardPill(D.me?.card || getMyShowcaseCard())}
               ${isSD ? renderHearts(D.me.hearts ?? 3, D.maxHearts || 3) : ''}
               ${(D.me.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${D.me.streak}x</span>` : ''}
             </div>
@@ -812,6 +877,7 @@
             <span>${opp?.answered ?? 0}/${D.total} soal • 🎯 ${oppLiveScore}</span>
             <div class="duel-fighter-meta">
               ${oppRk ? rankPill(oppRk, false) : ''}
+              ${cardPill(opp?.card)}
               ${isSD ? renderHearts(opp?.hearts ?? 3, D.maxHearts || 3) : ''}
               ${(opp?.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${opp.streak}x</span>` : ''}
             </div>
@@ -838,6 +904,7 @@
     if (nowS() < D.startedAt) {
       return board + `<div class="card soc-card soc-center duel-countdown-card">
         <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
+        ${vsCardShowcaseHTML('Kamu', D.me?.card, opp?.name || 'Lawan', opp?.card)}
         <p>Siapkan dirimu! Pertarungan dimulai dalam…</p>
         <div class="soc-count" id="duelGo">${Math.max(1, Math.ceil((D.startedAt - nowS()) / 1000))}</div>
         <p class="soc-hint">${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
@@ -887,6 +954,7 @@
   const guard = async fn => { if (S.busy) return; S.busy = true; try { await fn(); } catch (e) { toast(e.message || 'Terjadi kesalahan.', true); } finally { S.busy = false; } };
   async function createDuel(friendId) {
     if (!S.bank) return toast('Pilih bank soal dulu.', true);
+    const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
     const d = await api('/api/duels', {
       method: 'POST',
       body: {
@@ -896,6 +964,7 @@
         mode: S.mode,
         wager: S.wager,
         isPublic: friendId ? false : S.isPublic,
+        ...(card ? { card } : {}),
         ...(friendId ? { friendId } : {})
       }
     });
@@ -905,15 +974,17 @@
   async function quickMatch() {
     if (!S.bank && S.banks.length) S.bank = S.banks[0].id;
     if (!S.bank) return toast('Pilih bank soal dulu.', true);
+    const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
     const d = await api('/api/duels/quick', {
       method: 'POST',
-      body: { bankId: S.bank, count: S.count, seconds: S.sec, mode: S.mode, wager: S.wager }
+      body: { bankId: S.bank, count: S.count, seconds: S.sec, mode: S.mode, wager: S.wager, ...(card ? { card } : {}) }
     });
     syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
     toast(d.matched ? '⚡ Lawan ditemukan! Bersiap bertarung!' : '🌐 Ruang publik dibuat! Menunggu lawan masuk…');
   }
   async function joinByCode(code) {
-    const d = await api('/api/duels/join', { method: 'POST', body: { code } });
+    const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
+    const d = await api('/api/duels/join', { method: 'POST', body: { code, ...(card ? { card } : {}) } });
     syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
   }
   async function answer(choice) {
@@ -931,6 +1002,10 @@
     try { await api(`/api/duels/${encodeURIComponent(D.id)}/emote`, { method: 'POST', body: { emote: key } }); } catch {}
   }
 
+  window.addEventListener('clined:card-equipped', () => {
+    if (activeView() === 'socialPage') renderLobby(false);
+  });
+
   document.addEventListener('click', e => {
     const t = e.target.closest('button, summary'); if (!t) return;
     if (t.id === 'socialBtn') return openLobby();
@@ -941,6 +1016,7 @@
     if (t.id === 'shareStatusBtn') return openComposer(resultContext());
     if ('socShareDuel' in ds) return openComposer(duelResultContext());
     if ('socRankModal' in ds) return openRankModal();
+    if ('socOpenCards' in ds) { window.CLINED_CARD_SHOP?.show?.(); return; }
     if ('socTab' in ds) { S.hubTab = ds.socTab; if (S.hubTab === 'status') S.feed = null; return renderHub(); }
     if ('socHub' in ds) return openHub(ds.socHub);
     if ('socRefreshLobby' in ds) return guard(() => renderLobby(true));

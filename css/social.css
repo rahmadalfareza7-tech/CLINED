@@ -1064,26 +1064,146 @@
 .soc-tabs.three { grid-template-columns: repeat(3, 1fr); }
 .soc-tabs.three button { font-size: 12.5px; padding: 0 4px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
 .soc-warn { display: grid; gap: 2px; padding: 10px 12px; border-radius: 14px; background: rgba(255,150,0,.14); border: 2px solid rgba(255,150,0,.5); font-size: 12.5px; font-weight: 700; line-height: 1.45; }
--items: center; gap: 8px; }
-.stc-pub { font-weight: 800; opacity: .7; font-size: 12px; }
-.soc-emptybox .secondary { margin-top: 6px; }
-.soc-body .soc-cbtn { min-height: 38px; padding: 0 12px; font-size: 12.5px; }
-.soc-body .soc-compose { min-height: 48px; }
-.soc-filter button { min-height: 38px !important; font-size: 13px; }
-.soc-post { gap: 10px; }
 
-/* v96 editor soal */
-.qe-card { max-height: 88vh; display: flex; flex-direction: column; }
-.qe-body { overflow-y: auto; display: grid; gap: 8px; min-height: 0; }
-.qe-lab { font-weight: 900; font-size: 13px; margin-top: 6px; } .qe-lab small { font-weight: 700; opacity: .65; }
-.qe-body textarea, .qe-body input[type=text] { width: 100%; box-sizing: border-box; border: 2px solid var(--line, #e5e7eb); border-radius: 12px; padding: 8px 10px; font: inherit; font-size: 14px; background: var(--card, #fff); color: inherit; }
-.qe-opt { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; align-items: start; }
-.qe-key { display: grid; justify-items: center; gap: 2px; padding-top: 6px; font-weight: 900; }
-.qe-opt-fields { display: grid; gap: 6px; }
-.qe-note { margin: 0; font-size: 12px; }
-.admin-mentor-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
-.admin-mentor-toggle input { width: 18px; height: 18px; }
+/* ══════════════ KARTU ANDALAN DI ARENA DUEL ══════════════ */
+.duel-hero-card-strip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 15px;
+  background: rgba(15, 23, 42, .46);
+  border: 1.5px solid rgba(255, 255, 255, .18);
+}
+.duel-hero-card-thumb {
+  position: relative;
+  width: 38px;
+  height: 53px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--card-color, #fde047);
+  flex: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .35);
+}
+.duel-hero-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.duel-hero-card-thumb span {
+  position: absolute; bottom: 1px; right: 2px;
+  background: rgba(0,0,0,.75); color: #fde047;
+  font: 900 8.5px system-ui, sans-serif; padding: 0 4px; border-radius: 99px;
+}
+.duel-hero-card-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+.duel-hero-card-txt small { font-size: 9.5px; font-weight: 900; letter-spacing: .04em; color: #fde047; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.duel-hero-card-txt b { font-size: 12px; font-weight: 900; color: #fff; line-height: 1.3; overflow-wrap: break-word; }
 
-.soc-tabs.three { grid-template-columns: repeat(3, 1fr); }
-.soc-tabs.three button { font-size: 12.5px; padding: 0 4px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
-.soc-warn { display: grid; gap: 2px; padding: 10px 12px; border-radius: 14px; background: rgba(255,150,0,.14); border: 2px solid rgba(255,150,0,.5); font-size: 12.5px; font-weight: 700; line-height: 1.45; }
+.duel-card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 3px;
+  border-radius: 99px;
+  border: 1.5px solid color-mix(in srgb, var(--card-color, #a855f7) 60%, var(--line, #cbd5e1));
+  background: color-mix(in srgb, var(--card-color, #a855f7) 14%, var(--card, #fff));
+  font-size: 10.5px;
+  font-weight: 900;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.duel-card-pill img {
+  width: 16px; height: 22px; object-fit: cover; border-radius: 4px;
+  border: 1px solid var(--card-color, #a855f7); flex: none;
+}
+.duel-card-pill b { font-size: 10.5px; font-weight: 950; color: var(--text, #0f172a); white-space: nowrap !important; }
+.duel-card-pill small { font-size: 9.5px; font-weight: 900; color: #d97706; white-space: nowrap !important; }
+:root.dark .duel-card-pill b { color: #f8fafc; }
+:root.dark .duel-card-pill small { color: #fde047; }
+
+/* VS Clash Holographic Card Showcase */
+.duel-vs-cards-clash {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  margin: 6px auto 4px;
+  padding: 12px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, .06), rgba(124, 58, 237, .08));
+  border: 2px solid var(--line, #e2e8f0);
+}
+.duel-vs-card-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  text-align: center;
+}
+.duel-vs-card-art {
+  position: relative;
+  width: 84px;
+  height: 118px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2.5px solid var(--card-color, #a855f7);
+  background: var(--surface, #f1f5f9);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .22);
+}
+.duel-vs-card-art.empty {
+  border-style: dashed;
+  border-color: var(--line, #cbd5e1);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  opacity: .55;
+}
+.duel-vs-card-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.duel-vs-card-star {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 3;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  font: 950 10px system-ui, sans-serif;
+  padding: 1.5px 6px;
+  border-radius: 99px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+.duel-vs-card-slot b {
+  font-size: 12px;
+  font-weight: 950;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.duel-vs-card-slot small {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted, #64748b);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.duel-vs-clash-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 950;
+  color: #ef4444;
+  line-height: 1.1;
+}
+.duel-vs-clash-mid small {
+  font-size: 9px;
+  letter-spacing: .08em;
+  font-weight: 950;
+  color: var(--muted, #64748b);
+}
+
