@@ -582,7 +582,7 @@
       });
     });
   }
-  function blockScroll(e) { e.preventDefault(); }
+  function blockScroll(e) { if (e.target.closest && e.target.closest(".card-shop-sheet")) return; e.preventDefault(); }
   function showShop() {
     let modal = document.getElementById('cardShopModal');
     if (!modal) {
