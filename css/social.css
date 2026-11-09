@@ -1207,3 +1207,16 @@
   color: var(--muted, #64748b);
 }
 
+
+/* Fix: konten Arena Duel terpotong di layar sempit */
+.duel-hero { grid-template-columns: minmax(0, 1fr); max-width: 100%; box-sizing: border-box; }
+.duel-hero > * { min-width: 0; max-width: 100%; }
+.duel-hero-card-strip { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.duel-hero-card-txt { flex: 1 1 0; min-width: 0; }
+.duel-hero-card-txt small, .duel-hero-card-txt b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.duel-hero-card-strip .duel-tier-info-btn { flex: none; }
+.duel-quick-btn { max-width: 100%; box-sizing: border-box; }
+.duel-quick-txt { flex: 1 1 0; }
+.duel-quick-txt small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.duel-quick-go { flex: none; }
+.duel-stat-box { min-width: 0; }
