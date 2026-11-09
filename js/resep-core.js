@@ -80,7 +80,7 @@ function evalRow(key,u){
   }
   const j=parseJ(u.j);let jok,jnote='';
   if(typeof key.j==='number'){const dq=Number([...main.q].find(x=>/^\d+$/.test(x))||1),daily=(main.dd||1)*dq;
-    jok=j.n===key.j||(j.n>0&&j.n%daily===0);if(jok&&j.n!==key.j)jnote=` (catatan: ${n2r(key.j)})`;add(jok,'jumlah (no.)',n2r(key.j)+jnote)}
+    jok=j.n===key.j||(key.jAlt||[]).includes(j.n)||(j.n>0&&j.n%daily===0);if(jok&&j.n!==key.j)jnote=` (catatan: ${n2r(key.j)})`;add(jok,'jumlah (no.)',n2r(key.j)+jnote)}
   else{const kn=r2n(String(key.j).split(/\s+/).pop().toUpperCase())||1;jok=j.n===kn;add(jok,'jumlah',key.j)}
   add(best.dd,'frekuensi (dd)',main.dd==null?'tanpa dd':main.dd+' dd');
   if(main.q.size)add(best.q!==false,'jumlah per pemberian',[...main.q].join(' '));
@@ -91,13 +91,13 @@ function checkResep(c,f){
   const used=new Set();let pts=0,max=0,extra=0;
   const ur=rowsFromLines(f).filter(r=>r.o),out=[];
   for(const u of ur){
-    let idx=-1,spec=null;
-    c.rows.forEach((k,i)=>{if(idx>=0||used.has(i))return;for(const v of [k,...(k.v||[])]){const sp={...k,...v,s:v.s||k.s};if(nameOk(u.o,{n:v.n||k.n})){idx=i;spec=sp;return}}});
+    let idx=-1,spec=null,r=null;
+    c.rows.forEach((k,i)=>{if(used.has(i))return;for(const v of [k,...(k.v||[])]){const sp={...k,...v,s:v.s||k.s};if(nameOk(u.o,{n:v.n||k.n})){const rr=evalRow(sp,u);if(!r||rr.pts>r.pts){idx=i;spec=sp;r=rr}}}});
     if(idx<0){extra++;out.push({u,miss:true});continue}
-    used.add(idx);const r=evalRow(spec,u);pts+=r.pts;max+=r.max;out.push({u,r,key:spec,idx});
+    used.add(idx);pts+=r.pts;max+=r.max;out.push({u,r,key:spec,idx});
   }
-  const missing=c.rows.filter((_,i)=>!used.has(i));
-  c.rows.forEach((k,i)=>{if(!used.has(i))max+=evalRow(k,{b:'',k:'',j:'',s:''}).max});
+  const missing=c.rows.filter((k,i)=>!used.has(i)&&!k.opt);
+  c.rows.forEach((k,i)=>{if(!used.has(i)&&!k.opt)max+=evalRow(k,{b:'',k:'',j:'',s:''}).max});
   const proOk=String(f.pro||'').trim().toLowerCase().startsWith(c.pro.split(' ')[0].toLowerCase());
   const usiaOk=Number(String(f.usia||'').replace(/\D/g,''))===c.usia;
   const activeRows=(f.rows||[]).filter(r=>r.l1.trim()||r.l2.trim());
