@@ -5,6 +5,7 @@
 const BEST_KEY='clined_resep_best_v1';
 const LP_BEST_KEY='clined_resep_lp_best_v1';
 const gid=id=>document.getElementById(id);
+const E=(ds,key)=>window.RESEP_EDIT?window.RESEP_EDIT.btn(ds,key):'';
 const {CASES,SEDIAAN,RACIKAN=[],TEORI_BSO={},SINGK,PADAT,REV_SRC}=window.RESEP_DATA;
 const {n2r,r2n,checkResep,line1Of,rowsFromLines,FNAME,evalLembarPengamatan}=window.RESEP_CORE;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -20,6 +21,7 @@ a{color:var(--rxb);font-weight:800}
 :host(.rxdark){--red-soft:#3b2022;--amber:#f2c86b;--amber-soft:#3a2f12;--rxb:#6cc4f5;--rxbs:#12303f;--shadow:0 3px 0 rgba(0,0,0,.35)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;overflow-wrap:normal;word-break:normal}
 button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+.re-btn{display:inline-flex;align-items:center;gap:4px;margin-left:8px;padding:2px 9px;border-radius:99px;border:1.5px solid var(--rxb);background:var(--rxbs);color:var(--rxb);font-size:11.5px;font-weight:900;cursor:pointer;vertical-align:middle;white-space:nowrap}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid rgba(28,142,216,.45);outline-offset:2px}
 .eyebrow{font-size:12px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;color:var(--green-dark)}
 h1{font-size:23px;line-height:1.22;margin:2px 0 6px;font-weight:900;letter-spacing:-.3px;overflow-wrap:break-word}
@@ -432,7 +434,7 @@ function viewKasus(m){
   m.innerHTML=`<div class="note"><b>Penting.</b> Kunci jawaban dari catatan mahasiswa (Bella &amp; Syaf), bukan sumber resmi. Bagian yang bertentangan ditandai dan kedua versi diterima. Buka Catatan verifikasi di hasil tiap kasus.</div>
   <div class="card"><h2>Latihan kasus</h2><p class="sub">Diagnosis, pilihan obat, resep, dan informasi dinilai. Setiap jawaban benar memberikan <b>+10 EXP</b>.</p>
   <div class="seg" role="group" aria-label="Jenis latihan" style="margin-top:12px"><button aria-pressed="${!S.only}" data-mode="full">Lengkap (6 langkah)</button><button aria-pressed="${S.only}" data-mode="rx">Tulis resep saja</button></div><p class="sub" style="margin-top:8px">${S.only?'Langsung tulis resep. Diagnosis dan obat tersedia di Petunjuk bila perlu.':''}</p><div class="progress" style="margin-top:10px"><i style="width:${100*passed/CASES.length}%"></i></div><p class="sub" style="margin-top:6px">Lulus ${passed} dari ${CASES.length} kasus (nilai 80 ke atas)</p><div class="actions two">${P('Kasus acak yang belum lulus','todo',!todo.length)}${X('Mode ujian acak (15 menit)','exam')}</div></div>
-  <div class="cases">${CASES.map(c=>{const bo=best[c.id+(S.only?'r':'')],b=bo&&bo.pct;return `<button class="case ${b>=80?'done':''}" data-case="${c.id}"><span class="no">${b>=80?'✓':c.id}</span><span class="grow"><span class="t">${esc(c.ringkas)}</span><br><span class="d">${b!=null?`Terbaik ${b}%`:'Belum dicoba'}</span></span></button>`}).join('')}</div>`;
+  <div class="cases">${CASES.map(c=>{const bo=best[c.id+(S.only?'r':'')],b=bo&&bo.pct;return `<button class="case ${b>=80?'done':''}" data-case="${c.id}"><span class="no">${b>=80?'✓':c.id}</span><span class="grow"><span class="t">${esc(c.ringkas)}</span><br><span class="d">${b!=null?`Terbaik ${b}%`:'Belum dicoba'}</span> ${E('cases',c.id)}</span></button>`}).join('')}</div>`;
 }
 function openCase(id,exam){
   STEPS=S.only?STEPS_RX:STEPS_FULL;
@@ -456,7 +458,7 @@ function stopTimer(){clearInterval(S.tm);S.tm=null}
 /* ===== LANGKAH KASUS ===== */
 function viewCase(m){
   const c=S.case,st=STEPS[S.step],pct=Math.round(100*S.step/(STEPS.length-1));
-  const head=`<div class="bar"><button class="icon-btn" data-act="back" aria-label="Keluar dari kasus">×</button><div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>${S.exam?`<span class="timer" id="timer">${fmt(left())}</span>`:''}</div>`;
+  const head=`<div class="bar"><button class="icon-btn" data-act="back" aria-label="Keluar dari kasus">×</button><div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>${S.exam?`<span class="timer" id="timer">${fmt(left())}</span>`:''}${E('cases',c.id)}</div>`;
   const recap=st.k==='v'||st.k==='res'?'':`<details class="dt"><summary>Lihat kasus ${c.id}</summary><div class="in vignette">${esc(c.v)}</div></details>`;
   m.innerHTML=head+recap+({v:stepV,s1:stepS1,s3:stepS3,s4:stepS4,s5:stepS5,res:stepRes})[st.k]();
   if(S.focusH){S.focusH=false;const h=m.querySelector('h2,.big');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}}
@@ -635,6 +637,7 @@ function drawLembarPengamatan(){
 
   $('#list').innerHTML=`
   <div class="card">
+    <div style="text-align:right">${E('sediaan',s.no)}</div>
     <div class="row between" style="padding-bottom:12px;margin-bottom:12px;border-bottom:2px dashed var(--line)">
       <div>
         <div class="eyebrow">Mode Pengerjaan</div>
@@ -905,6 +908,7 @@ function drawSed(q){
       </span>
     </summary>
     <div class="in">
+      <div style="text-align:right">${E('sediaan',s.no)}</div>
       <div class="pkg-grid" style="margin-top:6px">
         <div class="pkg-photo-box">
           <img src="${esc(s.img)}" alt="Bungkus ${esc(s.n)}" data-zoom="${esc(s.img)}" data-zoom-title="#${s.no} ${esc(s.n)}">
@@ -971,7 +975,7 @@ function drawRacikan(){
         <span class="badge blue">${esc(r.bso)}</span>
         ${prakDosen?`<span class="muted">Pengampu: ${esc(prakDosen)}</span>`:''}
       </div>
-      <h2>${esc(r.nama)}</h2>
+      <h2>${esc(r.nama)}${E('racikan',r.id)}</h2>
       <div class="racik-summary">
         <div><b>Pasien:</b> ${esc(r.pro)}</div>
         <div style="margin-top:3px"><b>Indikasi / Skenario Praktikum:</b> ${esc(r.keluhan)}</div>
@@ -1091,7 +1095,7 @@ const sg=t=>SG[t]||'';
 const sga=a=>{const e=SINGK.find(x=>x.a===a);return e?sg(e.t):''};
 function viewSingk(m){
   m.innerHTML=`<div class="card"><h2>Singkatan Latin resep</h2><p class="sub">${SINGK.length} singkatan. "catatan" = ada di catatan; "umum" = istilah baku, cek ke dosen.</p>${subnav('sing',[['kuis','Kuis'],['daftar','Daftar']])}</div><div id="quiz"></div><div id="list"></div>`;
-  if(S.sub.sing==='daftar')$('#list').innerHTML=`<div class="card">${SINGK.map(s=>`<div class="item"><div class="row between"><b class="mono">${esc(s.t)}</b><span class="badge ${s.s==='c'?'':'warn'}">${s.s==='c'?'catatan':'umum'}</span></div><div>${esc(s.a)}</div></div>`).join('')}</div>`;
+  if(S.sub.sing==='daftar')$('#list').innerHTML=`<div class="card">${SINGK.map(s=>`<div class="item"><div class="row between"><b class="mono">${esc(s.t)}</b><span class="badge ${s.s==='c'?'':'warn'}">${s.s==='c'?'catatan':'umum'}</span>${E('singk',s.t)}</div><div>${esc(s.a)}</div></div>`).join('')}</div>`;
   else if(!S.quiz)startQuiz(singQs(),'Kuis singkatan');else drawQuiz();
 }
 function singQs(){return pick(SINGK,12).map(s=>Math.random()<.5?{q:`Arti "${s.t}"?`,a:s.a,o:opts(s.a,SINGK.map(x=>x.a),3,sga)}:{q:`Singkatan untuk: ${s.a}`,a:s.t,o:opts(s.t,SINGK.map(x=>x.t),3,sg)})}
@@ -1100,7 +1104,7 @@ function singQs(){return pick(SINGK,12).map(s=>Math.random()<.5?{q:`Arti "${s.t}
 function viewPadat(m){
   m.innerHTML=`<div class="card"><h2>BSO padat dan semipadat</h2><p class="sub">${PADAT.length} butir dari praktikum Pak Dharma.</p>${subnav('pad',[['kuis','Kuis'],['ringkas','Ringkasan']])}</div><div id="quiz"></div><div id="list"></div>`;
   if(S.sub.pad==='ringkas'){const G={rute:'Rute sediaan padat',serbuk:'Serbuk, granul, kapsul',tablet:'Tablet',supp:'Suppositoria dan ovula',salep:'Salep',lain:'Krim, gel, pasta, linimentum, sapo'};
-    $('#list').innerHTML=Object.entries(G).map(([g,l])=>`<details class="dt"><summary>${l}</summary><div class="in">${PADAT.filter(p=>p.g===g).map(p=>`<div class="item"><b>${esc(p.q)}</b><div>${esc(p.a)}</div></div>`).join('')}</div></details>`).join('')}
+    $('#list').innerHTML=Object.entries(G).map(([g,l])=>`<details class="dt"><summary>${l}</summary><div class="in">${PADAT.filter(p=>p.g===g).map(p=>`<div class="item"><b>${esc(p.q)}</b>${E('padat',p.q)}<div>${esc(p.a)}</div></div>`).join('')}</div></details>`).join('')}
   else if(!S.quiz)startQuiz(padQs(),'Kuis BSO padat');else drawQuiz();
 }
 function padQs(){return pick(PADAT,12).map(p=>{const same=PADAT.filter(x=>x.g===p.g).map(x=>x.a),all=PADAT.map(x=>x.a);let o=opts(p.a,same,3);if(o.length<4)o=opts(p.a,all,3);return{q:p.q+'?',a:p.a,o}})}
@@ -1186,9 +1190,13 @@ function init(){
   dark();new MutationObserver(dark).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
   bind();renderTabs();render();
 }
+if(window.RESEP_EDIT)window.RESEP_EDIT.rerender=()=>{if(!sr||!inited)return;try{if(S.case&&$('#app'))viewCase($('#app'));else render()}catch(err){console.warn(err)}};
 function bind(){
 sr.addEventListener('mousedown',e=>{if(e.target.closest('.quick button'))e.preventDefault()});
+sr.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('[data-re-edit]')){e.preventDefault();e.target.closest('[data-re-edit]').click()}});
 sr.addEventListener('click',e=>{
+  const ed=e.target.closest('[data-re-edit]');
+  if(ed&&window.RESEP_EDIT){e.preventDefault();e.stopPropagation();const v=ed.dataset.reEdit,i=v.indexOf(':');return window.RESEP_EDIT.open(v.slice(0,i),v.slice(i+1))}
   const img=e.target.closest('[data-zoom]');
   if(img)return openZoom(img.dataset.zoom,img.dataset.zoomTitle);
   if(e.target.id==='rxModal')return closeZoom();
