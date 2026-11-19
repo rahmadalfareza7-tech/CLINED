@@ -302,21 +302,22 @@
     let count = parseInt(sessionStorage.getItem('clined_qa_count') || '0', 10) || 0;
     let inBonusCall = false;
     const original = window.addXP;
-    window.addXP = function (amount, reason) {
+    window.addXP = function (amount, reason, meta, ...rest) {
       const isCorrectAnswer = !inBonusCall && ((typeof amount === 'number' && amount > 0 && amount <= 25) || (typeof reason === 'string' && /benar|resep|farmako|quest/i.test(reason)));
       const eq = isCorrectAnswer ? getEquippedCard() : null;
       const bonusXp = eq?.buff?.quizXp || 0;
       const totalAmount = (isCorrectAnswer && typeof amount === 'number' && bonusXp > 0) ? (amount + bonusXp) : amount;
 
+      let ret;
       if (typeof original === 'function') {
         inBonusCall = true;
         try {
-          original.call(this, totalAmount, reason);
+          ret = original.call(this, totalAmount, reason, meta, ...rest);
         } finally {
           inBonusCall = false;
         }
       }
-      if (!isCorrectAnswer) return;
+      if (!isCorrectAnswer) return ret;
       count++;
       sessionStorage.setItem('clined_qa_count', String(count));
       const step = getQuizPerDiamond();
@@ -325,6 +326,7 @@
         updateDiaBadges();
         popDiamondToast(eq ? `💎 +1 Diamond! (${eq.name} ★${eq.star})` : '💎 +1 Diamond!');
       }
+      return ret;
     };
   })();
 
