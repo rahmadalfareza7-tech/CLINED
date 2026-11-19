@@ -136,7 +136,7 @@
     'css/chat.css?v=1',
     'css/qcomments.css?v=2',
     'css/insights.css?v=7',
-    'css/content-ergonomic.css?v=7'
+    'css/content-ergonomic.css?v=8'
   ];
 
   function boot() {

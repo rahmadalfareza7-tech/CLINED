@@ -105,12 +105,20 @@
         </div>
 
         <div class="acm-panel" data-content-panel="items" hidden>
-          <div class="admin-content-intro"><b>Analisis butir soal</b><span>Statistik anonim dari semua pengguna. Soal diurutkan dari tingkat salah tertinggi. Tanda ⚠ berarti ada pilihan salah yang lebih sering dipilih daripada kunci, jadi kunci mungkin keliru atau soal ambigu.</span></div>
-          <div class="acm-grid">
-            <div class="acm-field"><label>Minimal jumlah jawaban</label><select data-items-min><option value="5">5</option><option value="10" selected>10</option><option value="30">30</option><option value="100">100</option></select></div>
-            <div class="acm-field"><label>Sumber</label><select data-items-source><option value="">Semua</option><option value="bank">Bank soal</option><option value="mat">Latihan Materi</option></select></div>
+          <div class="admin-content-intro"><b>Analisis butir soal (Psikometri &amp; Validasi Kunci)</b><span>Statistik distribusi jawaban dari semua pengguna. Tanda <b>⚠ Kunci mencurigakan</b> muncul bila ada pengecoh (distraktor) yang lebih banyak dipilih mahasiswa dibanding kunci jawaban.</span></div>
+          <div data-items-kpis class="ia-kpis"></div>
+          <div class="ia-toolbar">
+            <div class="acm-grid">
+              <div class="acm-field"><label>Minimal jawaban</label><select data-items-min><option value="1">≥ 1 jawaban</option><option value="5" selected>≥ 5 jawaban</option><option value="10">≥ 10 jawaban</option><option value="30">≥ 30 jawaban</option><option value="100">≥ 100 jawaban</option></select></div>
+              <div class="acm-field"><label>Sumber soal</label><select data-items-source><option value="">Semua sumber</option><option value="bank">Bank Soal UAB</option><option value="mat">Latihan Materi</option></select></div>
+            </div>
+            <div class="acm-grid">
+              <div class="acm-field"><label>Cari teks / bank / ID</label><input type="search" data-items-search placeholder="Ketik potongan soal, nama bank, atau ID…"></div>
+              <div class="acm-field"><label>Urutkan</label><select data-items-sort><option value="suspect">⚠ Prioritas Kunci Mencurigakan</option><option value="wrong_desc">% Salah Tertinggi (Tersulit)</option><option value="n_desc">Paling Banyak Dijawab</option><option value="easy_desc">% Benar Tertinggi (Termudah)</option></select></div>
+            </div>
+            <div class="ia-chips" data-items-flags role="tablist" aria-label="Filter kategori analisis"></div>
           </div>
-          <div data-items-list class="admin-uab-packages"><p class="muted">Memuat…</p></div>
+          <div data-items-list class="ia-list"><p class="muted">Memuat…</p></div>
         </div>
 
         <div class="acm-panel" data-content-panel="uab">
@@ -366,33 +374,156 @@
       });
       renderLatihanList();
 
-      const FLAG_TXT={suspect_key:'⚠ Kunci mencurigakan',very_hard:'Sangat sulit',hard:'Sulit',too_easy:'Terlalu mudah'};
+      const FLAG_TXT={suspect_key:'⚠ Kunci mencurigakan',very_hard:'🔥 Sangat sulit (≥70% salah)',hard:'Sulit (≥50% salah)',too_easy:'✓ Terlalu mudah (≤5% salah)'};
+      const FLAG_CHIPS=[['all','Semua'],['suspect_key','⚠ Kunci Mencurigakan'],['very_hard','🔥 Sangat Sulit'],['hard','Sulit'],['too_easy','✓ Terlalu Mudah']];
+      let iaCache={items:[],totals:{items:0,answers:0},minN:5},iaFlag='all',iaPreviews=new Map();
+      const formatBankDisplay=it=>{
+        const raw=String(it.bank||'').trim();
+        if(!raw) return it.source==='mat'?'Latihan Materi':'Bank Soal';
+        try{ if(window.BANKS?.[raw]?.name) return window.BANKS[raw].name; }catch{}
+        return raw.replace(/^server-uab-/i,'UAB ').replace(/[-_]+/g,' ').toUpperCase();
+      };
       const openQuestionByItemId=async(itemId,onSaved)=>{
         try{
           const d=await request(`/api/admin/question-reports/${encodeURIComponent(itemId)}/question`);
-          window.clinedEditQuestion?.({packageId:d.packageId,bankId:d.bankId,qid:d.questionId||d.question?.id||itemId,onSaved});
+          window.clinedEditQuestion?.({packageId:d.packageId,bankId:d.bankId,qid:d.questionId||d.question?.id||itemId,onSaved:async q=>{
+            iaPreviews.delete(itemId);
+            if(onSaved)await onSaved(q);
+          }});
         }catch(err){if(typeof showToast==='function')showToast(err.message||'Soal belum bisa diedit langsung.',true);}
+      };
+      const renderItemsView=()=>{
+        const host=box.querySelector('[data-items-list]'),kpisEl=box.querySelector('[data-items-kpis]'),flagsEl=box.querySelector('[data-items-flags]');
+        if(!host)return;
+        const all=iaCache.items||[];
+        const suspectN=all.filter(x=>(x.flags||[]).includes('suspect_key')).length;
+        const hardN=all.filter(x=>(x.flags||[]).includes('very_hard')||(x.flags||[]).includes('hard')).length;
+        if(kpisEl){
+          kpisEl.innerHTML=`
+            <div class="ia-kpi"><b>${Number(iaCache.totals?.items||0).toLocaleString('id-ID')}</b><span>Soal Terekam</span></div>
+            <div class="ia-kpi ok"><b>${Number(iaCache.totals?.answers||0).toLocaleString('id-ID')}</b><span>Total Jawaban</span></div>
+            <div class="ia-kpi ${suspectN?'danger':''}"><b>${suspectN}</b><span>⚠ Kunci Mencurigakan</span></div>
+            <div class="ia-kpi ${hardN?'warn':''}"><b>${hardN}</b><span>Soal Sulit</span></div>`;
+        }
+        const counts={all:all.length};
+        FLAG_CHIPS.slice(1).forEach(([f])=>{counts[f]=all.filter(x=>(x.flags||[]).includes(f)).length;});
+        if(flagsEl){
+          flagsEl.innerHTML=FLAG_CHIPS.map(([f,label])=>`<button type="button" class="ia-chip${iaFlag===f?' on':''}" data-ia-flag="${f}">${label} <i>${counts[f]||0}</i></button>`).join('');
+        }
+        const q=String(box.querySelector('[data-items-search]')?.value||'').trim().toLowerCase();
+        const sort=box.querySelector('[data-items-sort]')?.value||'suspect';
+        let list=all.filter(it=>{
+          if(iaFlag!=='all' && !(it.flags||[]).includes(iaFlag)) return false;
+          if(!q) return true;
+          return `${it.id||''} ${it.bank||''} ${formatBankDisplay(it)} ${it.snippet||''}`.toLowerCase().includes(q);
+        });
+        list=list.slice().sort((a,b)=>{
+          if(sort==='suspect'){
+            const sa=(a.flags||[]).includes('suspect_key')?1:0, sb=(b.flags||[]).includes('suspect_key')?1:0;
+            if(sb!==sa) return sb-sa;
+            return b.wrongRate-a.wrongRate || b.n-a.n;
+          }
+          if(sort==='n_desc') return b.n-a.n || b.wrongRate-a.wrongRate;
+          if(sort==='easy_desc') return a.wrongRate-b.wrongRate || b.n-a.n;
+          return b.wrongRate-a.wrongRate || b.n-a.n;
+        });
+        if(!all.length){
+          host.innerHTML=`<div class="admin-uab-empty"><b>Belum ada soal dengan minimal ${esc(iaCache.minN)} jawaban.</b><span>Total saat ini: ${iaCache.totals?.answers||0} jawaban dari ${iaCache.totals?.items||0} soal. Turunkan filter "Minimal jawaban" ke ≥ 1 jawaban untuk melihat semua data yang sudah masuk.</span></div>`;
+          return;
+        }
+        if(!list.length){
+          host.innerHTML=`<div class="admin-uab-empty"><b>Tidak ada soal yang cocok dengan filter ini.</b><span>Coba ganti kategori chip atau kata kunci pencarian.</span></div>`;
+          return;
+        }
+        host.innerHTML=`<div class="ia-meta-bar"><span>Menampilkan <b>${list.length}</b> dari ${all.length} soal (min. ${iaCache.minN} jawaban)</span>${isAdmin&&iaCache.totals?.items?`<button type="button" class="ia-btn danger" data-ia-reset-all>🗑️ Reset Semua Statistik</button>`:''}</div>`+list.map((it,idx)=>{
+          const tot=Math.max(1,it.n);
+          const isSuspect=(it.flags||[]).includes('suspect_key');
+          const correctPct=Math.max(0,Math.round((100-it.wrongRate)*10)/10);
+          const pillTone=it.wrongRate>=70?'bad':it.wrongRate>=50?'mid':'good';
+          const prev=iaPreviews.get(it.id);
+          const bars=it.optCounts.slice(0,5).map((c,k)=>{
+            const pct=Math.round(c/tot*100);
+            const isKey=k===it.correctIdx;
+            const isTrap=!isKey && k===it.topWrongIdx && c>0 && (isSuspect || pct>=35);
+            const optTxt=prev?.question?.opsi?.[k];
+            return `<div class="ia-opt-row${isKey?' is-key':isTrap?' is-trap':''}">
+              <span class="ia-opt-let" title="${isKey?'Kunci Jawaban':isTrap?'Pengecoh Terbanyak':'Pilihan'}">${'ABCDE'[k]}</span>
+              <div class="ia-opt-track"><i class="ia-opt-fill" style="width:${Math.max(pct,c>0?3:0)}%"></i></div>
+              <span class="ia-opt-val">${pct}% <small>(${c})</small>${isKey?' ✓':isTrap?' ⚠':''}</span>
+              ${optTxt?`<div class="ia-opt-text">${esc(optTxt)}</div>`:''}
+            </div>`;
+          }).join('');
+          const flags=(it.flags||[]).map(f=>`<span class="ia-flag ${esc(f)}">${FLAG_TXT[f]||esc(f)}</span>`).join('');
+          const trapHint=isSuspect && it.topWrongIdx>=0
+            ? `<span class="ia-flag suspect_key">Pengecoh ${'ABCDE'[it.topWrongIdx]} dipilih ${it.topWrongShare}% vs Kunci ${'ABCDE'[it.correctIdx]} (${Math.round((it.optCounts[it.correctIdx]||0)/tot*100)}%)</span>`
+            : '';
+          return `<article class="ia-card${isSuspect?' is-suspect':''}" data-ia-id="${esc(it.id)}">
+            <div class="ia-card-top">
+              <div class="ia-bank-wrap">
+                <span class="ia-rank">#${idx+1}</span>
+                <span class="ia-src-badge ${it.source==='mat'?'mat':''}">${it.source==='mat'?'Latihan Materi':'Bank UAB'}</span>
+                <span class="ia-bank-name">${esc(formatBankDisplay(it))}</span>
+              </div>
+              <div class="ia-stats-pills">
+                <span class="ia-pill">${it.n} jawaban</span>
+                <span class="ia-pill ${pillTone}">${it.wrongRate}% salah • ${correctPct}% benar</span>
+              </div>
+            </div>
+            <p class="ia-snippet">${esc(prev?.question?.soal||it.snippet||'(tanpa teks)')}</p>
+            ${flags||trapHint?`<div class="ia-flags">${flags}${trapHint}</div>`:''}
+            <div class="ia-opts">${bars}</div>
+            ${prev?.question?.pembahasan?`<div class="ia-preview"><b>Pembahasan Kunci (${'ABCDE'[it.correctIdx]}) • ${esc(prev.bankName||'')}</b><div>${esc(prev.question.pembahasan)}</div></div>`:prev?.error?`<div class="ia-preview"><b>Info</b><div>${esc(prev.error)}</div></div>`:''}
+            <div class="ia-card-foot">
+              <span class="ia-qid">ID: ${esc(it.id)}</span>
+              <div class="ia-actions">
+                <button type="button" class="ia-btn" data-item-preview="${esc(it.id)}">${prev?'🙈 Tutup Detail':'👁️ Lihat Opsi & Pembahasan'}</button>
+                <button type="button" class="ia-btn primary" data-item-edit="${esc(it.id)}">✏️ Edit Soal &amp; Kunci</button>
+                ${isAdmin?`<button type="button" class="ia-btn danger" data-item-reset="${esc(it.id)}">↺ Reset</button>`:''}
+              </div>
+            </div>
+          </article>`;
+        }).join('');
       };
       const renderItemsList=async()=>{
         const host=box.querySelector('[data-items-list]'); if(!host)return;
-        host.innerHTML='<p class="muted">Memuat…</p>';
+        host.innerHTML='<p class="muted">Memuat analisis butir soal…</p>';
         try{
           const min=box.querySelector('[data-items-min]').value,src=box.querySelector('[data-items-source]').value;
           const d=await request(`/api/admin/item-stats?min=${encodeURIComponent(min)}${src?`&source=${src}`:''}`);
-          if(!d.items.length){host.innerHTML=`<p class="muted">Belum ada soal dengan minimal ${esc(min)} jawaban. Total terekam: ${d.totals.answers} jawaban dari ${d.totals.items} soal.</p>`;return;}
-          host.innerHTML=`<p class="muted">${d.items.length} soal ditampilkan • total terekam ${d.totals.answers} jawaban dari ${d.totals.items} soal.</p>`+d.items.map(it=>{
-            const tot=Math.max(1,it.n);
-            const bars=it.optCounts.slice(0,5).map((c,k)=>{const pct=Math.round(c/tot*100);const ok=k===it.correctIdx;return `<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;margin-top:3px"><span style="width:14px">${'ABCDE'[k]}</span><div style="flex:1;height:8px;border-radius:99px;background:rgba(127,127,127,.18);overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:${ok?'#58cc02':'#ef4444'}"></i></div><span style="width:62px;text-align:right">${pct}%${ok?' ✓':''}</span></div>`;}).join('');
-            const flags=it.flags.map(f=>`<span style="font-size:11px;font-weight:900;padding:2px 8px;border-radius:99px;background:${f==='suspect_key'?'rgba(239,68,68,.14)':'rgba(127,127,127,.16)'}">${FLAG_TXT[f]||esc(f)}</span>`).join(' ');
-            return `<div class="admin-uab-package" style="display:block;padding:12px;margin-top:8px"><div style="display:flex;justify-content:space-between;gap:8px;font-weight:900;font-size:13px"><span>${esc(it.bank||it.source)} • ${it.n} jawaban</span><span>${it.wrongRate}% salah</span></div><p style="margin:6px 0;font-size:13px">${esc(it.snippet||'(tanpa teks)')}</p>${flags?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">${flags}</div>`:''}${bars}<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px"><small class="muted" style="word-break:break-all">ID: ${esc(it.id)}</small><div style="display:flex;gap:6px"><button type="button" class="secondary clined-compact-action" data-item-edit="${esc(it.id)}">✏️ Edit soal</button>${isAdmin?`<button type="button" class="secondary clined-compact-action" data-item-reset="${esc(it.id)}">↺ Reset stat</button>`:''}</div></div></div>`;
-          }).join('');
-          host.querySelectorAll('[data-item-edit]').forEach(b=>b.addEventListener('click',()=>openQuestionByItemId(b.dataset.itemEdit,renderItemsList)));
-          host.querySelectorAll('[data-item-reset]').forEach(b=>b.addEventListener('click',async()=>{
-            if(!(await clinedConfirm({title:'Reset statistik jawaban untuk soal ini?',ok:'Ya, reset',tone:'danger'})))return;
-            try{await request(`/api/admin/item-stats?id=${encodeURIComponent(b.dataset.itemReset)}`,{method:'DELETE'});renderItemsList();}catch(err){if(typeof showToast==='function')showToast(err.message||'Gagal mereset.',true);}
-          }));
+          iaCache={items:d.items||[],totals:d.totals||{items:0,answers:0},minN:d.minN||min};
+          renderItemsView();
         }catch(err){host.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat analisis.')}</p>`;}
       };
+      box.querySelector('[data-content-panel="items"]')?.addEventListener('click',async e=>{
+        const flagBtn=e.target.closest('[data-ia-flag]');
+        if(flagBtn){iaFlag=flagBtn.dataset.iaFlag;renderItemsView();return;}
+        const prevBtn=e.target.closest('[data-item-preview]');
+        if(prevBtn){
+          const id=prevBtn.dataset.itemPreview;
+          if(iaPreviews.has(id)){iaPreviews.delete(id);renderItemsView();return;}
+          prevBtn.disabled=true;prevBtn.textContent='Memuat…';
+          try{
+            const d=await request(`/api/admin/question-reports/${encodeURIComponent(id)}/question`);
+            iaPreviews.set(id,d);
+          }catch(err){
+            iaPreviews.set(id,{error:err.message||'Detail soal tidak ditemukan di server (mungkin bank statis lokal).'});
+          }
+          renderItemsView();
+          return;
+        }
+        const editBtn=e.target.closest('[data-item-edit]');
+        if(editBtn){openQuestionByItemId(editBtn.dataset.itemEdit,renderItemsList);return;}
+        const resetBtn=e.target.closest('[data-item-reset]');
+        if(resetBtn){
+          if(!(await clinedConfirm({title:'Reset statistik jawaban untuk soal ini?',ok:'Ya, reset',tone:'danger'})))return;
+          try{await request(`/api/admin/item-stats?id=${encodeURIComponent(resetBtn.dataset.itemReset)}`,{method:'DELETE'});renderItemsList();}catch(err){if(typeof showToast==='function')showToast(err.message||'Gagal mereset.',true);}
+          return;
+        }
+        if(e.target.closest('[data-ia-reset-all]')){
+          if(!(await clinedConfirm({title:'Reset SEMUA statistik analisis butir soal? Tindakan ini tidak bisa dibatalkan.',ok:'Ya, reset semua',tone:'danger'})))return;
+          try{await request('/api/admin/item-stats',{method:'DELETE'});renderItemsList();}catch(err){if(typeof showToast==='function')showToast(err.message||'Gagal mereset semua statistik.',true);}
+        }
+      });
 
       const RP_CAT={key:'Kunci salah',typo:'Salah ketik',ambiguous:'Ambigu',explanation:'Pembahasan keliru',other:'Lainnya'};
       const RP_ST=[['new','Baru'],['checked','Diperiksa'],['fixed','Diperbaiki'],['dismissed','Ditolak']];
@@ -462,6 +593,8 @@
         }
       });
       box.querySelectorAll('[data-items-min],[data-items-source]').forEach(el=>el.addEventListener('change',renderItemsList));
+      box.querySelector('[data-items-search]')?.addEventListener('input',renderItemsView);
+      box.querySelector('[data-items-sort]')?.addEventListener('change',renderItemsView);
       box.querySelectorAll('[data-content-tab]').forEach(tab=>tab.addEventListener('click',()=>{
         box.querySelectorAll('[data-content-tab]').forEach(x=>{x.classList.toggle('selected',x===tab);x.setAttribute('aria-selected',x===tab?'true':'false');});
         try{tab.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}catch{}
