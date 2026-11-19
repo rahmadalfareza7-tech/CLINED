@@ -9,7 +9,10 @@ window.CLINED_Leaderboard = (function () {
   let lbLoadedAt = 0;
   const blockCache = new Map();
 
-  async function fetchLeaderboard() {
+  async function fetchLeaderboard(syncFirst = false) {
+    if (syncFirst) {
+      try { await window.CLINED_ONLINE_SYNC?.sync?.(); } catch {}
+    }
     const r = await fetch('/api/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
     if (!r.ok) return null;
     lbData = await r.json();
@@ -36,7 +39,7 @@ window.CLINED_Leaderboard = (function () {
     if (lbTab === 'block' || lbTab === 'gladiator') return render(listEl, lbTab);
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat…</div>';
     try {
-      const data = await fetchLeaderboard();
+      const data = await fetchLeaderboard(true);
       if (!data) { listEl.innerHTML = '<div class="leaderboard-loading">Belum bisa memuat. Masuk akun dulu.</div>'; return; }
       render(listEl, lbTab);
       loadTeaser();
