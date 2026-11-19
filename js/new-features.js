@@ -7,6 +7,7 @@ window.CLINED_Leaderboard = (function () {
   let lbTab = 'weekly';
 
   let lbLoadedAt = 0;
+  const blockCache = new Map();
 
   async function fetchLeaderboard() {
     const r = await fetch('/api/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
@@ -16,9 +17,23 @@ window.CLINED_Leaderboard = (function () {
     return lbData;
   }
 
+  function currentBlockChoice() {
+    const sel = document.getElementById('leaderboardBlockSelect');
+    if (sel) {
+      if (!sel.dataset.inited) {
+        const saved = String(localStorage.getItem('current_block') || '').trim().toUpperCase();
+        if (saved && [...sel.options].some(o => o.value === saved)) sel.value = saved;
+        sel.dataset.inited = '1';
+      }
+      return sel.value || 'KEDKEL';
+    }
+    return 'KEDKEL';
+  }
+
   async function load() {
     const listEl = document.getElementById('leaderboardList');
     if (!listEl) return;
+    if (lbTab === 'block' || lbTab === 'gladiator') return render(listEl, lbTab);
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat…</div>';
     try {
       const data = await fetchLeaderboard();
@@ -42,6 +57,25 @@ window.CLINED_Leaderboard = (function () {
     } catch {}
   }
 
+  async function renderBlockLeaderboard(listEl) {
+    const block = currentBlockChoice();
+    const cached = blockCache.get(block);
+    if (cached && (Date.now() - cached.at < 30_000)) {
+      return renderRows(listEl, cached.data.rankings, cached.data.me, r => r.xpBlock, `Belum ada data XP di blok ${block}.`);
+    }
+    listEl.innerHTML = `<div class="leaderboard-loading">Memuat peringkat ${escHtml(block)}…</div>`;
+    try {
+      const r = await fetch(`/api/leaderboard?block=${encodeURIComponent(block)}`, { credentials: 'same-origin', cache: 'no-store' });
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      blockCache.set(block, { at: Date.now(), data: d });
+      if (lbTab !== 'block' || currentBlockChoice() !== block) return;
+      renderRows(listEl, d.rankings || [], d.me, row => row.xpBlock, `Belum ada data XP di blok ${block}.`);
+    } catch {
+      if (lbTab === 'block') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat blok. Masuk akun dulu.</div>';
+    }
+  }
+
   async function renderGladiator(listEl) {
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat Rank Gladiator…</div>';
     try {
@@ -54,16 +88,10 @@ window.CLINED_Leaderboard = (function () {
     } catch { if (lbTab === 'gladiator') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat Rank Gladiator. Masuk akun dulu.</div>'; }
   }
 
-  function render(listEl, tab) {
-    if (tab === 'gladiator') return renderGladiator(listEl);
-    if (!lbData) return;
-    const rankings = tab === 'alltime'
-      ? [...(lbData.rankingsAllTime || lbData.rankings)].sort((a, b) => b.xpAllTime - a.xpAllTime)
-      : [...lbData.rankings];
-    const meId = lbData.me;
-    listEl.innerHTML = rankings.map((r, i) => {
-      const rank = tab === 'alltime' ? i + 1 : r.rank;
-      const xp = tab === 'alltime' ? r.xpAllTime : r.xpWeekly;
+  function renderRows(listEl, rows, meId, getXp, emptyMsg) {
+    listEl.innerHTML = (rows || []).map((r, i) => {
+      const rank = r.rank || (i + 1);
+      const xp = Number(getXp(r)) || 0;
       const isMe = r.id === meId;
       const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
       return `<div class="leaderboard-row${isMe ? ' leaderboard-me' : ''}">
@@ -74,7 +102,25 @@ window.CLINED_Leaderboard = (function () {
         </div>
         <span class="lb-xp">⚡ ${xp.toLocaleString('id')} XP</span>
       </div>`;
-    }).join('') || `<div class="leaderboard-loading">${tab === 'alltime' ? 'Belum ada data XP.' : 'Belum ada data minggu ini.'}</div>`;
+    }).join('') || `<div class="leaderboard-loading">${escHtml(emptyMsg)}</div>`;
+  }
+
+  function render(listEl, tab) {
+    const blockBar = document.getElementById('leaderboardBlockBar');
+    if (blockBar) blockBar.hidden = tab !== 'block';
+    if (tab === 'gladiator') return renderGladiator(listEl);
+    if (tab === 'block') return renderBlockLeaderboard(listEl);
+    if (!lbData) return load();
+    const rankings = tab === 'alltime'
+      ? [...(lbData.rankingsAllTime || lbData.rankings)].sort((a, b) => b.xpAllTime - a.xpAllTime)
+      : [...lbData.rankings];
+    renderRows(
+      listEl,
+      rankings.map((r, i) => ({ ...r, rank: tab === 'alltime' ? i + 1 : r.rank })),
+      lbData.me,
+      r => (tab === 'alltime' ? r.xpAllTime : r.xpWeekly),
+      tab === 'alltime' ? 'Belum ada data XP.' : 'Belum ada data minggu ini.'
+    );
   }
 
   function loadTeaser() {
@@ -103,6 +149,10 @@ window.CLINED_Leaderboard = (function () {
     lbTab = tab.dataset.lbTab;
     document.querySelectorAll('.lb-tab').forEach(t => { t.classList.toggle('active', t.dataset.lbTab === lbTab); t.setAttribute('aria-selected', t.dataset.lbTab === lbTab); });
     render(document.getElementById('leaderboardList'), lbTab);
+  });
+
+  document.getElementById('leaderboardBlockSelect')?.addEventListener('change', () => {
+    if (lbTab === 'block') renderBlockLeaderboard(document.getElementById('leaderboardList'));
   });
 
   // Open leaderboard page

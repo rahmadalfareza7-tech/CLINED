@@ -920,8 +920,34 @@
   <div class="card nested-card leaderboard-tabs-card">
     <div class="leaderboard-tabs" role="tablist">
       <button class="lb-tab active" data-lb-tab="weekly" role="tab" aria-selected="true">Weekly</button>
+      <button class="lb-tab" data-lb-tab="block" role="tab" aria-selected="false">Per BLOK</button>
       <button class="lb-tab" data-lb-tab="alltime" role="tab" aria-selected="false">All Time</button>
       <button class="lb-tab" data-lb-tab="gladiator" role="tab" aria-selected="false">⚔️ Gladiator</button>
+    </div>
+    <div id="leaderboardBlockBar" class="lb-block-bar" hidden>
+      <label for="leaderboardBlockSelect">Pilih Blok:</label>
+      <select id="leaderboardBlockSelect" class="library-select">
+        <option value="BM1">BM1</option>
+        <option value="BM2">BM2</option>
+        <option value="HNC">HNC</option>
+        <option value="MP1">MP1</option>
+        <option value="MP2">MP2</option>
+        <option value="MPT">MPT</option>
+        <option value="MUSKULOSKELETAL">Muskuloskeletal</option>
+        <option value="RESPIRATORY">Respiratory</option>
+        <option value="KARDIOLOGI">Kardiologi</option>
+        <option value="HEMATOLOGI">Hematologi</option>
+        <option value="GIT">GIT</option>
+        <option value="FORENSIK">Forensik</option>
+        <option value="GINJAL">Ginjal</option>
+        <option value="ENDOKRINE">Endokrin</option>
+        <option value="REPRODUKSI">Reproduksi</option>
+        <option value="SSP">SSP</option>
+        <option value="PANCA INDRA">Panca Indra</option>
+        <option value="KEDKOM">KEDKOM</option>
+        <option value="KEDKEL" selected>KEDKEL</option>
+        <option value="MULSIS">Mulsis</option>
+      </select>
     </div>
     <div id="leaderboardList" class="leaderboard-list" aria-live="polite">
       <div class="leaderboard-loading">Memuat…</div>
@@ -1010,7 +1036,7 @@
 <script src="js/content-manager.js?v=23"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v3"></script>
 <script src="js/inline-boot.js"></script>
-<script src="js/new-features.js?v=7"></script>
+<script src="js/new-features.js?v=8"></script>
 <script src="js/clinical-quest.js?v=17"></script>
 
 <script id="clined-floating-dashboard-navigation-final">
