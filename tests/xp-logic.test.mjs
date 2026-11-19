@@ -2,8 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cleanEvents, applyCap, MAX_EVENT, DAILY_CAP } from '../lib/xp-logic.mjs';
 
-test('cleanEvents: jenis tak dikenal jadi other, jumlah dipotong, sampah dibuang', () => {
-  const r = cleanEvents([{ kind: 'quiz', ref: 'a', amount: 20 }, { kind: 'x', ref: 'b', amount: 9999 }, { ref: '', amount: 5 }, { kind: 'quiz', ref: 'c', amount: -1 }, null, { kind: 'upi', ref: 'd', amount: '7' }]);
+test('cleanEvents: jenis tak dikenal jadi other, jumlah dipotong, sampah/userbank/rnd dibuang', () => {
+  const r = cleanEvents([
+    { kind: 'quiz', ref: 'a', amount: 20 },
+    { kind: 'x', ref: 'b', amount: 9999 },
+    { ref: '', amount: 5 },
+    { kind: 'quiz', ref: 'c', amount: -1 },
+    null,
+    { kind: 'upi', ref: 'd', amount: '7' },
+    { kind: 'userbank', ref: 'ub:1', amount: 20 },
+    { kind: 'quiz', ref: 'rnd:abc123', amount: 30 }
+  ]);
   assert.deepEqual(r.map(e => [e.kind, e.ref, e.amount]), [['quiz', 'a', 20], ['other', 'b', MAX_EVENT], ['upi', 'd', 7]]);
   const b = cleanEvents([{ kind: 'materi', ref: 'q1', amount: 20, block: 'Blok Endokrin' }]);
   assert.equal(b[0].block, 'ENDOKRIN');

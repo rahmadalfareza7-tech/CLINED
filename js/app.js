@@ -23,12 +23,36 @@ function xpTitle(level){
   if(level>=5) return "Mahasiswa Klinik";
   return "Mahasiswa Pre-Klinik";
 }
+function todayXpKey(){
+  try{
+    const d=new Date(Date.now()+7*3600000);
+    return d.toISOString().slice(0,10);
+  }catch{return new Date().toISOString().slice(0,10);}
+}
+function claimDailyXpRef(kind,ref){
+  if(!ref || String(ref).startsWith('rnd:'))return true;
+  try{
+    const day=todayXpKey(), key='clined_xp_daily_refs_v1';
+    const raw=JSON.parse(localStorage.getItem(key)||'{}');
+    const map=(raw && raw.day===day && raw.refs && typeof raw.refs==='object')?raw.refs:{};
+    const token=`${kind||'quiz'}|${String(ref).slice(0,80)}`;
+    if(map[token])return false;
+    map[token]=1;
+    localStorage.setItem(key,JSON.stringify({day,refs:map}));
+    return true;
+  }catch{return true;}
+}
 function addXP(amount,reason="",meta){
   const before=Number(get(KEY.xp,0))||0;
   const gained=Math.max(0,Math.round(amount));
+  const kind=meta?.kind||"quiz";
+  const ref=meta?.ref||("rnd:"+Math.random().toString(36).slice(2,10));
+  if(gained<=0 || !claimDailyXpRef(kind,ref)){
+    return {before,after:before,gained:0,leveledUp:false,duplicate:true};
+  }
   const rawBankBlock=(typeof blockForBank==='function'&&typeof selectedBank!=='undefined'&&!window.__clinedCustomQuiz)?blockForBank(selectedBank):'';
   const evBlock=meta?.block||(rawBankBlock&&rawBankBlock!=='OTHER'?rawBankBlock:'')||(typeof selectedBank!=='undefined'&&selectedBank==='userbank'?'':(typeof getCurrentBlockId==='function'?getCurrentBlockId():''));
-  try{if(gained>0)window.CLINED_XP?.enqueue(meta?.kind||"quiz",meta?.ref||("rnd:"+Math.random().toString(36).slice(2,10)),gained,evBlock);}catch(e){}
+  try{if(gained>0 && kind!=="userbank")window.CLINED_XP?.enqueue(kind,ref,gained,evBlock);}catch(e){}
   const after=before+gained;
   set(KEY.xp,after);
   // Push XP immediately instead of waiting for the periodic sync interval.

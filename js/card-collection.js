@@ -303,7 +303,9 @@
     let inBonusCall = false;
     const original = window.addXP;
     window.addXP = function (amount, reason, meta, ...rest) {
-      const isCorrectAnswer = !inBonusCall && ((typeof amount === 'number' && amount > 0 && amount <= 25) || (typeof reason === 'string' && /benar|resep|farmako|quest/i.test(reason)));
+      const rStr = typeof reason === 'string' ? reason : '';
+      const isWrongReason = /salah|dikerjakan/i.test(rStr);
+      const isCorrectAnswer = !inBonusCall && !isWrongReason && ((typeof amount === 'number' && amount >= 10 && amount <= 55) || /benar|resep|farmako|quest/i.test(rStr));
       const eq = isCorrectAnswer ? getEquippedCard() : null;
       const bonusXp = eq?.buff?.quizXp || 0;
       const totalAmount = (isCorrectAnswer && typeof amount === 'number' && bonusXp > 0) ? (amount + bonusXp) : amount;
@@ -317,7 +319,7 @@
           inBonusCall = false;
         }
       }
-      if (!isCorrectAnswer) return ret;
+      if (!isCorrectAnswer || ret?.duplicate) return ret;
       count++;
       sessionStorage.setItem('clined_qa_count', String(count));
       const step = getQuizPerDiamond();

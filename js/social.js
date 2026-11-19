@@ -176,8 +176,12 @@
         if (diaGain > 0) addDiamonds(diaGain);
         if (xpGain > 0 && typeof window.addXP === 'function') {
           try {
+            // Server sudah mencatat 30+wager ke xp_events saat finalize(); client cukup mencatat bonus Kartu Andalan dengan kind:'duel'
+            if (cardBonusXp > 0) {
+              window.CLINED_XP?.enqueue?.('duel', `${D.id}:cardbonus`.slice(0, 80), cardBonusXp);
+            }
             window.addXP(xpGain, win ? `Menang Duel Klinik (+${xpGain} EXP)` : `Seri Duel Klinik (+${xpGain} EXP)`, {
-              kind: 'materi',
+              kind: 'userbank', // tidak di-enqueue ulang ke server karena 30+wager sudah dicatat server
               ref: `duel-local:${D.id}`.slice(0, 80),
               silent: false
             });

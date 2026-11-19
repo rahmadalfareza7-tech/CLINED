@@ -315,30 +315,30 @@ function updateHeaderXP(){
 function awardFarmakoXP(correctCount,reason,refPrefix,silentPopup=false){
   const n=Math.max(0,Math.floor(Number(correctCount)||0));
   if(!n)return 0;
-  const totalGain=n*XP_PER_CORRECT;
-  S.sessionXp=(S.sessionXp||0)+totalGain;
-  const stamp=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  let totalGain=0;
   const xpBefore=getTotalXP();
   if(typeof window!=='undefined'&&typeof window.addXP==='function'){
     const label=n===1?`${reason} (+${XP_PER_CORRECT} EXP)`:`${reason} (${n} benar × ${XP_PER_CORRECT} EXP)`;
     for(let i=0;i<n;i++){
       const isLast=(i===n-1);
       try{
-        window.addXP(
+        const r=window.addXP(
           XP_PER_CORRECT,
           label,
           {
             kind:'materi',
-            ref:`${refPrefix||'farmako'}:${i}:${stamp}`.slice(0,80),
+            ref:`${refPrefix||'farmako'}:${i}`.slice(0,80),
             block:'KEDKEL',
             silent:silentPopup||n>1||!isLast
           }
         );
+        totalGain+=Number(r?.gained??XP_PER_CORRECT)||0;
       }catch{}
     }
+    S.sessionXp=(S.sessionXp||0)+totalGain;
     const xpAfter=getTotalXP();
     const leveledUp=Math.floor(xpAfter/100)>Math.floor(xpBefore/100);
-    if(!silentPopup&&n>1&&typeof window.showXPPopup==='function'){
+    if(!silentPopup&&n>1&&totalGain>0&&typeof window.showXPPopup==='function'){
       try{window.showXPPopup(totalGain,label,leveledUp);}catch{}
     }
   }
@@ -584,7 +584,8 @@ function answer(i){
   z.ans=i;
   if(q.o[i]===q.a){
     z.score++;
-    awardFarmakoXP(1,`${z.title} • Jawaban benar`,`farmako:quiz:${S.tab}:${z.i}`);
+    const qKey=String(q.q||z.i).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,42)||z.i;
+    awardFarmakoXP(1,`${z.title} • Jawaban benar`,`farmako:quiz:${S.tab}:${qKey}`);
   }else{
     z.wrong.push(q);
   }
