@@ -120,7 +120,7 @@
               <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select></div>
               <div class="acm-field"><label>Judul paket <small>(opsional)</small></label><input name="title" maxlength="160" placeholder="Contoh: UAB KEDKOM 2026"></div>
             </div>
-            <div class="acm-field"><label>File JSON</label><div class="admin-file-picker"><input id="adminUabJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminUabJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-uab-file-meta>Belum ada file dipilih.</span></div></div>
+            <div class="acm-field"><label>File JSON <small>(maks 1 MB)</small></label><div class="admin-file-picker"><input id="adminUabJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminUabJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-uab-file-meta>Belum ada file dipilih.</span></div></div>
             <button class="account-action account-save acm-submit" type="submit">Import ke blok UAB</button>
             <p class="acm-note muted" data-content-message role="status"></p>
           </form>
@@ -211,6 +211,7 @@
       uabFile.addEventListener('change',()=>{const f=uabFile.files?.[0];uabMeta.textContent=f?`${f.name} • ${(f.size/1024).toFixed(1)} KB`:'Belum ada file dipilih.';});
       uabForm.addEventListener('submit',async e=>{
         e.preventDefault(); const f=uabForm.elements.file.files?.[0]; if(!f){message(box,'Pilih file JSON terlebih dahulu.',true);return;}
+        if(f.size > 1024 * 1024){message(box,'Ukuran file terlalu besar (maksimal 1 MB).',true);return;}
         try{
           const raw=await f.text(); const questions=parseUabJson(raw); const block=uabForm.elements.block.value;
           if(!Array.isArray(questions)||!questions.length) throw Error('File JSON tidak berisi soal.');

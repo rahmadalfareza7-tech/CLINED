@@ -96,7 +96,7 @@ export async function contentApi({ request, response, url, user, pool, body, jso
   }
   if (request.method !== 'POST' || path !== '/packages') return fail(response, 404, 'Endpoint konten tidak ditemukan.');
   origin(request);
-  const input = await body(request), module = String(input.module || ''), title = String(input.title || '').trim(), block = input.block ? String(input.block).trim().slice(0, 80) : null;
+  const input = await body(request, 1_200_000), module = String(input.module || ''), title = String(input.title || '').trim(), block = input.block ? String(input.block).trim().slice(0, 80) : null;
   if (!['UAB', 'UPI', 'MAT'].includes(module) || !title || (module === 'MAT' && !block) || title.length > 160 || !Array.isArray(input.questions) || !input.questions.length || input.questions.length > 500) return fail(response, 400, 'Paket soal tidak valid.');
   const questions = input.questions.map(packageQuestion), ids = new Set(questions.map(question => question.id));
   if (ids.size !== questions.length) return fail(response, 400, 'ID soal dalam paket harus unik.');
