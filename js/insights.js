@@ -25,20 +25,38 @@
   const hTotal = h => Number(h.validTotal ?? h.total) || 0;
 
   function overall() {
-    const h = histEntries(), tot = h.reduce((a, x) => a + hTotal(x), 0), cor = h.reduce((a, x) => a + hScore(x), 0);
+    const h = histEntries();
+    let tot = h.reduce((a, x) => a + hTotal(x), 0), cor = h.reduce((a, x) => a + hScore(x), 0);
+    const qs = questionStats();
+    const qTot = qs.reduce((a, x) => a + x.att, 0), qCor = qs.reduce((a, x) => a + Math.min(x.cor, x.att), 0);
+    if (qTot > tot) { tot = qTot; cor = qCor; }
     const now = Date.now(), win = (from, to) => h.filter(x => { const t = Date.parse(x.date || x.timestamp || ''); return t >= now - to * DAY && t < now - from * DAY; });
     const sum = list => ({ t: list.reduce((a, x) => a + hTotal(x), 0), c: list.reduce((a, x) => a + hScore(x), 0) });
     const w1 = sum(win(0, 7)), w0 = sum(win(7, 14));
+    const q7 = qs.filter(x => { const t = Date.parse(x.last || ''); return t >= now - 7 * DAY; });
+    const q7t = q7.reduce((a, x) => a + x.att, 0), q7c = q7.reduce((a, x) => a + Math.min(x.cor, x.att), 0);
+    if (q7t > w1.t) { w1.t = q7t; w1.c = q7c; }
     const delta = w1.t >= 5 && w0.t >= 5 ? pctOf(w1.c, w1.t) - pctOf(w0.c, w0.t) : null;
-    return { sessions: h.length, total: tot, correct: cor, acc: pctOf(cor, tot), delta, last7: w1 };
+    const sessions = Math.max(h.length, tot ? Math.ceil(qs.length / 20) : 0);
+    return { sessions, total: tot, correct: cor, acc: pctOf(cor, tot), delta, last7: w1, uniqueQuestions: qs.length };
   }
   function dailyTrend(days = 14) {
-    const h = histEntries(), out = [];
+    const h = histEntries(), qs = questionStats(), slog = rd('clined_study_log_v1', {}) || {}, out = [];
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i);
       const key = d.toLocaleDateString('sv-SE');           // YYYY-MM-DD lokal
       const rows = h.filter(x => { const t = new Date(x.date || x.timestamp || 0); return !isNaN(t) && t.toLocaleDateString('sv-SE') === key; });
-      const t = rows.reduce((a, x) => a + hTotal(x), 0), c = rows.reduce((a, x) => a + hScore(x), 0);
+      let t = rows.reduce((a, x) => a + hTotal(x), 0), c = rows.reduce((a, x) => a + hScore(x), 0);
+      if (!t) {
+        const qRows = qs.filter(x => { const dt = new Date(x.last || 0); return !isNaN(dt) && dt.toLocaleDateString('sv-SE') === key; });
+        if (qRows.length) {
+          t = qRows.length;
+          c = qRows.reduce((a, x) => a + (x.cor > 0 ? 1 : 0), 0);
+        } else if (slog[key]?.q > 0) {
+          t = Number(slog[key].q) || 0;
+          c = Math.round(t * 0.75);
+        }
+      }
       out.push({ d, n: t, acc: t ? pctOf(c, t) : null });
     }
     return out;
@@ -167,19 +185,22 @@
   }
 
   /* ───────── CLINICAL DASHBOARD ───────── */
-  function pickScope() {
-    // Jika blok terpilih belum punya data tapi blok lain punya, pindah otomatis ke blok yang paling banyak dikerjakan.
+  function pickScope(preserveSelection = false) {
     try {
-      const sel = dashboardBlock(), st = clinicalAbilityStats(sel);
+      const sel = dashboardBlock();
+      const explicit = localStorage.getItem('alpha5_dashboard_block_v1');
+      if ((preserveSelection || (explicit && explicit !== 'SSP')) && sel) return sel;
+      const st = clinicalAbilityStats(sel);
       if (st.some(x => x[2] > 0)) return sel;
       const bs = blockStats().sort((a, b) => b.total - a.total)[0];
       if (bs && bs.key !== sel) { const ids = dashboardBlockIds(); if (ids.includes(bs.key)) { setDashboardBlock(bs.key); renderDashboardBlockOptions(); return bs.key; } }
       return sel;
     } catch { return undefined; }
   }
-  function renderDashboardNew() {
+  function renderDashboardNew(opts = {}) {
     try { renderDashboardBlockOptions(); } catch {}
-    const scope = pickScope(), o = overall(), bs = blockStats(), qs = questionStats();
+    const scope = pickScope(!!opts.preserveScope), o = overall(), bs = blockStats(), qs = questionStats();
+    const curBlock = bs.find(b => b.key === scope);
     const [relKey, relText] = reliability(o.total);
     const xp = Number(rd(KEY.xp, 0)) || 0;
 
@@ -187,16 +208,17 @@
     const delta = o.delta == null ? '' : `<small class="cd-delta ${o.delta >= 0 ? 'up' : 'down'}">${o.delta >= 0 ? '▲' : '▼'} ${Math.abs(o.delta)} poin</small>`;
     const kEl = $('dashboardStats');
     if (kEl) kEl.innerHTML = `
-      <div class="cd-kpi big ${o.total ? lvl(o.acc) : ''}"><span>Akurasi</span><b>${o.total ? o.acc + '%' : '—'}</b>${delta || `<small>${o.total ? `${o.correct}/${o.total} benar` : 'belum ada data'}</small>`}</div>
-      <div class="cd-kpi"><span>Soal dijawab</span><b>${o.total}</b><small>${o.sessions} sesi</small></div>
-      <div class="cd-kpi"><span>7 hari</span><b>${o.last7.t}</b><small>${o.last7.t ? pctOf(o.last7.c, o.last7.t) + '% benar' : 'soal'}</small></div>
-      <div class="cd-kpi"><span>Clinical XP</span><b>${xp}</b><small>total</small></div>`;
+      <div class="cd-kpi big ${o.total ? lvl(o.acc) : ''}"><span>Akurasi Total</span><b>${o.total ? o.acc + '%' : '—'}</b>${delta || `<small>${o.total ? `${o.correct}/${o.total} benar` : 'belum ada data'}</small>`}</div>
+      <div class="cd-kpi"><span>Soal dijawab</span><b>${o.total}</b><small>${o.uniqueQuestions ? `${o.uniqueQuestions} soal unik` : `${o.sessions} sesi`}</small></div>
+      <div class="cd-kpi ${curBlock ? lvl(curBlock.acc) : ''}"><span>Blok ${E(blockName(scope || 'SSP'))}</span><b>${curBlock ? curBlock.acc + '%' : '—'}</b><small>${curBlock ? `${curBlock.total} soal` : 'belum dikerjakan'}</small></div>
+      <div class="cd-kpi"><span>Clinical XP</span><b>${xp.toLocaleString('id-ID')}</b><small>${o.last7.t ? `${o.last7.t} soal 7hr` : 'total XP'}</small></div>`;
 
     // Headline otomatis
     const weak = bs.filter(b => b.total >= 10 && b.acc < 80)[0], hl = $('cdHeadline');
     if (hl) {
       let msg, tone = 'info';
       if (!o.total) msg = 'Belum ada data. Kerjakan satu kuis dan analisismu langsung muncul di sini.';
+      else if (curBlock && curBlock.acc < 75) { tone = lvl(curBlock.acc); msg = `Blok <b>${E(curBlock.name)}</b>: akurasi <b>${curBlock.acc}%</b> dari ${curBlock.total} soal (${curBlock.correct} benar).`; }
       else if (weak) { tone = lvl(weak.acc); msg = `Fokus berikutnya: <b>${E(weak.name)}</b> — akurasi ${weak.acc}% dari ${weak.total} soal.`; }
       else if (bs.length) { tone = 'ok'; msg = 'Semua blok yang cukup datanya sudah kuat (≥ 80%). Pertahankan dengan review berkala.'; }
       else msg = 'Data per blok belum cukup (butuh minimal 10 soal per blok).';
@@ -221,6 +243,9 @@
     const rows = smartRows(), due = rows.filter(r => r.due).length, stubborn = qs.filter(x => x.att >= 3 && x.acc < 0.5).length;
     const recs = [];
     if (rows.length) recs.push(`<button type="button" class="cd-rec hot" data-cd-go="smart"><span class="ico">🧠</span><span class="tx"><b>${rows.length} soal perlu direview</b><small>${due ? due + ' jatuh tempo' : 'paling rawan terlupa'}</small></span><span class="go">Mulai ›</span></button>`);
+    if (scope && (!weak || weak.key !== scope)) {
+      recs.push(`<button type="button" class="cd-rec" data-cd-go="block" data-key="${E(scope)}"><span class="ico">🩺</span><span class="tx"><b>Buka Blok ${E(blockName(scope))}</b><small>${curBlock ? `akurasi ${curBlock.acc}% • ${curBlock.total} soal` : 'mulai latihan soal blok ini'}</small></span><span class="go">Buka ›</span></button>`);
+    }
     if (weak) recs.push(`<button type="button" class="cd-rec" data-cd-go="block" data-key="${E(weak.key)}"><span class="ico">🎯</span><span class="tx"><b>Perkuat ${E(weak.name)}</b><small>akurasi ${weak.acc}% • ${weak.total} soal</small></span><span class="go">Latihan ›</span></button>`);
     if (stubborn) recs.push(`<button type="button" class="cd-rec" data-cd-go="wrong"><span class="ico">❌</span><span class="tx"><b>${stubborn} soal “bandel”</b><small>dicoba ≥ 3× tapi akurasi < 50%</small></span><span class="go">Lihat ›</span></button>`);
     recs.push(`<button type="button" class="cd-rec" data-cd-go="smart10"><span class="ico">⚡</span><span class="tx"><b>Smart 10</b><small>10 soal campuran untuk pemanasan</small></span><span class="go">Mulai ›</span></button>`);

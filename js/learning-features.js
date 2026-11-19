@@ -23,30 +23,55 @@ const saveNotes   = d => localStorage.setItem(KEY_NOTES, JSON.stringify(d));
 
 /* Map block → label display */
 const BLOCK_LABELS = {
+  BM1:       'BM 1',
+  BM2:       'BM 2',
+  HNC:       'HNC',
+  MP1:       'MP 1',
+  MP2:       'MP 2',
+  MPT:       'MPT',
+  MUSKULOSKELETAL: 'Muskuloskeletal',
+  RESPIRATORY: 'Respirasi',
+  KARDIOLOGI:'Kardiologi',
+  HEMATOLOGI:'Hematologi',
+  GIT:       'Gastrointestinal',
+  GASTRO:    'Gastrointestinal',
+  FORENSIK:  'Forensik',
   GINJAL:    'Ginjal',
   ENDOKRINE: 'Endokrin',
-  KEDKEL:    'Ked. Keluarga',
+  REPRODUKSI:'Reproduksi',
+  SSP:       'SSP',
+  'PANCA INDRA': 'Panca Indra',
   KEDKOM:    'Ked. Komunitas',
-  MUSKULOSKELETAL: 'Musku',
-  KARDIOLOGI:'Kardio',
+  KEDKEL:    'Ked. Keluarga',
+  MULSIS:    'Mulsis',
   PULMONOLOGI:'Pulmo',
   NEUROLOGI: 'Neuro',
-  GASTRO:    'Gastro',
   PSIKIATRI: 'Psikiatri',
   OTHER:     'Lainnya',
 };
 
+function normalizeBlockKey(raw) {
+  let block = String(raw || '').trim().replace(/^BLOK\s+/i, '').replace(/_/g, ' ').toUpperCase();
+  if (block === 'MUSKULO') return 'MUSKULOSKELETAL';
+  if (block === 'ENDOKRIN' || block === 'ENDO') return 'ENDOKRINE';
+  if (block === 'PANCAINDRA') return 'PANCA INDRA';
+  if (block === 'GASTRO' || block === 'GASTROINTESTINAL') return 'GIT';
+  if (block === 'RESPIRASI' || block === 'PULMONOLOGI') return 'RESPIRATORY';
+  if (block === 'KEDOKTERAN KOMUNITAS') return 'KEDKOM';
+  if (block === 'KEDOKTERAN KELUARGA') return 'KEDKEL';
+  return block;
+}
+
 function computeBlockScores() {
-  /* Akurasi per blok dari riwayat kuis, dibobot jumlah soal (bukan rata-rata persen antar sesi). */
+  /* Akurasi per blok dari riwayat kuis + performa per soal (qstats), dibobot jumlah soal. */
   try {
     const hist = JSON.parse(localStorage.getItem('gaster_v8_history') || '[]');
     const blocks = {};
     hist.forEach(h => {
       let block = '';
-      if (h.block) block = String(h.block).replace(/^BLOK\s+/i, '').toUpperCase();          // Latihan Materi
-      else if (h.bank && typeof window.blockForBank === 'function') block = window.blockForBank(h.bank);
-      else if (h.bank && typeof BANKS !== 'undefined' && BANKS[h.bank]) block = String(BANKS[h.bank].block || '').replace(/^BLOK\s+/i, '').toUpperCase();
-      if (block === 'MUSKULO') block = 'MUSKULOSKELETAL';
+      if (h.block) block = normalizeBlockKey(h.block);
+      else if (h.bank && typeof window.blockForBank === 'function') block = normalizeBlockKey(window.blockForBank(h.bank));
+      else if (h.bank && typeof BANKS !== 'undefined' && BANKS[h.bank]) block = normalizeBlockKey(BANKS[h.bank].block || '');
       if (!block || block === 'OTHER') return;
       const total = Number(h.validTotal ?? h.total) || 0;
       if (!total) return;
@@ -57,6 +82,35 @@ function computeBlockScores() {
       blocks[block].n++;
       blocks[block].last = Math.max(blocks[block].last, Date.parse(h.date || h.timestamp || '') || 0);
     });
+    // Lengkapi dengan gaster_v22_question_performance (qstats) jika user menjawab soal tanpa menyelesaikan sesi ke layar hasil
+    const qstats = JSON.parse(localStorage.getItem('gaster_v22_question_performance') || '{}') || {};
+    const qBlocks = {};
+    for (const v of Object.values(qstats)) {
+      if (!v || typeof v !== 'object') continue;
+      const att = Number(v.attempts || 0), cor = Number(v.correct || 0);
+      if (att <= 0) continue;
+      let block = '';
+      if (v.block) block = normalizeBlockKey(v.block);
+      else if (v.bank && typeof window.blockForBank === 'function') block = normalizeBlockKey(window.blockForBank(v.bank));
+      else if (v.bank && typeof BANKS !== 'undefined' && BANKS[v.bank]) block = normalizeBlockKey(BANKS[v.bank].block || '');
+      if (!block || block === 'OTHER') continue;
+      if (!qBlocks[block]) qBlocks[block] = { correct: 0, total: 0, qCount: 0, last: 0 };
+      qBlocks[block].correct += Math.min(cor, att);
+      qBlocks[block].total += att;
+      qBlocks[block].qCount++;
+      qBlocks[block].last = Math.max(qBlocks[block].last, Date.parse(v.lastAnswered || '') || 0);
+    }
+    for (const [block, qb] of Object.entries(qBlocks)) {
+      const hb = blocks[block];
+      if (!hb || qb.total > hb.total) {
+        blocks[block] = {
+          correct: qb.correct,
+          total: qb.total,
+          n: hb ? Math.max(hb.n, 1) : Math.max(1, Math.ceil(qb.qCount / 20)),
+          last: Math.max(hb?.last || 0, qb.last)
+        };
+      }
+    }
     return blocks;
   } catch { return {}; }
 }

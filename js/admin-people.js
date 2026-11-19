@@ -17,7 +17,7 @@
   const dayKey = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? 'Hari ini' : new Date(n - 864e5).toDateString() === d.toDateString() ? 'Kemarin' : d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' }); };
 
   function mount(host, { request, confirm, selfId }) {
-    const S = { tab: 'users', users: null, acts: null, q: '', role: 'all', filter: 'all', open: null, timer: null, busy: new Set() };
+    const S = { tab: 'users', users: null, acts: null, q: '', role: 'all', sort: 'role', filter: 'all', open: null, timer: null, busy: new Set() };
     host.classList.add('ap');
     host.innerHTML = `<div class="ap-hero"><div class="ap-hero-t"><span class="ap-kick">ADMIN</span><h3>Pengguna & aktivitas</h3></div><div class="ap-stats" data-ap-stats></div></div>
       <div class="ap-tabs" role="tablist"><button type="button" role="tab" data-ap-tab="users" class="on">👥 Pengguna</button><button type="button" role="tab" data-ap-tab="acts">🕘 Aktivitas</button></div>
@@ -28,23 +28,34 @@
 
     const stats = () => {
       const u = S.users || [], c = r => u.filter(x => x.role === r).length;
-      $('[data-ap-stats]').innerHTML = S.users ? `<span><b>${u.length}</b>Pengguna</span><span><b>${c('admin')}</b>Admin</span><span><b>${c('helper')}</b>Helper</span><span><b>${u.filter(x => x.isMentor).length}</b>Mentor</span>` : '';
+      const activeToday = u.filter(x => x.lastLoginAt && (Date.now() - new Date(x.lastLoginAt).getTime()) < 864e5).length;
+      $('[data-ap-stats]').innerHTML = S.users ? `<span><b>${u.length}</b>Pengguna</span><span><b>${activeToday}</b>Aktif 24j</span><span><b>${c('admin')}</b>Admin</span><span><b>${c('helper')}</b>Helper</span><span><b>${u.filter(x => x.isMentor).length}</b>Mentor</span>` : '';
     };
 
     /* ───── Pengguna ───── */
     const usersHTML = () => {
       if (S.users == null) return '<div class="ap-skel"></div><div class="ap-skel"></div><div class="ap-skel"></div>';
       const q = S.q.trim().toLowerCase();
-      const rows = S.users.filter(u => (S.role === 'all' || (S.role === 'mentor' ? u.isMentor : u.role === S.role)) && (!q || u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q)));
+      const rows = S.users
+        .filter(u => (S.role === 'all' || (S.role === 'mentor' ? u.isMentor : u.role === S.role)) && (!q || u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q)))
+        .slice()
+        .sort((a, b) => {
+          if (S.sort === 'xp') return (Number(b.xpTotal) || 0) - (Number(a.xpTotal) || 0) || a.name.localeCompare(b.name, 'id');
+          if (S.sort === 'login') return (new Date(b.lastLoginAt || 0).getTime()) - (new Date(a.lastLoginAt || 0).getTime());
+          return 0;
+        });
       const chips = [['all', 'Semua'], ['admin', '👑 Admin'], ['helper', '🛠️ Helper'], ['mentor', '🙋 Mentor'], ['student', '🎓 Student']];
+      const sorts = [['role', 'Default'], ['xp', '⚡ XP Tertinggi'], ['login', '🕒 Login Terbaru']];
       return `<div class="ap-searchbox"><input type="search" data-ap-q placeholder="Cari nama atau username…" value="${esc(S.q)}" autocomplete="off" aria-label="Cari pengguna"></div>
         <div class="ap-chips" role="group" aria-label="Filter role">${chips.map(([k, l]) => `<button type="button" data-ap-role="${k}" class="${S.role === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+        <div class="ap-chips" role="group" aria-label="Urutkan pengguna" style="margin-top:4px">${sorts.map(([k, l]) => `<button type="button" data-ap-sort="${k}" class="${S.sort === k ? 'on' : ''}">${l}</button>`).join('')}</div>
         <div class="ap-count">${rows.length} pengguna</div>
         <div class="ap-list">${rows.length ? rows.map(userCard).join('') : '<div class="ap-empty"><span>🫥</span>Tidak ada pengguna yang cocok.</div>'}</div>`;
     };
     const userCard = u => {
       const open = S.open === u.id, me = u.id === selfId, busy = S.busy.has(u.id);
-      const tags = `<em class="ap-tag r-${esc(u.role)}">${ROLES[u.role]?.[0] || ''} ${ROLES[u.role]?.[1] || esc(u.role)}</em>${u.isMentor ? '<em class="ap-tag r-mentor">🙋 Tempat bertanya</em>' : ''}`;
+      const xpBadge = Number(u.xpTotal) > 0 ? `<em class="ap-tag">⚡ ${Number(u.xpTotal).toLocaleString('id-ID')} XP</em>` : '';
+      const tags = `<em class="ap-tag r-${esc(u.role)}">${ROLES[u.role]?.[0] || ''} ${ROLES[u.role]?.[1] || esc(u.role)}</em>${u.isMentor ? '<em class="ap-tag r-mentor">🙋 Tempat bertanya</em>' : ''}${xpBadge}`;
       return `<article class="ap-user${open ? ' open' : ''}${busy ? ' busy' : ''}">
         <button type="button" class="ap-user-head" data-ap-open="${esc(u.id)}" aria-expanded="${open}">
           <span class="ap-av" style="background:${hue(u.name)}">${esc(ini(u.name))}</span>
@@ -59,16 +70,18 @@
     };
 
     /* ───── Aktivitas ───── */
-    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'] };
+    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'], question_edited: ['✏️', 'Edit soal', 'edit'] };
     const actsHTML = () => {
       if (S.acts == null) return '<div class="ap-skel"></div><div class="ap-skel"></div><div class="ap-skel"></div>';
       const rows = S.acts.filter(a => S.filter === 'all' || (LBL[a.action]?.[2] || 'other') === S.filter);
-      const chips = [['all', 'Semua'], ['login', '↪ Login'], ['logout', '↩ Logout'], ['role', '⚙️ Role']];
+      const chips = [['all', 'Semua'], ['login', '↪ Login'], ['logout', '↩ Logout'], ['role', '⚙️ Role'], ['edit', '✏️ Edit Soal']];
       let last = '', html = '';
       rows.forEach(a => {
         const d = dayKey(a.createdAt); if (d !== last) { html += `<div class="ap-day">${esc(d)}</div>`; last = d; }
         const l = LBL[a.action] || ['•', a.action, 'other'];
-        const extra = a.action === 'role_changed' && a.metadata?.to ? `<span class="ap-chg">${esc(a.metadata.from || '—')}<i>→</i>${esc(a.metadata.to)}</span>` : '';
+        const extra = a.action === 'role_changed' && a.metadata?.to
+          ? `<span class="ap-chg">${esc(a.metadata.from || '—')}<i>→</i>${esc(a.metadata.to)}</span>`
+          : (a.action === 'question_edited' && a.metadata?.questionId ? `<span class="ap-chg">${esc(a.metadata.bank || '')} • ${esc(a.metadata.questionId)}</span>` : '');
         html += `<article class="ap-act k-${l[2]}"><span class="ap-act-ico" aria-hidden="true">${l[0]}</span><div class="ap-act-main"><b>${esc(a.user?.name || 'Akun dihapus')}</b><small>@${esc(a.user?.username || '-')} • ${esc(l[1])}</small>${extra}</div><time>${hm(a.createdAt)}</time></article>`;
       });
       return `<div class="ap-chips" role="group" aria-label="Filter aktivitas">${chips.map(([k, l]) => `<button type="button" data-ap-filter="${k}" class="${S.filter === k ? 'on' : ''}">${l}</button>`).join('')}</div>
@@ -91,6 +104,7 @@
       const t = e.target.closest('button'); if (!t || !host.contains(t)) return;
       if (t.dataset.apTab) { S.tab = t.dataset.apTab; host.querySelectorAll('[data-ap-tab]').forEach(b => b.classList.toggle('on', b === t)); draw(); return; }
       if (t.dataset.apRole) { S.role = t.dataset.apRole; draw(); return; }
+      if (t.dataset.apSort) { S.sort = t.dataset.apSort; draw(); return; }
       if (t.dataset.apFilter) { S.filter = t.dataset.apFilter; draw(); return; }
       if (t.dataset.apOpen) { S.open = S.open === t.dataset.apOpen ? null : t.dataset.apOpen; draw(); return; }
       if (t.dataset.apSetrole) {

@@ -127,9 +127,12 @@
         </div>
 
         <div class="acm-panel" data-content-panel="manage" hidden>
-          <div class="admin-content-intro"><b>Kelola soal UAB</b><span>Pilih blok, buka bank yang ingin dicek, lalu hapus soal yang salah atau duplikat.</span></div>
+          <div class="admin-content-intro"><b>Kelola soal UAB</b><span>Pilih blok, cari soal, lalu edit atau hapus soal yang salah maupun duplikat.</span></div>
           <div class="admin-uab-manage acm-form" data-uab-manage>
-            <div class="acm-field"><label>Blok soal</label><select data-uab-delete-block>${blockOptions(UAB_BLOCKS)}</select></div>
+            <div class="acm-grid">
+              <div class="acm-field"><label>Blok soal</label><select data-uab-delete-block>${blockOptions(UAB_BLOCKS)}</select></div>
+              <div class="acm-field"><label>Cari soal / ID</label><input type="search" data-uab-search placeholder="Ketik kata kunci atau ID soal…"></div>
+            </div>
             <div data-uab-packages class="admin-uab-packages"><p class="muted">Memuat bank UAB…</p></div>
           </div>
         </div>
@@ -141,11 +144,11 @@
               <div class="acm-field"><label>Blok tujuan</label><select name="block" required>${blockOptions(UAB_BLOCKS)}</select></div>
               <div class="acm-field"><label>Judul materi</label><input name="title" maxlength="160" required placeholder="Contoh: Anatomi Jantung"></div>
             </div>
-            <div class="acm-field"><label>File JSON</label><div class="admin-file-picker"><input id="adminLatihanJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminLatihanJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-latihan-file-meta>Belum ada file dipilih.</span></div></div>
+            <div class="acm-field"><label>File JSON <small>(maks 1 MB)</small></label><div class="admin-file-picker"><input id="adminLatihanJsonFile" name="file" type="file" accept=".json,application/json" required hidden><label for="adminLatihanJsonFile" class="admin-file-btn" role="button">Pilih file JSON</label><span class="admin-file-selected" data-latihan-file-meta>Belum ada file dipilih.</span></div></div>
             <button class="account-action account-save acm-submit" type="submit">Tambah ke Latihan Materi</button>
             <p class="acm-note muted" data-content-message role="status"></p>
           </form>
-          <div class="admin-content-intro" style="margin-top:14px"><b>Latihan yang sudah ada</b><span>Hapus paket yang salah atau duplikat.</span></div>
+          <div class="admin-content-intro" style="margin-top:14px"><b>Latihan yang sudah ada</b><span>Buka paket untuk melihat, mengedit, atau menghapus soal di dalamnya.</span></div>
           <div class="acm-field"><label>Filter blok</label><select data-latihan-filter><option value="*">Semua blok</option>${blockOptions(UAB_BLOCKS)}</select></div>
           <div data-latihan-list class="admin-uab-packages"><p class="muted">Memuat…</p></div>
         </div>
@@ -226,6 +229,7 @@
 
       const uabPackagesHost=box.querySelector('[data-uab-packages]');
       const uabDeleteBlock=box.querySelector('[data-uab-delete-block]');
+      const uabSearchInput=box.querySelector('[data-uab-search]');
       const normalizeBlock = value => {
         const k=String(value||'').trim().toUpperCase().replace(/^BLOK\s+/,'').replace(/_/g,' ');
         if(k==='ENDOKRIN')return 'ENDOKRINE';
@@ -244,45 +248,62 @@
         uabDeleteBlock.innerHTML=`<option value="*">Semua blok UAB</option>`+UAB_BLOCKS.map(([value,label])=>{const n=counts.get(normalizeBlock(value))||0;return `<option value="${esc(value)}">${esc(label)}${n?` • ${n} bank`:''}</option>`;}).join('');
         if(current==='*'||UAB_BLOCKS.some(([v])=>String(v).toUpperCase()===current))uabDeleteBlock.value=current;
       };
+      let cachedUabPackages=[];
+      const renderUabPackagesList=()=>{
+        if(!uabPackagesHost)return;
+        const rawSelected=String(uabDeleteBlock?.value||'*');
+        const selectedBlock=normalizeBlock(rawSelected);
+        const showAll=rawSelected==='*';
+        const qTerm=String(uabSearchInput?.value||'').trim().toLowerCase();
+        const packages=(showAll?cachedUabPackages:cachedUabPackages.filter(p=>normalizeBlock(p.block)===selectedBlock))
+          .map(p=>{
+            const allQs=Array.isArray(p.questions)?p.questions:[];
+            const qs=qTerm?allQs.filter(q=>`${q.id||''} ${q.soal||''}`.toLowerCase().includes(qTerm)):allQs;
+            return {...p,_allCount:allQs.length,_filteredQs:qs};
+          })
+          .filter(p=>!qTerm||p._filteredQs.length>0||String(p.title||'').toLowerCase().includes(qTerm));
+        if(!packages.length){
+          uabPackagesHost.innerHTML=`<div class="admin-uab-empty"><b>${qTerm?'Tidak ada soal UAB yang cocok dengan pencarian.':'Belum ada bank UAB di blok ini.'}</b><span>Kalau kamu baru selesai import, tekan refresh untuk memuat data terbaru.</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Refresh bank UAB</button></div>`;
+          uabPackagesHost.querySelector('[data-refresh-uab-delete]')?.addEventListener('click',renderUabPackages);
+          return;
+        }
+        uabPackagesHost.innerHTML=`<div class="admin-uab-result-count">${packages.length} bank ditemukan</div>`+packages.map(p=>{
+          const qs=p._filteredQs||[];
+          return `<details class="admin-uab-package"${qTerm?' open':''}><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'—')} • ${qTerm?`${qs.length}/${p._allCount}`:p._allCount} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-package="${esc(p.id)}">Hapus bank</button></summary><div class="admin-uab-question-list">${qs.length?qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id||'ID tidak tersedia')}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="secondary clined-compact-action" data-edit-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">✏️ Edit</button><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus</button></div></div>`).join(''):`<p class="muted">Bank ini belum memiliki soal.</p>`}</div></details>`;
+        }).join('');
+        uabPackagesHost.querySelectorAll('[data-edit-uab-question]').forEach(btn=>btn.addEventListener('click',e=>{
+          e.preventDefault();e.stopPropagation();
+          window.clinedEditQuestion?.({packageId:btn.dataset.editUabQuestion,qid:btn.dataset.questionId,onSaved:async()=>{await hydrateUab();await renderUabPackages();}});
+        }));
+        uabPackagesHost.querySelectorAll('[data-delete-uab-question]').forEach(btn=>btn.addEventListener('click',async e=>{
+          e.preventDefault();e.stopPropagation();
+          if(!(await clinedConfirm({title:'Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
+          btn.disabled=true;
+          try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabQuestion)}&questionId=${encodeURIComponent(btn.dataset.questionId)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Soal UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
+          catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus soal.',true);btn.disabled=false;}
+        }));
+        uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn=>btn.addEventListener('click',async e=>{
+          e.preventDefault();e.stopPropagation();
+          if(!(await clinedConfirm({title:'Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
+          btn.disabled=true;
+          try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabPackage)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Bank UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
+          catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus bank.',true);btn.disabled=false;}
+        }));
+      };
       const renderUabPackages=async()=>{
         if(!uabPackagesHost)return;
         try{
           const d=await request('/api/content/packages?module=UAB');
-          const allPackages=Array.isArray(d.packages)?d.packages:[];
-          refreshUabDeleteOptions(allPackages);
-          const rawSelected=String(uabDeleteBlock?.value||'*');
-          const selectedBlock=normalizeBlock(rawSelected);
-          const showAll=rawSelected==='*';
-          const packages=showAll?allPackages:allPackages.filter(p=>normalizeBlock(p.block)===selectedBlock);
-          if(!packages.length){
-            uabPackagesHost.innerHTML=`<div class="admin-uab-empty"><b>Belum ada bank UAB di blok ini.</b><span>Kalau kamu baru selesai import, tekan refresh untuk memuat data terbaru.</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Refresh bank UAB</button></div>`;
-            uabPackagesHost.querySelector('[data-refresh-uab-delete]')?.addEventListener('click',renderUabPackages);
-            return;
-          }
-          uabPackagesHost.innerHTML=`<div class="admin-uab-result-count">${packages.length} bank ditemukan</div>`+packages.map(p=>{
-            const qs=Array.isArray(p.questions)?p.questions:[];
-            return `<details class="admin-uab-package"><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'—')} • ${qs.length} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-package="${esc(p.id)}">Hapus bank</button></summary><div class="admin-uab-question-list">${qs.length?qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id||'ID tidak tersedia')}</small></div><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus soal</button></div>`).join(''):`<p class="muted">Bank ini belum memiliki soal.</p>`}</div></details>`;
-          }).join('');
-          uabPackagesHost.querySelectorAll('[data-delete-uab-question]').forEach(btn=>btn.addEventListener('click',async e=>{
-            e.preventDefault();e.stopPropagation();
-            if(!(await clinedConfirm({title:'Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
-            btn.disabled=true;
-            try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabQuestion)}&questionId=${encodeURIComponent(btn.dataset.questionId)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Soal UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
-            catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus soal.',true);btn.disabled=false;}
-          }));
-          uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn=>btn.addEventListener('click',async e=>{
-            e.preventDefault();e.stopPropagation();
-            if(!(await clinedConfirm({title:'Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
-            btn.disabled=true;
-            try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabPackage)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Bank UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
-            catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus bank.',true);btn.disabled=false;}
-          }));
+          cachedUabPackages=Array.isArray(d.packages)?d.packages:[];
+          refreshUabDeleteOptions(cachedUabPackages);
+          renderUabPackagesList();
         }catch(e){
           uabPackagesHost.innerHTML=`<div class="admin-uab-empty is-error"><b>Gagal memuat bank UAB.</b><span>${esc(e.message||'Terjadi kesalahan.')}</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Coba lagi</button></div>`;
           uabPackagesHost.querySelector('[data-refresh-uab-delete]')?.addEventListener('click',renderUabPackages);
         }
       };
-      uabDeleteBlock?.addEventListener('change',renderUabPackages);
+      uabDeleteBlock?.addEventListener('change',renderUabPackagesList);
+      uabSearchInput?.addEventListener('input',renderUabPackagesList);
       renderUabPackages();
 
       const upiForm=box.querySelector('[data-admin-upi-form]'), upiImage=upiForm.elements.image, upiPreview=box.querySelector('[data-admin-upi-preview]'), upiFileMeta=box.querySelector('[data-upi-file-meta]');
@@ -304,10 +325,23 @@
       const latihanForm=box.querySelector('[data-admin-latihan-form]'),latihanMeta=box.querySelector('[data-latihan-file-meta]'),latihanList=box.querySelector('[data-latihan-list]'),latihanFilter=box.querySelector('[data-latihan-filter]');
       const renderLatihanList=async()=>{
         try{
-          const d=await request('/api/content/packages?module=MAT&meta=1');
-          const f=latihanFilter.value; const rows=(d.packages||[]).filter(p=>f==='*'||String(p.block||'').toUpperCase()===f);
-          latihanList.innerHTML=rows.length?rows.map(p=>`<div class="admin-uab-package"><div><b>${esc(p.title)}</b><small>${esc(p.block||'-')} • ${Number(p.question_count||0)} soal</small></div><button type="button" class="account-action material-delete-action" data-del-latihan="${esc(p.id)}">Hapus</button></div>`).join(''):'<p class="muted">Belum ada latihan materi.</p>';
-          latihanList.querySelectorAll('[data-del-latihan]').forEach(b=>b.addEventListener('click',async()=>{
+          const d=await request('/api/content/packages?module=MAT');
+          const f=latihanFilter.value; const rows=(d.packages||[]).filter(p=>f==='*'||normalizeBlock(p.block)===normalizeBlock(f));
+          latihanList.innerHTML=rows.length?rows.map(p=>{
+            const qs=Array.isArray(p.questions)?p.questions:[];
+            return `<details class="admin-uab-package"><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'-')} • ${qs.length} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-del-latihan="${esc(p.id)}">Hapus paket</button></summary><div class="admin-uab-question-list">${qs.length?qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id||'ID tidak tersedia')}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="secondary clined-compact-action" data-edit-mat-question="${esc(p.id)}" data-question-id="${esc(q.id)}">✏️ Edit</button><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-mat-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus</button></div></div>`).join(''):'<p class="muted">Paket ini belum memiliki soal.</p>'}</div></details>`;
+          }).join(''):'<p class="muted">Belum ada latihan materi.</p>';
+          latihanList.querySelectorAll('[data-edit-mat-question]').forEach(b=>b.addEventListener('click',e=>{
+            e.preventDefault();e.stopPropagation();
+            window.clinedEditQuestion?.({packageId:b.dataset.editMatQuestion,qid:b.dataset.questionId,onSaved:renderLatihanList});
+          }));
+          latihanList.querySelectorAll('[data-delete-mat-question]').forEach(b=>b.addEventListener('click',async e=>{
+            e.preventDefault();e.stopPropagation();
+            if(!(await clinedConfirm({title:'Hapus soal latihan materi ini?',ok:'Ya, lanjut',tone:'danger'})))return;
+            try{await request(`/api/content/packages?packageId=${encodeURIComponent(b.dataset.deleteMatQuestion)}&questionId=${encodeURIComponent(b.dataset.questionId)}`,{method:'DELETE'});message(box,'Soal latihan dihapus.');await renderLatihanList();}catch(err){message(box,err.message||'Gagal menghapus soal.',true);}
+          }));
+          latihanList.querySelectorAll('[data-del-latihan]').forEach(b=>b.addEventListener('click',async e=>{
+            e.preventDefault();e.stopPropagation();
             if(!(await clinedConfirm({title:'Hapus paket latihan ini?',ok:'Ya, lanjut',tone:'danger'})))return;
             try{await request('/api/content/packages/'+encodeURIComponent(b.dataset.delLatihan),{method:'DELETE'});message(box,'Paket latihan dihapus.');await renderLatihanList();}catch(err){message(box,err.message||'Gagal menghapus.',true);}
           }));
@@ -317,6 +351,7 @@
       latihanForm.elements.file.addEventListener('change',()=>{const f=latihanForm.elements.file.files?.[0];latihanMeta.textContent=f?`${f.name} • ${(f.size/1024).toFixed(1)} KB`:'Belum ada file dipilih.';});
       latihanForm.addEventListener('submit',async e=>{
         e.preventDefault(); const f=latihanForm.elements.file.files?.[0]; if(!f){message(box,'Pilih file JSON terlebih dahulu.',true);return;}
+        if(f.size > 1024 * 1024){message(box,'Ukuran file terlalu besar (maksimal 1 MB).',true);return;}
         try{
           const block=latihanForm.elements.block.value,title=latihanForm.elements.title.value.trim().slice(0,160);
           if(!title)throw Error('Judul materi wajib diisi.');
@@ -332,6 +367,12 @@
       renderLatihanList();
 
       const FLAG_TXT={suspect_key:'⚠ Kunci mencurigakan',very_hard:'Sangat sulit',hard:'Sulit',too_easy:'Terlalu mudah'};
+      const openQuestionByItemId=async(itemId,onSaved)=>{
+        try{
+          const d=await request(`/api/admin/question-reports/${encodeURIComponent(itemId)}/question`);
+          window.clinedEditQuestion?.({packageId:d.packageId,bankId:d.bankId,qid:d.questionId||d.question?.id||itemId,onSaved});
+        }catch(err){if(typeof showToast==='function')showToast(err.message||'Soal belum bisa diedit langsung.',true);}
+      };
       const renderItemsList=async()=>{
         const host=box.querySelector('[data-items-list]'); if(!host)return;
         host.innerHTML='<p class="muted">Memuat…</p>';
@@ -343,20 +384,32 @@
             const tot=Math.max(1,it.n);
             const bars=it.optCounts.slice(0,5).map((c,k)=>{const pct=Math.round(c/tot*100);const ok=k===it.correctIdx;return `<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;margin-top:3px"><span style="width:14px">${'ABCDE'[k]}</span><div style="flex:1;height:8px;border-radius:99px;background:rgba(127,127,127,.18);overflow:hidden"><i style="display:block;height:100%;width:${pct}%;background:${ok?'#58cc02':'#ef4444'}"></i></div><span style="width:62px;text-align:right">${pct}%${ok?' ✓':''}</span></div>`;}).join('');
             const flags=it.flags.map(f=>`<span style="font-size:11px;font-weight:900;padding:2px 8px;border-radius:99px;background:${f==='suspect_key'?'rgba(239,68,68,.14)':'rgba(127,127,127,.16)'}">${FLAG_TXT[f]||esc(f)}</span>`).join(' ');
-            return `<div class="admin-uab-package" style="display:block;padding:12px;margin-top:8px"><div style="display:flex;justify-content:space-between;gap:8px;font-weight:900;font-size:13px"><span>${esc(it.bank||it.source)} • ${it.n} jawaban</span><span>${it.wrongRate}% salah</span></div><p style="margin:6px 0;font-size:13px">${esc(it.snippet||'(tanpa teks)')}</p>${flags?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">${flags}</div>`:''}${bars}<small class="muted" style="display:block;margin-top:6px;word-break:break-all">ID: ${esc(it.id)}</small></div>`;
+            return `<div class="admin-uab-package" style="display:block;padding:12px;margin-top:8px"><div style="display:flex;justify-content:space-between;gap:8px;font-weight:900;font-size:13px"><span>${esc(it.bank||it.source)} • ${it.n} jawaban</span><span>${it.wrongRate}% salah</span></div><p style="margin:6px 0;font-size:13px">${esc(it.snippet||'(tanpa teks)')}</p>${flags?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">${flags}</div>`:''}${bars}<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px"><small class="muted" style="word-break:break-all">ID: ${esc(it.id)}</small><div style="display:flex;gap:6px"><button type="button" class="secondary clined-compact-action" data-item-edit="${esc(it.id)}">✏️ Edit soal</button>${isAdmin?`<button type="button" class="secondary clined-compact-action" data-item-reset="${esc(it.id)}">↺ Reset stat</button>`:''}</div></div></div>`;
           }).join('');
+          host.querySelectorAll('[data-item-edit]').forEach(b=>b.addEventListener('click',()=>openQuestionByItemId(b.dataset.itemEdit,renderItemsList)));
+          host.querySelectorAll('[data-item-reset]').forEach(b=>b.addEventListener('click',async()=>{
+            if(!(await clinedConfirm({title:'Reset statistik jawaban untuk soal ini?',ok:'Ya, reset',tone:'danger'})))return;
+            try{await request(`/api/admin/item-stats?id=${encodeURIComponent(b.dataset.itemReset)}`,{method:'DELETE'});renderItemsList();}catch(err){if(typeof showToast==='function')showToast(err.message||'Gagal mereset.',true);}
+          }));
         }catch(err){host.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat analisis.')}</p>`;}
       };
 
       const RP_CAT={key:'Kunci salah',typo:'Salah ketik',ambiguous:'Ambigu',explanation:'Pembahasan keliru',other:'Lainnya'};
       const RP_ST=[['new','Baru'],['checked','Diperiksa'],['fixed','Diperbaiki'],['dismissed','Ditolak']];
       let rpStatus='new';
+      const rpTabBtn=box.querySelector('[data-content-tab="reports"]');
+      const updateReportTabBadge=counts=>{
+        if(!rpTabBtn)return;
+        const openN=Number(counts?.new||0);
+        rpTabBtn.innerHTML=openN>0?`Laporan Soal <span class="rp-badge" style="margin-left:4px;background:rgba(239,68,68,.18);color:#ef4444">${openN}</span>`:'Laporan Soal';
+      };
       const rpSetStatus=async(qid,status)=>{await request(`/api/admin/question-reports/${encodeURIComponent(qid)}`,{method:'PATCH',body:JSON.stringify({status})});};
       const renderReports=async()=>{
         const host=box.querySelector('[data-rp-list]'),filt=box.querySelector('[data-rp-filter]'); if(!host)return;
         host.innerHTML='<p class="muted">Memuat…</p>';
         try{
           const d=await request(`/api/admin/question-reports?status=${rpStatus}`);
+          updateReportTabBadge(d.counts);
           filt.innerHTML=RP_ST.map(([k,l])=>`<button type="button" class="ml-chip${k===rpStatus?' on':''}" data-rp-st="${k}">${l} <i style="font-style:normal;opacity:.7">${(d.counts||{})[k]||0}</i></button>`).join('');
           if(!d.items.length){host.innerHTML='<p class="muted">Tidak ada laporan di status ini. 🎉</p>';return;}
           host.innerHTML=d.items.map(it=>{
@@ -365,22 +418,23 @@
             const open=rpStatus==='new'||rpStatus==='checked';
             return `<div class="admin-uab-package rp-card" data-rp-q="${esc(it.question_id)}"><div class="rp-top"><b>${it.reporters||it.reports} pelapor</b><span class="muted">${esc(it.bank||it.source)}</span></div>
               <p class="rp-snippet">${esc(it.snippet||'(tanpa teks)')}</p><div class="rp-cats">${cats}</div>${notes?`<ul class="rp-notes">${notes}</ul>`:''}
-              <div class="rp-actions">${it.source==='bank'?`<button type="button" class="secondary" data-rp-edit>✏️ Edit soal</button>`:''}${open?`<button type="button" class="secondary" data-rp-do="checked">Diperiksa</button><button type="button" class="secondary" data-rp-do="dismissed">Tolak</button>`:`<button type="button" class="secondary" data-rp-do="new">Buka lagi</button>`}</div><div data-rp-editor></div></div>`;
+              <div class="rp-actions"><button type="button" class="secondary" data-rp-edit>✏️ Edit soal</button>${open?`<button type="button" class="secondary" data-rp-do="checked">Diperiksa</button><button type="button" class="secondary" data-rp-do="fixed">✓ Selesai</button><button type="button" class="secondary" data-rp-do="dismissed">Tolak</button>`:`<button type="button" class="secondary" data-rp-do="new">Buka lagi</button>`}</div><div data-rp-editor></div></div>`;
           }).join('');
         }catch(err){host.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat laporan.')}</p>`;}
       };
+      request('/api/admin/question-reports?status=new').then(d=>updateReportTabBadge(d?.counts)).catch(()=>{});
       const rpEditor=async(card)=>{
         const qid=card.dataset.rpQ,slot=card.querySelector('[data-rp-editor]');
         if(slot.innerHTML){slot.innerHTML='';return;}
         slot.innerHTML='<p class="muted">Memuat soal…</p>';
         try{
           const d=await request(`/api/admin/question-reports/${encodeURIComponent(qid)}/question`),q=d.question,L='ABCDEF';
-          slot.innerHTML=`<div class="rp-editor"><p class="muted">Bank: ${esc(d.bankName||d.bankId)}</p>
+          slot.innerHTML=`<div class="rp-editor"><p class="muted">Sumber: ${esc(d.bankName||d.bankId||d.packageId)}</p>
             <label>Soal</label><textarea rows="4" data-f="soal">${esc(q.soal)}</textarea>
             <label>Pilihan jawaban <small>(pilih huruf = kunci)</small></label>
             ${q.opsi.map((o,i)=>`<div class="rp-opt"><label class="rp-key"><input type="radio" name="k-${esc(qid)}" value="${i}" ${q.jawabanBenar===i?'checked':''}><span>${L[i]}</span></label><input type="text" data-o="${i}" value="${esc(o)}"></div>`).join('')}
             <label>Pembahasan</label><textarea rows="5" data-f="pembahasan">${esc(q.pembahasan||'')}</textarea>
-            <div class="acm-actions"><button type="button" class="secondary" data-rp-cancel>Batal</button><button type="button" class="account-action acm-submit" data-rp-save data-bank="${esc(d.bankId)}">Simpan &amp; tandai diperbaiki</button></div></div>`;
+            <div class="acm-actions"><button type="button" class="secondary" data-rp-cancel>Batal</button><button type="button" class="account-action acm-submit" data-rp-save data-bank="${esc(d.bankId||'')}" data-pkg="${esc(d.packageId||'')}" data-real-qid="${esc(d.questionId||q.id||qid)}">Simpan &amp; tandai diperbaiki</button></div></div>`;
         }catch(err){slot.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat soal.')}</p>`;}
       };
       box.querySelector('[data-content-panel="reports"]')?.addEventListener('click',async e=>{
@@ -397,7 +451,11 @@
           if(!k){message(box,'Pilih huruf kunci jawaban dulu.',true);return;}
           save.disabled=true;
           try{
-            await request(`/api/admin/banks/${encodeURIComponent(save.dataset.bank)}/questions/${encodeURIComponent(qid)}`,{method:'PATCH',body:JSON.stringify({soal:ed.querySelector('[data-f=soal]').value,opsi,jawabanBenar:Number(k.value),pembahasan:ed.querySelector('[data-f=pembahasan]').value})});
+            const targetQid=save.dataset.realQid||qid;
+            const endpoint=save.dataset.pkg
+              ? `/api/content/packages/${encodeURIComponent(save.dataset.pkg)}/questions/${encodeURIComponent(targetQid)}`
+              : `/api/admin/banks/${encodeURIComponent(save.dataset.bank)}/questions/${encodeURIComponent(targetQid)}`;
+            await request(endpoint,{method:'PATCH',body:JSON.stringify({soal:ed.querySelector('[data-f=soal]').value,opsi,jawabanBenar:Number(k.value),pembahasan:ed.querySelector('[data-f=pembahasan]').value})});
             await rpSetStatus(qid,'fixed');
             message(box,'Soal diperbaiki dan dipublikasikan. Pengguna menerima versi baru saat memuat ulang.');renderReports();
           }catch(err){save.disabled=false;message(box,err.message||'Gagal menyimpan.',true);}
@@ -408,6 +466,7 @@
         box.querySelectorAll('[data-content-tab]').forEach(x=>{x.classList.toggle('selected',x===tab);x.setAttribute('aria-selected',x===tab?'true':'false');});
         try{tab.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}catch{}
         box.querySelectorAll('[data-content-panel]').forEach(p=>p.hidden=p.dataset.contentPanel!==tab.dataset.contentTab);
+        if(tab.dataset.contentTab==='manage')renderUabPackages();
         if(tab.dataset.contentTab==='latihan')renderLatihanList();
         if(tab.dataset.contentTab==='items')renderItemsList();
         if(tab.dataset.contentTab==='reports')renderReports();
