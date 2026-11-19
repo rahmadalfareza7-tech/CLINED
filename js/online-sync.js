@@ -19,8 +19,40 @@
   localStorage.setItem=(key,value)=>{nativeSet(key,String(value));if(!suppress&&safe(key))markSet(key,String(value));};
   localStorage.removeItem=key=>{const was=safe(key)&&localStorage.getItem(key)!==null;nativeRemove(key);if(was&&!suppress)markDelete(key);};
   async function request(path,options={}){const r=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'Sinkronisasi gagal.');return d;}
+  function mergeJsonKey(key, localRaw, serverRaw){
+    if(localRaw===null||localRaw===undefined)return{value:serverRaw,dirty:false};
+    try{
+      const loc=JSON.parse(localRaw), srv=JSON.parse(serverRaw);
+      if(key==='gaster_v8_bookmarks'&&Array.isArray(loc)&&Array.isArray(srv)){
+        const merged=[...new Set([...srv,...loc])];
+        return{value:JSON.stringify(merged),dirty:merged.length>srv.length};
+      }
+      if(key==='clined_study_log_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'&&!Array.isArray(loc)&&!Array.isArray(srv)){
+        const merged={...srv};let changed=false;
+        for(const [d,v] of Object.entries(loc)){const ln=Number(v)||0,sn=Number(srv[d])||0;if(ln>sn){merged[d]=ln;changed=true;}}
+        return{value:JSON.stringify(merged),dirty:changed};
+      }
+      if(key==='gaster_v8_wrong_stats'&&Array.isArray(loc)&&Array.isArray(srv)){
+        const byId=new Map();let changed=false;
+        for(const item of srv)if(item&&item.id!=null)byId.set(String(item.id),item);
+        for(const item of loc){
+          if(!item||item.id==null)continue;
+          const k=String(item.id), prev=byId.get(k);
+          if(!prev){byId.set(k,item);changed=true;}
+          else{
+            const lw=Number(item.wrong)||0, pw=Number(prev.wrong)||0;
+            const lt=Date.parse(item.lastWrong||0)||0, pt=Date.parse(prev.lastWrong||0)||0;
+            if(lw>pw||lt>pt){byId.set(k,{...prev,...item,wrong:Math.max(lw,pw),lastWrong:lt>=pt?(item.lastWrong||prev.lastWrong):prev.lastWrong});changed=true;}
+          }
+        }
+        return{value:JSON.stringify([...byId.values()]),dirty:changed};
+      }
+    }catch{}
+    return null;
+  }
   function apply(state){
     let restoreXP=null;
+    const rePush=[];
     const xpKey='gaster_v11_xp';
     const xpNumber=raw=>{
       if(typeof raw!=='string'||!/^\s*\d+\s*$/.test(raw))return null;
@@ -40,11 +72,21 @@
             continue;
           }
         }
-        if(item.deleted)nativeRemove(key);
-        else if(typeof item.value==='string')nativeSet(key,item.value);
+        if(item.deleted){nativeRemove(key);continue;}
+        if(typeof item.value==='string'){
+          const merged=mergeJsonKey(key,localStorage.getItem(key),item.value);
+          if(merged){
+            nativeSet(key,merged.value);
+            if(merged.dirty)rePush.push([key,merged.value]);
+          }else{
+            nativeSet(key,item.value);
+          }
+        }
       }
     }finally{suppress=false;}
     if(restoreXP!==null)markSet(xpKey,restoreXP);
+    for(const [k,v] of rePush)markSet(k,v);
+    if(Object.keys(state||{}).length)window.dispatchEvent(new CustomEvent('clined:sync-applied'));
   }
   function snapshot(serverState){for(const key of learningKeys())if(!serverState[key])enqueue({id:uuid(),type:'set',key,value:localStorage.getItem(key),updatedAt:new Date().toISOString()});}
   async function pull(force=false){let cursor=localStorage.getItem(CURSOR);let loops=0;while(loops++<10){
@@ -58,6 +100,17 @@
   }
   return {mode:'delta',hasMore:true,updatedAt:cursor};
 }
+  function flushBeacon(){
+    try{
+      if(!navigator.onLine||!localStorage.getItem(ACTIVE_USER))return;
+      const ops=read(QUEUE,[]);
+      if(!ops.length)return;
+      const payload=JSON.stringify({operations:ops.slice(-50)});
+      if(payload.length<=60000){
+        fetch('/api/sync',{method:'POST',credentials:'same-origin',keepalive:true,headers:{'Content-Type':'application/json'},body:payload}).catch(()=>{});
+      }
+    }catch{}
+  }
   async function sync({force=false}={}){
     if(sending||!navigator.onLine)return;
     const id=localStorage.getItem(ACTIVE_USER);
@@ -72,7 +125,7 @@
       let batch=[];
       for(const op of ops){
         const candidate=[...batch,op];
-        if(batch.length&&new Blob([JSON.stringify({operations:candidate})]).size>120000){
+        if(batch.length&&new Blob([JSON.stringify({operations:candidate})]).size>450000){
           batches.push(batch);
           batch=[op];
         }else{
@@ -82,7 +135,7 @@
       if(batch.length)batches.push(batch);
 
       for(const group of batches){
-        if(new Blob([JSON.stringify({operations:group})]).size>120000)continue;
+        if(new Blob([JSON.stringify({operations:group})]).size>520000)continue;
         const saved=await request('/api/sync',{
           method:'POST',
           body:JSON.stringify({operations:group})
@@ -110,7 +163,11 @@
       sending=false;
     }
   }
-  window.addEventListener('online',()=>sync({force:true}));window.addEventListener('pagehide',()=>sync());window.addEventListener('clined:auth-ready',()=>sync({force:true}));setInterval(()=>sync(),PERIODIC_PULL_MS);
+  window.addEventListener('online',()=>sync({force:true}));
+  window.addEventListener('pagehide',()=>{flushBeacon();});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushBeacon();});
+  window.addEventListener('clined:auth-ready',()=>sync({force:true}));
+  setInterval(()=>sync(),PERIODIC_PULL_MS);
   let dirtyTimer=0;
   window.CLINED_ONLINE_SYNC={sync,switchUser,clearLocalLearningData,markDirty:()=>{dirty=true;clearTimeout(dirtyTimer);dirtyTimer=setTimeout(()=>sync({force:true}),250)}};
   window.addEventListener('load',()=>sync({force:true}),{once:true});

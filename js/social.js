@@ -1135,11 +1135,18 @@
     if (m.kind === 'comment') toast(`💬 ${n} mengomentari statusmu`);
     if (activeView() === 'hubPage' && S.hubTab === 'status') loadFeed().then(() => { const open = [...S.openC]; Promise.all(open.map(id => api('/api/status/comments?id=' + encodeURIComponent(id)).then(d => { S.comments[id] = d.comments || []; }).catch(() => {}))).then(() => renderHub(false)); });
   }
+  function reconnectStream() {
+    if (es && es.readyState !== 2) { try { es.close(); } catch {} }
+    es = null; nextTry = 0; delay = 3000;
+    connect();
+  }
   function onDuel(m) {
     const n = m.from?.name || 'Lawan';
     const here = S.D && S.D.id === m.id && activeView() === 'duelPage';
     if (m.kind === 'emote') {
-      if (here && m.emote) showEmoteBubble('opp', m.emote.emoji, m.emote.text);
+      const emoji = m.emote?.emoji || m.emoji;
+      const text = m.emote?.text || m.text;
+      if (here && emoji) showEmoteBubble('opp', emoji, text || '');
       return;
     }
     if (m.kind === 'progress' && here) {
@@ -1158,7 +1165,21 @@
   }
 
   function boot() { ensureShell(); connect(); }
-  setInterval(() => { ensureShell(); connect(); }, 5000);
+  setInterval(() => {
+    ensureShell();
+    connect();
+    if (activeView() === 'duelPage' && S.D && S.D.status !== 'finished' && (!es || es.readyState !== 1)) {
+      refreshDuel();
+    }
+  }, 4000);
+  window.addEventListener('clined:auth-ready', () => { reconnectStream(); });
+  window.addEventListener('online', () => { reconnectStream(); if (activeView() === 'duelPage' && S.D) refreshDuel(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && loggedIn()) {
+      if (!es || es.readyState !== 1) reconnectStream();
+      if (activeView() === 'duelPage' && S.D && S.D.status !== 'finished') refreshDuel();
+    }
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
   window.CLINED_SOCIAL = { gladiatorRowsHTML: list => (list || []).map(p => {
       const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;

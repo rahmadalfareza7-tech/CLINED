@@ -50,10 +50,78 @@
   const isAdmin = () => { try { const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null; return !!(u && u.role === 'admin'); } catch { return false; } };
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+  let saveTimer = 0, cardDirty = false, applyingServer = false;
+  function localCardPayload() {
+    return {
+      diamonds: isAdmin() ? 0 : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0),
+      cards: getCards(),
+      stars: getStarMap(),
+      equippedId: localStorage.getItem(KEY_EQUIP) || ''
+    };
+  }
+  async function pushServerCardState(mode = 'save', useKeepalive = false) {
+    try {
+      if (!navigator.onLine) return;
+      const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      if (!u || !u.id) return;
+      const body = JSON.stringify({ ...localCardPayload(), mode });
+      const r = await fetch('/api/cards', {
+        method: 'PUT',
+        credentials: 'same-origin',
+        keepalive: useKeepalive && body.length < 60000,
+        headers: { 'Content-Type': 'application/json' },
+        body
+      });
+      if (!r.ok) return;
+      cardDirty = false;
+      const d = await r.json().catch(() => null);
+      if (d && d.exists) applyServerCardState(d);
+    } catch {}
+  }
+  function scheduleServerSave() {
+    if (applyingServer) return;
+    cardDirty = true;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => pushServerCardState('save'), 250);
+  }
+  function applyServerCardState(d) {
+    if (!d || !d.exists) return;
+    applyingServer = true;
+    try {
+      if (!isAdmin() && Number.isFinite(Number(d.diamonds))) localStorage.setItem(KEY_DIA, String(Math.max(0, Number(d.diamonds))));
+      if (Array.isArray(d.cards)) localStorage.setItem(KEY_CARDS, JSON.stringify(d.cards));
+      if (d.stars && typeof d.stars === 'object') localStorage.setItem(KEY_STARS, JSON.stringify(d.stars));
+      if (typeof d.equippedId === 'string' && d.equippedId) localStorage.setItem(KEY_EQUIP, d.equippedId);
+    } finally { applyingServer = false; }
+    onExternalSync();
+  }
+  async function hydrateFromServer() {
+    try {
+      if (!navigator.onLine) return;
+      const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      if (!u || !u.id) return;
+      const r = await fetch('/api/cards', { credentials: 'same-origin', cache: 'no-store' });
+      if (!r.ok) return;
+      const d = await r.json().catch(() => null);
+      if (!d) return;
+      const local = localCardPayload();
+      const hasLocal = local.cards.length > 0 || local.diamonds > 0 || Object.keys(local.stars).length > 0;
+      if (!d.exists || cardDirty) {
+        if (hasLocal || cardDirty) await pushServerCardState('merge');
+        return;
+      }
+      // If local has cards/stars not yet on server (e.g. earned offline), merge once
+      const serverKeys = new Set((d.cards || []).map(c => `${c.id}:${c.at}`));
+      const hasNewLocalCard = local.cards.some(c => !serverKeys.has(`${c.id}:${c.at}`));
+      if (hasNewLocalCard) { await pushServerCardState('merge'); return; }
+      applyServerCardState(d);
+    } catch {}
+  }
+
   const getDia = () => isAdmin() ? Infinity : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0);
-  const setDia = v => { if (!isAdmin()) localStorage.setItem(KEY_DIA, String(Math.max(0, v))); };
+  const setDia = v => { if (!isAdmin()) { localStorage.setItem(KEY_DIA, String(Math.max(0, v))); scheduleServerSave(); } };
   const getCards = () => { try { return JSON.parse(localStorage.getItem(KEY_CARDS) || '[]'); } catch { return []; } };
-  const addCard = card => { const c = getCards(); c.push({ id: card.id, at: Date.now() }); localStorage.setItem(KEY_CARDS, JSON.stringify(c)); };
+  const addCard = card => { const c = getCards(); c.push({ id: card.id, at: Date.now() }); localStorage.setItem(KEY_CARDS, JSON.stringify(c)); scheduleServerSave(); };
   const ownedCount = id => getCards().filter(c => c.id === id).length;
 
   const getStarMap = () => { try { const m = JSON.parse(localStorage.getItem(KEY_STARS) || '{}'); return m && typeof m === 'object' ? m : {}; } catch { return {}; } };
@@ -61,6 +129,7 @@
     const m = getStarMap();
     m[id] = Math.max(1, Math.min(5, Number(star) || 1));
     localStorage.setItem(KEY_STARS, JSON.stringify(m));
+    scheduleServerSave();
   };
 
   function copiesToStar(n) {
@@ -186,6 +255,7 @@
     if (!id || !CARD_CATALOG.some(c => c.id === id)) return false;
     if (ownedCount(id) <= 0 && !isAdmin()) return false;
     localStorage.setItem(KEY_EQUIP, id);
+    scheduleServerSave();
     renderHomeShowcaseBadge();
     window.dispatchEvent(new CustomEvent('clined:card-equipped', { detail: getEquippedCard() }));
     return true;
@@ -680,8 +750,12 @@
     injectDiamondStatCell();
     updateDiaBadges();
     renderHomeShowcaseBadge();
+    hydrateFromServer();
     window.addEventListener('clined:sync-applied', onExternalSync);
-    window.addEventListener('clined:auth-ready', () => setTimeout(onExternalSync, 600));
+    window.addEventListener('clined:auth-ready', () => { hydrateFromServer(); setTimeout(onExternalSync, 600); });
+    window.addEventListener('online', () => { if (cardDirty) pushServerCardState('merge'); else hydrateFromServer(); });
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && cardDirty) pushServerCardState('save', true); });
+    window.addEventListener('pagehide', () => { if (cardDirty) pushServerCardState('save', true); });
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
 
