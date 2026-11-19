@@ -12,7 +12,7 @@
 
 /* ── Halaman: header & wadah ── */
 #materiLatihanBody{display:flex;flex-direction:column;gap:12px;padding:0 2px calc(110px + env(safe-area-inset-bottom))}
-#materiLatihanPage.ml-running #materiLatihanBody{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+#materiLatihanPage.ml-running #materiLatihanBody{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
 #materiLatihanPage.ml-running .exam-page-header p{display:none}
 #materiLatihanPage .exam-page-header h2{overflow-wrap:anywhere}
 
@@ -88,9 +88,8 @@
 .ml-review .option-review-text{white-space:pre-line;overflow-wrap:anywhere}
 .ml-review.is-picked.is-wrong{border-color:rgba(255,75,75,.55)}
 
-/* tombol lanjut menempel di bawah layar (fixed: sticky tidak jalan karena body/main memakai overflow) */
-.ml-dock{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:22px 16px calc(12px + env(safe-area-inset-bottom));
-  background:linear-gradient(to bottom,transparent,var(--bg) 42%);pointer-events:none}
+/* tombol lanjut & lewati berada rapi di bawah kartu soal agar tidak menutupi opsi */
+.ml-dock{position:static;width:100%;padding:4px 0 0;background:none;pointer-events:auto}
 .ml-dock .primary{display:flex!important;box-shadow:0 8px 22px rgba(0,0,0,.18)!important}
 
 /* ── Hasil ── */

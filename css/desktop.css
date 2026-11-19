@@ -51,7 +51,7 @@
 
   /* Navigasi bawah melayang: lebih lebar, tetap di tengah */
   html body .floating-dashboard-nav { width: min(560px, calc(100vw - 48px)) !important; }
-  html body .ins-dock, html body .ml-dock { bottom: 96px; }
+  html body .ins-dock { bottom: 96px; }
   html body .card-shop-fab { right: 28px; }
 
   /* Profil: avatar tidak kebesaran, formulir tidak melebar */
