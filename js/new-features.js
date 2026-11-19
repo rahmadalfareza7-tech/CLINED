@@ -6,17 +6,40 @@ window.CLINED_Leaderboard = (function () {
   let lbData = null;
   let lbTab = 'weekly';
 
+  let lbLoadedAt = 0;
+
+  async function fetchLeaderboard() {
+    const r = await fetch('/api/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
+    if (!r.ok) return null;
+    lbData = await r.json();
+    lbLoadedAt = Date.now();
+    return lbData;
+  }
+
   async function load() {
     const listEl = document.getElementById('leaderboardList');
     if (!listEl) return;
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat…</div>';
     try {
-      const r = await fetch('/api/leaderboard');
-      if (!r.ok) { listEl.innerHTML = '<div class="leaderboard-loading">Belum bisa memuat. Masuk akun dulu.</div>'; return; }
-      lbData = await r.json();
+      const data = await fetchLeaderboard();
+      if (!data) { listEl.innerHTML = '<div class="leaderboard-loading">Belum bisa memuat. Masuk akun dulu.</div>'; return; }
       render(listEl, lbTab);
       loadTeaser();
     } catch { listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat.</div>'; }
+  }
+
+  async function refreshTeaser(force = false) {
+    const teaserEl = document.getElementById('leaderboardTeaser');
+    if (!teaserEl) return;
+    if (typeof authCurrentUser === 'function' && !authCurrentUser()) return;
+    if (!force && lbData && (Date.now() - lbLoadedAt < 60_000)) {
+      loadTeaser();
+      return;
+    }
+    try {
+      const data = await fetchLeaderboard();
+      if (data) loadTeaser();
+    } catch {}
   }
 
   async function renderGladiator(listEl) {
@@ -34,8 +57,9 @@ window.CLINED_Leaderboard = (function () {
   function render(listEl, tab) {
     if (tab === 'gladiator') return renderGladiator(listEl);
     if (!lbData) return;
-    const rankings = [...lbData.rankings];
-    if (tab === 'alltime') rankings.sort((a, b) => b.xpAllTime - a.xpAllTime);
+    const rankings = tab === 'alltime'
+      ? [...(lbData.rankingsAllTime || lbData.rankings)].sort((a, b) => b.xpAllTime - a.xpAllTime)
+      : [...lbData.rankings];
     const meId = lbData.me;
     listEl.innerHTML = rankings.map((r, i) => {
       const rank = tab === 'alltime' ? i + 1 : r.rank;
@@ -50,7 +74,7 @@ window.CLINED_Leaderboard = (function () {
         </div>
         <span class="lb-xp">⚡ ${xp.toLocaleString('id')} XP</span>
       </div>`;
-    }).join('') || '<div class="leaderboard-loading">Belum ada data minggu ini.</div>';
+    }).join('') || `<div class="leaderboard-loading">${tab === 'alltime' ? 'Belum ada data XP.' : 'Belum ada data minggu ini.'}</div>`;
   }
 
   function loadTeaser() {
@@ -95,11 +119,15 @@ window.CLINED_Leaderboard = (function () {
   document.getElementById('backFromLeaderboard')?.addEventListener('click', () => {
     document.getElementById('leaderboardPage')?.classList.remove('active');
     document.getElementById('home')?.classList.add('active');
+    refreshTeaser();
   });
 
-  // Jangan fetch leaderboard otomatis saat boot. Muat hanya ketika halaman/fitur leaderboard dibuka.
+  window.addEventListener('clined:auth-ready', () => refreshTeaser(true));
+  window.addEventListener('clined:view-change', e => { if (e.detail === 'home') refreshTeaser(); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(() => refreshTeaser(), 300));
+  else setTimeout(() => refreshTeaser(), 300);
 
-  return { load, openPage };
+  return { load, openPage, refreshTeaser };
 })();
 
 // ── STUDY TIMER (POMODORO) ────────────────────────────────────────────────
