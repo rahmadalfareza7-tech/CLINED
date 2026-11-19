@@ -1,4 +1,4 @@
-document.addEventListener('click',(event)=>{const feedback=event.target.closest('#feedback');if(!feedback)return;event.preventDefault();const url=feedback.dataset.googleFormUrl||localStorage.getItem('clined_google_form_url')||'';if(!url){showToast('Link formulir masukan belum diatur. Hubungi admin.',true);return;}const opened=window.open(url,'_blank','noopener,noreferrer');if(!opened)window.location.href=url;});const CLINED_SCHEMA_VERSION=4;(function migrateStorageSchema(){try{const current=Number(localStorage.getItem('clined_schema_version')||0);if(current<1){const aliases=[['xp','clined_xp'],['streak','clined_streak'],['gems','clined_gems']];aliases.forEach(([legacy,next])=>{if(localStorage.getItem(next)===null&&localStorage.getItem(legacy)!==null)localStorage.setItem(next,localStorage.getItem(legacy));});}if(current<2){if(!localStorage.getItem('clined_migrated_at'))localStorage.setItem('clined_migrated_at',new Date().toISOString());}if(current<3){}if(current<4){try{const wrong=JSON.parse(localStorage.getItem('gaster_v8_wrong_stats')||'[]');if(Array.isArray(wrong)){let changed=false;const normalized=wrong.map(item=>{if(!item||typeof item!=='object')return item;if(!item.lastWrong){item.lastWrong=item.lastSeen||new Date().toISOString();changed=true;}if(!Number.isFinite(Number(item.wrong))){item.wrong=1;changed=true;}return item;});if(changed)localStorage.setItem('gaster_v8_wrong_stats',JSON.stringify(normalized));}}catch{}}localStorage.setItem('clined_schema_version',String(CLINED_SCHEMA_VERSION));}catch(e){console.warn('CLINED storage migration skipped',e);}})();const $=id=>document.getElementById(id);const APP_VERSION="v36.8-static-banks-v18-materials";const KEY={theme:"gaster_v8_theme",book:"gaster_v8_bookmarks",hist:"gaster_v8_history",session:"gaster_v8_quiz_session",sound:"gaster_v8_sound",wrong:"gaster_v8_wrong_stats",goal:"gaster_v9_daily_goal",qstats:"gaster_v22_question_performance",abilityMap:"gaster_v22_question_ability_map",xp:"gaster_v11_xp",navVisible:"medical_rpg_nav_visible_v21",navPos:"medicalRpgNavPos_v21",dailyStreak:"gaster_daily_streak_v1"};let selectedCount=20,selectedBank="utama",quiz=[],pos=0,score=0,answered=false;let soundEnabled=true;let selectedAnswer=null,streak=0,sessionStart=0,timerSeconds=0,timerDuration=0,timerDeadline=0,timerId=null;let quizMode="study",flagged=new Set();let sessionXP=0,lastXPGain=0;let playerHP=100,wrongCombo=0,enemyHP=100;const get=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("CLINED storage write failed",e);return false}};const del=k=>{try{localStorage.removeItem(k)}catch{}};function showToast(message,isError){let t=document.getElementById('clinedToast');if(!t){t=document.createElement('div');t.id='clinedToast';t.className='clined-toast';document.body.appendChild(t);}t.textContent=message;t.classList.toggle('is-error',!!isError);t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),Math.max(isError?4200:2200,String(message).length*55));}const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+document.addEventListener('click',(event)=>{const feedback=event.target.closest('#feedback');if(!feedback)return;event.preventDefault();const url=feedback.dataset.googleFormUrl||localStorage.getItem('clined_google_form_url')||'';if(!url){showToast('Link formulir masukan belum diatur. Hubungi admin.',true);return;}const opened=window.open(url,'_blank','noopener,noreferrer');if(!opened)window.location.href=url;});const CLINED_SCHEMA_VERSION=4;(function migrateStorageSchema(){try{const current=Number(localStorage.getItem('clined_schema_version')||0);if(current<1){const aliases=[['xp','clined_xp'],['streak','clined_streak'],['gems','clined_gems']];aliases.forEach(([legacy,next])=>{if(localStorage.getItem(next)===null&&localStorage.getItem(legacy)!==null)localStorage.setItem(next,localStorage.getItem(legacy));});}if(current<2){if(!localStorage.getItem('clined_migrated_at'))localStorage.setItem('clined_migrated_at',new Date().toISOString());}if(current<3){}if(current<4){try{const wrong=JSON.parse(localStorage.getItem('gaster_v8_wrong_stats')||'[]');if(Array.isArray(wrong)){let changed=false;const normalized=wrong.map(item=>{if(!item||typeof item!=='object')return item;if(!item.lastWrong){item.lastWrong=item.lastSeen||new Date().toISOString();changed=true;}if(!Number.isFinite(Number(item.wrong))){item.wrong=1;changed=true;}return item;});if(changed)localStorage.setItem('gaster_v8_wrong_stats',JSON.stringify(normalized));}}catch{}}localStorage.setItem('clined_schema_version',String(CLINED_SCHEMA_VERSION));}catch(e){console.warn('CLINED storage migration skipped',e);}})();const $=id=>document.getElementById(id);const APP_VERSION="v36.8-static-banks-v18-materials";const KEY={theme:"gaster_v8_theme",book:"gaster_v8_bookmarks",hist:"gaster_v8_history",session:"gaster_v8_quiz_session",bankSessions:"clined_bank_sessions_v1",bankBest:"clined_bank_best_v1",sound:"gaster_v8_sound",wrong:"gaster_v8_wrong_stats",goal:"gaster_v9_daily_goal",qstats:"gaster_v22_question_performance",abilityMap:"gaster_v22_question_ability_map",xp:"gaster_v11_xp",navVisible:"medical_rpg_nav_visible_v21",navPos:"medicalRpgNavPos_v21",dailyStreak:"gaster_daily_streak_v1"};let selectedCount=20,selectedBank="utama",quiz=[],pos=0,score=0,answered=false;let soundEnabled=true;let selectedAnswer=null,streak=0,sessionStart=0,timerSeconds=0,timerDuration=0,timerDeadline=0,timerId=null;let quizMode="study",flagged=new Set();let sessionXP=0,lastXPGain=0;let playerHP=100,wrongCombo=0,enemyHP=100;const get=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("CLINED storage write failed",e);return false}};const del=k=>{try{localStorage.removeItem(k)}catch{}};function showToast(message,isError){let t=document.getElementById('clinedToast');if(!t){t=document.createElement('div');t.id='clinedToast';t.className='clined-toast';document.body.appendChild(t);}t.textContent=message;t.classList.toggle('is-error',!!isError);t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),Math.max(isError?4200:2200,String(message).length*55));}const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const letter=i=>String.fromCharCode(65+i);
 const qid=(bank,i,q)=>q.id || `${bank}-${q.no||i+1}`;
 // RPG progression: 100 levels, 100 XP per level.
@@ -609,6 +609,7 @@ function buildQuiz(count){
     const correct=q.jawabanBenar==null?null:order.indexOf(q.jawabanBenar);
     return {
       id, bank:selectedBank, source:q.source||bankName(), no:q.no||originalIndex+1,
+      origIndex:originalIndex, order,
       soal:q.soal, opsi:order.map(i=>q.opsi[i]), jawabanBenar:correct,
       pembahasan:coreExplanation(q),
       pembahasanPilihan:order.map(i=>optionExplanation(q,i)||"Belum ada pembahasan khusus untuk opsi ini."),
@@ -618,16 +619,180 @@ function buildQuiz(count){
   });
 }
 
+function getBankSessionMap(){
+  const m=get(KEY.bankSessions,{});
+  return m && typeof m==='object' && !Array.isArray(m) ? m : {};
+}
+function getBankSession(bankId){
+  if(!bankId)return null;
+  const s=getBankSessionMap()[bankId];
+  if(s && Array.isArray(s.items) && s.items.length) return s;
+  const legacy=get(KEY.session,null);
+  if(legacy && !legacy.isCustom && legacy.selectedBank===bankId && Array.isArray(legacy.quiz) && legacy.quiz.length){
+    return {
+      bankId, bankName:BANKS[bankId]?.name||bankId,
+      pos:legacy.pos||0, score:legacy.score||0,
+      doneCount:legacy.quiz.filter(q=>q?.selectedAnswer!=null).length,
+      total:legacy.quiz.length, legacyOnly:true
+    };
+  }
+  return null;
+}
+function clearBankSession(bankId){
+  if(!bankId)return;
+  const m=getBankSessionMap();
+  if(m[bankId]){delete m[bankId];set(KEY.bankSessions,m);}
+}
+function getBankBestMap(){
+  const raw=get(KEY.bankBest,{});
+  const map=(raw && typeof raw==='object' && !Array.isArray(raw))?{...raw}:{};
+  const hist=get(KEY.hist,[]);
+  if(Array.isArray(hist)){
+    for(const h of hist){
+      const id=h?.bank;
+      if(!id)continue;
+      const pct=Number(h.pct);
+      if(!Number.isFinite(pct))continue;
+      const prev=map[id];
+      if(!prev || pct>(Number(prev.bestPct)||0)){
+        map[id]={
+          bestPct:pct,
+          bestScore:Number(h.score)||0,
+          bestTotal:Number(h.validTotal||h.total)||0,
+          attempts:Math.max(1,Number(prev?.attempts)||1),
+          lastAt:h.date||prev?.lastAt||''
+        };
+      }
+    }
+  }
+  return map;
+}
+function getBankBest(bankId){
+  return bankId ? (getBankBestMap()[bankId] || null) : null;
+}
+function recordBankBest(bankId, pct, sc, total){
+  if(!bankId)return;
+  const raw=get(KEY.bankBest,{});
+  const map=(raw && typeof raw==='object' && !Array.isArray(raw))?{...raw}:{};
+  const prev=map[bankId]||getBankBest(bankId);
+  const nextBest=(!prev || pct>=Number(prev.bestPct||0));
+  map[bankId]={
+    bestPct:nextBest?pct:Number(prev.bestPct||0),
+    bestScore:nextBest?sc:Number(prev.bestScore||0),
+    bestTotal:nextBest?total:Number(prev.bestTotal||0),
+    lastPct:pct,
+    attempts:(Number(prev?.attempts)||0)+1,
+    lastAt:new Date().toISOString()
+  };
+  set(KEY.bankBest,map);
+}
+function bankProgressMetaHTML(bankId, bankTotal){
+  const sess=getBankSession(bankId);
+  const best=getBankBest(bankId);
+  const parts=[];
+  if(sess){
+    const total=Math.max(1,Number(sess.total||bankTotal||1));
+    const done=Math.min(total,Math.max(0,Number(sess.doneCount||0)));
+    const pct=Math.round((done/total)*100);
+    parts.push(`<span class="bank-prog-badge">⏳ ${done}/${total} dijawab</span>`);
+    parts.push(`<span class="bank-prog-track" aria-hidden="true"><i style="width:${pct}%"></i></span>`);
+  }
+  if(best){
+    const bp=Math.round(Number(best.bestPct)||0);
+    const tier=bp>=75?'good':bp>=55?'mid':'low';
+    parts.push(`<span class="bank-best-badge ${tier}">🏆 Tertinggi: ${bp}%</span>`);
+  }
+  return parts.length?`<span class="bank-progress-meta">${parts.join('')}</span>`:'';
+}
+async function resumeBankSession(bankId){
+  const sess=getBankSession(bankId);
+  if(!sess){showToast('Sesi belum tersedia.',true);return;}
+  if(sess.legacyOnly){$("resumeBtn")?.click();return;}
+  try{
+    await loadServerBanks();
+    if(!BANKS[bankId]) throw Error('Bank soal tidak ditemukan.');
+    await ensureServerBankLoaded(bankId);
+  }catch(e){showToast(e.message||'Bank soal gagal dimuat.',true);return;}
+  const bank=BANKS[bankId]?.data||[];
+  const byId=new Map();
+  bank.forEach((q,idx)=>byId.set(qid(bankId,idx,q),{q,idx}));
+  const built=sess.items.map(it=>{
+    let entry=byId.get(it.id);
+    if(!entry && Number.isInteger(it.i) && bank[it.i]) entry={q:bank[it.i],idx:it.i};
+    if(!entry)return null;
+    const raw=entry.q;
+    const order=Array.isArray(it.o)&&it.o.length===raw.opsi.length?it.o:raw.opsi.map((_,k)=>k);
+    const correct=raw.jawabanBenar==null?null:order.indexOf(raw.jawabanBenar);
+    const prevBank=selectedBank;
+    selectedBank=bankId;
+    const item={
+      id:qid(bankId,entry.idx,raw), bank:bankId, source:raw.source||BANKS[bankId]?.name||bankId,
+      no:raw.no||entry.idx+1, origIndex:entry.idx, order,
+      soal:raw.soal, opsi:order.map(k=>raw.opsi[k]), jawabanBenar:correct,
+      pembahasan:coreExplanation(raw),
+      pembahasanPilihan:order.map(k=>optionExplanation(raw,k)||"Belum ada pembahasan khusus untuk opsi ini."),
+      catatanKlinis:raw.catatanKlinis||"", incomplete:!!raw.incomplete,
+      abilityProfile:questionAbilityProfile(raw),
+      selectedAnswer:it.a==null?null:Number(it.a)
+    };
+    selectedBank=prevBank;
+    return item;
+  }).filter(Boolean);
+  if(!built.length){clearBankSession(bankId);showToast('Soal sesi sebelumnya tidak ditemukan.',true);return;}
+  window.__clinedCustomQuiz=false;
+  window.__clinedFinishing=false;
+  quiz=built;selectedBank=bankId;selectedCount=quiz.length;
+  pos=Math.max(0,Math.min(quiz.length-1,Number(sess.pos)||0));
+  score=Number(sess.score)||0;streak=Number(sess.streak)||0;
+  sessionXP=Number(sess.sessionXP||0);
+  playerHP=Number.isFinite(Number(sess.playerHP))?Math.max(0,Math.min(100,Number(sess.playerHP))):100;
+  enemyHP=Number.isFinite(Number(sess.enemyHP))?Math.max(0,Math.min(100,Number(sess.enemyHP))):100;
+  wrongCombo=Number(sess.wrongCombo||0);
+  selectedAnswer=quiz[pos].selectedAnswer??null;
+  answered=selectedAnswer!==null;
+  quizMode=sess.quizMode||"study";
+  timerDuration=Number(sess.timerDuration||0);
+  timerSeconds=Number.isFinite(sess.timerSeconds)?sess.timerSeconds:timerDuration;
+  timerDeadline=timerDuration?Date.now()+timerSeconds*1000:0;
+  flagged=new Set(sess.flagged||[]);
+  setLastWorkedBlock(blockForBank(selectedBank));
+  renderDashboardBlockOptions();
+  show("quiz");renderQuestion(true);startTimer();
+}
+
 function saveSession(){
   if(!quiz.length || !$("quiz")?.classList.contains("active"))return;
   if(timerDuration && timerDeadline){
     timerSeconds=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));
   }
+  const savedAt=new Date().toISOString();
   set(KEY.session,{
     quiz,pos,score,selectedCount,selectedBank,streak,sessionXP,playerHP,enemyHP,wrongCombo,
     answered,selectedAnswer,quizMode,timerSeconds,timerDuration,timerDeadline,
-    flagged:[...flagged],savedAt:new Date().toISOString()
+    isCustom:!!window.__clinedCustomQuiz,
+    flagged:[...flagged],savedAt
   });
+  if(!window.__clinedCustomQuiz && selectedBank && BANKS[selectedBank]){
+    const m=getBankSessionMap();
+    const bankArr=BANKS[selectedBank]?.data||[];
+    const items=quiz.map(q=>({
+      i:Number.isInteger(q.origIndex)?q.origIndex:bankArr.findIndex((raw,idx)=>qid(selectedBank,idx,raw)===q.id),
+      id:q.id,
+      o:Array.isArray(q.order)?q.order:q.opsi.map((_,k)=>k),
+      a:q.selectedAnswer??null
+    }));
+    const entries=Object.entries(m).filter(([k])=>k!==selectedBank).slice(-14);
+    entries.push([selectedBank,{
+      bankId:selectedBank, bankName:bankName(),
+      pos, score, streak, sessionXP, playerHP, enemyHP, wrongCombo,
+      quizMode, timerSeconds, timerDuration,
+      flagged:[...flagged],
+      total:quiz.length,
+      doneCount:quiz.filter(q=>q.selectedAnswer!=null).length,
+      items, savedAt
+    }]);
+    set(KEY.bankSessions,Object.fromEntries(entries));
+  }
   renderResume();
 }
 function clearSession(){stopTimer();del(KEY.session);renderResume()}
@@ -639,6 +804,7 @@ function renderResume(){
 }
 $("resumeBtn").onclick=()=>{
   const s=get(KEY.session,null);if(!s)return;
+  window.__clinedCustomQuiz=!!s.isCustom;
   quiz=s.quiz;pos=s.pos||0;score=s.score||0;selectedCount=s.selectedCount||quiz.length;
   selectedBank=(s.selectedBank&&BANKS[s.selectedBank])?s.selectedBank:(s.quiz?.[0]?.bank&&BANKS[s.quiz[0].bank])?s.quiz[0].bank:(Object.keys(BANKS)[0]||"utama");streak=s.streak||0;sessionXP=Number(s.sessionXP||0);playerHP=Number.isFinite(Number(s.playerHP))?Math.max(0,Math.min(100,Number(s.playerHP))):100;enemyHP=Number.isFinite(Number(s.enemyHP))?Math.max(0,Math.min(100,Number(s.enemyHP))):100;wrongCombo=Number(s.wrongCombo||0);answered=!!s.answered;selectedAnswer=s.selectedAnswer??null;
   setLastWorkedBlock(blockForBank(selectedBank));
@@ -711,8 +877,15 @@ function renderEmptyBlockControls(key,blockOverride){
   const bank=BANKS[selectedBank], max=Number(bank.count||bank.data?.length||0);
   const choices=[10,20,50,100].filter(n=>n<=max); if(max>0)choices.push(max);
   const unique=[...new Set(choices)]; if(!unique.includes(selectedCount)||selectedCount>max)selectedCount=unique[0]||max;
-  if(inline)inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>${esc(entries.length===1?bank.name:`${entries.length} bank tersedia`)}</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${Number(b.count||b.data?.length||0)} soal</span><i>${id===selectedBank?'✓':''}</i></button><button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div>`).join('')}</div></div>`;
+  const bankRowHTML=(id,b)=>{
+    const count=Number(b.count||b.data?.length||0);
+    const sess=getBankSession(id);
+    const meta=bankProgressMetaHTML(id,count);
+    return `<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><div class="bank-choice-main"><span class="bank-name">${esc(b.name)}</span>${meta}</div><span class="bank-desc">${count} soal</span><i>${id===selectedBank?'✓':''}</i></button><div class="clinical-bank-actions">${sess?`<button type="button" class="clinical-bank-resume" data-resume-bank="${esc(id)}">▶ Lanjutkan</button>`:''}<button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div></div>`;
+  };
+  if(inline)inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>${esc(entries.length===1?bank.name:`${entries.length} bank tersedia`)}</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>bankRowHTML(id,b)).join('')}</div></div>`;
   inline?.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{selectedBank=btn.dataset.blockBank;selectedCount=10;renderEmptyBlockControls(key);});
+  inline?.querySelectorAll('[data-resume-bank]').forEach(btn=>btn.onclick=()=>resumeBankSession(btn.dataset.resumeBank));
   countBox.innerHTML=unique.map(n=>`<button type="button" class="choice ${selectedCount===n?'selected':''}" data-block-count="${n}">${n===max?'Semua':n}<small>${n===max?` (${max})`:' soal'}</small></button>`).join('');
   countBox.querySelectorAll('[data-block-count]').forEach(btn=>btn.onclick=()=>{selectedCount=Number(btn.dataset.blockCount);renderEmptyBlockControls(key);});
   const modes=[["study","📖Belajar","Pembahasan langsung setelah menjawab"],["exam","📝Ujian","Pembahasan dibuka setelah selesai"]];
@@ -769,8 +942,14 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
       const card=page?.querySelector('.bank-card');
       if(card)card.appendChild(inline); else page?.prepend(inline);
     }
-    inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>Bank soal tersedia</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>`<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${Number(b.count||b.data?.length||0)} soal</span><i>${id===selectedBank?'✓':''}</i></button><button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div>`).join('')}</div></div>`;
+    inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>Bank soal tersedia</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>{
+      const count=Number(b.count||b.data?.length||0);
+      const sess=getBankSession(id);
+      const meta=bankProgressMetaHTML(id,count);
+      return `<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><div class="bank-choice-main"><span class="bank-name">${esc(b.name)}</span>${meta}</div><span class="bank-desc">${count} soal</span><i>${id===selectedBank?'✓':''}</i></button><div class="clinical-bank-actions">${sess?`<button type="button" class="clinical-bank-resume" data-resume-bank="${esc(id)}">▶ Lanjutkan</button>`:''}<button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div></div>`;
+    }).join('')}</div></div>`;
     inline.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{if(btn.dataset.blockBank!==selectedBank){selectedBank=btn.dataset.blockBank;selectedCount=0;renderAvailableBlockControls(key,block,pageId);}});
+    inline.querySelectorAll('[data-resume-bank]').forEach(btn=>btn.onclick=()=>resumeBankSession(btn.dataset.resumeBank));
     inline.querySelectorAll('[data-review-bank]').forEach(btn=>btn.onclick=async()=>{
       const bankId=btn.dataset.reviewBank;
       try{
@@ -852,6 +1031,7 @@ async function confirmUabAiDisclaimer(){
   });
 }
 async function startQuiz(){
+  window.__clinedCustomQuiz=false;
   window.__clinedFinishing=false;
   if(!(await confirmUabAiDisclaimer()))return;
   try{await loadServerBanks();await ensureServerBankLoaded(selectedBank);}catch{return;}
@@ -860,6 +1040,7 @@ async function startQuiz(){
     return;
   }
   clearSession();
+  clearBankSession(selectedBank);
   setLastWorkedBlock(blockForBank(selectedBank));
   renderDashboardBlockOptions();
   quiz=buildQuiz(selectedCount);
@@ -951,7 +1132,8 @@ function renderQuestion(resume=false){
   // Set the current question's state from the question itself so Back/Next
   // navigation never loses an already selected answer.
   selectedAnswer=q.selectedAnswer ?? null;
-  answered=selectedAnswer!==null || !!(resume && pos===Number(get(KEY.session,null)?.pos));
+  const legacySess=resume?get(KEY.session,null):null;
+  answered=selectedAnswer!==null || !!(legacySess && legacySess.selectedBank===selectedBank && legacySess.answered && pos===Number(legacySess.pos));
   $("info").textContent=`Soal ${pos+1} / ${quiz.length}`;
   if($("scoreLive"))$("scoreLive").textContent=`${score} benar`;
   renderXP();
@@ -1594,6 +1776,7 @@ function wrongToQuiz(q){
 function startCustomQuiz(list,{shuffleList=true,limit=20}={}){
   const base=(list||[]).filter(q=>q&&q.jawabanBenar!=null&&Array.isArray(q.opsi));
   if(!base.length){showToast("Belum ada soal untuk dilatih.");return false}
+  window.__clinedCustomQuiz=true;
   quiz=(shuffleList?shuffle(base):base).slice(0,limit).map(wrongToQuiz);
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
@@ -1631,6 +1814,7 @@ function startSmartReview(){
     return ref?rawToQuiz(ref.bankId,ref.idx):null;
   }).filter(Boolean);
   if(!quiz.length){showToast('Soal review tidak tersedia di bank saat ini.');return;}
+  window.__clinedCustomQuiz=true;
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show('quiz');renderQuestion();startTimer();
 }

@@ -2219,13 +2219,78 @@ textarea{line-height:1.4}
   text-align: left;
 }
 
-.clinical-bank-row .bank-name {
+.clinical-bank-row .bank-choice-main {
   flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.clinical-bank-row .bank-name {
+  flex: 0 0 auto;
   min-width: 0;
   white-space: normal;
   overflow-wrap: break-word;
   word-break: normal;
   line-height: 1.35;
+}
+
+.bank-progress-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.bank-prog-badge,
+.bank-best-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.1;
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+
+.bank-prog-badge {
+  background: rgba(28, 176, 246, .14);
+  color: #0284c7;
+}
+:root.dark .bank-prog-badge { color: #5ec8ff; }
+
+.bank-best-badge.good {
+  background: rgba(88, 204, 2, .16);
+  color: #2f7d00;
+}
+.bank-best-badge.mid {
+  background: rgba(255, 179, 0, .18);
+  color: #b45309;
+}
+.bank-best-badge.low {
+  background: rgba(255, 75, 75, .14);
+  color: #d93025;
+}
+:root.dark .bank-best-badge.good { color: #7be03a; }
+:root.dark .bank-best-badge.mid { color: #fbbf24; }
+:root.dark .bank-best-badge.low { color: #ff7a70; }
+
+.bank-prog-track {
+  flex: 1 1 80px;
+  min-width: 60px;
+  max-width: 150px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--line, rgba(0, 0, 0, .08));
+  overflow: hidden;
+}
+.bank-prog-track > i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #1cb0f6, #58cc02);
 }
 
 .clinical-bank-row .bank-desc {
@@ -2234,12 +2299,52 @@ textarea{line-height:1.4}
   font-size: 11px;
 }
 
+.clinical-bank-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
+}
+
+.clinical-bank-resume {
+  border: 2px solid #46a900;
+  border-bottom-width: 4px;
+  border-radius: 13px;
+  min-height: 42px;
+  padding: 0 12px;
+  background: #58cc02;
+  color: #fff;
+  font-weight: 900;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.clinical-bank-resume:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
 .clinical-bank-review {
   align-self: center;
   min-height: 42px;
   padding: 0 11px;
   font-size: 12px;
   white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .clinical-bank-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .clinical-bank-actions {
+    justify-content: flex-end;
+  }
+  .clinical-bank-actions > button {
+    min-height: 36px;
+    font-size: 11.5px;
+    padding: 0 10px;
+  }
 }
 
 #reviewList {
