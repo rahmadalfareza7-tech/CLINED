@@ -7,10 +7,12 @@
   let busy = false, timer = null;
   const loggedIn = () => { try { return typeof authCurrentUser === 'function' && !!authCurrentUser(); } catch { return false; } };
 
-  function enqueue(kind, ref, amount) {
+  function enqueue(kind, ref, amount, block) {
     const a = Math.round(Number(amount));
     if (!ref || !(a > 0)) return;
-    const q = rd(); q.push({ kind: kind || 'quiz', ref: String(ref).slice(0, 80), amount: a }); wr(q);
+    const item = { kind: kind || 'quiz', ref: String(ref).slice(0, 80), amount: a };
+    if (block) item.block = String(block).trim().slice(0, 60);
+    const q = rd(); q.push(item); wr(q);
     clearTimeout(timer); timer = setTimeout(flush, 1500);
   }
   async function flush() {

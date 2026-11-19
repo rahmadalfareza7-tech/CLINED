@@ -26,7 +26,8 @@ function xpTitle(level){
 function addXP(amount,reason="",meta){
   const before=Number(get(KEY.xp,0))||0;
   const gained=Math.max(0,Math.round(amount));
-  try{if(gained>0)window.CLINED_XP?.enqueue(meta?.kind||"quiz",meta?.ref||("rnd:"+Math.random().toString(36).slice(2,10)),gained);}catch(e){}
+  const evBlock=meta?.block||(typeof blockForBank==='function'&&typeof selectedBank!=='undefined'&&!window.__clinedCustomQuiz?blockForBank(selectedBank):'')||(typeof getCurrentBlockId==='function'?getCurrentBlockId():'');
+  try{if(gained>0)window.CLINED_XP?.enqueue(meta?.kind||"quiz",meta?.ref||("rnd:"+Math.random().toString(36).slice(2,10)),gained,evBlock);}catch(e){}
   const after=before+gained;
   set(KEY.xp,after);
   // Push XP immediately instead of waiting for the periodic sync interval.

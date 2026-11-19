@@ -352,7 +352,7 @@
     try {
       const gain = good ? 20 + Math.min(30, Math.max(0, (streak - 1) * 5)) : 5;
       R.xp += gain;
-      window.addXP?.(gain, good ? (streak > 1 ? `Latihan Materi • streak ${streak} 🔥` : 'Latihan Materi • benar') : 'Tetap semangat—jawaban salah', { kind: 'materi', ref: q.id });
+      window.addXP?.(gain, good ? (streak > 1 ? `Latihan Materi • streak ${streak} 🔥` : 'Latihan Materi • benar') : 'Tetap semangat—jawaban salah', { kind: 'materi', ref: q.id, block: S.block });
     } catch {}
     // sambungkan ke sistem utama: target harian, statistik kemampuan, daftar soal salah
     const rec = { stat: { p: q.orig[k], ci: q.orig[q.benar] }, id: q.id, bank: 'Latihan Materi', soal: q.soal, opsi: q.opsi, jawabanBenar: q.benar, pembahasan: q.pembahasan, pembahasanPilihan: q.per, catatanKlinis: q.catatan };

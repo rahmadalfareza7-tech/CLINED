@@ -330,6 +330,7 @@ function awardFarmakoXP(correctCount,reason,refPrefix,silentPopup=false){
           {
             kind:'materi',
             ref:`${refPrefix||'farmako'}:${i}:${stamp}`.slice(0,80),
+            block:'KEDKEL',
             silent:silentPopup||n>1||!isLast
           }
         );
