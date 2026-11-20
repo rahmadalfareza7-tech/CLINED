@@ -1389,6 +1389,20 @@ function gradeExam(){
   if(totalXP)showXPPopup(totalXP,"Ujian selesai");
 }
 
+function runChunkedAfterPaint(tasks){
+  let idx=0;
+  const step=()=>{
+    if(idx>=tasks.length)return;
+    const fn=tasks[idx++];
+    try{fn();}catch{}
+    if(idx<tasks.length){
+      if(typeof requestIdleCallback==='function')requestIdleCallback(step,{timeout:120});
+      else setTimeout(step,24);
+    }
+  };
+  requestAnimationFrame(()=>setTimeout(step,16));
+}
+
 function answer(i){
   if(quizMode==="exam"){answerExam(i);return;}
   if(answered)return;
@@ -1399,12 +1413,12 @@ function answer(i){
     document.querySelectorAll(".answer").forEach(b=>b.disabled=true);
     if(quizMode==="study"){$("explainText").innerHTML=allExplanations(q);$("explain").style.display="block";}
     $("nextBtn").hidden=false;$("nextBtn").style.display="block";$("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
-    setTimeout(()=>{
-      recordDailyQuestion();
-      addXP(5,"Soal dikerjakan",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
-      if(quizMode==="study")mountBankQuestionComments(q, $("explainText"));
-      saveSession();
-    },0);
+    runChunkedAfterPaint([
+      ()=>{recordDailyQuestion();},
+      ()=>{addXP(5,"Soal dikerjakan",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});},
+      ()=>{if(quizMode==="study")mountBankQuestionComments(q,$("explainText"));},
+      ()=>{saveSession();}
+    ]);
     return;
   }
   const good=i===q.jawabanBenar;
@@ -1426,24 +1440,30 @@ function answer(i){
   $("nextBtn").style.display="block";
   $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
   const curStreak=streak, curBtn=ansBtns[i];
-  setTimeout(()=>{
-    recordDailyQuestion();
-    recordQuestionPerformance(q,good);
-    if(good&&q.jawabanBenar!=null)recordRight(q);
+  requestAnimationFrame(()=>{
     if(good){
       wrongCombo=0; renderHP();
       dealClinicalStrike(q);celebrate();
-      const gain=20 + Math.min(30,Math.max(0,(curStreak-1)*5));
-      addXP(gain,curStreak>1?`Jawaban benar • streak ${curStreak} 🔥`:"Jawaban benar",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
       answerReward(curBtn);
     }else{
       const dmg=applyDamage();
-      wrongFx();combatFx("damage",dmg);recordWrong(q);
-      addXP(5,"Tetap semangat—jawaban salah",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
+      wrongFx();combatFx("damage",dmg);
     }
-    if(quizMode==="study")mountBankQuestionComments(q, $("explainText"));
-    saveSession();
-  },0);
+  });
+  runChunkedAfterPaint([
+    ()=>{recordDailyQuestion();},
+    ()=>{recordQuestionPerformance(q,good);if(good&&q.jawabanBenar!=null)recordRight(q);else if(!good)recordWrong(q);},
+    ()=>{
+      if(good){
+        const gain=20 + Math.min(30,Math.max(0,(curStreak-1)*5));
+        addXP(gain,curStreak>1?`Jawaban benar • streak ${curStreak} 🔥`:"Jawaban benar",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
+      }else{
+        addXP(5,"Tetap semangat—jawaban salah",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
+      }
+    },
+    ()=>{if(quizMode==="study")mountBankQuestionComments(q,$("explainText"));},
+    ()=>{saveSession();}
+  ]);
 }
 function goToQuestion(target){
   if(!quiz.length)return;
