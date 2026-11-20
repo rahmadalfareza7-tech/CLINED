@@ -66,27 +66,32 @@
 
   /* ---------- data ---------- */
   async function loadKedkelTryoutQuestions() {
-    try {
-      await window.CLINED_BANKS_READY?.();
-      await window.CLINED_ENSURE_BANK_LOADED?.('kedkel-2026-tryout-1');
-      const bank = window.BANKS?.['kedkel-2026-tryout-1'];
-      if (Array.isArray(bank?.data) && bank.data.length) return bank.data;
-    } catch {}
-    try {
-      const r = await fetch('/api/banks/kedkel-2026-tryout-1', { credentials: 'same-origin', cache: 'default' });
-      if (r.ok) {
-        const d = await r.json().catch(() => ({}));
-        if (Array.isArray(d?.bank?.questions) && d.bank.questions.length) return d.bank.questions;
-      }
-    } catch {}
-    try {
-      const r = await fetch('/seed-data/banks/kedkel-2026-tryout-1.json', { credentials: 'same-origin', cache: 'no-store' });
-      if (r.ok) {
-        const arr = await r.json().catch(() => []);
-        if (Array.isArray(arr) && arr.length) return arr;
-      }
-    } catch {}
-    return [];
+    const bankIds = window.CLINED_KEDKEL_2026_MATERI?.BANK_IDS || ['kedkel-2026-tryout-1', 'kedkel-2026-tryout-2'];
+    const loadOne = async (bankId) => {
+      try {
+        await window.CLINED_BANKS_READY?.();
+        await window.CLINED_ENSURE_BANK_LOADED?.(bankId);
+        const bank = window.BANKS?.[bankId];
+        if (Array.isArray(bank?.data) && bank.data.length) return bank.data;
+      } catch {}
+      try {
+        const r = await fetch(`/api/banks/${encodeURIComponent(bankId)}`, { credentials: 'same-origin', cache: 'default' });
+        if (r.ok) {
+          const d = await r.json().catch(() => ({}));
+          if (Array.isArray(d?.bank?.questions) && d.bank.questions.length) return d.bank.questions;
+        }
+      } catch {}
+      try {
+        const r = await fetch(`/seed-data/banks/${encodeURIComponent(bankId)}.json`, { credentials: 'same-origin', cache: 'no-store' });
+        if (r.ok) {
+          const arr = await r.json().catch(() => []);
+          if (Array.isArray(arr) && arr.length) return arr;
+        }
+      } catch {}
+      return [];
+    };
+    const parts = await Promise.all(bankIds.map(loadOne));
+    return parts.flat();
   }
 
   async function fetchPacks(block) {
