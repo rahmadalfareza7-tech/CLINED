@@ -439,6 +439,20 @@
     }).join('');
   }
 
+  const NAME_COLORS = [
+    { id: '',         name: 'Default',  dot: '#94a3b8' },
+    { id: 'amber',    name: 'Amber',    dot: '#fbbf24' },
+    { id: 'gold',     name: 'Gold',     dot: '#fde047' },
+    { id: 'sakura',   name: 'Sakura',   dot: '#f472b6' },
+    { id: 'cyber',    name: 'Cyan',     dot: '#22d3ee' },
+    { id: 'crimson',  name: 'Crimson',  dot: '#fb7185' },
+    { id: 'emerald',  name: 'Emerald',  dot: '#34d399' },
+    { id: 'violet',   name: 'Violet',   dot: '#c084fc' },
+    { id: 'sunset',   name: 'Sunset',   dot: '#fb923c' },
+    { id: 'ice',      name: 'Ice',      dot: '#60a5fa' },
+    { id: 'hologram', name: 'Hologram', dot: 'linear-gradient(135deg,#f472b6,#fbbf24,#34d399,#38bdf8,#a855f7)' }
+  ];
+
   function buildBannerShop() {
     const ownedSet = new Set(getOwnedBanners());
     const eq = getEquippedBanner();
@@ -448,6 +462,9 @@
     const myUser = me?.username ? `@${me.username}` : '@username';
     const myIni = String(myName || 'C').trim().charAt(0).toUpperCase() || 'C';
     const myAv = me?.avatarUrl ? `<img src="${esc(me.avatarUrl)}" alt="">` : esc(myIni);
+    const curColor = me?.nameColor || '';
+    const colorAttr = curColor ? ` data-name-color="${esc(curColor)}"` : '';
+    const colorPills = NAME_COLORS.map(c => `<button type="button" class="name-color-pill${curColor === c.id ? ' on' : ''}" data-pick-name-color="${esc(c.id)}"><span class="name-color-dot" style="background:${c.dot}"></span>${esc(c.name)}</button>`).join('');
     const items = BANNER_CATALOG.map(b => {
       const isOwned = ownedSet.has(b.id);
       const isEquipped = eq === b.id;
@@ -459,7 +476,7 @@
           <span class="banner-shop-preview-bg" style="background-image:url('${esc(b.img)}')" aria-hidden="true"></span>
           <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
           <div class="banner-shop-preview-txt">
-            <b>${esc(myName)}</b>
+            <b${colorAttr}>${esc(myName)}</b>
             <small>${esc(myUser)} • ${b.icon} ${esc(b.name)}</small>
           </div>
         </div>
@@ -472,7 +489,11 @@
         </div>
       </div>`;
     }).join('');
-    return `<div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>Ala Discord</b></div>
+    return `<div class="name-color-box">
+        <div class="name-color-box-head"><span>✨ Warna Nama Chat (Ala Discord)</span><small>Gratis pilih</small></div>
+        <div class="name-color-grid">${colorPills}</div>
+      </div>
+      <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>Ala Discord</b></div>
       <div class="banner-shop-list">${items}</div>`;
   }
 
@@ -716,6 +737,29 @@
   }
   function bindShop() {
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
+    document.querySelectorAll('#cardShopContainer [data-pick-name-color]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const color = btn.getAttribute('data-pick-name-color') || '';
+        btn.disabled = true;
+        try {
+          const r = await fetch('/api/auth/name-color', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ color })
+          });
+          const d = await r.json().catch(() => ({}));
+          if (!r.ok) throw new Error(d.error || 'Gagal mengganti warna nama.');
+          const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+          if (me && d.user) me.nameColor = d.user.nameColor || '';
+          window.showToast?.('Warna nama chat diperbarui!');
+          refreshShop();
+        } catch (e) {
+          window.showToast?.(e.message || 'Gagal mengganti warna nama.', true);
+          btn.disabled = false;
+        }
+      });
+    });
     document.querySelectorAll('#cardShopContainer [data-shop-tab]').forEach(btn => {
       btn.addEventListener('click', () => {
         const next = btn.getAttribute('data-shop-tab');

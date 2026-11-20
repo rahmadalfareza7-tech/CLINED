@@ -1176,3 +1176,30 @@ html.dark .chat-row.has-banner .chat-meta time {
   inset: 0;
   border-radius: 14px;
 }
+
+/* ── Discord-style Display Name Color Variations ─────────────────────────── */
+[data-name-color="amber"]   { color: #d97706 !important; }
+[data-name-color="gold"]    { color: #ca8a04 !important; }
+[data-name-color="sakura"]  { color: #db2777 !important; }
+[data-name-color="cyber"]   { color: #0891b2 !important; }
+[data-name-color="crimson"] { color: #e11d48 !important; }
+[data-name-color="emerald"] { color: #059669 !important; }
+[data-name-color="violet"]  { color: #7c3aed !important; }
+[data-name-color="sunset"]  { color: #ea580c !important; }
+[data-name-color="ice"]     { color: #2563eb !important; }
+[data-name-color="hologram"] {
+  background: linear-gradient(90deg, #f472b6, #fbbf24, #34d399, #38bdf8, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+body.dark [data-name-color="amber"],   html.dark [data-name-color="amber"],   .banner-shop-preview-txt [data-name-color="amber"]   { color: #fbbf24 !important; }
+body.dark [data-name-color="gold"],    html.dark [data-name-color="gold"],    .banner-shop-preview-txt [data-name-color="gold"]    { color: #fde047 !important; }
+body.dark [data-name-color="sakura"],  html.dark [data-name-color="sakura"],  .banner-shop-preview-txt [data-name-color="sakura"]  { color: #f472b6 !important; }
+body.dark [data-name-color="cyber"],   html.dark [data-name-color="cyber"],   .banner-shop-preview-txt [data-name-color="cyber"]   { color: #22d3ee !important; }
+body.dark [data-name-color="crimson"], html.dark [data-name-color="crimson"], .banner-shop-preview-txt [data-name-color="crimson"] { color: #fb7185 !important; }
+body.dark [data-name-color="emerald"], html.dark [data-name-color="emerald"], .banner-shop-preview-txt [data-name-color="emerald"] { color: #34d399 !important; }
+body.dark [data-name-color="violet"],  html.dark [data-name-color="violet"],  .banner-shop-preview-txt [data-name-color="violet"]  { color: #c084fc !important; }
+body.dark [data-name-color="sunset"],  html.dark [data-name-color="sunset"],  .banner-shop-preview-txt [data-name-color="sunset"]  { color: #fb923c !important; }
+body.dark [data-name-color="ice"],     html.dark [data-name-color="ice"],     .banner-shop-preview-txt [data-name-color="ice"]     { color: #60a5fa !important; }

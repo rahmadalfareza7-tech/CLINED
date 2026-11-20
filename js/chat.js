@@ -104,8 +104,9 @@
     const sub = u.lastText ? esc(u.lastText) : `@${esc(u.username)}${u.online ? ' • online' : ''}`;
     const meta = (u.lastAt ? `<time>${ago(u.lastAt)}</time>` : '') + (u.unread ? `<i class="soc-dot inline">${u.unread > 9 ? '9+' : u.unread}</i>` : '') + act;
     const banner = u.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(u.bannerUrl)}')" aria-hidden="true"></span>` : '';
+    const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
     return `<div class="chat-row${u.canChat ? ' open' : ''}${u.unread ? ' has-unread' : ''}${u.bannerUrl ? ' has-banner' : ''}" ${u.canChat ? `data-chat-open="${esc(u.id)}" role="button" tabindex="0"` : ''}>${banner}${av(u)}
-      <div class="chat-who"><div class="chat-who-top"><b>${esc(u.name)}</b>${badges(u)}</div><small>${sub}</small></div>
+      <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${badges(u)}</div><small>${sub}</small></div>
       <div class="chat-meta">${meta}</div></div>`;
   }
   function listHTML() {
@@ -135,7 +136,8 @@
     }).join('');
     const can = T ? T.canChat : false;
     const headBg = p.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(p.bannerUrl)}')" aria-hidden="true"></span>` : '';
-    return `<div class="card soc-card chat-card chat-thread"><div class="chat-head${p.bannerUrl ? ' has-banner' : ''}">${headBg}<button type="button" class="chat-back" data-chat-back aria-label="Kembali">‹</button>${av(p)}<div class="chat-who"><div class="chat-who-top"><b>${esc(p.name)}</b>${badges(p)}</div><small>@${esc(p.username)}${p.online ? ' • online' : ''}</small></div></div>
+    const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
+    return `<div class="card soc-card chat-card chat-thread"><div class="chat-head${p.bannerUrl ? ' has-banner' : ''}">${headBg}<button type="button" class="chat-back" data-chat-back aria-label="Kembali">‹</button>${av(p)}<div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(p.name)}</b>${badges(p)}</div><small>@${esc(p.username)}${p.online ? ' • online' : ''}</small></div></div>
       <div class="chat-ttl">🕒 Pesan hilang otomatis setelah 48 jam</div>
       <div class="chat-msgs" id="chatMsgs">${T ? (msgs || '<div class="chat-empty"><span>👋</span><b>Belum ada pesan</b><small>Sapa duluan!</small></div>') : '<p class="soc-empty">Memuat…</p>'}</div>
       ${can ? `<div class="chat-compose"><textarea id="chatInput" rows="1" maxlength="1000" placeholder="Tulis pesan…" aria-label="Pesan"></textarea><button type="button" class="chat-send" data-chat-send aria-label="Kirim" disabled>➤</button></div>` : '<p class="chat-locked">Tambahkan sebagai teman dulu untuk membalas.</p>'}</div>`;
