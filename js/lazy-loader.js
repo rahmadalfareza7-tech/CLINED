@@ -12,7 +12,9 @@
       l.href = href;
       l.onload = resolve;
       l.onerror = resolve;
-      document.head.appendChild(l);
+      const anchor = document.getElementById('clinedDesignSystemCss');
+      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(l, anchor);
+      else document.head.appendChild(l);
     });
   }
 
@@ -30,15 +32,15 @@
 
   const BUNDLES = {
     medcalc: {
-      styles: ['css/med-calc.css?v=3'],
+      styles: ['css/med-calc.css?v=4'],
       scripts: ['js/med-calc.js?v=2']
     },
     resep: {
       styles: [],
-      scripts: ['js/resep-data.js?v=7', 'js/resep-core.js?v=9', 'js/resep-editor.js?v=1', 'js/resep.js?v=14']
+      scripts: ['js/resep-data.js?v=7', 'js/resep-core.js?v=9', 'js/resep-editor.js?v=1', 'js/resep.js?v=15']
     },
     admin: {
-      styles: ['css/admin-people.css?v=1'],
+      styles: ['css/admin-people.css?v=2'],
       scripts: ['js/admin-people.js?v=2', 'js/question-editor.js?v=1']
     }
   };
@@ -133,7 +135,7 @@
 
   const SECONDARY_STYLES = [
     'css/userbank.css?v=3',
-    'css/chat.css?v=1',
+    'css/chat.css?v=2',
     'css/qcomments.css?v=2',
     'css/insights.css?v=7',
     'css/content-ergonomic.css?v=8'

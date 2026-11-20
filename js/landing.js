@@ -26,7 +26,7 @@
     root.classList.toggle('dark', t === 'dark');
     if (themeBtn) themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
     const meta = $('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', t === 'dark' ? '#101412' : '#58cc02');
+    if (meta) meta.setAttribute('content', t === 'dark' ? '#0f1513' : '#f6f8f6');
   };
   applyTheme(readTheme());
   themeBtn?.addEventListener('click', () => {

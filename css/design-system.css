@@ -1,0 +1,709 @@
+/* ==========================================================================
+   CLINED UNIFIED DESIGN SYSTEM v1
+   Satu sistem desain konsisten untuk seluruh 42 tampilan aplikasi & admin:
+   - Palet warna tunggal (Light & Dark slate-emerald, tanpa konflik tema)
+   - Tipografi tunggal (Plus Jakarta Sans + rounded fallback, tabular-nums)
+   - Geometri kartu, tombol, input, tab, chip, header, & modal yang seragam
+   - Perbaikan bug tata letak (header 5 ikon, .answer.wrong light mode,
+     form profil mobile, dan sinkronisasi dark mode)
+   ========================================================================== */
+
+:root {
+  /* Core Surfaces (Light) */
+  --bg: #f6f8f6;
+  --card: #ffffff;
+  --solid: #ffffff;
+  --surface: #edf2ee;
+  --surface-2: #f3f7f4;
+  --text: #1c282e;
+  --ink: #1c282e;
+  --muted: #5d6e75;
+  --muted-2: #5d6e75;
+  --line: #dbe4de;
+  --line-d: #c3d1c8;
+  --border-strong: #c8d5cd;
+
+  /* Brand & Semantic Palette */
+  --brand: #58cc02;
+  --brand-dark: #46a302;
+  --brand-soft: rgba(88, 204, 2, .13);
+  --green: #58cc02;
+  --green-dark: #46a302;
+  --clined-green: #58cc02;
+  --clined-green-dark: #46a302;
+  --duo-green: #58cc02;
+  --duo-green-dark: #46a302;
+
+  --sky: #1cb0f6;
+  --sky-dark: #1690cb;
+  --sky-soft: rgba(28, 176, 246, .13);
+  --sky-text: #0b7bb3;
+  --blue: #1cb0f6;
+  --clined-blue: #1cb0f6;
+  --duo-blue: #1cb0f6;
+
+  --med: #0d9488;
+  --med2: #14b8a6;
+  --med-dark: #0f766e;
+  --med-soft: rgba(13, 148, 136, .13);
+  --clinical: #e9f8f5;
+
+  --warn: #ff9600;
+  --warn-dark: #d97c00;
+  --warn-soft: rgba(255, 150, 0, .14);
+  --warn-text: #b86600;
+  --orange: #ff9600;
+  --yellow: #ffc800;
+
+  --danger: #ff4b4b;
+  --danger-dark: #d93636;
+  --danger-soft: rgba(255, 75, 75, .12);
+  --danger-text: #c92a2a;
+  --red: #ff4b4b;
+
+  --ok-text: #2f7d00;
+
+  /* Legacy alias alignment */
+  --clined-ink: var(--text);
+  --clined-muted: var(--muted);
+  --clined-border: var(--line);
+  --clined-surface: var(--card);
+  --clined-soft: var(--surface);
+  --clined-shadow: var(--line-d);
+
+  /* Typography */
+  --clined-font: "Plus Jakarta Sans", "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --clined-body-size: 14px;
+  --clined-body-leading: 1.5;
+
+  /* Unified Radius & Depth Scale */
+  --r-xl: 22px;
+  --r-lg: 18px;
+  --r-md: 14px;
+  --r-sm: 10px;
+  --r-pill: 999px;
+  --clined-radius-xl: 22px;
+  --clined-radius-lg: 18px;
+  --clined-radius-md: 14px;
+  --clined-radius-sm: 10px;
+  --radius: 18px;
+  --depth: 0 2px 10px rgba(20, 32, 26, .045);
+  --shadow: 0 2px 10px rgba(20, 32, 26, .045);
+  --shadow-soft: 0 2px 8px rgba(20, 32, 26, .04);
+
+  /* Motion */
+  --ease-ui: cubic-bezier(.22, 1, .36, 1);
+}
+
+:root.dark {
+  /* Core Surfaces (Unified Deep Slate-Emerald — overrides polish.css & #1c1c1e) */
+  --bg: #0f1513;
+  --card: #17201d;
+  --solid: #1b2622;
+  --surface: #202c28;
+  --surface-2: #263530;
+  --text: #edf5f1;
+  --ink: #edf5f1;
+  --muted: #9eb0a7;
+  --muted-2: #9eb0a7;
+  --line: #2c3c35;
+  --line-d: #0a100e;
+  --border-strong: #374a42;
+
+  /* Sync polish.css private variables so dark mode is 100% uniform */
+  --p-card: #17201d;
+  --p-surface: #202c28;
+  --p-line: #2c3c35;
+  --p-line-d: #0a100e;
+  --p-text: #edf5f1;
+  --p-muted: #9eb0a7;
+  --p-blue: #6fd0ff;
+  --p-purple: #6fd0ff;
+
+  --brand-soft: rgba(88, 204, 2, .16);
+  --sky-soft: rgba(28, 176, 246, .16);
+  --sky-text: #6fd0ff;
+  --med-soft: rgba(20, 184, 166, .16);
+  --clinical: #132c29;
+  --warn-soft: rgba(255, 150, 0, .16);
+  --warn-text: #fbbf24;
+  --danger-soft: rgba(255, 75, 75, .16);
+  --danger-text: #ff8a8a;
+  --ok-text: #86ef60;
+
+  --clined-border: var(--line);
+  --clined-surface: var(--card);
+  --clined-soft: var(--surface);
+  --clined-shadow: var(--line-d);
+
+  --depth: 0 4px 16px rgba(0, 0, 0, .28);
+  --shadow: 0 4px 16px rgba(0, 0, 0, .28);
+  --shadow-soft: 0 2px 10px rgba(0, 0, 0, .22);
+}
+
+/* ───────── 1. Base Typography & Document Defaults ───────── */
+html, body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: var(--clined-font) !important;
+  font-size: var(--clined-body-size);
+  line-height: var(--clined-body-leading);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea {
+  font-family: var(--clined-font) !important;
+}
+
+b, strong, .stat b, .cd-kpi b, .ins-kpi b, .us-kpis b, .ia-kpi b, .ap-stats b,
+.timer-clock, .xp-total b, .result-score .big, .ml-score {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(28, 176, 246, .45) !important;
+  outline-offset: 2px;
+}
+
+/* ───────── 2. App Top Header (Fixes 5-icon wrap bug!) ───────── */
+html body .header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 6px !important;
+  padding: 8px 0 11px !important;
+  min-height: 58px;
+  background: transparent !important;
+  border-bottom: 2px solid var(--line) !important;
+  margin-bottom: 12px !important;
+}
+
+html body .header .brand {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  gap: 10px !important;
+}
+
+html body .header .brand h1 {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.02em !important;
+  color: var(--text) !important;
+}
+
+html body .header .brand p {
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  color: var(--muted) !important;
+  margin-top: 2px !important;
+  max-width: none !important;
+}
+
+html body .header .icon-btn {
+  flex: 0 0 38px !important;
+  width: 38px !important;
+  min-width: 38px !important;
+  max-width: 38px !important;
+  height: 38px !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 3px !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  font-size: 16px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  transition: transform .12s var(--ease-ui), border-color .15s ease, background-color .15s ease !important;
+}
+
+html body .header .icon-btn:active {
+  transform: translateY(2px) !important;
+  border-bottom-width: 2px !important;
+}
+
+@media (hover: hover) {
+  html body .header .icon-btn:hover {
+    border-color: var(--sky) !important;
+    background: var(--surface) !important;
+  }
+}
+
+@media (max-width: 400px) {
+  html body .header { gap: 4px !important; }
+  html body .header .brand .logo.logo-image { width: 40px !important; height: 40px !important; flex: 0 0 40px !important; }
+  html body .header .icon-btn {
+    flex: 0 0 33px !important;
+    width: 33px !important;
+    min-width: 33px !important;
+    max-width: 33px !important;
+    height: 33px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+  }
+}
+
+/* ───────── 3. Unified Tactile Cards & Containers ───────── */
+html body .card,
+html body .nested-card,
+html body .account-auth-card,
+html body .admin-content-workspace,
+html body .account-data-tools,
+html body .duo-learning-map,
+html body .soc-card,
+html body .ap {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  border-radius: var(--r-xl) !important;
+  box-shadow: var(--depth) !important;
+}
+
+html body .cd-panel,
+html body .sp-block,
+html body .weakness-radar-wrap,
+html body .radar-dashboard-block,
+html body .ub-deck,
+html body .ub-q,
+html body .ub-save,
+html body .ub-practice,
+html body .ia-card,
+html body .gl-card,
+html body .ins-item,
+html body .clinical-quest-card {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: none !important;
+}
+
+/* Preserve special colored hero/completed/suspect states */
+html body .duel-hero,
+html body .clinical-quest-card.quest-completed,
+html body .ia-card.is-suspect,
+html body .ml-item.mastered {
+  box-shadow: var(--depth) !important;
+}
+
+html body .ia-card.is-suspect {
+  border-color: rgba(255, 75, 75, .55) !important;
+  background: linear-gradient(180deg, rgba(255, 75, 75, .07), transparent 85%), var(--card) !important;
+}
+
+/* Kill hardcoded #1c1c1e dark-mode tile drift from home-ergonomic & content-ergonomic */
+:root.dark html body #home .home-quick-tile,
+:root.dark #home .home-quick-tile,
+:root.dark html body #home button.duo-reward-item.duo-cal,
+:root.dark #adminContentWorkspace .admin-content-tabs,
+:root.dark #adminContentWorkspace .admin-uab-result-count,
+:root.dark #userBankPage .ub-editor-actions,
+:root.dark #userBankPage .ub-save .ub-actions:last-of-type {
+  background: var(--card) !important;
+  border-color: var(--line) !important;
+}
+
+:root.dark #adminContentWorkspace .admin-content-tabs {
+  background: var(--surface) !important;
+}
+
+/* Consistent Page Headers & Eyebrows */
+html body .exam-page-header,
+html body .materials-page-header {
+  display: grid;
+  gap: 8px;
+  margin: 2px 0 14px !important;
+}
+
+html body .exam-page-header h2,
+html body .materials-page-header h2,
+html body .account-page-view .account-header h2 {
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.02em !important;
+  line-height: 1.2 !important;
+  color: var(--text) !important;
+  margin: 2px 0 0 !important;
+}
+
+html body .exam-page-header p,
+html body .materials-page-header p {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--muted) !important;
+  line-height: 1.45 !important;
+  margin: 4px 0 0 !important;
+}
+
+html body .eyebrow,
+html body .account-auth-kicker,
+html body .quest-kicker,
+html body .study-kicker {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: var(--med) !important;
+}
+
+:root.dark html body .eyebrow,
+:root.dark html body .account-auth-kicker,
+:root.dark html body .quest-kicker,
+:root.dark html body .study-kicker {
+  color: var(--sky-text) !important;
+}
+
+html body .section-title,
+html body .cd-panel h3,
+html body .soc-card h3,
+html body .sp-h,
+html body .admin-content-intro b {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.015em !important;
+  color: var(--text) !important;
+}
+
+/* ───────── 4. Unified Button System (Single Tactile 3D Lip) ───────── */
+html body button.primary,
+html body .account-action.account-save {
+  min-height: 48px !important;
+  padding: 11px 18px !important;
+  border-radius: var(--r-md) !important;
+  border: 2px solid var(--brand-dark) !important;
+  border-bottom-width: 4px !important;
+  background: var(--brand) !important;
+  color: #ffffff !important;
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.005em !important;
+  box-shadow: none !important;
+  transition: transform .1s var(--ease-ui), filter .15s ease, border-bottom-width .1s ease !important;
+}
+
+html body button.primary:not(:disabled):active,
+html body .account-action.account-save:not(:disabled):active {
+  transform: translateY(2px) !important;
+  border-bottom-width: 2px !important;
+}
+
+@media (hover: hover) {
+  html body button.primary:not(:disabled):hover,
+  html body .account-action.account-save:not(:disabled):hover {
+    filter: brightness(1.04);
+  }
+}
+
+html body button.secondary,
+html body .account-action:not(.account-save):not(.material-delete-action),
+html body .account-security-btn:not(.danger) {
+  min-height: 46px !important;
+  padding: 10px 15px !important;
+  border-radius: var(--r-md) !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  box-shadow: none !important;
+  transition: transform .1s var(--ease-ui), border-color .15s ease, background-color .15s ease !important;
+}
+
+html body button.secondary:not(:disabled):active,
+html body .account-action:not(.account-save):not(:disabled):active,
+html body .account-security-btn:not(:disabled):active {
+  transform: translateY(2px) !important;
+  border-bottom-width: 2px !important;
+}
+
+@media (hover: hover) {
+  html body button.secondary:not(:disabled):hover,
+  html body .account-action:not(.account-save):not(.material-delete-action):not(:disabled):hover,
+  html body .account-security-btn:not(.danger):not(:disabled):hover {
+    border-color: var(--sky) !important;
+    background: var(--surface) !important;
+  }
+}
+
+html body button.secondary.small-btn {
+  min-height: 40px !important;
+  padding: 8px 13px !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+}
+
+html body button.secondary.clined-compact-action {
+  min-height: 36px !important;
+  padding: 6px 11px !important;
+  font-size: 12.5px !important;
+  border-radius: 11px !important;
+  border-bottom-width: 3px !important;
+  width: auto !important;
+}
+
+/* Unified Back Buttons across all views */
+html body .back,
+html body .back-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: fit-content !important;
+  min-height: 38px !important;
+  padding: 0 13px !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 3px !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: transform .1s var(--ease-ui), border-color .15s ease, background-color .15s ease !important;
+}
+
+html body .back:active,
+html body .back-link:active {
+  transform: translateY(1.5px) !important;
+  border-bottom-width: 1.5px !important;
+}
+
+@media (hover: hover) {
+  html body .back:hover,
+  html body .back-link:hover {
+    border-color: var(--sky) !important;
+    background: var(--surface) !important;
+  }
+}
+
+/* ───────── 5. Unified Form Controls (Inputs, Selects, Textareas) ───────── */
+html body input[type="text"],
+html body input[type="password"],
+html body input[type="email"],
+html body input[type="url"],
+html body input[type="search"],
+html body input[type="number"],
+html body input[type="date"],
+html body input[type="time"],
+html body input[type="datetime-local"],
+html body select,
+html body textarea {
+  min-height: 46px;
+  border-radius: var(--r-md) !important;
+  border: 2px solid var(--line) !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+
+html body input:focus,
+html body select:focus,
+html body textarea:focus {
+  outline: none !important;
+  border-color: var(--sky) !important;
+  background: var(--card) !important;
+  box-shadow: 0 0 0 3px var(--sky-soft) !important;
+}
+
+html body input::placeholder,
+html body textarea::placeholder {
+  color: var(--muted) !important;
+  opacity: .8;
+  font-weight: 600;
+}
+
+/* Fix Home Search Bar inside unified wrapper */
+html body .home-question-search {
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  border-radius: 18px !important;
+  background: var(--card) !important;
+  box-shadow: none !important;
+}
+html body .home-question-search input {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-height: 42px !important;
+}
+html body .home-question-search:focus-within {
+  border-color: var(--sky) !important;
+  box-shadow: 0 0 0 3px var(--sky-soft) !important;
+}
+
+/* Fix mobile account form oversized labels/inputs from style.css:1752 */
+html body .account-form label {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: var(--muted) !important;
+  margin-bottom: 4px !important;
+}
+html body .account-form .account-profile-fields input {
+  min-height: 46px !important;
+  font-size: 15px !important;
+  padding: 10px 14px !important;
+  border-radius: var(--r-md) !important;
+}
+
+/* ───────── 6. Quiz Answer Readability Bug Fix (Light & Dark Mode) ───────── */
+html body .answer {
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  border-radius: 16px !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.48 !important;
+}
+
+html body .answer:active:not(:disabled) {
+  transform: translateY(2px) !important;
+  border-bottom-width: 2px !important;
+}
+
+html body .answer-letter {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1.5px solid var(--line) !important;
+}
+
+html body .answer.correct {
+  background: rgba(88, 204, 2, .14) !important;
+  border-color: var(--brand) !important;
+  border-bottom-color: var(--brand-dark) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+html body .answer.correct .answer-letter {
+  background: var(--brand) !important;
+  border-color: var(--brand-dark) !important;
+  color: #ffffff !important;
+}
+
+/* CRITICAL FIX: previously #3b2022 dark brown in light mode! */
+html body .answer.wrong {
+  background: #fff1f2 !important;
+  border-color: var(--danger) !important;
+  border-bottom-color: var(--danger-dark) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+html body .answer.wrong .answer-letter {
+  background: var(--danger) !important;
+  border-color: var(--danger-dark) !important;
+  color: #ffffff !important;
+}
+
+:root.dark html body .answer.correct {
+  background: rgba(88, 204, 2, .18) !important;
+  border-color: #58cc02 !important;
+  color: #f0fdf4 !important;
+}
+:root.dark html body .answer.wrong {
+  background: #3a1c20 !important;
+  border-color: #ff5b5b !important;
+  border-bottom-color: #c83232 !important;
+  color: #ffe4e6 !important;
+}
+
+/* ───────── 7. Unified Tabs, Chips & Modals ───────── */
+html body .admin-panel-tab.selected {
+  background: var(--sky) !important;
+  border-color: var(--sky-dark) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+:root.dark html body .admin-panel-tab.selected {
+  background: var(--sky) !important;
+  border-color: var(--sky-dark) !important;
+  color: #ffffff !important;
+}
+
+html body .account-modal-card,
+html body .cdlg-card,
+html body .upi-image-zoom-card {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  border-radius: 24px !important;
+}
+
+html body .account-modal-backdrop,
+html body .cdlg-layer {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ───────── 8. Floating Bottom Navigation Harmonization ───────── */
+html body .floating-dashboard-nav {
+  background: rgba(255, 255, 255, .94) !important;
+  border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important;
+  border-radius: 24px !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 20, .13) !important;
+}
+
+:root.dark html body .floating-dashboard-nav {
+  background: rgba(23, 32, 29, .95) !important;
+  border-color: var(--line) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .45) !important;
+}
+
+html body .floating-dashboard-nav .floating-nav-item {
+  color: var(--muted) !important;
+  font-family: var(--clined-font) !important;
+  font-weight: 800 !important;
+}
+
+/* Harmonized icon accents (no purple clash on dark!) */
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="home"] { --nav-icon-color: #1cb0f6 !important; }
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="dashboard"] { --nav-icon-color: #ff9600 !important; }
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="uab"] { --nav-icon-color: #58cc02 !important; }
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="status"] { --nav-icon-color: #0d9488 !important; }
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="account"] { --nav-icon-color: #ff4b4b !important; }
+
+html body .floating-dashboard-nav .floating-nav-slider {
+  background: var(--brand-soft) !important;
+  border: 2px solid rgba(88, 204, 2, .45) !important;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+}
+
+:root.dark html body .floating-dashboard-nav .floating-nav-slider {
+  background: rgba(88, 204, 2, .16) !important;
+  border-color: rgba(88, 204, 2, .42) !important;
+  box-shadow: none !important;
+}
+
+html body .floating-dashboard-nav .floating-nav-item.active span:last-child {
+  color: var(--text) !important;
+}
+
+/* Home quick tile Sosial icon: clinical teal instead of violet */
+html body #home #hubBtn .home-materials-icon {
+  background: var(--med-soft) !important;
+}
+
+/* Clean custom scrollbars on desktop */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--line-d); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+}

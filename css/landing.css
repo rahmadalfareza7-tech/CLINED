@@ -1,14 +1,14 @@
-/* CLINED landing — mengikuti token dan gaya aplikasi (hijau #58cc02, tombol bertumpu, sudut membulat). */
+/* CLINED landing — mengikuti token dan gaya aplikasi (Unified Design System: Plus Jakarta Sans, hijau #58cc02, langit #1cb0f6, dark slate-emerald). */
 :root{
-  --bg:#f7f9f6;--card:#fff;--text:#263238;--muted:#6b777b;--line:#dfe7e2;--line-d:#cdd8d1;--surface:#f1f4f1;
-  --green:#58cc02;--green-d:#46a302;--blue:#1cb0f6;--blue-d:#1899d6;--yellow:#ffc800;--yellow-d:#e0ae00;
-  --orange:#ff9600;--orange-d:#dd8100;--purple:#ce82ff;--purple-d:#a866d9;--red:#ff4b4b;--red-d:#d93a3a;
-  --font:"Avenir Next","Nunito",Inter,ui-rounded,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --bg:#f6f8f6;--card:#fff;--text:#1c282e;--muted:#5d6e75;--line:#dbe4de;--line-d:#c3d1c8;--surface:#edf2ee;
+  --green:#58cc02;--green-d:#46a302;--blue:#1cb0f6;--blue-d:#1690cb;--yellow:#ffc800;--yellow-d:#e0ae00;
+  --orange:#ff9600;--orange-d:#d97c00;--purple:#0d9488;--purple-d:#0f766e;--red:#ff4b4b;--red-d:#d93636;
+  --font:"Plus Jakarta Sans","Nunito",ui-rounded,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --auto:7000ms;
   color-scheme:light;
 }
 :root.dark{
-  --bg:#101412;--card:#1b211e;--text:#f2f7f3;--muted:#a8b3ac;--line:#354039;--line-d:#232c26;--surface:#252d28;
+  --bg:#0f1513;--card:#17201d;--text:#edf5f1;--muted:#9eb0a7;--line:#2c3c35;--line-d:#0a100e;--surface:#202c28;
   color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}

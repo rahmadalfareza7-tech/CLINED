@@ -441,6 +441,8 @@ function initTheme(){
 function updateThemeIcon(){
   const d=document.documentElement.classList.contains("dark");
   $("themeBtn").textContent=d?"☀︎":"☾";
+  const m=document.querySelector('meta[name="theme-color"]');
+  if(m)m.setAttribute("content",d?"#0f1513":"#f6f8f6");
 }
 function updateSoundIcon(){
   if($("soundBtn"))$("soundBtn").textContent=soundEnabled?"🔊":"🔇";
