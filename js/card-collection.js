@@ -580,7 +580,7 @@
       const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${b.price} Beli`;
       return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}">
         <div class="banner-shop-preview">
-          <span class="banner-shop-preview-bg" style="background-image:url('${esc(b.img)}')" aria-hidden="true"></span>
+          <img class="banner-shop-preview-bg" src="${esc(b.img)}" alt="" loading="lazy" aria-hidden="true">
           <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
           <div class="banner-shop-preview-txt">
             <b${colorAttr}>${esc(myName)}</b>
