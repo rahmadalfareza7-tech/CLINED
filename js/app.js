@@ -251,7 +251,13 @@ function show(id, options={}){
     return;
   }
   __spaCurrentView=id;
-  try{sessionStorage.setItem('clined_last_view_v1',id);}catch{}
+  try{
+    sessionStorage.setItem('clined_last_view_v1',id);
+    if(id!=='quiz'&&id!=='result'&&id!=='review'){
+      window.__clinedQuizReturnView=id;
+      sessionStorage.setItem('clined_quiz_return_view_v1',id);
+    }
+  }catch{}
   document.querySelectorAll(".view.active").forEach(v=>v.classList.remove("active"));
   target.classList.add("active");
   document.querySelectorAll(".view.motion-page-enter").forEach(v=>v.classList.remove("motion-page-enter"));
@@ -1671,9 +1677,25 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-rv-filter]
 $("reviewQuizBtn").onclick=()=>{renderReview("all");show("review");window.scrollTo({top:0,behavior:"auto"})};
 $("reviewWrongBtn").onclick=()=>{const w=get(KEY.wrong,[]);const ids=new Set(w.map(x=>x.id));quiz=quiz.filter(q=>ids.has(q.id)).map(q=>({...q,selectedAnswer:null,graded:false}));if(!quiz.length){show("home");return}quizMode="study";window.__clinedFinishing=false;window.__examReview=false;pos=0;score=0;sessionXP=0;lastXPGain=0;answered=false;selectedAnswer=null;streak=0;wrongCombo=0;playerHP=100;enemyHP=100;timerDuration=0;timerSeconds=0;timerDeadline=0;flagged=new Set();show("quiz");renderQuestion();startTimer()};
 
+const BLOCK_TO_PAGE={
+  BM1:"blokBm1Page",BM2:"blokBm2Page",HNC:"blokHncPage",MP1:"blokMp1Page",MP2:"blokMp2Page",MPT:"blokMptPage",
+  MUSKULOSKELETAL:"blokMuskuloskeletalPage",RESPIRATORY:"blokRespiratoryPage",KARDIOLOGI:"blokKardiologiPage",
+  HEMATOLOGI:"blokHematologiPage",GIT:"blokGitPage",GINJAL:"blokGinjalPage",SSP:"blokSspPage",
+  "PANCA INDRA":"blokPancaIndraPage",ENDOKRINE:"blokEndokrinePage",REPRODUKSI:"blokReproduksiPage",
+  FORENSIK:"blokForensikPage",KEDKOM:"blokKedkomPage",KEDKEL:"blokKedkelPage",MULSIS:"blokMulsisPage"
+};
+function quizReturnTarget(){
+  try{
+    const prev=window.__clinedQuizReturnView||sessionStorage.getItem('clined_quiz_return_view_v1')||'';
+    if(prev&&prev!=='quiz'&&prev!=='result'&&prev!=='review'&&prev!=='home'&&$(prev))return prev;
+  }catch{}
+  const blk=(typeof blockForBank==='function'?blockForBank(selectedBank):'')||(typeof getCurrentBlockId==='function'?getCurrentBlockId():'');
+  const page=BLOCK_TO_PAGE[String(blk||'').toUpperCase()];
+  return (page&&$(page))?page:'home';
+}
 $("quizBack").onclick=async()=>{
-  if(await clinedConfirm({title:"Keluar dari kuis?",icon:"🚪",tone:"info",lines:["Progresmu **disimpan otomatis**, jadi bisa dilanjutkan nanti dari beranda."],ok:"Keluar",cancel:"Lanjut mengerjakan"})){
-    saveSession();stopTimer();show("home");renderCounts();
+  if(await clinedConfirm({title:"Keluar dari kuis?",icon:"🚪",tone:"info",lines:["Progresmu **disimpan otomatis**, jadi bisa dilanjutkan nanti."],ok:"Keluar",cancel:"Lanjut mengerjakan"})){
+    saveSession();stopTimer();show(quizReturnTarget());renderCounts();
   }
 };
 $("resultHome").onclick=()=>{show("home");renderCounts()};
