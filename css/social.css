@@ -647,7 +647,8 @@
 .soc-friend { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 18px; border: 2px solid var(--line, #e5e7eb); border-bottom-width: 4px; background: var(--card, #fff); }
 .soc-av { position: relative; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: linear-gradient(135deg, #1cb0f6, #7c5cff); color: #fff; font-size: 14px; font-weight: 950; box-shadow: 0 3px 8px rgba(28, 176, 246, .25); }
 .soc-av.opp { background: linear-gradient(135deg, #ff9600, #ff4b4b); box-shadow: 0 3px 8px rgba(255, 75, 75, .25); }
-.soc-av.on::after { content: ""; position: absolute; right: -1px; bottom: -1px; width: 12px; height: 12px; border-radius: 50%; background: #58cc02; border: 2px solid var(--card, #fff); }
+.soc-av.on::after { content: ""; position: absolute; right: -1px; bottom: -1px; width: 12px; height: 12px; border-radius: 50%; background: #22c55e; border: 2px solid var(--card, #fff); z-index: 4; box-shadow: 0 0 8px 2px rgba(74, 222, 128, .85), 0 0 14px rgba(34, 197, 94, .6); animation: socOnlineGlow 2s ease-in-out infinite; }
+@keyframes socOnlineGlow { 0%, 100% { box-shadow: 0 0 7px 1.5px rgba(74, 222, 128, .8), 0 0 13px rgba(34, 197, 94, .55); } 50% { box-shadow: 0 0 11px 3px rgba(74, 222, 128, 1), 0 0 18px rgba(34, 197, 94, .8); } }
 .soc-who { min-width: 0; display: grid; gap: 2px; }
 .soc-who b { font-size: 14px; overflow-wrap: anywhere; } .soc-who small { font-size: 12px; font-weight: 700; opacity: .72; }
 .soc-on { color: #46a302; opacity: 1; font-weight: 900; }
