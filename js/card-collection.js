@@ -20,56 +20,56 @@
   let shopTab = 'cards';
   let decoFilter = 'all';
   let bannerFilter = 'all';
-  const BASE_QUIZ_PER_DIAMOND = 5;
+  const BASE_QUIZ_PER_DIAMOND = 3;
   const BASE_PACK_COST = 20;
 
   const DECO_CATALOG = [
-    { id: '01-cat-ears',             name: 'Cat Ears',             cat: 'Cute & Animal',     icon: '🐱', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/01-cat-ears.svg?v=2' },
-    { id: '02-ribbon-kitten',        name: 'Ribbon Kitten',        cat: 'Cute & Animal',     icon: '🎀', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/02-ribbon-kitten.svg?v=2' },
-    { id: '03-snow-leopard',         name: 'Snow Leopard',         cat: 'Cute & Animal',     icon: '🐆', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/03-snow-leopard.svg?v=2' },
-    { id: '04-bunny-hoodie',         name: 'Bunny Hoodie',         cat: 'Cute & Animal',     icon: '🐰', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/04-bunny-hoodie.svg?v=2' },
-    { id: '05-crescent-dreams',      name: 'Crescent Dreams',      cat: 'Celestial',         icon: '🌙', price: 25, desc: 'Celestial',         img: 'assets/decorations/05-crescent-dreams.svg?v=2' },
-    { id: '06-star-struck',          name: 'Star Struck',          cat: 'Celestial',         icon: '⭐', price: 20, desc: 'Celestial',         img: 'assets/decorations/06-star-struck.svg?v=2' },
-    { id: '07-twilight-dusk',        name: 'Twilight Dusk',        cat: 'Celestial',         icon: '🌌', price: 30, desc: 'Celestial',         img: 'assets/decorations/07-twilight-dusk.svg?v=2' },
-    { id: '08-phantom-wraith',       name: 'Phantom Wraith',       cat: 'Dark & Gothic',     icon: '👻', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/08-phantom-wraith.svg?v=2' },
-    { id: '09-blood-moon',           name: 'Blood Moon',           cat: 'Dark & Gothic',     icon: '🩸', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/09-blood-moon.svg?v=2' },
-    { id: '10-frost-eclipse',        name: 'Frost Eclipse',        cat: 'Dark & Gothic',     icon: '❄️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/10-frost-eclipse.svg?v=2' },
-    { id: '11-fallen-angel',         name: 'Fallen Angel',         cat: 'Dark & Gothic',     icon: '🖤', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/11-fallen-angel.svg?v=2' },
-    { id: '12-symbiote-web',         name: 'Symbiote Web',         cat: 'Dark & Gothic',     icon: '🕸️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/12-symbiote-web.svg?v=2' },
-    { id: '13-hellflame',            name: 'Hellflame',            cat: 'Elemental & Aura',  icon: '🔥', price: 30, desc: 'Elemental & Aura',  img: 'assets/decorations/13-hellflame.svg?v=2' },
-    { id: '14-cursed-skulls',        name: 'Cursed Skulls',        cat: 'Dark & Gothic',     icon: '💀', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/14-cursed-skulls.svg?v=2' },
-    { id: '15-demon-horns',          name: 'Demon Horns',          cat: 'Dark & Gothic',     icon: '😈', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/15-demon-horns.svg?v=2' },
-    { id: '16-thunder-surge',        name: 'Thunder Surge',        cat: 'Elemental & Aura',  icon: '🌩️', price: 35, desc: 'Elemental & Aura',  img: 'assets/decorations/16-thunder-surge.svg?v=2' },
-    { id: '17-butterfly-waltz',      name: 'Butterfly Waltz',      cat: 'Aesthetic & Anime', icon: '🦋', price: 25, desc: 'Aesthetic & Anime', img: 'assets/decorations/17-butterfly-waltz.svg?v=2' },
-    { id: '18-anime-angry',          name: 'Anime Angry',          cat: 'Aesthetic & Anime', icon: '💢', price: 20, desc: 'Aesthetic & Anime', img: 'assets/decorations/18-anime-angry.svg?v=2' },
-    { id: '19-shark-frill',          name: 'Apex Shark',           cat: 'Dark & Gothic',     icon: '🦈', price: 25, desc: 'Dark & Gothic',     img: 'assets/decorations/19-shark-frill.svg?v=2' },
-    { id: '20-sakura-breeze',        name: 'Sakura Breeze',        cat: 'Aesthetic & Anime', icon: '🌸', price: 30, desc: 'Aesthetic & Anime', img: 'assets/decorations/20-sakura-breeze.svg?v=2' },
-    { id: '21-chrome-liquid-gothic', name: 'Chrome Liquid Gothic', cat: 'Dark & Gothic',     icon: '⛓️', price: 40, desc: 'Dark & Gothic',     img: 'assets/decorations/21-chrome-liquid-gothic.svg?v=2' }
+    { id: '01-cat-ears',             name: 'Cat Ears',             cat: 'Cute & Animal',     icon: '🐱', price: 8,  desc: 'Cute & Animal',     img: 'assets/decorations/01-cat-ears.svg?v=2' },
+    { id: '02-ribbon-kitten',        name: 'Ribbon Kitten',        cat: 'Cute & Animal',     icon: '🎀', price: 8,  desc: 'Cute & Animal',     img: 'assets/decorations/02-ribbon-kitten.svg?v=2' },
+    { id: '03-snow-leopard',         name: 'Snow Leopard',         cat: 'Cute & Animal',     icon: '🐆', price: 12, desc: 'Cute & Animal',     img: 'assets/decorations/03-snow-leopard.svg?v=2' },
+    { id: '04-bunny-hoodie',         name: 'Bunny Hoodie',         cat: 'Cute & Animal',     icon: '🐰', price: 12, desc: 'Cute & Animal',     img: 'assets/decorations/04-bunny-hoodie.svg?v=2' },
+    { id: '05-crescent-dreams',      name: 'Crescent Dreams',      cat: 'Celestial',         icon: '🌙', price: 12, desc: 'Celestial',         img: 'assets/decorations/05-crescent-dreams.svg?v=2' },
+    { id: '06-star-struck',          name: 'Star Struck',          cat: 'Celestial',         icon: '⭐', price: 8,  desc: 'Celestial',         img: 'assets/decorations/06-star-struck.svg?v=2' },
+    { id: '07-twilight-dusk',        name: 'Twilight Dusk',        cat: 'Celestial',         icon: '🌌', price: 15, desc: 'Celestial',         img: 'assets/decorations/07-twilight-dusk.svg?v=2' },
+    { id: '08-phantom-wraith',       name: 'Phantom Wraith',       cat: 'Dark & Gothic',     icon: '👻', price: 15, desc: 'Dark & Gothic',     img: 'assets/decorations/08-phantom-wraith.svg?v=2' },
+    { id: '09-blood-moon',           name: 'Blood Moon',           cat: 'Dark & Gothic',     icon: '🩸', price: 18, desc: 'Dark & Gothic',     img: 'assets/decorations/09-blood-moon.svg?v=2' },
+    { id: '10-frost-eclipse',        name: 'Frost Eclipse',        cat: 'Dark & Gothic',     icon: '❄️', price: 18, desc: 'Dark & Gothic',     img: 'assets/decorations/10-frost-eclipse.svg?v=2' },
+    { id: '11-fallen-angel',         name: 'Fallen Angel',         cat: 'Dark & Gothic',     icon: '🖤', price: 15, desc: 'Dark & Gothic',     img: 'assets/decorations/11-fallen-angel.svg?v=2' },
+    { id: '12-symbiote-web',         name: 'Symbiote Web',         cat: 'Dark & Gothic',     icon: '🕸️', price: 18, desc: 'Dark & Gothic',     img: 'assets/decorations/12-symbiote-web.svg?v=2' },
+    { id: '13-hellflame',            name: 'Hellflame',            cat: 'Elemental & Aura',  icon: '🔥', price: 15, desc: 'Elemental & Aura',  img: 'assets/decorations/13-hellflame.svg?v=2' },
+    { id: '14-cursed-skulls',        name: 'Cursed Skulls',        cat: 'Dark & Gothic',     icon: '💀', price: 15, desc: 'Dark & Gothic',     img: 'assets/decorations/14-cursed-skulls.svg?v=2' },
+    { id: '15-demon-horns',          name: 'Demon Horns',          cat: 'Dark & Gothic',     icon: '😈', price: 15, desc: 'Dark & Gothic',     img: 'assets/decorations/15-demon-horns.svg?v=2' },
+    { id: '16-thunder-surge',        name: 'Thunder Surge',        cat: 'Elemental & Aura',  icon: '🌩️', price: 18, desc: 'Elemental & Aura',  img: 'assets/decorations/16-thunder-surge.svg?v=2' },
+    { id: '17-butterfly-waltz',      name: 'Butterfly Waltz',      cat: 'Aesthetic & Anime', icon: '🦋', price: 12, desc: 'Aesthetic & Anime', img: 'assets/decorations/17-butterfly-waltz.svg?v=2' },
+    { id: '18-anime-angry',          name: 'Anime Angry',          cat: 'Aesthetic & Anime', icon: '💢', price: 8,  desc: 'Aesthetic & Anime', img: 'assets/decorations/18-anime-angry.svg?v=2' },
+    { id: '19-shark-frill',          name: 'Apex Shark',           cat: 'Dark & Gothic',     icon: '🦈', price: 12, desc: 'Dark & Gothic',     img: 'assets/decorations/19-shark-frill.svg?v=2' },
+    { id: '20-sakura-breeze',        name: 'Sakura Breeze',        cat: 'Aesthetic & Anime', icon: '🌸', price: 15, desc: 'Aesthetic & Anime', img: 'assets/decorations/20-sakura-breeze.svg?v=2' },
+    { id: '21-chrome-liquid-gothic', name: 'Chrome Liquid Gothic', cat: 'Dark & Gothic',     icon: '⛓️', price: 20, desc: 'Dark & Gothic',     img: 'assets/decorations/21-chrome-liquid-gothic.svg?v=2' }
   ];
 
   const BANNER_CATALOG = [
     // 10 Cowok
-    { id: '01-blood-eclipse',       name: 'Blood Eclipse',       cat: 'Cowok', icon: '🩸', price: 20, desc: 'Cowok • Gerhana merah kelam',        img: 'assets/banners/01-blood-eclipse.svg?v=2' },
-    { id: '02-lunar-monolith',      name: 'Lunar Monolith',      cat: 'Cowok', icon: '🌑', price: 20, desc: 'Cowok • Monolit bulan misterius',    img: 'assets/banners/02-lunar-monolith.svg?v=2' },
-    { id: '03-always-watching',     name: 'Always Watching',     cat: 'Cowok', icon: '👁️', price: 25, desc: 'Cowok • Mata bayangan gelap',        img: 'assets/banners/03-always-watching.svg?v=2' },
-    { id: '04-water-stalker',       name: 'Water Stalker',       cat: 'Cowok', icon: '🌊', price: 20, desc: 'Cowok • Pemburu laut dalam',         img: 'assets/banners/04-water-stalker.svg?v=2' },
-    { id: '05-crimson-katana',      name: 'Crimson Katana',      cat: 'Cowok', icon: '⚔️', price: 30, desc: 'Cowok • Tebasan katana merah',       img: 'assets/banners/05-crimson-katana.svg?v=2' },
-    { id: '06-cursed-skulls',       name: 'Cursed Skulls',       cat: 'Cowok', icon: '💀', price: 30, desc: 'Cowok • Tengkorak terkutuk',         img: 'assets/banners/06-cursed-skulls.svg?v=2' },
-    { id: '07-crimson-vs-symbiote', name: 'Crimson vs. Symbiote',cat: 'Cowok', icon: '🕸️', price: 35, desc: 'Cowok • Benturan simbiote',          img: 'assets/banners/07-crimson-vs-symbiote.svg?v=2' },
-    { id: '08-shark-tail',          name: 'Shark Tail',          cat: 'Cowok', icon: '🦈', price: 25, desc: 'Cowok • Sirip hiu samudra',          img: 'assets/banners/08-shark-tail.svg?v=2' },
-    { id: '09-midnight-rainpond',   name: 'Midnight Rainpond',   cat: 'Cowok', icon: '🌧️', price: 25, desc: 'Cowok • Hujan tengah malam',         img: 'assets/banners/09-midnight-rainpond.svg?v=2' },
-    { id: '10-crimson-oni',         name: 'Crimson Oni',         cat: 'Cowok', icon: '👹', price: 35, desc: 'Cowok • Topeng oni merah',           img: 'assets/banners/10-crimson-oni.svg?v=2' },
+    { id: '01-blood-eclipse',       name: 'Blood Eclipse',       cat: 'Cowok', icon: '🩸', price: 8,  desc: 'Cowok • Gerhana merah kelam',        img: 'assets/banners/01-blood-eclipse.svg?v=2' },
+    { id: '02-lunar-monolith',      name: 'Lunar Monolith',      cat: 'Cowok', icon: '🌑', price: 8,  desc: 'Cowok • Monolit bulan misterius',    img: 'assets/banners/02-lunar-monolith.svg?v=2' },
+    { id: '03-always-watching',     name: 'Always Watching',     cat: 'Cowok', icon: '👁️', price: 12, desc: 'Cowok • Mata bayangan gelap',        img: 'assets/banners/03-always-watching.svg?v=2' },
+    { id: '04-water-stalker',       name: 'Water Stalker',       cat: 'Cowok', icon: '🌊', price: 8,  desc: 'Cowok • Pemburu laut dalam',         img: 'assets/banners/04-water-stalker.svg?v=2' },
+    { id: '05-crimson-katana',      name: 'Crimson Katana',      cat: 'Cowok', icon: '⚔️', price: 15, desc: 'Cowok • Tebasan katana merah',       img: 'assets/banners/05-crimson-katana.svg?v=2' },
+    { id: '06-cursed-skulls',       name: 'Cursed Skulls',       cat: 'Cowok', icon: '💀', price: 15, desc: 'Cowok • Tengkorak terkutuk',         img: 'assets/banners/06-cursed-skulls.svg?v=2' },
+    { id: '07-crimson-vs-symbiote', name: 'Crimson vs. Symbiote',cat: 'Cowok', icon: '🕸️', price: 18, desc: 'Cowok • Benturan simbiote',          img: 'assets/banners/07-crimson-vs-symbiote.svg?v=2' },
+    { id: '08-shark-tail',          name: 'Shark Tail',          cat: 'Cowok', icon: '🦈', price: 12, desc: 'Cowok • Sirip hiu samudra',          img: 'assets/banners/08-shark-tail.svg?v=2' },
+    { id: '09-midnight-rainpond',   name: 'Midnight Rainpond',   cat: 'Cowok', icon: '🌧️', price: 12, desc: 'Cowok • Hujan tengah malam',         img: 'assets/banners/09-midnight-rainpond.svg?v=2' },
+    { id: '10-crimson-oni',         name: 'Crimson Oni',         cat: 'Cowok', icon: '👹', price: 18, desc: 'Cowok • Topeng oni merah',           img: 'assets/banners/10-crimson-oni.svg?v=2' },
     // 10 Cewek
-    { id: '11-pastel-cloud-pup',    name: 'Pastel Cloud Pup',    cat: 'Cewek', icon: '🐶', price: 20, desc: 'Cewek • Awan pastel & anak anjing',  img: 'assets/banners/11-pastel-cloud-pup.svg?v=2' },
-    { id: '12-crimson-sakura',      name: 'Crimson Sakura',      cat: 'Cewek', icon: '🌸', price: 25, desc: 'Cewek • Kelopak sakura merah',       img: 'assets/banners/12-crimson-sakura.svg?v=2' },
-    { id: '13-starlit-clouds',      name: 'Starlit Clouds',      cat: 'Cewek', icon: '✨', price: 25, desc: 'Cewek • Awan berbintang',            img: 'assets/banners/13-starlit-clouds.svg?v=2' },
-    { id: '14-rainy-lilypond',      name: 'Rainy Lilypond',      cat: 'Cewek', icon: '🪷', price: 25, desc: 'Cewek • Kolam teratai hujan',        img: 'assets/banners/14-rainy-lilypond.svg?v=2' },
-    { id: '15-idol-glowstick',      name: 'Idol Glowstick',      cat: 'Cewek', icon: '🎤', price: 30, desc: 'Cewek • Panggung cahaya idol',       img: 'assets/banners/15-idol-glowstick.svg?v=2' },
-    { id: '16-butterfly-aurora',    name: 'Butterfly Aurora',    cat: 'Cewek', icon: '🦋', price: 30, desc: 'Cewek • Kupu-kupu aurora',           img: 'assets/banners/16-butterfly-aurora.svg?v=2' },
-    { id: '17-rose-gold-velvet',    name: 'Rose Gold Velvet',    cat: 'Cewek', icon: '🌹', price: 35, desc: 'Cewek • Beludru mawar emas',         img: 'assets/banners/17-rose-gold-velvet.svg?v=2' },
-    { id: '18-cotton-candy-sky',    name: 'Cotton Candy Sky',    cat: 'Cewek', icon: '☁️', price: 20, desc: 'Cewek • Langit permen kapas',        img: 'assets/banners/18-cotton-candy-sky.svg?v=2' },
-    { id: '19-crystal-prism',       name: 'Crystal Prism',       cat: 'Cewek', icon: '💎', price: 35, desc: 'Cewek • Prisma kristal berkilau',    img: 'assets/banners/19-crystal-prism.svg?v=2' },
-    { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 25, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg?v=2' }
+    { id: '11-pastel-cloud-pup',    name: 'Pastel Cloud Pup',    cat: 'Cewek', icon: '🐶', price: 8,  desc: 'Cewek • Awan pastel & anak anjing',  img: 'assets/banners/11-pastel-cloud-pup.svg?v=2' },
+    { id: '12-crimson-sakura',      name: 'Crimson Sakura',      cat: 'Cewek', icon: '🌸', price: 12, desc: 'Cewek • Kelopak sakura merah',       img: 'assets/banners/12-crimson-sakura.svg?v=2' },
+    { id: '13-starlit-clouds',      name: 'Starlit Clouds',      cat: 'Cewek', icon: '✨', price: 12, desc: 'Cewek • Awan berbintang',            img: 'assets/banners/13-starlit-clouds.svg?v=2' },
+    { id: '14-rainy-lilypond',      name: 'Rainy Lilypond',      cat: 'Cewek', icon: '🪷', price: 12, desc: 'Cewek • Kolam teratai hujan',        img: 'assets/banners/14-rainy-lilypond.svg?v=2' },
+    { id: '15-idol-glowstick',      name: 'Idol Glowstick',      cat: 'Cewek', icon: '🎤', price: 15, desc: 'Cewek • Panggung cahaya idol',       img: 'assets/banners/15-idol-glowstick.svg?v=2' },
+    { id: '16-butterfly-aurora',    name: 'Butterfly Aurora',    cat: 'Cewek', icon: '🦋', price: 15, desc: 'Cewek • Kupu-kupu aurora',           img: 'assets/banners/16-butterfly-aurora.svg?v=2' },
+    { id: '17-rose-gold-velvet',    name: 'Rose Gold Velvet',    cat: 'Cewek', icon: '🌹', price: 18, desc: 'Cewek • Beludru mawar emas',         img: 'assets/banners/17-rose-gold-velvet.svg?v=2' },
+    { id: '18-cotton-candy-sky',    name: 'Cotton Candy Sky',    cat: 'Cewek', icon: '☁️', price: 8,  desc: 'Cewek • Langit permen kapas',        img: 'assets/banners/18-cotton-candy-sky.svg?v=2' },
+    { id: '19-crystal-prism',       name: 'Crystal Prism',       cat: 'Cewek', icon: '💎', price: 18, desc: 'Cewek • Prisma kristal berkilau',    img: 'assets/banners/19-crystal-prism.svg?v=2' },
+    { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 12, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg?v=2' }
   ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
@@ -310,11 +310,11 @@
     if (card.buffType === 'duel_xp') {
       const duelXp = 5 + s * 4; // ★1=+9 XP .. ★5=+25 XP
       const quizXp = Math.ceil(s / 2) + 1;
-      const diaEvery = s >= 4 ? 4 : BASE_QUIZ_PER_DIAMOND;
+      const diaEvery = s >= 4 ? 2 : BASE_QUIZ_PER_DIAMOND;
       return {
         quizXp, duelXp, packDiscount: s >= 3 ? 1 : 0, diaEvery,
         short: `+${duelXp} XP Duel • +${quizXp} XP Soal`,
-        desc: `Menang Duel mendapat +${duelXp} XP ekstra & +${quizXp} XP tiap soal benar${s >= 4 ? ' (Diamond tiap 4 soal!)' : ''}.`
+        desc: `Menang Duel mendapat +${duelXp} XP ekstra & +${quizXp} XP tiap soal benar${s >= 4 ? ' (Diamond tiap 2 soal!)' : ''}.`
       };
     }
     if (card.buffType === 'epic_mind') {
@@ -322,7 +322,7 @@
       const duelXp = 4 + s * 3;
       const packDiscount = s >= 3 ? 2 : 1;
       return {
-        quizXp, duelXp, packDiscount, diaEvery: s >= 5 ? 4 : BASE_QUIZ_PER_DIAMOND,
+        quizXp, duelXp, packDiscount, diaEvery: s >= 5 ? 2 : BASE_QUIZ_PER_DIAMOND,
         short: `+${quizXp} XP Soal • Diskon -${packDiscount}💎`,
         desc: `Bonus +${quizXp} XP tiap jawaban benar, +${duelXp} XP menang Duel & diskon Gacha -${packDiscount} 💎.`
       };
@@ -331,7 +331,7 @@
     const quizXp = s + 3; // ★1=+4 XP .. ★5=+8 XP
     const duelXp = 10 + s * 4; // ★1=+14 XP .. ★5=+30 XP
     const packDiscount = Math.min(5, s + 1); // ★1=-2 💎 .. ★5=-5 💎
-    const diaEvery = s >= 2 ? 4 : BASE_QUIZ_PER_DIAMOND;
+    const diaEvery = s >= 2 ? 2 : BASE_QUIZ_PER_DIAMOND;
     return {
       quizXp, duelXp, packDiscount, diaEvery,
       short: `+${quizXp} XP • Duel +${duelXp} • -${packDiscount}💎`,
@@ -1274,6 +1274,17 @@
     window.addEventListener('clined:profile-style', onExternalSync);
     window.addEventListener('clined:auth-ready', () => { hydrateFromServer(); setTimeout(onExternalSync, 600); });
     window.addEventListener('clined:view-change', e => { if (e.detail === 'home') setTimeout(maybeStartCosmeticTutorial, 1200); });
+    window.addEventListener('clined:quiz-finished', e => {
+      if (isAdmin()) return;
+      const d = e.detail || {};
+      const validTotal = Number(d.validTotal || 0);
+      const score = Number(d.score || 0);
+      if (validTotal < 10 || score < 5) return;
+      const bonus = validTotal >= 50 && score >= 25 ? 5 : 3;
+      setDia(getDia() + bonus);
+      updateDiaBadges();
+      popDiamondToast(`💎 +${bonus} Diamond Bonus Selesai Kuis!`);
+    });
     window.addEventListener('online', () => { if (cardDirty) pushServerCardState('merge'); else hydrateFromServer(); });
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && cardDirty) pushServerCardState('save', true); });
     window.addEventListener('pagehide', () => { if (cardDirty) pushServerCardState('save', true); });

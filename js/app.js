@@ -1669,6 +1669,7 @@ function finish(reason="complete"){
   $("reviewWrongBtn").style.display=quiz.some(q=>q.id && get(KEY.wrong,[]).some(x=>x.id===q.id))?"block":"none";
   $("reviewQuizBtn").style.display=quiz.length?"block":"none";
   show("result");renderCounts();
+  try{window.dispatchEvent(new CustomEvent('clined:quiz-finished',{detail:{score,validTotal,total,pct,bank:selectedBank}}));}catch{}
   try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
 }
 function formatTime(s){
