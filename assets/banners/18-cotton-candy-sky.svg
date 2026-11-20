@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a18_drift { 0%,100% { transform: translateX(-16px); } 50% { transform: translateX(16px); } }
+        @keyframes a18_sun { 0%,100% { transform: scale(0.92); opacity: 0.8; } 50% { transform: scale(1.12); opacity: 1; } }
+        @keyframes a18_star { 0%,100% { transform: scale(0.55); opacity: 0.4; } 50% { transform: scale(1.4); opacity: 1; } }
+        path[fill*="cc18a"] { animation: a18_drift 3.8s ease-in-out infinite; }
+        circle[cx="576"] { transform-box: fill-box; transform-origin: center; animation: a18_sun 2.6s ease-in-out infinite; }
+        g[filter*="glow18"] polygon { transform-box: fill-box; transform-origin: center; animation: a18_star 1.8s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg18" x1="0" y1="0" x2="1" y2="0">

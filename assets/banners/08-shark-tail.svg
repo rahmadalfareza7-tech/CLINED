@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a08_swish { 0%,100% { transform: rotate(0deg) translateY(0px); } 50% { transform: rotate(-6.5deg) translateY(5px); } }
+        @keyframes a08_glint { 0%,100% { transform: scale(0.5) rotate(0deg); opacity: 0.45; } 50% { transform: scale(1.45) rotate(45deg); opacity: 1; } }
+        g[filter*="sh08"] { transform-box: fill-box; transform-origin: right bottom; animation: a08_swish 2.2s ease-in-out infinite; }
+        polygon[fill="#ffffff"] { transform-box: fill-box; transform-origin: center; animation: a08_glint 1.7s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg08" x1="0" y1="0" x2="1" y2="0">
@@ -44,6 +49,5 @@
     </g>
     <!-- Razor 4-Point Anime Glint on Tail Fin Fork -->
     <polygon points="530.0,38.0 515.7,39.7 514.0,54.0 512.3,39.7 498.0,38.0 512.3,36.3 514.0,22.0 515.7,36.3" fill="#ffffff" opacity="0.96" />
-    
   </g>
 </svg>

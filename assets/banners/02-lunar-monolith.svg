@@ -1,4 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a02_beam { 0%,100% { transform: translateX(-18px); opacity: 0.08; } 50% { transform: translateX(24px); opacity: 0.24; } }
+        @keyframes a02_fog { 0%,100% { transform: translateX(-22px); opacity: 0.16; } 50% { transform: translateX(22px); opacity: 0.36; } }
+        @keyframes a02_star { 0%,100% { opacity: 0.2; transform: scale(0.6); } 50% { opacity: 1; transform: scale(1.4); } }
+        .a02-beam { animation: a02_beam 3.6s ease-in-out infinite; }
+        .a02-fog { animation: a02_fog 4.2s ease-in-out infinite; }
+        .a02-s1 { transform-box: fill-box; transform-origin: center; animation: a02_star 1.8s ease-in-out infinite; }
+        .a02-s2 { transform-box: fill-box; transform-origin: center; animation: a02_star 2.3s ease-in-out infinite -0.8s; }</style>
   <defs>
 
     <linearGradient id="bg02" x1="0" y1="0" x2="1" y2="0">
@@ -40,6 +48,16 @@
     <path d="M 352 120 L 418 82 L 468 98 L 528 68 L 586 92 L 640 72 L 640 120 Z" fill="#131924" opacity="0.9"/>
     <path d="M 396 120 L 458 94 L 512 108 L 574 84 L 640 100 L 640 120 Z" fill="#090d14"/>
     <path d="M 350 104 Q 470 86, 560 98 T 640 92 L 640 120 L 350 120 Z" fill="#8bb2d9" opacity="0.16" filter="url(#blur02)"/>
-    
+
+    <!-- NP_FX_START -->
+<g class="np-fx">
+          <polygon class="a02-beam" points="450,0 535,0 415,120 330,120" fill="#c4e6ff" opacity="0.16"/>
+          <ellipse class="a02-fog" cx="510" cy="110" rx="160" ry="26" fill="#a8ccf0" opacity="0.24"/>
+          <circle class="a02-s1" cx="424" cy="24" r="2.8" fill="#ffffff"/>
+          <circle class="a02-s2" cx="474" cy="48" r="2.4" fill="#d4f0ff"/>
+          <circle class="a02-s1" cx="622" cy="30" r="2.8" fill="#ffffff"/>
+          <circle class="a02-s2" cx="392" cy="54" r="2.2" fill="#c4e6ff"/>
+        </g>
+    <!-- NP_FX_END -->
   </g>
 </svg>

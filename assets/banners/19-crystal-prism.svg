@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a19_float { 0%,100% { transform: translateY(4px); } 50% { transform: translateY(-14px); } }
+        @keyframes a19_sweep { 0% { transform: translateX(-200px); opacity: 0; } 50% { opacity: 0.45; } 100% { transform: translateX(200px); opacity: 0; } }
+        @keyframes a19_star { 0%,100% { transform: scale(0.55) rotate(0deg); opacity: 0.5; } 50% { transform: scale(1.5) rotate(45deg); opacity: 1; } }
+        polygon[points^="456,"], polygon[points^="596,"] { animation: a19_float 2.0s ease-in-out infinite; }
+        .a19-beam { animation: a19_sweep 2.6s ease-in-out infinite; }
+        g[filter*="glow19"] polygon { transform-box: fill-box; transform-origin: center; animation: a19_star 1.8s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg19" x1="0" y1="0" x2="1" y2="0">
@@ -46,6 +53,11 @@
       <polygon points="484.0,42.0 475.8,43.8 474.0,52.0 472.2,43.8 464.0,42.0 472.2,40.2 474.0,32.0 475.8,40.2" fill="#c4f7ff" opacity="0.96" />
       <polygon points="636.0,20.0 627.8,21.8 626.0,30.0 624.2,21.8 616.0,20.0 624.2,18.2 626.0,10.0 627.8,18.2" fill="#ffd6f0" opacity="0.96" />
     </g>
-    
+
+    <!-- NP_FX_START -->
+<g class="np-fx">
+          <polygon class="a19-beam" points="450,0 510,0 440,120 380,120" fill="#d4f7ff" opacity="0.32"/>
+        </g>
+    <!-- NP_FX_END -->
   </g>
 </svg>

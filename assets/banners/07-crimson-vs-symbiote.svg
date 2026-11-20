@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a07_blink { 0%,68%,100% { transform: scaleY(1); } 74% { transform: scaleY(0.18); } 80% { transform: scaleY(1); } 86% { transform: scaleY(0.62); } 94% { transform: scaleY(1); } }
+        @keyframes a07_sym { 0%,100% { transform: translate(0px, 0px) scale(1); } 50% { transform: translate(6px, -3px) scale(1.06); } }
+        @keyframes a07_venomEye { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08, 0.92); } }
+        g[clip-path*="clipL07"] path[fill="#0a080a"], g[clip-path*="clipL07"] path[fill*="lens07"], g[clip-path*="clipL07"] path[stroke="#523f46"], g[clip-path*="clipL07"] path[stroke="#ffffff"] { transform-box: fill-box; transform-origin: center; animation: a07_blink 3.4s ease-in-out infinite; }
+        g[filter*="sym07"] { transform-box: fill-box; transform-origin: left center; animation: a07_sym 2.0s ease-in-out infinite; }
+        g[clip-path*="clipR07"] path[fill="#f5f3fa"] { transform-box: fill-box; transform-origin: center; animation: a07_venomEye 2.4s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg07" x1="0" y1="0" x2="1" y2="0">
@@ -77,6 +84,5 @@
 
     <!-- Sharp Center Split Shadow -->
     <line x1="534" y1="0" x2="534" y2="120" stroke="#050408" stroke-width="3"/>
-    
   </g>
 </svg>

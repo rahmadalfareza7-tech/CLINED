@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a16_flut { 0%,100% { transform: translateY(0px) scale(0.95); } 50% { transform: translateY(-12px) scale(1.08); } }
+        @keyframes a16_aur { 0%,100% { transform: translateX(-22px); opacity: 0.45; } 50% { transform: translateX(22px); opacity: 0.95; } }
+        path[fill*="aur16"] { animation: a16_aur 3.2s ease-in-out infinite; }
+        g[filter*="glow16"] { transform-box: fill-box; transform-origin: center; animation: a16_flut 2.0s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg16" x1="0" y1="0" x2="1" y2="0">

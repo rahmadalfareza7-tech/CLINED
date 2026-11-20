@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a20_hop { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-9px); } }
+        @keyframes a20_drip { 0% { transform: translateY(0px); opacity: 1; } 80% { opacity: 0.9; } 100% { transform: translateY(48px); opacity: 0; } }
+        @keyframes a20_star { 0%,100% { transform: scale(0.55) rotate(0deg); opacity: 0.45; } 50% { transform: scale(1.45) rotate(35deg); opacity: 1; } }
+        g[filter*="sh20"] { animation: a20_hop 1.6s ease-in-out infinite; }
+        .a20-drop { animation: a20_drip 2.0s ease-in infinite; }
+        g[filter*="glow20"] polygon { transform-box: fill-box; transform-origin: center; animation: a20_star 1.8s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg20" x1="0" y1="0" x2="1" y2="0">
@@ -87,6 +94,11 @@
       <polygon points="632.0,82.0 623.8,83.8 622.0,92.0 620.2,83.8 612.0,82.0 620.2,80.2 622.0,72.0 623.8,80.2" fill="#ffffff" opacity="0.96" />
       <polygon points="500.0,92.0 493.6,93.6 492.0,100.0 490.4,93.6 484.0,92.0 490.4,90.4 492.0,84.0 493.6,90.4" fill="#ffe680" opacity="0.94" />
     </g>
-    
+
+    <!-- NP_FX_START -->
+<g class="np-fx">
+          <path class="a20-drop" d="M 600 32 C 605 40, 606 47, 600 49 C 594 47, 595 40, 600 32 Z" fill="#ffe066"/>
+        </g>
+    <!-- NP_FX_END -->
   </g>
 </svg>

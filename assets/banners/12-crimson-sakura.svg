@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a12_fall1 { 0% { transform: translate(40px, -24px) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 85% { opacity: 0.9; } 100% { transform: translate(-110px, 76px) rotate(140deg); opacity: 0; } }
+        @keyframes a12_fall2 { 0% { transform: translate(30px, -20px) rotate(20deg); opacity: 0; } 20% { opacity: 1; } 85% { opacity: 0.9; } 100% { transform: translate(-120px, 84px) rotate(-120deg); opacity: 0; } }
+        .a12-p1 { animation: a12_fall1 3.2s linear infinite; }
+        .a12-p2 { animation: a12_fall2 3.8s linear infinite -1.5s; }
+        .a12-p3 { animation: a12_fall1 2.8s linear infinite -2.2s; }</style>
   <defs>
 
     <linearGradient id="bg12" x1="0" y1="0" x2="1" y2="0">
@@ -43,6 +49,13 @@
     <ellipse cx="446" cy="84" rx="5" ry="2.5" fill="#ffb8d0" transform="rotate(32 446 84)"/>
     <ellipse cx="360" cy="64" rx="4.5" ry="2.3" fill="#ff5280" transform="rotate(-14 360 64)"/>
     <ellipse cx="412" cy="98" rx="4" ry="2.1" fill="#ffd6e6" transform="rotate(18 412 98)"/>
-    
+
+    <!-- NP_FX_START -->
+<g class="np-fx">
+          <g class="a12-p1"><ellipse cx="560" cy="24" rx="6.5" ry="3.2" fill="#ff9eb8"/><ellipse cx="480" cy="18" rx="5.5" ry="2.8" fill="#ffd6e6"/></g>
+          <g class="a12-p2"><ellipse cx="610" cy="34" rx="6" ry="3" fill="#ff6b94"/><ellipse cx="510" cy="28" rx="5" ry="2.6" fill="#ffb8d0"/></g>
+          <g class="a12-p3"><ellipse cx="585" cy="16" rx="5.8" ry="2.8" fill="#ffe6f0"/></g>
+        </g>
+    <!-- NP_FX_END -->
   </g>
 </svg>

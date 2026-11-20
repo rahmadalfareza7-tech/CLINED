@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a15_wave { 0%,100% { transform: rotate(-14deg); } 50% { transform: rotate(14deg); } }
+        @keyframes a15_hop { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-9px); } }
+        @keyframes a15_spot { 0%,100% { transform: rotate(-8deg); opacity: 0.14; } 50% { transform: rotate(8deg); opacity: 0.34; } }
+        g[filter*="glow15"]:first-of-type { transform-box: fill-box; transform-origin: center 78%; animation: a15_wave 0.9s ease-in-out infinite; }
+        g[filter*="sh15"] { animation: a15_hop 0.9s ease-in-out infinite; }
+        polygon[fill="#ff70cc"], polygon[fill="#42ffba"] { transform-box: fill-box; transform-origin: top center; animation: a15_spot 2.2s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg15" x1="0" y1="0" x2="1" y2="0">

@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a13_shoot { 0% { transform: translate(-60px, -26px); opacity: 0; } 15% { opacity: 1; } 50% { transform: translate(95px, 42px); opacity: 0; } 100% { opacity: 0; } }
+        @keyframes a13_cloud { 0%,100% { transform: translateX(-14px); } 50% { transform: translateX(14px); } }
+        @keyframes a13_twink { 0%,100% { transform: scale(0.55); opacity: 0.4; } 50% { transform: scale(1.4); opacity: 1; } }
+        .a13-st { animation: a13_shoot 2.4s ease-out infinite; }
+        path[fill*="cl13a"] { animation: a13_cloud 4.2s ease-in-out infinite; }
+        g[filter*="glow13"] polygon { transform-box: fill-box; transform-origin: center; animation: a13_twink 1.8s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg13" x1="0" y1="0" x2="1" y2="0">
@@ -45,6 +52,11 @@
     <!-- Front Moonlit Highlight Clouds -->
     <path d="M 424 120 C 440 98, 474 92, 496 104 C 518 88, 560 92, 578 110 C 598 96, 624 92, 640 82 L 640 120 Z" fill="url(#cl13a)"/>
     <path d="M 438 104 C 456 94, 478 94, 494 104 M 526 96 C 544 90, 562 94, 576 106" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.82"/>
-    
+
+    <!-- NP_FX_START -->
+<g class="np-fx">
+          <line class="a13-st" x1="406" y1="18" x2="474" y2="48" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+        </g>
+    <!-- NP_FX_END -->
   </g>
 </svg>

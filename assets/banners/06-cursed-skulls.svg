@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a06_flame { 0%,100% { transform: translateY(4px) scaleY(0.92); opacity: 0.72; } 50% { transform: translateY(-12px) scaleY(1.16); opacity: 1; } }
+        @keyframes a06_wisp { 0% { transform: translateY(16px) scale(0.8); opacity: 0; } 30% { opacity: 0.95; } 100% { transform: translateY(-48px) scale(1.25); opacity: 0; } }
+        g[filter*="fireWarp06"] { transform-box: fill-box; transform-origin: bottom center; animation: a06_flame 1.6s ease-in-out infinite; }
+        .a06-w1 { animation: a06_wisp 2.0s ease-out infinite; }
+        .a06-w2 { animation: a06_wisp 2.4s ease-out infinite -1.0s; }</style>
   <defs>
 
     <linearGradient id="bg06" x1="0" y1="0" x2="1" y2="0">
@@ -187,6 +193,19 @@
       <path d="M 522 66 C 504 42, 478 36, 454 14 C 486 20, 514 34, 536 58 Z" fill="#8cf8ff" opacity="0.88"/>
       <path d="M 604 120 C 612 96, 626 84, 640 78 L 640 120 Z" fill="url(#sf06)" opacity="0.9"/>
     </g>
-    
+
+    <!-- NP_FX_START -->
+<g class="np-fx">
+          <g class="a06-w1">
+            <circle cx="448" cy="86" r="4" fill="#80f8ff"/>
+            <circle cx="526" cy="72" r="4.5" fill="#d6ffff"/>
+            <circle cx="604" cy="80" r="3.8" fill="#4ee8ff"/>
+          </g>
+          <g class="a06-w2">
+            <circle cx="486" cy="96" r="3.5" fill="#5cf2ff"/>
+            <circle cx="566" cy="66" r="4.2" fill="#b8fcff"/>
+          </g>
+        </g>
+    <!-- NP_FX_END -->
   </g>
 </svg>

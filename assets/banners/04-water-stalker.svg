@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  
+  <style class="np-anim">@keyframes a04_submerge { 0%,100% { transform: translateY(-5px); } 50% { transform: translateY(11px); } }
+        @keyframes a04_wave1 { 0%,100% { transform: translateX(-14px); opacity: 0.9; } 50% { transform: translateX(14px); opacity: 0.45; } }
+        @keyframes a04_wave2 { 0%,100% { transform: translateX(14px); opacity: 0.5; } 50% { transform: translateX(-14px); opacity: 0.95; } }
+        g[filter*="ink04"] { animation: a04_submerge 3.2s ease-in-out infinite; }
+        .a04-w1 { animation: a04_wave1 2.2s ease-in-out infinite; }
+        .a04-w2 { animation: a04_wave2 2.6s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="bg04" x1="0" y1="0" x2="1" y2="0">
@@ -61,6 +68,12 @@
       <path d="M 462 106 C 504 102, 544 108, 588 105 C 612 104, 628 101, 638 104" fill="none" stroke="#040507" stroke-width="3"/>
       <path d="M 476 114 C 518 110, 566 115, 626 111" fill="none" stroke="#dce0ea" stroke-width="2.2" stroke-linecap="round" opacity="0.75"/>
     </g>
-    
+
+    <!-- NP_FX_START -->
+<g class="np-fx" fill="none" stroke="#ffffff" stroke-linecap="round">
+          <path class="a04-w1" d="M 420 92 Q 490 85, 556 92 T 640 88" stroke-width="2.5" opacity="0.78"/>
+          <path class="a04-w2" d="M 446 106 Q 520 100, 588 106 T 640 102" stroke-width="2.2" opacity="0.65"/>
+        </g>
+    <!-- NP_FX_END -->
   </g>
 </svg>
