@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="css/onboarding.css?v=4">
 <link rel="stylesheet" href="css/social.css?v=15">
 <link rel="stylesheet" href="css/desktop.css?v=7">
-<link rel="stylesheet" href="css/home-ergonomic.css?v=12">
+<link rel="stylesheet" href="css/home-ergonomic.css?v=13">
 <link rel="stylesheet" href="css/top-notify.css?v=3">
 <link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=15">
 </head>
@@ -396,7 +396,7 @@
     <div><div class="eyebrow">UAB • BLOK KEDKEL</div><h2>BLOK KEDKEL</h2><p>Clinical Case Bank tersedia di perangkat ini.</p></div>
   </div>
   
-  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://app.notion.com/p/MUSKULOSKELETAL-20e6dad3e9468010acd0e9083337e13e?pvs=39" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI">MATERI</a></div>
+  <div class="materi-section"><a class="materi-button" data-external-material="1" href="https://drive.google.com/drive/folders/178ZCkcMlcOAf0IqChOeEdiE3ci41HsV9" target="_blank" rel="noopener noreferrer" aria-label="Buka MATERI PPT">MATERI PPT</a></div>
   <div class="materi-section resep-kedkel-section"><button class="materi-button resep-kedkel-button" id="openResepKedkel" type="button" aria-label="Buka Latihan Resep Farmakologi">✍️ LATIHAN RESEP &amp; PRAKTIKUM FARMAKOLOGI</button></div>
 <div class="card nested-card bank-card">
     <div class="section-title">📚 Clinical Case Bank</div>
@@ -642,6 +642,7 @@
       <div class="question-nav-wrap" id="questionNavWrap"><button class="question-nav-toggle" id="questionNavToggle" aria-label="Buka atau tutup navigasi soal">☷ <span class="nav-label">Navigasi soal</span><span>⌄</span></button><div id="questionNav" class="question-nav" hidden></div></div>
     </div>
     <div class="question" id="question">Memuat soal…</div>
+    <div id="quizMateriBar" class="quiz-materi-bar" hidden></div>
     <div class="answers" id="answers"></div>
     <div class="explain" id="explain">
       <div id="explainText"></div>
@@ -823,6 +824,7 @@
       <input id="librarySearch" class="library-search" type="search" placeholder="Cari diagnosis, obat, anatomi, gejala…" autocomplete="off">
       <select id="libraryBank" class="library-select" aria-label="Bank soal">
         <option value="all">Semua bank</option>
+        <option value="kedkel-2026-tryout-1">TRY OUT 1 KEDKEL by Reza</option>
         <option value="utama">SSP GASTER 2023</option>
         <option value="pulmonis">SSP PULMONIS 2022</option>
         <option value="arsip2021">SSP 2021</option>
@@ -1079,7 +1081,8 @@
 <script src="js/photo-compress.js?v=2"></script>
 <script src="js/online-sync.js?v=8"></script>
 <script src="js/ability-classifier.js?v=1"></script>
-<script src="js/app.js?v=static-banks-v40"></script>
+<script src="js/kedkel-2026-materi.js?v=1"></script>
+<script src="js/app.js?v=static-banks-v41"></script>
 <script src="js/auth-gate.js?v=2"></script>
 <script src="js/content-manager.js?v=25"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v3"></script>
@@ -1174,7 +1177,7 @@
 </script>
 
 <script src="js/card-collection.js?v=23"></script>
-<script src="js/latihan-materi.js?v=18"></script>
+<script src="js/latihan-materi.js?v=19"></script>
 <script src="js/qcomments.js?v=4"></script>
 <script src="js/learning-features.js?v=6"></script>
 <script src="js/study-plus.js?v=10"></script>

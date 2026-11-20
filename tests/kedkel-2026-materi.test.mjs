@@ -1,0 +1,66 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
+
+const bank = JSON.parse(readFileSync(new URL('../seed-data/banks/kedkel-2026-tryout-1.json', import.meta.url), 'utf8'));
+const manifest = JSON.parse(readFileSync(new URL('../seed-data/manifest.json', import.meta.url), 'utf8'));
+const materiCode = readFileSync(new URL('../js/kedkel-2026-materi.js', import.meta.url), 'utf8');
+
+function loadModule() {
+  const ctx = { window: {}, document: { getElementById: () => null, addEventListener: () => {} } };
+  vm.runInNewContext(materiCode, ctx);
+  return ctx.window.CLINED_KEDKEL_2026_MATERI;
+}
+
+test('seed-data/manifest.json mendaftarkan TRY OUT 1 KEDKEL by Reza (100 soal)', () => {
+  const entry = manifest.banks.find(b => b.id === 'kedkel-2026-tryout-1');
+  assert.ok(entry);
+  assert.equal(entry.name, 'TRY OUT 1 KEDKEL by Reza');
+  assert.equal(entry.block, 'KEDKEL');
+  assert.equal(entry.count, 100);
+});
+
+test('100 soal Try Out Kedkel 2026 terpetakan lengkap ke 31 materi PPT Google Drive', () => {
+  assert.equal(bank.length, 100);
+  const mod = loadModule();
+  assert.equal(mod.TOPICS.length, 31);
+  assert.equal(mod.TOPICS.reduce((s, t) => s + t.count, 0), 100);
+  assert.equal(mod.TOPICS.reduce((s, t) => s + t.weightPct, 0), 100);
+
+  const seenNos = new Set();
+  for (const q of bank) {
+    assert.ok(q.no >= 1 && q.no <= 100);
+    assert.equal(q.source_id, q.no);
+    assert.ok(!seenNos.has(q.no));
+    seenNos.add(q.no);
+    assert.equal(q.opsi.length, 5);
+    assert.ok(Number.isInteger(q.jawabanBenar) && q.jawabanBenar >= 0 && q.jawabanBenar < 5);
+    assert.ok(q.pembahasan && q.pembahasan.length > 20);
+    assert.equal(q.pembahasanPilihan.length, 5);
+    assert.ok(q.materiNo >= 1 && q.materiNo <= 31);
+    assert.match(q.materiPptUrl, /^https:\/\/(drive|docs)\.google\.com\//);
+    assert.match(q.materiFolderUrl, /^https:\/\/drive\.google\.com\/drive\/folders\//);
+    assert.ok(Array.isArray(q.materiFiles) && q.materiFiles.length >= 1);
+
+    const resolved = mod.forQuestion({ id: q.id, no: q.no, bank: 'kedkel-2026-tryout-1' });
+    assert.equal(resolved.materiNo, q.materiNo);
+    assert.equal(resolved.materiPptUrl, q.materiPptUrl);
+    assert.ok(mod.renderPptBarHTML(q, 'quiz').includes('Materi PPT:'));
+    assert.ok(mod.renderPptBarHTML(q, 'explain').includes(q.materiPptUrl.replace(/&/g, '&amp;')));
+  }
+  assert.equal(seenNos.size, 100);
+});
+
+test('buildLatihanMateriPacks membangun 31 paket materi KEDKEL berjumlah total 100 soal', () => {
+  const mod = loadModule();
+  const packs = mod.buildLatihanMateriPacks(bank);
+  assert.equal(packs.length, 31);
+  const total = packs.reduce((n, p) => n + p.questions.length, 0);
+  assert.equal(total, 100);
+  for (const p of packs) {
+    assert.equal(p.block, 'KEDKEL');
+    assert.ok(p.materiPptUrl);
+    assert.ok(p.questions.every(q => Array.isArray(q.pembahasanPilihan) && q.pembahasanPilihan.length === 5));
+  }
+});

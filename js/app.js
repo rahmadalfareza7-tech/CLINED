@@ -118,7 +118,7 @@ let banksLoadPromise=null;
 let staticBankManifest=null;
 // Embedded metadata is a deliberate fallback: the question bank must remain visible
 // even if a hosting rewrite/CDN temporarily serves the manifest incorrectly.
-const STATIC_BANK_META=[{"id":"endo-2019","name":"ENDO 2019","block":"ENDOKRINE","version":2,"count":100},{"id":"ginjal-2018","name":"GINJAL 2018","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2019","name":"GINJAL 2019","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2020","name":"GINJAL 2020","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2021","name":"GINJAL 2021","block":"GINJAL","version":3,"count":71},{"id":"ginjal-2022","name":"GINJAL 2022","block":"GINJAL","version":2,"count":97},{"id":"kedkel-2020","name":"KEDKEL 2020","block":"KEDKEL","version":2,"count":123},{"id":"kedkel-2021","name":"KEDKEL 2021","block":"KEDKEL","version":2,"count":100},{"id":"kedkel-2022","name":"KEDKEL 2022","block":"KEDKEL","version":2,"count":92},{"id":"kedkom-2020","name":"KEDKOM 2020","block":"KEDKOM","version":2,"count":157},{"id":"kedkom-2021","name":"KEDKOM 2021","block":"KEDKOM","version":2,"count":99}];
+const STATIC_BANK_META=[{"id":"kedkel-2026-tryout-1","name":"TRY OUT 1 KEDKEL by Reza","block":"KEDKEL","version":2,"count":100},{"id":"endo-2019","name":"ENDO 2019","block":"ENDOKRINE","version":2,"count":100},{"id":"ginjal-2018","name":"GINJAL 2018","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2019","name":"GINJAL 2019","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2020","name":"GINJAL 2020","block":"GINJAL","version":2,"count":100},{"id":"ginjal-2021","name":"GINJAL 2021","block":"GINJAL","version":3,"count":71},{"id":"ginjal-2022","name":"GINJAL 2022","block":"GINJAL","version":2,"count":97},{"id":"kedkel-2020","name":"KEDKEL 2020","block":"KEDKEL","version":2,"count":123},{"id":"kedkel-2021","name":"KEDKEL 2021","block":"KEDKEL","version":2,"count":100},{"id":"kedkel-2022","name":"KEDKEL 2022","block":"KEDKEL","version":2,"count":92},{"id":"kedkom-2020","name":"KEDKOM 2020","block":"KEDKOM","version":2,"count":157},{"id":"kedkom-2021","name":"KEDKOM 2021","block":"KEDKOM","version":2,"count":99}];
 function seedStaticBankCatalog(list){
   for(const b of (list||[])){
     const id=String(b.id);
@@ -198,15 +198,18 @@ async function ensureServerBankLoaded(id){
   // Stable baseline: load the question JSON directly from the deployment, not Neon.
   // If admin has published a newer server version, server becomes the source of truth.
   if(bank.staticUrl && Number(bank.serverVersion||0)<=Number(bank.staticVersion||1)){
-    const r=await fetch(bank.staticUrl,{credentials:'same-origin',cache:'no-store'});
-    if(!r.ok) throw Error(`Bank ${bank.name} tidak dapat dimuat.`);
-    const questions=await r.json();
-    bank.data=Array.isArray(questions)?questions:[];
-    bank.count=bank.data.length||bank.count;
-    bank.version=Number(bank.staticVersion||1);
-    bank.loaded=true;
-    bank.source='static';
-    return true;
+    try{
+      const r=await fetch(bank.staticUrl,{credentials:'same-origin',cache:'no-store'});
+      if(r.ok){
+        const questions=await r.json();
+        bank.data=Array.isArray(questions)?questions:[];
+        bank.count=bank.data.length||bank.count;
+        bank.version=Number(bank.staticVersion||1);
+        bank.loaded=true;
+        bank.source='static';
+        return true;
+      }
+    }catch{}
   }
   const r=await fetch(`/api/banks/${encodeURIComponent(key)}`,{credentials:'same-origin',cache:'default'});
   if(!r.ok) throw Error(`Bank ${bank.name} tidak dapat dimuat.`);
@@ -660,6 +663,30 @@ function coreExplanation(q){
   return fromOptions || direct;
 }
 
+function attachQuestionMateriMeta(target, raw, bankId){
+  const merged = window.CLINED_KEDKEL_2026_MATERI?.forQuestion?.({ ...raw, bank: bankId || raw?.bank || target?.bank });
+  if(merged){
+    target.materiNo=merged.materiNo;
+    target.materi=merged.materi;
+    target.materiTitle=merged.materiTitle;
+    target.materiDosen=merged.materiDosen;
+    target.materiPptName=merged.materiPptName;
+    target.materiPptUrl=merged.materiPptUrl;
+    target.materiFolderUrl=merged.materiFolderUrl;
+    target.materiFiles=merged.materiFiles;
+  }else if(raw?.materiPptUrl){
+    target.materiNo=raw.materiNo||null;
+    target.materi=raw.materi||raw.materiTitle||'';
+    target.materiTitle=raw.materiTitle||raw.materi||'';
+    target.materiDosen=raw.materiDosen||'';
+    target.materiPptName=raw.materiPptName||'';
+    target.materiPptUrl=raw.materiPptUrl;
+    target.materiFolderUrl=raw.materiFolderUrl||'';
+    target.materiFiles=Array.isArray(raw.materiFiles)?raw.materiFiles:[];
+  }
+  return target;
+}
+
 function buildQuiz(count){
   const bank=currentBank();
   return shuffle(bank).slice(0,count).map((q)=>{
@@ -667,15 +694,16 @@ function buildQuiz(count){
     const id=qid(selectedBank,originalIndex,q);
     const order=shuffle(q.opsi.map((_,i)=>i));
     const correct=q.jawabanBenar==null?null:order.indexOf(q.jawabanBenar);
-    return {
+    return attachQuestionMateriMeta({
       id, bank:selectedBank, source:q.source||bankName(), no:q.no||originalIndex+1,
+      source_id:q.source_id,
       origIndex:originalIndex, order,
       soal:q.soal, opsi:order.map(i=>q.opsi[i]), jawabanBenar:correct,
       pembahasan:coreExplanation(q),
       pembahasanPilihan:order.map(i=>optionExplanation(q,i)||"Belum ada pembahasan khusus untuk opsi ini."),
       catatanKlinis:q.catatanKlinis||"", incomplete:!!q.incomplete,
       abilityProfile:questionAbilityProfile(q)
-    };
+    }, q, selectedBank);
   });
 }
 
@@ -785,16 +813,16 @@ async function resumeBankSession(bankId){
     const correct=raw.jawabanBenar==null?null:order.indexOf(raw.jawabanBenar);
     const prevBank=selectedBank;
     selectedBank=bankId;
-    const item={
+    const item=attachQuestionMateriMeta({
       id:qid(bankId,entry.idx,raw), bank:bankId, source:raw.source||BANKS[bankId]?.name||bankId,
-      no:raw.no||entry.idx+1, origIndex:entry.idx, order,
+      no:raw.no||entry.idx+1, source_id:raw.source_id, origIndex:entry.idx, order,
       soal:raw.soal, opsi:order.map(k=>raw.opsi[k]), jawabanBenar:correct,
       pembahasan:coreExplanation(raw),
       pembahasanPilihan:order.map(k=>optionExplanation(raw,k)||"Belum ada pembahasan khusus untuk opsi ini."),
       catatanKlinis:raw.catatanKlinis||"", incomplete:!!raw.incomplete,
       abilityProfile:questionAbilityProfile(raw),
       selectedAnswer:it.a==null?null:Number(it.a)
-    };
+    }, raw, bankId);
     selectedBank=prevBank;
     return item;
   }).filter(Boolean);
@@ -941,11 +969,13 @@ function renderEmptyBlockControls(key,blockOverride){
     const count=Number(b.count||b.data?.length||0);
     const sess=getBankSession(id);
     const meta=bankProgressMetaHTML(id,count);
-    return `<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><div class="bank-choice-main"><span class="bank-name">${esc(b.name)}</span>${meta}</div><span class="bank-desc">${count} soal</span><i>${id===selectedBank?'✓':''}</i></button><div class="clinical-bank-actions">${sess?`<button type="button" class="clinical-bank-resume" data-resume-bank="${esc(id)}">▶ Lanjutkan</button>`:''}<button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div></div>`;
+    const hasBobot=!!window.CLINED_KEDKEL_2026_MATERI?.hasBobotForBank?.(id);
+    return `<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><div class="bank-choice-main"><span class="bank-name">${esc(b.name)}</span>${meta}</div><span class="bank-desc">${count} soal</span><i>${id===selectedBank?'✓':''}</i></button><div class="clinical-bank-actions">${sess?`<button type="button" class="clinical-bank-resume" data-resume-bank="${esc(id)}">▶ Lanjutkan</button>`:''}${hasBobot?`<button type="button" class="clinical-bank-bobot" data-bobot-bank="${esc(id)}">📊 Deskripsi Bobot Soal</button>`:''}<button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div></div>`;
   };
   if(inline)inline.innerHTML=`<span class="empty-bank-icon">🩺</span><div><b>${esc(entries.length===1?bank.name:`${entries.length} bank tersedia`)}</b><small class="bank-picker-label">Pilih bank soal yang ingin dikerjakan:</small><div class="bank-picker" role="group" aria-label="Pilih bank soal">${entries.map(([id,b])=>bankRowHTML(id,b)).join('')}</div></div>`;
   inline?.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{selectedBank=btn.dataset.blockBank;selectedCount=10;renderEmptyBlockControls(key);});
   inline?.querySelectorAll('[data-resume-bank]').forEach(btn=>btn.onclick=()=>resumeBankSession(btn.dataset.resumeBank));
+  inline?.querySelectorAll('[data-bobot-bank]').forEach(btn=>btn.onclick=()=>window.CLINED_KEDKEL_2026_MATERI?.openBobotModal?.(btn.dataset.bobotBank));
   countBox.innerHTML=unique.map(n=>`<button type="button" class="choice ${selectedCount===n?'selected':''}" data-block-count="${n}">${n===max?'Semua':n}<small>${n===max?` (${max})`:' soal'}</small></button>`).join('');
   countBox.querySelectorAll('[data-block-count]').forEach(btn=>btn.onclick=()=>{selectedCount=Number(btn.dataset.blockCount);renderEmptyBlockControls(key);});
   const modes=[["study","📖Belajar","Pembahasan langsung setelah menjawab"],["exam","📝Ujian","Pembahasan dibuka setelah selesai"]];
@@ -1006,10 +1036,12 @@ function renderAvailableBlockControls(key,blockOverride,pageId){
       const count=Number(b.count||b.data?.length||0);
       const sess=getBankSession(id);
       const meta=bankProgressMetaHTML(id,count);
-      return `<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><div class="bank-choice-main"><span class="bank-name">${esc(b.name)}</span>${meta}</div><span class="bank-desc">${count} soal</span><i>${id===selectedBank?'✓':''}</i></button><div class="clinical-bank-actions">${sess?`<button type="button" class="clinical-bank-resume" data-resume-bank="${esc(id)}">▶ Lanjutkan</button>`:''}<button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div></div>`;
+      const hasBobot=!!window.CLINED_KEDKEL_2026_MATERI?.hasBobotForBank?.(id);
+      return `<div class="clinical-bank-row"><button type="button" class="bank-choice block-bank-choice ${id===selectedBank?'selected':''}" data-block-bank="${esc(id)}" aria-pressed="${id===selectedBank}"><div class="bank-choice-main"><span class="bank-name">${esc(b.name)}</span>${meta}</div><span class="bank-desc">${count} soal</span><i>${id===selectedBank?'✓':''}</i></button><div class="clinical-bank-actions">${sess?`<button type="button" class="clinical-bank-resume" data-resume-bank="${esc(id)}">▶ Lanjutkan</button>`:''}${hasBobot?`<button type="button" class="clinical-bank-bobot" data-bobot-bank="${esc(id)}">📊 Deskripsi Bobot Soal</button>`:''}<button type="button" class="clinical-bank-review" data-review-bank="${esc(id)}">Review Soal</button></div></div>`;
     }).join('')}</div></div>`;
     inline.querySelectorAll('[data-block-bank]').forEach(btn=>btn.onclick=()=>{if(btn.dataset.blockBank!==selectedBank){selectedBank=btn.dataset.blockBank;selectedCount=0;renderAvailableBlockControls(key,block,pageId);}});
     inline.querySelectorAll('[data-resume-bank]').forEach(btn=>btn.onclick=()=>resumeBankSession(btn.dataset.resumeBank));
+    inline.querySelectorAll('[data-bobot-bank]').forEach(btn=>btn.onclick=()=>window.CLINED_KEDKEL_2026_MATERI?.openBobotModal?.(btn.dataset.bobotBank));
     inline.querySelectorAll('[data-review-bank]').forEach(btn=>btn.onclick=async()=>{
       const bankId=btn.dataset.reviewBank;
       try{
@@ -1201,6 +1233,12 @@ function renderQuestion(resume=false){
   $("streakLive").textContent=streak>1?`🔥 ${streak} beruntun`:"";
   setProgress($("progress"),(pos+1)/quiz.length*100);
   $("question").innerHTML=`<div>${esc(q.soal)}</div>`;
+  const materiBar=$("quizMateriBar");
+  if(materiBar){
+    const barHTML=window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(q,'quiz')||'';
+    materiBar.innerHTML=barHTML;
+    materiBar.hidden=!barHTML;
+  }
 
   $("answers").innerHTML=q.opsi.map((o,i)=>`<button class="answer" data-i="${i}">
     <span class="answer-letter">${letter(i)}</span><span>${esc(o)}</span>
@@ -1282,9 +1320,11 @@ function allExplanations(q){
   }
   const negative=isNegativeStem(q.soal);
   const keyLabel=negative?"✓KUNCI—PERNYATAAN SALAH":"✓KUNCI—JAWABAN BENAR";
+  const pptExplain=window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(q,'explain')||'';
   return `<div class="explain-title">Pembahasan semua pilihan</div>
     <div class="main-explain"><b>🎯 Konsep inti:</b> ${esc(q.pembahasan||"Tidak ada pembahasan khusus.")}</div>`+
     (q.catatanKlinis?`<div class="clinical-note"><b>🩺 Catatan klinis:</b> ${esc(q.catatanKlinis)}</div>`:"")+
+    pptExplain+
     q.opsi.map((o,i)=>{
       const good=i===q.jawabanBenar;
       let detail=(q.pembahasanPilihan&&q.pembahasanPilihan[i])||"";
@@ -1545,7 +1585,7 @@ function recordWrong(q){
   const w=get(KEY.wrong,[]);
   const idx=w.findIndex(x=>x.id===q.id);
   if(idx>=0){w[idx].wrong++;w[idx].lastWrong=new Date().toISOString();w[idx].ok=0;delete w[idx].mastered;}
-  else w.push({id:q.id,bank:q.bank||selectedBank,wrong:1,lastWrong:new Date().toISOString(),soal:q.soal,opsi:q.opsi,jawabanBenar:q.jawabanBenar,pembahasan:q.pembahasan,pembahasanPilihan:q.pembahasanPilihan,catatanKlinis:q.catatanKlinis});
+  else w.push(attachQuestionMateriMeta({id:q.id,bank:q.bank||selectedBank,no:q.no,source_id:q.source_id,wrong:1,lastWrong:new Date().toISOString(),soal:q.soal,opsi:q.opsi,jawabanBenar:q.jawabanBenar,pembahasan:q.pembahasan,pembahasanPilihan:q.pembahasanPilihan,catatanKlinis:q.catatanKlinis}, q, q.bank||selectedBank));
   set(KEY.wrong,w);
 }
 /* Jawaban benar pada soal yang pernah salah: 2 benar berturut-turut = dianggap dikuasai (tetap tersimpan, tidak ikut Smart Review). */
@@ -1577,10 +1617,12 @@ function reviewStatus(q){
 function reviewExplainHTML(q,st){
   const negative=isNegativeStem(q.soal),selected=q.selectedAnswer,key=q.jawabanBenar;
   const title=st==='ok'?'✅ Benar!':st==='bad'?'❌ Kurang tepat':st==='skip'?'⏭️ Belum dijawab':'ℹ️ Pembahasan';
+  const pptExplain=window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(q,'explain')||'';
   return `<div class="explain ml-explain">
     <div class="explain-title ${st}">${title}</div>
     ${q.pembahasan?`<div class="main-explain"><b>🎯 Konsep inti:</b> ${esc(q.pembahasan)}</div>`:''}
     ${q.catatanKlinis?`<div class="clinical-note"><b>🩺 Catatan klinis:</b> ${esc(q.catatanKlinis)}</div>`:''}
+    ${pptExplain}
     ${q.opsi.map((o,i)=>{
       const isKey=i===key,truth=negative?(isKey?'SALAH':'BENAR'):(isKey?'BENAR':'SALAH');
       const txt=stripTruthLabel(q.pembahasanPilihan?.[i]||'')||'Belum ada pembahasan khusus untuk opsi ini.';
@@ -1641,6 +1683,7 @@ function renderReview(filter){
       const coreText=coreForReview(q);
       const hasGeneral=!!coreText;
       const hasClinical=String(q.catatanKlinis||"").trim();
+      const pptExplain=window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.({ ...q, bank: bankId },'explain')||'';
       const hasOptionDetails=opts.some((_,i)=>String(detailFor(q,i)||"").trim());
 
       return `<article class="card ml-rv ${validKey?'ml-rv-study':'ml-rv-nokey'}">
@@ -1667,9 +1710,10 @@ function renderReview(filter){
           }).join('')}
         </div>
 
-        ${hasGeneral||hasClinical?`<section class="explain ml-explain">
+        ${hasGeneral||hasClinical||pptExplain?`<section class="explain ml-explain">
           ${hasGeneral?`<div class="main-explain"><b>Konsep inti</b><div>${esc(coreText)}</div></div>`:''}
           ${hasClinical?`<div class="clinical-note"><b>Catatan klinis</b><div>${esc(q.catatanKlinis)}</div></div>`:''}
+          ${pptExplain}
         </section>`:''}
         <details class="qcomments-details" data-qkey="${esc(window.CLINED_QC?.keyOf(bankId, q.id || `${bankId}-${q.no||idx+1}`) || '')}">
           <summary>Diskusi soal</summary>
@@ -1875,8 +1919,8 @@ function renderAnalytics(){
 $("analyticsBtn").onclick=()=>{renderAnalytics();show("analytics")};
 
 function wrongToQuiz(q){
-  return {id:q.id,bank:q.bank||selectedBank,source:BANKS[q.bank]?.name||q.bank,no:q.no,soal:q.soal,opsi:q.opsi,
-    jawabanBenar:q.jawabanBenar,pembahasan:q.pembahasan,pembahasanPilihan:q.pembahasanPilihan||[],catatanKlinis:q.catatanKlinis||"",incomplete:false,selectedAnswer:null};
+  return attachQuestionMateriMeta({id:q.id,bank:q.bank||selectedBank,source:BANKS[q.bank]?.name||q.bank,no:q.no,source_id:q.source_id,soal:q.soal,opsi:q.opsi,
+    jawabanBenar:q.jawabanBenar,pembahasan:q.pembahasan,pembahasanPilihan:q.pembahasanPilihan||[],catatanKlinis:q.catatanKlinis||"",incomplete:false,selectedAnswer:null}, q, q.bank||selectedBank);
 }
 function startCustomQuiz(list,{shuffleList=true,limit=20}={}){
   const base=(list||[]).filter(q=>q&&q.jawabanBenar!=null&&Array.isArray(q.opsi));
@@ -1969,10 +2013,10 @@ function renderDailyMission(){
 function rawToQuiz(bankId,idx){
   const bank=BANKS[bankId]?.data||[], q=bank[idx]; if(!q)return null;
   const order=shuffle(q.opsi.map((_,i)=>i));
-  return {id:qid(bankId,idx,q),bank:bankId,source:q.source||BANKS[bankId].name,no:q.no||idx+1,soal:q.soal,
+  return attachQuestionMateriMeta({id:qid(bankId,idx,q),bank:bankId,source:q.source||BANKS[bankId].name,no:q.no||idx+1,source_id:q.source_id,soal:q.soal,
     opsi:order.map(i=>q.opsi[i]),jawabanBenar:q.jawabanBenar==null?null:order.indexOf(q.jawabanBenar),
     pembahasan:coreExplanation(q),pembahasanPilihan:order.map(i=>optionExplanation(q,i)||"Belum ada pembahasan khusus untuk opsi ini."),
-    catatanKlinis:q.catatanKlinis||"",incomplete:!!q.incomplete,selectedAnswer:null,_order:order,rid:q.id};
+    catatanKlinis:q.catatanKlinis||"",incomplete:!!q.incomplete,selectedAnswer:null,_order:order,rid:q.id}, q, bankId);
 }
 function resolveQuestionRef(id){
   const raw=String(id||"");
@@ -2170,6 +2214,7 @@ async function renderLibrary(){
           <div class="library-answer">
             <b>Pembahasan</b>
             <p>${esc(q.pembahasan || q.catatan || "Belum ada pembahasan khusus.")}</p>
+            ${window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(x.type === "bank" ? { ...q, bank: x.bankId } : q, "explain") || ""}
           </div>
         </details>
         ${action}
@@ -2613,6 +2658,7 @@ const CLINED_UAB_BLOCKS=[
 const CLINED_MATERIAL_URLS={
   'GINJAL':'https://drive.google.com/drive/folders/1kLKbjFQ4Gxk3GT64FTH-CXFmuK8MrWD2?usp=drive_link',
   'KEDKOM':'https://drive.google.com/drive/folders/19natRdSWTwk3ms0FbGlQA8Tmnv2YgwJE?usp=drive_link',
+  'KEDKEL':'https://drive.google.com/drive/folders/178ZCkcMlcOAf0IqChOeEdiE3ci41HsV9',
   'PANCA INDRA':'https://app.notion.com/p/PANCA-INDRA-3846dad3e946802d8f4ad7f4c6dc042f?source=copy_link',
   'MUSKULOSKELETAL':'https://app.notion.com/p/MUSKULOSKELETAL-20e6dad3e9468010acd0e9083337e13e?pvs=39',
   'RESPIRATORY':'https://app.notion.com/p/RESPIRATORY-2a16dad3e94680e6824fd1aa0e6b4ee2?pvs=39',

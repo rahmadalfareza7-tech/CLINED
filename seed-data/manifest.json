@@ -62,6 +62,16 @@
       "sourceFile": "GINJAL 2022.json"
     },
     {
+      "id": "kedkel-2026-tryout-1",
+      "name": "TRY OUT 1 KEDKEL by Reza",
+      "block": "KEDKEL",
+      "version": 2,
+      "schema": "1.0",
+      "count": 100,
+      "dataUrl": "./banks/kedkel-2026-tryout-1.json",
+      "sourceFile": "tryout_blok_kedokteran_keluarga_2026_100_soal (1).json"
+    },
+    {
       "id": "kedkel-2018",
       "name": "KEDKEL 2018",
       "block": "KEDKEL",

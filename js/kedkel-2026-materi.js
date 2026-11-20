@@ -1,0 +1,1072 @@
+/* Data materi PPT Google Drive & Deskripsi Bobot Soal untuk TRY OUT 1 KEDKEL by Reza (BLOK KEDKEL 2026) */
+(() => {
+  'use strict';
+
+  const BANK_ID = 'kedkel-2026-tryout-1';
+  const BANK_NAME = 'TRY OUT 1 KEDKEL by Reza';
+  const DRIVE_FOLDER_URL = 'https://drive.google.com/drive/folders/178ZCkcMlcOAf0IqChOeEdiE3ci41HsV9';
+  const TOTAL_QUESTIONS = 100;
+
+  const TOPICS = [
+  {
+    "no": 1,
+    "folderId": "14KHpFqB5PKQG7F6z95yuuYNWZbsGVx8r",
+    "folderName": "01 Deteksi Dini Gangguan Jiwa & Bunuh Diri - dr. Liko",
+    "folderUrl": "https://drive.google.com/drive/folders/14KHpFqB5PKQG7F6z95yuuYNWZbsGVx8r",
+    "title": "Deteksi Dini Gangguan Jiwa & Bunuh Diri",
+    "dosen": "dr. Liko",
+    "files": [
+      {
+        "id": "1ZJkS37VJPCEn0wG7ZtzL3Zb0_4h9r_uz",
+        "name": "Deteksi Dini Gangguan Jiwa dan Risiko Bunuh Diri.pptx",
+        "url": "https://docs.google.com/presentation/d/1ZJkS37VJPCEn0wG7ZtzL3Zb0_4h9r_uz/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      62,
+      63,
+      64
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 2,
+    "folderId": "1NK05vKpzkheJoiRqqALUpKVmTnpvCu4R",
+    "folderName": "02 Teknik Komunikasi Dokter-Pasien - Prof. Qomariyah",
+    "folderUrl": "https://drive.google.com/drive/folders/1NK05vKpzkheJoiRqqALUpKVmTnpvCu4R",
+    "title": "Teknik Komunikasi Dokter-Pasien",
+    "dosen": "Prof. Qomariyah",
+    "files": [
+      {
+        "id": "1ydRXQ1aFE1v1Swnr3w6XkoZyinml7fB5",
+        "name": "kuliah tehnik komunikasi 2023.pptx",
+        "url": "https://docs.google.com/presentation/d/1ydRXQ1aFE1v1Swnr3w6XkoZyinml7fB5/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      },
+      {
+        "id": "1skXVjxdc_j97zi0oZXWRTmD-UKUe8_x0",
+        "name": "Prof Qoqom - Komunikasi Efektif.pdf",
+        "url": "https://drive.google.com/file/d/1skXVjxdc_j97zi0oZXWRTmD-UKUe8_x0/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      36,
+      37,
+      38
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 3,
+    "folderId": "1cSoL3TDOb3nO-sC9SIPX4IaUv5qm3BW5",
+    "folderName": "03 Kedokteran Keluarga - Prof. Qomariyah",
+    "folderUrl": "https://drive.google.com/drive/folders/1cSoL3TDOb3nO-sC9SIPX4IaUv5qm3BW5",
+    "title": "Kedokteran Keluarga",
+    "dosen": "Prof. Qomariyah",
+    "files": [
+      {
+        "id": "1JDrSoZnqfg5q9CE4DjWa8bpzLJMf8r2R",
+        "name": "kEDOKTERAN kELUARGA.pptx",
+        "url": "https://docs.google.com/presentation/d/1JDrSoZnqfg5q9CE4DjWa8bpzLJMf8r2R/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "count": 5,
+    "weightPct": 5
+  },
+  {
+    "no": 4,
+    "folderId": "1_izoo_cYZCT64eNJ4AMk4WY9BQTLGosR",
+    "folderName": "04 Diagnosis Holistik - DR. dr. Erlina",
+    "folderUrl": "https://drive.google.com/drive/folders/1_izoo_cYZCT64eNJ4AMk4WY9BQTLGosR",
+    "title": "Diagnosis Holistik",
+    "dosen": "DR. dr. Erlina",
+    "files": [
+      {
+        "id": "1Jc-5R4QsDwAp2MVnu2S74-eFKKMDURt6",
+        "name": "DIAGNOSIS HOLISTIK.pptx",
+        "url": "https://docs.google.com/presentation/d/1Jc-5R4QsDwAp2MVnu2S74-eFKKMDURt6/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "count": 5,
+    "weightPct": 5
+  },
+  {
+    "no": 5,
+    "folderId": "1GvotSlaBkf31cZ9kDzTmmwmhUBS7l9di",
+    "folderName": "05 Patient Central Approach - DR. dr. Erlina",
+    "folderUrl": "https://drive.google.com/drive/folders/1GvotSlaBkf31cZ9kDzTmmwmhUBS7l9di",
+    "title": "Patient-Centered Approach",
+    "dosen": "DR. dr. Erlina",
+    "files": [
+      {
+        "id": "1Nnh3vQ6KKf9170c9UURNB_KjSZNZA3R9",
+        "name": "Patient Center Approach, family focused, community oriented.pptx",
+        "url": "https://docs.google.com/presentation/d/1Nnh3vQ6KKf9170c9UURNB_KjSZNZA3R9/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "count": 5,
+    "weightPct": 5
+  },
+  {
+    "no": 6,
+    "folderId": "1McPyI39CJvEh9al_t_MmpmikPeb6aL2k",
+    "folderName": "06 Rational Use of Medicine - dr. Lilian",
+    "folderUrl": "https://drive.google.com/drive/folders/1McPyI39CJvEh9al_t_MmpmikPeb6aL2k",
+    "title": "Rational Use of Medicine",
+    "dosen": "dr. Lilian",
+    "files": [
+      {
+        "id": "1vbGe2XfDpF5GUeywbHOT4BZjywVfjQd9",
+        "name": "Lilian Rational Use of Medicine (RUM).pdf",
+        "url": "https://drive.google.com/file/d/1vbGe2XfDpF5GUeywbHOT4BZjywVfjQd9/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      82,
+      83,
+      84
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 7,
+    "folderId": "1BL2l-1y0mN4xYFlL-Ocd4cB81nvKPQMS",
+    "folderName": "07 Konseling Individu - dr. Maya",
+    "folderUrl": "https://drive.google.com/drive/folders/1BL2l-1y0mN4xYFlL-Ocd4cB81nvKPQMS",
+    "title": "Konseling Individu",
+    "dosen": "dr. Maya",
+    "files": [
+      {
+        "id": "1hhnj_FcSabWQn_qhHIP-oPs4uPgc573q",
+        "name": "Maya Konseling induvidu.pdf",
+        "url": "https://drive.google.com/file/d/1hhnj_FcSabWQn_qhHIP-oPs4uPgc573q/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      39,
+      40,
+      41
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 8,
+    "folderId": "1JSHFD2lcgc50ezSBXV6isktxCMoEk7YG",
+    "folderName": "08 Perilaku Menyimpang & Kespro - dr. Maya",
+    "folderUrl": "https://drive.google.com/drive/folders/1JSHFD2lcgc50ezSBXV6isktxCMoEk7YG",
+    "title": "Perilaku Menyimpang & Kespro",
+    "dosen": "dr. Maya",
+    "files": [
+      {
+        "id": "1mT1MAvAYZ3ePle0hSnY9jOsLBmTL4yE1",
+        "name": "Maya - PERILAKU MENYIMPANG.pdf",
+        "url": "https://drive.google.com/file/d/1mT1MAvAYZ3ePle0hSnY9jOsLBmTL4yE1/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      68,
+      69,
+      70
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 9,
+    "folderId": "1tNOuS-MOlXuoQKEhu7GFRFrEd2dJzhpi",
+    "folderName": "09 Psikoedukasi - dr. Liko",
+    "folderUrl": "https://drive.google.com/drive/folders/1tNOuS-MOlXuoQKEhu7GFRFrEd2dJzhpi",
+    "title": "Psikoedukasi",
+    "dosen": "dr. Liko",
+    "files": [
+      {
+        "id": "1nNnR_EBSUgW3a1EcLMIrp1P9CyYflmjD",
+        "name": "Psikoedukasi Blok Kedkel.pptx",
+        "url": "https://docs.google.com/presentation/d/1nNnR_EBSUgW3a1EcLMIrp1P9CyYflmjD/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      65,
+      66,
+      67
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 10,
+    "folderId": "1tNgVqScdG-VSCUp3bfmDcCG21eXGZgCx",
+    "folderName": "10 BSO Padat & Setengah Padat - Drs. Dharma",
+    "folderUrl": "https://drive.google.com/drive/folders/1tNgVqScdG-VSCUp3bfmDcCG21eXGZgCx",
+    "title": "BSO Padat & Setengah Padat",
+    "dosen": "Drs. Dharma",
+    "files": [
+      {
+        "id": "1MuicgPZCcFLjPtpBxs6TLwpCrKB8p7nv",
+        "name": "Dharma - BSO padat dan setengah padat Dharma-2021.pdf",
+        "url": "https://drive.google.com/file/d/1MuicgPZCcFLjPtpBxs6TLwpCrKB8p7nv/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      85,
+      86
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 11,
+    "folderId": "1-jl_EuyxhaOQ7aZvfwft6RmD3E0J0VMX",
+    "folderName": "11 Formularium & Obat Esensial - Drs. Dharma",
+    "folderUrl": "https://drive.google.com/drive/folders/1-jl_EuyxhaOQ7aZvfwft6RmD3E0J0VMX",
+    "title": "Formularium & Obat Esensial",
+    "dosen": "Drs. Dharma",
+    "files": [
+      {
+        "id": "11LvVm_U3qRWdogm83FalCmEY5sX7bIqZ",
+        "name": "Obat Esensial dan Formularium-Dharma 2017.pptx",
+        "url": "https://docs.google.com/presentation/d/11LvVm_U3qRWdogm83FalCmEY5sX7bIqZ/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      87,
+      88
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 12,
+    "folderId": "1BypuZdcAvOCjsiEbBu5h9HoO9SLTKiDe",
+    "folderName": "12 BSO Cairan - DR. Risdawati",
+    "folderUrl": "https://drive.google.com/drive/folders/1BypuZdcAvOCjsiEbBu5h9HoO9SLTKiDe",
+    "title": "BSO Cairan",
+    "dosen": "DR. Risdawati",
+    "files": [
+      {
+        "id": "1twP9CBeJjMWjL6HCFp3Ji9UjOHcqBuR7",
+        "name": "BSO Cair_ORAL_PARENTERAL_TOPIKAL-2022-23.pptx",
+        "url": "https://docs.google.com/presentation/d/1twP9CBeJjMWjL6HCFp3Ji9UjOHcqBuR7/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      },
+      {
+        "id": "1tCFqEJYvG6q1x8jKTfbTOtb0NfheE27z",
+        "name": "Risdawati - BSO cari_PENGANTAR.pdf",
+        "url": "https://drive.google.com/file/d/1tCFqEJYvG6q1x8jKTfbTOtb0NfheE27z/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      89,
+      90
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 13,
+    "folderId": "1KL-rYlyd0oBs25SBAFjy79R58FREuu0f",
+    "folderName": "13 Asuransi Syariah - Dr. dr. Endi",
+    "folderUrl": "https://drive.google.com/drive/folders/1KL-rYlyd0oBs25SBAFjy79R58FREuu0f",
+    "title": "Asuransi Syariah",
+    "dosen": "Dr. dr. Endi",
+    "files": [
+      {
+        "id": "135lSZ6xGHipAf9dpThnpggdw3PfvUo2W",
+        "name": "Endy M. Astiwara - Blok Kedkel - Asuransi Syariah - Terbaru.pdf",
+        "url": "https://drive.google.com/file/d/135lSZ6xGHipAf9dpThnpggdw3PfvUo2W/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      91,
+      92
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 14,
+    "folderId": "1oIrSWSvSLp5Sox22cmFwCgy2CMQP7iTs",
+    "folderName": "14 Perilaku Menyimpang dalam Islam - Dr. dr. Endi",
+    "folderUrl": "https://drive.google.com/drive/folders/1oIrSWSvSLp5Sox22cmFwCgy2CMQP7iTs",
+    "title": "Perilaku Menyimpang dalam Islam",
+    "dosen": "Dr. dr. Endi",
+    "files": [
+      {
+        "id": "13qy9BvT0BEEHPglLKYEfE_Ac8bHmAaRp",
+        "name": "Blok Kedkel - Sebab-sebab Perilaku Menyimpang-23.10.2024.pdf",
+        "url": "https://drive.google.com/file/d/13qy9BvT0BEEHPglLKYEfE_Ac8bHmAaRp/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      93,
+      94
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 15,
+    "folderId": "1TdTmfCILhB7hlgw5Zx9MGKsd5FHMrzwh",
+    "folderName": "15 Ruang Lingkup PAK & 7 Langkah Diagnosis - dr. Dian",
+    "folderUrl": "https://drive.google.com/drive/folders/1TdTmfCILhB7hlgw5Zx9MGKsd5FHMrzwh",
+    "title": "Ruang Lingkup PAK & 7 Langkah Diagnosis",
+    "dosen": "dr. Dian",
+    "files": [
+      {
+        "id": "1Frby8NLm1rB7NdmCi_Iz5beszYCBZmNy",
+        "name": "Dian Mardhiyah - RUANG LINGKUP KES KERJA.pdf",
+        "url": "https://drive.google.com/file/d/1Frby8NLm1rB7NdmCi_Iz5beszYCBZmNy/view?usp=drivesdk",
+        "type": "pdf"
+      },
+      {
+        "id": "1Zlo_dV7cVba1OBwmKnle4sl53q4GePrL",
+        "name": "PENYAKIT AKIBAT KERJA_fix.pptx",
+        "url": "https://docs.google.com/presentation/d/1Zlo_dV7cVba1OBwmKnle4sl53q4GePrL/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      71,
+      72,
+      73
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 16,
+    "folderId": "1b-mc_di8982QssyipRda893uTxF_Xy7F",
+    "folderName": "16 Home Visit, Home Care & Paliatif - dr. Zwasta",
+    "folderUrl": "https://drive.google.com/drive/folders/1b-mc_di8982QssyipRda893uTxF_Xy7F",
+    "title": "Home Visit, Home Care & Paliatif",
+    "dosen": "dr. Zwasta",
+    "files": [
+      {
+        "id": "1xLd0IHzQUu3CM8pCZQ8bwY6lMpfV-5q2",
+        "name": "Home Visit Home Care.pptx",
+        "url": "https://docs.google.com/presentation/d/1xLd0IHzQUu3CM8pCZQ8bwY6lMpfV-5q2/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      },
+      {
+        "id": "1s4NXhPPeXY5oMxsqJGMlsGvg4Tss9QGD",
+        "name": "Zwasta Home Visit Home Care Palliative Care (kating).pdf",
+        "url": "https://drive.google.com/file/d/1s4NXhPPeXY5oMxsqJGMlsGvg4Tss9QGD/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "count": 6,
+    "weightPct": 6
+  },
+  {
+    "no": 17,
+    "folderId": "1HzQCFDM0sHoKq-TnYBGZUnGBLxnOJSW-",
+    "folderName": "17 Aspek Religi Pasien - dr. Zwasta",
+    "folderUrl": "https://drive.google.com/drive/folders/1HzQCFDM0sHoKq-TnYBGZUnGBLxnOJSW-",
+    "title": "Aspek Religi Pasien",
+    "dosen": "dr. Zwasta",
+    "files": [
+      {
+        "id": "1CPcX0KChcSCpvSNqpmQ4gmgBrQzzuE7q",
+        "name": "Zwasta - Aspek Religi Pasien.pdf",
+        "url": "https://drive.google.com/file/d/1CPcX0KChcSCpvSNqpmQ4gmgBrQzzuE7q/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      7,
+      8,
+      9,
+      10
+    ],
+    "count": 4,
+    "weightPct": 4
+  },
+  {
+    "no": 18,
+    "folderId": "1pF672wM1pqXojVs8RXdR7usU0Nt7NXYm",
+    "folderName": "18 Kesehatan Lansia - dr. Zwasta",
+    "folderUrl": "https://drive.google.com/drive/folders/1pF672wM1pqXojVs8RXdR7usU0Nt7NXYm",
+    "title": "Kesehatan Lansia",
+    "dosen": "dr. Zwasta",
+    "files": [
+      {
+        "id": "1a7si2kXtj6NTMJXrPqkEupubrxFy3qpq",
+        "name": "Pelayanan Kesehatan pada Kelompok Usia Lansia.pdf",
+        "url": "https://drive.google.com/file/d/1a7si2kXtj6NTMJXrPqkEupubrxFy3qpq/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "count": 6,
+    "weightPct": 6
+  },
+  {
+    "no": 19,
+    "folderId": "1k5F7vJOJXmk-yedicoEwedPSnEvciy5x",
+    "folderName": "19 Inform Consent - dr. Farah",
+    "folderUrl": "https://drive.google.com/drive/folders/1k5F7vJOJXmk-yedicoEwedPSnEvciy5x",
+    "title": "Informed Consent",
+    "dosen": "dr. Farah",
+    "files": [
+      {
+        "id": "1JNIx1A0q_NGKGfSLBGSGzDAxsxxUc_za",
+        "name": "Farah - INFORMED CONSENT OVERVIEW KEDKEL 2024.pdf",
+        "url": "https://drive.google.com/file/d/1JNIx1A0q_NGKGfSLBGSGzDAxsxxUc_za/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      74,
+      75,
+      76
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 20,
+    "folderId": "197BZeqQmJjoRFYNZRMarLLSMVQx0dGQQ",
+    "folderName": "20 Konsep Dasar & Regulasi Lab Layanan Primer - dr. Syukrini",
+    "folderUrl": "https://drive.google.com/drive/folders/197BZeqQmJjoRFYNZRMarLLSMVQx0dGQQ",
+    "title": "Konsep Dasar & Regulasi Lab Layanan Primer",
+    "dosen": "dr. Syukrini",
+    "files": [
+      {
+        "id": "1-Etf7WcQoHp19IfitnyjsjbaqVknB03d",
+        "name": "Syukrini - Lab Klinik Dokter Keluarga.pdf",
+        "url": "https://drive.google.com/file/d/1-Etf7WcQoHp19IfitnyjsjbaqVknB03d/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      77,
+      78,
+      79
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 21,
+    "folderId": "1xpiwzgdGAhX2W_nCjyFuTL22drJ6KBSZ",
+    "folderName": "21 Aktivitas Fisik - dr. Rita",
+    "folderUrl": "https://drive.google.com/drive/folders/1xpiwzgdGAhX2W_nCjyFuTL22drJ6KBSZ",
+    "title": "Aktivitas Fisik",
+    "dosen": "dr. Rita",
+    "files": [
+      {
+        "id": "1pWnrj1cr-y-lTvSLf-AFubFyccTK9DCA",
+        "name": "Rita - Kuliah_Aktifitas fisik.pdf",
+        "url": "https://drive.google.com/file/d/1pWnrj1cr-y-lTvSLf-AFubFyccTK9DCA/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      59,
+      60,
+      61
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 22,
+    "folderId": "1Zkxiq12BNo4Tmop6WAIbtxv4SZ77Wdio",
+    "folderName": "22 Pengelolaan Gizi dalam Keluarga - DR. Rifda",
+    "folderUrl": "https://drive.google.com/drive/folders/1Zkxiq12BNo4Tmop6WAIbtxv4SZ77Wdio",
+    "title": "Pengelolaan Gizi dalam Keluarga",
+    "dosen": "DR. Rifda",
+    "files": [
+      {
+        "id": "1Qvx_eEktkkvCLJxMvwspNUr7NAmtm1_w",
+        "name": "Rifda PENGELOLAAN GIZI KLG_BLOK KEDKEL.pdf",
+        "url": "https://drive.google.com/file/d/1Qvx_eEktkkvCLJxMvwspNUr7NAmtm1_w/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      50,
+      51,
+      52
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 23,
+    "folderId": "1_zMGaqOw4XwjrQgOOosHLICEDoZXWzId",
+    "folderName": "23 Kesehatan Perkotaan & Pedesaan - DR. Kholis",
+    "folderUrl": "https://drive.google.com/drive/folders/1_zMGaqOw4XwjrQgOOosHLICEDoZXWzId",
+    "title": "Kesehatan Perkotaan & Pedesaan",
+    "dosen": "DR. Kholis",
+    "files": [
+      {
+        "id": "1QSX5zJjJ-r6qGssCewdWpUTcvGr743oi",
+        "name": "Kholis- Kesehatan Perkotaan dan Pedesaan.pdf",
+        "url": "https://drive.google.com/file/d/1QSX5zJjJ-r6qGssCewdWpUTcvGr743oi/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      53,
+      54,
+      55
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 24,
+    "folderId": "1rRXP4ZjaBEk58qnMJVMcfREotVvSMLyy",
+    "folderName": "24 Penilaian Rumah, Perumahan & PHBS dlm DH - DR. Kholis",
+    "folderUrl": "https://drive.google.com/drive/folders/1rRXP4ZjaBEk58qnMJVMcfREotVvSMLyy",
+    "title": "Penilaian Rumah, Perumahan & PHBS dlm DH",
+    "dosen": "DR. Kholis",
+    "files": [
+      {
+        "id": "1j0y2zZdmitr5zhRCjNnTrrFkY5Gysj1-",
+        "name": "Kholis - Rumah Sehat, Lingkungan Perumahan, dan PHBS dalam Diagnosis Holistik.pdf",
+        "url": "https://drive.google.com/file/d/1j0y2zZdmitr5zhRCjNnTrrFkY5Gysj1-/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      42,
+      43,
+      44,
+      45
+    ],
+    "count": 4,
+    "weightPct": 4
+  },
+  {
+    "no": 25,
+    "folderId": "1X0OQ_e7tQFbdKV3g5vVisc_ZvbZJ0wVI",
+    "folderName": "25 ketahanan Keluarga - dr. Maya T",
+    "folderUrl": "https://drive.google.com/drive/folders/1X0OQ_e7tQFbdKV3g5vVisc_ZvbZJ0wVI",
+    "title": "Ketahanan Keluarga",
+    "dosen": "dr. Maya T",
+    "files": [
+      {
+        "id": "14iIl-7z8FsgY4UyCDiQAxUWVXezcuQ7F",
+        "name": "Ketahanan Keluarga - Biro kesos dki.pdf",
+        "url": "https://drive.google.com/file/d/14iIl-7z8FsgY4UyCDiQAxUWVXezcuQ7F/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      46,
+      47,
+      48,
+      49
+    ],
+    "count": 4,
+    "weightPct": 4
+  },
+  {
+    "no": 26,
+    "folderId": "1uxBXomdT_qw5LJaNI4vvivdlkjg3KsCS",
+    "folderName": "26 Long Term Care - DR. dr. Erlina W",
+    "folderUrl": "https://drive.google.com/drive/folders/1uxBXomdT_qw5LJaNI4vvivdlkjg3KsCS",
+    "title": "Long Term Care",
+    "dosen": "DR. dr. Erlina W",
+    "files": [
+      {
+        "id": "1LfEOJv-m4HDw7YEQEhlf8HXL7KLd0VmK",
+        "name": "LONG TERM CARE.pdf",
+        "url": "https://drive.google.com/file/d/1LfEOJv-m4HDw7YEQEhlf8HXL7KLd0VmK/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      32,
+      33,
+      34,
+      35
+    ],
+    "count": 4,
+    "weightPct": 4
+  },
+  {
+    "no": 27,
+    "folderId": "1VghQe6bvQkzEy38cr-tGYjxLa34xx9uz",
+    "folderName": "27 Model perubahan perilaku & determinan perilaku - dr. Nur Isnaeni Evry K, MARS",
+    "folderUrl": "https://drive.google.com/drive/folders/1VghQe6bvQkzEy38cr-tGYjxLa34xx9uz",
+    "title": "Model Perubahan Perilaku & Determinan Perilaku",
+    "dosen": "dr. Nur Isnaeni Evry K, MARS",
+    "files": [
+      {
+        "id": "1vg2LQgd7XPkgoNmZM9G1UgpkDGX-le4n",
+        "name": "A PERUBAHAN DAN DETERMINAN PERILAKU.pptx",
+        "url": "https://docs.google.com/presentation/d/1vg2LQgd7XPkgoNmZM9G1UgpkDGX-le4n/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      56,
+      57,
+      58
+    ],
+    "count": 3,
+    "weightPct": 3
+  },
+  {
+    "no": 28,
+    "folderId": "1MDhG16Pm3GuplbVD4grlH2Pqo3xRtrkw",
+    "folderName": "28 Pencegahan & Penanganan Kecelakaan Lalu Lintas dalam Perspektif Islam - Afrizal",
+    "folderUrl": "https://drive.google.com/drive/folders/1MDhG16Pm3GuplbVD4grlH2Pqo3xRtrkw",
+    "title": "Pencegahan & Penanganan Kecelakaan Lalu Lintas dalam Perspektif Islam",
+    "dosen": "Afrizal",
+    "files": [
+      {
+        "id": "1zceCReIaYKpEu8Cm_isRFrzoOvuSRRo6",
+        "name": "Pencegahan & Penanganan Kecelakaan Lalu Lintas dalam Perspektif Islam.pdf",
+        "url": "https://drive.google.com/file/d/1zceCReIaYKpEu8Cm_isRFrzoOvuSRRo6/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      95,
+      96
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 29,
+    "folderId": "1W6DYSf8KavzMVwHkcr7R7QYWyev-EQM6",
+    "folderName": "29 Perawatan & pendampingan lansia dari perspektif Islam - Afrizal",
+    "folderUrl": "https://drive.google.com/drive/folders/1W6DYSf8KavzMVwHkcr7R7QYWyev-EQM6",
+    "title": "Perawatan & Pendampingan Lansia dari Perspektif Islam",
+    "dosen": "Afrizal",
+    "files": [
+      {
+        "id": "13uaso6R_QZe1taR9d87vNQLUDBjSPkc_",
+        "name": "GELAR BERTAMBAH, BAKTI TAK BERKURANG.pdf",
+        "url": "https://drive.google.com/file/d/13uaso6R_QZe1taR9d87vNQLUDBjSPkc_/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      97,
+      98
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 30,
+    "folderId": "1aZ25VrwvSWNSiawq7TmHJpiGagIDtQPa",
+    "folderName": "30 Perbaikan gizi masyarakat & peningkatan aksesibilitas pangan beragam - DR. Rifda",
+    "folderUrl": "https://drive.google.com/drive/folders/1aZ25VrwvSWNSiawq7TmHJpiGagIDtQPa",
+    "title": "Perbaikan Gizi Masyarakat & Peningkatan Aksesibilitas Pangan Beragam",
+    "dosen": "DR. Rifda",
+    "files": [
+      {
+        "id": "1tdPPFJGQ-LA9pBXXSRCKRyd_dSJ18FjF",
+        "name": "PERBAIKAN GIZI MASYARAKAT.pptx",
+        "url": "https://docs.google.com/presentation/d/1tdPPFJGQ-LA9pBXXSRCKRyd_dSJ18FjF/edit?usp=drivesdk&ouid=105284979239413289162&rtpof=true&sd=true",
+        "type": "pptx"
+      }
+    ],
+    "questionNos": [
+      80,
+      81
+    ],
+    "count": 2,
+    "weightPct": 2
+  },
+  {
+    "no": 31,
+    "folderId": "1q3M3qOGui0lBnyRLgydy4054wooU__Gv",
+    "folderName": "31 Ta'awun dalam Pandangan Islam - Afrizal",
+    "folderUrl": "https://drive.google.com/drive/folders/1q3M3qOGui0lBnyRLgydy4054wooU__Gv",
+    "title": "Ta'awun dalam Pandangan Islam",
+    "dosen": "Afrizal",
+    "files": [
+      {
+        "id": "1QKzB8PKY6GtSyrPTtWad4ifNYL_6gTA7",
+        "name": "Ta'awun dalam Pandangan Islam.pdf",
+        "url": "https://drive.google.com/file/d/1QKzB8PKY6GtSyrPTtWad4ifNYL_6gTA7/view?usp=drivesdk",
+        "type": "pdf"
+      }
+    ],
+    "questionNos": [
+      99,
+      100
+    ],
+    "count": 2,
+    "weightPct": 2
+  }
+];
+
+  const TOPIC_BY_NO = new Map(TOPICS.map(t => [Number(t.no), t]));
+  const TOPIC_BY_QNO = new Map();
+  TOPICS.forEach(t => {
+    (t.questionNos || []).forEach(qno => TOPIC_BY_QNO.set(Number(qno), t));
+  });
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+
+  function hasBobotForBank(bankId) {
+    return String(bankId || '') === BANK_ID;
+  }
+
+  function questionNoOf(q) {
+    if (!q || typeof q !== 'object') return null;
+    const rawNo = q.source_id ?? q.no;
+    if (Number.isInteger(Number(rawNo)) && Number(rawNo) >= 1 && Number(rawNo) <= TOTAL_QUESTIONS) {
+      return Number(rawNo);
+    }
+    const idStr = String(q.id || q.rid || '');
+    const m = idStr.match(/kedokteran-keluarga-2026-(\d+)$/i);
+    return m ? Number(m[1]) : null;
+  }
+
+  function isTryoutQuestion(q) {
+    if (!q || typeof q !== 'object') return false;
+    if (q.materiPptUrl && q.materiTitle) return true;
+    const bank = String(q.bank || '');
+    const id = String(q.id || q.rid || '');
+    return bank === BANK_ID || id.startsWith('kedokteran-keluarga-2026-') || id.startsWith(`${BANK_ID}:`);
+  }
+
+  function forQuestion(q) {
+    if (!q || typeof q !== 'object') return null;
+    if (q.materiPptUrl && (q.materiTitle || q.materi)) {
+      return {
+        materiNo: Number(q.materiNo || 0) || null,
+        materi: q.materi || q.materiTitle,
+        materiTitle: q.materiTitle || q.materi,
+        materiDosen: q.materiDosen || '',
+        materiPptName: q.materiPptName || 'Materi PPT',
+        materiPptUrl: q.materiPptUrl,
+        materiFolderUrl: q.materiFolderUrl || DRIVE_FOLDER_URL,
+        materiFiles: Array.isArray(q.materiFiles) && q.materiFiles.length
+          ? q.materiFiles
+          : [{ name: q.materiPptName || 'Materi PPT', url: q.materiPptUrl, type: 'file' }]
+      };
+    }
+    if (!isTryoutQuestion(q)) return null;
+    const qno = questionNoOf(q);
+    if (!qno) return null;
+    const t = TOPIC_BY_QNO.get(qno);
+    if (!t) return null;
+    let primary = t.files[0];
+    if (t.no === 16 && qno <= 2) {
+      primary = t.files.find(f => /Home Visit Home Care\.pptx/i.test(f.name)) || t.files[0];
+    } else if (t.no === 16 && qno >= 3) {
+      primary = t.files.find(f => /Palliative Care/i.test(f.name)) || t.files[0];
+    } else if (t.no === 15 && qno === 73) {
+      primary = t.files.find(f => /RUANG LINGKUP/i.test(f.name)) || t.files[0];
+    } else if (t.no === 15) {
+      primary = t.files.find(f => /PENYAKIT AKIBAT KERJA/i.test(f.name)) || t.files[0];
+    } else if (t.no === 12 && qno === 89) {
+      primary = t.files.find(f => /PENGANTAR/i.test(f.name)) || t.files[0];
+    } else if (t.no === 12 && qno === 90) {
+      primary = t.files.find(f => /BSO Cair_ORAL/i.test(f.name)) || t.files[0];
+    } else if (t.no === 2) {
+      primary = t.files.find(f => /kuliah tehnik komunikasi/i.test(f.name)) || t.files[0];
+    }
+    return {
+      materiNo: t.no,
+      materi: t.dosen ? `${t.title} (${t.dosen})` : t.title,
+      materiTitle: t.title,
+      materiDosen: t.dosen,
+      materiPptName: primary?.name || t.title,
+      materiPptUrl: primary?.url || t.folderUrl,
+      materiFolderUrl: t.folderUrl,
+      materiFiles: t.files
+    };
+  }
+
+  function renderPptBarHTML(q, mode = 'quiz') {
+    const info = forQuestion(q);
+    if (!info || !info.materiPptUrl) return '';
+    const titleLabel = info.materiDosen
+      ? `${info.materiTitle} • ${info.materiDosen}`
+      : info.materiTitle;
+    const extras = (info.materiFiles || []).filter(f => f && f.url && f.url !== info.materiPptUrl);
+    const extrasHTML = extras.map(f => `<a class="materi-ppt-sub-btn" href="${esc(f.url)}" target="_blank" rel="noopener noreferrer" title="Buka file pendukung: ${esc(f.name)}">📎 ${esc(f.name)}</a>`).join('');
+    if (mode === 'explain') {
+      return `<div class="explain-materi-box">
+        <div class="explain-materi-head">
+          <span class="explain-materi-tag">📚 Materi #${String(info.materiNo || '').padStart(2, '0')}</span>
+          <small>${esc(info.materiPptName || '')}</small>
+        </div>
+        <div class="explain-materi-actions">
+          <a class="materi-ppt-btn" href="${esc(info.materiPptUrl)}" target="_blank" rel="noopener noreferrer">📄 Materi PPT: ${esc(titleLabel)}</a>
+          ${extrasHTML}
+        </div>
+      </div>`;
+    }
+    return `<div class="quiz-materi-inner">
+      <a class="materi-ppt-btn is-quiz" href="${esc(info.materiPptUrl)}" target="_blank" rel="noopener noreferrer" title="Buka ${esc(info.materiPptName)} di Google Drive">📄 Materi PPT: ${esc(titleLabel)}</a>
+      ${extrasHTML}
+    </div>`;
+  }
+
+  function formatRange(nos) {
+    if (!Array.isArray(nos) || !nos.length) return '-';
+    if (nos.length === 1) return `No. ${nos[0]}`;
+    const contiguous = nos.every((n, i) => i === 0 || n === nos[i - 1] + 1);
+    return contiguous ? `No. ${nos[0]}–${nos[nos.length - 1]}` : nos.map(n => `#${n}`).join(', ');
+  }
+
+  function buildLatihanMateriPacks(questions) {
+    const byNo = new Map();
+    (Array.isArray(questions) ? questions : []).forEach(q => {
+      const info = forQuestion(q);
+      const mno = Number(info?.materiNo || 0);
+      if (!mno) return;
+      if (!byNo.has(mno)) byNo.set(mno, []);
+      byNo.get(mno).push(q);
+    });
+    return TOPICS.map(t => {
+      const list = (byNo.get(t.no) || []).slice().sort((a, b) => (Number(a.no) || 0) - (Number(b.no) || 0));
+      const primary = t.files[0] || { name: t.title, url: t.folderUrl };
+      return {
+        id: `kedkel-2026-mat-${String(t.no).padStart(2, '0')}`,
+        module: 'MAT',
+        block: 'KEDKEL',
+        title: `${String(t.no).padStart(2, '0')}. ${t.title}${t.dosen ? ` — ${t.dosen}` : ''}`,
+        materiNo: t.no,
+        materiTitle: t.title,
+        materiDosen: t.dosen,
+        materiPptName: primary.name,
+        materiPptUrl: primary.url,
+        materiFolderUrl: t.folderUrl,
+        materiFiles: t.files,
+        weightPct: t.weightPct,
+        questionNos: t.questionNos,
+        virtualTryout: true,
+        questions: list.map(q => {
+          const pk = q.pembahasan_klinis || {};
+          const per = Array.isArray(q.pembahasanPilihan) && q.pembahasanPilihan.length
+            ? q.pembahasanPilihan
+            : (q.opsi || []).map((_, idx) => pk[String.fromCharCode(65 + idx)] || '');
+          const qInfo = forQuestion(q);
+          return {
+            ...q,
+            pembahasanPilihan: per,
+            materiNo: qInfo?.materiNo || t.no,
+            materi: qInfo?.materi || t.title,
+            materiTitle: qInfo?.materiTitle || t.title,
+            materiDosen: qInfo?.materiDosen || t.dosen,
+            materiPptName: qInfo?.materiPptName || primary.name,
+            materiPptUrl: qInfo?.materiPptUrl || primary.url,
+            materiFolderUrl: qInfo?.materiFolderUrl || t.folderUrl,
+            materiFiles: qInfo?.materiFiles || t.files
+          };
+        })
+      };
+    }).filter(p => p.questions.length > 0);
+  }
+
+  /* ---------- Modal Deskripsi Bobot Soal ---------- */
+  let modalState = { query: '', sort: 'no' };
+
+  function ensureBobotModal() {
+    let modal = document.getElementById('kedkelBobotModal');
+    if (modal) return modal;
+    modal = document.createElement('div');
+    modal.id = 'kedkelBobotModal';
+    modal.className = 'modal-backdrop';
+    modal.hidden = true;
+    modal.innerHTML = `<div class="kedkel-bobot-modal card" role="dialog" aria-modal="true" aria-labelledby="kedkelBobotTitle">
+      <div class="kedkel-bobot-head">
+        <div>
+          <div class="eyebrow">BLOK KEDKEL • DESKRIPSI BOBOT SOAL</div>
+          <h2 id="kedkelBobotTitle">📊 ${esc(BANK_NAME)}</h2>
+          <p>Pembagian 100 soal ke seluruh 31 materi PPT beserta tautan langsung Google Drive.</p>
+        </div>
+        <button class="dashboard-mini-btn close" id="closeKedkelBobot" type="button" aria-label="Tutup Deskripsi Bobot Soal">×</button>
+      </div>
+      <div class="kedkel-bobot-summary" id="kedkelBobotSummary"></div>
+      <div class="kedkel-bobot-toolbar">
+        <input id="kedkelBobotSearch" type="search" placeholder="Cari materi atau nama dosen..." autocomplete="off" aria-label="Cari materi bobot soal">
+        <div class="kedkel-bobot-sort" role="group" aria-label="Urutkan materi">
+          <button type="button" class="ml-chip on" data-kb-sort="no">Urut 01–31</button>
+          <button type="button" class="ml-chip" data-kb-sort="weight">Bobot Terbesar</button>
+        </div>
+      </div>
+      <div class="kedkel-bobot-list" id="kedkelBobotList"></div>
+    </div>`;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.closest('#closeKedkelBobot')) {
+        closeBobotModal();
+        return;
+      }
+      const sortBtn = e.target.closest('[data-kb-sort]');
+      if (sortBtn) {
+        modalState.sort = sortBtn.dataset.kbSort || 'no';
+        renderBobotModalBody();
+        return;
+      }
+      const trainBtn = e.target.closest('[data-kb-train]');
+      if (trainBtn) {
+        const mno = Number(trainBtn.dataset.kbTrain);
+        closeBobotModal();
+        if (window.CLINED_LATIHAN_MATERI?.open) {
+          window.CLINED_LATIHAN_MATERI.open('KEDKEL', 'KEDKEL', 'blokKedkelPage', mno);
+        }
+      }
+    });
+
+    modal.querySelector('#kedkelBobotSearch')?.addEventListener('input', e => {
+      modalState.query = e.target.value || '';
+      renderBobotModalBody();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !modal.hidden) closeBobotModal();
+    });
+    return modal;
+  }
+
+  function renderBobotModalBody() {
+    const summaryEl = document.getElementById('kedkelBobotSummary');
+    const listEl = document.getElementById('kedkelBobotList');
+    if (!summaryEl || !listEl) return;
+    const totalFiles = TOPICS.reduce((n, t) => n + (t.files?.length || 0), 0);
+    summaryEl.innerHTML = `<div class="kb-stat-row">
+        <span class="kb-stat-pill"><b>${TOTAL_QUESTIONS}</b> Soal</span>
+        <span class="kb-stat-pill"><b>${TOPICS.length}</b> Materi</span>
+        <span class="kb-stat-pill"><b>${totalFiles}</b> File PPT/PDF</span>
+        <span class="kb-stat-pill"><b>100%</b> Total Bobot</span>
+      </div>
+      <a class="kb-drive-root-btn" href="${esc(DRIVE_FOLDER_URL)}" target="_blank" rel="noopener noreferrer">📂 Buka Folder Drive "Materi PPT Blok Kedkel 2026"</a>`;
+
+    document.querySelectorAll('#kedkelBobotModal [data-kb-sort]').forEach(btn => {
+      btn.classList.toggle('on', btn.dataset.kbSort === modalState.sort);
+    });
+
+    const q = String(modalState.query || '').trim().toLowerCase();
+    let rows = TOPICS.filter(t => {
+      if (!q) return true;
+      const hay = `${t.no} ${t.title} ${t.dosen} ${t.folderName} ${(t.files || []).map(f => f.name).join(' ')}`.toLowerCase();
+      return hay.includes(q);
+    });
+    if (modalState.sort === 'weight') {
+      rows = rows.slice().sort((a, b) => b.count - a.count || a.no - b.no);
+    } else {
+      rows = rows.slice().sort((a, b) => a.no - b.no);
+    }
+
+    const maxCount = Math.max(...TOPICS.map(t => t.count), 1);
+    listEl.innerHTML = rows.length ? rows.map(t => {
+      const barWidth = Math.round((t.count / maxCount) * 100);
+      const filesHTML = (t.files || []).map(f =>
+        `<a class="kb-file-link" href="${esc(f.url)}" target="_blank" rel="noopener noreferrer" title="Buka ${esc(f.name)}">📄 ${esc(f.name)}</a>`
+      ).join('');
+      return `<article class="kb-topic-card">
+        <div class="kb-topic-top">
+          <span class="kb-topic-num">${String(t.no).padStart(2, '0')}</span>
+          <div class="kb-topic-title">
+            <b>${esc(t.title)}</b>
+            <small>${esc(t.dosen || 'Tim Dosen Kedkel')}</small>
+          </div>
+          <div class="kb-topic-weight">
+            <b>${t.count} soal</b>
+            <small>${t.weightPct}% • ${esc(formatRange(t.questionNos))}</small>
+          </div>
+        </div>
+        <div class="kb-weight-bar" aria-hidden="true"><i style="width:${barWidth}%"></i></div>
+        <div class="kb-topic-links">
+          ${filesHTML}
+          <button type="button" class="kb-train-btn" data-kb-train="${t.no}">📝 Latih ${t.count} Soal</button>
+        </div>
+      </article>`;
+    }).join('') : '<div class="ml-empty"><b>Materi tidak ditemukan</b><small>Coba kata kunci judul materi atau nama dosen lain.</small></div>';
+  }
+
+  function openBobotModal() {
+    const modal = ensureBobotModal();
+    modalState.query = '';
+    const input = document.getElementById('kedkelBobotSearch');
+    if (input) input.value = '';
+    renderBobotModalBody();
+    modal.hidden = false;
+  }
+
+  function closeBobotModal() {
+    const modal = document.getElementById('kedkelBobotModal');
+    if (modal) modal.hidden = true;
+  }
+
+  window.CLINED_KEDKEL_2026_MATERI = {
+    BANK_ID,
+    BANK_NAME,
+    DRIVE_FOLDER_URL,
+    TOTAL_QUESTIONS,
+    TOPICS,
+    hasBobotForBank,
+    forQuestion,
+    renderPptBarHTML,
+    buildLatihanMateriPacks,
+    openBobotModal,
+    closeBobotModal
+  };
+})();

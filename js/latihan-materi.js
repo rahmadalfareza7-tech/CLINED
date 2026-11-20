@@ -65,21 +65,63 @@
   const getPack = i => i === 'flag' ? S.flagPack : S.packs[i];
 
   /* ---------- data ---------- */
-  async function fetchPacks() {
+  async function loadKedkelTryoutQuestions() {
+    try {
+      await window.CLINED_BANKS_READY?.();
+      await window.CLINED_ENSURE_BANK_LOADED?.('kedkel-2026-tryout-1');
+      const bank = window.BANKS?.['kedkel-2026-tryout-1'];
+      if (Array.isArray(bank?.data) && bank.data.length) return bank.data;
+    } catch {}
+    try {
+      const r = await fetch('/api/banks/kedkel-2026-tryout-1', { credentials: 'same-origin', cache: 'default' });
+      if (r.ok) {
+        const d = await r.json().catch(() => ({}));
+        if (Array.isArray(d?.bank?.questions) && d.bank.questions.length) return d.bank.questions;
+      }
+    } catch {}
+    try {
+      const r = await fetch('/seed-data/banks/kedkel-2026-tryout-1.json', { credentials: 'same-origin', cache: 'no-store' });
+      if (r.ok) {
+        const arr = await r.json().catch(() => []);
+        if (Array.isArray(arr) && arr.length) return arr;
+      }
+    } catch {}
+    return [];
+  }
+
+  async function fetchPacks(block) {
+    let packages = [];
+    let fetchError = null;
     try {
       const r = await fetch('/api/content/packages?module=MAT', { credentials: 'same-origin', cache: 'no-store' });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw Object.assign(Error(d.error || 'Gagal memuat latihan materi.'), { server: true });
-      const packages = d.packages || [];
+      packages = d.packages || [];
       writeJSON(KEY_CACHE, { at: Date.now(), packages });
       S.offline = false;
-      return packages;
     } catch (err) {
-      if (err && err.server) throw err;
-      const c = readJSON(KEY_CACHE, null); // hanya untuk kegagalan jaringan
-      if (c && Array.isArray(c.packages)) { S.offline = true; return c.packages; }
+      const c = readJSON(KEY_CACHE, null);
+      if (c && Array.isArray(c.packages)) {
+        S.offline = !(err && err.server);
+        packages = c.packages;
+      } else {
+        fetchError = err;
+      }
+    }
+    if (norm(block) === 'KEDKEL' && window.CLINED_KEDKEL_2026_MATERI?.buildLatihanMateriPacks) {
+      const qs = await loadKedkelTryoutQuestions();
+      const virtualPacks = window.CLINED_KEDKEL_2026_MATERI.buildLatihanMateriPacks(qs);
+      if (virtualPacks.length) {
+        const seen = new Set(packages.map(p => String(p.id)));
+        packages = [...virtualPacks.filter(p => !seen.has(String(p.id))), ...packages];
+        return packages;
+      }
+    }
+    if (fetchError) {
+      if (fetchError.server) throw fetchError;
       throw Error('Tidak bisa terhubung. Periksa koneksi internet lalu coba lagi.');
     }
+    return packages;
   }
 
   const validQuestions = p => (p.questions || []).filter(q =>
@@ -87,18 +129,31 @@
     Number.isInteger(q.jawabanBenar) && q.jawabanBenar >= 0 && q.jawabanBenar < q.opsi.length);
 
   function buildQ(pack, q, order) {
-    const per = Array.isArray(q.pembahasanPilihan) ? q.pembahasanPilihan : [];
+    const pkObj = q.pembahasan_klinis && typeof q.pembahasan_klinis === 'object' ? q.pembahasan_klinis : null;
+    const per = Array.isArray(q.pembahasanPilihan) && q.pembahasanPilihan.length
+      ? q.pembahasanPilihan
+      : (pkObj ? (q.opsi || []).map((_, idx) => pkObj[String.fromCharCode(65 + idx)] || '') : []);
     return {
       rid: q.id,
       pk: q._pk || packKey(pack),
       id: `mat:${q._pk || packKey(pack)}:${q.id}`,
+      no: q.no,
+      source_id: q.source_id,
       soal: q.soal,
       opsi: order.map(k => stripLetter(q.opsi[k])),
       orig: order,
       benar: order.indexOf(q.jawabanBenar),
       pembahasan: q.pembahasan || '',
       catatan: q.catatanKlinis || '',
-      per: order.map(k => stripTruth(per[k] || ''))
+      per: order.map(k => stripTruth(per[k] || '')),
+      materiNo: q.materiNo || pack.materiNo || null,
+      materi: q.materi || pack.title || '',
+      materiTitle: q.materiTitle || pack.materiTitle || pack.title || '',
+      materiDosen: q.materiDosen || pack.materiDosen || '',
+      materiPptName: q.materiPptName || pack.materiPptName || '',
+      materiPptUrl: q.materiPptUrl || pack.materiPptUrl || '',
+      materiFolderUrl: q.materiFolderUrl || pack.materiFolderUrl || '',
+      materiFiles: Array.isArray(q.materiFiles) && q.materiFiles.length ? q.materiFiles : (pack.materiFiles || [])
     };
   }
 
@@ -117,7 +172,7 @@
   const grade = pct => pct >= 80 ? ['🏆', 'Mantap! Materi ini sudah kuat.'] : pct >= 60 ? ['👍', 'Lumayan, ulangi bagian yang masih salah.'] : ['📖', 'Yuk pelajari materinya lagi, lalu coba ulang.'];
 
   /* ---------- list ---------- */
-  async function openList(block, label, pageId) {
+  async function openList(block, label, pageId, startMateriNo = null) {
     if (block) { if (block !== S.block) { S.q = ''; S.lf = 'all'; S.lim = 12; } S.block = block; S.label = label; S.pageId = pageId; }
     if (!S.block) { window.show?.('home'); return; }
     S.run = null;
@@ -127,10 +182,14 @@
     window.show?.('materiLatihanPage');
     body().innerHTML = '<div class="ml-skeleton"></div><div class="ml-skeleton"></div><div class="ml-skeleton"></div>';
     try {
-      const packs = (await fetchPacks()).filter(p => norm(p.block) === S.block);
+      const packs = (await fetchPacks(S.block)).filter(p => norm(p.block) === S.block);
       if (token !== S.token) return;
       S.packs = packs;
       buildFlagPack();
+      if (startMateriNo != null) {
+        const targetIdx = packs.findIndex(p => Number(p.materiNo) === Number(startMateriNo));
+        if (targetIdx >= 0) { startRun(targetIdx); return; }
+      }
       renderList();
     } catch (err) {
       if (token !== S.token) return;
@@ -160,10 +219,15 @@
       const st = getResume(key), best = getBest(key), lastRes = getLast(key);
       const inProg = st && Array.isArray(st.seq) && st.seq.length;
       const meta = [`${n} soal`];
+      if (p.weightPct) meta.push(`Bobot ${p.weightPct}%`);
       if (best) meta.push(`✓ Selesai`, `Terbaik ${best.pct}%`);
       const pct = inProg ? Math.round(Math.min(st.pos, st.seq.length) / st.seq.length * 100) : 0;
       const status = inProg ? 'prog' : best ? 'done' : 'new';
       cnt[status]++;
+      const pptLink = p.materiPptUrl
+        ? `<a class="ml-ppt-link" href="${esc(p.materiPptUrl)}" target="_blank" rel="noopener noreferrer" title="Buka ${esc(p.materiPptName || p.title)} di Google Drive">📄 Materi PPT: ${esc(p.materiTitle || p.title)}</a>`
+        : '';
+      const hasRowLinks = inProg || lastRes || pptLink;
       return `<div class="ml-row" data-ml-title="${esc(fold(p.title))}" data-ml-status="${status}">
         <button type="button" class="ml-item${inProg ? ' in-progress' : ''}${best ? ' mastered' : ''}" data-ml-start="${i}" ${n ? '' : 'disabled'}>
           <span class="ml-item-num">${best ? '✓' : i + 1}</span>
@@ -171,13 +235,14 @@
             ${inProg ? `<span class="ml-item-bar"><i style="width:${pct}%"></i></span>` : ''}</span>
           <span class="ml-item-cta">${inProg ? `Lanjut ${Math.min(st.pos + 1, st.seq.length)}/${st.seq.length}` : best ? 'Ulangi' : 'Mulai'} ›</span>
         </button>
-        ${inProg || lastRes ? `<div class="ml-row-links">${lastRes ? `<button type="button" class="ml-restart" data-ml-review="${i}">Tinjau hasil terakhir (${lastRes.pct}%)</button>` : ''}${inProg ? `<button type="button" class="ml-restart" data-ml-restart="${i}">Mulai dari awal</button>` : ''}</div>` : ''}
+        ${hasRowLinks ? `<div class="ml-row-links">${pptLink}${lastRes ? `<button type="button" class="ml-restart" data-ml-review="${i}">Tinjau hasil terakhir (${lastRes.pct}%)</button>` : ''}${inProg ? `<button type="button" class="ml-restart" data-ml-restart="${i}">Mulai dari awal</button>` : ''}</div>` : ''}
       </div>`;
     }).join('');
     const showLf = [cnt.new, cnt.prog, cnt.done].filter(Boolean).length >= 2;
     if (!showLf) S.lf = 'all';
+    const showBobotBtn = S.block === 'KEDKEL' && window.CLINED_KEDKEL_2026_MATERI?.openBobotModal;
     body().innerHTML = `${S.offline ? '<div class="ml-note">📡 Mode offline • menampilkan data terakhir yang tersimpan.</div>' : ''}
-      <div class="ml-hero"><span class="ml-hero-icon">📝</span><div><b>${packs.length} materi • ${totalQ} soal</b><small>Jawab, lihat pembahasan tiap pilihan, kumpulkan XP.</small></div></div>
+      <div class="ml-hero"><span class="ml-hero-icon">📝</span><div><b>${packs.length} materi • ${totalQ} soal</b><small>Jawab, lihat pembahasan tiap pilihan, kumpulkan XP.</small></div>${showBobotBtn ? '<button type="button" class="ml-bobot-btn" data-ml-bobot>📊 Deskripsi Bobot Soal</button>' : ''}</div>
       <div class="ml-toolbar">
         <div class="ml-search"><span class="ml-search-ico" aria-hidden="true">🔍</span><input type="search" id="mlSearch" class="ml-search-input" placeholder="Cari materi…" value="${esc(S.q)}" autocomplete="off" enterkeyhint="search" aria-label="Cari materi"><button type="button" class="ml-search-clear" data-ml-clear aria-label="Hapus pencarian" hidden>✕</button></div>
         ${showLf ? `<div class="ml-chips ml-lf" role="tablist" aria-label="Filter status">${[['all', 'Semua'], ['new', 'Belum'], ['prog', 'Berjalan'], ['done', 'Selesai']].filter(([k]) => k === 'all' || cnt[k]).map(([k, l]) => `<button type="button" class="ml-chip${S.lf === k ? ' on' : ''}" data-ml-lf="${k}">${l} <i>${cnt[k]}</i></button>`).join('')}</div>` : ''}
@@ -271,6 +336,7 @@
     const fl = isFlagged(q);
     setHead('LATIHAN • BLOK ' + S.label, R.title, '‹ Daftar materi');
 
+    const pptQuizBar = window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(q, 'quiz') || '';
     const explain = done ? explainHTML(q, picked, false) : '';
     const commentKey = window.CLINED_QC?.keyOf('latihan-materi-' + S.block, q.id);
     const left = R.ans.filter(x => x == null).length;
@@ -283,6 +349,7 @@
         <div class="ml-progress" role="progressbar" aria-valuemin="0" aria-valuemax="${R.qs.length}" aria-valuenow="${R.qs.length - left}"><i style="width:${Math.round((R.qs.length - left) / R.qs.length * 100)}%"></i></div>
         <div class="ml-nav" id="mlNav" aria-label="Navigasi soal">${R.qs.map((qq, i) => { const a = R.ans[i]; const c = i === R.pos ? ' cur' : ''; const st2 = a == null ? '' : a === qq.benar ? ' ok' : ' bad'; return `<button type="button" class="ml-dot${c}${st2}" data-ml-goto="${i}" aria-label="Soal ${i + 1}">${i + 1}</button>`; }).join('')}</div>
         <div class="ml-question">${esc(q.soal)}</div>
+        ${pptQuizBar ? `<div class="quiz-materi-bar">${pptQuizBar}</div>` : ''}
         <div class="ml-options">${q.opsi.map((o, k) => `<button type="button" class="ml-opt${done ? (k === q.benar ? ' ok' : k === picked ? ' bad' : '') : ''}" data-ml-pick="${k}" ${done ? 'disabled' : ''}><span class="ml-letter">${L[k]}</span><span class="ml-opt-text">${esc(o)}</span></button>`).join('')}</div>
         ${explain}
         ${done ? '<div class="qcomments-slot" data-materi-qcomments></div>' : ''}
@@ -301,11 +368,14 @@
 
   function explainHTML(q, picked, review) {
     const unanswered = picked == null, good = picked === q.benar;
+    const pptExplain = window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(q, 'explain') || '';
+    const canEdit = window.clinedCanEditQuestions?.() && /^[0-9a-f-]{36}$/i.test(String(q.pk || ''));
     return `<div class="explain ml-explain">
       <div class="explain-title ${unanswered ? 'skip' : good ? 'ok' : 'bad'}">${unanswered ? '⏭️ Belum dijawab' : good ? '✅ Benar!' : '❌ Kurang tepat'}</div>
       ${q.pembahasan ? `<div class="main-explain"><b>🎯 Konsep inti:</b> ${esc(q.pembahasan)}</div>` : ''}
       ${q.catatan ? `<div class="clinical-note"><b>🩺 Catatan klinis:</b> ${esc(q.catatan)}</div>` : ''}
-      ${!review && !good ? '<button type="button" class="ml-mini-btn" data-ml-material>📖 Buka materi blok ini</button>' : ''}
+      ${pptExplain}
+      ${!review && !good && !pptExplain ? '<button type="button" class="ml-mini-btn" data-ml-material>📖 Buka materi blok ini</button>' : ''}
       ${q.opsi.map((o, k) => {
         const ok = k === q.benar;
         const text = q.per[k] || (ok ? (q.pembahasan || 'Sesuai dengan konsep yang diuji.') : 'Opsi ini tidak paling sesuai dengan temuan pada soal.');
@@ -314,7 +384,7 @@
           <div class="option-review-text">${esc(text)}</div></div>`;
       }).join('')}
       ${review ? '' : '<button type="button" class="ml-report" data-ml-report>🚩 Laporkan soal ini (salah / ambigu)</button>'}
-      ${window.clinedCanEditQuestions?.() ? '<button type="button" class="ml-report ml-edit" data-ml-edit>✏️ Edit jawaban & pembahasan</button>' : ''}
+      ${canEdit ? '<button type="button" class="ml-report ml-edit" data-ml-edit>✏️ Edit jawaban & pembahasan</button>' : ''}
     </div>`;
   }
 
@@ -489,8 +559,9 @@
 
   /* ---------- events ---------- */
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-ml-start],[data-ml-restart],[data-ml-retry],[data-ml-pick],[data-ml-next],[data-ml-again],[data-ml-wrong],[data-ml-list],[data-ml-clear],[data-ml-goto],[data-ml-prev],[data-ml-skip],[data-ml-finish],[data-ml-review-now],[data-ml-review],[data-ml-filter],[data-ml-lf],[data-ml-more],[data-ml-flag],[data-ml-material],[data-ml-report],[data-ml-edit],[data-ml-edit],[data-ml-resume-home],[data-ml-discard-home],#backFromMateriLatihan,[data-latihan-open]');
+    const t = e.target.closest('[data-ml-start],[data-ml-restart],[data-ml-retry],[data-ml-pick],[data-ml-next],[data-ml-again],[data-ml-wrong],[data-ml-list],[data-ml-clear],[data-ml-goto],[data-ml-prev],[data-ml-skip],[data-ml-finish],[data-ml-review-now],[data-ml-review],[data-ml-filter],[data-ml-lf],[data-ml-more],[data-ml-flag],[data-ml-material],[data-ml-report],[data-ml-edit],[data-ml-bobot],[data-ml-resume-home],[data-ml-discard-home],#backFromMateriLatihan,[data-latihan-open]');
     if (!t) return;
+    if (t.matches('[data-ml-bobot]')) return window.CLINED_KEDKEL_2026_MATERI?.openBobotModal?.();
     if (t.matches('[data-latihan-open]')) {
       const sec = t.closest('[data-block-key]');
       return openList(norm(sec.dataset.blockKey), (sec.querySelector('h2')?.textContent || sec.dataset.blockKey).replace(/^BLOK\s+/i, ''), sec.id);

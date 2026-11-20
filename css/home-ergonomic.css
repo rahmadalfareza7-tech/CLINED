@@ -351,4 +351,380 @@ html body #resepPage #resepHost {
   word-break: normal !important;
 }
 
+/* ── KEDKEL 2026: Materi PPT pills & Deskripsi Bobot Soal modal ── */
+.clinical-bank-bobot {
+  border: 1.5px solid #0284c7;
+  border-bottom-width: 3px;
+  border-radius: 13px;
+  min-height: 42px;
+  padding: 0 11px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.clinical-bank-bobot:active {
+  transform: translateY(2px);
+  border-bottom-width: 1.5px;
+}
+:root.dark .clinical-bank-bobot {
+  background: rgba(14, 165, 233, .18);
+  border-color: #38bdf8;
+  color: #7dd3fc;
+}
+
+.quiz-materi-bar {
+  margin: 0 0 12px;
+}
+.quiz-materi-bar[hidden] {
+  display: none !important;
+}
+.quiz-materi-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.materi-ppt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #0284c7;
+  border-bottom-width: 3px;
+  background: rgba(14, 165, 233, .11);
+  color: #0369a1;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-decoration: none;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.materi-ppt-btn:hover {
+  background: rgba(14, 165, 233, .18);
+}
+.materi-ppt-btn:active {
+  transform: translateY(1px);
+  border-bottom-width: 1.5px;
+}
+:root.dark .materi-ppt-btn {
+  background: rgba(56, 189, 248, .16);
+  border-color: #38bdf8;
+  color: #bae6fd;
+}
+.materi-ppt-sub-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 11.5px;
+  font-weight: 700;
+  text-decoration: none;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.explain-materi-box {
+  margin: 8px 0 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(14, 165, 233, .32);
+  background: rgba(14, 165, 233, .08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+:root.dark .explain-materi-box {
+  background: rgba(14, 165, 233, .12);
+  border-color: rgba(56, 189, 248, .35);
+}
+.explain-materi-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.explain-materi-tag {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0369a1;
+  background: rgba(14, 165, 233, .16);
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+:root.dark .explain-materi-tag {
+  color: #7dd3fc;
+}
+.explain-materi-head small {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.explain-materi-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Modal Deskripsi Bobot Soal */
+.kedkel-bobot-modal {
+  width: min(680px, 95vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  overflow: hidden;
+}
+.kedkel-bobot-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.kedkel-bobot-head h2 {
+  margin: 2px 0 4px;
+  font-size: 19px;
+  line-height: 1.25;
+}
+.kedkel-bobot-head p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.kedkel-bobot-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.kb-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.kb-stat-pill {
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+.kb-drive-root-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 12px;
+  background: #0284c7;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.kedkel-bobot-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+#kedkelBobotSearch {
+  flex: 1 1 200px;
+  min-width: 0;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.kedkel-bobot-sort {
+  display: flex;
+  gap: 6px;
+}
+.kedkel-bobot-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+.kb-topic-card {
+  border: 1.5px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+  padding: 11px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.kb-topic-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.kb-topic-num {
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(14, 165, 233, .15);
+  color: #0369a1;
+  font-weight: 900;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+}
+:root.dark .kb-topic-num {
+  color: #7dd3fc;
+}
+.kb-topic-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.kb-topic-title b {
+  display: block;
+  font-size: 13.5px;
+  line-height: 1.3;
+}
+.kb-topic-title small {
+  display: block;
+  color: var(--muted);
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+.kb-topic-weight {
+  flex: 0 0 auto;
+  text-align: right;
+}
+.kb-topic-weight b {
+  display: block;
+  font-size: 13px;
+  color: #16a34a;
+}
+:root.dark .kb-topic-weight b {
+  color: #4ade80;
+}
+.kb-topic-weight small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.kb-weight-bar {
+  height: 5px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden;
+}
+.kb-weight-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #0ea5e9, #22c55e);
+}
+.kb-topic-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.kb-file-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(14, 165, 233, .35);
+  background: var(--card);
+  color: #0369a1;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-decoration: none;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+:root.dark .kb-file-link {
+  color: #7dd3fc;
+}
+.kb-train-btn {
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid #16a34a;
+  background: rgba(22, 163, 74, .12);
+  color: #15803d;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+:root.dark .kb-train-btn {
+  color: #4ade80;
+}
+
+.ml-bobot-btn {
+  margin-left: auto;
+  padding: 7px 11px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(255, 255, 255, .65);
+  background: rgba(255, 255, 255, .2);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ml-ppt-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(14, 165, 233, .35);
+  background: rgba(14, 165, 233, .1);
+  color: #0369a1;
+  font-size: 11.5px;
+  font-weight: 800;
+  text-decoration: none;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+:root.dark .ml-ppt-link {
+  color: #7dd3fc;
+}
+
+@media (max-width: 560px) {
+  .clinical-bank-actions {
+    flex-wrap: wrap;
+  }
+  .ml-hero {
+    flex-wrap: wrap;
+  }
+  .ml-bobot-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+
 
