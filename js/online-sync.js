@@ -7,15 +7,36 @@
   const learningKeys=()=>Array.from({length:localStorage.length},(_,i)=>localStorage.key(i)).filter(k=>k&&safe(k));
   let suppress=false, sending=false, dirty=true, lastPullAt=0;
   const PERIODIC_PULL_MS=10*60_000;
+  const nativeSet=localStorage.setItem.bind(localStorage),nativeRemove=localStorage.removeItem.bind(localStorage);
   const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||'')??f}catch{return f}};
-  const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+  let memQueue=null, queueFlushTimer=0;
+  function getQueue(){
+    if(!memQueue){
+      const raw=read(QUEUE,[]);
+      memQueue=Array.isArray(raw)?raw:[];
+    }
+    return memQueue;
+  }
+  function flushQueueNow(){
+    clearTimeout(queueFlushTimer);queueFlushTimer=0;
+    if(!memQueue)return;
+    try{nativeSet(QUEUE,JSON.stringify(memQueue));}catch{}
+  }
+  function scheduleQueueFlush(){
+    clearTimeout(queueFlushTimer);
+    queueFlushTimer=setTimeout(flushQueueNow,180);
+  }
+  function setQueue(next,immediate=false){
+    memQueue=Array.isArray(next)?next.slice(-200):[];
+    if(immediate)flushQueueNow();
+    else scheduleQueueFlush();
+  }
   const uuid=()=>crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`;
-  function clearLocalLearningData(){suppress=true;try{for(const k of learningKeys())localStorage.removeItem(k);localStorage.removeItem(QUEUE);localStorage.removeItem(LEGACY_QUEUE);localStorage.removeItem(CURSOR);}finally{suppress=false;}}
+  function clearLocalLearningData(){suppress=true;try{for(const k of learningKeys())localStorage.removeItem(k);memQueue=[];clearTimeout(queueFlushTimer);nativeRemove(QUEUE);nativeRemove(LEGACY_QUEUE);nativeRemove(CURSOR);}finally{suppress=false;}}
   function switchUser(userId){const id=String(userId||''),prev=localStorage.getItem(ACTIVE_USER)||'';if(!id){clearLocalLearningData();localStorage.removeItem(ACTIVE_USER);return{changed:Boolean(prev)}}if(prev!==id){clearLocalLearningData();localStorage.setItem(ACTIVE_USER,id);dirty=true;lastPullAt=0;return{changed:true}}return{changed:false}}
-  function enqueue(operation){if(suppress)return;write(QUEUE,read(QUEUE,[]).filter(x=>x.key!==operation.key).concat(operation).slice(-200));dirty=true;}
+  function enqueue(operation){if(suppress)return;const q=getQueue();const next=[];for(let i=0;i<q.length;i++){if(q[i]?.key!==operation.key)next.push(q[i]);}next.push(operation);setQueue(next,false);dirty=true;}
   function markSet(key,value){if(safe(key))enqueue({id:uuid(),type:'set',key,value,updatedAt:new Date().toISOString()});}
   function markDelete(key){if(safe(key))enqueue({id:uuid(),type:'delete',key,updatedAt:new Date().toISOString()});}
-  const nativeSet=localStorage.setItem.bind(localStorage),nativeRemove=localStorage.removeItem.bind(localStorage);
   localStorage.setItem=(key,value)=>{nativeSet(key,String(value));if(!suppress&&safe(key))markSet(key,String(value));};
   localStorage.removeItem=key=>{const was=safe(key)&&localStorage.getItem(key)!==null;nativeRemove(key);if(was&&!suppress)markDelete(key);};
   async function request(path,options={}){const r=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'Sinkronisasi gagal.');return d;}
@@ -102,8 +123,9 @@
 }
   function flushBeacon(){
     try{
+      flushQueueNow();
       if(!navigator.onLine||!localStorage.getItem(ACTIVE_USER))return;
-      const ops=read(QUEUE,[]);
+      const ops=getQueue();
       if(!ops.length)return;
       const payload=JSON.stringify({operations:ops.slice(-50)});
       if(payload.length<=60000){
@@ -115,12 +137,12 @@
     if(sending||!navigator.onLine)return;
     const id=localStorage.getItem(ACTIVE_USER);
     if(!id)return;
-    const needs=force||dirty||read(QUEUE,[]).length||(Date.now()-lastPullAt>=PERIODIC_PULL_MS);
+    const needs=force||dirty||getQueue().length||(Date.now()-lastPullAt>=PERIODIC_PULL_MS);
     if(!needs)return;
     sending=true;
     try{
       await pull(force);
-      const ops=read(QUEUE,[]);
+      const ops=getQueue().slice();
       const batches=[];
       let batch=[];
       for(const op of ops){
@@ -150,12 +172,12 @@
         });
         if(confirmed.length){
           const ids=new Set(confirmed.map(op=>op.id));
-          write(QUEUE,read(QUEUE,[]).filter(op=>!ids.has(op.id)));
+          setQueue(getQueue().filter(op=>!ids.has(op.id)),true);
         }
         apply(accepted);
         if(saved.updatedAt)localStorage.setItem(CURSOR,saved.updatedAt);
       }
-      dirty=read(QUEUE,[]).length>0;
+      dirty=getQueue().length>0;
       lastPullAt=Date.now();
     }catch{
       dirty=true;
@@ -169,6 +191,6 @@
   window.addEventListener('clined:auth-ready',()=>sync({force:true}));
   setInterval(()=>sync(),PERIODIC_PULL_MS);
   let dirtyTimer=0;
-  window.CLINED_ONLINE_SYNC={sync,switchUser,clearLocalLearningData,markDirty:()=>{dirty=true;clearTimeout(dirtyTimer);dirtyTimer=setTimeout(()=>sync({force:true}),250)}};
+  window.CLINED_ONLINE_SYNC={sync,switchUser,clearLocalLearningData,markDirty:()=>{dirty=true;clearTimeout(dirtyTimer);dirtyTimer=setTimeout(()=>sync({force:true}),900)}};
   window.addEventListener('load',()=>sync({force:true}),{once:true});
 })();

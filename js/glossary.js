@@ -69,13 +69,25 @@
   /* ───────── ketuk istilah di pembahasan ───────── */
   const TARGETS = '#explain, .ml-explain, #question';
   let busy = false;
+  function contentSignature(root) {
+    let len = 0;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: n => n.parentElement?.closest('.qcomments-slot,.explain-materi-box,script,style')
+        ? NodeFilter.FILTER_REJECT
+        : NodeFilter.FILTER_ACCEPT
+    });
+    while (walker.nextNode()) len += walker.currentNode.nodeValue.length;
+    return String(G.terms.length) + '|' + len;
+  }
   function annotate(root) {
-    if (busy || !G.matcher || !G.matcher.re || !root || root.dataset.glDone === String(G.terms.length) + '|' + root.textContent.length) return;
+    if (busy || !G.matcher || !G.matcher.re || !root) return;
+    const sig = contentSignature(root);
+    if (root.dataset.glDone === sig) return;
     busy = true;
     try {
       root.querySelectorAll('.gl-term').forEach(b => b.replaceWith(document.createTextNode(b.textContent)));
       root.normalize();
-      const used = new Set(), walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('button,a,.gl-term,textarea,script,style') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+      const used = new Set(), walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement?.closest('button,a,.gl-term,textarea,script,style,.qcomments-slot,.explain-materi-box') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
       const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
       for (const node of nodes) {
         const hits = window.ClinedGlossaryMatch.find(node.nodeValue, G.matcher, 12).filter(h => !used.has(h.id));
@@ -88,12 +100,43 @@
         }
         frag.append(node.nodeValue.slice(pos)); node.replaceWith(frag);
       }
-      root.dataset.glDone = String(G.terms.length) + '|' + root.textContent.length;
+      root.dataset.glDone = sig;
     } finally { busy = false; }
   }
-  function sweep() { if (!G.matcher?.re) return; document.querySelectorAll(TARGETS).forEach(annotate); }
+  function sweep() {
+    if (!G.matcher?.re) return;
+    const els = [...document.querySelectorAll(TARGETS)];
+    let idx = 0;
+    const step = () => {
+      if (idx >= els.length) return;
+      annotate(els[idx++]);
+      if (idx < els.length) {
+        if (typeof requestIdleCallback === 'function') requestIdleCallback(step, { timeout: 200 });
+        else setTimeout(step, 16);
+      }
+    };
+    step();
+  }
   let tmr = null;
-  const obs = new MutationObserver(() => { if (busy) return; clearTimeout(tmr); tmr = setTimeout(sweep, 120); });
+  function scheduleSweep() {
+    clearTimeout(tmr);
+    tmr = setTimeout(() => {
+      if (typeof requestIdleCallback === 'function') requestIdleCallback(sweep, { timeout: 300 });
+      else sweep();
+    }, 180);
+  }
+  const obs = new MutationObserver(muts => {
+    if (busy || !G.matcher?.re) return;
+    for (let i = 0; i < muts.length; i++) {
+      const target = muts[i].target;
+      if (!(target instanceof Element)) continue;
+      if (target.closest('.qcomments-slot,.explain-materi-box,.combat-fx,.pop-celebration,.xp-popup-layer,.clined-toast')) continue;
+      if (target.matches(TARGETS) || target.closest(TARGETS) || target.querySelector?.(TARGETS)) {
+        scheduleSweep();
+        return;
+      }
+    }
+  });
 
   function showSheet(id) {
     const t = G.byId.get(String(id)); if (!t) return;

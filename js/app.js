@@ -77,7 +77,8 @@ function addXP(amount,reason="",meta){
   renderXP();
   const leveledUp=xpLevel(after)>xpLevel(before);
   if(!meta?.silent)showXPPopup(gained,reason,leveledUp);
-  setTimeout(()=>{try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}},80);
+  clearTimeout(window.__clinedAchTimer);
+  window.__clinedAchTimer=setTimeout(()=>{try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}},450);
   return {before,after,gained,leveledUp};
 }
 function renderXP(){
@@ -365,11 +366,15 @@ document.addEventListener("pointerdown",(e)=>{
   window.setTimeout(()=>el.classList.remove("motion-pressed"),180);
 },{passive:true});
 
+let __clinedAudioCtx=null;
 function beep(type="correct"){
   if(!soundEnabled)return;
   try{
     const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
-    const ctx=new C(),o=ctx.createOscillator(),g=ctx.createGain();
+    if(!__clinedAudioCtx || __clinedAudioCtx.state==='closed') __clinedAudioCtx=new C();
+    const ctx=__clinedAudioCtx;
+    if(ctx.state==='suspended') ctx.resume().catch(()=>{});
+    const o=ctx.createOscillator(),g=ctx.createGain();
     o.connect(g);g.connect(ctx.destination);
     const now=ctx.currentTime;
     if(type==="correct"){
@@ -387,7 +392,7 @@ function beep(type="correct"){
 
 function combatFx(type,damageInfo=null){
   const card=document.querySelector("#quiz.quiz-card");
-  if(!card)return;
+  if(!card)return false;
   const lowMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || Number(navigator.hardwareConcurrency||8)<=4 || Number(navigator.deviceMemory||8)<=4;
   const rect=card.getBoundingClientRect();
   const layer=document.createElement("div");
@@ -401,7 +406,7 @@ function combatFx(type,damageInfo=null){
       <div class="battle-impact"><span></span></div>
       <div class="battle-slash s1"></div><div class="battle-slash s2"></div><div class="battle-slash s3"></div>
       <div class="battle-label">🩺 CLINICAL STRIKE!</div><div class="battle-sub">DIAGNOSTIC IMPACT</div>`;
-    for(let i=0;i<(lowMotion?12:24);i++){
+    for(let i=0;i<(lowMotion?10:18);i++){
       const p=document.createElement("i");p.className="battle-particle";
       p.style.setProperty("--a",(Math.random()*360)+"deg");
       p.style.setProperty("--d",(70+Math.random()*170)+"px");
@@ -413,13 +418,14 @@ function combatFx(type,damageInfo=null){
     requestAnimationFrame(()=>layer.classList.add("show"));
     vibrate([18,25,45,15,70]); beep("correct");
     setTimeout(()=>layer.remove(),1050);
+    return true;
   }else{
     layer.innerHTML=`
       <div class="battle-redout"></div>
       <div class="battle-damage-ring"></div>
       <div class="battle-crack c1"></div><div class="battle-crack c2"></div><div class="battle-crack c3"></div>
       <div class="battle-label damage">🚨 CLINICAL ERROR!</div><div class="battle-sub damage-sub">-${damageInfo?.damage||1} VITALITY • ERROR COMBO ${damageInfo?.combo||1}x</div>`;
-    for(let i=0;i<(lowMotion?8:12);i++){
+    for(let i=0;i<(lowMotion?6:10);i++){
       const p=document.createElement("i");p.className="damage-particle";
       p.style.setProperty("--a",(Math.random()*360)+"deg");
       p.style.setProperty("--d",(35+Math.random()*100)+"px");
@@ -432,12 +438,13 @@ function combatFx(type,damageInfo=null){
     requestAnimationFrame(()=>card.classList.add("damage-shake"));
     vibrate([70,35,100]); beep("wrong");
     setTimeout(()=>{layer.remove();card.classList.remove("damage-shake")},900);
+    return true;
   }
 }
 function answerReward(button){
   if(!button||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||window.innerWidth<700)return;
   const colors=['#34c759','#67e8f9','#facc15','#a7f3d0','#ffffff'];
-  for(let n=0;n<18;n++){
+  for(let n=0;n<14;n++){
     const particle=document.createElement('i');particle.className='clined-reward-particle';
     const angle=Math.random()*Math.PI*2,distance=45+Math.random()*100;
     particle.style.setProperty('--x',`${Math.cos(angle)*distance}px`);particle.style.setProperty('--y',`${Math.sin(angle)*distance}px`);
@@ -447,11 +454,11 @@ function answerReward(button){
 }
 function celebrate(){
   const lowMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || Number(navigator.hardwareConcurrency||8)<=4 || Number(navigator.deviceMemory||8)<=4;
-  combatFx("hit");
+  const hitFx=combatFx("hit");
   const layer=document.createElement("div");layer.className="pop-celebration";
   layer.innerHTML=`<div class="pop-burst"><span>✓</span></div><div class="pop-text">Benar!</div>`;
   document.body.appendChild(layer);
-  for(let i=0;i<(lowMotion?8:14);i++){
+  for(let i=0;i<(lowMotion?6:10);i++){
     const p=document.createElement("i");p.className="confetti";
     p.style.setProperty("--x",(Math.random()*180-90)+"px");
     p.style.setProperty("--r",(Math.random()*540-270)+"deg");
@@ -460,12 +467,12 @@ function celebrate(){
   }
   requestAnimationFrame(()=>layer.classList.add("show"));
   setTimeout(()=>layer.remove(),900);
-  vibrate([18,35,18]);beep("correct");
+  if(!hitFx){vibrate([18,35,18]);beep("correct");}
 }
-function wrongFx(){
+function wrongFx(playBeep=true){
   $("quiz")?.classList.add("shake");
   setTimeout(()=>$("quiz")?.classList.remove("shake"),430);
-  vibrate(28);beep("wrong");
+  vibrate(28);if(playBeep)beep("wrong");
 }
 
 function initTheme(){
@@ -594,7 +601,10 @@ function recordQuestionPerformance(q,correct){
   prev.lastAnswered=new Date().toISOString(); prev.bank=q.bank||selectedBank; prev.no=q.no;
   prev.primary=p.primary; prev.weights=p.weights;
   all[id]=prev; set(KEY.qstats,all);
-  try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
+  clearTimeout(window.__clinedAchTimer);
+  window.__clinedAchTimer=setTimeout(()=>{
+    try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
+  },450);
 }
 
 function abilityEvidence(){
@@ -854,13 +864,8 @@ function saveSession(){
     timerSeconds=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));
   }
   const savedAt=new Date().toISOString();
-  set(KEY.session,{
-    quiz,pos,score,selectedCount,selectedBank,streak,sessionXP,playerHP,enemyHP,wrongCombo,
-    answered,selectedAnswer,quizMode,timerSeconds,timerDuration,timerDeadline,
-    isCustom:!!window.__clinedCustomQuiz,
-    flagged:[...flagged],savedAt
-  });
-  if(!window.__clinedCustomQuiz && selectedBank && BANKS[selectedBank]){
+  const isBankBacked=!window.__clinedCustomQuiz && selectedBank && BANKS[selectedBank];
+  if(isBankBacked){
     const m=getBankSessionMap();
     const bankArr=BANKS[selectedBank]?.data||[];
     const items=quiz.map(q=>({
@@ -880,18 +885,34 @@ function saveSession(){
       items, savedAt
     }]);
     set(KEY.bankSessions,Object.fromEntries(entries));
+    set(KEY.session,{
+      compact:true,selectedBank,bankName:bankName(),
+      pos,score,selectedCount,total:quiz.length,
+      isCustom:false,savedAt
+    });
+  }else{
+    set(KEY.session,{
+      quiz,pos,score,selectedCount,selectedBank,streak,sessionXP,playerHP,enemyHP,wrongCombo,
+      answered,selectedAnswer,quizMode,timerSeconds,timerDuration,timerDeadline,
+      isCustom:!!window.__clinedCustomQuiz,
+      flagged:[...flagged],savedAt
+    });
   }
   renderResume();
 }
 function clearSession(){stopTimer();del(KEY.session);renderResume()}
 function renderResume(){
   const s=get(KEY.session,null);
-  if(!s||!s.quiz?.length){$("resumeCard").hidden=true;return}
+  const total=s?.compact?Number(s.total||0):(s?.quiz?.length||0);
+  if(!s||!total){$("resumeCard").hidden=true;return}
   $("resumeCard").hidden=false;
-  $("resumeText").textContent=`${BANKS[s.selectedBank||"utama"]?.name||"Kuis"} • Soal ${Math.min((s.pos||0)+1,s.quiz.length)} dari ${s.quiz.length} • ${s.score||0} benar`;
+  $("resumeText").textContent=`${BANKS[s.selectedBank||"utama"]?.name||s.bankName||"Kuis"} • Soal ${Math.min((s.pos||0)+1,total)} dari ${total} • ${s.score||0} benar`;
 }
 $("resumeBtn").onclick=()=>{
   const s=get(KEY.session,null);if(!s)return;
+  if(s.compact && s.selectedBank){
+    if(typeof resumeBankSession==="function"){resumeBankSession(s.selectedBank);return;}
+  }
   window.__clinedCustomQuiz=!!s.isCustom;
   quiz=s.quiz;pos=s.pos||0;score=s.score||0;selectedCount=s.selectedCount||quiz.length;
   selectedBank=(s.selectedBank&&BANKS[s.selectedBank])?s.selectedBank:(s.quiz?.[0]?.bank&&BANKS[s.quiz[0].bank])?s.quiz[0].bank:(Object.keys(BANKS)[0]||"utama");streak=s.streak||0;sessionXP=Number(s.sessionXP||0);playerHP=Number.isFinite(Number(s.playerHP))?Math.max(0,Math.min(100,Number(s.playerHP))):100;enemyHP=Number.isFinite(Number(s.enemyHP))?Math.max(0,Math.min(100,Number(s.enemyHP))):100;wrongCombo=Number(s.wrongCombo||0);answered=!!s.answered;selectedAnswer=s.selectedAnswer??null;
@@ -1436,11 +1457,11 @@ function runChunkedAfterPaint(tasks){
     const fn=tasks[idx++];
     try{fn();}catch{}
     if(idx<tasks.length){
-      if(typeof requestIdleCallback==='function')requestIdleCallback(step,{timeout:120});
-      else setTimeout(step,24);
+      if(typeof requestIdleCallback==='function')requestIdleCallback(step,{timeout:240});
+      else setTimeout(step,32);
     }
   };
-  requestAnimationFrame(()=>setTimeout(step,16));
+  requestAnimationFrame(()=>setTimeout(step,40));
 }
 
 function answer(i){
@@ -1448,15 +1469,19 @@ function answer(i){
   if(answered)return;
   answered=true;selectedAnswer=i;
   const q=quiz[pos];
+  const answerPos=pos;
   if(q.incomplete || q.jawabanBenar==null){
     q.selectedAnswer=i;
     document.querySelectorAll(".answer").forEach(b=>b.disabled=true);
-    if(quizMode==="study"){$("explainText").innerHTML=allExplanations(q);$("explain").style.display="block";}
     $("nextBtn").hidden=false;$("nextBtn").style.display="block";$("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
+    requestAnimationFrame(()=>{
+      if(pos!==answerPos)return;
+      if(quizMode==="study"){$("explainText").innerHTML=allExplanations(q);$("explain").style.display="block";}
+    });
     runChunkedAfterPaint([
       ()=>{recordDailyQuestion();},
       ()=>{addXP(5,"Soal dikerjakan",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});},
-      ()=>{if(quizMode==="study")mountBankQuestionComments(q,$("explainText"));},
+      ()=>{if(quizMode==="study" && pos===answerPos)mountBankQuestionComments(q,$("explainText"));},
       ()=>{saveSession();}
     ]);
     return;
@@ -1472,27 +1497,30 @@ function answer(i){
   });
   $("scoreLive").textContent=`${score} benar`;
   $("streakLive").textContent=streak>1?`🔥 ${streak} beruntun`:"";
-  if(quizMode==="study"){
-    $("explainText").innerHTML=allExplanations(q);
-    $("explain").style.display="block";
-  }
   $("nextBtn").hidden=false;
   $("nextBtn").style.display="block";
   $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
   const curStreak=streak, curBtn=ansBtns[i];
   requestAnimationFrame(()=>{
+    if(pos!==answerPos)return;
+    if(quizMode==="study"){
+      $("explainText").innerHTML=allExplanations(q);
+      $("explain").style.display="block";
+    }
     if(good){
       wrongCombo=0; renderHP();
       dealClinicalStrike(q);celebrate();
       answerReward(curBtn);
     }else{
       const dmg=applyDamage();
-      wrongFx();combatFx("damage",dmg);
+      const hitDmgFx=combatFx("damage",dmg);
+      wrongFx(!hitDmgFx);
     }
   });
   runChunkedAfterPaint([
     ()=>{recordDailyQuestion();},
-    ()=>{recordQuestionPerformance(q,good);if(good&&q.jawabanBenar!=null)recordRight(q);else if(!good)recordWrong(q);},
+    ()=>{recordQuestionPerformance(q,good);},
+    ()=>{if(good&&q.jawabanBenar!=null)recordRight(q);else if(!good)recordWrong(q);},
     ()=>{
       if(good){
         const gain=20 + Math.min(30,Math.max(0,(curStreak-1)*5));
@@ -1501,7 +1529,7 @@ function answer(i){
         addXP(5,"Tetap semangat—jawaban salah",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
       }
     },
-    ()=>{if(quizMode==="study")mountBankQuestionComments(q,$("explainText"));},
+    ()=>{if(quizMode==="study" && pos===answerPos)mountBankQuestionComments(q,$("explainText"));},
     ()=>{saveSession();}
   ]);
 }
