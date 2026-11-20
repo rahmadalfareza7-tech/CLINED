@@ -34,7 +34,7 @@
       b.disabled = !ta.value.trim() || S.busy;
       if (hadFocus) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
     };
-    const row = c => `<article class="qc-c" data-id="${esc(c.id)}"><span class="qc-av" style="${c.avatarUrl ? '' : `background:${hue(c.name)}`}" aria-hidden="true">${c.avatarUrl ? `<img class="qc-av-img" src="${esc(c.avatarUrl)}" alt="" loading="lazy">` : esc(ini(c.name))}</span>
+    const row = c => `<article class="qc-c" data-id="${esc(c.id)}"><span class="qc-av${c.avatarDeco ? ' has-deco' : ''}" style="${c.avatarUrl ? '' : `background:${hue(c.name)}`}" aria-hidden="true">${c.avatarUrl ? `<img class="qc-av-img" src="${esc(c.avatarUrl)}" alt="" loading="lazy">` : esc(ini(c.name))}${c.avatarDeco ? `<img class="avatar-deco-img" src="${esc(c.avatarDeco)}" alt="" loading="lazy">` : ''}</span>
       <div class="qc-body"><div class="qc-meta"><b>${esc(c.name)}</b>${(c.badges || []).map(x => `<em class="qc-badge b-${x}">${BADGE[x] || ''}</em>`).join('')}<time>${ago(c.at)}</time></div>
       <p>${esc(c.text)}</p>
       <div class="qc-act"><button type="button" class="qc-v${c.mine === 1 ? ' on up' : ''}" data-qc-vote="1" ${c.own ? 'disabled' : ''} aria-pressed="${c.mine === 1}" aria-label="Suka">👍 <span>${c.up}</span></button>

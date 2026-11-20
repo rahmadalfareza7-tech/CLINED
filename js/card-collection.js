@@ -12,9 +12,33 @@
   const KEY_STARS = 'clined_card_stars_v1';
   const KEY_BANNERS = 'clined_owned_banners_v1';
   const KEY_EQ_BANNER = 'clined_equipped_banner_v1';
+  const KEY_DECOS = 'clined_owned_decos_v1';
+  const KEY_EQ_DECO = 'clined_equipped_deco_v1';
   let shopTab = 'cards';
+  let decoFilter = 'all';
   const BASE_QUIZ_PER_DIAMOND = 5;
   const BASE_PACK_COST = 20;
+
+  const DECO_CATALOG = [
+    // 8 Cowok
+    { id: 'venom-tendrils',  name: 'Venom Tendrils',  gender: 'male',   icon: '🖤', price: 25, desc: 'Sulur simbiote hitam tajam',       img: 'assets/decorations/venom-tendrils.svg' },
+    { id: 'cyber-visor',     name: 'Cyber Visor',     gender: 'male',   icon: '⚡', price: 20, desc: 'Frame HUD neon cyan futuristik',   img: 'assets/decorations/cyber-visor.svg' },
+    { id: 'crimson-horns',   name: 'Crimson Horns',   gender: 'male',   icon: '😈', price: 25, desc: 'Tanduk merah menyala & bara api',  img: 'assets/decorations/crimson-horns.svg' },
+    { id: 'wolf-alpha',      name: 'Wolf Alpha',      gender: 'male',   icon: '🐺', price: 20, desc: 'Telinga serigala & aura es',       img: 'assets/decorations/wolf-alpha.svg' },
+    { id: 'samurai-flame',   name: 'Ronin Flame',     gender: 'male',   icon: '🔥', price: 30, desc: 'Kobaran biru & ikat kepala ronin', img: 'assets/decorations/samurai-flame.svg' },
+    { id: 'mecha-helmet',    name: 'Mecha Unit-01',   gender: 'male',   icon: '🤖', price: 25, desc: 'Helm mecha oranye-putih',          img: 'assets/decorations/mecha-helmet.svg' },
+    { id: 'obsidian-crown',  name: 'Obsidian King',   gender: 'male',   icon: '👑', price: 35, desc: 'Mahkota raja obsidian emas',       img: 'assets/decorations/obsidian-crown.svg' },
+    { id: 'thunder-aura',    name: 'Thunder Aura',    gender: 'male',   icon: '🌩️', price: 30, desc: 'Kilatan petir kuning menyambar',   img: 'assets/decorations/thunder-aura.svg' },
+    // 8 Cewek
+    { id: 'neko-ears',       name: 'Snow Neko',       gender: 'female', icon: '🐱', price: 20, desc: 'Telinga kucing putih & ekor',      img: 'assets/decorations/neko-ears.svg' },
+    { id: 'sakura-wreath',   name: 'Sakura Wreath',   gender: 'female', icon: '🌸', price: 20, desc: 'Karangan bunga sakura pink',       img: 'assets/decorations/sakura-wreath.svg' },
+    { id: 'bunny-hood',      name: 'Bunny Hood',      gender: 'female', icon: '🐰', price: 25, desc: 'Topi kelinci pastel imut',         img: 'assets/decorations/bunny-hood.svg' },
+    { id: 'crescent-dreams', name: 'Crescent Dreams', gender: 'female', icon: '🌙', price: 25, desc: 'Bulan sabit & awan mimpi',         img: 'assets/decorations/crescent-dreams.svg' },
+    { id: 'angel-halo',      name: 'Angel Halo',      gender: 'female', icon: '😇', price: 30, desc: 'Halo emas & sayap malaikat',       img: 'assets/decorations/angel-halo.svg' },
+    { id: 'butterfly-fairy', name: 'Butterfly Fairy', gender: 'female', icon: '🦋', price: 25, desc: 'Kupu-kupu ungu & debu peri',       img: 'assets/decorations/butterfly-fairy.svg' },
+    { id: 'royal-tiara',     name: 'Crystal Tiara',   gender: 'female', icon: '💎', price: 35, desc: 'Tiara permata pink-emas elegan',   img: 'assets/decorations/royal-tiara.svg' },
+    { id: 'starlight-ribbon',name: 'Starlight Ribbon',gender: 'female', icon: '🎀', price: 20, desc: 'Pita merah muda & bintang',        img: 'assets/decorations/starlight-ribbon.svg' }
+  ];
 
   const BANNER_CATALOG = [
     { id: 'sakura-blossom',  name: 'Sakura Blossom',  icon: '🌸', price: 15, desc: 'Kelopak sakura senja ala Discord',       img: 'assets/banners/sakura-blossom.svg' },
@@ -81,6 +105,20 @@
     try { localStorage.setItem(KEY_EQ_BANNER, id || ''); } catch {}
     scheduleServerSave();
   }
+  function getOwnedDecos() {
+    try { const a = JSON.parse(localStorage.getItem(KEY_DECOS) || '[]'); return Array.isArray(a) ? a : []; } catch { return []; }
+  }
+  function setOwnedDecos(arr) {
+    try { localStorage.setItem(KEY_DECOS, JSON.stringify([...new Set(arr)])); } catch {}
+    scheduleServerSave();
+  }
+  function getEquippedDeco() {
+    return localStorage.getItem(KEY_EQ_DECO) || '';
+  }
+  function setEquippedDeco(id) {
+    try { localStorage.setItem(KEY_EQ_DECO, id || ''); } catch {}
+    scheduleServerSave();
+  }
   function localCardPayload() {
     return {
       diamonds: isAdmin() ? 0 : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0),
@@ -88,7 +126,9 @@
       stars: getStarMap(),
       equippedId: localStorage.getItem(KEY_EQUIP) || '',
       ownedBanners: getOwnedBanners(),
-      equippedBanner: getEquippedBanner()
+      equippedBanner: getEquippedBanner(),
+      ownedDecos: getOwnedDecos(),
+      equippedDeco: getEquippedDeco()
     };
   }
   async function pushServerCardState(mode = 'save', useKeepalive = false) {
@@ -126,6 +166,8 @@
       if (typeof d.equippedId === 'string' && d.equippedId) localStorage.setItem(KEY_EQUIP, d.equippedId);
       if (Array.isArray(d.ownedBanners)) localStorage.setItem(KEY_BANNERS, JSON.stringify(d.ownedBanners));
       if (typeof d.equippedBanner === 'string') localStorage.setItem(KEY_EQ_BANNER, d.equippedBanner);
+      if (Array.isArray(d.ownedDecos)) localStorage.setItem(KEY_DECOS, JSON.stringify(d.ownedDecos));
+      if (typeof d.equippedDeco === 'string') localStorage.setItem(KEY_EQ_DECO, d.equippedDeco);
     } finally { applyingServer = false; }
     onExternalSync();
   }
@@ -139,7 +181,7 @@
       const d = await r.json().catch(() => null);
       if (!d) return;
       const local = localCardPayload();
-      const hasLocal = local.cards.length > 0 || local.diamonds > 0 || Object.keys(local.stars).length > 0 || local.ownedBanners.length > 0;
+      const hasLocal = local.cards.length > 0 || local.diamonds > 0 || Object.keys(local.stars).length > 0 || local.ownedBanners.length > 0 || local.ownedDecos.length > 0;
       if (!d.exists || cardDirty) {
         if (hasLocal || cardDirty) await pushServerCardState('merge');
         return;
@@ -497,6 +539,36 @@
       <div class="banner-shop-list">${items}</div>`;
   }
 
+  function buildDecoShop() {
+    const ownedSet = new Set(getOwnedDecos());
+    const eq = getEquippedDeco();
+    const dia = getDia();
+    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    const myIni = String(me?.name || 'C').trim().charAt(0).toUpperCase() || 'C';
+    const myAv = me?.avatarUrl ? `<img class="deco-shop-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
+    const list = DECO_CATALOG.filter(x => decoFilter === 'all' || x.gender === decoFilter);
+    const items = list.map(d => {
+      const isOwned = ownedSet.has(d.id);
+      const isEquipped = eq === d.id;
+      const canBuy = dia >= d.price;
+      const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : '';
+      const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : `💎 ${d.price} Beli`;
+      return `<div class="deco-shop-card${isEquipped ? ' equipped' : ''}">
+        <div class="deco-shop-av">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
+        <div class="deco-shop-title">${d.icon} ${esc(d.name)}</div>
+        <div class="deco-shop-sub">${d.gender === 'male' ? '👦 Cowok' : '👧 Cewek'} • ${esc(d.desc)}</div>
+        <button type="button" class="banner-shop-btn ${btnCls}" data-deco-id="${esc(d.id)}" ${!isOwned && !canBuy ? 'disabled' : ''}>${btnLabel}</button>
+      </div>`;
+    }).join('');
+    return `<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>8 Cowok • 8 Cewek</b></div>
+      <div class="deco-filter-row">
+        <button type="button" class="deco-filter-btn${decoFilter === 'all' ? ' on' : ''}" data-deco-filter="all">Semua (16)</button>
+        <button type="button" class="deco-filter-btn${decoFilter === 'male' ? ' on' : ''}" data-deco-filter="male">👦 Cowok (8)</button>
+        <button type="button" class="deco-filter-btn${decoFilter === 'female' ? ' on' : ''}" data-deco-filter="female">👧 Cewek (8)</button>
+      </div>
+      <div class="deco-shop-grid">${items}</div>`;
+  }
+
   function buildShop() {
     const d = getDia(), diaText = d === Infinity ? '∞' : d;
     const owned = getCards(), uniqueOwned = new Set(owned.map(c => c.id)).size;
@@ -524,7 +596,7 @@
       <div class="card-collection-grid">${buildGrid()}</div>`;
     return `<div class="card-shop-sheet">
       <div class="card-shop-head">
-        <div><span class="card-shop-eyebrow">CLINED SHOP • KARTU &amp; PROFIL CHAT</span><h3>Card Shop &amp; Deck</h3><p>Koleksi ${CARD_CATALOG.length} kartu organ &amp; ${BANNER_CATALOG.length} background chat ala Discord!</p></div>
+        <div><span class="card-shop-eyebrow">CLINED SHOP • KARTU, BANNER &amp; DEKORASI</span><h3>Card Shop &amp; Deck</h3><p>Koleksi ${CARD_CATALOG.length} kartu, ${BANNER_CATALOG.length} background chat, &amp; ${DECO_CATALOG.length} dekorasi avatar!</p></div>
         <button type="button" class="card-shop-close" id="closeCardShop" aria-label="Tutup">✕</button>
       </div>
       <div class="card-shop-dia-row">
@@ -532,10 +604,11 @@
         <span class="card-shop-dia-hint">+1 💎 setiap ${diaStep} soal benar</span>
       </div>
       <div class="card-shop-tabs" role="tablist">
-        <button type="button" class="card-shop-tab${shopTab === 'cards' ? ' on' : ''}" data-shop-tab="cards" role="tab" aria-selected="${shopTab === 'cards'}">🃏 Kartu Organ</button>
-        <button type="button" class="card-shop-tab${shopTab === 'banners' ? ' on' : ''}" data-shop-tab="banners" role="tab" aria-selected="${shopTab === 'banners'}">🎨 Background Chat (${BANNER_CATALOG.length})</button>
+        <button type="button" class="card-shop-tab${shopTab === 'cards' ? ' on' : ''}" data-shop-tab="cards" role="tab" aria-selected="${shopTab === 'cards'}">🃏 Kartu</button>
+        <button type="button" class="card-shop-tab${shopTab === 'banners' ? ' on' : ''}" data-shop-tab="banners" role="tab" aria-selected="${shopTab === 'banners'}">🎨 Banner (${BANNER_CATALOG.length})</button>
+        <button type="button" class="card-shop-tab${shopTab === 'decos' ? ' on' : ''}" data-shop-tab="decos" role="tab" aria-selected="${shopTab === 'decos'}">✨ Dekorasi (${DECO_CATALOG.length})</button>
       </div>
-      ${shopTab === 'banners' ? buildBannerShop() : cardsBody}
+      ${shopTab === 'banners' ? buildBannerShop() : shopTab === 'decos' ? buildDecoShop() : cardsBody}
     </div>`;
   }
 
@@ -795,6 +868,41 @@
         refreshShop();
       });
     });
+    document.querySelectorAll('#cardShopContainer [data-deco-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const next = btn.getAttribute('data-deco-filter') || 'all';
+        if (next !== decoFilter) { decoFilter = next; refreshShop(); }
+      });
+    });
+    document.querySelectorAll('#cardShopContainer [data-deco-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-deco-id');
+        const item = DECO_CATALOG.find(x => x.id === id);
+        if (!item) return;
+        const owned = getOwnedDecos();
+        const isOwned = owned.includes(id);
+        const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+        if (!isOwned) {
+          if (getDia() < item.price) { window.showToast?.(`Diamond kurang (butuh ${item.price} 💎).`); return; }
+          setDia(getDia() - item.price);
+          setOwnedDecos([...owned, id]);
+          setEquippedDeco(id);
+          if (me) me.avatarDeco = item.img;
+          window.showToast?.(`${item.icon} ${item.name} dibeli & dipasang!`);
+        } else if (getEquippedDeco() === id) {
+          setEquippedDeco('');
+          if (me) me.avatarDeco = '';
+          window.showToast?.('Dekorasi avatar dilepas.');
+        } else {
+          setEquippedDeco(id);
+          if (me) me.avatarDeco = item.img;
+          window.showToast?.(`${item.icon} ${item.name} dipasang!`);
+        }
+        window.dispatchEvent(new Event('clined:profile-style'));
+        if (typeof renderAccount === 'function') try { renderAccount(); } catch {}
+        refreshShop();
+      });
+    });
     document.getElementById('buyCardPack')?.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -813,7 +921,7 @@
   }
   function blockScroll(e) { if (e.target.closest && e.target.closest(".card-shop-sheet")) return; e.preventDefault(); }
   function showShop(tab) {
-    if (tab === 'cards' || tab === 'banners') shopTab = tab;
+    if (tab === 'cards' || tab === 'banners' || tab === 'decos') shopTab = tab;
     let modal = document.getElementById('cardShopModal');
     if (!modal) {
       modal = document.createElement('div');

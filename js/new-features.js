@@ -94,7 +94,7 @@ window.CLINED_Leaderboard = (function () {
   function renderRows(listEl, rows, meId, getXp, emptyMsg) {
     const lbAv = r => {
       const ini = String(r.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
-      return `<span class="lb-av" aria-hidden="true">${r.avatarUrl ? `<img class="lb-av-img" src="${escHtml(r.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}</span>`;
+      return `<span class="lb-av${r.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${r.avatarUrl ? `<img class="lb-av-img" src="${escHtml(r.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}${r.avatarDeco ? `<img class="avatar-deco-img" src="${escHtml(r.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
     };
     listEl.innerHTML = (rows || []).map((r, i) => {
       const rank = r.rank || (i + 1);
@@ -143,7 +143,7 @@ window.CLINED_Leaderboard = (function () {
       const ini = String(r.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
       return `<div class="lb-teaser-row${isMe ? ' leaderboard-me' : ''}">
         <span>${medal}</span>
-        <span class="lb-av lb-av-sm" aria-hidden="true">${r.avatarUrl ? `<img class="lb-av-img" src="${escHtml(r.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}</span>
+        <span class="lb-av lb-av-sm${r.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${r.avatarUrl ? `<img class="lb-av-img" src="${escHtml(r.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}${r.avatarDeco ? `<img class="avatar-deco-img" src="${escHtml(r.avatarDeco)}" alt="" loading="lazy">` : ''}</span>
         <span class="lb-teaser-name">${escHtml(r.name)}</span>
         <span class="lb-teaser-xp">⚡${r.xpWeekly.toLocaleString('id')}</span>
       </div>`;

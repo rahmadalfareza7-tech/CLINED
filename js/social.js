@@ -259,7 +259,7 @@
 
   /* ───────── LOBI & ARENA VISUAL ───────── */
   const initials = n => esc(String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase());
-  const avatar = (p, cls = '') => `<span class="soc-av ${cls}${p?.online ? ' on' : ''}" aria-hidden="true">${p?.avatarUrl ? `<img class="soc-av-img" src="${esc(p.avatarUrl)}" alt="" loading="lazy">` : initials(p?.name)}</span>`;
+  const avatar = (p, cls = '') => `<span class="soc-av ${cls}${p?.online ? ' on' : ''}${p?.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${p?.avatarUrl ? `<img class="soc-av-img" src="${esc(p.avatarUrl)}" alt="" loading="lazy">` : initials(p?.name)}${p?.avatarDeco ? `<img class="avatar-deco-img" src="${esc(p.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
   const resolveCard = raw => {
     if (!raw || !raw.id) return null;
     if (window.CLINED_CARDS?.getCardById) return window.CLINED_CARDS.getCardById(raw.id, raw.star || 1);

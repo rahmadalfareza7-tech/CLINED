@@ -3225,8 +3225,10 @@ function renderAccount(){
   const user=authCurrentUser(),account=getAccount(),nameEl=$('accountName'),usernameEl=$('accountUsername'),avatar=$('accountAvatar'),removeBtn=$('removeAvatarBtn'),profileFields=$('accountProfileFields');
   if(nameEl)nameEl.value=user?.name||account.name||'';if(usernameEl)usernameEl.value=user?.username||account.username||'';
   if(avatar){
-    if(user?.avatarUrl){avatar.innerHTML=`<img class="account-avatar-img" src="${esc(user.avatarUrl)}" alt="Foto profil">`;avatar.classList.add('has-photo');}
-    else{avatar.textContent=user?.name?.charAt(0).toUpperCase()||account.avatar||'C';avatar.classList.remove('has-photo');}
+    const decoHtml=user?.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
+    if(user?.avatarUrl){avatar.innerHTML=`<img class="account-avatar-img" src="${esc(user.avatarUrl)}" alt="Foto profil">${decoHtml}`;avatar.classList.add('has-photo');}
+    else{avatar.innerHTML=`<span>${esc(user?.name?.charAt(0).toUpperCase()||account.avatar||'C')}</span>${decoHtml}`;avatar.classList.remove('has-photo');}
+    avatar.classList.toggle('has-deco',!!user?.avatarDeco);
   }
   if(removeBtn){removeBtn.hidden=!(user&&user.avatarUrl);removeBtn.disabled=!(user&&user.avatarUrl);}
   const bPrev=$('accountBannerPreview'),bBg=$('accountBannerBg'),bAv=$('accountBannerMiniAv'),bName=$('accountBannerMiniName'),bUser=$('accountBannerMiniUser'),bRem=$('removeBannerBtn');
