@@ -214,8 +214,9 @@ function renderAllVisibleBankUI(){
   if(activeView){
     const activeBlock=canonicalBlockName(activeView.dataset.blockKey||'');
     renderUniversalBlockControls(activeBlock,activeView.id);
+  }else{
+    renderAvailableBlockControls?.('SSP','SSP');
   }
-  renderAvailableBlockControls?.('SSP','SSP');
 }
 window.CLINED_REFRESH_BANK_UI=renderAllVisibleBankUI;
 async function loadServerBanks(options={}){
@@ -325,14 +326,7 @@ window.CLINED_ENSURE_BANK_LOADED=ensureServerBankLoaded;
 // Bank soal stabil dibaca dari static JSON deployment sehingga tidak menguras egress Neon.
 // Neon tetap menjadi source of truth untuk bank yang memiliki versi admin lebih baru.
 window.addEventListener("clined:bank-updated",()=>{
-  renderBanks();
-  renderCounts();
-  document.querySelectorAll("[data-block-key]").forEach(page=>{
-    const key=page.dataset.blockKey;
-    if(key && typeof renderUniversalBlockControls==="function"){
-      renderUniversalBlockControls(canonicalBlockName(key),page.id);
-    }
-  });
+  renderAllVisibleBankUI();
 });
 let __spaHistoryLock=false;
 let __spaCurrentView="home";
@@ -734,11 +728,11 @@ function abilityEvidence(){
   return evidence;
 }
 function renderBanks(){
-  if(!$('bankChoices'))return;
+  const host=$('bankChoices'); if(!host)return;
   const banks=Object.fromEntries(Object.entries(BANKS||{}).filter(([id])=>blockForBank(id)==='SSP').map(([id,b])=>[id,{name:b.name,desc:`${b.count||b.data?.length||0} soal`} ]));
-  $('bankChoices').innerHTML=`<div class="bank-picker" role="group" aria-label="Pilih bank soal">${Object.entries(banks).map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?"selected":""}" data-bank="${id}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${esc(b.desc)}</span><i>${id===selectedBank?"✓":""}</i></button>`).join("")}</div>`;
+  host.innerHTML=`<div class="bank-picker" role="group" aria-label="Pilih bank soal">${Object.entries(banks).map(([id,b])=>`<button type="button" class="bank-choice block-bank-choice ${id===selectedBank?"selected":""}" data-bank="${id}" aria-pressed="${id===selectedBank}"><span class="bank-name">${esc(b.name)}</span><span class="bank-desc">${esc(b.desc)}</span><i>${id===selectedBank?"✓":""}</i></button>`).join("")}</div>`;
   $('bankNote').textContent="";
-  document.querySelectorAll('.bank-choice').forEach(b=>b.onclick=()=>{selectedBank=b.dataset.bank;selectedCount=10;renderBanks();renderCounts();});
+  host.querySelectorAll('.bank-choice').forEach(b=>b.onclick=()=>{selectedBank=b.dataset.bank;selectedCount=10;renderBanks();renderCounts();});
 }
 function renderCounts(){
   const bank=currentBank(), max=bank.length || Number(BANKS[selectedBank]?.count||0);
