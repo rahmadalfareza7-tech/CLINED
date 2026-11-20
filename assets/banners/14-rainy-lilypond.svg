@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg14" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#111d24"/>
+      <stop offset="48%" stop-color="#17333d"/>
+      <stop offset="84%" stop-color="#225763"/>
+      <stop offset="100%" stop-color="#19424f"/>
+    </linearGradient>
+    <linearGradient id="lotus14" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff0f7"/>
+      <stop offset="45%" stop-color="#ff9ec8"/>
+      <stop offset="100%" stop-color="#d43f82"/>
+    </linearGradient>
+    <filter id="glow14" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg14)"/>
+    <!-- Shimmering Turquoise Water Ripples -->
+    <g fill="none" stroke="#99f6ff" opacity="0.65">
+      <ellipse cx="556" cy="92" rx="68" ry="16" stroke-width="1.5"/>
+      <ellipse cx="556" cy="92" rx="44" ry="10" stroke-width="1.8" opacity="0.85"/>
+      <ellipse cx="458" cy="88" rx="34" ry="9" stroke-width="1.4" opacity="0.6"/>
+    </g>
+    <!-- Soft Emerald-Mint Lilypads -->
+    <path d="M 434 94 C 414 90, 412 72, 438 66 C 464 60, 492 72, 484 86 C 476 96, 454 96, 446 88 Z" fill="#3da37d" stroke="#1b4d3e" stroke-width="1.6"/>
+    <path d="M 526 102 C 498 98, 496 76, 530 68 C 564 60, 600 74, 592 92 C 584 104, 554 106, 542 96 Z" fill="#4ec292" stroke="#1b4d3e" stroke-width="1.8"/>
+    <!-- Lush Blooming Pink Lotus Flower Sitting on Main Lilypad -->
+    <g transform="translate(556,74)" stroke="#8c1f52" stroke-width="1.4">
+      <path d="M -32 8 C -24 -12, -10 -14, 0 6 Z" fill="url(#lotus14)"/>
+      <path d="M 32 8 C 24 -12, 10 -14, 0 6 Z" fill="url(#lotus14)"/>
+      <path d="M -22 8 C -20 -20, -6 -24, 0 4 Z" fill="url(#lotus14)"/>
+      <path d="M 22 8 C 20 -20, 6 -24, 0 4 Z" fill="url(#lotus14)"/>
+      <path d="M -10 6 C -8 -26, 8 -26, 10 6 Z" fill="#ffd6eb"/>
+      <circle cx="0" cy="2" r="4.5" fill="#ffe680" stroke="none"/>
+    </g>
+    <!-- Magical Floating Golden Fireflies & Fairy Glow -->
+    <g filter="url(#glow14)">
+      <polygon points="494.0,30.0 485.8,31.8 484.0,40.0 482.2,31.8 474.0,30.0 482.2,28.2 484.0,20.0 485.8,28.2" fill="#fff8cc" opacity="0.98" />
+      <polygon points="617.0,34.0 609.7,35.7 608.0,43.0 606.3,35.7 599.0,34.0 606.3,32.3 608.0,25.0 609.7,32.3" fill="#ffd6f0" opacity="0.95" />
+      <circle cx="524" cy="42" r="3.2" fill="#fff5a8"/>
+      <circle cx="446" cy="48" r="2.8" fill="#b8fcff"/>
+      <circle cx="622" cy="72" r="3" fill="#fff5a8"/>
+    </g>
+    
+  </g>
+</svg>

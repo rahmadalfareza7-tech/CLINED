@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg17" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1c0b13"/>
+      <stop offset="48%" stop-color="#45172b"/>
+      <stop offset="84%" stop-color="#8c3152"/>
+      <stop offset="100%" stop-color="#cf6e8a"/>
+    </linearGradient>
+    <linearGradient id="rg17" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff5e6"/>
+      <stop offset="38%" stop-color="#ffc2ad"/>
+      <stop offset="76%" stop-color="#e67896"/>
+      <stop offset="100%" stop-color="#962e50"/>
+    </linearGradient>
+    <filter id="bok17" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="glow17" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg17)"/>
+    <g filter="url(#bok17)" opacity="0.42">
+      <circle cx="512" cy="44" r="28" fill="#ffe6d4"/>
+      <circle cx="604" cy="24" r="24" fill="#ffb8cc"/>
+    </g>
+    <!-- Flowing Sculpted Rose-Gold Satin Ribbon -->
+    <path d="M 380 120 C 436 86, 490 98, 542 52 C 578 20, 610 18, 640 24 L 640 52 C 606 48, 578 54, 548 80 C 498 122, 444 106, 404 120 Z" fill="url(#rg17)" opacity="0.92"/>
+    <path d="M 412 116 C 464 88, 514 92, 560 48 C 588 22, 616 20, 640 26" fill="none" stroke="#fff8ee" stroke-width="2.6" opacity="0.88"/>
+    <!-- Lush Multi-Petaled Velvet Rose -->
+    <g transform="translate(580,68)">
+      <circle cx="0" cy="0" r="42" fill="#7d1c3d"/>
+      <path d="M -36 -8 C -28 -36, 12 -42, 34 -16 C 14 -24, -14 -20, -36 -8 Z" fill="url(#rg17)"/>
+      <path d="M 36 8 C 28 36, -12 42, -34 16 C -14 24, 14 20, 36 8 Z" fill="url(#rg17)"/>
+      <path d="M -26 22 C -36 -6, -14 -32, 18 -24 C 0 -16, -14 0, -26 22 Z" fill="#ffbfd0"/>
+      <path d="M 26 -22 C 36 6, 14 32, -18 24 C 0 16, 14 0, 26 -22 Z" fill="#f08aa6"/>
+      <circle cx="0" cy="0" r="13" fill="#c93e68"/>
+      <path d="M -8 -2 C -4 -10, 8 -8, 8 2 C 6 10, -6 10, -6 2" fill="none" stroke="#fff5f8" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+    <g filter="url(#glow17)">
+      <polygon points="527.0,32.0 516.1,34.1 514.0,45.0 511.9,34.1 501.0,32.0 511.9,29.9 514.0,19.0 516.1,29.9" fill="#fff5e6" opacity="0.98" />
+      <polygon points="471.0,86.0 463.7,87.7 462.0,95.0 460.3,87.7 453.0,86.0 460.3,84.3 462.0,77.0 463.7,84.3" fill="#ffd6e6" opacity="0.94" />
+      <polygon points="634.0,24.0 625.8,25.8 624.0,34.0 622.2,25.8 614.0,24.0 622.2,22.2 624.0,14.0 625.8,22.2" fill="#ffffff" opacity="0.96" />
+    </g>
+    
+  </g>
+</svg>

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg07" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a0b0e"/>
+      <stop offset="46%" stop-color="#381014"/>
+      <stop offset="76%" stop-color="#78131a"/>
+      <stop offset="82%" stop-color="#191021"/>
+      <stop offset="100%" stop-color="#120b18"/>
+    </linearGradient>
+    <radialGradient id="redMask07" cx="72%" cy="55%" r="55%">
+      <stop offset="0%" stop-color="#c91826"/>
+      <stop offset="65%" stop-color="#780d16"/>
+      <stop offset="100%" stop-color="#2b060a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lens07" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#e8dce0"/>
+      <stop offset="100%" stop-color="#8c727a"/>
+    </linearGradient>
+    <filter id="sym07" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="12" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <clipPath id="clipL07"><rect x="370" y="0" width="164" height="120"/></clipPath>
+    <clipPath id="clipR07"><rect x="534" y="0" width="106" height="120"/></clipPath>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg07)"/>
+
+    <!-- === LEFT HALF: SHADED CRIMSON WEBBED HERO MASK === -->
+    <g clip-path="url(#clipL07)">
+      <ellipse cx="510" cy="64" rx="115" ry="90" fill="url(#redMask07)"/>
+      <!-- Curved 3D-Perspective Mask Webbing -->
+      <g stroke="#ff6659" stroke-width="1.2" opacity="0.62" fill="none">
+        <line x1="534" y1="68" x2="438" y2="-12"/>
+        <line x1="534" y1="68" x2="404" y2="20"/>
+        <line x1="534" y1="68" x2="394" y2="66"/>
+        <line x1="534" y1="68" x2="416" y2="124"/>
+        <line x1="534" y1="68" x2="478" y2="134"/>
+        <path d="M 504 8 C 488 44, 488 84, 506 118"/>
+        <path d="M 476 2 C 456 42, 456 86, 478 122"/>
+        <path d="M 448 -2 C 424 40, 426 88, 450 126"/>
+      </g>
+      <!-- Sculpted Black-Rimmed Hero Lens with Metallic Rim Highlight -->
+      <path d="M 454 22 C 482 34, 514 64, 526 96 C 492 100, 464 88, 454 62 C 448 44, 448 32, 454 22 Z"
+            fill="#0a080a" stroke="#060507" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M 463 36 C 484 46, 507 68, 515 88 C 490 91, 470 80, 463 60 C 459 49, 459 42, 463 36 Z"
+            fill="url(#lens07)"/>
+      <!-- Inner rim shadow & specular glint -->
+      <path d="M 464 38 C 484 48, 504 66, 512 84" fill="none" stroke="#523f46" stroke-width="2.5" opacity="0.45"/>
+      <path d="M 468 58 C 476 74, 492 84, 508 86" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    </g>
+
+    <!-- === RIGHT HALF: WET ORGANIC SYMBIOTE WITH TENDRILS & GLOSSY SHEEN === -->
+    <g clip-path="url(#clipR07)">
+      <g filter="url(#sym07)">
+        <!-- Organic Chaotic Symbiote Mass + Branching Whipping Tendrils -->
+        <path d="M 534 0 L 586 0 L 574 16 L 614 4 L 592 26 L 636 18 L 606 44 L 640 52 L 608 68 L 638 88 L 602 92 L 626 116 L 584 108 L 570 120 L 534 120 Z"
+              fill="#060509"/>
+        <!-- Fine creeping tendrils shooting into dark purple mist -->
+        <path d="M 588 22 Q 618 14, 638 4 M 598 46 Q 622 44, 638 36 M 602 74 Q 624 80, 638 94 M 586 102 Q 608 112, 622 120"
+              fill="none" stroke="#060509" stroke-width="3.2" stroke-linecap="round"/>
+        <!-- Wet Glossy Symbiote Highlights on Black Tendrils -->
+        <path d="M 556 10 Q 574 6, 584 14 M 596 42 Q 610 46, 616 56 M 576 106 Q 592 108, 602 102"
+              fill="none" stroke="#c8bed9" stroke-width="1.8" stroke-linecap="round" opacity="0.72"/>
+      </g>
+      <!-- Iconic Jagged White Symbiote Predator Eye (Sharp Organic Notch!) -->
+      <path d="M 542 92 C 544 64, 566 30, 598 14 C 594 34, 594 46, 610 38 C 612 68, 594 94, 564 100 C 552 102, 544 98, 542 92 Z"
+            fill="#f5f3fa" stroke="#060509" stroke-width="3.5" stroke-linejoin="round"/>
+      <!-- Subtle violet-grey shadow curve inside white symbiote eye -->
+      <path d="M 546 90 C 570 94, 592 80, 604 52" fill="none" stroke="#b9afc9" stroke-width="3.5" opacity="0.65"/>
+    </g>
+
+    <!-- Sharp Center Split Shadow -->
+    <line x1="534" y1="0" x2="534" y2="120" stroke="#050408" stroke-width="3"/>
+    
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg05" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#140a0d"/>
+      <stop offset="50%" stop-color="#290a10"/>
+      <stop offset="86%" stop-color="#4d0a14"/>
+      <stop offset="100%" stop-color="#140407"/>
+    </linearGradient>
+    <linearGradient id="sl05" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a80a1c" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#ff1a35"/>
+      <stop offset="68%" stop-color="#fff4e0"/>
+      <stop offset="100%" stop-color="#ff334b" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow05" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg05)"/>
+    <!-- Dark Ink Slash Backdrop -->
+    <path d="M 378 120 Q 496 52, 640 0 L 640 16 Q 512 66, 404 120 Z" fill="#090204" opacity="0.65"/>
+    <g filter="url(#glow05)">
+      <!-- Primary Sweeping Katana Arc -->
+      <path d="M 380 112 Q 502 52, 638 4 Q 514 68, 396 118 Z" fill="url(#sl05)"/>
+      <!-- Fierce Counter-Slash -->
+      <path d="M 426 14 Q 532 52, 632 108 Q 526 62, 418 20 Z" fill="url(#sl05)" opacity="0.92"/>
+      <!-- Fast High-Edge Slash -->
+      <path d="M 484 118 Q 562 72, 640 40 Q 570 80, 496 120 Z" fill="url(#sl05)" opacity="0.8"/>
+      <!-- Razor Micro-Slash -->
+      <path d="M 454 6 Q 528 32, 608 42 Q 524 36, 448 10 Z" fill="url(#sl05)" opacity="0.68"/>
+      <!-- Blazing Impact Flash at Crosspoint -->
+      <polygon points="544.0,56.0 529.8,57.8 528.0,72.0 526.2,57.8 512.0,56.0 526.2,54.2 528.0,40.0 529.8,54.2" fill="#ffffff" opacity="0.96" />
+      <line x1="515.1" y1="12.3" x2="521.1" y2="5.4" stroke="#ffffff" stroke-width="2.0" stroke-linecap="round" opacity="0.65"/><line x1="461.9" y1="84.5" x2="464.9" y2="87.7" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity="0.92"/><line x1="478.7" y1="54.6" x2="474.3" y2="61.1" stroke="#ff334b" stroke-width="1.9" stroke-linecap="round" opacity="0.78"/><line x1="426.2" y1="73.1" x2="425.0" y2="71.8" stroke="#ffffff" stroke-width="2.0" stroke-linecap="round" opacity="0.87"/><line x1="520.9" y1="58.8" x2="511.5" y2="67.0" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" opacity="0.92"/><line x1="582.7" y1="53.6" x2="570.1" y2="53.9" stroke="#ffd499" stroke-width="2.1" stroke-linecap="round" opacity="0.82"/><line x1="509.0" y1="88.8" x2="497.6" y2="98.3" stroke="#ffd499" stroke-width="1.5" stroke-linecap="round" opacity="0.71"/><line x1="537.4" y1="107.4" x2="552.6" y2="103.6" stroke="#ff334b" stroke-width="1.1" stroke-linecap="round" opacity="0.83"/><line x1="533.3" y1="98.0" x2="538.8" y2="99.9" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity="0.58"/><line x1="424.1" y1="99.3" x2="411.8" y2="107.0" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/><line x1="496.9" y1="62.0" x2="509.8" y2="64.7" stroke="#ffd499" stroke-width="1.3" stroke-linecap="round" opacity="0.88"/><line x1="457.5" y1="32.9" x2="442.5" y2="28.0" stroke="#ffd499" stroke-width="1.7" stroke-linecap="round" opacity="0.69"/><line x1="410.7" y1="41.1" x2="401.7" y2="48.1" stroke="#ffd499" stroke-width="1.7" stroke-linecap="round" opacity="0.73"/><line x1="607.7" y1="32.9" x2="623.3" y2="41.4" stroke="#ff334b" stroke-width="2.2" stroke-linecap="round" opacity="0.93"/><line x1="516.0" y1="80.6" x2="506.2" y2="90.9" stroke="#ffd499" stroke-width="1.4" stroke-linecap="round" opacity="0.61"/><line x1="551.8" y1="77.0" x2="553.9" y2="70.3" stroke="#ffd499" stroke-width="1.7" stroke-linecap="round" opacity="0.71"/><line x1="560.7" y1="87.0" x2="569.1" y2="80.0" stroke="#ffd499" stroke-width="1.4" stroke-linecap="round" opacity="0.78"/><line x1="453.4" y1="77.7" x2="459.3" y2="80.3" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.82"/><line x1="432.9" y1="20.0" x2="432.4" y2="27.7" stroke="#ffd499" stroke-width="1.4" stroke-linecap="round" opacity="0.71"/><line x1="568.5" y1="79.9" x2="559.9" y2="73.5" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round" opacity="0.69"/><line x1="539.8" y1="106.5" x2="535.0" y2="110.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.78"/><line x1="490.0" y1="76.1" x2="484.7" y2="68.7" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" opacity="0.56"/><line x1="457.0" y1="99.5" x2="452.6" y2="94.5" stroke="#ffd499" stroke-width="1.4" stroke-linecap="round" opacity="0.65"/><line x1="499.9" y1="90.7" x2="508.7" y2="80.4" stroke="#ff334b" stroke-width="1.6" stroke-linecap="round" opacity="0.76"/><line x1="579.5" y1="70.3" x2="587.5" y2="72.2" stroke="#ffd499" stroke-width="1.2" stroke-linecap="round" opacity="0.95"/><line x1="554.3" y1="10.1" x2="541.9" y2="0.8" stroke="#ff334b" stroke-width="1.2" stroke-linecap="round" opacity="0.89"/><line x1="521.3" y1="70.2" x2="520.2" y2="63.8" stroke="#ffd499" stroke-width="1.7" stroke-linecap="round" opacity="0.73"/><line x1="474.1" y1="92.5" x2="460.1" y2="100.7" stroke="#ffd499" stroke-width="2.1" stroke-linecap="round" opacity="0.67"/>
+    </g>
+    
+  </g>
+</svg>

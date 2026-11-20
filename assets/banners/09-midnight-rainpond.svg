@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg09" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#111912"/>
+      <stop offset="44%" stop-color="#1a271b"/>
+      <stop offset="76%" stop-color="#20382e"/>
+      <stop offset="100%" stop-color="#152b2e"/>
+    </linearGradient>
+    <linearGradient id="water09" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d5b63"/>
+      <stop offset="48%" stop-color="#3c737a"/>
+      <stop offset="100%" stop-color="#183036"/>
+    </linearGradient>
+    <linearGradient id="rock09" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7c8f7d"/>
+      <stop offset="45%" stop-color="#4e5e52"/>
+      <stop offset="100%" stop-color="#222b25"/>
+    </linearGradient>
+    <linearGradient id="pad09" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a8db5c"/>
+      <stop offset="55%" stop-color="#588c34"/>
+      <stop offset="100%" stop-color="#1f3b14"/>
+    </linearGradient>
+    <filter id="soft09" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg09)"/>
+    <!-- Painterly Moonlit Pond Surface with Soft Reflections -->
+    <path d="M 382 120 C 414 76, 466 54, 532 46 L 640 38 L 640 120 Z" fill="url(#water09)"/>
+    <!-- Soft Underwater Reflected Foliage Shadows -->
+    <ellipse cx="584" cy="76" rx="68" ry="18" fill="#13292e" opacity="0.45" filter="url(#soft09)"/>
+    <ellipse cx="468" cy="108" rx="74" ry="16" fill="#0f2126" opacity="0.55" filter="url(#soft09)"/>
+
+    <!-- Textured Mossy River Rocks (Natural Multi-Faceted Silhouette + Moss Patches) -->
+    <path d="M 384 96 C 388 64, 408 48, 434 44 C 460 40, 484 54, 490 78 C 494 94, 478 106, 444 106 C 412 106, 388 104, 384 96 Z" fill="url(#rock09)"/>
+    <path d="M 402 62 C 418 48, 444 46, 464 56 C 446 62, 422 64, 402 62 Z" fill="#82a656" opacity="0.55"/>
+    <path d="M 576 52 C 580 28, 602 16, 628 18 L 640 24 L 640 56 C 618 58, 594 58, 576 52 Z" fill="url(#rock09)"/>
+    <path d="M 588 34 C 602 22, 620 20, 636 28 C 620 34, 602 36, 588 34 Z" fill="#8bb557" opacity="0.5"/>
+
+    <!-- Background Reeds -->
+    <path d="M 356 120 Q 356.1 103.4, 356.2 86.9" fill="none" stroke="#46732d" stroke-width="2.9" stroke-linecap="round" opacity="0.90"/><path d="M 366 120 Q 370.9 96.5, 375.7 73.0" fill="none" stroke="#6aa641" stroke-width="2.0" stroke-linecap="round" opacity="0.94"/><path d="M 374 120 Q 374.6 88.0, 375.2 56.1" fill="none" stroke="#2d4f20" stroke-width="1.8" stroke-linecap="round" opacity="0.66"/><path d="M 384 120 Q 389.6 94.1, 395.1 68.2" fill="none" stroke="#2d4f20" stroke-width="1.9" stroke-linecap="round" opacity="0.82"/><path d="M 392 120 Q 393.6 94.8, 395.1 69.6" fill="none" stroke="#8cc452" stroke-width="2.8" stroke-linecap="round" opacity="0.86"/><path d="M 404 120 Q 411.4 98.9, 418.8 77.7" fill="none" stroke="#2d4f20" stroke-width="2.1" stroke-linecap="round" opacity="0.89"/><path d="M 412 120 Q 416.4 85.4, 420.7 50.9" fill="none" stroke="#8cc452" stroke-width="1.7" stroke-linecap="round" opacity="0.80"/><path d="M 536 49.61116573694393 Q 534.7 25.0, 533.4 0.4" fill="none" stroke="#46732d" stroke-width="2.2" stroke-linecap="round" opacity="0.66"/><path d="M 544 56.28103222179021 Q 551.5 33.2, 559.1 10.1" fill="none" stroke="#8cc452" stroke-width="1.8" stroke-linecap="round" opacity="0.80"/><path d="M 552 52.90679869304892 Q 556.9 35.1, 561.9 17.2" fill="none" stroke="#8cc452" stroke-width="2.8" stroke-linecap="round" opacity="0.88"/><path d="M 560 45.052227761259516 Q 562.9 22.6, 565.7 0.2" fill="none" stroke="#2d4f20" stroke-width="1.8" stroke-linecap="round" opacity="0.88"/><path d="M 568 51.54238912844776 Q 573.8 34.7, 579.5 17.9" fill="none" stroke="#2d4f20" stroke-width="3.0" stroke-linecap="round" opacity="0.81"/><path d="M 608 120 Q 615.9 83.9, 623.9 47.8" fill="none" stroke="#8cc452" stroke-width="1.8" stroke-linecap="round" opacity="0.80"/><path d="M 616 120 Q 614.9 90.0, 613.8 60.1" fill="none" stroke="#6aa641" stroke-width="2.6" stroke-linecap="round" opacity="0.80"/><path d="M 626 120 Q 620.7 84.9, 615.3 49.9" fill="none" stroke="#6aa641" stroke-width="1.9" stroke-linecap="round" opacity="0.71"/><path d="M 634 120 Q 639.9 99.6, 645.7 79.3" fill="none" stroke="#6aa641" stroke-width="3.1" stroke-linecap="round" opacity="0.68"/>
+
+    <!-- Richly Shaded Broad Veined Lilypads & Dewdrops -->
+    <g stroke="#1b3312" stroke-width="1.4">
+      <!-- Pad 1 -->
+      <path d="M 468 38 C 444 36, 436 16, 460 6 C 486 -2, 518 10, 510 26 C 504 38, 486 40, 478 30 Z" fill="url(#pad09)"/>
+      <path d="M 476 22 L 456 16 M 476 22 L 478 8 M 476 22 L 498 16" stroke="#c8eb88" stroke-width="1" opacity="0.55"/>
+      <!-- Pad 2 -->
+      <path d="M 526 24 C 506 24, 498 10, 518 0 L 564 0 C 568 14, 548 26, 534 18 Z" fill="url(#pad09)"/>
+      <path d="M 534 12 L 518 6 M 534 12 L 552 8" stroke="#c8eb88" stroke-width="1" opacity="0.55"/>
+      <!-- Pad 3 (Far Right) -->
+      <path d="M 614 34 C 594 30, 592 10, 614 2 L 640 2 L 640 36 Z" fill="url(#pad09)"/>
+      <!-- Glistening Dewdrop on Lilypad -->
+      <circle cx="540" cy="10" r="2.6" fill="#e6fcff" stroke="none"/>
+    </g>
+
+    <!-- Delicate Multi-Ring Raindrop Splash on Pond Surface -->
+    <g fill="none" stroke="#d8f9ff">
+      <ellipse cx="534" cy="90" rx="44" ry="13" stroke-width="1.2" opacity="0.45"/>
+      <ellipse cx="534" cy="90" rx="28" ry="8.5" stroke-width="1.8" opacity="0.78"/>
+      <ellipse cx="534" cy="90" rx="13" ry="4" stroke-width="2" opacity="0.95"/>
+      <!-- Tiny splash droplets jumping up -->
+      <circle cx="534" cy="74" r="2.2" fill="#ffffff" stroke="none"/>
+      <circle cx="534" cy="83" r="1.8" fill="#e6fcff" stroke="none"/>
+      <circle cx="527" cy="82" r="1.3" fill="#d4f7ff" stroke="none"/>
+      <circle cx="541" cy="81" r="1.3" fill="#d4f7ff" stroke="none"/>
+    </g>
+    <!-- Subtle Falling Rain Lines -->
+    <g stroke="#d6f5ff" stroke-width="0.9" opacity="0.28" stroke-linecap="round">
+      <line x1="436" y1="6" x2="430" y2="34"/><line x1="496" y1="14" x2="490" y2="46"/>
+      <line x1="576" y1="8" x2="570" y2="38"/><line x1="618" y1="42" x2="612" y2="74"/>
+    </g>
+    
+  </g>
+</svg>

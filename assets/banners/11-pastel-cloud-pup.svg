@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg11" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1e1133"/>
+      <stop offset="46%" stop-color="#3c1b5c"/>
+      <stop offset="76%" stop-color="#6e389e"/>
+      <stop offset="100%" stop-color="#54368c"/>
+    </linearGradient>
+    <radialGradient id="rain11" cx="68%" cy="94%" r="78%">
+      <stop offset="0%" stop-color="#fffbe0"/>
+      <stop offset="26%" stop-color="#ffd1eb"/>
+      <stop offset="50%" stop-color="#b8f5ec"/>
+      <stop offset="74%" stop-color="#c4b5ff"/>
+      <stop offset="100%" stop-color="#54368c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pupShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="72%" stop-color="#f2f7ff"/>
+      <stop offset="100%" stop-color="#d4e4ff"/>
+    </linearGradient>
+    <filter id="glow11" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg11)"/>
+    <ellipse cx="554" cy="112" rx="188" ry="132" fill="url(#rain11)"/>
+    <!-- Dreamy Soft Pastel Clouds behind Puppy -->
+    <path d="M 412 120 C 420 96, 448 88, 468 98 C 482 78, 514 80, 524 100 L 524 120 Z" fill="#ffffff" opacity="0.45"/>
+    <path d="M 588 120 C 594 94, 620 84, 640 94 L 640 120 Z" fill="#ffffff" opacity="0.45"/>
+    <!-- Twinkling Pastel Stars & Dream Bubbles -->
+    <g filter="url(#glow11)">
+      <polygon points="454.0,30.0 444.3,32.3 442.0,42.0 439.7,32.3 430.0,30.0 439.7,27.7 442.0,18.0 444.3,27.7" fill="#ffffff" opacity="0.98" />
+      <polygon points="521.0,18.0 513.8,19.8 512.0,27.0 510.2,19.8 503.0,18.0 510.2,16.2 512.0,9.0 513.8,16.2" fill="#fff5cc" opacity="0.96" />
+      <polygon points="629.0,24.0 620.1,26.1 618.0,35.0 615.9,26.1 607.0,24.0 615.9,21.9 618.0,13.0 620.1,21.9" fill="#ffffff" opacity="0.98" />
+      <polygon points="470.0,82.0 463.6,83.6 462.0,90.0 460.4,83.6 454.0,82.0 460.4,80.4 462.0,74.0 463.6,80.4" fill="#ffd6f0" opacity="0.92" />
+      <circle cx="484" cy="44" r="4" fill="#ffffff" opacity="0.88"/>
+      <circle cx="580" cy="22" r="3.8" fill="#fff0c2" opacity="0.92"/>
+      <circle cx="626" cy="56" r="3.5" fill="#d6f5ff" opacity="0.88"/>
+    </g>
+    <!-- Cel-Shaded Fluffy White Floppy-Eared Puppy -->
+    <g stroke="#4e8ce0" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M 508 66 C 474 74, 454 96, 450 120 L 502 120 Z" fill="url(#pupShade)"/>
+      <path d="M 600 66 C 624 76, 636 96, 640 120 L 604 120 Z" fill="url(#pupShade)"/>
+      <path d="M 498 120 C 494 72, 518 46, 554 46 C 590 46, 614 72, 610 120 Z" fill="url(#pupShade)"/>
+      <!-- Sparkly Glossy Sky-Blue Anime Eyes -->
+      <ellipse cx="528" cy="84" rx="6" ry="7.8" fill="#3d82de" stroke="none"/>
+      <circle cx="526" cy="81" r="2.4" fill="#ffffff" stroke="none"/>
+      <circle cx="530" cy="88" r="1.2" fill="#b8e6ff" stroke="none"/>
+      <ellipse cx="580" cy="84" rx="6" ry="7.8" fill="#3d82de" stroke="none"/>
+      <circle cx="578" cy="81" r="2.4" fill="#ffffff" stroke="none"/>
+      <circle cx="582" cy="88" r="1.2" fill="#b8e6ff" stroke="none"/>
+      <!-- Soft Gradient Rosy Cheeks -->
+      <ellipse cx="513" cy="96" rx="10" ry="5.5" fill="#ff9ec8" stroke="none" opacity="0.72"/>
+      <ellipse cx="595" cy="96" rx="10" ry="5.5" fill="#ff9ec8" stroke="none" opacity="0.72"/>
+      <!-- Cute ":3" Smile -->
+      <path d="M 544 90 Q 549 97, 554 90 Q 559 97, 564 90" fill="none" stroke="#3d82de" stroke-width="3.2"/>
+      <!-- Cute Chubby Paws -->
+      <ellipse cx="524" cy="117" rx="14" ry="9" fill="#ffffff"/>
+      <ellipse cx="584" cy="117" rx="14" ry="9" fill="#ffffff"/>
+    </g>
+    
+  </g>
+</svg>

@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg15" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#190a21"/>
+      <stop offset="46%" stop-color="#3e1347"/>
+      <stop offset="82%" stop-color="#7a1c6b"/>
+      <stop offset="100%" stop-color="#3d1145"/>
+    </linearGradient>
+    <linearGradient id="hood15" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#ebe6f5"/>
+      <stop offset="100%" stop-color="#b8afd4"/>
+    </linearGradient>
+    <linearGradient id="denim15" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7c98e8"/>
+      <stop offset="65%" stop-color="#526ec2"/>
+      <stop offset="100%" stop-color="#33488c"/>
+    </linearGradient>
+    <linearGradient id="visor15" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34304a"/>
+      <stop offset="100%" stop-color="#161424"/>
+    </linearGradient>
+    <filter id="bok15" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="glow15" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="sh15" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#1a061f" flood-opacity="0.5"/>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg15)"/>
+    <!-- Concert Stage Spotlight Beams -->
+    <polygon points="436,0 484,0 568,120 498,120" fill="#ff70cc" opacity="0.16"/>
+    <polygon points="588,0 638,0 532,120 476,120" fill="#42ffba" opacity="0.14"/>
+    <!-- Soft Neon Stage Bokeh -->
+    <g filter="url(#bok15)" opacity="0.45">
+      <circle cx="484" cy="36" r="22" fill="#ff4db8"/>
+      <circle cx="614" cy="40" r="22" fill="#38ffb8"/>
+    </g>
+
+    <!-- Twin Glowing Neon Concert Glowsticks (Held by Mascot) -->
+    <g filter="url(#glow15)">
+      <!-- Left Mint-Cyan Glowstick -->
+      <line x1="504" y1="74" x2="490" y2="18" stroke="#36ffaa" stroke-width="11" stroke-linecap="round"/>
+      <line x1="504" y1="74" x2="490" y2="18" stroke="#ebfff6" stroke-width="4" stroke-linecap="round"/>
+      <!-- Right Hot-Pink Glowstick -->
+      <line x1="604" y1="74" x2="618" y2="18" stroke="#ff3da8" stroke-width="11" stroke-linecap="round"/>
+      <line x1="604" y1="74" x2="618" y2="18" stroke="#ffe8f5" stroke-width="4" stroke-linecap="round"/>
+    </g>
+
+    <!-- Polished Anime-Chibi Bunny-Hoodie Idol Fan Mascot -->
+    <g filter="url(#sh15)" stroke="#1b1224" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+      <!-- Left Plush Bunny Ear -->
+      <path d="M 538 38 C 524 22, 520 6, 530 3 C 540 0, 548 16, 548 34 Z" fill="url(#hood15)"/>
+      <path d="M 536 30 C 530 18, 528 10, 533 9 C 538 8, 542 18, 542 28 Z" fill="#ffb3d9" stroke="none"/>
+      <!-- Right Floppy Bent Plush Bunny Ear + Cute Gold Star Pin -->
+      <path d="M 570 38 C 584 22, 592 8, 582 4 C 572 0, 562 16, 560 34 Z" fill="url(#hood15)"/>
+      <path d="M 572 30 C 578 18, 582 12, 577 10 C 572 9, 566 18, 566 28 Z" fill="#ffb3d9" stroke="none"/>
+
+      <!-- Puffy Rounded Chibi Hoodie Head & Body -->
+      <path d="M 516 120 C 512 88, 518 46, 534 36 C 546 28, 562 28, 574 36 C 590 46, 596 88, 592 120 Z" fill="url(#hood15)"/>
+      <!-- Hoodie inner rim shadow -->
+      <path d="M 526 58 C 526 42, 540 35, 554 35 C 568 35, 582 42, 582 58" fill="none" stroke="#ffffff" stroke-width="2.5" opacity="0.85"/>
+
+      <!-- Cute Curved Glossy Visor Faceplate -->
+      <rect x="526" y="42" width="56" height="32" rx="16" fill="url(#visor15)" stroke="#1b1224" stroke-width="3"/>
+      <!-- Visor glass sheen -->
+      <path d="M 536 48 Q 554 44, 572 48" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.32"/>
+      <!-- Happy Glowing Star-Sparkle Eyes + Blush -->
+      <g stroke="none">
+        <polygon points="548.2,58.0 542.8,59.8 541.0,65.2 539.2,59.8 533.8,58.0 539.2,56.2 541.0,50.8 542.8,56.2" fill="#ffe866" opacity="1.00" />
+        <polygon points="574.2,58.0 568.8,59.8 567.0,65.2 565.2,59.8 559.8,58.0 565.2,56.2 567.0,50.8 568.8,56.2" fill="#ffe866" opacity="1.00" />
+        <ellipse cx="534" cy="65" rx="4.5" ry="2.2" fill="#ff7ab8" opacity="0.75"/>
+        <ellipse cx="574" cy="65" rx="4.5" ry="2.2" fill="#ff7ab8" opacity="0.75"/>
+      </g>
+      <path d="M 550 62 Q 554 66, 558 62" fill="none" stroke="#ffe866" stroke-width="2.2"/>
+
+      <!-- Detailed Denim Idol Overalls + Straps + Pocket + Brass Buttons -->
+      <path d="M 518 84 L 590 84 L 594 120 L 514 120 Z" fill="url(#denim15)"/>
+      <!-- Overall Straps -->
+      <rect x="528" y="74" width="10" height="14" rx="2" fill="url(#denim15)"/>
+      <rect x="570" y="74" width="10" height="14" rx="2" fill="url(#denim15)"/>
+      <!-- Brass Buttons -->
+      <circle cx="533" cy="86" r="3" fill="#ffd24d" stroke="#1b1224" stroke-width="1.6"/>
+      <circle cx="575" cy="86" r="3" fill="#ffd24d" stroke="#1b1224" stroke-width="1.6"/>
+      <!-- Front Chest Pocket with Cute Pink Heart Badge -->
+      <path d="M 541 92 L 567 92 L 565 109 Q 554 114, 543 109 Z" fill="#445eb0" stroke="#1b1224" stroke-width="2.2"/>
+      <path d="M 554 98 C 554 95, 559 95, 559 98 C 559 101, 554 104, 554 104 C 554 104, 549 101, 549 98 C 549 95, 554 95, 554 98 Z" fill="#ff85c0" stroke="none"/>
+
+      <!-- Raised Chubby Cheering Paws Gripping the Glowsticks -->
+      <ellipse cx="508" cy="76" rx="11" ry="8.5" fill="url(#hood15)" transform="rotate(-24 508 76)"/>
+      <ellipse cx="600" cy="76" rx="11" ry="8.5" fill="url(#hood15)" transform="rotate(24 600 76)"/>
+      <!-- Glowstick Handles peeking below paws -->
+      <line x1="507" y1="81" x2="510" y2="92" stroke="#dce2f0" stroke-width="5.5"/>
+      <line x1="601" y1="81" x2="598" y2="92" stroke="#dce2f0" stroke-width="5.5"/>
+    </g>
+
+    <!-- Floating Concert Sparkles & Hearts -->
+    <g filter="url(#glow15)">
+      <polygon points="469.0,30.0 460.0,32.0 458.0,41.0 456.0,32.0 447.0,30.0 456.0,28.0 458.0,19.0 460.0,28.0" fill="#fff5cc" opacity="0.98" />
+      <polygon points="637.0,72.0 629.7,73.7 628.0,81.0 626.3,73.7 619.0,72.0 626.3,70.3 628.0,63.0 629.7,70.3" fill="#ffd6f0" opacity="0.96" />
+      <path d="M 468 74 C 468 67, 478 67, 478 74 C 478 79, 468 86, 468 86 C 468 86, 458 79, 458 74 C 458 67, 468 67, 468 74 Z" fill="#ff70c8"/>
+    </g>
+    
+  </g>
+</svg>

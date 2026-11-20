@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg08" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#202227"/>
+      <stop offset="48%" stop-color="#34373e"/>
+      <stop offset="86%" stop-color="#565b66"/>
+      <stop offset="100%" stop-color="#696f7a"/>
+    </linearGradient>
+    <linearGradient id="tailBody08" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4e535e"/>
+      <stop offset="45%" stop-color="#32353d"/>
+      <stop offset="100%" stop-color="#1a1c21"/>
+    </linearGradient>
+    <linearGradient id="tailBelly08" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b4bac7"/>
+      <stop offset="100%" stop-color="#6e7482"/>
+    </linearGradient>
+    <filter id="sh08" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="-4" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg08)"/>
+    <!-- Sleek Muscular Arching Shark Tail (Reference-Accurate Silhouette!) -->
+    <g filter="url(#sh08)" stroke="#111318" stroke-width="3.8" stroke-linejoin="round">
+      <!-- Sweeping Muscular Tail + Asymmetric Caudal Fin + Upper Dorsal Notch -->
+      <path d="M 640 120 L 574 120 C 574 96, 560 72, 536 68 C 516 65, 502 74, 488 86 C 498 68, 498 52, 486 44 C 496 36, 498 16, 486 0 L 510 0 C 520 20, 536 30, 562 30 C 584 30, 602 22, 594 2 C 618 18, 634 44, 640 78 Z"
+            fill="url(#tailBody08)"/>
+      <!-- Smooth Silver-Grey Belly Undercurve -->
+      <path d="M 626 120 L 574 120 C 574 96, 560 72, 536 68 C 562 60, 594 72, 616 98 C 622 106, 624 114, 626 120 Z"
+            fill="url(#tailBelly08)"/>
+      <!-- Subtle cel-shading ridge along upper tail muscle -->
+      <path d="M 526 36 C 556 42, 588 46, 616 66" fill="none" stroke="#6d7484" stroke-width="2.2" opacity="0.65"/>
+    </g>
+    <!-- Stylized Sharp White Street-Art / Shark-Jaw Graffiti Tag Hugging Tail -->
+    <g fill="#f4f6fa" stroke="#111318" stroke-width="1.6" stroke-linejoin="round">
+      <path d="M 588 48 L 614 52 L 604 62 L 626 66 L 616 78 L 636 86 L 620 94 L 612 80 L 598 86 L 602 70 L 586 72 L 594 58 Z"/>
+      <polygon points="596,56 606,58 600,66" fill="#23262e" stroke="none"/>
+      <polygon points="610,72 620,76 612,82" fill="#23262e" stroke="none"/>
+    </g>
+    <!-- Razor 4-Point Anime Glint on Tail Fin Fork -->
+    <polygon points="530.0,38.0 515.7,39.7 514.0,54.0 512.3,39.7 498.0,38.0 512.3,36.3 514.0,22.0 515.7,36.3" fill="#ffffff" opacity="0.96" />
+    
+  </g>
+</svg>

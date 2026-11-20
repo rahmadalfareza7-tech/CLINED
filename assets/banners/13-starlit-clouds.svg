@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg13" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#11182e"/>
+      <stop offset="48%" stop-color="#1d3066"/>
+      <stop offset="84%" stop-color="#365db5"/>
+      <stop offset="100%" stop-color="#5e8ee8"/>
+    </linearGradient>
+    <linearGradient id="cl13a" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="42%" stop-color="#a8d2ff"/>
+      <stop offset="100%" stop-color="#3e62b8"/>
+    </linearGradient>
+    <linearGradient id="cl13b" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dbeeff"/>
+      <stop offset="60%" stop-color="#75a6eb"/>
+      <stop offset="100%" stop-color="#2c4994"/>
+    </linearGradient>
+    <filter id="glow13" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg13)"/>
+    <!-- Delicate Diagonal Shooting Star Streak -->
+    <line x1="418" y1="16" x2="478" y2="42" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.72" filter="url(#glow13)"/>
+    <!-- Radiant Crescent Moon -->
+    <path d="M 562 20 A 32 32 0 1 0 586 78 A 24 24 0 1 1 562 20 Z" fill="#fffce8" filter="url(#glow13)"/>
+    <!-- Twinkling Star Clusters -->
+    <g filter="url(#glow13)">
+      <polygon points="487.0,42.0 479.7,43.7 478.0,51.0 476.3,43.7 469.0,42.0 476.3,40.3 478.0,33.0 479.7,40.3" fill="#ffffff" opacity="0.98" />
+      <polygon points="525.0,24.0 516.0,26.0 514.0,35.0 512.0,26.0 503.0,24.0 512.0,22.0 514.0,13.0 516.0,22.0" fill="#fff8cc" opacity="0.98" />
+      <polygon points="622.0,20.0 613.8,21.8 612.0,30.0 610.2,21.8 602.0,20.0 610.2,18.2 612.0,10.0 613.8,18.2" fill="#ffffff" opacity="0.96" />
+      <polygon points="443.0,56.0 437.4,57.4 436.0,63.0 434.6,57.4 429.0,56.0 434.6,54.6 436.0,49.0 437.4,54.6" fill="#ccebff" opacity="0.90" />
+      <circle cx="496" cy="22" r="2.2" fill="#ffffff"/>
+      <circle cx="598" cy="46" r="2.6" fill="#fff8cc"/>
+      <circle cx="458" cy="20" r="1.8" fill="#d6f0ff"/>
+    </g>
+    <!-- Back Layer Anime Clouds -->
+    <path d="M 380 120 C 394 92, 430 82, 456 94 C 476 66, 524 68, 542 94 C 566 82, 594 84, 608 62 C 622 38, 636 34, 640 38 L 640 120 Z" fill="url(#cl13b)"/>
+    <!-- Front Moonlit Highlight Clouds -->
+    <path d="M 424 120 C 440 98, 474 92, 496 104 C 518 88, 560 92, 578 110 C 598 96, 624 92, 640 82 L 640 120 Z" fill="url(#cl13a)"/>
+    <path d="M 438 104 C 456 94, 478 94, 494 104 M 526 96 C 544 90, 562 94, 576 106" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.82"/>
+    
+  </g>
+</svg>

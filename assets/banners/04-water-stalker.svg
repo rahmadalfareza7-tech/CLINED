@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
+  <defs>
+
+    <linearGradient id="bg04" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#111215"/>
+      <stop offset="52%" stop-color="#07080a"/>
+      <stop offset="100%" stop-color="#020203"/>
+    </linearGradient>
+    <radialGradient id="skin04" cx="50%" cy="38%" r="60%">
+      <stop offset="0%" stop-color="#f2f3f7"/>
+      <stop offset="58%" stop-color="#c4c7d0"/>
+      <stop offset="88%" stop-color="#646873"/>
+      <stop offset="100%" stop-color="#1c1e24"/>
+    </radialGradient>
+    <filter id="ink04" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="2" seed="17" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    
+  </defs>
+  <clipPath id="npClip"><rect width="640" height="120"/></clipPath>
+  <g clip-path="url(#npClip)">
+
+    <rect width="640" height="120" fill="url(#bg04)"/>
+    <circle cx="452.2" cy="4.8" r="1.0" fill="#eef0f5" opacity="0.39"/><circle cx="462.3" cy="114.1" r="0.7" fill="#eef0f5" opacity="0.29"/><circle cx="509.7" cy="11.9" r="1.2" fill="#eef0f5" opacity="0.39"/><circle cx="495.4" cy="53.2" r="1.6" fill="#eef0f5" opacity="0.14"/><circle cx="588.3" cy="77.9" r="1.2" fill="#eef0f5" opacity="0.20"/><circle cx="395.6" cy="114.0" r="0.8" fill="#eef0f5" opacity="0.25"/><circle cx="450.9" cy="25.1" r="1.6" fill="#eef0f5" opacity="0.42"/><circle cx="472.9" cy="99.0" r="1.0" fill="#eef0f5" opacity="0.41"/><circle cx="550.1" cy="58.3" r="1.3" fill="#eef0f5" opacity="0.25"/><circle cx="621.6" cy="87.2" r="0.8" fill="#eef0f5" opacity="0.28"/><circle cx="466.4" cy="77.3" r="1.3" fill="#eef0f5" opacity="0.14"/><circle cx="345.0" cy="37.8" r="1.4" fill="#eef0f5" opacity="0.40"/><circle cx="571.1" cy="110.8" r="0.7" fill="#eef0f5" opacity="0.39"/><circle cx="610.0" cy="75.6" r="1.1" fill="#eef0f5" opacity="0.41"/><circle cx="583.6" cy="14.2" r="0.7" fill="#eef0f5" opacity="0.46"/><circle cx="531.5" cy="71.7" r="1.0" fill="#eef0f5" opacity="0.28"/><circle cx="440.0" cy="17.0" r="1.1" fill="#eef0f5" opacity="0.33"/><circle cx="526.4" cy="31.1" r="0.5" fill="#eef0f5" opacity="0.20"/><circle cx="456.1" cy="116.6" r="1.4" fill="#eef0f5" opacity="0.31"/><circle cx="445.0" cy="85.3" r="1.3" fill="#eef0f5" opacity="0.23"/><circle cx="472.5" cy="86.9" r="1.2" fill="#eef0f5" opacity="0.16"/><circle cx="539.5" cy="34.7" r="0.7" fill="#eef0f5" opacity="0.16"/><circle cx="343.6" cy="52.5" r="1.7" fill="#eef0f5" opacity="0.25"/><circle cx="501.9" cy="67.6" r="1.7" fill="#eef0f5" opacity="0.17"/><circle cx="517.3" cy="8.9" r="1.6" fill="#eef0f5" opacity="0.22"/><circle cx="581.2" cy="110.6" r="0.9" fill="#eef0f5" opacity="0.18"/><circle cx="607.9" cy="72.1" r="0.9" fill="#eef0f5" opacity="0.36"/><circle cx="418.7" cy="6.8" r="1.1" fill="#eef0f5" opacity="0.38"/><circle cx="350.8" cy="5.3" r="1.3" fill="#eef0f5" opacity="0.47"/><circle cx="426.6" cy="101.2" r="1.6" fill="#eef0f5" opacity="0.48"/><circle cx="538.3" cy="70.1" r="1.6" fill="#eef0f5" opacity="0.42"/><circle cx="584.0" cy="80.4" r="0.8" fill="#eef0f5" opacity="0.41"/><circle cx="434.5" cy="100.5" r="0.8" fill="#eef0f5" opacity="0.34"/><circle cx="610.7" cy="39.1" r="1.2" fill="#eef0f5" opacity="0.19"/><circle cx="450.7" cy="3.1" r="1.6" fill="#eef0f5" opacity="0.27"/><circle cx="606.2" cy="46.6" r="0.8" fill="#eef0f5" opacity="0.37"/><circle cx="525.3" cy="35.7" r="1.0" fill="#eef0f5" opacity="0.33"/><circle cx="513.4" cy="10.7" r="0.6" fill="#eef0f5" opacity="0.27"/><circle cx="358.3" cy="8.8" r="1.3" fill="#eef0f5" opacity="0.30"/><circle cx="560.2" cy="75.9" r="1.2" fill="#eef0f5" opacity="0.45"/><circle cx="506.2" cy="29.1" r="1.7" fill="#eef0f5" opacity="0.33"/><circle cx="594.0" cy="98.0" r="0.6" fill="#eef0f5" opacity="0.18"/><circle cx="393.9" cy="34.1" r="1.0" fill="#eef0f5" opacity="0.36"/><circle cx="416.0" cy="97.8" r="0.7" fill="#eef0f5" opacity="0.47"/><circle cx="406.0" cy="102.0" r="0.9" fill="#eef0f5" opacity="0.35"/><circle cx="597.0" cy="21.9" r="1.3" fill="#eef0f5" opacity="0.17"/><circle cx="619.1" cy="99.3" r="0.8" fill="#eef0f5" opacity="0.49"/><circle cx="443.7" cy="55.9" r="0.7" fill="#eef0f5" opacity="0.45"/><circle cx="383.2" cy="39.0" r="0.7" fill="#eef0f5" opacity="0.18"/><circle cx="560.6" cy="103.9" r="1.0" fill="#eef0f5" opacity="0.38"/><circle cx="448.9" cy="12.3" r="0.6" fill="#eef0f5" opacity="0.31"/><circle cx="453.4" cy="84.4" r="0.7" fill="#eef0f5" opacity="0.16"/><circle cx="472.6" cy="114.7" r="1.0" fill="#eef0f5" opacity="0.47"/><circle cx="431.1" cy="92.2" r="1.1" fill="#eef0f5" opacity="0.16"/><circle cx="597.2" cy="4.0" r="0.8" fill="#eef0f5" opacity="0.28"/><circle cx="430.5" cy="7.4" r="1.2" fill="#eef0f5" opacity="0.24"/><circle cx="375.7" cy="105.5" r="0.6" fill="#eef0f5" opacity="0.19"/><circle cx="492.2" cy="88.0" r="1.6" fill="#eef0f5" opacity="0.24"/><circle cx="574.3" cy="6.3" r="1.0" fill="#eef0f5" opacity="0.19"/><circle cx="563.9" cy="82.0" r="1.6" fill="#eef0f5" opacity="0.28"/><circle cx="458.9" cy="51.4" r="1.6" fill="#eef0f5" opacity="0.47"/><circle cx="537.2" cy="73.7" r="1.7" fill="#eef0f5" opacity="0.31"/><circle cx="375.4" cy="7.3" r="1.3" fill="#eef0f5" opacity="0.46"/><circle cx="468.2" cy="111.5" r="0.8" fill="#eef0f5" opacity="0.36"/><circle cx="615.3" cy="116.5" r="1.3" fill="#eef0f5" opacity="0.37"/><circle cx="526.4" cy="89.5" r="0.6" fill="#eef0f5" opacity="0.22"/><circle cx="611.8" cy="30.5" r="1.4" fill="#eef0f5" opacity="0.47"/><circle cx="459.8" cy="22.4" r="1.1" fill="#eef0f5" opacity="0.29"/><circle cx="546.8" cy="74.0" r="1.4" fill="#eef0f5" opacity="0.42"/><circle cx="477.3" cy="82.7" r="1.5" fill="#eef0f5" opacity="0.41"/><circle cx="379.5" cy="52.2" r="1.4" fill="#eef0f5" opacity="0.33"/><circle cx="547.5" cy="33.2" r="0.5" fill="#eef0f5" opacity="0.26"/><circle cx="426.9" cy="91.4" r="1.3" fill="#eef0f5" opacity="0.24"/><circle cx="429.5" cy="30.4" r="1.0" fill="#eef0f5" opacity="0.47"/><circle cx="496.2" cy="24.0" r="1.0" fill="#eef0f5" opacity="0.26"/><circle cx="514.2" cy="44.7" r="1.3" fill="#eef0f5" opacity="0.50"/><circle cx="431.6" cy="83.4" r="1.1" fill="#eef0f5" opacity="0.46"/><circle cx="524.6" cy="87.2" r="0.9" fill="#eef0f5" opacity="0.16"/><circle cx="488.3" cy="104.0" r="1.2" fill="#eef0f5" opacity="0.48"/><circle cx="439.2" cy="92.9" r="1.6" fill="#eef0f5" opacity="0.26"/><circle cx="544.3" cy="25.3" r="1.1" fill="#eef0f5" opacity="0.45"/><circle cx="581.8" cy="7.7" r="1.0" fill="#eef0f5" opacity="0.48"/><circle cx="462.7" cy="6.0" r="1.1" fill="#eef0f5" opacity="0.43"/><circle cx="622.6" cy="9.0" r="0.6" fill="#eef0f5" opacity="0.15"/><circle cx="572.5" cy="102.1" r="1.1" fill="#eef0f5" opacity="0.17"/><circle cx="530.7" cy="54.1" r="1.0" fill="#eef0f5" opacity="0.19"/><circle cx="590.9" cy="25.9" r="0.7" fill="#eef0f5" opacity="0.41"/><circle cx="346.6" cy="46.6" r="1.2" fill="#eef0f5" opacity="0.31"/><circle cx="480.4" cy="109.8" r="0.7" fill="#eef0f5" opacity="0.13"/><circle cx="545.0" cy="11.5" r="1.4" fill="#eef0f5" opacity="0.44"/><circle cx="421.8" cy="57.1" r="1.4" fill="#eef0f5" opacity="0.25"/><circle cx="434.0" cy="73.9" r="1.2" fill="#eef0f5" opacity="0.33"/><circle cx="574.7" cy="75.0" r="1.5" fill="#eef0f5" opacity="0.19"/><circle cx="465.2" cy="79.1" r="1.5" fill="#eef0f5" opacity="0.45"/><circle cx="520.0" cy="81.3" r="1.4" fill="#eef0f5" opacity="0.17"/><circle cx="429.1" cy="13.3" r="1.7" fill="#eef0f5" opacity="0.50"/><circle cx="341.5" cy="30.0" r="1.4" fill="#eef0f5" opacity="0.39"/><circle cx="568.5" cy="13.9" r="1.4" fill="#eef0f5" opacity="0.44"/><circle cx="459.7" cy="45.4" r="1.0" fill="#eef0f5" opacity="0.46"/><circle cx="594.6" cy="91.9" r="0.6" fill="#eef0f5" opacity="0.45"/><circle cx="443.9" cy="55.7" r="1.5" fill="#eef0f5" opacity="0.17"/><circle cx="492.5" cy="8.4" r="1.2" fill="#eef0f5" opacity="0.23"/><circle cx="608.0" cy="61.8" r="0.5" fill="#eef0f5" opacity="0.32"/><circle cx="549.3" cy="27.4" r="1.7" fill="#eef0f5" opacity="0.33"/><circle cx="574.1" cy="40.2" r="1.0" fill="#eef0f5" opacity="0.38"/><circle cx="569.4" cy="23.2" r="1.2" fill="#eef0f5" opacity="0.22"/><circle cx="453.3" cy="50.4" r="0.5" fill="#eef0f5" opacity="0.39"/><circle cx="515.6" cy="69.7" r="0.8" fill="#eef0f5" opacity="0.29"/><circle cx="561.8" cy="80.0" r="1.4" fill="#eef0f5" opacity="0.25"/><circle cx="513.4" cy="89.1" r="1.6" fill="#eef0f5" opacity="0.14"/>
+    <g filter="url(#ink04)">
+      <!-- Wet Plastered Black Hair Silhouette Surrounding Pale Head -->
+      <path d="M 484 94 C 488 54, 500 16, 526 6 C 540 1, 558 1, 572 6 C 598 16, 610 54, 614 94 Z"
+            fill="#060709" stroke="#d8dce6" stroke-width="1.8"/>
+      <!-- Fine Wet White Hair Strand Highlights -->
+      <path d="M 500 84 C 502 48, 512 20, 530 10 M 492 86 C 494 56, 502 28, 518 14" fill="none" stroke="#cfd4de" stroke-width="1.4" opacity="0.65"/>
+      <path d="M 596 84 C 594 48, 584 20, 566 10 M 604 86 C 602 56, 594 28, 578 14" fill="none" stroke="#cfd4de" stroke-width="1.4" opacity="0.65"/>
+
+      <!-- Anatomically Natural Gaunt Pale Horror Face Emerging from Water -->
+      <path d="M 509 92 C 506 60, 512 26, 528 16 C 540 10, 556 10, 568 16 C 584 26, 590 60, 587 92 Z"
+            fill="url(#skin04)" stroke="#060709" stroke-width="3.2"/>
+      <line x1="516" y1="26" x2="516" y2="56" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="520" y1="22" x2="520" y2="54" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="524" y1="20" x2="524" y2="48" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="528" y1="18" x2="528" y2="38" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="568" y1="18" x2="568" y2="38" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="572" y1="20" x2="572" y2="48" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="576" y1="22" x2="576" y2="54" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="580" y1="26" x2="580" y2="56" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="544" y1="62" x2="544" y2="78" stroke="#14151a" stroke-width="1.1" opacity="0.65"/><line x1="552" y1="62" x2="552" y2="78" stroke="#14151a" stroke-width="1.1" opacity="0.65"/>
+
+      <!-- Deep Gaunt Brow Shadow & Hollow Sunken Sockets -->
+      <path d="M 514 58 C 524 52, 538 54, 544 62 C 538 72, 520 72, 514 58 Z" fill="#0c0d11"/>
+      <path d="M 582 58 C 572 52, 558 54, 552 62 C 558 72, 576 72, 582 58 Z" fill="#0c0d11"/>
+      <!-- Eerie Lifeless Pale Eyes Staring Straight Forward -->
+      <path d="M 518 61 C 524 56, 536 57, 540 62 C 536 67, 524 67, 518 61 Z" fill="#f4f6fa"/>
+      <path d="M 578 61 C 572 56, 560 57, 556 62 C 560 67, 572 67, 578 61 Z" fill="#f4f6fa"/>
+      <!-- Subtle dark upper lid creases & under-eye bags -->
+      <path d="M 516 57 Q 529 52, 542 59 M 580 57 Q 567 52, 554 59" fill="none" stroke="#060709" stroke-width="2.2"/>
+      <path d="M 520 72 Q 529 76, 539 72 M 557 72 Q 567 76, 576 72" fill="none" stroke="#3c404a" stroke-width="1.3"/>
+      <!-- Gaunt Nose Bridge & Nostrils Just Above Waterline -->
+      <path d="M 548 56 L 544 79 M 550 56 L 553 79" stroke="#242730" stroke-width="1.6"/>
+      <circle cx="545" cy="81" r="1.8" fill="#0b0c10"/>
+      <circle cx="552" cy="81" r="1.8" fill="#0b0c10"/>
+
+      <!-- Pitch-Black Ink Water Submerging Lower Face -->
+      <path d="M 410 86 C 458 78, 502 82, 548 84 C 594 86, 616 78, 640 84 L 640 120 L 410 120 Z" fill="#040507"/>
+
+      <!-- Organic Hand-Inked White Water Ripples & Reflections -->
+      <path d="M 426 88 C 464 81, 498 85, 536 86 C 574 87, 608 80, 638 86" fill="none" stroke="#eef1f7" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M 444 96 C 482 90, 518 96, 556 95 C 594 94, 616 89, 638 94" fill="none" stroke="#dce0ea" stroke-width="3.2" stroke-linecap="round" opacity="0.88"/>
+      <!-- Pale eerie reflection patch in water right below face -->
+      <path d="M 518 100 C 538 97, 562 97, 582 101 C 574 110, 530 112, 518 100 Z" fill="#cfd4de" opacity="0.72"/>
+      <path d="M 462 106 C 504 102, 544 108, 588 105 C 612 104, 628 101, 638 104" fill="none" stroke="#040507" stroke-width="3"/>
+      <path d="M 476 114 C 518 110, 566 115, 626 111" fill="none" stroke="#dce0ea" stroke-width="2.2" stroke-linecap="round" opacity="0.75"/>
+    </g>
+    
+  </g>
+</svg>

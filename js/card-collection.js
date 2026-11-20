@@ -16,6 +16,7 @@
   const KEY_EQ_DECO = 'clined_equipped_deco_v1';
   let shopTab = 'cards';
   let decoFilter = 'all';
+  let bannerFilter = 'all';
   const BASE_QUIZ_PER_DIAMOND = 5;
   const BASE_PACK_COST = 20;
 
@@ -43,16 +44,28 @@
   ];
 
   const BANNER_CATALOG = [
-    { id: 'sakura-blossom',  name: 'Sakura Blossom',  icon: '🌸', price: 15, desc: 'Kelopak sakura senja ala Discord',       img: 'assets/banners/sakura-blossom.svg' },
-    { id: 'cyber-pulse',     name: 'Cyber Pulse',     icon: '⚡', price: 15, desc: 'Gelombang EKG neon cyan futuristik',     img: 'assets/banners/cyber-pulse.svg' },
-    { id: 'midnight-nebula', name: 'Midnight Nebula', icon: '🌌', price: 20, desc: 'Galaksi ungu & planet bercincin',        img: 'assets/banners/midnight-nebula.svg' },
-    { id: 'crimson-dragon',  name: 'Crimson Eclipse', icon: '🔥', price: 20, desc: 'Gerhana merah tua & siluet dramatis',    img: 'assets/banners/crimson-dragon.svg' },
-    { id: 'emerald-aurora',  name: 'Emerald Aurora',  icon: '🌿', price: 25, desc: 'Cahaya aurora hijau zamrud malam',       img: 'assets/banners/emerald-aurora.svg' },
-    { id: 'golden-caduceus', name: 'Golden Caduceus', icon: '🩺', price: 25, desc: 'Motif klinik klasik berlapis emas',      img: 'assets/banners/golden-caduceus.svg' },
-    { id: 'ocean-abyss',     name: 'Ocean Abyss',     icon: '🌊', price: 30, desc: 'Ombak bioluminesensi laut dalam',        img: 'assets/banners/ocean-abyss.svg' },
-    { id: 'rose-velvet',     name: 'Rose Velvet',     icon: '🌹', price: 30, desc: 'Kelopak mawar ungu gelap bercahaya',     img: 'assets/banners/rose-velvet.svg' },
-    { id: 'solar-flare',     name: 'Solar Flare',     icon: '☀️', price: 35, desc: 'Gradien jingga-emas badai matahari',     img: 'assets/banners/solar-flare.svg' },
-    { id: 'void-monarch',    name: 'Void Monarch',    icon: '👑', price: 40, desc: 'Kristal obsidian ungu-emas eksklusif',   img: 'assets/banners/void-monarch.svg' }
+    // 10 Cowok
+    { id: '01-blood-eclipse',       name: 'Blood Eclipse',       cat: 'Cowok', icon: '🩸', price: 20, desc: 'Cowok • Gerhana merah kelam',        img: 'assets/banners/01-blood-eclipse.svg' },
+    { id: '02-lunar-monolith',      name: 'Lunar Monolith',      cat: 'Cowok', icon: '🌑', price: 20, desc: 'Cowok • Monolit bulan misterius',    img: 'assets/banners/02-lunar-monolith.svg' },
+    { id: '03-always-watching',     name: 'Always Watching',     cat: 'Cowok', icon: '👁️', price: 25, desc: 'Cowok • Mata bayangan gelap',        img: 'assets/banners/03-always-watching.svg' },
+    { id: '04-water-stalker',       name: 'Water Stalker',       cat: 'Cowok', icon: '🌊', price: 20, desc: 'Cowok • Pemburu laut dalam',         img: 'assets/banners/04-water-stalker.svg' },
+    { id: '05-crimson-katana',      name: 'Crimson Katana',      cat: 'Cowok', icon: '⚔️', price: 30, desc: 'Cowok • Tebasan katana merah',       img: 'assets/banners/05-crimson-katana.svg' },
+    { id: '06-cursed-skulls',       name: 'Cursed Skulls',       cat: 'Cowok', icon: '💀', price: 30, desc: 'Cowok • Tengkorak terkutuk',         img: 'assets/banners/06-cursed-skulls.svg' },
+    { id: '07-crimson-vs-symbiote', name: 'Crimson vs. Symbiote',cat: 'Cowok', icon: '🕸️', price: 35, desc: 'Cowok • Benturan simbiote',          img: 'assets/banners/07-crimson-vs-symbiote.svg' },
+    { id: '08-shark-tail',          name: 'Shark Tail',          cat: 'Cowok', icon: '🦈', price: 25, desc: 'Cowok • Sirip hiu samudra',          img: 'assets/banners/08-shark-tail.svg' },
+    { id: '09-midnight-rainpond',   name: 'Midnight Rainpond',   cat: 'Cowok', icon: '🌧️', price: 25, desc: 'Cowok • Hujan tengah malam',         img: 'assets/banners/09-midnight-rainpond.svg' },
+    { id: '10-crimson-oni',         name: 'Crimson Oni',         cat: 'Cowok', icon: '👹', price: 35, desc: 'Cowok • Topeng oni merah',           img: 'assets/banners/10-crimson-oni.svg' },
+    // 10 Cewek
+    { id: '11-pastel-cloud-pup',    name: 'Pastel Cloud Pup',    cat: 'Cewek', icon: '🐶', price: 20, desc: 'Cewek • Awan pastel & anak anjing',  img: 'assets/banners/11-pastel-cloud-pup.svg' },
+    { id: '12-crimson-sakura',      name: 'Crimson Sakura',      cat: 'Cewek', icon: '🌸', price: 25, desc: 'Cewek • Kelopak sakura merah',       img: 'assets/banners/12-crimson-sakura.svg' },
+    { id: '13-starlit-clouds',      name: 'Starlit Clouds',      cat: 'Cewek', icon: '✨', price: 25, desc: 'Cewek • Awan berbintang',            img: 'assets/banners/13-starlit-clouds.svg' },
+    { id: '14-rainy-lilypond',      name: 'Rainy Lilypond',      cat: 'Cewek', icon: '🪷', price: 25, desc: 'Cewek • Kolam teratai hujan',        img: 'assets/banners/14-rainy-lilypond.svg' },
+    { id: '15-idol-glowstick',      name: 'Idol Glowstick',      cat: 'Cewek', icon: '🎤', price: 30, desc: 'Cewek • Panggung cahaya idol',       img: 'assets/banners/15-idol-glowstick.svg' },
+    { id: '16-butterfly-aurora',    name: 'Butterfly Aurora',    cat: 'Cewek', icon: '🦋', price: 30, desc: 'Cewek • Kupu-kupu aurora',           img: 'assets/banners/16-butterfly-aurora.svg' },
+    { id: '17-rose-gold-velvet',    name: 'Rose Gold Velvet',    cat: 'Cewek', icon: '🌹', price: 35, desc: 'Cewek • Beludru mawar emas',         img: 'assets/banners/17-rose-gold-velvet.svg' },
+    { id: '18-cotton-candy-sky',    name: 'Cotton Candy Sky',    cat: 'Cewek', icon: '☁️', price: 20, desc: 'Cewek • Langit permen kapas',        img: 'assets/banners/18-cotton-candy-sky.svg' },
+    { id: '19-crystal-prism',       name: 'Crystal Prism',       cat: 'Cewek', icon: '💎', price: 35, desc: 'Cewek • Prisma kristal berkilau',    img: 'assets/banners/19-crystal-prism.svg' },
+    { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 25, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg' }
   ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
@@ -509,7 +522,8 @@
     const curColor = me?.nameColor || '';
     const colorAttr = curColor ? ` data-name-color="${esc(curColor)}"` : '';
     const colorPills = NAME_COLORS.map(c => `<button type="button" class="name-color-pill${curColor === c.id ? ' on' : ''}" data-pick-name-color="${esc(c.id)}"><span class="name-color-dot" style="background:${c.dot}"></span>${esc(c.name)}</button>`).join('');
-    const items = BANNER_CATALOG.map(b => {
+    const list = BANNER_CATALOG.filter(b => bannerFilter === 'all' || b.cat === bannerFilter);
+    const items = list.map(b => {
       const isOwned = ownedSet.has(b.id);
       const isEquipped = eq === b.id;
       const canBuy = dia >= b.price;
@@ -533,11 +547,14 @@
         </div>
       </div>`;
     }).join('');
+    const bCats = [['all', `Semua (${BANNER_CATALOG.length})`], ['Cowok', '👦 Cowok (10)'], ['Cewek', '👧 Cewek (10)']];
+    const bPills = bCats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${bannerFilter === k ? ' on' : ''}" data-banner-filter="${esc(k)}">${lbl}</button>`).join('');
     return `<div class="name-color-box">
         <div class="name-color-box-head"><span>✨ Warna Nama Chat (Ala Discord)</span><small>Gratis pilih</small></div>
         <div class="name-color-grid">${colorPills}</div>
       </div>
-      <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>Ala Discord</b></div>
+      <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>10 Cowok • 10 Cewek</b></div>
+      <div class="deco-filter-row">${bPills}</div>
       <div class="banner-shop-list">${items}</div>`;
   }
 
@@ -866,6 +883,12 @@
         }
         window.dispatchEvent(new Event('clined:profile-style'));
         refreshShop();
+      });
+    });
+    document.querySelectorAll('#cardShopContainer [data-banner-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const next = btn.getAttribute('data-banner-filter') || 'all';
+        if (next !== bannerFilter) { bannerFilter = next; refreshShop(); }
       });
     });
     document.querySelectorAll('#cardShopContainer [data-deco-filter]').forEach(btn => {
