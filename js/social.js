@@ -9,7 +9,7 @@
   const CLAIM_KEY = 'clined_duel_claims_v1';
   const DIA_KEY = 'clined_diamonds_v1';
   const S = {
-    tab: 'status', hubTab: 'status', openC: new Set(), comments: {}, feed: null, F: null,
+    tab: 'status', hubTab: 'chat', openC: new Set(), comments: {}, feed: null, F: null,
     mine: [], invites: [], openRooms: [], myStats: null, h2h: {}, leaderboard: [],
     banks: [], bank: '', count: 10, sec: 30, mode: 'classic', wager: 0, isPublic: true,
     D: null, fb: null, busy: false, tick: null, skew: 0, sentFor: -1,

@@ -676,7 +676,7 @@ html body .floating-dashboard-nav .floating-nav-item {
 html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="home"] { --nav-icon-color: #1cb0f6 !important; }
 html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="dashboard"] { --nav-icon-color: #ff9600 !important; }
 html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="uab"] { --nav-icon-color: #58cc02 !important; }
-html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="status"] { --nav-icon-color: #0d9488 !important; }
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="chat"] { --nav-icon-color: #0d9488 !important; }
 html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="account"] { --nav-icon-color: #ff4b4b !important; }
 
 html body .floating-dashboard-nav .floating-nav-slider {

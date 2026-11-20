@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="css/desktop.css?v=7">
 <link rel="stylesheet" href="css/home-ergonomic.css?v=12">
 <link rel="stylesheet" href="css/top-notify.css?v=3">
-<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=14">
+<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=15">
 </head>
 <body class="auth-pending">
 
@@ -942,7 +942,7 @@
   <button type="button" class="floating-nav-item active" data-floating-nav="home" aria-label="Beranda"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.2v-6.1H9.2V21H4a1 1 0 0 1-1-1z"/></svg></span><span>Beranda</span></button>
   <button type="button" class="floating-nav-item" data-floating-nav="dashboard" aria-label="Clinical Dashboard"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/><path d="M3 20h18"/></svg></span><span>Dashboard</span></button>
   <button type="button" class="floating-nav-item" data-floating-nav="uab" aria-label="BLOK"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4v7a5 5 0 0 0 10 0V4M7 4H5m2 0v3m10-3h2m-2 0v3M12 16v3m0 0a3 3 0 0 0 3 3h1"/></svg></span><span>BLOK</span></button>
-  <button type="button" class="floating-nav-item" data-floating-nav="status" aria-label="Status"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4.5"/></svg></span><span>Status</span></button>
+  <button type="button" class="floating-nav-item" data-floating-nav="chat" aria-label="Chat"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4.5"/></svg></span><span>Chat</span></button>
   <button type="button" class="floating-nav-item" data-floating-nav="account" aria-label="Profil"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg></span><span>Profil</span></button>
 </nav>
 
@@ -1104,7 +1104,7 @@
     }
 
     function route(key){
-      const target={home:'home',dashboard:'clinicalDashboard',uab:'uabPage',status:'hubPage',account:'accountPage'}[key];
+      const target={home:'home',dashboard:'clinicalDashboard',uab:'uabPage',chat:'hubPage',account:'accountPage'}[key];
       if(!target || !document.getElementById(target)) return;
 
       // Always use the application's single SPA router. This keeps its current
@@ -1122,8 +1122,8 @@
       if(key==='uab' && typeof window.syncUabStats==='function'){
         try{window.syncUabStats();}catch(e){console.warn(e);}
       }
-      if(key==='status' && window.CLINED_SOCIAL && window.CLINED_SOCIAL.openStatus){
-        try{window.CLINED_SOCIAL.openStatus();}catch(e){console.warn(e);}
+      if(key==='chat' && window.CLINED_SOCIAL && window.CLINED_SOCIAL.openChat){
+        try{window.CLINED_SOCIAL.openChat();}catch(e){console.warn(e);}
       }
       if(key==='account' && typeof window.renderAccount==='function'){
         try{window.renderAccount();}catch(e){console.warn(e);}
@@ -1162,7 +1162,7 @@
 
     // Keep the selected item synchronized whenever the SPA router changes page.
     window.addEventListener('clined:view-change',function(e){
-      const map={home:'home',clinicalDashboard:'dashboard',uabPage:'uab',hubPage:'status',accountPage:'account'};
+      const map={home:'home',clinicalDashboard:'dashboard',uabPage:'uab',hubPage:'chat',accountPage:'account'};
       if(map[e.detail]) setActive(map[e.detail]);
     });
     setActive('home');
@@ -1182,7 +1182,7 @@
 <script src="js/onboarding.js?v=6"></script>
 <script src="js/userbank-parser.js?v=3"></script>
 <script src="js/userbank.js?v=5"></script>
-<script src="js/social.js?v=17"></script>
+<script src="js/social.js?v=18"></script>
 <script src="js/chat.js?v=7"></script>
 <script src="js/xp-sync.js?v=2"></script>
 <script src="js/announcement.js?v=1"></script>
