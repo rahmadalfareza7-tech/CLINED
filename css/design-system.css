@@ -568,6 +568,7 @@ html body .answer {
   font-size: 15px !important;
   font-weight: 700 !important;
   line-height: 1.48 !important;
+  touch-action: manipulation;
 }
 
 html body .answer:active:not(:disabled) {
