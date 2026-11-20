@@ -2820,14 +2820,14 @@ async function saveAccount(){
     if(typeof beep==='function')beep('correct');showToast('Profil berhasil disimpan.');
   }catch(error){showToast(error?.message||'Profil tidak dapat disimpan.');}
 }
-const avatarCropState={img:null,w:0,h:0,stage:260,zoom:1,x:0,y:0,dragging:false,sx:0,sy:0,ox:0,oy:0,busy:false};
+const avatarCropState={mode:'avatar',img:null,w:0,h:0,stageW:260,stageH:260,zoom:1,x:0,y:0,dragging:false,sx:0,sy:0,ox:0,oy:0,busy:false};
 function clampAvatarCrop(){
   const s=avatarCropState;
   if(!s.img)return;
-  const base=Math.max(s.stage/s.w,s.stage/s.h);
+  const base=Math.max(s.stageW/s.w,s.stageH/s.h);
   const scale=base*s.zoom;
   const dw=s.w*scale,dh=s.h*scale;
-  const maxX=Math.max(0,(dw-s.stage)/2),maxY=Math.max(0,(dh-s.stage)/2);
+  const maxX=Math.max(0,(dw-s.stageW)/2),maxY=Math.max(0,(dh-s.stageH)/2);
   s.x=Math.max(-maxX,Math.min(maxX,s.x));
   s.y=Math.max(-maxY,Math.min(maxY,s.y));
 }
@@ -2835,7 +2835,7 @@ function paintAvatarCrop(){
   const s=avatarCropState,imgEl=$('avatarCropImg'),zVal=$('avatarCropZoomVal');
   if(!imgEl||!s.img)return;
   clampAvatarCrop();
-  const base=Math.max(s.stage/s.w,s.stage/s.h),scale=base*s.zoom;
+  const base=Math.max(s.stageW/s.w,s.stageH/s.h),scale=base*s.zoom;
   const dw=s.w*scale,dh=s.h*scale;
   imgEl.style.width=`${dw}px`;
   imgEl.style.height=`${dh}px`;
@@ -2847,7 +2847,7 @@ function closeAvatarCropModal(){
   if(modal){modal.hidden=true;modal.setAttribute('aria-hidden','true');}
   avatarCropState.img=null;avatarCropState.dragging=false;
 }
-function openAvatarCropModal(file){
+function openAvatarCropModal(file,mode='avatar'){
   if(!file||!file.type||!/^image\/(jpeg|png|webp)$/i.test(file.type)){showToast('Pilih gambar JPG, PNG, atau WebP.');return;}
   if(file.size>12*1024*1024){showToast('Ukuran file maksimal 12 MB.');return;}
   const reader=new FileReader();
@@ -2856,11 +2856,18 @@ function openAvatarCropModal(file){
     const img=new Image();
     img.onerror=()=>showToast('File gambar tidak valid.');
     img.onload=()=>{
-      const modal=$('avatarCropModal'),stageEl=$('avatarCropStage'),imgEl=$('avatarCropImg'),zoomEl=$('avatarCropZoom');
+      const modal=$('avatarCropModal'),stageEl=$('avatarCropStage'),imgEl=$('avatarCropImg'),zoomEl=$('avatarCropZoom'),titleEl=$('avatarCropTitle');
       if(!modal||!stageEl||!imgEl)return;
+      const isBanner=mode==='banner';
+      stageEl.classList.toggle('is-banner',isBanner);
+      if(titleEl)titleEl.textContent=isBanner?'Atur background chat':'Atur posisi foto';
+      const descEl=titleEl?.nextElementSibling;
+      if(descEl)descEl.textContent=isBanner?'Geser dan atur zoom untuk background profil chat ala Discord.':'Geser foto dan atur zoom agar pas di dalam lingkaran.';
       modal.hidden=false;modal.setAttribute('aria-hidden','false');
       const rect=stageEl.getBoundingClientRect();
-      avatarCropState.stage=Math.max(200,Math.round(rect.width||260));
+      avatarCropState.mode=mode;
+      avatarCropState.stageW=Math.max(200,Math.round(rect.width||(isBanner?300:260)));
+      avatarCropState.stageH=Math.max(70,Math.round(rect.height||(isBanner?84:260)));
       avatarCropState.img=img;
       avatarCropState.w=img.naturalWidth||img.width;
       avatarCropState.h=img.naturalHeight||img.height;
@@ -2877,12 +2884,23 @@ function triggerAccountAvatarPicker(){
   if(!authCurrentUser()){showToast('Masuk dulu untuk mengganti foto profil.');return;}
   $('accountAvatarFile')?.click();
 }
+function triggerAccountBannerPicker(){
+  if(!authCurrentUser()){showToast('Masuk dulu untuk mengganti background chat.');return;}
+  $('accountBannerFile')?.click();
+}
 function uploadAccountAvatar(event){
   const input=event?.target,file=input?.files?.[0];
   if(input)input.value='';
   if(!file)return;
   if(!authCurrentUser()){showToast('Masuk dulu untuk mengganti foto profil.');return;}
-  openAvatarCropModal(file);
+  openAvatarCropModal(file,'avatar');
+}
+function uploadAccountBanner(event){
+  const input=event?.target,file=input?.files?.[0];
+  if(input)input.value='';
+  if(!file)return;
+  if(!authCurrentUser()){showToast('Masuk dulu untuk mengganti background chat.');return;}
+  openAvatarCropModal(file,'banner');
 }
 async function saveCroppedAvatar(){
   const s=avatarCropState;
@@ -2890,22 +2908,26 @@ async function saveCroppedAvatar(){
   s.busy=true;
   const saveBtn=$('saveAvatarCropBtn');if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Menyimpan...';}
   try{
-    const outSize=256,canvas=document.createElement('canvas');
-    canvas.width=outSize;canvas.height=outSize;
+    const isBanner=s.mode==='banner';
+    const outW=isBanner?640:256,outH=isBanner?180:256;
+    const canvas=document.createElement('canvas');
+    canvas.width=outW;canvas.height=outH;
     const ctx=canvas.getContext('2d');
-    const base=Math.max(s.stage/s.w,s.stage/s.h),scale=base*s.zoom;
+    const base=Math.max(s.stageW/s.w,s.stageH/s.h),scale=base*s.zoom;
     const dw=s.w*scale,dh=s.h*scale;
-    const ratio=outSize/s.stage;
-    const dx=((s.stage-dw)/2+s.x)*ratio;
-    const dy=((s.stage-dh)/2+s.y)*ratio;
-    ctx.drawImage(s.img,dx,dy,dw*ratio,dh*ratio);
+    const rx=outW/s.stageW,ry=outH/s.stageH;
+    const dx=((s.stageW-dw)/2+s.x)*rx;
+    const dy=((s.stageH-dh)/2+s.y)*ry;
+    ctx.drawImage(s.img,dx,dy,dw*rx,dh*ry);
+    const maxLen=isBanner?215000:150000;
     let dataUrl=canvas.toDataURL('image/jpeg',0.82);
-    if(dataUrl.length>150000)dataUrl=canvas.toDataURL('image/jpeg',0.68);
-    const data=await authApi('/avatar',{method:'POST',body:JSON.stringify({dataUrl})});
+    if(dataUrl.length>maxLen)dataUrl=canvas.toDataURL('image/jpeg',0.68);
+    const endpoint=isBanner?'/banner':'/avatar';
+    const data=await authApi(endpoint,{method:'POST',body:JSON.stringify({dataUrl})});
     authServerUser=data.user;authSyncProfile(authServerUser);renderAccount();
     closeAvatarCropModal();
-    if(typeof beep==='function')beep('correct');showToast('Foto profil berhasil diperbarui.');
-  }catch(error){showToast(error?.message||'Gagal mengunggah foto profil.');}
+    if(typeof beep==='function')beep('correct');showToast(isBanner?'Background chat berhasil diperbarui.':'Foto profil berhasil diperbarui.');
+  }catch(error){showToast(error?.message||'Gagal mengunggah gambar.');}
   finally{s.busy=false;if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='Simpan Foto';}}
 }
 async function removeAccountAvatar(){
@@ -2916,6 +2938,16 @@ async function removeAccountAvatar(){
     authServerUser=data.user;authSyncProfile(authServerUser);renderAccount();
     showToast('Foto profil dihapus.');
   }catch(error){showToast(error?.message||'Gagal menghapus foto profil.');}
+  finally{if(btn)btn.disabled=false;}
+}
+async function removeAccountBanner(){
+  if(!authCurrentUser())return;
+  const btn=$('removeBannerBtn');if(btn)btn.disabled=true;
+  try{
+    const data=await authApi('/banner',{method:'DELETE',body:'{}'});
+    authServerUser=data.user;authSyncProfile(authServerUser);renderAccount();
+    showToast('Background chat dihapus.');
+  }catch(error){showToast(error?.message||'Gagal menghapus background chat.');}
   finally{if(btn)btn.disabled=false;}
 }
 function exportAccountData(){
@@ -2966,6 +2998,10 @@ if($('changeAvatarBtn'))$('changeAvatarBtn').onclick=triggerAccountAvatarPicker;
 if($('accountAvatar'))$('accountAvatar').onclick=triggerAccountAvatarPicker;
 if($('removeAvatarBtn'))$('removeAvatarBtn').onclick=removeAccountAvatar;
 if($('accountAvatarFile'))$('accountAvatarFile').onchange=uploadAccountAvatar;
+if($('changeBannerBtn'))$('changeBannerBtn').onclick=triggerAccountBannerPicker;
+if($('accountBannerPreview'))$('accountBannerPreview').onclick=triggerAccountBannerPicker;
+if($('removeBannerBtn'))$('removeBannerBtn').onclick=removeAccountBanner;
+if($('accountBannerFile'))$('accountBannerFile').onchange=uploadAccountBanner;
 if($('saveAvatarCropBtn'))$('saveAvatarCropBtn').onclick=saveCroppedAvatar;
 if($('cancelAvatarCropBtn'))$('cancelAvatarCropBtn').onclick=closeAvatarCropModal;
 if($('closeAvatarCropModal'))$('closeAvatarCropModal').onclick=closeAvatarCropModal;
@@ -3149,9 +3185,19 @@ function renderAccount(){
     else{avatar.textContent=user?.name?.charAt(0).toUpperCase()||account.avatar||'C';avatar.classList.remove('has-photo');}
   }
   if(removeBtn){removeBtn.hidden=!(user&&user.avatarUrl);removeBtn.disabled=!(user&&user.avatarUrl);}
+  const bPrev=$('accountBannerPreview'),bBg=$('accountBannerBg'),bAv=$('accountBannerMiniAv'),bName=$('accountBannerMiniName'),bUser=$('accountBannerMiniUser'),bRem=$('removeBannerBtn');
+  if(bBg)bBg.style.backgroundImage=user?.bannerUrl?`url('${user.bannerUrl}')`:'';
+  if(bPrev)bPrev.classList.toggle('has-banner',!!user?.bannerUrl);
+  if(bAv){
+    if(user?.avatarUrl)bAv.innerHTML=`<img src="${esc(user.avatarUrl)}" alt="">`;
+    else bAv.textContent=user?.name?.charAt(0).toUpperCase()||'C';
+  }
+  if(bName)bName.textContent=user?.name||account.name||'Nama Kamu';
+  if(bUser)bUser.textContent=`@${user?.username||account.username||'username'}`;
+  if(bRem){bRem.hidden=!(user&&user.bannerUrl);bRem.disabled=!(user&&user.bannerUrl);}
   [nameEl,usernameEl].forEach(el=>{if(el)el.disabled=!user;});
   if(profileFields)profileFields.hidden=!user;
-  ['saveAccountBtn','exportAccountBtn','changeAvatarBtn','accountAvatar'].forEach(id=>{const el=$(id);if(el)el.disabled=!user;});
+  ['saveAccountBtn','exportAccountBtn','changeAvatarBtn','accountAvatar','changeBannerBtn'].forEach(id=>{const el=$(id);if(el)el.disabled=!user;});
   renderAccountAuthState();
 }
 async function authChangePassword(event){

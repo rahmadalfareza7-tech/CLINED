@@ -1057,3 +1057,122 @@ html body .achievement-item.locked {
   color: var(--text, #0f172a);
   border: 1.5px solid var(--border, #cbd5e1);
 }
+
+/* ── Discord-style Chat Nameplate Banner ─────────────────────────────────── */
+.chat-row,
+.chat-head,
+.account-banner-preview {
+  position: relative;
+  overflow: hidden;
+}
+.chat-row > *:not(.chat-row-bg),
+.chat-head > *:not(.chat-row-bg),
+.account-banner-preview > *:not(.chat-row-bg) {
+  position: relative;
+  z-index: 1;
+}
+.chat-row-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.58) 42%, rgba(0,0,0,0.95) 100%);
+  mask-image: linear-gradient(90deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.58) 42%, rgba(0,0,0,0.95) 100%);
+}
+.chat-row.has-banner {
+  background: linear-gradient(90deg, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0.58) 55%, rgba(255,255,255,0.18) 100%);
+}
+body.dark .chat-row.has-banner,
+html.dark .chat-row.has-banner {
+  background: linear-gradient(90deg, rgba(15,23,42,0.90) 0%, rgba(15,23,42,0.56) 55%, rgba(15,23,42,0.22) 100%);
+}
+.chat-row.has-banner .chat-who b,
+.chat-row.has-banner .chat-who small,
+.chat-row.has-banner .chat-meta time {
+  text-shadow: 0 1px 2px rgba(255,255,255,0.75);
+}
+body.dark .chat-row.has-banner .chat-who b,
+body.dark .chat-row.has-banner .chat-who small,
+body.dark .chat-row.has-banner .chat-meta time,
+html.dark .chat-row.has-banner .chat-who b,
+html.dark .chat-row.has-banner .chat-who small,
+html.dark .chat-row.has-banner .chat-meta time {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.85);
+}
+.chat-head.has-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(13,148,136,0.82) 0%, rgba(28,176,246,0.45) 55%, rgba(15,23,42,0.25) 100%);
+  pointer-events: none;
+}
+.account-banner-section {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+.account-banner-preview {
+  min-height: 68px;
+  border-radius: 14px;
+  border: 2px solid var(--border, #dbe4de);
+  background: var(--surface, #edf2ee);
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.account-banner-preview-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.account-banner-mini-av {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #1cb0f6, #6366f1);
+  overflow: hidden;
+}
+.account-banner-mini-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.account-banner-mini-txt {
+  display: grid;
+  min-width: 0;
+}
+.account-banner-mini-txt b {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.account-banner-mini-txt small {
+  font-size: 12px;
+  opacity: 0.78;
+}
+.avatar-crop-stage.is-banner {
+  width: 300px;
+  height: 84px;
+  border-radius: 14px;
+}
+.avatar-crop-stage.is-banner .avatar-crop-mask {
+  display: none;
+}
+.avatar-crop-stage.is-banner .avatar-crop-grid {
+  inset: 0;
+  border-radius: 14px;
+}
