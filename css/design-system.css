@@ -961,3 +961,99 @@ html body .achievement-item.locked {
   font-size: 10px;
 }
 
+/* ── Interactive Avatar Crop Modal with 3x3 Grid ─────────────────────────── */
+.avatar-crop-card {
+  max-width: 360px;
+}
+.avatar-crop-stage {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: 12px auto 14px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  border: 2px solid var(--border, #e2e8f0);
+}
+.avatar-crop-stage:active {
+  cursor: grabbing;
+}
+.avatar-crop-stage img {
+  position: relative;
+  max-width: none;
+  max-height: none;
+  pointer-events: none;
+  will-change: transform;
+}
+.avatar-crop-mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.avatar-crop-mask::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.56);
+}
+.avatar-crop-grid {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.avatar-crop-grid .grid-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.45);
+}
+.avatar-crop-grid .grid-v.v1 { left: 33.333%; }
+.avatar-crop-grid .grid-v.v2 { left: 66.666%; }
+.avatar-crop-grid .grid-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.45);
+}
+.avatar-crop-grid .grid-h.h1 { top: 33.333%; }
+.avatar-crop-grid .grid-h.h2 { top: 66.666%; }
+.avatar-crop-zoom-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.avatar-crop-zoom-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--sky, #1cb0f6);
+}
+.avatar-crop-zoom-row b {
+  min-width: 38px;
+  text-align: right;
+  font-size: 12.5px;
+  color: var(--sky-text, #0284c7);
+}
+.avatar-crop-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.account-action.account-cancel {
+  background: var(--surface-2, #f1f5f9);
+  color: var(--text, #0f172a);
+  border: 1.5px solid var(--border, #cbd5e1);
+}

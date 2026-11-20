@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="css/desktop.css?v=7">
 <link rel="stylesheet" href="css/home-ergonomic.css?v=12">
 <link rel="stylesheet" href="css/top-notify.css?v=3">
-<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=3">
+<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=4">
 </head>
 <body class="auth-pending">
 
@@ -892,6 +892,35 @@
   </section>
 </div>
 
+<div class="account-modal" id="avatarCropModal" hidden aria-hidden="true">
+  <div class="account-modal-backdrop" data-close-avatar-crop></div>
+  <section class="account-modal-card avatar-crop-card" role="dialog" aria-modal="true" aria-labelledby="avatarCropTitle">
+    <button class="account-modal-close ui-arrow ui-arrow-back" id="closeAvatarCropModal" type="button" aria-label="Tutup">×</button>
+    <span class="account-auth-kicker">FOTO PROFIL</span>
+    <h2 id="avatarCropTitle">Atur posisi foto</h2>
+    <p>Geser foto dan atur zoom agar pas di dalam lingkaran.</p>
+    <div class="avatar-crop-stage" id="avatarCropStage">
+      <img id="avatarCropImg" alt="Pratinjau foto profil" draggable="false">
+      <div class="avatar-crop-mask" aria-hidden="true"></div>
+      <div class="avatar-crop-grid" aria-hidden="true">
+        <span class="grid-v v1"></span>
+        <span class="grid-v v2"></span>
+        <span class="grid-h h1"></span>
+        <span class="grid-h h2"></span>
+      </div>
+    </div>
+    <label class="avatar-crop-zoom-row" for="avatarCropZoom">
+      <span>Zoom</span>
+      <input id="avatarCropZoom" type="range" min="1" max="3" step="0.02" value="1">
+      <b id="avatarCropZoomVal">1.0×</b>
+    </label>
+    <div class="avatar-crop-actions">
+      <button type="button" class="account-action account-cancel" id="cancelAvatarCropBtn">Batal</button>
+      <button type="button" class="account-action account-save" id="saveAvatarCropBtn">Simpan Foto</button>
+    </div>
+  </section>
+</div>
+
 <nav class="floating-dashboard-nav" id="floatingDashboardNav" aria-label="Navigasi utama">
   <span class="floating-nav-slider" aria-hidden="true"></span>
   <button type="button" class="floating-nav-item active" data-floating-nav="home" aria-label="Beranda"><span class="floating-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.2v-6.1H9.2V21H4a1 1 0 0 1-1-1z"/></svg></span><span>Beranda</span></button>
@@ -1034,7 +1063,7 @@
 <script src="js/photo-compress.js?v=2"></script>
 <script src="js/online-sync.js?v=8"></script>
 <script src="js/ability-classifier.js?v=1"></script>
-<script src="js/app.js?v=static-banks-v30"></script>
+<script src="js/app.js?v=static-banks-v31"></script>
 <script src="js/auth-gate.js?v=2"></script>
 <script src="js/content-manager.js?v=25"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v3"></script>

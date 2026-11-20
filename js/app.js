@@ -2820,50 +2820,93 @@ async function saveAccount(){
     if(typeof beep==='function')beep('correct');showToast('Profil berhasil disimpan.');
   }catch(error){showToast(error?.message||'Profil tidak dapat disimpan.');}
 }
-function compressProfilePhoto(file){
-  return new Promise((resolve,reject)=>{
-    if(!file||!file.type||!/^image\/(jpeg|png|webp)$/i.test(file.type))return reject(Error('Pilih gambar JPG, PNG, atau WebP.'));
-    if(file.size>12*1024*1024)return reject(Error('Ukuran file maksimal 12 MB.'));
-    const reader=new FileReader();
-    reader.onerror=()=>reject(Error('Gagal membaca file gambar.'));
-    reader.onload=()=>{
-      const img=new Image();
-      img.onerror=()=>reject(Error('File gambar tidak valid.'));
-      img.onload=()=>{
-        const size=256,canvas=document.createElement('canvas');
-        canvas.width=size;canvas.height=size;
-        const ctx=canvas.getContext('2d');
-        const minSide=Math.min(img.naturalWidth||img.width,img.naturalHeight||img.height);
-        const sx=Math.max(0,((img.naturalWidth||img.width)-minSide)/2);
-        const sy=Math.max(0,((img.naturalHeight||img.height)-minSide)/2);
-        ctx.drawImage(img,sx,sy,minSide,minSide,0,0,size,size);
-        let dataUrl=canvas.toDataURL('image/jpeg',0.82);
-        if(dataUrl.length>150000)dataUrl=canvas.toDataURL('image/jpeg',0.68);
-        resolve(dataUrl);
-      };
-      img.src=reader.result;
+const avatarCropState={img:null,w:0,h:0,stage:260,zoom:1,x:0,y:0,dragging:false,sx:0,sy:0,ox:0,oy:0,busy:false};
+function clampAvatarCrop(){
+  const s=avatarCropState;
+  if(!s.img)return;
+  const base=Math.max(s.stage/s.w,s.stage/s.h);
+  const scale=base*s.zoom;
+  const dw=s.w*scale,dh=s.h*scale;
+  const maxX=Math.max(0,(dw-s.stage)/2),maxY=Math.max(0,(dh-s.stage)/2);
+  s.x=Math.max(-maxX,Math.min(maxX,s.x));
+  s.y=Math.max(-maxY,Math.min(maxY,s.y));
+}
+function paintAvatarCrop(){
+  const s=avatarCropState,imgEl=$('avatarCropImg'),zVal=$('avatarCropZoomVal');
+  if(!imgEl||!s.img)return;
+  clampAvatarCrop();
+  const base=Math.max(s.stage/s.w,s.stage/s.h),scale=base*s.zoom;
+  const dw=s.w*scale,dh=s.h*scale;
+  imgEl.style.width=`${dw}px`;
+  imgEl.style.height=`${dh}px`;
+  imgEl.style.transform=`translate(${s.x}px, ${s.y}px)`;
+  if(zVal)zVal.textContent=`${Number(s.zoom).toFixed(1)}×`;
+}
+function closeAvatarCropModal(){
+  const modal=$('avatarCropModal');
+  if(modal){modal.hidden=true;modal.setAttribute('aria-hidden','true');}
+  avatarCropState.img=null;avatarCropState.dragging=false;
+}
+function openAvatarCropModal(file){
+  if(!file||!file.type||!/^image\/(jpeg|png|webp)$/i.test(file.type)){showToast('Pilih gambar JPG, PNG, atau WebP.');return;}
+  if(file.size>12*1024*1024){showToast('Ukuran file maksimal 12 MB.');return;}
+  const reader=new FileReader();
+  reader.onerror=()=>showToast('Gagal membaca file gambar.');
+  reader.onload=()=>{
+    const img=new Image();
+    img.onerror=()=>showToast('File gambar tidak valid.');
+    img.onload=()=>{
+      const modal=$('avatarCropModal'),stageEl=$('avatarCropStage'),imgEl=$('avatarCropImg'),zoomEl=$('avatarCropZoom');
+      if(!modal||!stageEl||!imgEl)return;
+      modal.hidden=false;modal.setAttribute('aria-hidden','false');
+      const rect=stageEl.getBoundingClientRect();
+      avatarCropState.stage=Math.max(200,Math.round(rect.width||260));
+      avatarCropState.img=img;
+      avatarCropState.w=img.naturalWidth||img.width;
+      avatarCropState.h=img.naturalHeight||img.height;
+      avatarCropState.zoom=1;avatarCropState.x=0;avatarCropState.y=0;avatarCropState.dragging=false;
+      if(zoomEl)zoomEl.value='1';
+      imgEl.src=reader.result;
+      paintAvatarCrop();
     };
-    reader.readAsDataURL(file);
-  });
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
 }
 function triggerAccountAvatarPicker(){
   if(!authCurrentUser()){showToast('Masuk dulu untuk mengganti foto profil.');return;}
   $('accountAvatarFile')?.click();
 }
-async function uploadAccountAvatar(event){
+function uploadAccountAvatar(event){
   const input=event?.target,file=input?.files?.[0];
   if(input)input.value='';
   if(!file)return;
   if(!authCurrentUser()){showToast('Masuk dulu untuk mengganti foto profil.');return;}
-  const btn=$('changeAvatarBtn'),av=$('accountAvatar');
-  if(btn)btn.disabled=true;if(av)av.disabled=true;
+  openAvatarCropModal(file);
+}
+async function saveCroppedAvatar(){
+  const s=avatarCropState;
+  if(!s.img||s.busy||!authCurrentUser())return;
+  s.busy=true;
+  const saveBtn=$('saveAvatarCropBtn');if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Menyimpan...';}
   try{
-    const dataUrl=await compressProfilePhoto(file);
+    const outSize=256,canvas=document.createElement('canvas');
+    canvas.width=outSize;canvas.height=outSize;
+    const ctx=canvas.getContext('2d');
+    const base=Math.max(s.stage/s.w,s.stage/s.h),scale=base*s.zoom;
+    const dw=s.w*scale,dh=s.h*scale;
+    const ratio=outSize/s.stage;
+    const dx=((s.stage-dw)/2+s.x)*ratio;
+    const dy=((s.stage-dh)/2+s.y)*ratio;
+    ctx.drawImage(s.img,dx,dy,dw*ratio,dh*ratio);
+    let dataUrl=canvas.toDataURL('image/jpeg',0.82);
+    if(dataUrl.length>150000)dataUrl=canvas.toDataURL('image/jpeg',0.68);
     const data=await authApi('/avatar',{method:'POST',body:JSON.stringify({dataUrl})});
     authServerUser=data.user;authSyncProfile(authServerUser);renderAccount();
+    closeAvatarCropModal();
     if(typeof beep==='function')beep('correct');showToast('Foto profil berhasil diperbarui.');
   }catch(error){showToast(error?.message||'Gagal mengunggah foto profil.');}
-  finally{if(btn)btn.disabled=!authCurrentUser();if(av)av.disabled=!authCurrentUser();}
+  finally{s.busy=false;if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='Simpan Foto';}}
 }
 async function removeAccountAvatar(){
   if(!authCurrentUser())return;
@@ -2923,6 +2966,19 @@ if($('changeAvatarBtn'))$('changeAvatarBtn').onclick=triggerAccountAvatarPicker;
 if($('accountAvatar'))$('accountAvatar').onclick=triggerAccountAvatarPicker;
 if($('removeAvatarBtn'))$('removeAvatarBtn').onclick=removeAccountAvatar;
 if($('accountAvatarFile'))$('accountAvatarFile').onchange=uploadAccountAvatar;
+if($('saveAvatarCropBtn'))$('saveAvatarCropBtn').onclick=saveCroppedAvatar;
+if($('cancelAvatarCropBtn'))$('cancelAvatarCropBtn').onclick=closeAvatarCropModal;
+if($('closeAvatarCropModal'))$('closeAvatarCropModal').onclick=closeAvatarCropModal;
+document.querySelector('[data-close-avatar-crop]')?.addEventListener('click',closeAvatarCropModal);
+if($('avatarCropZoom'))$('avatarCropZoom').oninput=e=>{avatarCropState.zoom=Math.max(1,Math.min(3,Number(e.target.value)||1));paintAvatarCrop();};
+if($('avatarCropStage')){
+  const st=$('avatarCropStage');
+  st.addEventListener('pointerdown',e=>{if(!avatarCropState.img)return;avatarCropState.dragging=true;avatarCropState.sx=e.clientX;avatarCropState.sy=e.clientY;avatarCropState.ox=avatarCropState.x;avatarCropState.oy=avatarCropState.y;try{st.setPointerCapture(e.pointerId);}catch{}});
+  st.addEventListener('pointermove',e=>{if(!avatarCropState.dragging)return;avatarCropState.x=avatarCropState.ox+(e.clientX-avatarCropState.sx);avatarCropState.y=avatarCropState.oy+(e.clientY-avatarCropState.sy);paintAvatarCrop();});
+  const endDrag=()=>{avatarCropState.dragging=false;};
+  st.addEventListener('pointerup',endDrag);
+  st.addEventListener('pointercancel',endDrag);
+}
 if($('exportAccountBtn'))$('exportAccountBtn').onclick=exportAccountData;
 if($('backFromAccount'))$('backFromAccount').onclick=()=>show('home');
 
@@ -3089,7 +3145,7 @@ function renderAccount(){
   const user=authCurrentUser(),account=getAccount(),nameEl=$('accountName'),usernameEl=$('accountUsername'),avatar=$('accountAvatar'),removeBtn=$('removeAvatarBtn'),profileFields=$('accountProfileFields');
   if(nameEl)nameEl.value=user?.name||account.name||'';if(usernameEl)usernameEl.value=user?.username||account.username||'';
   if(avatar){
-    if(user?.avatarUrl){avatar.innerHTML=`<img class="account-avatar-img" src="${escapeHtml(user.avatarUrl)}" alt="Foto profil">`;avatar.classList.add('has-photo');}
+    if(user?.avatarUrl){avatar.innerHTML=`<img class="account-avatar-img" src="${esc(user.avatarUrl)}" alt="Foto profil">`;avatar.classList.add('has-photo');}
     else{avatar.textContent=user?.name?.charAt(0).toUpperCase()||account.avatar||'C';avatar.classList.remove('has-photo');}
   }
   if(removeBtn){removeBtn.hidden=!(user&&user.avatarUrl);removeBtn.disabled=!(user&&user.avatarUrl);}
