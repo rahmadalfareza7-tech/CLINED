@@ -3245,7 +3245,31 @@ function renderAccount(){
   if(profileFields)profileFields.hidden=!user;
   ['saveAccountBtn','exportAccountBtn','changeAvatarBtn','accountAvatar','changeBannerBtn'].forEach(id=>{const el=$(id);if(el)el.disabled=!user;});
   renderAccountAuthState();
+  renderHomeProfileShowcase();
 }
+function renderHomeProfileShowcase(){
+  const el=$('homeProfileShowcase');
+  if(!el)return;
+  const user=typeof authCurrentUser==='function'?authCurrentUser():null;
+  if(!user){el.hidden=true;el.innerHTML='';return;}
+  el.hidden=false;
+  el.classList.toggle('has-banner',!!user.bannerUrl);
+  const bg=user.bannerUrl?`<span class="chat-row-bg" style="background-image:url('${esc(user.bannerUrl)}')" aria-hidden="true"></span>`:'';
+  const ini=esc(String(user.name||'C').trim().slice(0,2).toUpperCase()||'C');
+  const avInner=user.avatarUrl?`<img class="soc-av-img" src="${esc(user.avatarUrl)}" alt="">`:ini;
+  const deco=user.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
+  const nc=user.nameColor?` data-name-color="${esc(user.nameColor)}"`:'';
+  const roleBadge=user.role==='admin'?'<em class="chat-badge b-admin">👑 Admin</em>':user.role==='helper'?'<em class="chat-badge b-helper">🛠️ Helper</em>':'';
+  el.innerHTML=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''}" aria-hidden="true">${avInner}${deco}</span>
+    <div class="home-profile-info">
+      <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${roleBadge}</div>
+      <small>@${esc(user.username)}</small>
+    </div>
+    <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>`;
+  const editBtn=$('homeProfileEditBtn');
+  if(editBtn)editBtn.onclick=()=>window.CLINED_CARD_SHOP?.show?.('decos');
+}
+window.addEventListener('clined:profile-style',renderHomeProfileShowcase);
 async function authChangePassword(event){
   event.preventDefault();authSetError('changePasswordError','');
   try{
