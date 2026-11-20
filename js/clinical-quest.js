@@ -175,6 +175,7 @@
   }
   function finish(){
     const q=active;const correct=answers.reduce((n,a,i)=>n+(a===q.steps[i].answer?1:0),0);const st=state();st.completed=st.completed||{};st.completed[q.id]={correct,total:q.steps.length,at:new Date().toISOString()};save(st);
+    try{window.clinedCheckAchievements?.();}catch{}
     try{if(typeof window.addXP==='function')window.addXP(10+correct*5,`Clinical Quest • ${q.title}`,{kind:'quest',ref:'quest:'+(q.id||q.title)});}catch(e){}
     const pct=Math.round(correct/q.steps.length*100);const root=host();
     root.innerHTML=`<div class="clinical-quest-shell">

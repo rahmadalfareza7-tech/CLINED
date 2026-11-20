@@ -78,7 +78,7 @@
   /* ───────── daftar soal: salah / review ───────── */
   const wrongAll = () => (rd(KEY.wrong, []) || []).filter(q => q && q.id != null);
   const activeWrong = () => wrongAll().filter(q => !q.mastered);
-  function saveWrong(list) { localStorage.setItem(KEY.wrong, JSON.stringify(list)); try { window.CLINED_SYNC?.markSet?.(KEY.wrong); } catch {} }
+  function saveWrong(list) { localStorage.setItem(KEY.wrong, JSON.stringify(list)); try { window.CLINED_SYNC?.markSet?.(KEY.wrong); } catch {} try { window.clinedCheckAchievements?.(); } catch {} }
   function patchWrong(id, fn) { const w = wrongAll(), i = w.findIndex(x => x.id === id); if (i < 0) return; fn(w[i]); saveWrong(w); }
 
   function smartRows() {

@@ -539,7 +539,7 @@ function scores(){
   if(S.chk.s5)o.s5=20*f.l5.length/c.l5.length;
   o.total=S.only?o.s4*100/35:o.s1+o.s3+o.s4+o.s5;return o;
 }
-function saveBest(){const t=Math.round(scores().total),b=bestMap(),id=S.case.id+(S.only?'r':''),o=b[id];if(!o||t>=o.pct){b[id]={pct:t,at:Date.now()};try{localStorage.setItem(BEST_KEY,JSON.stringify(b))}catch{}}}
+function saveBest(){const t=Math.round(scores().total),b=bestMap(),id=S.case.id+(S.only?'r':''),o=b[id];if(!o||t>=o.pct){b[id]={pct:t,at:Date.now()};try{localStorage.setItem(BEST_KEY,JSON.stringify(b))}catch{}}try{window.clinedCheckAchievements?.()}catch{}}
 function finish(){
   ['s1','s3','s4','s5'].forEach(k=>S.chk[k]=true);
   const stepsToAward=S.only?['s4']:['s1','s3','s4','s5'];

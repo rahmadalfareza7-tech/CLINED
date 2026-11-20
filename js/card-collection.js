@@ -121,7 +121,7 @@
   const getDia = () => isAdmin() ? Infinity : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0);
   const setDia = v => { if (!isAdmin()) { localStorage.setItem(KEY_DIA, String(Math.max(0, v))); scheduleServerSave(); } };
   const getCards = () => { try { return JSON.parse(localStorage.getItem(KEY_CARDS) || '[]'); } catch { return []; } };
-  const addCard = card => { const c = getCards(); c.push({ id: card.id, at: Date.now() }); localStorage.setItem(KEY_CARDS, JSON.stringify(c)); scheduleServerSave(); };
+  const addCard = card => { const c = getCards(); c.push({ id: card.id, at: Date.now() }); localStorage.setItem(KEY_CARDS, JSON.stringify(c)); scheduleServerSave(); try { window.clinedCheckAchievements?.(); } catch {} };
   const ownedCount = id => getCards().filter(c => c.id === id).length;
 
   const getStarMap = () => { try { const m = JSON.parse(localStorage.getItem(KEY_STARS) || '{}'); return m && typeof m === 'object' ? m : {}; } catch { return {}; } };

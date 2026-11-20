@@ -1,16 +1,32 @@
 document.addEventListener('click',(event)=>{const feedback=event.target.closest('#feedback');if(!feedback)return;event.preventDefault();const url=feedback.dataset.googleFormUrl||localStorage.getItem('clined_google_form_url')||'';if(!url){showToast('Link formulir masukan belum diatur. Hubungi admin.',true);return;}const opened=window.open(url,'_blank','noopener,noreferrer');if(!opened)window.location.href=url;});const CLINED_SCHEMA_VERSION=4;(function migrateStorageSchema(){try{const current=Number(localStorage.getItem('clined_schema_version')||0);if(current<1){const aliases=[['xp','clined_xp'],['streak','clined_streak'],['gems','clined_gems']];aliases.forEach(([legacy,next])=>{if(localStorage.getItem(next)===null&&localStorage.getItem(legacy)!==null)localStorage.setItem(next,localStorage.getItem(legacy));});}if(current<2){if(!localStorage.getItem('clined_migrated_at'))localStorage.setItem('clined_migrated_at',new Date().toISOString());}if(current<3){}if(current<4){try{const wrong=JSON.parse(localStorage.getItem('gaster_v8_wrong_stats')||'[]');if(Array.isArray(wrong)){let changed=false;const normalized=wrong.map(item=>{if(!item||typeof item!=='object')return item;if(!item.lastWrong){item.lastWrong=item.lastSeen||new Date().toISOString();changed=true;}if(!Number.isFinite(Number(item.wrong))){item.wrong=1;changed=true;}return item;});if(changed)localStorage.setItem('gaster_v8_wrong_stats',JSON.stringify(normalized));}}catch{}}localStorage.setItem('clined_schema_version',String(CLINED_SCHEMA_VERSION));}catch(e){console.warn('CLINED storage migration skipped',e);}})();const $=id=>document.getElementById(id);const APP_VERSION="v36.8-static-banks-v18-materials";const KEY={theme:"gaster_v8_theme",book:"gaster_v8_bookmarks",hist:"gaster_v8_history",session:"gaster_v8_quiz_session",bankSessions:"clined_bank_sessions_v1",bankBest:"clined_bank_best_v1",sound:"gaster_v8_sound",wrong:"gaster_v8_wrong_stats",goal:"gaster_v9_daily_goal",qstats:"gaster_v22_question_performance",abilityMap:"gaster_v22_question_ability_map",xp:"gaster_v11_xp",navVisible:"medical_rpg_nav_visible_v21",navPos:"medicalRpgNavPos_v21",dailyStreak:"gaster_daily_streak_v1"};let selectedCount=20,selectedBank="utama",quiz=[],pos=0,score=0,answered=false;let soundEnabled=true;let selectedAnswer=null,streak=0,sessionStart=0,timerSeconds=0,timerDuration=0,timerDeadline=0,timerId=null;let quizMode="study",flagged=new Set();let sessionXP=0,lastXPGain=0;let playerHP=100,wrongCombo=0,enemyHP=100;const get=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch{return d}};const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("CLINED storage write failed",e);return false}};const del=k=>{try{localStorage.removeItem(k)}catch{}};function showToast(message,isError){let t=document.getElementById('clinedToast');if(!t){t=document.createElement('div');t.id='clinedToast';t.className='clined-toast';document.body.appendChild(t);}t.textContent=message;t.classList.toggle('is-error',!!isError);t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),Math.max(isError?4200:2200,String(message).length*55));}const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const letter=i=>String.fromCharCode(65+i);
 const qid=(bank,i,q)=>q.id || `${bank}-${q.no||i+1}`;
-// RPG progression: 100 levels, 100 XP per level.
+// RPG progression: 100 levels dengan kurva progresif (Lv.L -> L+1 butuh 250 + (L-1)*100 XP).
+const XP_MAX_LEVEL=100;
+function xpLevelStart(level){
+  const L=Math.max(1,Math.min(XP_MAX_LEVEL,Math.floor(Number(level)||1)));
+  return 50*(L-1)*(L+3);
+}
 function xpLevel(xp){
-  return Math.min(100, Math.floor(Math.max(0, Number(xp)||0) / 100) + 1);
+  const total=Math.max(0,Number(xp)||0);
+  let lv=Math.floor(Math.sqrt(total/50+4)+1e-9)-1;
+  while(lv<XP_MAX_LEVEL && xpLevelStart(lv+1)<=total) lv++;
+  while(lv>1 && xpLevelStart(lv)>total) lv--;
+  return Math.max(1,Math.min(XP_MAX_LEVEL,lv));
 }
 function xpInfo(xp){
-  const total=Math.max(0, Number(xp)||0);
+  const total=Math.max(0,Number(xp)||0);
   const level=xpLevel(total);
-  if(level>=100) return {level,current:100,need:100,next:10000,total};
-  const current=total % 100;
-  return {level,current,need:100,next:level*100,total};
+  if(level>=XP_MAX_LEVEL){
+    const maxCap=xpLevelStart(XP_MAX_LEVEL);
+    const maxStep=250+(XP_MAX_LEVEL-2)*100;
+    return {level:XP_MAX_LEVEL,current:maxStep,need:maxStep,next:maxCap,total};
+  }
+  const start=xpLevelStart(level);
+  const next=xpLevelStart(level+1);
+  const need=next-start;
+  const current=Math.max(0,total-start);
+  return {level,current,need,next,total};
 }
 function xpTitle(level){
   if(level>=90) return "Clinical Master";
@@ -59,25 +75,32 @@ function addXP(amount,reason="",meta){
   try{window.CLINED_ONLINE_SYNC?.markDirty?.();}catch(e){console.warn('XP sync trigger skipped',e);}
   lastXPGain=gained;sessionXP+=gained;
   renderXP();
-  if(!meta?.silent)showXPPopup(gained,reason, xpLevel(after)>xpLevel(before));
-  return {before,after,gained,leveledUp:xpLevel(after)>xpLevel(before)};
+  const leveledUp=xpLevel(after)>xpLevel(before);
+  if(!meta?.silent)showXPPopup(gained,reason,leveledUp);
+  try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
+  return {before,after,gained,leveledUp};
 }
 function renderXP(){
   const info=xpInfo(Number(get(KEY.xp,0))||0);
-  const pct=Math.min(100,Math.round(info.current/info.need*100));
+  const pct=Math.min(100,Math.round(info.current/Math.max(1,info.need)*100));
   if($("levelBadge"))$("levelBadge").textContent=`Lv. ${info.level}`;
   if($("xpTitle"))$("xpTitle").textContent=xpTitle(info.level);
-  if($("xpTotal"))$("xpTotal").textContent=`${info.total} XP`;
+  if($("xpTotal"))$("xpTotal").textContent=`${info.total.toLocaleString('id-ID')} XP`;
   setProgress($("xpBar"),pct);
-  if($("xpProgressText"))$("xpProgressText").textContent=`${info.current} / ${info.need} XP`;
-  if($("xpNextText"))$("xpNextText").textContent=info.level>=100?"MAX LEVEL":`${info.need-info.current} XP ke Level ${info.level+1}`;
-  if($("xpLive"))$("xpLive").textContent=`⚡ ${info.total} XP`;
+  if($("xpProgressText"))$("xpProgressText").textContent=`${info.current.toLocaleString('id-ID')} / ${info.need.toLocaleString('id-ID')} XP`;
+  if($("xpNextText"))$("xpNextText").textContent=info.level>=XP_MAX_LEVEL?"MAX LEVEL":`${(info.need-info.current).toLocaleString('id-ID')} XP ke Level ${info.level+1}`;
+  if($("xpLive"))$("xpLive").textContent=`⚡ ${info.total.toLocaleString('id-ID')} XP`;
   if($("playerBadges")){
     const badges=[];
-    if(info.level>=2)badges.push("🔥Pejuang");
-    if(info.level>=4)badges.push("🎯Konsisten");
-    if(info.level>=6)badges.push("🧠Tajam");
-    if(info.level>=10)badges.push("🏆Master");
+    if(info.level>=2)badges.push("🔥 Pejuang");
+    if(info.level>=5)badges.push("🩺 Klinik");
+    if(info.level>=10)badges.push("🎯 Koas");
+    if(info.level>=20)badges.push("🧠 Senior");
+    if(info.level>=30)badges.push("⚕️ Dokter Muda");
+    if(info.level>=45)badges.push("👨‍⚕️ Dokter");
+    if(info.level>=60)badges.push("🏥 Spesialis");
+    if(info.level>=75)badges.push("⭐ Konsulen");
+    if(info.level>=90)badges.push("🏆 Master");
     $("playerBadges").innerHTML=badges.map(x=>`<span>${x}</span>`).join("");
   }
 }
@@ -560,6 +583,7 @@ function recordQuestionPerformance(q,correct){
   prev.lastAnswered=new Date().toISOString(); prev.bank=q.bank||selectedBank; prev.no=q.no;
   prev.primary=p.primary; prev.weights=p.weights;
   all[id]=prev; set(KEY.qstats,all);
+  try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
 }
 
 function abilityEvidence(){
@@ -1451,6 +1475,7 @@ function finish(reason="complete"){
   $("reviewWrongBtn").style.display=quiz.some(q=>q.id && get(KEY.wrong,[]).some(x=>x.id===q.id))?"block":"none";
   $("reviewQuizBtn").style.display=quiz.length?"block":"none";
   show("result");renderCounts();
+  try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
 }
 function formatTime(s){
   s=Math.max(0,Math.floor(s||0)); const m=Math.floor(s/60),sec=s%60;
@@ -1654,6 +1679,7 @@ $("resultHome").onclick=()=>{show("home");renderCounts()};
 function toggleBookmark(id){
   let b=get(KEY.book,[]);
   b=b.includes(id)?b.filter(x=>x!==id):[...b,id];set(KEY.book,b);
+  try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
   $("bookmarkStat").textContent=b.length;
   if(quiz[pos])$("bookmarkBtn").textContent=b.includes(quiz[pos].id)?"★Tersimpan":"☆Simpan";
 }
@@ -2904,6 +2930,7 @@ async function authRestoreMissingLearningState(){
     if(restored){
       nativeSet.call(localStorage,'clined_sync_meta_v1',JSON.stringify(meta));
       try{renderXP();}catch{}
+      try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
       console.log('[CLINED] restored missing learning state:',restored);
     }
   }catch(e){
@@ -2920,6 +2947,7 @@ async function authRestoreSession(){
   try{const data=await authApi('/me',{method:'GET',headers:{}});authServerUser=data.user||null;authScopeUser(authServerUser);authSyncProfile(authServerUser);if(authServerUser)await authRestoreMissingLearningState();}
   catch{authServerUser=null;}
   renderAccount();renderAccountAuthState();
+  try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
   if(authServerUser){window.CLINED_AUTH_GATE?.unlock?.();show('home',{force:true});}
   else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
 }
@@ -3041,33 +3069,189 @@ setupAuthSecurity();
 renderAccount();
 authRestoreSession();
 
-function achievementData(){
-  const hist=get(KEY.hist,[]), xp=Number(get(KEY.xp,0))||0;
-  const answered=hist.reduce((a,h)=>a+Number(h.total||0),0);
+const ACHIEVEMENT_KEY='clined_unlocked_achievements_v1';
+let achActiveFilter='all';
+const achUnlockQueue=[];
+let achBannerActive=false;
+
+function longestDailyStreak(counts){
+  const activeDays=Object.entries(counts||{}).filter(([,v])=>Number(v||0)>=5).map(([k])=>k).sort();
+  if(!activeDays.length)return 0;
+  let best=1, run=1;
+  for(let i=1;i<activeDays.length;i++){
+    const prev=new Date(`${activeDays[i-1]}T12:00:00`).getTime();
+    const cur=new Date(`${activeDays[i]}T12:00:00`).getTime();
+    if(Math.round((cur-prev)/86400000)===1){run++;if(run>best)best=run;}
+    else run=1;
+  }
+  return best;
+}
+
+function achievementCatalog(){
+  const hist=get(KEY.hist,[]);
+  const xp=Number(get(KEY.xp,0))||0;
+  const level=xpLevel(xp);
+  const qstats=get(KEY.qstats,{})||{};
+  const qAtt=Object.values(qstats).reduce((a,s)=>a+Number(s?.attempts||0),0);
+  const histAtt=hist.reduce((a,h)=>a+Number((h.validTotal??h.total)||0),0);
+  const answered=Math.max(histAtt,qAtt);
   const best=hist.length?Math.max(...hist.map(h=>Number(h.pct||0))):0;
-  const streakData=get(KEY.dailyStreak,{current:0,best:0});
+  const stRaw=streakData();
+  const bestStreak=Math.max(Number(stRaw.streak||0),calculateDailyStreak(stRaw.counts),longestDailyStreak(stRaw.counts));
+  const bookCount=(get(KEY.book,[])||[]).length;
+  const wrongList=get(KEY.wrong,[])||[];
+  const masteredWrong=Array.isArray(wrongList)?wrongList.filter(w=>w&&w.mastered).length:0;
+  const blocks=new Set();
+  hist.forEach(h=>{const b=blockForBank(h?.bank);if(b&&b!=='OTHER')blocks.add(b);});
+  Object.values(qstats).forEach(s=>{const b=blockForBank(s?.bank);if(b&&b!=='OTHER')blocks.add(b);});
+  const cardRaw=get('clined_collection_v1',[]);
+  const uniqueCards=new Set((Array.isArray(cardRaw)?cardRaw:[]).map(c=>c?.id).filter(Boolean)).size;
+  const questDone=Object.keys((get('clined_clinical_quest_v1',{})||{}).completed||{}).length;
+  const resepDone=Object.keys(get('clined_resep_best_v1',{})||{}).length;
+  const ab=(name)=>componentProgress(name).answered;
+
   return [
-    ['🎓','First Step','Menyelesaikan sesi pertama',hist.length>=1],
-    ['🔥','Hot Streak','Mencapai 7 hari streak',Number(streakData.best||streakData.current||0)>=7],
-    ['📚','100 Questions','Mengerjakan 100 soal',answered>=100],
-    ['🎯','Perfect Session','Mencapai akurasi 100% dalam satu sesi',best>=100],
-    ['⚡','Clinical XP','Mengumpulkan 1.000 XP',xp>=1000],
-    ['🏆','Clinical Master','Mencapai Level 10',xpLevel(xp)>=10],
-    ['🔬','Histology Starter','Menjawab 5 soal Histology',componentProgress('Histology').answered>=5],
-    ['🧠','Physiology Core','Menjawab 10 soal Physiology',componentProgress('Physiology').answered>=10],
-    ['💊','Pharm Ready','Menjawab 10 soal Pharmacology',componentProgress('Pharmacology').answered>=10],
-    ['🫀','Anatomy Explorer','Menjawab 10 soal Anatomy',componentProgress('Anatomy').answered>=10],
-    ['🩺','Diagnostics Ready','Menjawab 10 soal Diagnostics',componentProgress('Diagnostics').answered>=10]
+    {id:'first_step',icon:'🎓',title:'First Step',desc:'Menyelesaikan sesi kuis pertama',cat:'kuis',current:Math.min(1,hist.length),target:1,unlocked:hist.length>=1},
+    {id:'q_50',icon:'📖',title:'Pemanasan Klinis',desc:'Menjawab 50 soal latihan',cat:'kuis',current:Math.min(50,answered),target:50,unlocked:answered>=50},
+    {id:'q_100',icon:'📚',title:'100 Questions',desc:'Menjawab 100 soal latihan',cat:'kuis',current:Math.min(100,answered),target:100,unlocked:answered>=100},
+    {id:'q_500',icon:'🩺',title:'Bank Hunter',desc:'Menjawab 500 soal latihan',cat:'kuis',current:Math.min(500,answered),target:500,unlocked:answered>=500},
+    {id:'q_1000',icon:'🏛️',title:'Seribu Kasus',desc:'Menjawab 1.000 soal latihan',cat:'kuis',current:Math.min(1000,answered),target:1000,unlocked:answered>=1000},
+    {id:'q_2500',icon:'👑',title:'Ensiklopedia Klinis',desc:'Menjawab 2.500 soal latihan',cat:'kuis',current:Math.min(2500,answered),target:2500,unlocked:answered>=2500},
+    {id:'sess_10',icon:'🗂️',title:'Rajin Latihan',desc:'Menyelesaikan 10 sesi kuis',cat:'kuis',current:Math.min(10,hist.length),target:10,unlocked:hist.length>=10},
+    {id:'sess_30',icon:'🎖️',title:'Veteran Ujian',desc:'Menyelesaikan 30 sesi kuis',cat:'kuis',current:Math.min(30,hist.length),target:30,unlocked:hist.length>=30},
+    {id:'score_80',icon:'✨',title:'High Scorer',desc:'Meraih nilai ≥ 80% dalam satu sesi',cat:'kuis',current:Math.min(80,best),target:80,unlocked:best>=80},
+    {id:'perfect_100',icon:'🎯',title:'Perfect Session',desc:'Meraih akurasi 100% dalam satu sesi',cat:'kuis',current:Math.min(100,best),target:100,unlocked:best>=100},
+
+    {id:'streak_3',icon:'🕯️',title:'Tiga Hari Konsisten',desc:'Mencapai 3 hari streak berturut-turut',cat:'konsistensi',current:Math.min(3,bestStreak),target:3,unlocked:bestStreak>=3},
+    {id:'streak_7',icon:'🔥',title:'Hot Streak',desc:'Mencapai 7 hari streak berturut-turut',cat:'konsistensi',current:Math.min(7,bestStreak),target:7,unlocked:bestStreak>=7},
+    {id:'streak_14',icon:'🌟',title:'Dua Pekan Tangguh',desc:'Mencapai 14 hari streak berturut-turut',cat:'konsistensi',current:Math.min(14,bestStreak),target:14,unlocked:bestStreak>=14},
+    {id:'streak_30',icon:'💎',title:'Disiplin Baja',desc:'Mencapai 30 hari streak berturut-turut',cat:'konsistensi',current:Math.min(30,bestStreak),target:30,unlocked:bestStreak>=30},
+    {id:'xp_1k',icon:'⚡',title:'Clinical XP',desc:'Mengumpulkan 1.000 XP',cat:'konsistensi',current:Math.min(1000,xp),target:1000,unlocked:xp>=1000},
+    {id:'xp_10k',icon:'🌩️',title:'Ten Thousand Club',desc:'Mengumpulkan 10.000 XP',cat:'konsistensi',current:Math.min(10000,xp),target:10000,unlocked:xp>=10000},
+    {id:'xp_50k',icon:'🚀',title:'XP Legend',desc:'Mengumpulkan 50.000 XP',cat:'konsistensi',current:Math.min(50000,xp),target:50000,unlocked:xp>=50000},
+    {id:'lvl_5',icon:'🩻',title:'Mahasiswa Klinik',desc:'Mencapai Level 5 Clinical Progress',cat:'konsistensi',current:Math.min(5,level),target:5,unlocked:level>=5},
+    {id:'lvl_10',icon:'🥼',title:'Resmi Koas',desc:'Mencapai Level 10 Clinical Progress',cat:'konsistensi',current:Math.min(10,level),target:10,unlocked:level>=10},
+    {id:'lvl_25',icon:'🏆',title:'Dokter Muda Elit',desc:'Mencapai Level 25 Clinical Progress',cat:'konsistensi',current:Math.min(25,level),target:25,unlocked:level>=25},
+
+    {id:'ab_histo',icon:'🔬',title:'Histology Starter',desc:'Menjawab 10 soal Histology',cat:'kompetensi',current:Math.min(10,ab('Histology')),target:10,unlocked:ab('Histology')>=10},
+    {id:'ab_phys',icon:'🧠',title:'Physiology Core',desc:'Menjawab 25 soal Physiology',cat:'kompetensi',current:Math.min(25,ab('Physiology')),target:25,unlocked:ab('Physiology')>=25},
+    {id:'ab_pharm',icon:'💊',title:'Pharm Ready',desc:'Menjawab 25 soal Pharmacology',cat:'kompetensi',current:Math.min(25,ab('Pharmacology')),target:25,unlocked:ab('Pharmacology')>=25},
+    {id:'ab_anat',icon:'🫀',title:'Anatomy Explorer',desc:'Menjawab 25 soal Anatomy',cat:'kompetensi',current:Math.min(25,ab('Anatomy')),target:25,unlocked:ab('Anatomy')>=25},
+    {id:'ab_diag',icon:'🩻',title:'Diagnostics Pro',desc:'Menjawab 25 soal Diagnostics',cat:'kompetensi',current:Math.min(25,ab('Diagnostics')),target:25,unlocked:ab('Diagnostics')>=25},
+
+    {id:'blocks_5',icon:'🗺️',title:'Penjelajah Blok',desc:'Berlatih di minimal 5 blok UAB berbeda',cat:'eksplorasi',current:Math.min(5,blocks.size),target:5,unlocked:blocks.size>=5},
+    {id:'blocks_10',icon:'🧭',title:'Penakluk Kurikulum',desc:'Berlatih di minimal 10 blok UAB berbeda',cat:'eksplorasi',current:Math.min(10,blocks.size),target:10,unlocked:blocks.size>=10},
+    {id:'cards_5',icon:'🃏',title:'Kolektor Kartu',desc:'Mengoleksi 5 kartu karakter klinik',cat:'eksplorasi',current:Math.min(5,uniqueCards),target:5,unlocked:uniqueCards>=5},
+    {id:'quest_1',icon:'🧩',title:'Case Solver',desc:'Menyelesaikan 1 kasus Clinical Quest',cat:'eksplorasi',current:Math.min(1,questDone),target:1,unlocked:questDone>=1},
+    {id:'resep_1',icon:'📋',title:'Penulis Resep',desc:'Menyelesaikan 1 kasus Latihan Resep',cat:'eksplorasi',current:Math.min(1,resepDone),target:1,unlocked:resepDone>=1},
+    {id:'book_10',icon:'🔖',title:'Arsip Penting',desc:'Menyimpan 10 soal di Bookmark',cat:'eksplorasi',current:Math.min(10,bookCount),target:10,unlocked:bookCount>=10},
+    {id:'recall_10',icon:'📌',title:'Active Recall',desc:'Menguasai 10 soal dari daftar Sering Salah',cat:'eksplorasi',current:Math.min(10,masteredWrong),target:10,unlocked:masteredWrong>=10}
   ];
 }
+function achievementData(){
+  return achievementCatalog().map(a=>[a.icon,a.title,a.desc,a.unlocked,a]);
+}
+
+function flushAchievementQueue(){
+  if(achBannerActive || !achUnlockQueue.length)return;
+  const item=achUnlockQueue.shift();
+  achBannerActive=true;
+  const el=document.createElement('button');
+  el.type='button';
+  el.className='ach-notify-banner';
+  el.setAttribute('aria-live','polite');
+  el.innerHTML=`<span class="ach-notify-ico">${item.icon}</span><span class="ach-notify-body"><small>🏆 ACHIEVEMENT TERBUKA!</small><b>${esc(item.title)}</b><span>${esc(item.desc)}</span></span><span class="ach-notify-go">Lihat ›</span>`;
+  let timer=0;
+  const dismiss=()=>{
+    clearTimeout(timer);
+    el.classList.remove('show');
+    setTimeout(()=>{el.remove();achBannerActive=false;flushAchievementQueue();},260);
+  };
+  el.onclick=()=>{dismiss();renderAchievements();show('achievementsPage');};
+  document.body.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('show'));
+  try{vibrate([25,40,35]);beep('level');}catch{}
+  timer=setTimeout(dismiss,4600);
+}
+
+function checkNewAchievements(opts={}){
+  try{
+    const list=achievementCatalog();
+    const raw=localStorage.getItem(ACHIEVEMENT_KEY);
+    const initialized=raw!==null;
+    let map={};
+    try{const parsed=JSON.parse(raw||'{}');if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed))map=parsed;}catch{}
+    const newlyUnlocked=[];
+    let changed=false;
+    for(const a of list){
+      if(a.unlocked && !map[a.id]){
+        map[a.id]=Date.now();
+        changed=true;
+        if(initialized && !opts.silent) newlyUnlocked.push(a);
+      }
+    }
+    if(!initialized || changed) set(ACHIEVEMENT_KEY,map);
+    if(newlyUnlocked.length){
+      achUnlockQueue.push(...newlyUnlocked);
+      flushAchievementQueue();
+      if($('achievementsPage')?.classList.contains('active')) renderAchievements();
+    }
+    return newlyUnlocked;
+  }catch{return [];}
+}
+window.clinedCheckAchievements=checkNewAchievements;
+
 function renderAchievements(){
   const root=$('achievementList'); if(!root)return;
-  root.innerHTML=achievementData().map(a=>`<div class="achievement-item ${a[3]?'unlocked':'locked'}"><span class="achievement-icon">${a[0]}</span><div><b>${a[1]}</b><small>${a[2]}</small></div><strong>${a[3]?'✓':'🔒'}</strong></div>`).join('');
+  const all=achievementCatalog();
+  const unlockedN=all.filter(a=>a.unlocked).length;
+  const pct=all.length?Math.round(unlockedN/all.length*100):0;
+  const tabs=[
+    ['all',`Semua (${all.length})`],
+    ['unlocked',`Terbuka (${unlockedN})`],
+    ['kuis','Kuis'],
+    ['konsistensi','Konsistensi'],
+    ['kompetensi','Kompetensi'],
+    ['eksplorasi','Eksplorasi']
+  ];
+  const filtered=all.filter(a=>{
+    if(achActiveFilter==='unlocked')return a.unlocked;
+    if(achActiveFilter==='all')return true;
+    return a.cat===achActiveFilter;
+  }).sort((a,b)=>Number(b.unlocked)-Number(a.unlocked));
+
+  root.innerHTML=`
+    <div class="ach-summary">
+      <div class="ach-summary-top">
+        <div><b>${unlockedN} / ${all.length} Pencapaian Terbuka</b><small>${pct}% koleksi selesai</small></div>
+        <span class="ach-summary-pct">${pct}%</span>
+      </div>
+      <div class="ach-summary-bar"><i style="width:${pct}%"></i></div>
+    </div>
+    <div class="ach-tabs" role="tablist" aria-label="Filter pencapaian">
+      ${tabs.map(([id,lbl])=>`<button type="button" class="ach-tab${achActiveFilter===id?' on':''}" data-ach-filter="${id}">${lbl}</button>`).join('')}
+    </div>
+    <div class="ach-grid">
+      ${filtered.length?filtered.map(a=>{
+        const p=a.target?Math.min(100,Math.round(a.current/a.target*100)):(a.unlocked?100:0);
+        return `<div class="achievement-item ${a.unlocked?'unlocked':'locked'}">
+          <span class="achievement-icon">${a.icon}</span>
+          <div>
+            <b>${esc(a.title)}</b>
+            <small>${esc(a.desc)}</small>
+            ${!a.unlocked && a.target>1?`<div class="ach-item-prog"><div class="ach-item-track"><i style="width:${p}%"></i></div><span>${a.current.toLocaleString('id-ID')}/${a.target.toLocaleString('id-ID')}</span></div>`:''}
+          </div>
+          <strong>${a.unlocked?'✓':'🔒'}</strong>
+        </div>`;
+      }).join(''):`<p class="muted" style="text-align:center;padding:18px 0">Belum ada pencapaian terbuka di kategori ini.</p>`}
+    </div>`;
+  root.querySelectorAll('[data-ach-filter]').forEach(btn=>btn.onclick=()=>{achActiveFilter=btn.dataset.achFilter;renderAchievements();});
 }
 if($('achievementBtn'))$('achievementBtn').onclick=()=>{renderAchievements();show('achievementsPage');};
 if($('backFromAchievements'))$('backFromAchievements').onclick=()=>show('home');
 
 initSPAHistory();initTheme();renderBanks();renderCounts();renderModes();updateTimerUI();renderResume();renderXP();
+checkNewAchievements({silent:true});
 // Load the static bank manifest immediately so block pages get an enabled
 // "Mulai Kuis" button even before authentication state finishes resolving.
 loadServerBanks().catch(()=>{});

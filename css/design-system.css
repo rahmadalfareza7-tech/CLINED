@@ -707,3 +707,202 @@ html body #home #hubBtn .home-materials-icon {
   ::-webkit-scrollbar-thumb { background: var(--line-d); border-radius: 99px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 }
+
+/* ───────── 9. Achievements Page & Unlock Notification Banner ───────── */
+.ach-summary {
+  padding: 14px;
+  border-radius: var(--r-lg);
+  background: linear-gradient(135deg, var(--brand-soft), var(--sky-soft));
+  border: 2px solid var(--line);
+  display: grid;
+  gap: 10px;
+}
+.ach-summary-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ach-summary-top b {
+  display: block;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--text);
+}
+.ach-summary-top small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.ach-summary-pct {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.ach-summary-bar {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  overflow: hidden;
+}
+.ach-summary-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand), var(--sky));
+  transition: width .35s var(--ease-ui);
+}
+
+.ach-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px 0 4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.ach-tabs::-webkit-scrollbar { display: none; }
+.ach-tab {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 99px;
+  border: 2px solid var(--line);
+  border-bottom-width: 3px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ach-tab.on {
+  background: var(--sky);
+  border-color: var(--sky-dark);
+  color: #ffffff;
+}
+
+.ach-grid {
+  display: grid;
+  gap: 8px;
+}
+@media (min-width: 680px) {
+  .ach-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+html body .achievement-item.unlocked {
+  background: var(--brand-soft) !important;
+  border-color: rgba(88, 204, 2, .45) !important;
+  opacity: 1 !important;
+}
+html body .achievement-item.locked {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+  opacity: .84 !important;
+}
+.ach-item-prog {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+.ach-item-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden;
+}
+.ach-item-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sky);
+}
+.ach-item-prog span {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Celebratory Top-Sliding Achievement Banner */
+.ach-notify-banner {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translate(-50%, -150%);
+  opacity: 0;
+  z-index: 2147483050;
+  width: min(92vw, 430px);
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 14px;
+  border-radius: 18px;
+  border: 2px solid var(--brand);
+  border-bottom-width: 4px;
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 14px 36px rgba(10, 22, 16, .28);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .34s cubic-bezier(.2, .95, .3, 1.1), opacity .22s ease;
+}
+.ach-notify-banner.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+.ach-notify-ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: var(--brand-soft);
+  border: 1.5px solid rgba(88, 204, 2, .4);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+}
+.ach-notify-body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+.ach-notify-body small {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  color: var(--ok-text);
+}
+.ach-notify-body b {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ach-notify-body span {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ach-notify-go {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--sky-text);
+  white-space: nowrap;
+}
+
