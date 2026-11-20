@@ -1032,7 +1032,7 @@
 .soc-seg.n2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .soc-avwrap { position: relative; display: inline-flex; width: 42px; height: 42px; }
 .soc-avwrap .soc-av { width: 42px; height: 42px; }
-.soc-avwrap .soc-mood { position: absolute; right: -6px; bottom: -6px; font-size: 17px; background: var(--card, #fff); border-radius: 99px; padding: 1px; line-height: 1; box-shadow: 0 0 0 2px var(--line, #e5e7eb); }
+.soc-avwrap .soc-mood { position: absolute; right: -7px; bottom: -7px; z-index: 5; font-size: 17px; background: var(--card, #fff); border-radius: 99px; padding: 1px; line-height: 1; box-shadow: 0 0 0 2px var(--line, #e5e7eb); }
 .soc-post-head { grid-template-columns: 42px minmax(0, 1fr) auto; }
 .soc-who > small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .soc-tag { font-style: normal; font-size: 11px; font-weight: 900; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
