@@ -647,4 +647,188 @@
   font-size: 11px;
   opacity: 0.72;
 }
+.free-claim-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.16), rgba(16, 185, 129, 0.12));
+  border: 1.5px solid rgba(34, 197, 94, 0.45);
+  color: #15803d;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+body.dark .free-claim-banner,
+html.dark .free-claim-banner {
+  color: #86efac;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.14));
+}
+.banner-shop-btn.free-claim {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  border-color: #15803d;
+  box-shadow: 0 3px 10px rgba(34, 197, 94, 0.32);
+}
+
+/* ── Cosmetic Feature Tutorial Modal ──────────────────────────────────────── */
+.cosmetic-tut-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.cosmetic-tut-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 15, 28, 0.72);
+  backdrop-filter: blur(4px);
+}
+.cosmetic-tut-sheet {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 22px;
+  padding: 18px;
+  background: var(--card, #fff);
+  color: var(--text, #1f2d33);
+  border: 2px solid var(--line, #e2e8f0);
+  border-bottom-width: 5px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  animation: obIn 0.22s ease both;
+}
+.cosmetic-tut-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.cosmetic-tut-eyebrow {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #1cb0f6;
+}
+.cosmetic-tut-x {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--surface, #f1f5f9);
+  color: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+.cosmetic-tut-sheet h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 950;
+}
+.cosmetic-tut-sheet p {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.48;
+  font-weight: 600;
+  color: var(--muted, #64748b);
+}
+.cosmetic-tut-preview {
+  margin-bottom: 14px;
+}
+.cosmetic-tut-preview-center {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #0f172a;
+  color: #f8fafc;
+}
+.cosmetic-tut-preview-caption {
+  display: grid;
+  gap: 3px;
+}
+.cosmetic-tut-preview-caption b {
+  font-size: 14px;
+}
+.cosmetic-tut-preview-caption small {
+  font-size: 12px;
+  opacity: 0.78;
+}
+.cosmetic-tut-gifts {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.cosmetic-tut-gift {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1.5px solid rgba(34, 197, 94, 0.38);
+}
+.cosmetic-tut-gift.claimed {
+  opacity: 0.6;
+  background: var(--surface, #f1f5f9);
+  border-color: var(--line, #cbd5e1);
+}
+.cosmetic-tut-gift > span {
+  font-size: 22px;
+}
+.cosmetic-tut-gift b {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 900;
+}
+.cosmetic-tut-gift small {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.cosmetic-tut-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.cosmetic-tut-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--line, #cbd5e1);
+}
+.cosmetic-tut-dots i.on {
+  width: 22px;
+  background: #1cb0f6;
+}
+.cosmetic-tut-actions {
+  display: grid;
+  gap: 8px;
+}
+.cosmetic-tut-btn {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 900;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.cosmetic-tut-btn.primary {
+  background: linear-gradient(135deg, #1cb0f6, #0ea5e9);
+  color: #fff;
+  border-bottom: 4px solid #0284c7;
+}
+.cosmetic-tut-btn.ghost {
+  background: var(--surface, #f1f5f9);
+  color: inherit;
+  border-color: var(--line, #cbd5e1);
+}
+
 

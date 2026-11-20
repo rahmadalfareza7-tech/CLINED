@@ -54,3 +54,14 @@ test('mergeCardStates unions cards, takes max stars, and respects merge vs save 
   const merged = mergeCardStates(server, incoming, 'merge');
   assert.equal(merged.diamonds, 10);
 });
+
+test('mergeCardStates preserves one-time free claim and cosmetic tutorial flags', () => {
+  const claimed = mergeCardStates(
+    { freeBannerClaimed: true, freeDecoClaimed: false, cosmeticTutorialDone: true },
+    { freeBannerClaimed: false, freeDecoClaimed: true, cosmeticTutorialDone: false },
+    'save'
+  );
+  assert.equal(claimed.freeBannerClaimed, true);
+  assert.equal(claimed.freeDecoClaimed, true);
+  assert.equal(claimed.cosmeticTutorialDone, true);
+});

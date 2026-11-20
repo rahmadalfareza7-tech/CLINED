@@ -14,6 +14,9 @@
   const KEY_EQ_BANNER = 'clined_equipped_banner_v1';
   const KEY_DECOS = 'clined_owned_decos_v1';
   const KEY_EQ_DECO = 'clined_equipped_deco_v1';
+  const KEY_FREE_BANNER = 'clined_free_banner_claimed_v1';
+  const KEY_FREE_DECO = 'clined_free_deco_claimed_v1';
+  const KEY_COSMETIC_TUT = 'clined_cosmetic_tutorial_v1';
   let shopTab = 'cards';
   let decoFilter = 'all';
   let bannerFilter = 'all';
@@ -134,6 +137,12 @@
     try { localStorage.setItem(KEY_EQ_DECO, id || ''); } catch {}
     scheduleServerSave();
   }
+  const isFreeBannerClaimed = () => localStorage.getItem(KEY_FREE_BANNER) === '1';
+  const markFreeBannerClaimed = () => { try { localStorage.setItem(KEY_FREE_BANNER, '1'); } catch {} scheduleServerSave(); };
+  const isFreeDecoClaimed = () => localStorage.getItem(KEY_FREE_DECO) === '1';
+  const markFreeDecoClaimed = () => { try { localStorage.setItem(KEY_FREE_DECO, '1'); } catch {} scheduleServerSave(); };
+  const isCosmeticTutorialDone = () => localStorage.getItem(KEY_COSMETIC_TUT) === '1';
+  const markCosmeticTutorialDone = () => { try { localStorage.setItem(KEY_COSMETIC_TUT, '1'); } catch {} scheduleServerSave(); };
   function localCardPayload() {
     return {
       diamonds: isAdmin() ? 0 : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0),
@@ -143,7 +152,10 @@
       ownedBanners: getOwnedBanners(),
       equippedBanner: getEquippedBanner(),
       ownedDecos: getOwnedDecos(),
-      equippedDeco: getEquippedDeco()
+      equippedDeco: getEquippedDeco(),
+      freeBannerClaimed: isFreeBannerClaimed(),
+      freeDecoClaimed: isFreeDecoClaimed(),
+      cosmeticTutorialDone: isCosmeticTutorialDone()
     };
   }
   async function pushServerCardState(mode = 'save', useKeepalive = false) {
@@ -183,9 +195,13 @@
       if (typeof d.equippedBanner === 'string') localStorage.setItem(KEY_EQ_BANNER, d.equippedBanner);
       if (Array.isArray(d.ownedDecos)) localStorage.setItem(KEY_DECOS, JSON.stringify(d.ownedDecos));
       if (typeof d.equippedDeco === 'string') localStorage.setItem(KEY_EQ_DECO, d.equippedDeco);
+      if (d.freeBannerClaimed) localStorage.setItem(KEY_FREE_BANNER, '1');
+      if (d.freeDecoClaimed) localStorage.setItem(KEY_FREE_DECO, '1');
+      if (d.cosmeticTutorialDone) localStorage.setItem(KEY_COSMETIC_TUT, '1');
     } finally { applyingServer = false; }
     onExternalSync();
   }
+  let serverHydrated = false;
   async function hydrateFromServer() {
     try {
       if (!navigator.onLine) return;
@@ -196,16 +212,25 @@
       const d = await r.json().catch(() => null);
       if (!d) return;
       const local = localCardPayload();
-      const hasLocal = local.cards.length > 0 || local.diamonds > 0 || Object.keys(local.stars).length > 0 || local.ownedBanners.length > 0 || local.ownedDecos.length > 0;
+      const hasLocal = local.cards.length > 0 || local.diamonds > 0 || Object.keys(local.stars).length > 0 || local.ownedBanners.length > 0 || local.ownedDecos.length > 0 || local.freeBannerClaimed || local.freeDecoClaimed || local.cosmeticTutorialDone;
       if (!d.exists || cardDirty) {
         if (hasLocal || cardDirty) await pushServerCardState('merge');
+        serverHydrated = true;
+        setTimeout(() => { try { maybeStartCosmeticTutorial(); } catch {} }, 600);
         return;
       }
       // If local has cards/stars not yet on server (e.g. earned offline), merge once
       const serverKeys = new Set((d.cards || []).map(c => `${c.id}:${c.at}`));
       const hasNewLocalCard = local.cards.some(c => !serverKeys.has(`${c.id}:${c.at}`));
-      if (hasNewLocalCard) { await pushServerCardState('merge'); return; }
+      if (hasNewLocalCard) {
+        await pushServerCardState('merge');
+        serverHydrated = true;
+        setTimeout(() => { try { maybeStartCosmeticTutorial(); } catch {} }, 600);
+        return;
+      }
       applyServerCardState(d);
+      serverHydrated = true;
+      setTimeout(() => { try { maybeStartCosmeticTutorial(); } catch {} }, 600);
     } catch {}
   }
 
@@ -522,13 +547,14 @@
     const curColor = me?.nameColor || '';
     const colorAttr = curColor ? ` data-name-color="${esc(curColor)}"` : '';
     const colorPills = NAME_COLORS.map(c => `<button type="button" class="name-color-pill${curColor === c.id ? ' on' : ''}" data-pick-name-color="${esc(c.id)}"><span class="name-color-dot" style="background:${c.dot}"></span>${esc(c.name)}</button>`).join('');
+    const freeAvail = !isFreeBannerClaimed();
     const list = BANNER_CATALOG.filter(b => bannerFilter === 'all' || b.cat === bannerFilter);
     const items = list.map(b => {
       const isOwned = ownedSet.has(b.id);
       const isEquipped = eq === b.id;
-      const canBuy = dia >= b.price;
-      const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : '';
-      const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : `💎 ${b.price} Beli`;
+      const canBuy = freeAvail || dia >= b.price;
+      const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : freeAvail ? 'free-claim' : '';
+      const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${b.price} Beli`;
       return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}">
         <div class="banner-shop-preview">
           <span class="banner-shop-preview-bg" style="background-image:url('${esc(b.img)}')" aria-hidden="true"></span>
@@ -549,10 +575,12 @@
     }).join('');
     const bCats = [['all', `Semua (${BANNER_CATALOG.length})`], ['Cowok', '👦 Cowok (10)'], ['Cewek', '👧 Cewek (10)']];
     const bPills = bCats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${bannerFilter === k ? ' on' : ''}" data-banner-filter="${esc(k)}">${lbl}</button>`).join('');
+    const freeBannerNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Nameplate Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
     return `<div class="name-color-box">
         <div class="name-color-box-head"><span>✨ Warna Nama Chat (Ala Discord)</span><small>Gratis pilih</small></div>
         <div class="name-color-grid">${colorPills}</div>
       </div>
+      ${freeBannerNotice}
       <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>10 Cowok • 10 Cewek</b></div>
       <div class="deco-filter-row">${bPills}</div>
       <div class="banner-shop-list">${items}</div>`;
@@ -562,6 +590,7 @@
     const ownedSet = new Set(getOwnedDecos());
     const eq = getEquippedDeco();
     const dia = getDia();
+    const freeAvail = !isFreeDecoClaimed();
     const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
     const myIni = String(me?.name || 'C').trim().charAt(0).toUpperCase() || 'C';
     const myAv = me?.avatarUrl ? `<img class="deco-shop-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
@@ -569,9 +598,9 @@
     const items = list.map(d => {
       const isOwned = ownedSet.has(d.id);
       const isEquipped = eq === d.id;
-      const canBuy = dia >= d.price;
-      const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : '';
-      const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : `💎 ${d.price} Beli`;
+      const canBuy = freeAvail || dia >= d.price;
+      const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : freeAvail ? 'free-claim' : '';
+      const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${d.price} Beli`;
       return `<div class="deco-shop-card${isEquipped ? ' equipped' : ''}">
         <div class="deco-shop-av">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
         <div class="deco-shop-title">${d.icon} ${esc(d.name)}</div>
@@ -581,7 +610,8 @@
     }).join('');
     const cats = [['all', `Semua (${DECO_CATALOG.length})`], ['Cute & Animal', '🐱 Cute'], ['Celestial', '🌙 Celestial'], ['Dark & Gothic', '🖤 Dark'], ['Elemental & Aura', '🔥 Elemental'], ['Aesthetic & Anime', '🌸 Anime']];
     const pills = cats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${decoFilter === k ? ' on' : ''}" data-deco-filter="${esc(k)}">${lbl}</button>`).join('');
-    return `<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
+    const freeDecoNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Dekorasi Avatar Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
+    return `${freeDecoNotice}<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
       <div class="deco-filter-row">${pills}</div>
       <div class="deco-shop-grid">${items}</div>`;
   }
@@ -1035,6 +1065,116 @@
     if (document.getElementById('cardShopModal')?.classList.contains('open')) refreshShop();
   }
 
+  let cosmeticTutShownThisLoad = false;
+  function showCosmeticTutorial(force) {
+    if (document.getElementById('cosmeticTutModal')) return;
+    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    const myName = me?.name || 'Nama Kamu';
+    const myIni = String(myName || 'C').trim().charAt(0).toUpperCase() || 'C';
+    const myAv = me?.avatarUrl ? `<img class="deco-shop-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
+    let step = 0;
+
+    const modal = document.createElement('div');
+    modal.id = 'cosmeticTutModal';
+    modal.className = 'cosmetic-tut-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Perkenalan Nameplates & Dekorasi Avatar');
+    document.body.appendChild(modal);
+
+    const closeTut = (openTab) => {
+      if (!force) markCosmeticTutorialDone();
+      modal.remove();
+      if (openTab) showShop(openTab);
+    };
+
+    const renderStep = () => {
+      const freeB = !isFreeBannerClaimed();
+      const freeD = !isFreeDecoClaimed();
+      const previews = [
+        `<div class="cosmetic-tut-preview">
+          <div class="banner-shop-preview" style="border-radius:14px">
+            <span class="banner-shop-preview-bg" style="background-image:url('assets/banners/05-crimson-katana.svg')" aria-hidden="true"></span>
+            <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
+            <div class="banner-shop-preview-txt">
+              <b data-name-color="neon">${esc(myName)}</b>
+              <small>@${esc(me?.username || 'username')} • ⚔️ Crimson Katana</small>
+            </div>
+          </div>
+        </div>`,
+        `<div class="cosmetic-tut-preview cosmetic-tut-preview-center">
+          <div class="deco-shop-av" style="width:68px;height:68px;font-size:24px">${myAv}<img class="avatar-deco-img" src="assets/decorations/14-spirit-flame.svg" alt="" aria-hidden="true"></div>
+          <div class="cosmetic-tut-preview-caption"><b>💙 Spirit Flame</b><small>Tampil di Chat, Teman, Duel, Beranda &amp; Leaderboard</small></div>
+        </div>`,
+        `<div class="cosmetic-tut-gifts">
+          <div class="cosmetic-tut-gift${freeB ? '' : ' claimed'}"><span>🎨</span><div><b>1x Nameplate Gratis</b><small>${freeB ? 'Belum diklaim — siap dipilih!' : 'Sudah diklaim'}</small></div></div>
+          <div class="cosmetic-tut-gift${freeD ? '' : ' claimed'}"><span>✨</span><div><b>1x Dekorasi Avatar Gratis</b><small>${freeD ? 'Belum diklaim — siap dipilih!' : 'Sudah diklaim'}</small></div></div>
+        </div>`
+      ];
+      const steps = [
+        {
+          eyebrow: 'FITUR BARU • 1/3',
+          title: '🎨 Nameplates & Warna Nama',
+          desc: 'Hiasi kartu profilmu dengan 20 pilihan Nameplate (10 Cowok & 10 Cewek) dan warna nama bercahaya ala Discord. Nameplate tampil di Beranda, Chat, dan Leaderboard!'
+        },
+        {
+          eyebrow: 'FITUR BARU • 2/3',
+          title: '✨ Dekorasi Avatar',
+          desc: 'Tambahkan bingkai efek spesial di sekeliling foto profilmu! Tersedia 20 dekorasi keren yang langsung terlihat di Beranda, Chat, Duel, dan Leaderboard.'
+        },
+        {
+          eyebrow: 'HADIAH AKUN • 3/3',
+          title: '🎁 Klaim 1 Gratis Masing-Masing!',
+          desc: 'Setiap akun mendapat 1x Nameplate Gratis dan 1x Dekorasi Avatar Gratis tanpa potong Diamond. Pilih langsung sekarang atau nanti lewat Card Shop (🧺)!'
+        }
+      ];
+      const cur = steps[step];
+      const isLast = step === steps.length - 1;
+      modal.innerHTML = `<div class="cosmetic-tut-backdrop" data-ct-close></div>
+        <div class="cosmetic-tut-sheet">
+          <div class="cosmetic-tut-head">
+            <span class="cosmetic-tut-eyebrow">${cur.eyebrow}</span>
+            <button type="button" class="cosmetic-tut-x" data-ct-close aria-label="Tutup">✕</button>
+          </div>
+          <h3>${cur.title}</h3>
+          <p>${cur.desc}</p>
+          ${previews[step]}
+          <div class="cosmetic-tut-dots">${steps.map((_, i) => `<i class="${i === step ? 'on' : ''}"></i>`).join('')}</div>
+          <div class="cosmetic-tut-actions">
+            ${isLast ? `
+              ${freeB ? '<button type="button" class="cosmetic-tut-btn primary" data-ct-open="banners">🎨 Klaim Nameplate Gratis</button>' : ''}
+              ${freeD ? '<button type="button" class="cosmetic-tut-btn primary" data-ct-open="decos">✨ Klaim Dekorasi Gratis</button>' : ''}
+              <button type="button" class="cosmetic-tut-btn ghost" data-ct-close>Selesai</button>
+            ` : `
+              <button type="button" class="cosmetic-tut-btn ghost" data-ct-close>Lewati</button>
+              <button type="button" class="cosmetic-tut-btn primary" data-ct-next>Lanjut ›</button>
+            `}
+          </div>
+        </div>`;
+    };
+
+    modal.addEventListener('click', e => {
+      if (e.target.closest('[data-ct-close]')) { closeTut(''); return; }
+      const openTab = e.target.closest('[data-ct-open]')?.getAttribute('data-ct-open');
+      if (openTab) { closeTut(openTab); return; }
+      if (e.target.closest('[data-ct-next]')) { step++; renderStep(); }
+    });
+    renderStep();
+  }
+
+  function maybeStartCosmeticTutorial() {
+    if (cosmeticTutShownThisLoad || isCosmeticTutorialDone()) return;
+    if (!serverHydrated) return;
+    const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    if (!u || !u.id) return;
+    if (!document.getElementById('home')?.classList.contains('active')) return;
+    if (document.getElementById('obLayer')) return;
+    const blockingModal = [...document.querySelectorAll('.account-modal, #accountModal, #authModal, #cardShopModal')].some(m => m.classList?.contains('open') || (!m.hidden && m.offsetParent !== null));
+    if (blockingModal) return;
+    cosmeticTutShownThisLoad = true;
+    showCosmeticTutorial(false);
+  }
+
   function boot() {
     createFab();
     watchHomeContext();
@@ -1044,13 +1184,14 @@
     hydrateFromServer();
     window.addEventListener('clined:sync-applied', onExternalSync);
     window.addEventListener('clined:auth-ready', () => { hydrateFromServer(); setTimeout(onExternalSync, 600); });
+    window.addEventListener('clined:view-change', e => { if (e.detail === 'home') setTimeout(maybeStartCosmeticTutorial, 1200); });
     window.addEventListener('online', () => { if (cardDirty) pushServerCardState('merge'); else hydrateFromServer(); });
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && cardDirty) pushServerCardState('save', true); });
     window.addEventListener('pagehide', () => { if (cardDirty) pushServerCardState('save', true); });
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
 
-  window.CLINED_CARD_SHOP = { show: showShop, hide: hideShop };
+  window.CLINED_CARD_SHOP = { show: showShop, hide: hideShop, showCosmeticTutorial: () => showCosmeticTutorial(true) };
   window.CLINED_CARDS = {
     catalog: CARD_CATALOG,
     getEquipped: getEquippedCard,
