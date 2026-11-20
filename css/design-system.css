@@ -1178,29 +1178,62 @@ html.dark .chat-row.has-banner .chat-meta time {
   border-radius: 14px;
 }
 
-/* ── Discord-style Display Name Color Variations ─────────────────────────── */
-[data-name-color="amber"]   { color: #d97706 !important; }
-[data-name-color="gold"]    { color: #ca8a04 !important; }
-[data-name-color="sakura"]  { color: #db2777 !important; }
-[data-name-color="cyber"]   { color: #0891b2 !important; }
-[data-name-color="crimson"] { color: #e11d48 !important; }
-[data-name-color="emerald"] { color: #059669 !important; }
-[data-name-color="violet"]  { color: #7c3aed !important; }
-[data-name-color="sunset"]  { color: #ea580c !important; }
-[data-name-color="ice"]     { color: #2563eb !important; }
-[data-name-color="hologram"] {
-  background: linear-gradient(90deg, #f472b6, #fbbf24, #34d399, #38bdf8, #a855f7);
-  -webkit-background-clip: text;
-  background-clip: text;
+/* ── Discord-style Glowing Gradient Display Name Colors ──────────────────── */
+[data-name-color] {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
   color: transparent !important;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+  font-weight: 800;
 }
-body.dark [data-name-color="amber"],   html.dark [data-name-color="amber"],   .banner-shop-preview-txt [data-name-color="amber"]   { color: #fbbf24 !important; }
-body.dark [data-name-color="gold"],    html.dark [data-name-color="gold"],    .banner-shop-preview-txt [data-name-color="gold"]    { color: #fde047 !important; }
-body.dark [data-name-color="sakura"],  html.dark [data-name-color="sakura"],  .banner-shop-preview-txt [data-name-color="sakura"]  { color: #f472b6 !important; }
-body.dark [data-name-color="cyber"],   html.dark [data-name-color="cyber"],   .banner-shop-preview-txt [data-name-color="cyber"]   { color: #22d3ee !important; }
-body.dark [data-name-color="crimson"], html.dark [data-name-color="crimson"], .banner-shop-preview-txt [data-name-color="crimson"] { color: #fb7185 !important; }
-body.dark [data-name-color="emerald"], html.dark [data-name-color="emerald"], .banner-shop-preview-txt [data-name-color="emerald"] { color: #34d399 !important; }
-body.dark [data-name-color="violet"],  html.dark [data-name-color="violet"],  .banner-shop-preview-txt [data-name-color="violet"]  { color: #c084fc !important; }
-body.dark [data-name-color="sunset"],  html.dark [data-name-color="sunset"],  .banner-shop-preview-txt [data-name-color="sunset"]  { color: #fb923c !important; }
-body.dark [data-name-color="ice"],     html.dark [data-name-color="ice"],     .banner-shop-preview-txt [data-name-color="ice"]     { color: #60a5fa !important; }
+[data-name-color="amber"] {
+  background: linear-gradient(90deg, #f59e0b 0%, #fde68a 50%, #d97706 100%);
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.55));
+}
+[data-name-color="gold"] {
+  background: linear-gradient(90deg, #eab308 0%, #fef08a 50%, #ca8a04 100%);
+  filter: drop-shadow(0 0 7px rgba(250, 204, 21, 0.62));
+}
+[data-name-color="sakura"] {
+  background: linear-gradient(90deg, #ec4899 0%, #fbcfe8 50%, #db2777 100%);
+  filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.6));
+}
+[data-name-color="cyber"] {
+  background: linear-gradient(90deg, #06b6d4 0%, #a5f3fc 50%, #3b82f6 100%);
+  filter: drop-shadow(0 0 7px rgba(34, 211, 238, 0.65));
+}
+[data-name-color="crimson"] {
+  background: linear-gradient(90deg, #f43f5e 0%, #fda4af 50%, #e11d48 100%);
+  filter: drop-shadow(0 0 6px rgba(251, 113, 133, 0.6));
+}
+[data-name-color="emerald"] {
+  background: linear-gradient(90deg, #10b981 0%, #a7f3d0 50%, #059669 100%);
+  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.58));
+}
+[data-name-color="violet"] {
+  background: linear-gradient(90deg, #a855f7 0%, #e9d5ff 50%, #7c3aed 100%);
+  filter: drop-shadow(0 0 7px rgba(192, 132, 252, 0.62));
+}
+[data-name-color="sunset"] {
+  background: linear-gradient(90deg, #f97316 0%, #fed7aa 50%, #ef4444 100%);
+  filter: drop-shadow(0 0 6px rgba(251, 146, 60, 0.6));
+}
+[data-name-color="ice"] {
+  background: linear-gradient(90deg, #3b82f6 0%, #bae6fd 50%, #6366f1 100%);
+  filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.62));
+}
+[data-name-color="hologram"] {
+  background: linear-gradient(90deg, #f472b6 0%, #fbbf24 25%, #34d399 50%, #38bdf8 75%, #c084fc 100%);
+  filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.65));
+}
+body.dark [data-name-color="amber"],   html.dark [data-name-color="amber"],   .banner-shop-preview-txt [data-name-color="amber"]   { background: linear-gradient(90deg, #fbbf24 0%, #fef3c7 50%, #f59e0b 100%); }
+body.dark [data-name-color="gold"],    html.dark [data-name-color="gold"],    .banner-shop-preview-txt [data-name-color="gold"]    { background: linear-gradient(90deg, #fde047 0%, #fef9c3 50%, #facc15 100%); }
+body.dark [data-name-color="sakura"],  html.dark [data-name-color="sakura"],  .banner-shop-preview-txt [data-name-color="sakura"]  { background: linear-gradient(90deg, #f472b6 0%, #fce7f3 50%, #ec4899 100%); }
+body.dark [data-name-color="cyber"],   html.dark [data-name-color="cyber"],   .banner-shop-preview-txt [data-name-color="cyber"]   { background: linear-gradient(90deg, #22d3ee 0%, #cffafe 50%, #60a5fa 100%); }
+body.dark [data-name-color="crimson"], html.dark [data-name-color="crimson"], .banner-shop-preview-txt [data-name-color="crimson"] { background: linear-gradient(90deg, #fb7185 0%, #ffe4e6 50%, #f43f5e 100%); }
+body.dark [data-name-color="emerald"], html.dark [data-name-color="emerald"], .banner-shop-preview-txt [data-name-color="emerald"] { background: linear-gradient(90deg, #34d399 0%, #d1fae5 50%, #10b981 100%); }
+body.dark [data-name-color="violet"],  html.dark [data-name-color="violet"],  .banner-shop-preview-txt [data-name-color="violet"]  { background: linear-gradient(90deg, #c084fc 0%, #f3e8ff 50%, #a855f7 100%); }
+body.dark [data-name-color="sunset"],  html.dark [data-name-color="sunset"],  .banner-shop-preview-txt [data-name-color="sunset"]  { background: linear-gradient(90deg, #fb923c 0%, #ffedd5 50%, #f87171 100%); }
+body.dark [data-name-color="ice"],     html.dark [data-name-color="ice"],     .banner-shop-preview-txt [data-name-color="ice"]     { background: linear-gradient(90deg, #60a5fa 0%, #e0f2fe 50%, #818cf8 100%); }
+

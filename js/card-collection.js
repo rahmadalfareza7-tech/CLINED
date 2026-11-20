@@ -441,15 +441,15 @@
 
   const NAME_COLORS = [
     { id: '',         name: 'Default',  dot: '#94a3b8' },
-    { id: 'amber',    name: 'Amber',    dot: '#fbbf24' },
-    { id: 'gold',     name: 'Gold',     dot: '#fde047' },
-    { id: 'sakura',   name: 'Sakura',   dot: '#f472b6' },
-    { id: 'cyber',    name: 'Cyan',     dot: '#22d3ee' },
-    { id: 'crimson',  name: 'Crimson',  dot: '#fb7185' },
-    { id: 'emerald',  name: 'Emerald',  dot: '#34d399' },
-    { id: 'violet',   name: 'Violet',   dot: '#c084fc' },
-    { id: 'sunset',   name: 'Sunset',   dot: '#fb923c' },
-    { id: 'ice',      name: 'Ice',      dot: '#60a5fa' },
+    { id: 'amber',    name: 'Amber',    dot: 'linear-gradient(135deg,#f59e0b,#fde68a)' },
+    { id: 'gold',     name: 'Gold',     dot: 'linear-gradient(135deg,#eab308,#fef08a)' },
+    { id: 'sakura',   name: 'Sakura',   dot: 'linear-gradient(135deg,#ec4899,#fbcfe8)' },
+    { id: 'cyber',    name: 'Cyan',     dot: 'linear-gradient(135deg,#06b6d4,#a5f3fc)' },
+    { id: 'crimson',  name: 'Crimson',  dot: 'linear-gradient(135deg,#f43f5e,#fda4af)' },
+    { id: 'emerald',  name: 'Emerald',  dot: 'linear-gradient(135deg,#10b981,#a7f3d0)' },
+    { id: 'violet',   name: 'Violet',   dot: 'linear-gradient(135deg,#a855f7,#e9d5ff)' },
+    { id: 'sunset',   name: 'Sunset',   dot: 'linear-gradient(135deg,#f97316,#fed7aa)' },
+    { id: 'ice',      name: 'Ice',      dot: 'linear-gradient(135deg,#3b82f6,#bae6fd)' },
     { id: 'hologram', name: 'Hologram', dot: 'linear-gradient(135deg,#f472b6,#fbbf24,#34d399,#38bdf8,#a855f7)' }
   ];
 
