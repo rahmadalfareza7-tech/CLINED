@@ -521,12 +521,15 @@
       const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
       const pTier = getRank(p.tier || { rp: p.rp || 0 });
       const pCard = p.me ? (getMyShowcaseCard() || p.card) : p.card;
-      return `<div class="duel-lb-row${p.me ? ' me' : ''}">
+      const bg = p.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(p.bannerUrl)}')" aria-hidden="true"></span>` : '';
+      const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
+      return `<div class="duel-lb-row${p.me ? ' me' : ''}${p.bannerUrl ? ' has-banner' : ''}">
+        ${bg}
         <span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
         ${avatar(p)}
         <div class="duel-lb-main">
           <div class="duel-lb-top">
-            <b class="duel-lb-name">${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
+            <b class="duel-lb-name"${nc}>${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
             <span class="duel-lb-wins">🏆 ${p.wins} Menang</span>
           </div>
           <div class="duel-lb-bottom">

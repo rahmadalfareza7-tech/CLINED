@@ -1363,6 +1363,53 @@ body.dark [data-name-color="ice"],     html.dark [data-name-color="ice"],     .h
   white-space: nowrap;
 }
 
+/* ── Leaderboard Nameplates ──────────────────────────────────────────────── */
+.leaderboard-row,
+.lb-teaser-row,
+.duel-lb-row {
+  position: relative;
+  overflow: hidden;
+}
+.leaderboard-row > *:not(.chat-row-bg),
+.lb-teaser-row > *:not(.chat-row-bg),
+.duel-lb-row > *:not(.chat-row-bg) {
+  position: relative;
+  z-index: 1;
+}
+.leaderboard-row.has-banner,
+.lb-teaser-row.has-banner,
+.duel-lb-row.has-banner {
+  background: #0f172a !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f8fafc !important;
+}
+.leaderboard-row.has-banner::before,
+.lb-teaser-row.has-banner::before,
+.duel-lb-row.has-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(11, 15, 28, 0.92) 0%, rgba(15, 23, 42, 0.68) 48%, rgba(15, 23, 42, 0.18) 100%);
+  pointer-events: none;
+}
+.leaderboard-row.has-banner .lb-user small,
+.leaderboard-row.has-banner .lb-rank,
+.leaderboard-row.has-banner .lb-xp,
+.lb-teaser-row.has-banner .lb-teaser-xp,
+.duel-lb-row.has-banner .duel-lb-meta,
+.duel-lb-row.has-banner .duel-lb-wins,
+.duel-lb-row.has-banner .duel-lb-rank {
+  color: rgba(241, 245, 249, 0.88) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75) !important;
+}
+.leaderboard-row.has-banner .lb-user b:not([data-name-color]),
+.lb-teaser-row.has-banner .lb-teaser-name:not([data-name-color]),
+.duel-lb-row.has-banner .duel-lb-name:not([data-name-color]) {
+  color: #fff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
+}
+
 
 
 
