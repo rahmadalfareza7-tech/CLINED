@@ -9,7 +9,7 @@
   const initials = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || '?';
   const HUES = [[28,176,246,124,92,255],[255,150,0,255,75,75],[88,204,2,0,180,150],[255,99,160,160,90,255],[0,184,217,60,100,230],[255,196,0,255,120,0]];
   const hue = n => { let h = 0; for (const c of String(n || '')) h = (h * 31 + c.charCodeAt(0)) >>> 0; const x = HUES[h % HUES.length]; return `background:linear-gradient(135deg,rgb(${x[0]},${x[1]},${x[2]}),rgb(${x[3]},${x[4]},${x[5]}))`; };
-  const av = (p, cls = '') => `<span class="soc-av ${cls}${p.online ? ' on' : ''}" style="${hue(p.name)}" aria-hidden="true">${esc(initials(p.name))}</span>`;
+  const av = (p, cls = '') => `<span class="soc-av ${cls}${p.online ? ' on' : ''}" style="${p.avatarUrl ? '' : hue(p.name)}" aria-hidden="true">${p.avatarUrl ? `<img class="soc-av-img" src="${esc(p.avatarUrl)}" alt="" loading="lazy">` : esc(initials(p.name))}</span>`;
   const ago = t => { if (!t) return ''; const m = Math.round((Date.now() - t) / 6e4); return m < 1 ? 'baru' : m < 60 ? m + ' mnt' : m < 1440 ? Math.floor(m / 60) + ' jam' : Math.floor(m / 1440) + ' hr'; };
   const badges = p => (p.badges || []).map(b => `<em class="chat-badge b-${b}">${BADGE[b][0]} ${BADGE[b][1]}</em>`).join('');
   const clock = t => new Date(t).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });

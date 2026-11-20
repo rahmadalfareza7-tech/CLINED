@@ -58,7 +58,7 @@
       const tags = `<em class="ap-tag r-${esc(u.role)}">${ROLES[u.role]?.[0] || ''} ${ROLES[u.role]?.[1] || esc(u.role)}</em>${u.isMentor ? '<em class="ap-tag r-mentor">🙋 Tempat bertanya</em>' : ''}${xpBadge}`;
       return `<article class="ap-user${open ? ' open' : ''}${busy ? ' busy' : ''}">
         <button type="button" class="ap-user-head" data-ap-open="${esc(u.id)}" aria-expanded="${open}">
-          <span class="ap-av" style="background:${hue(u.name)}">${esc(ini(u.name))}</span>
+          <span class="ap-av" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${u.avatarUrl ? `<img class="ap-av-img" src="${esc(u.avatarUrl)}" alt="" loading="lazy">` : esc(ini(u.name))}</span>
           <span class="ap-user-main"><b>${esc(u.name)}${me ? ' <small class="ap-you">kamu</small>' : ''}</b><small>@${esc(u.username)} • ${rel(u.lastLoginAt)}</small><span class="ap-tags">${tags}</span></span>
           <span class="ap-chev" aria-hidden="true">›</span></button>
         ${open ? `<div class="ap-user-body">

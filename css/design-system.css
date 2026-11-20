@@ -906,3 +906,58 @@ html body .achievement-item.locked {
   white-space: nowrap;
 }
 
+/* ── Profile Photo & User Avatars ────────────────────────────────────────── */
+.account-avatar.has-photo {
+  padding: 0;
+  background: var(--surface-2, #f1f5f9);
+  border: 2px solid var(--sky, #1cb0f6);
+}
+.account-avatar-img,
+.soc-av-img,
+.ap-av-img,
+.qc-av-img,
+.lb-av-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.account-avatar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.account-remove-avatar {
+  background: transparent;
+  border: 1.5px solid var(--border, #e2e8f0);
+  color: var(--danger, #e11d48);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.account-remove-avatar:hover {
+  background: rgba(225, 29, 72, 0.08);
+}
+.lb-av {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, var(--sky, #1cb0f6), var(--indigo, #6366f1));
+}
+.lb-av-sm {
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+}
+
