@@ -1080,35 +1080,58 @@ html body .achievement-item.locked {
   background-position: center;
   background-repeat: no-repeat;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.58) 42%, rgba(0,0,0,0.95) 100%);
-  mask-image: linear-gradient(90deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.58) 42%, rgba(0,0,0,0.95) 100%);
+  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.82) 45%, rgba(0,0,0,1) 100%);
+  mask-image: linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.82) 45%, rgba(0,0,0,1) 100%);
 }
-.chat-row.has-banner {
-  background: linear-gradient(90deg, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0.58) 55%, rgba(255,255,255,0.18) 100%);
+.chat-row.has-banner,
+.account-banner-preview.has-banner {
+  background: #0f172a !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f8fafc !important;
 }
-body.dark .chat-row.has-banner,
-html.dark .chat-row.has-banner {
-  background: linear-gradient(90deg, rgba(15,23,42,0.90) 0%, rgba(15,23,42,0.56) 55%, rgba(15,23,42,0.22) 100%);
+.chat-row.has-banner::before,
+.account-banner-preview.has-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(11, 15, 28, 0.92) 0%, rgba(15, 23, 42, 0.68) 48%, rgba(15, 23, 42, 0.18) 100%);
+  pointer-events: none;
 }
-.chat-row.has-banner .chat-who b,
 .chat-row.has-banner .chat-who small,
-.chat-row.has-banner .chat-meta time {
-  text-shadow: 0 1px 2px rgba(255,255,255,0.75);
+.chat-row.has-banner .chat-meta time,
+.chat-row.has-banner .chat-wait,
+.account-banner-preview.has-banner .account-banner-mini-txt small {
+  color: rgba(241, 245, 249, 0.85) !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75) !important;
 }
-body.dark .chat-row.has-banner .chat-who b,
-body.dark .chat-row.has-banner .chat-who small,
-body.dark .chat-row.has-banner .chat-meta time,
-html.dark .chat-row.has-banner .chat-who b,
-html.dark .chat-row.has-banner .chat-who small,
-html.dark .chat-row.has-banner .chat-meta time {
-  text-shadow: 0 1px 3px rgba(0,0,0,0.85);
+.chat-row.has-banner .chat-who b:not([data-name-color]),
+.account-banner-preview.has-banner .account-banner-mini-txt b:not([data-name-color]) {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
+}
+.chat-row.has-banner .chat-badge.b-admin {
+  background: rgba(245, 158, 11, 0.25) !important;
+  color: #fde68a !important;
+}
+.chat-row.has-banner .chat-badge.b-helper {
+  background: rgba(56, 189, 248, 0.24) !important;
+  color: #bae6fd !important;
+}
+.chat-row.has-banner .chat-badge.b-mentor {
+  background: rgba(52, 211, 153, 0.24) !important;
+  color: #a7f3d0 !important;
+}
+.chat-head.has-banner {
+  background: #0f172a !important;
 }
 .chat-head.has-banner::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(90deg, rgba(13,148,136,0.82) 0%, rgba(28,176,246,0.45) 55%, rgba(15,23,42,0.25) 100%);
+  background: linear-gradient(90deg, rgba(11, 15, 28, 0.90) 0%, rgba(15, 23, 42, 0.62) 52%, rgba(15, 23, 42, 0.20) 100%);
   pointer-events: none;
 }
 .account-banner-section {
@@ -1227,13 +1250,14 @@ html.dark .chat-row.has-banner .chat-meta time {
   background: linear-gradient(90deg, #f472b6 0%, #fbbf24 25%, #34d399 50%, #38bdf8 75%, #c084fc 100%);
   filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.65));
 }
-body.dark [data-name-color="amber"],   html.dark [data-name-color="amber"],   .banner-shop-preview-txt [data-name-color="amber"]   { background: linear-gradient(90deg, #fbbf24 0%, #fef3c7 50%, #f59e0b 100%); }
-body.dark [data-name-color="gold"],    html.dark [data-name-color="gold"],    .banner-shop-preview-txt [data-name-color="gold"]    { background: linear-gradient(90deg, #fde047 0%, #fef9c3 50%, #facc15 100%); }
-body.dark [data-name-color="sakura"],  html.dark [data-name-color="sakura"],  .banner-shop-preview-txt [data-name-color="sakura"]  { background: linear-gradient(90deg, #f472b6 0%, #fce7f3 50%, #ec4899 100%); }
-body.dark [data-name-color="cyber"],   html.dark [data-name-color="cyber"],   .banner-shop-preview-txt [data-name-color="cyber"]   { background: linear-gradient(90deg, #22d3ee 0%, #cffafe 50%, #60a5fa 100%); }
-body.dark [data-name-color="crimson"], html.dark [data-name-color="crimson"], .banner-shop-preview-txt [data-name-color="crimson"] { background: linear-gradient(90deg, #fb7185 0%, #ffe4e6 50%, #f43f5e 100%); }
-body.dark [data-name-color="emerald"], html.dark [data-name-color="emerald"], .banner-shop-preview-txt [data-name-color="emerald"] { background: linear-gradient(90deg, #34d399 0%, #d1fae5 50%, #10b981 100%); }
-body.dark [data-name-color="violet"],  html.dark [data-name-color="violet"],  .banner-shop-preview-txt [data-name-color="violet"]  { background: linear-gradient(90deg, #c084fc 0%, #f3e8ff 50%, #a855f7 100%); }
-body.dark [data-name-color="sunset"],  html.dark [data-name-color="sunset"],  .banner-shop-preview-txt [data-name-color="sunset"]  { background: linear-gradient(90deg, #fb923c 0%, #ffedd5 50%, #f87171 100%); }
-body.dark [data-name-color="ice"],     html.dark [data-name-color="ice"],     .banner-shop-preview-txt [data-name-color="ice"]     { background: linear-gradient(90deg, #60a5fa 0%, #e0f2fe 50%, #818cf8 100%); }
+body.dark [data-name-color="amber"],   html.dark [data-name-color="amber"],   .has-banner [data-name-color="amber"],   .banner-shop-preview-txt [data-name-color="amber"]   { background: linear-gradient(90deg, #fbbf24 0%, #fef3c7 50%, #f59e0b 100%); }
+body.dark [data-name-color="gold"],    html.dark [data-name-color="gold"],    .has-banner [data-name-color="gold"],    .banner-shop-preview-txt [data-name-color="gold"]    { background: linear-gradient(90deg, #fde047 0%, #fef9c3 50%, #facc15 100%); }
+body.dark [data-name-color="sakura"],  html.dark [data-name-color="sakura"],  .has-banner [data-name-color="sakura"],  .banner-shop-preview-txt [data-name-color="sakura"]  { background: linear-gradient(90deg, #f472b6 0%, #fce7f3 50%, #ec4899 100%); }
+body.dark [data-name-color="cyber"],   html.dark [data-name-color="cyber"],   .has-banner [data-name-color="cyber"],   .banner-shop-preview-txt [data-name-color="cyber"]   { background: linear-gradient(90deg, #22d3ee 0%, #cffafe 50%, #60a5fa 100%); }
+body.dark [data-name-color="crimson"], html.dark [data-name-color="crimson"], .has-banner [data-name-color="crimson"], .banner-shop-preview-txt [data-name-color="crimson"] { background: linear-gradient(90deg, #fb7185 0%, #ffe4e6 50%, #f43f5e 100%); }
+body.dark [data-name-color="emerald"], html.dark [data-name-color="emerald"], .has-banner [data-name-color="emerald"], .banner-shop-preview-txt [data-name-color="emerald"] { background: linear-gradient(90deg, #34d399 0%, #d1fae5 50%, #10b981 100%); }
+body.dark [data-name-color="violet"],  html.dark [data-name-color="violet"],  .has-banner [data-name-color="violet"],  .banner-shop-preview-txt [data-name-color="violet"]  { background: linear-gradient(90deg, #c084fc 0%, #f3e8ff 50%, #a855f7 100%); }
+body.dark [data-name-color="sunset"],  html.dark [data-name-color="sunset"],  .has-banner [data-name-color="sunset"],  .banner-shop-preview-txt [data-name-color="sunset"]  { background: linear-gradient(90deg, #fb923c 0%, #ffedd5 50%, #f87171 100%); }
+body.dark [data-name-color="ice"],     html.dark [data-name-color="ice"],     .has-banner [data-name-color="ice"],     .banner-shop-preview-txt [data-name-color="ice"]     { background: linear-gradient(90deg, #60a5fa 0%, #e0f2fe 50%, #818cf8 100%); }
+
 
