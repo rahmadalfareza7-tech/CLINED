@@ -251,6 +251,7 @@ function show(id, options={}){
     return;
   }
   __spaCurrentView=id;
+  try{sessionStorage.setItem('clined_last_view_v1',id);}catch{}
   document.querySelectorAll(".view.active").forEach(v=>v.classList.remove("active"));
   target.classList.add("active");
   document.querySelectorAll(".view.motion-page-enter").forEach(v=>v.classList.remove("motion-page-enter"));
@@ -265,6 +266,7 @@ function show(id, options={}){
   }
 
   if(id==="home") renderHomeClinicalDashboard();
+  if(id==="achievementsPage" && typeof renderAchievements==="function") renderAchievements();
   const __blockPages={
     blokBm1Page:["BM1","blokBm1Page"],blokBm2Page:["BM2","blokBm2Page"],blokHncPage:["HNC","blokHncPage"],
     blokMp1Page:["MP1","blokMp1Page"],blokMp2Page:["MP2","blokMp2Page"],blokMptPage:["MPT","blokMptPage"],
@@ -3088,12 +3090,25 @@ function authScopeUser(user){
   // akun sebelumnya dibuang sebelum /api/sync mengambil state milik akun baru.
   try{window.CLINED_ONLINE_SYNC?.switchUser?.(user.id);}catch(error){console.warn('CLINED account scope skipped',error);}
 }
+function restoreLastView(){
+  const hashId=(location.hash||'').replace(/^#/,'');
+  let savedId='';
+  try{savedId=sessionStorage.getItem('clined_last_view_v1')||'';}catch{}
+  const wanted=hashId&&document.getElementById(hashId)?hashId:(savedId&&document.getElementById(savedId)?savedId:'home');
+  if(wanted==='quiz'){
+    const s=get(KEY.session,null);
+    if(s&&s.quiz?.length&&$('resumeBtn')){$('resumeBtn').click();return;}
+  }
+  if((wanted==='result'||wanted==='review')&&!quiz.length){show('home',{force:true,fromHistory:true});return;}
+  show(wanted,{force:true,fromHistory:true});
+}
+window.addEventListener('clined:before-reload',()=>{try{saveSession();}catch{}});
 async function authRestoreSession(){
   try{const data=await authApi('/me',{method:'GET',headers:{}});authServerUser=data.user||null;authScopeUser(authServerUser);authSyncProfile(authServerUser);if(authServerUser)await authRestoreMissingLearningState();}
   catch{authServerUser=null;}
   renderAccount();renderAccountAuthState();
   try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
-  if(authServerUser){window.CLINED_AUTH_GATE?.unlock?.();show('home',{force:true});}
+  if(authServerUser){window.CLINED_AUTH_GATE?.unlock?.();restoreLastView();}
   else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
 }
 function authSetError(id,message){const el=$(id);if(!el)return;el.textContent=message;el.hidden=!message;}

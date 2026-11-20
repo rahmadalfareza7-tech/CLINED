@@ -37,7 +37,12 @@
     const last = Number(sessionStorage.getItem('clined_upd_at') || 0);
     if (!force && Date.now() - last < 60_000) return;             // cegah putaran muat ulang
     reloading = true;
-    try { sessionStorage.setItem('clined_upd_at', String(Date.now())); } catch {}
+    try {
+      const v = activeView();
+      if (v) sessionStorage.setItem('clined_last_view_v1', v);
+      window.dispatchEvent(new CustomEvent('clined:before-reload', { detail: v }));
+      sessionStorage.setItem('clined_upd_at', String(Date.now()));
+    } catch {}
     location.reload();
   }
   function tick() {

@@ -169,21 +169,30 @@ window.CLINED_Leaderboard = (function () {
   function openPage() {
     const page = document.getElementById('leaderboardPage');
     if (!page) return;
-    document.querySelectorAll('.view.active').forEach(v => v.classList.remove('active'));
-    page.classList.add('active');
+    if (typeof show === 'function') show('leaderboardPage', { force: true });
+    else {
+      document.querySelectorAll('.view.active').forEach(v => v.classList.remove('active'));
+      page.classList.add('active');
+    }
     load();
   }
 
   document.getElementById('openLeaderboardBtn')?.addEventListener('click', openPage);
   document.getElementById('leaderboardMenuBtn')?.addEventListener('click', openPage);
   document.getElementById('backFromLeaderboard')?.addEventListener('click', () => {
-    document.getElementById('leaderboardPage')?.classList.remove('active');
-    document.getElementById('home')?.classList.add('active');
+    if (typeof show === 'function') show('home');
+    else {
+      document.getElementById('leaderboardPage')?.classList.remove('active');
+      document.getElementById('home')?.classList.add('active');
+    }
     refreshTeaser();
   });
 
   window.addEventListener('clined:auth-ready', () => refreshTeaser(true));
-  window.addEventListener('clined:view-change', e => { if (e.detail === 'home') refreshTeaser(); });
+  window.addEventListener('clined:view-change', e => {
+    if (e.detail === 'home') refreshTeaser();
+    if (e.detail === 'leaderboardPage') load();
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(() => refreshTeaser(), 300));
   else setTimeout(() => refreshTeaser(), 300);
 
