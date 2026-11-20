@@ -20,24 +20,26 @@
   const BASE_PACK_COST = 20;
 
   const DECO_CATALOG = [
-    // 8 Cowok
-    { id: 'venom-tendrils',  name: 'Venom Tendrils',  gender: 'male',   icon: '🖤', price: 25, desc: 'Sulur simbiote hitam tajam',       img: 'assets/decorations/venom-tendrils.svg' },
-    { id: 'cyber-visor',     name: 'Cyber Visor',     gender: 'male',   icon: '⚡', price: 20, desc: 'Frame HUD neon cyan futuristik',   img: 'assets/decorations/cyber-visor.svg' },
-    { id: 'crimson-horns',   name: 'Crimson Horns',   gender: 'male',   icon: '😈', price: 25, desc: 'Tanduk merah menyala & bara api',  img: 'assets/decorations/crimson-horns.svg' },
-    { id: 'wolf-alpha',      name: 'Wolf Alpha',      gender: 'male',   icon: '🐺', price: 20, desc: 'Telinga serigala & aura es',       img: 'assets/decorations/wolf-alpha.svg' },
-    { id: 'samurai-flame',   name: 'Ronin Flame',     gender: 'male',   icon: '🔥', price: 30, desc: 'Kobaran biru & ikat kepala ronin', img: 'assets/decorations/samurai-flame.svg' },
-    { id: 'mecha-helmet',    name: 'Mecha Unit-01',   gender: 'male',   icon: '🤖', price: 25, desc: 'Helm mecha oranye-putih',          img: 'assets/decorations/mecha-helmet.svg' },
-    { id: 'obsidian-crown',  name: 'Obsidian King',   gender: 'male',   icon: '👑', price: 35, desc: 'Mahkota raja obsidian emas',       img: 'assets/decorations/obsidian-crown.svg' },
-    { id: 'thunder-aura',    name: 'Thunder Aura',    gender: 'male',   icon: '🌩️', price: 30, desc: 'Kilatan petir kuning menyambar',   img: 'assets/decorations/thunder-aura.svg' },
-    // 8 Cewek
-    { id: 'neko-ears',       name: 'Snow Neko',       gender: 'female', icon: '🐱', price: 20, desc: 'Telinga kucing putih & ekor',      img: 'assets/decorations/neko-ears.svg' },
-    { id: 'sakura-wreath',   name: 'Sakura Wreath',   gender: 'female', icon: '🌸', price: 20, desc: 'Karangan bunga sakura pink',       img: 'assets/decorations/sakura-wreath.svg' },
-    { id: 'bunny-hood',      name: 'Bunny Hood',      gender: 'female', icon: '🐰', price: 25, desc: 'Topi kelinci pastel imut',         img: 'assets/decorations/bunny-hood.svg' },
-    { id: 'crescent-dreams', name: 'Crescent Dreams', gender: 'female', icon: '🌙', price: 25, desc: 'Bulan sabit & awan mimpi',         img: 'assets/decorations/crescent-dreams.svg' },
-    { id: 'angel-halo',      name: 'Angel Halo',      gender: 'female', icon: '😇', price: 30, desc: 'Halo emas & sayap malaikat',       img: 'assets/decorations/angel-halo.svg' },
-    { id: 'butterfly-fairy', name: 'Butterfly Fairy', gender: 'female', icon: '🦋', price: 25, desc: 'Kupu-kupu ungu & debu peri',       img: 'assets/decorations/butterfly-fairy.svg' },
-    { id: 'royal-tiara',     name: 'Crystal Tiara',   gender: 'female', icon: '💎', price: 35, desc: 'Tiara permata pink-emas elegan',   img: 'assets/decorations/royal-tiara.svg' },
-    { id: 'starlight-ribbon',name: 'Starlight Ribbon',gender: 'female', icon: '🎀', price: 20, desc: 'Pita merah muda & bintang',        img: 'assets/decorations/starlight-ribbon.svg' }
+    { id: '01-cat-ears',        name: 'Cat Ears',        cat: 'Cute & Animal',     icon: '🐱', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/01-cat-ears.svg' },
+    { id: '02-ribbon-kitten',   name: 'Ribbon Kitten',   cat: 'Cute & Animal',     icon: '🎀', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/02-ribbon-kitten.svg' },
+    { id: '03-snow-leopard',    name: 'Snow Leopard',    cat: 'Cute & Animal',     icon: '🐆', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/03-snow-leopard.svg' },
+    { id: '04-bunny-hoodie',    name: 'Bunny Hoodie',    cat: 'Cute & Animal',     icon: '🐰', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/04-bunny-hoodie.svg' },
+    { id: '05-crescent-dreams', name: 'Crescent Dreams', cat: 'Celestial',         icon: '🌙', price: 25, desc: 'Celestial',         img: 'assets/decorations/05-crescent-dreams.svg' },
+    { id: '06-star-struck',     name: 'Star Struck',     cat: 'Celestial',         icon: '⭐', price: 20, desc: 'Celestial',         img: 'assets/decorations/06-star-struck.svg' },
+    { id: '07-twilight-dusk',   name: 'Twilight Dusk',   cat: 'Celestial',         icon: '🌌', price: 30, desc: 'Celestial',         img: 'assets/decorations/07-twilight-dusk.svg' },
+    { id: '08-phantom-wraith',  name: 'Phantom Wraith',  cat: 'Dark & Gothic',     icon: '👻', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/08-phantom-wraith.svg' },
+    { id: '09-blood-moon',      name: 'Blood Moon',      cat: 'Dark & Gothic',     icon: '🩸', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/09-blood-moon.svg' },
+    { id: '10-frost-eclipse',   name: 'Frost Eclipse',   cat: 'Dark & Gothic',     icon: '❄️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/10-frost-eclipse.svg' },
+    { id: '11-fallen-angel',    name: 'Fallen Angel',    cat: 'Dark & Gothic',     icon: '🖤', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/11-fallen-angel.svg' },
+    { id: '12-symbiote-web',    name: 'Symbiote Web',    cat: 'Dark & Gothic',     icon: '🕸️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/12-symbiote-web.svg' },
+    { id: '13-hellflame',       name: 'Hellflame',       cat: 'Elemental & Aura',  icon: '🔥', price: 30, desc: 'Elemental & Aura',  img: 'assets/decorations/13-hellflame.svg' },
+    { id: '14-spirit-flame',    name: 'Spirit Flame',    cat: 'Elemental & Aura',  icon: '💙', price: 25, desc: 'Elemental & Aura',  img: 'assets/decorations/14-spirit-flame.svg' },
+    { id: '15-cyber-neon',      name: 'Cyber Neon',      cat: 'Elemental & Aura',  icon: '⚡', price: 25, desc: 'Elemental & Aura',  img: 'assets/decorations/15-cyber-neon.svg' },
+    { id: '16-thunder-surge',   name: 'Thunder Surge',   cat: 'Elemental & Aura',  icon: '🌩️', price: 35, desc: 'Elemental & Aura',  img: 'assets/decorations/16-thunder-surge.svg' },
+    { id: '17-butterfly-waltz', name: 'Butterfly Waltz', cat: 'Aesthetic & Anime', icon: '🦋', price: 25, desc: 'Aesthetic & Anime', img: 'assets/decorations/17-butterfly-waltz.svg' },
+    { id: '18-anime-angry',     name: 'Anime Angry',     cat: 'Aesthetic & Anime', icon: '💢', price: 20, desc: 'Aesthetic & Anime', img: 'assets/decorations/18-anime-angry.svg' },
+    { id: '19-shark-frill',     name: 'Shark Frill',     cat: 'Aesthetic & Anime', icon: '🦈', price: 25, desc: 'Aesthetic & Anime', img: 'assets/decorations/19-shark-frill.svg' },
+    { id: '20-sakura-breeze',   name: 'Sakura Breeze',   cat: 'Aesthetic & Anime', icon: '🌸', price: 30, desc: 'Aesthetic & Anime', img: 'assets/decorations/20-sakura-breeze.svg' }
   ];
 
   const BANNER_CATALOG = [
@@ -546,7 +548,7 @@
     const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
     const myIni = String(me?.name || 'C').trim().charAt(0).toUpperCase() || 'C';
     const myAv = me?.avatarUrl ? `<img class="deco-shop-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
-    const list = DECO_CATALOG.filter(x => decoFilter === 'all' || x.gender === decoFilter);
+    const list = DECO_CATALOG.filter(x => decoFilter === 'all' || x.cat === decoFilter);
     const items = list.map(d => {
       const isOwned = ownedSet.has(d.id);
       const isEquipped = eq === d.id;
@@ -556,16 +558,14 @@
       return `<div class="deco-shop-card${isEquipped ? ' equipped' : ''}">
         <div class="deco-shop-av">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
         <div class="deco-shop-title">${d.icon} ${esc(d.name)}</div>
-        <div class="deco-shop-sub">${d.gender === 'male' ? '👦 Cowok' : '👧 Cewek'} • ${esc(d.desc)}</div>
+        <div class="deco-shop-sub">${esc(d.cat)}</div>
         <button type="button" class="banner-shop-btn ${btnCls}" data-deco-id="${esc(d.id)}" ${!isOwned && !canBuy ? 'disabled' : ''}>${btnLabel}</button>
       </div>`;
     }).join('');
-    return `<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>8 Cowok • 8 Cewek</b></div>
-      <div class="deco-filter-row">
-        <button type="button" class="deco-filter-btn${decoFilter === 'all' ? ' on' : ''}" data-deco-filter="all">Semua (16)</button>
-        <button type="button" class="deco-filter-btn${decoFilter === 'male' ? ' on' : ''}" data-deco-filter="male">👦 Cowok (8)</button>
-        <button type="button" class="deco-filter-btn${decoFilter === 'female' ? ' on' : ''}" data-deco-filter="female">👧 Cewek (8)</button>
-      </div>
+    const cats = [['all', `Semua (${DECO_CATALOG.length})`], ['Cute & Animal', '🐱 Cute'], ['Celestial', '🌙 Celestial'], ['Dark & Gothic', '🖤 Dark'], ['Elemental & Aura', '🔥 Elemental'], ['Aesthetic & Anime', '🌸 Anime']];
+    const pills = cats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${decoFilter === k ? ' on' : ''}" data-deco-filter="${esc(k)}">${lbl}</button>`).join('');
+    return `<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
+      <div class="deco-filter-row">${pills}</div>
       <div class="deco-shop-grid">${items}</div>`;
   }
 

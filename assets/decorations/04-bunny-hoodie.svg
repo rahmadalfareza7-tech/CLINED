@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <linearGradient id="bhWhite" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="65%" stop-color="#eef0f6"/>
+      <stop offset="100%" stop-color="#c9cfde"/>
+    </linearGradient>
+    <linearGradient id="bhCollar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f09246"/>
+      <stop offset="50%" stop-color="#c96b22"/>
+      <stop offset="100%" stop-color="#87400d"/>
+    </linearGradient>
+    <linearGradient id="bhOrange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffb56b"/>
+      <stop offset="100%" stop-color="#eb6d1e"/>
+    </linearGradient>
+    <filter id="bhSh" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    
+  </defs>
+
+    <g filter="url(#bhSh)">
+      <!-- Left Streetwear Bunny Ear -->
+      <g transform="translate(142,88) rotate(-28)">
+        <rect x="-28" y="-72" width="56" height="110" rx="28" fill="url(#bhOrange)" stroke="#181920" stroke-width="8"/>
+        <rect x="-14" y="-56" width="28" height="72" rx="14" fill="#ffd2a1"/>
+        <!-- Glossy shine -->
+        <path d="M -18 -46 L -18 -14" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+        <!-- Band-aid X stitch -->
+        <path d="M -9 -36 L 9 -20 M 9 -36 L -9 -20" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <!-- Right Streetwear Bunny Ear -->
+      <g transform="translate(370,88) rotate(28)">
+        <rect x="-28" y="-72" width="56" height="110" rx="28" fill="url(#bhWhite)" stroke="#181920" stroke-width="8"/>
+        <rect x="-16" y="-58" width="32" height="76" rx="16" fill="url(#bhOrange)"/>
+        <circle cx="-5" cy="-38" r="3.2" fill="#fff"/>
+        <circle cx="5" cy="-38" r="3.2" fill="#fff"/>
+        <circle cx="-5" cy="-24" r="3.2" fill="#fff"/>
+        <circle cx="5" cy="-24" r="3.2" fill="#fff"/>
+      </g>
+
+      <!-- Outer White Puffy Hoodie Frame -->
+      <path fill-rule="evenodd"
+            d="M 82 358 C 58 294, 58 182, 112 118 C 154 68, 206 62, 256 62 C 306 62, 358 68, 400 118 C 454 182, 454 294, 430 358 L 392 342 C 414 294, 420 200, 382 144 C 348 94, 300 92, 256 92 C 212 92, 164 94, 130 144 C 92 200, 98 294, 120 342 Z"
+            fill="url(#bhWhite)" stroke="#181920" stroke-width="8.5" stroke-linejoin="round"/>
+      <!-- Glossy anime cel-highlight on top hood curve -->
+      <path d="M 146 96 C 184 74, 224 72, 266 72" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+      <!-- Dashed streetwear seam -->
+      <path d="M 104 336 C 82 282, 84 190, 124 136 C 158 90, 208 80, 256 80 C 304 80, 354 90, 388 136 C 428 190, 430 282, 408 336"
+            fill="none" stroke="#3c4150" stroke-width="4" stroke-dasharray="12 10" stroke-linecap="round"/>
+
+      <!-- Bottom Collar Band with 3D Shading -->
+      <path d="M 80 352 C 136 396, 376 396, 432 352 C 440 380, 426 420, 388 438 C 314 472, 198 472, 124 438 C 86 420, 72 380, 80 352 Z"
+            fill="url(#bhCollar)" stroke="#181920" stroke-width="8.5" stroke-linejoin="round"/>
+      <path d="M 102 374 C 156 412, 356 412, 410 374" fill="none" stroke="#ffc285" stroke-width="5.5" stroke-linecap="round" opacity="0.8"/>
+
+      <!-- Metal Grommets & Cute Dangling Hoodie Drawstrings -->
+      <circle cx="316" cy="422" r="7" fill="#3a3f4d" stroke="#181920" stroke-width="3.5"/>
+      <circle cx="352" cy="412" r="7" fill="#3a3f4d" stroke="#181920" stroke-width="3.5"/>
+      <path d="M 316 424 C 314 448, 306 462, 312 474" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+      <path d="M 316 424 C 314 448, 306 462, 312 474" fill="none" stroke="#181920" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 352 414 C 358 438, 368 452, 362 466" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="312" cy="476" r="5" fill="#ff9442" stroke="#181920" stroke-width="3"/>
+      <circle cx="362" cy="468" r="5" fill="#ff9442" stroke="#181920" stroke-width="3"/>
+
+      <!-- Crisp Tech Number "01" Badge -->
+      <g fill="#fff8f0">
+        <path d="M 164 412 C 164 396, 196 396, 196 412 L 196 440 C 196 456, 164 456, 164 440 Z M 175 414 L 175 438 C 175 443, 185 443, 185 438 L 185 414 C 185 409, 175 409, 175 414 Z" fill-rule="evenodd"/>
+        <path d="M 212 402 L 228 402 L 228 452 L 214 452 L 214 414 L 204 418 L 204 407 Z"/>
+      </g>
+    </g>
+    
+</svg>

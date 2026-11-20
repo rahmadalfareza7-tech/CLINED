@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <radialGradient id="tdRose" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff5e6" stop-opacity="0.92"/>
+      <stop offset="45%" stop-color="#f2b8d8" stop-opacity="0.58"/>
+      <stop offset="100%" stop-color="#7c4da8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tdGold" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="#ffe0a3" stop-opacity="0.52"/>
+      <stop offset="100%" stop-color="#8068a8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tdCyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8ffff" stop-opacity="0.82"/>
+      <stop offset="48%" stop-color="#a8c8ff" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#4e468a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tdRingGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff5d6"/>
+      <stop offset="35%" stop-color="#ffb8e0"/>
+      <stop offset="70%" stop-color="#b5a6ff"/>
+      <stop offset="100%" stop-color="#fff0cc"/>
+    </linearGradient>
+    <filter id="tdBlur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+    <filter id="tdGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <mask id="tdRingMask">
+      <rect width="512" height="512" fill="white"/>
+      <circle cx="256" cy="256" r="172" fill="black"/>
+    </mask>
+    
+  </defs>
+
+    <g mask="url(#tdRingMask)">
+      <g filter="url(#tdBlur)">
+        <circle cx="444.7" cy="256.0" r="40.8" fill="url(#tdRose)"/><circle cx="453.7" cy="309.0" r="58.8" fill="url(#tdGold)"/><circle cx="424.6" cy="353.3" r="41.3" fill="url(#tdCyan)"/><circle cx="399.5" cy="399.5" r="37.0" fill="url(#tdRose)"/><circle cx="354.4" cy="426.4" r="53.1" fill="url(#tdGold)"/><circle cx="309.5" cy="455.5" r="42.9" fill="url(#tdCyan)"/><circle cx="256.0" cy="450.7" r="37.0" fill="url(#tdRose)"/><circle cx="205.2" cy="445.4" r="49.8" fill="url(#tdGold)"/><circle cx="158.4" cy="425.0" r="46.8" fill="url(#tdCyan)"/><circle cx="116.0" cy="396.0" r="53.7" fill="url(#tdRose)"/><circle cx="78.4" cy="358.5" r="59.9" fill="url(#tdGold)"/><circle cx="66.1" cy="306.9" r="55.1" fill="url(#tdCyan)"/><circle cx="55.9" cy="256.0" r="43.0" fill="url(#tdRose)"/><circle cx="73.4" cy="207.1" r="47.1" fill="url(#tdGold)"/><circle cx="91.3" cy="160.9" r="40.1" fill="url(#tdCyan)"/><circle cx="122.4" cy="122.4" r="36.4" fill="url(#tdRose)"/><circle cx="159.5" cy="88.8" r="52.6" fill="url(#tdGold)"/><circle cx="205.0" cy="65.7" r="54.1" fill="url(#tdCyan)"/><circle cx="256.0" cy="50.2" r="59.6" fill="url(#tdRose)"/><circle cx="304.0" cy="77.0" r="48.6" fill="url(#tdGold)"/><circle cx="359.5" cy="76.7" r="54.0" fill="url(#tdCyan)"/><circle cx="397.3" cy="114.7" r="49.0" fill="url(#tdRose)"/><circle cx="424.2" cy="158.9" r="57.3" fill="url(#tdGold)"/><circle cx="435.8" cy="207.8" r="45.4" fill="url(#tdCyan)"/>
+      </g>
+      <!-- Luminous Iridescent Orbit Threads -->
+      <circle cx="256" cy="256" r="189" fill="none" stroke="url(#tdRingGrad)" stroke-width="7" opacity="0.88" filter="url(#tdGlow)"/>
+      <circle cx="256" cy="256" r="206" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="36 28 10 28" opacity="0.65"/>
+    </g>
+    <circle cx="192.4" cy="39.7" r="2.4" fill="#ffffff" opacity="0.91"/><circle cx="265.4" cy="67.8" r="4.4" fill="#fff2cc" opacity="0.92"/><circle cx="96.4" cy="366.3" r="4.2" fill="#fff2cc" opacity="0.76"/><circle cx="108.7" cy="366.9" r="4.1" fill="#ffffff" opacity="0.78"/><circle cx="457.4" cy="339.7" r="4.1" fill="#ffd6f0" opacity="0.95"/><circle cx="154.2" cy="400.4" r="2.8" fill="#d4e8ff" opacity="0.95"/><circle cx="275.0" cy="452.5" r="1.6" fill="#d4e8ff" opacity="0.80"/><circle cx="350.0" cy="80.4" r="3.7" fill="#ffd6f0" opacity="0.95"/><circle cx="70.4" cy="314.6" r="2.0" fill="#ffffff" opacity="0.80"/><circle cx="325.2" cy="442.2" r="3.1" fill="#d4e8ff" opacity="1.00"/><circle cx="465.6" cy="166.7" r="3.1" fill="#d4e8ff" opacity="0.62"/><circle cx="335.6" cy="64.4" r="2.3" fill="#d4e8ff" opacity="0.61"/><circle cx="240.0" cy="80.5" r="3.4" fill="#fff2cc" opacity="0.85"/><circle cx="32.8" cy="235.0" r="4.2" fill="#ffd6f0" opacity="0.62"/><circle cx="395.3" cy="85.6" r="3.8" fill="#fff2cc" opacity="0.93"/><circle cx="34.4" cy="316.3" r="2.5" fill="#ffffff" opacity="0.67"/><circle cx="478.8" cy="306.6" r="4.5" fill="#ffffff" opacity="0.75"/><circle cx="69.6" cy="285.5" r="3.8" fill="#ffd6f0" opacity="0.92"/><circle cx="373.3" cy="120.7" r="2.4" fill="#d4e8ff" opacity="0.99"/><circle cx="65.1" cy="360.2" r="2.7" fill="#d4e8ff" opacity="0.92"/><circle cx="398.2" cy="368.1" r="3.5" fill="#ffffff" opacity="0.87"/><circle cx="483.1" cy="292.9" r="2.8" fill="#d4e8ff" opacity="0.69"/><circle cx="52.6" cy="289.2" r="3.0" fill="#ffffff" opacity="0.97"/><circle cx="432.3" cy="325.2" r="4.5" fill="#ffd6f0" opacity="0.96"/><circle cx="429.9" cy="152.0" r="2.2" fill="#fff2cc" opacity="0.77"/><circle cx="395.8" cy="396.8" r="4.2" fill="#d4e8ff" opacity="0.61"/><circle cx="470.5" cy="305.8" r="2.4" fill="#d4e8ff" opacity="0.73"/><circle cx="379.1" cy="411.6" r="3.4" fill="#ffffff" opacity="0.90"/><circle cx="381.4" cy="127.4" r="3.6" fill="#fff2cc" opacity="0.90"/><circle cx="271.5" cy="50.7" r="2.7" fill="#ffd6f0" opacity="0.96"/><circle cx="92.1" cy="371.3" r="1.6" fill="#fff2cc" opacity="0.89"/><circle cx="108.2" cy="373.1" r="1.8" fill="#ffffff" opacity="0.99"/><circle cx="433.4" cy="378.4" r="1.9" fill="#ffd6f0" opacity="0.62"/><circle cx="250.9" cy="68.3" r="4.6" fill="#ffffff" opacity="0.95"/><circle cx="291.2" cy="69.5" r="1.7" fill="#fff2cc" opacity="0.61"/><circle cx="216.6" cy="434.2" r="3.1" fill="#d4e8ff" opacity="0.87"/><circle cx="46.5" cy="334.8" r="2.3" fill="#fff2cc" opacity="0.89"/><circle cx="447.0" cy="248.0" r="3.3" fill="#ffffff" opacity="0.65"/><circle cx="305.0" cy="453.0" r="4.3" fill="#ffffff" opacity="0.86"/><circle cx="185.6" cy="49.6" r="4.4" fill="#ffd6f0" opacity="0.80"/><circle cx="457.0" cy="272.1" r="3.2" fill="#fff2cc" opacity="0.67"/><circle cx="434.0" cy="113.3" r="2.0" fill="#ffffff" opacity="0.74"/><circle cx="29.3" cy="287.8" r="3.9" fill="#ffd6f0" opacity="0.67"/><circle cx="59.0" cy="143.6" r="1.9" fill="#ffffff" opacity="0.79"/><circle cx="452.6" cy="364.2" r="2.6" fill="#fff2cc" opacity="0.87"/><circle cx="430.1" cy="183.0" r="4.1" fill="#fff2cc" opacity="0.90"/><circle cx="79.6" cy="388.5" r="3.9" fill="#ffd6f0" opacity="0.77"/><circle cx="413.9" cy="127.5" r="4.3" fill="#fff2cc" opacity="0.81"/><circle cx="175.9" cy="413.4" r="2.8" fill="#ffffff" opacity="0.71"/><circle cx="72.7" cy="285.9" r="2.3" fill="#ffffff" opacity="0.74"/><circle cx="383.9" cy="421.6" r="2.9" fill="#ffd6f0" opacity="0.80"/><circle cx="230.2" cy="451.0" r="3.4" fill="#d4e8ff" opacity="0.98"/><circle cx="212.3" cy="31.5" r="3.9" fill="#d4e8ff" opacity="0.91"/><circle cx="138.3" cy="104.2" r="2.4" fill="#ffffff" opacity="0.84"/><circle cx="41.3" cy="193.2" r="3.5" fill="#ffffff" opacity="0.94"/><circle cx="445.3" cy="154.7" r="4.0" fill="#d4e8ff" opacity="0.95"/>
+    <polygon points="126.0,174.0 101.7,177.7 98.0,202.0 94.3,177.7 70.0,174.0 94.3,170.3 98.0,146.0 101.7,170.3" fill="#ffffff" opacity="1.00" filter="url(#tdGlow)"/><polygon points="426.0,138.0 407.0,141.0 404.0,160.0 401.0,141.0 382.0,138.0 401.0,135.0 404.0,116.0 407.0,135.0" fill="#fff5cc" opacity="0.98" filter="url(#tdGlow)"/><polygon points="456.0,318.0 435.4,321.4 432.0,342.0 428.6,321.4 408.0,318.0 428.6,314.6 432.0,294.0 435.4,314.6" fill="#ffd6f0" opacity="0.98" filter="url(#tdGlow)"/><polygon points="156.0,404.0 138.8,406.8 136.0,424.0 133.2,406.8 116.0,404.0 133.2,401.2 136.0,384.0 138.8,401.2" fill="#e0f2ff" opacity="0.95" filter="url(#tdGlow)"/><polygon points="290.0,62.0 276.3,64.3 274.0,78.0 271.7,64.3 258.0,62.0 271.7,59.7 274.0,46.0 276.3,59.7" fill="#ffffff" opacity="0.95" filter="url(#tdGlow)"/>
+    
+</svg>

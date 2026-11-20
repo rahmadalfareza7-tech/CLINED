@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <linearGradient id="hfOuterFire" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5e11a8"/>
+      <stop offset="35%" stop-color="#c21088"/>
+      <stop offset="72%" stop-color="#ff2463"/>
+      <stop offset="100%" stop-color="#ff7733"/>
+    </linearGradient>
+    <linearGradient id="hfMidFire" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a81096"/>
+      <stop offset="45%" stop-color="#ff296a"/>
+      <stop offset="85%" stop-color="#ff9933"/>
+      <stop offset="100%" stop-color="#ffe680"/>
+    </linearGradient>
+    <linearGradient id="hfCoreFire" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff5e4d"/>
+      <stop offset="45%" stop-color="#ffbe3b"/>
+      <stop offset="100%" stop-color="#fffad1"/>
+    </linearGradient>
+    <!-- Authentic liquid fire turbulence filter -->
+    <filter id="fireTurb" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022 0.032" numOctaves="3" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G" result="warped"/>
+      <feGaussianBlur in="warped" stdDeviation="6" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="warped"/>
+      </feMerge>
+    </filter>
+    <filter id="fireGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+
+    <!-- Layer 1: Continuous Swirling Turbulent Fire Vortex (Purple -> Magenta -> Orange) -->
+    <g filter="url(#fireTurb)">
+      <!-- Heavy Roaring Bottom & Side Fire Bowl whipping upward asymmetrically -->
+      <path d="M 118 82 C 62 146, 36 254, 72 356 C 108 456, 232 496, 344 462 C 444 432, 486 322, 464 212 C 448 134, 396 76, 326 62 C 378 88, 418 142, 428 214 C 440 310, 382 406, 276 416 C 174 426, 98 352, 92 252 C 88 186, 114 134, 162 94 L 146 60 Z"
+            fill="url(#hfOuterFire)"/>
+      <!-- Sweeping Left Upward Roaring Flame Plume -->
+      <path d="M 64 294 C 24 226, 44 128, 122 66 C 106 106, 108 144, 128 176 C 102 198, 92 246, 98 296 Z"
+            fill="url(#hfMidFire)"/>
+      <!-- Sweeping Right Upward Roaring Flame Plume -->
+      <path d="M 442 328 C 482 254, 474 156, 404 94 C 414 138, 408 176, 388 208 C 414 236, 422 282, 412 328 Z"
+            fill="url(#hfMidFire)"/>
+      <!-- Wild Bottom Swirling Flame Wave -->
+      <path d="M 84 316 C 118 424, 246 476, 360 434 C 424 410, 458 348, 456 278 C 430 356, 364 406, 274 408 C 186 410, 118 368, 84 316 Z"
+            fill="url(#hfMidFire)"/>
+    </g>
+
+    <!-- Layer 2: Crisp Hand-Sculpted Blazing Fire Tongues (Orange-Gold & White-Hot Core) -->
+    <g filter="url(#fireGlow)">
+      <!-- Left roaring inner flame whip -->
+      <path d="M 74 282 C 56 218, 78 138, 146 84 C 122 126, 108 176, 108 232 C 108 298, 144 366, 218 402 C 142 384, 92 342, 74 282 Z"
+            fill="url(#hfCoreFire)"/>
+      <!-- Bottom-right sweeping molten flame ribbon -->
+      <path d="M 152 414 C 234 452, 344 434, 408 360 C 446 316, 454 248, 434 188 C 434 252, 408 320, 354 366 C 296 416, 216 426, 152 414 Z"
+            fill="url(#hfCoreFire)"/>
+      <!-- Top-right licking flame tip -->
+      <path d="M 358 88 C 412 122, 448 188, 446 258 C 436 196, 406 142, 358 88 Z"
+            fill="url(#hfCoreFire)"/>
+      <!-- White-hot inner flame core streaks -->
+      <path d="M 96 318 C 134 394, 224 432, 316 416 C 238 416, 158 380, 96 318 Z" fill="#fffbe0"/>
+      <path d="M 88 264 C 82 206, 98 152, 134 110 C 110 156, 102 208, 104 264 Z" fill="#fff6c2" opacity="0.92"/>
+      <path d="M 432 232 C 434 294, 404 352, 348 388 C 392 348, 418 294, 422 234 Z" fill="#fff6c2" opacity="0.92"/>
+
+      <!-- Detached flickering fire licks & glowing embers -->
+      <path d="M 102 68 C 116 44, 142 38, 158 46 C 142 54, 132 66, 126 80 C 114 76, 106 72, 102 68 Z" fill="#ff7043"/>
+      <path d="M 424 106 C 444 86, 464 90, 470 108 C 454 108, 442 114, 434 126 Z" fill="#ff2e7a"/>
+      <path d="M 52 178 C 40 156, 48 136, 62 128 C 58 144, 60 160, 66 174 Z" fill="#ffbe3b"/>
+      <circle cx="62" cy="110" r="4.5" fill="#fff4b8"/>
+      <circle cx="456" cy="162" r="4" fill="#ff9933"/>
+      <circle cx="468" cy="348" r="4.5" fill="#ffd257"/>
+      <circle cx="48" cy="364" r="4.5" fill="#ff2e7a"/>
+    </g>
+    
+</svg>

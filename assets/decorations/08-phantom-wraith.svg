@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <linearGradient id="pwPale" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f4f5f8"/>
+      <stop offset="70%" stop-color="#c4c8d2"/>
+      <stop offset="100%" stop-color="#606573"/>
+    </linearGradient>
+    <filter id="pwSh" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.75"/>
+    </filter>
+    
+  </defs>
+
+    <g filter="url(#pwSh)" stroke-linejoin="round" stroke-linecap="round">
+
+      <!-- Bottom-Left Sweeping Shadow Claw Tail -->
+      <path d="M 94 348 C 110 404, 152 448, 212 468 C 186 444, 154 416, 128 384 C 114 366, 104 354, 94 348 Z"
+            fill="#0a0b0e" stroke="#cfd4de" stroke-width="2"/>
+      <!-- Bottom-Right Twisting Dark Foot/Claw -->
+      <path d="M 386 352 C 414 334, 434 306, 444 274 C 446 318, 422 364, 384 392 L 352 396 L 372 376 L 334 374 L 368 358 Z"
+            fill="#090a0d" stroke="#d4d8e2" stroke-width="2.2"/>
+
+      <!-- === TOP-LEFT: DARK-INKED SKELETAL CLAWED HAND (BLACK BASE + STARK WHITE BONE HIGHLIGHTS) === -->
+      <!-- Bony wrist & metacarpals arch (dark silhouette) -->
+      <path d="M 70 288 C 60 226, 74 162, 114 114 C 154 66, 206 48, 248 60 C 260 66, 260 88, 246 98 C 236 122, 224 148, 218 168 C 212 142, 214 114, 214 96 C 198 112, 184 146, 174 192 C 166 158, 172 124, 178 102 C 156 122, 138 160, 126 218 C 120 182, 128 144, 136 120 C 114 148, 100 192, 96 254 C 90 286, 94 316, 104 346 C 84 330, 74 310, 70 288 Z"
+            fill="#0a0b0e" stroke="#060709" stroke-width="4"/>
+
+      <!-- Stark White Manga Bone Highlights on Knuckles & Skinny Crooked Fingers -->
+      <!-- Wrist & Hand Back Bones -->
+      <path d="M 116 126 C 142 94, 182 72, 224 68 C 204 78, 174 96, 146 122 Z" fill="#eceff5"/>
+      <path d="M 102 152 C 122 122, 152 98, 186 86 C 162 104, 136 128, 118 156 Z" fill="#d8dde8"/>
+      <!-- Finger 1 (Index - hooked sharp black claw with bone ridge) -->
+      <path d="M 224 72 C 238 68, 248 76, 244 96 C 240 112, 232 132, 224 148 C 228 124, 232 104, 230 88 Z" fill="#f2f4f8"/>
+      <path d="M 224 148 L 216 172 L 228 156 Z" fill="#0a0b0e" stroke="#d0d5e0" stroke-width="1.5"/>
+      <!-- Finger 2 (Middle - long skinny gnarled bone) -->
+      <path d="M 192 80 C 206 76, 216 88, 208 112 C 200 138, 188 162, 178 184 C 184 156, 192 128, 194 104 Z" fill="#eceff5"/>
+      <path d="M 178 184 L 168 208 L 184 190 Z" fill="#0a0b0e" stroke="#d0d5e0" stroke-width="1.5"/>
+      <!-- Finger 3 (Ring - crooked gripping left upper rim) -->
+      <path d="M 154 100 C 168 96, 176 110, 166 136 C 154 166, 140 190, 128 212 C 136 182, 146 152, 152 126 Z" fill="#e4e8f0"/>
+      <path d="M 128 212 L 118 238 L 134 218 Z" fill="#0a0b0e" stroke="#d0d5e0" stroke-width="1.5"/>
+      <!-- Finger 4 (Pinky - hooking down left edge) -->
+      <path d="M 118 134 C 130 132, 136 146, 126 174 C 114 206, 102 232, 94 256 C 102 224, 110 190, 116 162 Z" fill="#d8dde8"/>
+      <!-- Knuckle joint dark ink creases -->
+      <path d="M 228 96 L 242 98 M 194 112 L 208 116 M 156 136 L 170 142 M 118 172 L 130 178"
+            stroke="#08090c" stroke-width="3.5"/>
+      <!-- Outer gaunt arm bone streak -->
+      <path d="M 78 214 C 72 248, 76 286, 88 320" fill="none" stroke="#dce0ea" stroke-width="4"/>
+      <path d="M 88 196 C 82 228, 84 264, 92 296" fill="none" stroke="#8e94a4" stroke-width="2.5"/>
+
+      <!-- === TOP-RIGHT: HORROR MANGA GHOUL CLINGING TO AVATAR === -->
+      <!-- Thin bony left arm reaching over top rim -->
+      <path d="M 250 74 C 276 58, 310 62, 330 82 L 318 98 C 298 86, 280 86, 264 96 Z"
+            fill="url(#pwPale)" stroke="#08090c" stroke-width="4.5"/>
+      <!-- Tiny creepy clawed fingers gripping top rim -->
+      <path d="M 256 84 L 250 112 M 266 82 L 262 114 M 276 82 L 274 114 M 286 84 L 286 112"
+            stroke="#08090c" stroke-width="5"/>
+      <path d="M 256 84 L 252 108 M 266 82 L 264 110 M 276 82 L 275 110"
+            stroke="#eef1f6" stroke-width="2"/>
+
+      <!-- Hunched gaunt shoulder & right arm hugging right rim -->
+      <path d="M 382 108 C 424 124, 448 174, 444 266 C 432 246, 420 228, 408 214 L 398 242 L 388 198 L 368 228 L 364 176 Z"
+            fill="url(#pwPale)" stroke="#08090c" stroke-width="5"/>
+      <!-- Ink cross-hatching on shoulder/arm -->
+      <path d="M 412 142 L 428 154 M 416 158 L 434 170 M 418 176 L 436 188 M 422 194 L 438 206"
+            stroke="#161820" stroke-width="2.2"/>
+
+      <!-- Messy stringy horror hair (layered dark + pale streaks) -->
+      <path d="M 326 84 C 304 104, 294 142, 300 184 L 314 166 L 318 196 L 334 176 L 348 214 L 358 184 L 376 226 L 386 198 L 402 224 C 412 178, 410 122, 388 88 C 374 66, 344 66, 326 84 Z"
+            fill="#cfd4de" stroke="#08090c" stroke-width="4.5"/>
+
+      <!-- Gaunt Pale Skull-like Ghoul Face -->
+      <path d="M 332 92 C 344 74, 376 74, 386 96 C 394 114, 388 136, 384 156 C 378 178, 368 196, 356 196 C 344 196, 334 178, 330 156 C 324 136, 322 110, 332 92 Z"
+            fill="#f7f8fb" stroke="#08090c" stroke-width="4.5"/>
+
+      <!-- Horror Manga Vertical Shading Lines (Sunken Cheeks & Forehead) -->
+      <g stroke="#2a2e38" stroke-width="1.6" opacity="0.8">
+        <path d="M 340 84 L 340 94 M 346 82 L 346 92 M 368 82 L 368 92 M 374 84 L 374 94"/>
+        <path d="M 332 132 L 336 146 M 337 134 L 340 146 M 378 134 L 375 146 M 383 132 L 379 146"/>
+      </g>
+
+      <!-- Sunken Pitch-Black Eyes with Eerie White Pinpricks -->
+      <path d="M 334 114 C 336 102, 352 102, 354 116 C 354 128, 336 130, 334 114 Z" fill="#060709"/>
+      <path d="M 362 116 C 364 102, 380 102, 382 114 C 380 130, 362 128, 362 116 Z" fill="#060709"/>
+      <circle cx="345" cy="115" r="2.4" fill="#ffffff"/>
+      <circle cx="371" cy="115" r="2.4" fill="#ffffff"/>
+
+      <!-- Hollow Nose Slits -->
+      <path d="M 356 126 L 353 136 M 360 126 L 363 136" stroke="#060709" stroke-width="2.5"/>
+
+      <!-- Wide Terrifying Screaming Maw with Fine Manga Teeth -->
+      <path d="M 338 144 C 350 139, 366 139, 378 144 C 380 166, 372 188, 358 190 C 344 188, 336 166, 338 144 Z"
+            fill="#060709"/>
+      <!-- Upper Teeth -->
+      <path d="M 340 146 L 343 157 L 346 145 L 350 158 L 354 145 L 358 158 L 362 145 L 366 158 L 370 145 L 373 157 L 376 146 Z"
+            fill="#ffffff"/>
+      <!-- Lower Teeth -->
+      <path d="M 342 182 L 346 171 L 350 184 L 354 171 L 358 184 L 362 171 L 366 184 L 370 171 L 374 182 Z"
+            fill="#e4e8f0"/>
+      <!-- Drool / Ink Drip from Chin -->
+      <path d="M 352 190 L 350 208 M 364 188 L 366 202" stroke="#dce0ea" stroke-width="2.2"/>
+
+      <!-- Fine Stringy Hair Strands Draped Over Face Edges -->
+      <path d="M 330 88 C 318 116, 314 152, 320 188 M 322 104 C 310 134, 308 166, 314 196" fill="none" stroke="#08090c" stroke-width="3.5"/>
+      <path d="M 386 90 C 398 120, 400 160, 392 198 M 392 108 C 404 138, 406 172, 398 206" fill="none" stroke="#08090c" stroke-width="3.5"/>
+      <path d="M 326 98 C 316 126, 314 158, 318 184 M 390 102 C 398 132, 398 166, 392 194" fill="none" stroke="#f0f2f7" stroke-width="1.8"/>
+    </g>
+    
+</svg>

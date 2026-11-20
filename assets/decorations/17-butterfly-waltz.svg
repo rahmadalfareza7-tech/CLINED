@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <linearGradient id="bwWing1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#ffe9a8"/>
+      <stop offset="72%" stop-color="#ffb8e6"/>
+      <stop offset="100%" stop-color="#a89eff"/>
+    </linearGradient>
+    <linearGradient id="bwWing2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#d4f4ff"/>
+      <stop offset="80%" stop-color="#c9b8ff"/>
+      <stop offset="100%" stop-color="#ff9ed8"/>
+    </linearGradient>
+    <linearGradient id="bwTrail" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff8d6"/>
+      <stop offset="50%" stop-color="#ffb8e6"/>
+      <stop offset="100%" stop-color="#b5c8ff"/>
+    </linearGradient>
+    <filter id="bwGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+
+    <!-- Luminous Golden-Pastel Fairy Dust Ribbon -->
+    <circle cx="256" cy="256" r="190" fill="none" stroke="url(#bwTrail)" stroke-width="5" opacity="0.65" filter="url(#bwGlow)"/>
+    <path d="M 122 142 A 196 196 0 0 0 398 386" fill="none" stroke="#fff8d6" stroke-width="3.5" stroke-dasharray="8 14" opacity="0.75" filter="url(#bwGlow)"/>
+    
+        <g transform="translate(134,122) rotate(-26) scale(1.24)" opacity="1.0" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+        <g transform="translate(386,134) rotate(32) scale(0.72)" opacity="0.96" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+        <g transform="translate(78,226) rotate(-12) scale(0.68)" opacity="0.96" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+        <g transform="translate(86,312) rotate(18) scale(0.5)" opacity="0.92" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+        <g transform="translate(128,390) rotate(34) scale(0.58)" opacity="0.95" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+        <g transform="translate(214,438) rotate(16) scale(0.42)" opacity="0.88" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+        <g transform="translate(308,440) rotate(-18) scale(0.48)" opacity="0.92" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing2)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing2)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+        <g transform="translate(392,396) rotate(-38) scale(0.44)" opacity="0.88" filter="url(#bwGlow)">
+          <!-- Upper Left & Right Detailed Wings -->
+          <path d="M 0 0 C -20 -40, -64 -34, -52 2 C -42 22, -14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <path d="M 0 0 C 20 -40, 64 -34, 52 2 C 42 22, 14 14, 0 4 Z" fill="url(#bwWing1)" stroke="#ffffff" stroke-width="1.6"/>
+          <!-- Lower Wings with Swallowtail Tip -->
+          <path d="M 0 4 C -28 8, -44 34, -24 44 C -10 48, -2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <path d="M 0 4 C 28 8, 44 34, 24 44 C 10 48, 2 24, 0 8 Z" fill="url(#bwWing1)" opacity="0.94" stroke="#ffffff" stroke-width="1.4"/>
+          <!-- Delicate Wing Veins & Jewels -->
+          <path d="M -4 0 L -36 -14 M -4 2 L -28 8 M 4 0 L 36 -14 M 4 2 L 28 8" stroke="#7c5ca8" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="-32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <circle cx="32" cy="-12" r="3.5" fill="#ffffff" opacity="0.9"/>
+          <!-- Body & Antennae -->
+          <ellipse cx="0" cy="5" rx="3" ry="13" fill="#6d5299"/>
+          <path d="M -1 -8 Q -8 -20, -14 -22 M 1 -8 Q 8 -20, 14 -22" fill="none" stroke="#fff6d6" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        
+    <polygon points="112.0,174.0 100.5,176.5 98.0,188.0 95.5,176.5 84.0,174.0 95.5,171.5 98.0,160.0 100.5,171.5" fill="#fff8d6" opacity="0.98" filter="url(#bwGlow)"/><polygon points="437.0,198.0 426.3,200.3 424.0,211.0 421.7,200.3 411.0,198.0 421.7,195.7 424.0,185.0 426.3,195.7" fill="#ffd6f0" opacity="0.95" filter="url(#bwGlow)"/><polygon points="186.0,424.0 176.1,426.1 174.0,436.0 171.9,426.1 162.0,424.0 171.9,421.9 174.0,412.0 176.1,421.9" fill="#ffffff" opacity="0.95" filter="url(#bwGlow)"/><polygon points="365.0,426.0 354.3,428.3 352.0,439.0 349.7,428.3 339.0,426.0 349.7,423.7 352.0,413.0 354.3,423.7" fill="#fff5cc" opacity="0.95" filter="url(#bwGlow)"/><polygon points="275.0,62.0 266.0,64.0 264.0,73.0 262.0,64.0 253.0,62.0 262.0,60.0 264.0,51.0 266.0,60.0" fill="#e6f2ff" opacity="0.90" filter="url(#bwGlow)"/>
+    <circle cx="72" cy="272" r="3.5" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="104" cy="354" r="4" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="168" cy="418" r="3.2" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="258" cy="448" r="3.8" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="344" cy="430" r="3.2" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="420" cy="356" r="3.5" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="434" cy="272" r="3.0" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="206" cy="68" r="3.0" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/><circle cx="332" cy="82" r="3.2" fill="#fff8d6" opacity="0.92" filter="url(#bwGlow)"/>
+    
+</svg>

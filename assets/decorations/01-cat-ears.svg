@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <linearGradient id="catOuter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f7f0fa"/>
+      <stop offset="100%" stop-color="#d6c6e0"/>
+    </linearGradient>
+    <linearGradient id="catInner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd9eb"/>
+      <stop offset="45%" stop-color="#ff8ec4"/>
+      <stop offset="100%" stop-color="#d94f94"/>
+    </linearGradient>
+    <linearGradient id="catGlowRing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffb8dc"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#ff85c0"/>
+    </linearGradient>
+    <filter id="catSh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#2b1224" flood-opacity="0.42"/>
+    </filter>
+    <filter id="catGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+
+    <!-- Subtle Luminous Pastel Rim -->
+    <circle cx="256" cy="256" r="189" fill="none" stroke="url(#catGlowRing)" stroke-width="5" opacity="0.72" filter="url(#catGlow)"/>
+
+    <g filter="url(#catSh)">
+      <!-- Left Ear (Fuller, fluffier, layered) -->
+      <path d="M 96 190 C 76 124, 86 64, 122 52 C 158 40, 210 76, 232 112 C 190 120, 138 148, 96 190 Z"
+            fill="url(#catOuter)" stroke="#241626" stroke-width="8.5" stroke-linejoin="round"/>
+      <!-- Inner Pink Ear with rich depth -->
+      <path d="M 114 164 C 102 122, 110 84, 132 76 C 154 68, 190 92, 208 116 C 176 126, 142 142, 114 164 Z"
+            fill="url(#catInner)"/>
+      <!-- Glossy inner-ear highlight -->
+      <path d="M 122 122 C 122 98, 132 86, 146 86" fill="none" stroke="#fff0f7" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+      <!-- Fluffy white ear fur tufts -->
+      <path d="M 98 164 C 112 152, 124 148, 136 144 C 124 136, 118 134, 114 128 C 126 124, 138 122, 148 122"
+            fill="none" stroke="#ffffff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Cute heart earring accent on left ear -->
+      <circle cx="94" cy="126" r="6" fill="#ffd166" stroke="#241626" stroke-width="3.5"/>
+
+      <!-- Right Ear -->
+      <path d="M 416 190 C 436 124, 426 64, 390 52 C 354 40, 302 76, 280 112 C 322 120, 374 148, 416 190 Z"
+            fill="url(#catOuter)" stroke="#241626" stroke-width="8.5" stroke-linejoin="round"/>
+      <path d="M 398 164 C 410 122, 402 84, 380 76 C 358 68, 322 92, 304 116 C 336 126, 370 142, 398 164 Z"
+            fill="url(#catInner)"/>
+      <path d="M 390 122 C 390 98, 380 86, 366 86" fill="none" stroke="#fff0f7" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+      <path d="M 414 164 C 400 152, 388 148, 376 144 C 388 136, 394 134, 398 128 C 386 124, 374 122, 364 122"
+            fill="none" stroke="#ffffff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- Soft Blush Glows on Cheeks -->
+      <ellipse cx="96" cy="276" rx="22" ry="12" fill="#ff85bc" opacity="0.45" filter="url(#catGlow)"/>
+      <ellipse cx="416" cy="276" rx="22" ry="12" fill="#ff85bc" opacity="0.45" filter="url(#catGlow)"/>
+
+      <!-- Crisp Double-Outline Whiskers (Left & Right) -->
+      <g fill="none" stroke-linecap="round">
+        <g stroke="#ffffff" stroke-width="11" opacity="0.9">
+          <path d="M 104 252 Q 66 238, 32 244"/>
+          <path d="M 100 276 Q 60 276, 26 288"/>
+          <path d="M 106 300 Q 70 310, 42 328"/>
+          <path d="M 408 252 Q 446 238, 480 244"/>
+          <path d="M 412 276 Q 452 276, 486 288"/>
+          <path d="M 406 300 Q 442 310, 470 328"/>
+        </g>
+        <g stroke="#241626" stroke-width="6.5">
+          <path d="M 104 252 Q 66 238, 32 244"/>
+          <path d="M 100 276 Q 60 276, 26 288"/>
+          <path d="M 106 300 Q 70 310, 42 328"/>
+          <path d="M 408 252 Q 446 238, 480 244"/>
+          <path d="M 412 276 Q 452 276, 486 288"/>
+          <path d="M 406 300 Q 442 310, 470 328"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Cute Floating Pink Hearts & Sparkles -->
+    <g filter="url(#catGlow)">
+      <path d="M 426 116 C 426 106, 440 106, 440 116 C 440 124, 426 132, 426 132 C 426 132, 412 124, 412 116 C 412 106, 426 106, 426 116 Z" fill="#ff7ab8"/>
+      <polygon points="89.0,102.0 78.3,104.3 76.0,115.0 73.7,104.3 63.0,102.0 73.7,99.7 76.0,89.0 78.3,99.7" fill="#fff0f8" opacity="0.95" />
+      <polygon points="453.0,186.0 444.0,188.0 442.0,197.0 440.0,188.0 431.0,186.0 440.0,184.0 442.0,175.0 444.0,184.0" fill="#ffd6eb" opacity="0.92" />
+      <polygon points="268.0,446.0 258.1,448.1 256.0,458.0 253.9,448.1 244.0,446.0 253.9,443.9 256.0,434.0 258.1,443.9" fill="#ffffff" opacity="0.90" />
+    </g>
+    
+</svg>

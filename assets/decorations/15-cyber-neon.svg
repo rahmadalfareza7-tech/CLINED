@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <linearGradient id="cnSteel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3c4456"/>
+      <stop offset="50%" stop-color="#1a1e28"/>
+      <stop offset="100%" stop-color="#0d1017"/>
+    </linearGradient>
+    <linearGradient id="cnLaser" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00f7ff"/>
+      <stop offset="50%" stop-color="#ff1a5e"/>
+      <stop offset="100%" stop-color="#00f7ff"/>
+    </linearGradient>
+    <filter id="cnGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+
+    <!-- Heavy Dark Armored Outer Segmented Plates -->
+    <g stroke="#080a0f" stroke-width="5" stroke-linejoin="round">
+      <!-- Top-Left Armor Blade -->
+      <path d="M 62 182 L 72 108 L 136 62 L 198 56 L 182 78 L 134 86 L 94 124 L 84 176 Z" fill="url(#cnSteel)"/>
+      <!-- Top-Right Armor Blade -->
+      <path d="M 450 182 L 440 108 L 376 62 L 314 56 L 330 78 L 378 86 L 418 124 L 428 176 Z" fill="url(#cnSteel)"/>
+      <!-- Bottom-Left Armor Blade -->
+      <path d="M 62 330 L 72 404 L 136 450 L 198 456 L 182 434 L 134 426 L 94 388 L 84 336 Z" fill="url(#cnSteel)"/>
+      <!-- Bottom-Right Armor Blade -->
+      <path d="M 450 330 L 440 404 L 376 450 L 314 456 L 330 434 L 378 426 L 418 388 L 428 336 Z" fill="url(#cnSteel)"/>
+    </g>
+
+    <!-- Razor Neon Energy Strips & Targeting Reticles -->
+    <g filter="url(#cnGlow)">
+      <circle cx="256" cy="256" r="190" fill="none" stroke="url(#cnLaser)" stroke-width="7" stroke-dasharray="150 35 70 35"/>
+      <!-- Glowing Blade Trim -->
+      <path d="M 76 174 L 84 116 L 140 74 L 186 68" fill="none" stroke="#00f7ff" stroke-width="4.5"/>
+      <path d="M 436 174 L 428 116 L 372 74 L 326 68" fill="none" stroke="#ff1a5e" stroke-width="4.5"/>
+      <path d="M 76 338 L 84 396 L 140 438 L 186 444" fill="none" stroke="#ff1a5e" stroke-width="4.5"/>
+      <path d="M 436 338 L 428 396 L 372 438 L 326 444" fill="none" stroke="#00f7ff" stroke-width="4.5"/>
+      <!-- Crosshair Laser Notches -->
+      <polygon points="256,42 264,66 248,66" fill="#ff1a5e"/>
+      <polygon points="256,470 264,446 248,446" fill="#00f7ff"/>
+      <polygon points="36,256 64,248 64,264" fill="#00f7ff"/>
+      <polygon points="476,256 448,248 448,264" fill="#ff1a5e"/>
+      <!-- Glitch Slashes -->
+      <rect x="28" y="232" width="44" height="5" fill="#ff1a5e"/>
+      <rect x="438" y="274" width="48" height="5" fill="#00f7ff"/>
+    </g>
+    
+</svg>

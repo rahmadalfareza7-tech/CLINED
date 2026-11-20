@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <filter id="aaSh" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+    
+  </defs>
+
+    <g filter="url(#aaSh)">
+      <!-- Intense Red & Black Manga Motion Arcs -->
+      <path d="M 84 166 A 198 198 0 0 1 294 56" fill="none" stroke="#111015" stroke-width="11" stroke-linecap="round"/>
+      <path d="M 84 166 A 198 198 0 0 1 294 56" fill="none" stroke="#ff1726" stroke-width="6" stroke-linecap="round"/>
+      <path d="M 66 212 A 214 214 0 0 1 256 42" fill="none" stroke="#ff1726" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 446 196 A 198 198 0 0 1 424 352" fill="none" stroke="#111015" stroke-width="11" stroke-linecap="round"/>
+      <path d="M 446 196 A 198 198 0 0 1 424 352" fill="none" stroke="#ff1726" stroke-width="6" stroke-linecap="round"/>
+      <path d="M 462 224 A 214 214 0 0 1 446 326" fill="none" stroke="#ff1726" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 192 448 A 198 198 0 0 0 356 428" fill="none" stroke="#ff1726" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M 218 464 A 214 214 0 0 0 334 446" fill="none" stroke="#ff1726" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- Sharp Red Comic Impact Spikes -->
+      <polygon points="334,58 352,32 346,66" fill="#ff1726" stroke="#111015" stroke-width="3"/>
+      <polygon points="444,158 474,142 452,174" fill="#ff1726" stroke="#111015" stroke-width="3"/>
+
+      <!-- Bold Oversized Anime Anger Vein Mark (Top-Right) -->
+      <g transform="translate(382,130) rotate(14) scale(1.18)" fill="#ff1726" stroke="#111015" stroke-width="7.5" stroke-linejoin="round">
+        <path d="M -42 -10 L -14 -10 L -14 -38 L -28 -38 L -28 -24 L -42 -24 Z"/>
+        <path d="M 42 -10 L 14 -10 L 14 -38 L 28 -38 L 28 -24 L 42 -24 Z"/>
+        <path d="M -42 10 L -14 10 L -14 38 L -28 38 L -28 24 L -42 24 Z"/>
+        <path d="M 42 10 L 14 10 L 14 38 L 28 38 L 28 24 L 42 24 Z"/>
+      </g>
+
+      <!-- Spiky Aggressive Exclamation Speech Bubble (Bottom-Left) -->
+      <g transform="translate(122,386)">
+        <path d="M -56 2 C -56 -32, -28 -54, 4 -54 C 36 -54, 58 -30, 58 2 C 58 32, 34 52, 2 52 C -12 52, -24 48, -34 40 L -60 58 L -46 26 C -52 18, -56 10, -56 2 Z"
+              fill="#f2f4f8" stroke="#111015" stroke-width="9" stroke-linejoin="round"/>
+        <path d="M -8 -32 L 12 -32 L 7 10 L -3 10 Z" fill="#111015"/>
+        <circle cx="2" cy="27" r="8.5" fill="#ff1726" stroke="#111015" stroke-width="3"/>
+      </g>
+    </g>
+    
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <linearGradient id="cdHalo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#fff0c4"/>
+      <stop offset="70%" stop-color="#e5c8ff"/>
+      <stop offset="100%" stop-color="#9e8ce6"/>
+    </linearGradient>
+    <linearGradient id="cdCloudTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f7f2ff"/>
+      <stop offset="45%" stop-color="#c4b5e8"/>
+      <stop offset="100%" stop-color="#6b5c99"/>
+    </linearGradient>
+    <linearGradient id="cdCloudBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b9a8e0"/>
+      <stop offset="100%" stop-color="#4e4378"/>
+    </linearGradient>
+    <filter id="cdGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="cdSoft" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+
+    <!-- Radiant Pearlescent Crescent Ring -->
+    <g filter="url(#cdGlow)">
+      <path d="M 96 356 A 190 190 0 1 1 416 356 A 178 178 0 1 0 96 356 Z" fill="url(#cdHalo)"/>
+      <circle cx="256" cy="256" r="188" fill="none" stroke="url(#cdHalo)" stroke-width="11" opacity="0.95"/>
+      <!-- Bright top-right moonbeam highlight -->
+      <path d="M 244 66 A 190 190 0 0 1 444 274" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round"/>
+    </g>
+
+    <!-- Dangling Golden Star Charms at Top-Left & Top-Right -->
+    <g filter="url(#cdSoft)">
+      <line x1="126" y1="120" x2="126" y2="162" stroke="#fff3c4" stroke-width="2.5" opacity="0.85"/>
+      <polygon points="140.0,168.0 129.0,171.0 126.0,182.0 123.0,171.0 112.0,168.0 123.0,165.0 126.0,154.0 129.0,165.0" fill="#fff5cc" opacity="0.98" />
+      <line x1="396" y1="130" x2="396" y2="164" stroke="#fff3c4" stroke-width="2.5" opacity="0.85"/>
+      <polygon points="407.0,170.0 398.3,172.3 396.0,181.0 393.7,172.3 385.0,170.0 393.7,167.7 396.0,159.0 398.3,167.7" fill="#ffffff" opacity="0.95" />
+    </g>
+
+    <!-- Multi-Layered Dreamy Iridescent Clouds -->
+    <g>
+      <!-- Back Lavender Mist Layer -->
+      <path d="M 52 356 C 46 318, 86 294, 118 314 C 134 286, 184 294, 192 332 C 222 334, 240 364, 228 394 C 246 414, 232 454, 192 456 C 158 476, 102 466, 88 436 C 52 434, 38 392, 52 356 Z"
+            fill="url(#cdCloudBack)" opacity="0.92"/>
+      <path d="M 460 356 C 466 318, 426 294, 394 314 C 378 286, 328 294, 320 332 C 290 334, 272 364, 284 394 C 266 414, 280 454, 320 456 C 354 476, 410 466, 424 436 C 460 434, 474 392, 460 356 Z"
+            fill="url(#cdCloudBack)" opacity="0.92"/>
+
+      <!-- Front Moonlit Cloud Puffs -->
+      <path d="M 68 370 C 64 340, 94 320, 118 334 C 132 310, 172 318, 178 346 C 202 348, 216 370, 208 392 C 226 404, 220 438, 188 442 C 164 460, 118 452, 106 428 C 74 426, 58 396, 68 370 Z"
+            fill="url(#cdCloudTop)"/>
+      <path d="M 444 370 C 448 340, 418 320, 394 334 C 380 310, 340 318, 334 346 C 310 348, 296 370, 304 392 C 286 404, 292 438, 324 442 C 348 460, 394 452, 406 428 C 438 426, 454 396, 444 370 Z"
+            fill="url(#cdCloudTop)"/>
+
+      <!-- Crisp Silver-White Moonlit Rim Highlights on Clouds -->
+      <path d="M 82 356 C 90 334, 112 330, 126 344 C 140 322, 168 328, 172 350" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" opacity="0.82"/>
+      <path d="M 430 356 C 422 334, 400 330, 386 344 C 372 322, 344 328, 340 350" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" opacity="0.82"/>
+
+      <!-- Glowing Golden-Pearl Bridge at Bottom -->
+      <path d="M 156 422 Q 256 468, 356 422" fill="none" stroke="#fff7d6" stroke-width="10" stroke-linecap="round" filter="url(#cdGlow)"/>
+    </g>
+
+    <!-- Radiant Stardust & Twinkling Stars -->
+    <g filter="url(#cdSoft)">
+      <polygon points="430.0,104.0 415.2,107.2 412.0,122.0 408.8,107.2 394.0,104.0 408.8,100.8 412.0,86.0 415.2,100.8" fill="#fffbe6" opacity="1.00" />
+      <polygon points="110.0,126.0 98.5,128.5 96.0,140.0 93.5,128.5 82.0,126.0 93.5,123.5 96.0,112.0 98.5,123.5" fill="#f0e0ff" opacity="0.95" />
+      <polygon points="464.0,232.0 454.1,234.1 452.0,244.0 449.9,234.1 440.0,232.0 449.9,229.9 452.0,220.0 454.1,229.9" fill="#ffffff" opacity="0.90" />
+      <polygon points="270.0,456.0 258.5,458.5 256.0,470.0 253.5,458.5 242.0,456.0 253.5,453.5 256.0,442.0 258.5,453.5" fill="#fff7cc" opacity="0.95" />
+      <circle cx="76" cy="212" r="4" fill="#fff0ff" opacity="0.85"/>
+      <circle cx="436" cy="284" r="3.5" fill="#fff6cc" opacity="0.85"/>
+    </g>
+    
+</svg>
