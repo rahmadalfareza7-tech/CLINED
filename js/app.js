@@ -3424,10 +3424,16 @@ function renderAccount(){
   if(bBg)bBg.style.backgroundImage=user?.bannerUrl?`url('${user.bannerUrl}')`:'';
   if(bPrev)bPrev.classList.toggle('has-banner',!!user?.bannerUrl);
   if(bAv){
-    if(user?.avatarUrl)bAv.innerHTML=`<img src="${esc(user.avatarUrl)}" alt="">`;
-    else bAv.textContent=user?.name?.charAt(0).toUpperCase()||'C';
+    const miniDeco=user?.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
+    bAv.classList.toggle('has-deco',!!user?.avatarDeco);
+    if(user?.avatarUrl)bAv.innerHTML=`<img src="${esc(user.avatarUrl)}" alt="">${miniDeco}`;
+    else bAv.innerHTML=`<span>${esc(user?.name?.charAt(0).toUpperCase()||'C')}</span>${miniDeco}`;
   }
-  if(bName)bName.textContent=user?.name||account.name||'Nama Kamu';
+  if(bName){
+    bName.textContent=user?.name||account.name||'Nama Kamu';
+    if(user?.nameColor)bName.setAttribute('data-name-color',user.nameColor);
+    else bName.removeAttribute('data-name-color');
+  }
   if(bUser)bUser.textContent=`@${user?.username||account.username||'username'}`;
   if(bRem){bRem.hidden=!(user&&user.bannerUrl);bRem.disabled=!(user&&user.bannerUrl);}
   [nameEl,usernameEl].forEach(el=>{if(el)el.disabled=!user;});

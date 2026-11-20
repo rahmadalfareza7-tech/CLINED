@@ -924,21 +924,53 @@ html body .achievement-item.locked {
   object-fit: cover;
   display: block;
 }
+.account-profile-hero {
+  padding-top: 28px;
+}
 .account-avatar-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
+  margin-top: 30px;
+}
+.account-banner-section .account-avatar-actions {
+  margin-top: 6px;
+}
+.account-change-avatar {
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  background: rgba(28, 176, 246, 0.1) !important;
+  border: 1.5px solid rgba(28, 176, 246, 0.38) !important;
+  color: #0284c7 !important;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.2px !important;
+  cursor: pointer;
+}
+:root.dark .account-change-avatar,
+body.dark .account-change-avatar {
+  color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.14) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
 }
 .account-remove-avatar {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: 1.5px solid var(--border, #e2e8f0);
   color: var(--danger, #e11d48);
   border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 12.5px;
-  font-weight: 700;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 800;
   cursor: pointer;
 }
 .account-remove-avatar:hover {
@@ -1156,6 +1188,7 @@ html body .achievement-item.locked {
   min-width: 0;
 }
 .account-banner-mini-av {
+  position: relative;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -1168,9 +1201,13 @@ html body .achievement-item.locked {
   background: linear-gradient(135deg, #1cb0f6, #6366f1);
   overflow: hidden;
 }
-.account-banner-mini-av img {
+.account-banner-mini-av.has-deco {
+  overflow: visible;
+}
+.account-banner-mini-av > img:not(.avatar-deco-img) {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   object-fit: cover;
   display: block;
 }
