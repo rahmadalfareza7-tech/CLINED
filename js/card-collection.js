@@ -48,27 +48,27 @@
 
   const BANNER_CATALOG = [
     // 10 Cowok
-    { id: '01-blood-eclipse',       name: 'Blood Eclipse',       cat: 'Cowok', icon: '🩸', price: 20, desc: 'Cowok • Gerhana merah kelam',        img: 'assets/banners/01-blood-eclipse.svg' },
-    { id: '02-lunar-monolith',      name: 'Lunar Monolith',      cat: 'Cowok', icon: '🌑', price: 20, desc: 'Cowok • Monolit bulan misterius',    img: 'assets/banners/02-lunar-monolith.svg' },
-    { id: '03-always-watching',     name: 'Always Watching',     cat: 'Cowok', icon: '👁️', price: 25, desc: 'Cowok • Mata bayangan gelap',        img: 'assets/banners/03-always-watching.svg' },
-    { id: '04-water-stalker',       name: 'Water Stalker',       cat: 'Cowok', icon: '🌊', price: 20, desc: 'Cowok • Pemburu laut dalam',         img: 'assets/banners/04-water-stalker.svg' },
-    { id: '05-crimson-katana',      name: 'Crimson Katana',      cat: 'Cowok', icon: '⚔️', price: 30, desc: 'Cowok • Tebasan katana merah',       img: 'assets/banners/05-crimson-katana.svg' },
-    { id: '06-cursed-skulls',       name: 'Cursed Skulls',       cat: 'Cowok', icon: '💀', price: 30, desc: 'Cowok • Tengkorak terkutuk',         img: 'assets/banners/06-cursed-skulls.svg' },
-    { id: '07-crimson-vs-symbiote', name: 'Crimson vs. Symbiote',cat: 'Cowok', icon: '🕸️', price: 35, desc: 'Cowok • Benturan simbiote',          img: 'assets/banners/07-crimson-vs-symbiote.svg' },
-    { id: '08-shark-tail',          name: 'Shark Tail',          cat: 'Cowok', icon: '🦈', price: 25, desc: 'Cowok • Sirip hiu samudra',          img: 'assets/banners/08-shark-tail.svg' },
-    { id: '09-midnight-rainpond',   name: 'Midnight Rainpond',   cat: 'Cowok', icon: '🌧️', price: 25, desc: 'Cowok • Hujan tengah malam',         img: 'assets/banners/09-midnight-rainpond.svg' },
-    { id: '10-crimson-oni',         name: 'Crimson Oni',         cat: 'Cowok', icon: '👹', price: 35, desc: 'Cowok • Topeng oni merah',           img: 'assets/banners/10-crimson-oni.svg' },
+    { id: '01-blood-eclipse',       name: 'Blood Eclipse',       cat: 'Cowok', icon: '🩸', price: 20, desc: 'Cowok • Gerhana merah kelam',        img: 'assets/banners/01-blood-eclipse.svg?v=2' },
+    { id: '02-lunar-monolith',      name: 'Lunar Monolith',      cat: 'Cowok', icon: '🌑', price: 20, desc: 'Cowok • Monolit bulan misterius',    img: 'assets/banners/02-lunar-monolith.svg?v=2' },
+    { id: '03-always-watching',     name: 'Always Watching',     cat: 'Cowok', icon: '👁️', price: 25, desc: 'Cowok • Mata bayangan gelap',        img: 'assets/banners/03-always-watching.svg?v=2' },
+    { id: '04-water-stalker',       name: 'Water Stalker',       cat: 'Cowok', icon: '🌊', price: 20, desc: 'Cowok • Pemburu laut dalam',         img: 'assets/banners/04-water-stalker.svg?v=2' },
+    { id: '05-crimson-katana',      name: 'Crimson Katana',      cat: 'Cowok', icon: '⚔️', price: 30, desc: 'Cowok • Tebasan katana merah',       img: 'assets/banners/05-crimson-katana.svg?v=2' },
+    { id: '06-cursed-skulls',       name: 'Cursed Skulls',       cat: 'Cowok', icon: '💀', price: 30, desc: 'Cowok • Tengkorak terkutuk',         img: 'assets/banners/06-cursed-skulls.svg?v=2' },
+    { id: '07-crimson-vs-symbiote', name: 'Crimson vs. Symbiote',cat: 'Cowok', icon: '🕸️', price: 35, desc: 'Cowok • Benturan simbiote',          img: 'assets/banners/07-crimson-vs-symbiote.svg?v=2' },
+    { id: '08-shark-tail',          name: 'Shark Tail',          cat: 'Cowok', icon: '🦈', price: 25, desc: 'Cowok • Sirip hiu samudra',          img: 'assets/banners/08-shark-tail.svg?v=2' },
+    { id: '09-midnight-rainpond',   name: 'Midnight Rainpond',   cat: 'Cowok', icon: '🌧️', price: 25, desc: 'Cowok • Hujan tengah malam',         img: 'assets/banners/09-midnight-rainpond.svg?v=2' },
+    { id: '10-crimson-oni',         name: 'Crimson Oni',         cat: 'Cowok', icon: '👹', price: 35, desc: 'Cowok • Topeng oni merah',           img: 'assets/banners/10-crimson-oni.svg?v=2' },
     // 10 Cewek
-    { id: '11-pastel-cloud-pup',    name: 'Pastel Cloud Pup',    cat: 'Cewek', icon: '🐶', price: 20, desc: 'Cewek • Awan pastel & anak anjing',  img: 'assets/banners/11-pastel-cloud-pup.svg' },
-    { id: '12-crimson-sakura',      name: 'Crimson Sakura',      cat: 'Cewek', icon: '🌸', price: 25, desc: 'Cewek • Kelopak sakura merah',       img: 'assets/banners/12-crimson-sakura.svg' },
-    { id: '13-starlit-clouds',      name: 'Starlit Clouds',      cat: 'Cewek', icon: '✨', price: 25, desc: 'Cewek • Awan berbintang',            img: 'assets/banners/13-starlit-clouds.svg' },
-    { id: '14-rainy-lilypond',      name: 'Rainy Lilypond',      cat: 'Cewek', icon: '🪷', price: 25, desc: 'Cewek • Kolam teratai hujan',        img: 'assets/banners/14-rainy-lilypond.svg' },
-    { id: '15-idol-glowstick',      name: 'Idol Glowstick',      cat: 'Cewek', icon: '🎤', price: 30, desc: 'Cewek • Panggung cahaya idol',       img: 'assets/banners/15-idol-glowstick.svg' },
-    { id: '16-butterfly-aurora',    name: 'Butterfly Aurora',    cat: 'Cewek', icon: '🦋', price: 30, desc: 'Cewek • Kupu-kupu aurora',           img: 'assets/banners/16-butterfly-aurora.svg' },
-    { id: '17-rose-gold-velvet',    name: 'Rose Gold Velvet',    cat: 'Cewek', icon: '🌹', price: 35, desc: 'Cewek • Beludru mawar emas',         img: 'assets/banners/17-rose-gold-velvet.svg' },
-    { id: '18-cotton-candy-sky',    name: 'Cotton Candy Sky',    cat: 'Cewek', icon: '☁️', price: 20, desc: 'Cewek • Langit permen kapas',        img: 'assets/banners/18-cotton-candy-sky.svg' },
-    { id: '19-crystal-prism',       name: 'Crystal Prism',       cat: 'Cewek', icon: '💎', price: 35, desc: 'Cewek • Prisma kristal berkilau',    img: 'assets/banners/19-crystal-prism.svg' },
-    { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 25, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg' }
+    { id: '11-pastel-cloud-pup',    name: 'Pastel Cloud Pup',    cat: 'Cewek', icon: '🐶', price: 20, desc: 'Cewek • Awan pastel & anak anjing',  img: 'assets/banners/11-pastel-cloud-pup.svg?v=2' },
+    { id: '12-crimson-sakura',      name: 'Crimson Sakura',      cat: 'Cewek', icon: '🌸', price: 25, desc: 'Cewek • Kelopak sakura merah',       img: 'assets/banners/12-crimson-sakura.svg?v=2' },
+    { id: '13-starlit-clouds',      name: 'Starlit Clouds',      cat: 'Cewek', icon: '✨', price: 25, desc: 'Cewek • Awan berbintang',            img: 'assets/banners/13-starlit-clouds.svg?v=2' },
+    { id: '14-rainy-lilypond',      name: 'Rainy Lilypond',      cat: 'Cewek', icon: '🪷', price: 25, desc: 'Cewek • Kolam teratai hujan',        img: 'assets/banners/14-rainy-lilypond.svg?v=2' },
+    { id: '15-idol-glowstick',      name: 'Idol Glowstick',      cat: 'Cewek', icon: '🎤', price: 30, desc: 'Cewek • Panggung cahaya idol',       img: 'assets/banners/15-idol-glowstick.svg?v=2' },
+    { id: '16-butterfly-aurora',    name: 'Butterfly Aurora',    cat: 'Cewek', icon: '🦋', price: 30, desc: 'Cewek • Kupu-kupu aurora',           img: 'assets/banners/16-butterfly-aurora.svg?v=2' },
+    { id: '17-rose-gold-velvet',    name: 'Rose Gold Velvet',    cat: 'Cewek', icon: '🌹', price: 35, desc: 'Cewek • Beludru mawar emas',         img: 'assets/banners/17-rose-gold-velvet.svg?v=2' },
+    { id: '18-cotton-candy-sky',    name: 'Cotton Candy Sky',    cat: 'Cewek', icon: '☁️', price: 20, desc: 'Cewek • Langit permen kapas',        img: 'assets/banners/18-cotton-candy-sky.svg?v=2' },
+    { id: '19-crystal-prism',       name: 'Crystal Prism',       cat: 'Cewek', icon: '💎', price: 35, desc: 'Cewek • Prisma kristal berkilau',    img: 'assets/banners/19-crystal-prism.svg?v=2' },
+    { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 25, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg?v=2' }
   ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
@@ -580,7 +580,7 @@
       const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${b.price} Beli`;
       return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}">
         <div class="banner-shop-preview">
-          <img class="banner-shop-preview-bg" src="${esc(b.img)}" alt="" loading="lazy" aria-hidden="true">
+          <img class="banner-shop-preview-bg" src="${esc(b.img)}" alt="" aria-hidden="true">
           <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
           <div class="banner-shop-preview-txt">
             <b${colorAttr}>${esc(myName)}</b>
