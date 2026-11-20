@@ -10,8 +10,24 @@
   const KEY_CARDS = 'clined_collection_v1';
   const KEY_EQUIP = 'clined_equipped_card_v1';
   const KEY_STARS = 'clined_card_stars_v1';
+  const KEY_BANNERS = 'clined_owned_banners_v1';
+  const KEY_EQ_BANNER = 'clined_equipped_banner_v1';
+  let shopTab = 'cards';
   const BASE_QUIZ_PER_DIAMOND = 5;
   const BASE_PACK_COST = 20;
+
+  const BANNER_CATALOG = [
+    { id: 'sakura-blossom',  name: 'Sakura Blossom',  icon: '🌸', price: 15, desc: 'Kelopak sakura senja ala Discord',       img: 'assets/banners/sakura-blossom.svg' },
+    { id: 'cyber-pulse',     name: 'Cyber Pulse',     icon: '⚡', price: 15, desc: 'Gelombang EKG neon cyan futuristik',     img: 'assets/banners/cyber-pulse.svg' },
+    { id: 'midnight-nebula', name: 'Midnight Nebula', icon: '🌌', price: 20, desc: 'Galaksi ungu & planet bercincin',        img: 'assets/banners/midnight-nebula.svg' },
+    { id: 'crimson-dragon',  name: 'Crimson Eclipse', icon: '🔥', price: 20, desc: 'Gerhana merah tua & siluet dramatis',    img: 'assets/banners/crimson-dragon.svg' },
+    { id: 'emerald-aurora',  name: 'Emerald Aurora',  icon: '🌿', price: 25, desc: 'Cahaya aurora hijau zamrud malam',       img: 'assets/banners/emerald-aurora.svg' },
+    { id: 'golden-caduceus', name: 'Golden Caduceus', icon: '🩺', price: 25, desc: 'Motif klinik klasik berlapis emas',      img: 'assets/banners/golden-caduceus.svg' },
+    { id: 'ocean-abyss',     name: 'Ocean Abyss',     icon: '🌊', price: 30, desc: 'Ombak bioluminesensi laut dalam',        img: 'assets/banners/ocean-abyss.svg' },
+    { id: 'rose-velvet',     name: 'Rose Velvet',     icon: '🌹', price: 30, desc: 'Kelopak mawar ungu gelap bercahaya',     img: 'assets/banners/rose-velvet.svg' },
+    { id: 'solar-flare',     name: 'Solar Flare',     icon: '☀️', price: 35, desc: 'Gradien jingga-emas badai matahari',     img: 'assets/banners/solar-flare.svg' },
+    { id: 'void-monarch',    name: 'Void Monarch',    icon: '👑', price: 40, desc: 'Kristal obsidian ungu-emas eksklusif',   img: 'assets/banners/void-monarch.svg' }
+  ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
   const STAR_COPY_THRESHOLDS = [1, 2, 4, 7, 10];
@@ -51,12 +67,28 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   let saveTimer = 0, cardDirty = false, applyingServer = false;
+  function getOwnedBanners() {
+    try { const a = JSON.parse(localStorage.getItem(KEY_BANNERS) || '[]'); return Array.isArray(a) ? a : []; } catch { return []; }
+  }
+  function setOwnedBanners(arr) {
+    try { localStorage.setItem(KEY_BANNERS, JSON.stringify([...new Set(arr)])); } catch {}
+    scheduleServerSave();
+  }
+  function getEquippedBanner() {
+    return localStorage.getItem(KEY_EQ_BANNER) || '';
+  }
+  function setEquippedBanner(id) {
+    try { localStorage.setItem(KEY_EQ_BANNER, id || ''); } catch {}
+    scheduleServerSave();
+  }
   function localCardPayload() {
     return {
       diamonds: isAdmin() ? 0 : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0),
       cards: getCards(),
       stars: getStarMap(),
-      equippedId: localStorage.getItem(KEY_EQUIP) || ''
+      equippedId: localStorage.getItem(KEY_EQUIP) || '',
+      ownedBanners: getOwnedBanners(),
+      equippedBanner: getEquippedBanner()
     };
   }
   async function pushServerCardState(mode = 'save', useKeepalive = false) {
@@ -92,6 +124,8 @@
       if (Array.isArray(d.cards)) localStorage.setItem(KEY_CARDS, JSON.stringify(d.cards));
       if (d.stars && typeof d.stars === 'object') localStorage.setItem(KEY_STARS, JSON.stringify(d.stars));
       if (typeof d.equippedId === 'string' && d.equippedId) localStorage.setItem(KEY_EQUIP, d.equippedId);
+      if (Array.isArray(d.ownedBanners)) localStorage.setItem(KEY_BANNERS, JSON.stringify(d.ownedBanners));
+      if (typeof d.equippedBanner === 'string') localStorage.setItem(KEY_EQ_BANNER, d.equippedBanner);
     } finally { applyingServer = false; }
     onExternalSync();
   }
@@ -105,7 +139,7 @@
       const d = await r.json().catch(() => null);
       if (!d) return;
       const local = localCardPayload();
-      const hasLocal = local.cards.length > 0 || local.diamonds > 0 || Object.keys(local.stars).length > 0;
+      const hasLocal = local.cards.length > 0 || local.diamonds > 0 || Object.keys(local.stars).length > 0 || local.ownedBanners.length > 0;
       if (!d.exists || cardDirty) {
         if (hasLocal || cardDirty) await pushServerCardState('merge');
         return;
@@ -405,22 +439,50 @@
     }).join('');
   }
 
+  function buildBannerShop() {
+    const ownedSet = new Set(getOwnedBanners());
+    const eq = getEquippedBanner();
+    const dia = getDia();
+    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    const myName = me?.name || 'Nama Kamu';
+    const myUser = me?.username ? `@${me.username}` : '@username';
+    const myIni = String(myName || 'C').trim().charAt(0).toUpperCase() || 'C';
+    const myAv = me?.avatarUrl ? `<img src="${esc(me.avatarUrl)}" alt="">` : esc(myIni);
+    const items = BANNER_CATALOG.map(b => {
+      const isOwned = ownedSet.has(b.id);
+      const isEquipped = eq === b.id;
+      const canBuy = dia >= b.price;
+      const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : '';
+      const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : `💎 ${b.price} Beli`;
+      return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}">
+        <div class="banner-shop-preview">
+          <span class="banner-shop-preview-bg" style="background-image:url('${esc(b.img)}')" aria-hidden="true"></span>
+          <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
+          <div class="banner-shop-preview-txt">
+            <b>${esc(myName)}</b>
+            <small>${esc(myUser)} • ${b.icon} ${esc(b.name)}</small>
+          </div>
+        </div>
+        <div class="banner-shop-foot">
+          <div class="banner-shop-info">
+            <b>${b.icon} ${esc(b.name)}</b>
+            <small>${esc(b.desc)}</small>
+          </div>
+          <button type="button" class="banner-shop-btn ${btnCls}" data-banner-id="${esc(b.id)}" ${!isOwned && !canBuy ? 'disabled' : ''}>${btnLabel}</button>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>Ala Discord</b></div>
+      <div class="banner-shop-list">${items}</div>`;
+  }
+
   function buildShop() {
     const d = getDia(), diaText = d === Infinity ? '∞' : d;
     const owned = getCards(), uniqueOwned = new Set(owned.map(c => c.id)).size;
     const cost = getPackCost();
     const hasDisc = cost < BASE_PACK_COST;
     const diaStep = getQuizPerDiamond();
-    return `<div class="card-shop-sheet">
-      <div class="card-shop-head">
-        <div><span class="card-shop-eyebrow">CLINED CARDS • HOLOGRAM &amp; STAR-UP</span><h3>Card Shop &amp; Deck</h3><p>Koleksi ${CARD_CATALOG.length} kartu, naikkan ★ bintang &amp; pasang Kartu Andalan untuk Duel!</p></div>
-        <button type="button" class="card-shop-close" id="closeCardShop" aria-label="Tutup">✕</button>
-      </div>
-      <div class="card-shop-dia-row">
-        <span class="card-shop-dia-badge">💎 <b data-diamond-count>${diaText}</b></span>
-        <span class="card-shop-dia-hint">+1 💎 setiap ${diaStep} soal benar</span>
-      </div>
-      ${buildEquippedBanner()}
+    const cardsBody = `${buildEquippedBanner()}
       <div class="card-pack-card">
         <img class="card-pack-img" src="assets/cards/fab-basket.png" alt="Organ Pack">
         <div class="card-pack-info">
@@ -438,7 +500,21 @@
         <span>Koleksi &amp; Star-Up (Ketuk Kartu)</span>
         <b>${uniqueOwned} / ${CARD_CATALOG.length}</b>
       </div>
-      <div class="card-collection-grid">${buildGrid()}</div>
+      <div class="card-collection-grid">${buildGrid()}</div>`;
+    return `<div class="card-shop-sheet">
+      <div class="card-shop-head">
+        <div><span class="card-shop-eyebrow">CLINED SHOP • KARTU &amp; PROFIL CHAT</span><h3>Card Shop &amp; Deck</h3><p>Koleksi ${CARD_CATALOG.length} kartu organ &amp; ${BANNER_CATALOG.length} background chat ala Discord!</p></div>
+        <button type="button" class="card-shop-close" id="closeCardShop" aria-label="Tutup">✕</button>
+      </div>
+      <div class="card-shop-dia-row">
+        <span class="card-shop-dia-badge">💎 <b data-diamond-count>${diaText}</b></span>
+        <span class="card-shop-dia-hint">+1 💎 setiap ${diaStep} soal benar</span>
+      </div>
+      <div class="card-shop-tabs" role="tablist">
+        <button type="button" class="card-shop-tab${shopTab === 'cards' ? ' on' : ''}" data-shop-tab="cards" role="tab" aria-selected="${shopTab === 'cards'}">🃏 Kartu Organ</button>
+        <button type="button" class="card-shop-tab${shopTab === 'banners' ? ' on' : ''}" data-shop-tab="banners" role="tab" aria-selected="${shopTab === 'banners'}">🎨 Background Chat (${BANNER_CATALOG.length})</button>
+      </div>
+      ${shopTab === 'banners' ? buildBannerShop() : cardsBody}
     </div>`;
   }
 
@@ -640,6 +716,35 @@
   }
   function bindShop() {
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
+    document.querySelectorAll('#cardShopContainer [data-shop-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const next = btn.getAttribute('data-shop-tab');
+        if (next && next !== shopTab) { shopTab = next; refreshShop(); }
+      });
+    });
+    document.querySelectorAll('#cardShopContainer [data-banner-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-banner-id');
+        const item = BANNER_CATALOG.find(b => b.id === id);
+        if (!item) return;
+        const owned = getOwnedBanners();
+        const isOwned = owned.includes(id);
+        if (!isOwned) {
+          if (getDia() < item.price) { window.showToast?.(`Diamond kurang (butuh ${item.price} 💎).`); return; }
+          setDia(getDia() - item.price);
+          setOwnedBanners([...owned, id]);
+          setEquippedBanner(id);
+          window.showToast?.(`${item.icon} ${item.name} dibeli & dipasang!`);
+        } else if (getEquippedBanner() === id) {
+          setEquippedBanner('');
+          window.showToast?.('Background chat dilepas.');
+        } else {
+          setEquippedBanner(id);
+          window.showToast?.(`${item.icon} ${item.name} dipasang!`);
+        }
+        refreshShop();
+      });
+    });
     document.getElementById('buyCardPack')?.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();

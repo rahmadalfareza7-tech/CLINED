@@ -387,3 +387,144 @@
   overscroll-behavior: contain; touch-action: pan-y;
 }
 .card-shop-sheet > * { flex-shrink: 0; }
+
+/* ── Shop Tabs & Background Chat (Ala Discord) ───────────────────────────── */
+.card-shop-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.card-shop-tab {
+  min-height: 40px;
+  border-radius: 12px;
+  border: 2px solid var(--line, #dbe4de);
+  background: var(--surface, #f1f5f9);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.card-shop-tab.on {
+  background: linear-gradient(135deg, #1cb0f6, #0d9488);
+  border-color: transparent;
+  color: #fff;
+}
+.banner-shop-list {
+  display: grid;
+  gap: 10px;
+}
+.banner-shop-card {
+  border-radius: 16px;
+  border: 2px solid var(--line, #dbe4de);
+  background: var(--card, #fff);
+  overflow: hidden;
+  display: grid;
+}
+.banner-shop-card.equipped {
+  border-color: #1cb0f6;
+  box-shadow: 0 0 0 2px rgba(28, 176, 246, 0.22);
+}
+.banner-shop-preview {
+  position: relative;
+  min-height: 64px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  background: #0f172a;
+}
+.banner-shop-preview-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.72) 45%, rgba(0,0,0,1) 100%);
+  mask-image: linear-gradient(90deg, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.72) 45%, rgba(0,0,0,1) 100%);
+}
+.banner-shop-preview-av {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1cb0f6, #6366f1);
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.banner-shop-preview-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.banner-shop-preview-txt {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.85);
+}
+.banner-shop-preview-txt b {
+  font-size: 13.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.banner-shop-preview-txt small {
+  font-size: 11.5px;
+  opacity: 0.88;
+}
+.banner-shop-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+}
+.banner-shop-info {
+  display: grid;
+  min-width: 0;
+}
+.banner-shop-info b {
+  font-size: 13.5px;
+}
+.banner-shop-info small {
+  font-size: 11.5px;
+  opacity: 0.75;
+}
+.banner-shop-btn {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 0;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #1cb0f6, #0284c7);
+  color: #fff;
+}
+.banner-shop-btn.equip {
+  background: var(--surface, #e2e8f0);
+  color: inherit;
+}
+.banner-shop-btn.equipped {
+  background: rgba(16, 185, 129, 0.16);
+  color: #059669;
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+}
+.banner-shop-btn:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
