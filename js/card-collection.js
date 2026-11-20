@@ -958,12 +958,21 @@
         const isOwned = owned.includes(id);
         const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
         if (!isOwned) {
-          if (getDia() < item.price) { window.showToast?.(`Diamond kurang (butuh ${item.price} 💎).`); return; }
-          setDia(getDia() - item.price);
-          setOwnedBanners([...owned, id]);
-          setEquippedBanner(id);
-          if (me) me.bannerUrl = item.img;
-          window.showToast?.(`${item.icon} ${item.name} dibeli & dipasang!`);
+          const freeAvail = !isFreeBannerClaimed();
+          if (freeAvail) {
+            markFreeBannerClaimed();
+            setOwnedBanners([...owned, id]);
+            setEquippedBanner(id);
+            if (me) me.bannerUrl = item.img;
+            window.showToast?.(`🎁 ${item.icon} ${item.name} diklaim gratis & dipasang!`);
+          } else {
+            if (getDia() < item.price) { window.showToast?.(`Diamond kurang (butuh ${item.price} 💎).`); return; }
+            setDia(getDia() - item.price);
+            setOwnedBanners([...owned, id]);
+            setEquippedBanner(id);
+            if (me) me.bannerUrl = item.img;
+            window.showToast?.(`${item.icon} ${item.name} dibeli & dipasang!`);
+          }
         } else if (getEquippedBanner() === id) {
           setEquippedBanner('');
           if (me) me.bannerUrl = '';
@@ -998,12 +1007,21 @@
         const isOwned = owned.includes(id);
         const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
         if (!isOwned) {
-          if (getDia() < item.price) { window.showToast?.(`Diamond kurang (butuh ${item.price} 💎).`); return; }
-          setDia(getDia() - item.price);
-          setOwnedDecos([...owned, id]);
-          setEquippedDeco(id);
-          if (me) me.avatarDeco = item.img;
-          window.showToast?.(`${item.icon} ${item.name} dibeli & dipasang!`);
+          const freeAvail = !isFreeDecoClaimed();
+          if (freeAvail) {
+            markFreeDecoClaimed();
+            setOwnedDecos([...owned, id]);
+            setEquippedDeco(id);
+            if (me) me.avatarDeco = item.img;
+            window.showToast?.(`🎁 ${item.icon} ${item.name} diklaim gratis & dipasang!`);
+          } else {
+            if (getDia() < item.price) { window.showToast?.(`Diamond kurang (butuh ${item.price} 💎).`); return; }
+            setDia(getDia() - item.price);
+            setOwnedDecos([...owned, id]);
+            setEquippedDeco(id);
+            if (me) me.avatarDeco = item.img;
+            window.showToast?.(`${item.icon} ${item.name} dibeli & dipasang!`);
+          }
         } else if (getEquippedDeco() === id) {
           setEquippedDeco('');
           if (me) me.avatarDeco = '';
