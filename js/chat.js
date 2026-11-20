@@ -109,10 +109,25 @@
       <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${badges(u)}</div><small>${sub}</small></div>
       <div class="chat-meta">${meta}</div></div>`;
   }
+  function selfCardHTML() {
+    let me = null;
+    try { me = typeof authCurrentUser === 'function' ? authCurrentUser() : null; } catch {}
+    if (!me) return '';
+    const meBadges = [];
+    if (me.role === 'admin') meBadges.push('admin');
+    else if (me.role === 'helper') meBadges.push('helper');
+    if (me.isMentor) meBadges.push('mentor');
+    const u = { ...me, online: true, badges: meBadges };
+    const banner = u.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(u.bannerUrl)}')" aria-hidden="true"></span>` : '';
+    const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
+    return `<div class="chat-grp"><h4>Profil Kamu</h4><div class="chat-row chat-self${u.bannerUrl ? ' has-banner' : ''}">${banner}${av(u)}
+      <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${badges(u)}</div><small>@${esc(u.username)} • tampil di chat</small></div>
+      <div class="chat-meta"><button type="button" class="secondary chat-mini" data-chat-shop>🎨 Atur</button></div></div></div>`;
+  }
   function listHTML() {
     const q = C.q.trim().toLowerCase();
     const all = (C.users || []).filter(u => !q || u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q));
-    let html = '';
+    let html = q ? '' : selfCardHTML();
     [0, 1, 2].forEach(g => { const rows = all.filter(u => group(u) === g); if (rows.length) html += `<div class="chat-grp"><h4>${GT[g]} <small>${rows.length}</small>${g === 2 ? onlineBadge() : ''}</h4>${rows.map(rowHTML).join('')}</div>`; });
     return `<div class="card soc-card chat-card"><div class="chat-hero"><span class="chat-hero-ico">💬</span><div><h3>Chat</h3><p>Tanya soal ke Admin, Helper & Tempat bertanya, atau ngobrol dengan teman.</p></div>${bellHTML()}</div>
       <div class="chat-pad">${pushNoteHTML()}
@@ -183,7 +198,8 @@
   }
 
   document.addEventListener('click', async e => {
-    const t = e.target.closest('[data-chat-open],[data-chat-back],[data-chat-send],[data-chat-add],[data-chat-accept],[data-chat-push]'); if (!t) return;
+    const t = e.target.closest('[data-chat-open],[data-chat-back],[data-chat-send],[data-chat-add],[data-chat-accept],[data-chat-push],[data-chat-shop]'); if (!t) return;
+    if (t.matches('[data-chat-shop]')) return window.CLINED_CARD_SHOP?.show?.('banners');
     if (t.matches('[data-chat-push]')) return pushToggle(t.dataset.chatPush === 'on');
     if (t.matches('[data-chat-open]')) return openPeer(t.dataset.chatOpen);
     if (t.matches('[data-chat-back]')) { C.peer = null; C.thread = null; render(); loadUsers().then(render).catch(() => {}); return; }
@@ -227,5 +243,6 @@
   }
   navigator.serviceWorker?.addEventListener?.('message', e => { if (e.data?.type === 'open-chat') deepLink(e.data.id); });
   try { const q = new URLSearchParams(location.search).get('chat'); if (q) { deepLink(q); history.replaceState(null, '', location.pathname + location.hash); } } catch {}
+  window.addEventListener('clined:profile-style', () => { if (C.host?.isConnected && !C.peer) render(); });
   window.CLINED_CHAT = { unread: 0, mount, stop: () => { stopPoll(); stopOnlinePoll(); C.peer = null; C.thread = null; }, onPush, refreshDot };
 })();

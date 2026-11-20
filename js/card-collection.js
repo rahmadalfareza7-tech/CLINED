@@ -752,6 +752,7 @@
           if (!r.ok) throw new Error(d.error || 'Gagal mengganti warna nama.');
           const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
           if (me && d.user) me.nameColor = d.user.nameColor || '';
+          window.dispatchEvent(new Event('clined:profile-style'));
           window.showToast?.('Warna nama chat diperbarui!');
           refreshShop();
         } catch (e) {
@@ -773,19 +774,24 @@
         if (!item) return;
         const owned = getOwnedBanners();
         const isOwned = owned.includes(id);
+        const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
         if (!isOwned) {
           if (getDia() < item.price) { window.showToast?.(`Diamond kurang (butuh ${item.price} 💎).`); return; }
           setDia(getDia() - item.price);
           setOwnedBanners([...owned, id]);
           setEquippedBanner(id);
+          if (me) me.bannerUrl = item.img;
           window.showToast?.(`${item.icon} ${item.name} dibeli & dipasang!`);
         } else if (getEquippedBanner() === id) {
           setEquippedBanner('');
+          if (me) me.bannerUrl = '';
           window.showToast?.('Background chat dilepas.');
         } else {
           setEquippedBanner(id);
+          if (me) me.bannerUrl = item.img;
           window.showToast?.(`${item.icon} ${item.name} dipasang!`);
         }
+        window.dispatchEvent(new Event('clined:profile-style'));
         refreshShop();
       });
     });
@@ -806,7 +812,8 @@
     });
   }
   function blockScroll(e) { if (e.target.closest && e.target.closest(".card-shop-sheet")) return; e.preventDefault(); }
-  function showShop() {
+  function showShop(tab) {
+    if (tab === 'cards' || tab === 'banners') shopTab = tab;
     let modal = document.getElementById('cardShopModal');
     if (!modal) {
       modal = document.createElement('div');
