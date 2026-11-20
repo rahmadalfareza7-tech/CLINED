@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d18_throb { 0%,100% { transform: translate(382px,130px) rotate(14deg) scale(1.12); } 40% { transform: translate(382px,130px) rotate(14deg) scale(1.42); } 60% { transform: translate(382px,130px) rotate(14deg) scale(1.15); } 80% { transform: translate(382px,130px) rotate(14deg) scale(1.36); } }
+      @keyframes d18_shake { 0%,100% { transform: translate(122px,386px) rotate(0deg); } 25% { transform: translate(118px,383px) rotate(-5deg); } 75% { transform: translate(126px,389px) rotate(5deg); } }
+      .deco-18 g[transform*="382,130"] { animation: d18_throb 1.1s ease-in-out infinite; }
+      .deco-18 g[transform*="122,386"] { animation: d18_shake 0.5s ease-in-out infinite; }</style>
   <defs>
 
     <filter id="aaSh" x="-15%" y="-15%" width="130%" height="130%">

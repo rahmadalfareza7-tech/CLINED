@@ -24,26 +24,27 @@
   const BASE_PACK_COST = 20;
 
   const DECO_CATALOG = [
-    { id: '01-cat-ears',        name: 'Cat Ears',        cat: 'Cute & Animal',     icon: '🐱', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/01-cat-ears.svg' },
-    { id: '02-ribbon-kitten',   name: 'Ribbon Kitten',   cat: 'Cute & Animal',     icon: '🎀', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/02-ribbon-kitten.svg' },
-    { id: '03-snow-leopard',    name: 'Snow Leopard',    cat: 'Cute & Animal',     icon: '🐆', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/03-snow-leopard.svg' },
-    { id: '04-bunny-hoodie',    name: 'Bunny Hoodie',    cat: 'Cute & Animal',     icon: '🐰', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/04-bunny-hoodie.svg' },
-    { id: '05-crescent-dreams', name: 'Crescent Dreams', cat: 'Celestial',         icon: '🌙', price: 25, desc: 'Celestial',         img: 'assets/decorations/05-crescent-dreams.svg' },
-    { id: '06-star-struck',     name: 'Star Struck',     cat: 'Celestial',         icon: '⭐', price: 20, desc: 'Celestial',         img: 'assets/decorations/06-star-struck.svg' },
-    { id: '07-twilight-dusk',   name: 'Twilight Dusk',   cat: 'Celestial',         icon: '🌌', price: 30, desc: 'Celestial',         img: 'assets/decorations/07-twilight-dusk.svg' },
-    { id: '08-phantom-wraith',  name: 'Phantom Wraith',  cat: 'Dark & Gothic',     icon: '👻', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/08-phantom-wraith.svg' },
-    { id: '09-blood-moon',      name: 'Blood Moon',      cat: 'Dark & Gothic',     icon: '🩸', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/09-blood-moon.svg' },
-    { id: '10-frost-eclipse',   name: 'Frost Eclipse',   cat: 'Dark & Gothic',     icon: '❄️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/10-frost-eclipse.svg' },
-    { id: '11-fallen-angel',    name: 'Fallen Angel',    cat: 'Dark & Gothic',     icon: '🖤', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/11-fallen-angel.svg' },
-    { id: '12-symbiote-web',    name: 'Symbiote Web',    cat: 'Dark & Gothic',     icon: '🕸️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/12-symbiote-web.svg' },
-    { id: '13-hellflame',       name: 'Hellflame',       cat: 'Elemental & Aura',  icon: '🔥', price: 30, desc: 'Elemental & Aura',  img: 'assets/decorations/13-hellflame.svg' },
-    { id: '14-spirit-flame',    name: 'Spirit Flame',    cat: 'Elemental & Aura',  icon: '💙', price: 25, desc: 'Elemental & Aura',  img: 'assets/decorations/14-spirit-flame.svg' },
-    { id: '15-cyber-neon',      name: 'Cyber Neon',      cat: 'Elemental & Aura',  icon: '⚡', price: 25, desc: 'Elemental & Aura',  img: 'assets/decorations/15-cyber-neon.svg' },
-    { id: '16-thunder-surge',   name: 'Thunder Surge',   cat: 'Elemental & Aura',  icon: '🌩️', price: 35, desc: 'Elemental & Aura',  img: 'assets/decorations/16-thunder-surge.svg' },
-    { id: '17-butterfly-waltz', name: 'Butterfly Waltz', cat: 'Aesthetic & Anime', icon: '🦋', price: 25, desc: 'Aesthetic & Anime', img: 'assets/decorations/17-butterfly-waltz.svg' },
-    { id: '18-anime-angry',     name: 'Anime Angry',     cat: 'Aesthetic & Anime', icon: '💢', price: 20, desc: 'Aesthetic & Anime', img: 'assets/decorations/18-anime-angry.svg' },
-    { id: '19-shark-frill',     name: 'Shark Frill',     cat: 'Aesthetic & Anime', icon: '🦈', price: 25, desc: 'Aesthetic & Anime', img: 'assets/decorations/19-shark-frill.svg' },
-    { id: '20-sakura-breeze',   name: 'Sakura Breeze',   cat: 'Aesthetic & Anime', icon: '🌸', price: 30, desc: 'Aesthetic & Anime', img: 'assets/decorations/20-sakura-breeze.svg' }
+    { id: '01-cat-ears',             name: 'Cat Ears',             cat: 'Cute & Animal',     icon: '🐱', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/01-cat-ears.svg?v=2' },
+    { id: '02-ribbon-kitten',        name: 'Ribbon Kitten',        cat: 'Cute & Animal',     icon: '🎀', price: 20, desc: 'Cute & Animal',     img: 'assets/decorations/02-ribbon-kitten.svg?v=2' },
+    { id: '03-snow-leopard',         name: 'Snow Leopard',         cat: 'Cute & Animal',     icon: '🐆', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/03-snow-leopard.svg?v=2' },
+    { id: '04-bunny-hoodie',         name: 'Bunny Hoodie',         cat: 'Cute & Animal',     icon: '🐰', price: 25, desc: 'Cute & Animal',     img: 'assets/decorations/04-bunny-hoodie.svg?v=2' },
+    { id: '05-crescent-dreams',      name: 'Crescent Dreams',      cat: 'Celestial',         icon: '🌙', price: 25, desc: 'Celestial',         img: 'assets/decorations/05-crescent-dreams.svg?v=2' },
+    { id: '06-star-struck',          name: 'Star Struck',          cat: 'Celestial',         icon: '⭐', price: 20, desc: 'Celestial',         img: 'assets/decorations/06-star-struck.svg?v=2' },
+    { id: '07-twilight-dusk',        name: 'Twilight Dusk',        cat: 'Celestial',         icon: '🌌', price: 30, desc: 'Celestial',         img: 'assets/decorations/07-twilight-dusk.svg?v=2' },
+    { id: '08-phantom-wraith',       name: 'Phantom Wraith',       cat: 'Dark & Gothic',     icon: '👻', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/08-phantom-wraith.svg?v=2' },
+    { id: '09-blood-moon',           name: 'Blood Moon',           cat: 'Dark & Gothic',     icon: '🩸', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/09-blood-moon.svg?v=2' },
+    { id: '10-frost-eclipse',        name: 'Frost Eclipse',        cat: 'Dark & Gothic',     icon: '❄️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/10-frost-eclipse.svg?v=2' },
+    { id: '11-fallen-angel',         name: 'Fallen Angel',         cat: 'Dark & Gothic',     icon: '🖤', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/11-fallen-angel.svg?v=2' },
+    { id: '12-symbiote-web',         name: 'Symbiote Web',         cat: 'Dark & Gothic',     icon: '🕸️', price: 35, desc: 'Dark & Gothic',     img: 'assets/decorations/12-symbiote-web.svg?v=2' },
+    { id: '13-hellflame',            name: 'Hellflame',            cat: 'Elemental & Aura',  icon: '🔥', price: 30, desc: 'Elemental & Aura',  img: 'assets/decorations/13-hellflame.svg?v=2' },
+    { id: '14-cursed-skulls',        name: 'Cursed Skulls',        cat: 'Dark & Gothic',     icon: '💀', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/14-cursed-skulls.svg?v=2' },
+    { id: '15-demon-horns',          name: 'Demon Horns',          cat: 'Dark & Gothic',     icon: '😈', price: 30, desc: 'Dark & Gothic',     img: 'assets/decorations/15-demon-horns.svg?v=2' },
+    { id: '16-thunder-surge',        name: 'Thunder Surge',        cat: 'Elemental & Aura',  icon: '🌩️', price: 35, desc: 'Elemental & Aura',  img: 'assets/decorations/16-thunder-surge.svg?v=2' },
+    { id: '17-butterfly-waltz',      name: 'Butterfly Waltz',      cat: 'Aesthetic & Anime', icon: '🦋', price: 25, desc: 'Aesthetic & Anime', img: 'assets/decorations/17-butterfly-waltz.svg?v=2' },
+    { id: '18-anime-angry',          name: 'Anime Angry',          cat: 'Aesthetic & Anime', icon: '💢', price: 20, desc: 'Aesthetic & Anime', img: 'assets/decorations/18-anime-angry.svg?v=2' },
+    { id: '19-shark-frill',          name: 'Apex Shark',           cat: 'Dark & Gothic',     icon: '🦈', price: 25, desc: 'Dark & Gothic',     img: 'assets/decorations/19-shark-frill.svg?v=2' },
+    { id: '20-sakura-breeze',        name: 'Sakura Breeze',        cat: 'Aesthetic & Anime', icon: '🌸', price: 30, desc: 'Aesthetic & Anime', img: 'assets/decorations/20-sakura-breeze.svg?v=2' },
+    { id: '21-chrome-liquid-gothic', name: 'Chrome Liquid Gothic', cat: 'Dark & Gothic',     icon: '⛓️', price: 40, desc: 'Dark & Gothic',     img: 'assets/decorations/21-chrome-liquid-gothic.svg?v=2' }
   ];
 
   const BANNER_CATALOG = [
@@ -626,7 +627,7 @@
       const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : freeAvail ? 'free-claim' : '';
       const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${d.price} Beli`;
       return `<div class="deco-shop-card${isEquipped ? ' equipped' : ''}">
-        <div class="deco-shop-av">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
+        <div class="deco-shop-av" data-deco-preview="${esc(d.id)}">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
         <div class="deco-shop-title">${d.icon} ${esc(d.name)}</div>
         <div class="deco-shop-sub">${esc(d.cat)}</div>
         <button type="button" class="banner-shop-btn ${btnCls}" data-deco-id="${esc(d.id)}" ${!isOwned && !canBuy ? 'disabled' : ''}>${btnLabel}</button>
@@ -638,6 +639,36 @@
     return `${buildProfileHeroCard()}${freeDecoNotice}<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
       <div class="deco-filter-row">${pills}</div>
       <div class="deco-shop-grid">${items}</div>`;
+  }
+
+  const DECO_SVG_CACHE = new Map();
+  function hydrateDecoPreviews() {
+    const hosts = document.querySelectorAll('#cardShopContainer [data-deco-preview]');
+    if (!hosts.length) return;
+    hosts.forEach(async host => {
+      const id = host.getAttribute('data-deco-preview');
+      const item = DECO_CATALOG.find(x => x.id === id);
+      if (!item) return;
+      try {
+        let svgText = DECO_SVG_CACHE.get(id);
+        if (!svgText) {
+          const r = await fetch(item.img, { credentials: 'same-origin' });
+          if (!r.ok) return;
+          svgText = await r.text();
+          DECO_SVG_CACHE.set(id, svgText);
+        }
+        if (!host.isConnected) return;
+        const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const svg = doc.documentElement;
+        if (!svg || svg.nodeName.toLowerCase() !== 'svg') return;
+        const imported = document.importNode(svg, true);
+        imported.classList.add('avatar-deco-img');
+        imported.setAttribute('aria-hidden', 'true');
+        const oldImg = host.querySelector('.avatar-deco-img');
+        if (oldImg) oldImg.replaceWith(imported);
+        else host.appendChild(imported);
+      } catch {}
+    });
   }
 
   function buildShop() {
@@ -880,6 +911,7 @@
     if (c) { c.innerHTML = buildShop(); bindShop(); }
   }
   function bindShop() {
+    if (shopTab === 'decos') hydrateDecoPreviews();
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
     document.querySelectorAll('#cardShopContainer [data-pick-name-color]').forEach(btn => {
       btn.addEventListener('click', async () => {

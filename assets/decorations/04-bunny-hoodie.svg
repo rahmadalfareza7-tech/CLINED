@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-04" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d04_earL { 0%,100% { transform: translate(142px,88px) rotate(-28deg); } 50% { transform: translate(142px,82px) rotate(-40deg); } }
+      @keyframes d04_earR { 0%,100% { transform: translate(370px,88px) rotate(28deg); } 50% { transform: translate(370px,82px) rotate(40deg); } }
+      .deco-04 g[transform*="142,88"] { animation: d04_earL 1.8s ease-in-out infinite; }
+      .deco-04 g[transform*="370,88"] { animation: d04_earR 1.8s ease-in-out infinite -0.35s; }</style>
   <defs>
 
     <linearGradient id="bhWhite" x1="0" y1="0" x2="1" y2="1">

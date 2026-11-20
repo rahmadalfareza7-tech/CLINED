@@ -1,4 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d20_sway { 0%,100% { transform: translate(0px, 0px); } 50% { transform: translate(2.5px, -3.5px); } }
+@keyframes d20_drift { 0%,100% { transform: translate(0px, 0px); opacity: 0.95; } 50% { transform: translate(-9px, 11px); opacity: 0.72; } }
+@keyframes d20_sp { 0%,100% { transform: scale(0.55); opacity: 0.45; } 50% { transform: scale(1.4); opacity: 1; } }
+.deco-20 .sk-bloom { animation: d20_sway 2.8s ease-in-out infinite; }
+.deco-20 .sk-petal { animation: d20_drift 3.0s ease-in-out infinite; }
+.deco-20 g[filter*="skGlow"] polygon { transform-box: fill-box; transform-origin: center; animation: d20_sp 1.9s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="skPetal" x1="0" y1="0" x2="1" y2="1">
@@ -47,87 +54,87 @@
 
     <!-- Lush Blossom Clusters (Top-Left & Bottom-Right) -->
     
-        <g transform="translate(112,132) rotate(14) scale(1.18)" filter="url(#skSh)">
+        <g class="sk-bloom" style="animation-delay:-0.00s"><g transform="translate(112,132) rotate(14) scale(1.18)" filter="url(#skSh)">
           <path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(0)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(0)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(72)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(72)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(144)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(144)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(216)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(216)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(288)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(288)"/>
           <circle cx="0" cy="0" r="5.5" fill="#e63e7c"/>
           <line x1="0" y1="0" x2="8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.7" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="-9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.8" cy="-8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="-8.2" r="1.8" fill="#fff5b8"/>
-        </g>
+        </g></g>
         
     
-        <g transform="translate(184,82) rotate(-18) scale(0.96)" filter="url(#skSh)">
+        <g class="sk-bloom" style="animation-delay:-0.40s"><g transform="translate(184,82) rotate(-18) scale(0.96)" filter="url(#skSh)">
           <path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(0)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(0)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(72)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(72)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(144)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(144)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(216)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(216)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(288)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(288)"/>
           <circle cx="0" cy="0" r="5.5" fill="#e63e7c"/>
           <line x1="0" y1="0" x2="8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.7" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="-9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.8" cy="-8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="-8.2" r="1.8" fill="#fff5b8"/>
-        </g>
+        </g></g>
         
     
-        <g transform="translate(80,206) rotate(36) scale(0.86)" filter="url(#skSh)">
+        <g class="sk-bloom" style="animation-delay:-0.80s"><g transform="translate(80,206) rotate(36) scale(0.86)" filter="url(#skSh)">
           <path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(0)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(0)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(72)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(72)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(144)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(144)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(216)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(216)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(288)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(288)"/>
           <circle cx="0" cy="0" r="5.5" fill="#e63e7c"/>
           <line x1="0" y1="0" x2="8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.7" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="-9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.8" cy="-8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="-8.2" r="1.8" fill="#fff5b8"/>
-        </g>
+        </g></g>
         
     
-        <g transform="translate(144,96) rotate(-40) scale(0.68)" filter="url(#skSh)">
+        <g class="sk-bloom" style="animation-delay:-1.20s"><g transform="translate(144,96) rotate(-40) scale(0.68)" filter="url(#skSh)">
           <path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(0)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(0)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(72)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(72)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(144)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(144)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(216)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(216)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(288)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(288)"/>
           <circle cx="0" cy="0" r="5.5" fill="#e63e7c"/>
           <line x1="0" y1="0" x2="8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.7" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="-9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.8" cy="-8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="-8.2" r="1.8" fill="#fff5b8"/>
-        </g>
+        </g></g>
         
     
-        <g transform="translate(398,376) rotate(20) scale(1.16)" filter="url(#skSh)">
+        <g class="sk-bloom" style="animation-delay:-1.60s"><g transform="translate(398,376) rotate(20) scale(1.16)" filter="url(#skSh)">
           <path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(0)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(0)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(72)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(72)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(144)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(144)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(216)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(216)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(288)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(288)"/>
           <circle cx="0" cy="0" r="5.5" fill="#e63e7c"/>
           <line x1="0" y1="0" x2="8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.7" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="-9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.8" cy="-8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="-8.2" r="1.8" fill="#fff5b8"/>
-        </g>
+        </g></g>
         
     
-        <g transform="translate(340,424) rotate(-16) scale(0.9)" filter="url(#skSh)">
+        <g class="sk-bloom" style="animation-delay:-2.00s"><g transform="translate(340,424) rotate(-16) scale(0.9)" filter="url(#skSh)">
           <path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(0)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(0)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(72)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(72)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(144)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(144)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(216)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(216)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(288)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(288)"/>
           <circle cx="0" cy="0" r="5.5" fill="#e63e7c"/>
           <line x1="0" y1="0" x2="8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.7" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="-9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.8" cy="-8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="-8.2" r="1.8" fill="#fff5b8"/>
-        </g>
+        </g></g>
         
     
-        <g transform="translate(424,326) rotate(42) scale(0.72)" filter="url(#skSh)">
+        <g class="sk-bloom" style="animation-delay:-2.40s"><g transform="translate(424,326) rotate(42) scale(0.72)" filter="url(#skSh)">
           <path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(0)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(0)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(72)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(72)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(144)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(144)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(216)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(216)"/><path d="M 0 0 C -12 -14, -14 -32, -3.5 -36 L 0 -30 L 3.5 -36 C 14 -32, 12 -14, 0 0 Z" fill="url(#skPetal)" stroke="#b8326d" stroke-width="1.5" transform="rotate(288)"/><path d="M 0 -6 L 0 -22" stroke="#ffffff" stroke-width="1.4" opacity="0.65" transform="rotate(288)"/>
           <circle cx="0" cy="0" r="5.5" fill="#e63e7c"/>
           <line x1="0" y1="0" x2="8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.7" cy="8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-8.0" y2="0.0" stroke="#ffe680" stroke-width="1.5"/><circle cx="-9.5" cy="0.0" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="-4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="-4.8" cy="-8.2" r="1.8" fill="#fff5b8"/><line x1="0" y1="0" x2="4.0" y2="-6.9" stroke="#ffe680" stroke-width="1.5"/><circle cx="4.8" cy="-8.2" r="1.8" fill="#fff5b8"/>
-        </g>
+        </g></g>
         
 
     <!-- Drifting Glowing Petals Swirling All Around -->
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(298,66) rotate(48) scale(1.0)"/>
+        <g class="sk-petal" style="animation-delay:-0.00s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(298,66) rotate(48) scale(1.0)"/></g>
         
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(372,98) rotate(68) scale(0.9)"/>
+        <g class="sk-petal" style="animation-delay:-0.45s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(372,98) rotate(68) scale(0.9)"/></g>
         
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(432,166) rotate(96) scale(1.0)"/>
+        <g class="sk-petal" style="animation-delay:-0.90s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(432,166) rotate(96) scale(1.0)"/></g>
         
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(452,248) rotate(128) scale(0.92)"/>
+        <g class="sk-petal" style="animation-delay:-1.35s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(452,248) rotate(128) scale(0.92)"/></g>
         
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(252,454) rotate(-42) scale(0.96)"/>
+        <g class="sk-petal" style="animation-delay:-1.80s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(252,454) rotate(-42) scale(0.96)"/></g>
         
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(164,424) rotate(-68) scale(1.0)"/>
+        <g class="sk-petal" style="animation-delay:-2.25s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(164,424) rotate(-68) scale(1.0)"/></g>
         
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(94,362) rotate(-104) scale(0.9)"/>
+        <g class="sk-petal" style="animation-delay:-2.70s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(94,362) rotate(-104) scale(0.9)"/></g>
         
     
-        <path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
-              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(62,286) rotate(-135) scale(0.85)"/>
+        <g class="sk-petal" style="animation-delay:-3.15s"><path d="M 0 0 C -10 -12, -11 -26, -2.5 -31 L 0 -25 L 2.5 -31 C 11 -26, 10 -12, 0 0 Z"
+              fill="url(#skPetalSoft)" stroke="#d95b94" stroke-width="1" opacity="0.96" transform="translate(62,286) rotate(-135) scale(0.85)"/></g>
         
 
     <!-- Radiant Spring Sparkles -->

@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-06" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d06_twink { 0%,100% { transform: scale(0.55) rotate(0deg); opacity: 0.45; } 50% { transform: scale(1.38) rotate(30deg); opacity: 1; } }
+      @keyframes d06_cloud { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-7px); } }
+      .deco-06 polygon[filter*="ssGlow"] { transform-box: fill-box; transform-origin: center; animation: d06_twink 1.9s ease-in-out infinite; }
+      .deco-06 path[fill*="ssBright"] { animation: d06_cloud 3.2s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="ssBright" x1="0" y1="0" x2="0" y2="1">

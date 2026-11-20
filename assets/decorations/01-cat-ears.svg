@@ -1,4 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-01" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d01_earL { 0%,68%,100% { transform: rotate(0deg); } 74% { transform: rotate(-10deg); } 80% { transform: rotate(3deg); } 86% { transform: rotate(-6deg); } 92% { transform: rotate(0deg); } }
+      @keyframes d01_earR { 0%,74%,100% { transform: rotate(0deg); } 80% { transform: rotate(10deg); } 86% { transform: rotate(-3deg); } 92% { transform: rotate(0deg); } }
+      @keyframes d01_spark { 0%,100% { transform: scale(0.65); opacity: 0.5; } 50% { transform: scale(1.35); opacity: 1; } }
+      .deco-01 path[d^="M 96 190"], .deco-01 path[d^="M 114 164"], .deco-01 path[d^="M 122 122"], .deco-01 path[d^="M 98 164"], .deco-01 circle[cx="94"] { transform-box: fill-box; transform-origin: 70% 90%; animation: d01_earL 2.8s ease-in-out infinite; }
+      .deco-01 path[d^="M 416 190"], .deco-01 path[d^="M 398 164"], .deco-01 path[d^="M 390 122"], .deco-01 path[d^="M 414 164"] { transform-box: fill-box; transform-origin: 30% 90%; animation: d01_earR 3.2s ease-in-out infinite; }
+      .deco-01 g[filter*="catGlow"] polygon, .deco-01 g[filter*="catGlow"] path { transform-box: fill-box; transform-origin: center; animation: d01_spark 1.8s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="catOuter" x1="0" y1="0" x2="0" y2="1">

@@ -1,4 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d16_zap { 0%,100% { opacity: 0.68; transform: scale(0.985); } 25% { opacity: 1; transform: scale(1.035); } 50% { opacity: 0.55; transform: scale(0.99); } 75% { opacity: 1; transform: scale(1.04); } }
+      .deco-16 g[filter*="tsGlow"] { transform-origin: 256px 256px; animation: d16_zap 0.75s steps(3) infinite; }</style>
   <defs>
 
     <linearGradient id="tsArc" x1="0" y1="0" x2="1" y2="1">

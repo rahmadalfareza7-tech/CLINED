@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-11" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d11_flapL { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(10deg) translateX(-6px); } }
+      @keyframes d11_flapR { 0%,100% { transform: translate(512px,0) scale(-1,1) rotate(0deg); } 50% { transform: translate(512px,0) scale(-1,1) rotate(10deg) translateX(-6px); } }
+      .deco-11 g[filter*="faSh"] > g:first-child { transform-box: fill-box; transform-origin: 95% 28%; animation: d11_flapL 2.0s ease-in-out infinite; }
+      .deco-11 g[filter*="faSh"] > g:last-child { transform-box: fill-box; transform-origin: 95% 28%; animation: d11_flapR 2.0s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="faBlade" x1="0" y1="0" x2="0" y2="1">

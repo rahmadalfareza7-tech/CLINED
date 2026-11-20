@@ -1,4 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-02" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d02_earL { 0%,70%,100% { transform: rotate(0deg); } 78% { transform: rotate(-9deg); } 86% { transform: rotate(2deg); } 92% { transform: rotate(0deg); } }
+      @keyframes d02_earR { 0%,75%,100% { transform: rotate(0deg); } 83% { transform: rotate(9deg); } 91% { transform: rotate(0deg); } }
+      @keyframes d02_bowL { 0%,100% { transform: translate(102px,182px) rotate(-18deg); } 50% { transform: translate(102px,182px) rotate(-26deg); } }
+      @keyframes d02_bowR { 0%,100% { transform: translate(410px,182px) rotate(18deg); } 50% { transform: translate(410px,182px) rotate(26deg); } }
+      @keyframes d02_bell { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
+      @keyframes d02_sp { 0%,100% { transform: scale(0.6); opacity: 0.45; } 50% { transform: scale(1.38); opacity: 1; } }
+      .deco-02 path[d^="M 96 188"], .deco-02 path[d^="M 114 162"], .deco-02 path[d^="M 108 150"] { transform-box: fill-box; transform-origin: 70% 90%; animation: d02_earL 3.0s ease-in-out infinite; }
+      .deco-02 path[d^="M 416 188"], .deco-02 path[d^="M 398 162"], .deco-02 path[d^="M 404 150"] { transform-box: fill-box; transform-origin: 30% 90%; animation: d02_earR 3.4s ease-in-out infinite; }
+      .deco-02 g[transform*="102,182"] { animation: d02_bowL 2.2s ease-in-out infinite; }
+      .deco-02 g[transform*="410,182"] { animation: d02_bowR 2.2s ease-in-out infinite; }
+      .deco-02 circle[cx="256"][cy="448"] { transform-box: fill-box; transform-origin: top center; animation: d02_bell 1.6s ease-in-out infinite; }
+      .deco-02 g[filter*="rkGlow"] polygon { transform-box: fill-box; transform-origin: center; animation: d02_sp 1.9s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="rkEar" x1="0" y1="0" x2="0" y2="1">

@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-08" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d08_creep { 0%,100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-6px) scale(1.025); } }
+      @keyframes d08_shudder { 0%,86%,100% { transform: translate(0,0); } 89% { transform: translate(-4px, 1px); } 92% { transform: translate(4px, -1px); } 95% { transform: translate(-2px, 0); } }
+      .deco-08 g[filter*="pwSh"] { transform-origin: 256px 256px; animation: d08_creep 2.8s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="pwPale" x1="0" y1="0" x2="0" y2="1">

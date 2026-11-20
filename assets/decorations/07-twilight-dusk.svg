@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-07" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d07_spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes d07_twink { 0%,100% { transform: scale(0.55) rotate(0deg); opacity: 0.45; } 50% { transform: scale(1.4) rotate(40deg); opacity: 1; } }
+      .deco-07 g[mask*="tdRingMask"] { transform-origin: 256px 256px; animation: d07_spin 22s linear infinite; }
+      .deco-07 polygon[filter*="tdGlow"] { transform-box: fill-box; transform-origin: center; animation: d07_twink 2.0s ease-in-out infinite; }</style>
   <defs>
 
     <radialGradient id="tdRose" cx="50%" cy="50%" r="50%">

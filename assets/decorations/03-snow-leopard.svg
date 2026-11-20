@@ -1,4 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-03" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d03_earL { 0%,72%,100% { transform: rotate(0deg); } 80% { transform: rotate(-8deg); } 88% { transform: rotate(0deg); } }
+      @keyframes d03_earR { 0%,76%,100% { transform: rotate(0deg); } 84% { transform: rotate(8deg); } 92% { transform: rotate(0deg); } }
+      @keyframes d03_wag { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-5.5deg) translateY(-3px); } }
+      @keyframes d03_snow { 0%,100% { transform: scale(0.6) rotate(0deg); opacity: 0.45; } 50% { transform: scale(1.38) rotate(35deg); opacity: 1; } }
+      .deco-03 path[d^="M 90 182"], .deco-03 path[d^="M 108 156"], .deco-03 path[d^="M 98 146"] { transform-box: fill-box; transform-origin: 70% 90%; animation: d03_earL 3.2s ease-in-out infinite; }
+      .deco-03 path[d^="M 422 182"], .deco-03 path[d^="M 404 156"], .deco-03 path[d^="M 414 146"] { transform-box: fill-box; transform-origin: 30% 90%; animation: d03_earR 3.6s ease-in-out infinite; }
+      .deco-03 path[fill*="slTail"] { transform-box: fill-box; transform-origin: 18% 40%; animation: d03_wag 2.2s ease-in-out infinite; }
+      .deco-03 g[filter*="slGlow"] polygon, .deco-03 g[filter*="slGlow"] circle { transform-box: fill-box; transform-origin: center; animation: d03_snow 2.0s ease-in-out infinite; }</style>
   <defs>
 
     <linearGradient id="slFur" x1="0" y1="0" x2="0" y2="1">

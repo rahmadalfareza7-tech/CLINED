@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg class="deco-09" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  
+  <style class="deco-anim">@keyframes d09_pulse { 0%,100% { opacity: 0.72; transform: scale(0.985); } 50% { opacity: 1; transform: scale(1.03); } }
+      .deco-09 g[filter*="bmGlow"] { transform-origin: 256px 256px; animation: d09_pulse 2.0s ease-in-out infinite; }
+      .deco-09 g[filter*="bmHardGlow"] { animation: d09_pulse 1.5s ease-in-out infinite -0.5s; }</style>
   <defs>
 
     <linearGradient id="bmCrimson" x1="0" y1="0" x2="1" y2="1">
