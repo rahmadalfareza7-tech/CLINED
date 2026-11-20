@@ -3260,12 +3260,19 @@ function renderHomeProfileShowcase(){
   const deco=user.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
   const nc=user.nameColor?` data-name-color="${esc(user.nameColor)}"`:'';
   const roleBadge=user.role==='admin'?'<em class="chat-badge b-admin">👑 Admin</em>':user.role==='helper'?'<em class="chat-badge b-helper">🛠️ Helper</em>':'';
-  el.innerHTML=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''}" aria-hidden="true">${avInner}${deco}</span>
+  el.innerHTML=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Ketuk untuk ganti foto profil">${avInner}${deco}</span>
     <div class="home-profile-info">
       <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${roleBadge}</div>
       <small>@${esc(user.username)}</small>
     </div>
-    <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>`;
+    <div class="home-profile-actions">
+      <button type="button" class="home-profile-edit" id="homeProfilePhotoBtn" title="Ganti foto profil">📷 Foto</button>
+      <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>
+    </div>`;
+  const avBtn=$('homeProfileAvatarBtn');
+  if(avBtn){avBtn.onclick=()=>pickAccountAvatar();avBtn.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pickAccountAvatar();}};}
+  const photoBtn=$('homeProfilePhotoBtn');
+  if(photoBtn)photoBtn.onclick=()=>pickAccountAvatar();
   const editBtn=$('homeProfileEditBtn');
   if(editBtn)editBtn.onclick=()=>window.CLINED_CARD_SHOP?.show?.('decos');
 }

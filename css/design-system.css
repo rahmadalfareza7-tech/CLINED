@@ -1349,6 +1349,15 @@ body.dark [data-name-color="ice"],     html.dark [data-name-color="ice"],     .h
   color: rgba(241, 245, 249, 0.85);
   opacity: 1;
 }
+.home-profile-av-btn {
+  cursor: pointer;
+}
+.home-profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
 .home-profile-edit {
   min-height: 32px;
   padding: 0 11px;

@@ -1067,98 +1067,106 @@
 
   let cosmeticTutShownThisLoad = false;
   function showCosmeticTutorial(force) {
-    if (document.getElementById('cosmeticTutModal')) return;
-    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
-    const myName = me?.name || 'Nama Kamu';
-    const myIni = String(myName || 'C').trim().charAt(0).toUpperCase() || 'C';
-    const myAv = me?.avatarUrl ? `<img class="deco-shop-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
-    let step = 0;
+    if (document.getElementById('cosmeticObLayer')) return;
+    const isVisible = el => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 4 && r.height > 4 && getComputedStyle(el).visibility !== 'hidden';
+    };
+    const findTarget = sel => !sel ? null : sel.split(',').map(s => document.querySelector(s.trim())).find(isVisible) || null;
+    const allSteps = [
+      {
+        sel: '#homeProfileShowcase',
+        icon: '🪪',
+        title: 'Profil Clinical Progress & Ganti Avatar',
+        text: 'Di sini tampil Nameplate, Dekorasi Avatar, dan warna namamu. Ketuk fotomu atau tombol 📷 Foto untuk langsung ganti foto profil kapan saja!'
+      },
+      {
+        sel: '#homeProfileEditBtn, .card-shop-fab',
+        icon: '🎨',
+        title: 'Nameplates & Dekorasi Avatar',
+        text: 'Ketuk ✨ Hias (atau keranjang 🧺) untuk pasang Nameplate & Dekorasi Avatar. Setiap akun mendapat 1x Nameplate Gratis & 1x Dekorasi Avatar Gratis!'
+      },
+      {
+        sel: '#leaderboardTeaser, #floatingDashboardNav',
+        icon: '🏆',
+        title: 'Tampil di Leaderboard & Sosial',
+        text: 'Nameplate, warna nama bercahaya, dan dekorasi avatarmu otomatis tampil di Beranda, Leaderboard, Chat, Teman, dan Duel!'
+      }
+    ];
+    const steps = allSteps.filter(s => !s.sel || findTarget(s.sel));
+    if (!steps.length) return;
 
-    const modal = document.createElement('div');
-    modal.id = 'cosmeticTutModal';
-    modal.className = 'cosmetic-tut-modal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Perkenalan Nameplates & Dekorasi Avatar');
-    document.body.appendChild(modal);
+    let idx = 0;
+    const layer = document.createElement('div');
+    layer.id = 'cosmeticObLayer';
+    layer.className = 'ob-layer';
+    document.body.appendChild(layer);
+
+    const place = () => {
+      if (!layer.isConnected) return;
+      const st = steps[idx];
+      const el = findTarget(st.sel);
+      const hole = layer.querySelector('.ob-hole');
+      const sheet = layer.querySelector('.ob-sheet');
+      if (!hole || !sheet) return;
+      if (!el) { hole.style.display = 'none'; sheet.classList.remove('top'); return; }
+      const r = el.getBoundingClientRect(), pad = 6;
+      Object.assign(hole.style, {
+        display: 'block',
+        top: (r.top - pad) + 'px',
+        left: (r.left - pad) + 'px',
+        width: (r.width + pad * 2) + 'px',
+        height: (r.height + pad * 2) + 'px'
+      });
+      sheet.classList.toggle('top', r.top + r.height / 2 > window.innerHeight * 0.55);
+    };
 
     const closeTut = (openTab) => {
       if (!force) markCosmeticTutorialDone();
-      modal.remove();
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+      layer.remove();
       if (openTab) showShop(openTab);
     };
 
     const renderStep = () => {
+      const st = steps[idx];
+      const isLast = idx === steps.length - 1;
       const freeB = !isFreeBannerClaimed();
       const freeD = !isFreeDecoClaimed();
-      const previews = [
-        `<div class="cosmetic-tut-preview">
-          <div class="banner-shop-preview" style="border-radius:14px">
-            <span class="banner-shop-preview-bg" style="background-image:url('assets/banners/05-crimson-katana.svg')" aria-hidden="true"></span>
-            <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
-            <div class="banner-shop-preview-txt">
-              <b data-name-color="neon">${esc(myName)}</b>
-              <small>@${esc(me?.username || 'username')} • ⚔️ Crimson Katana</small>
-            </div>
-          </div>
-        </div>`,
-        `<div class="cosmetic-tut-preview cosmetic-tut-preview-center">
-          <div class="deco-shop-av" style="width:68px;height:68px;font-size:24px">${myAv}<img class="avatar-deco-img" src="assets/decorations/14-spirit-flame.svg" alt="" aria-hidden="true"></div>
-          <div class="cosmetic-tut-preview-caption"><b>💙 Spirit Flame</b><small>Tampil di Chat, Teman, Duel, Beranda &amp; Leaderboard</small></div>
-        </div>`,
-        `<div class="cosmetic-tut-gifts">
-          <div class="cosmetic-tut-gift${freeB ? '' : ' claimed'}"><span>🎨</span><div><b>1x Nameplate Gratis</b><small>${freeB ? 'Belum diklaim — siap dipilih!' : 'Sudah diklaim'}</small></div></div>
-          <div class="cosmetic-tut-gift${freeD ? '' : ' claimed'}"><span>✨</span><div><b>1x Dekorasi Avatar Gratis</b><small>${freeD ? 'Belum diklaim — siap dipilih!' : 'Sudah diklaim'}</small></div></div>
-        </div>`
-      ];
-      const steps = [
-        {
-          eyebrow: 'FITUR BARU • 1/3',
-          title: '🎨 Nameplates & Warna Nama',
-          desc: 'Hiasi kartu profilmu dengan 20 pilihan Nameplate (10 Cowok & 10 Cewek) dan warna nama bercahaya ala Discord. Nameplate tampil di Beranda, Chat, dan Leaderboard!'
-        },
-        {
-          eyebrow: 'FITUR BARU • 2/3',
-          title: '✨ Dekorasi Avatar',
-          desc: 'Tambahkan bingkai efek spesial di sekeliling foto profilmu! Tersedia 20 dekorasi keren yang langsung terlihat di Beranda, Chat, Duel, dan Leaderboard.'
-        },
-        {
-          eyebrow: 'HADIAH AKUN • 3/3',
-          title: '🎁 Klaim 1 Gratis Masing-Masing!',
-          desc: 'Setiap akun mendapat 1x Nameplate Gratis dan 1x Dekorasi Avatar Gratis tanpa potong Diamond. Pilih langsung sekarang atau nanti lewat Card Shop (🧺)!'
-        }
-      ];
-      const cur = steps[step];
-      const isLast = step === steps.length - 1;
-      modal.innerHTML = `<div class="cosmetic-tut-backdrop" data-ct-close></div>
-        <div class="cosmetic-tut-sheet">
-          <div class="cosmetic-tut-head">
-            <span class="cosmetic-tut-eyebrow">${cur.eyebrow}</span>
-            <button type="button" class="cosmetic-tut-x" data-ct-close aria-label="Tutup">✕</button>
-          </div>
-          <h3>${cur.title}</h3>
-          <p>${cur.desc}</p>
-          ${previews[step]}
-          <div class="cosmetic-tut-dots">${steps.map((_, i) => `<i class="${i === step ? 'on' : ''}"></i>`).join('')}</div>
-          <div class="cosmetic-tut-actions">
-            ${isLast ? `
-              ${freeB ? '<button type="button" class="cosmetic-tut-btn primary" data-ct-open="banners">🎨 Klaim Nameplate Gratis</button>' : ''}
-              ${freeD ? '<button type="button" class="cosmetic-tut-btn primary" data-ct-open="decos">✨ Klaim Dekorasi Gratis</button>' : ''}
-              <button type="button" class="cosmetic-tut-btn ghost" data-ct-close>Selesai</button>
-            ` : `
-              <button type="button" class="cosmetic-tut-btn ghost" data-ct-close>Lewati</button>
-              <button type="button" class="cosmetic-tut-btn primary" data-ct-next>Lanjut ›</button>
-            `}
+      const claimRow = isLast && (freeB || freeD) ? `<div class="cosmetic-ob-claims">
+        ${freeB ? '<button type="button" class="cosmetic-ob-claim-btn" data-cob-open="banners">🎨 Klaim Nameplate Gratis</button>' : ''}
+        ${freeD ? '<button type="button" class="cosmetic-ob-claim-btn" data-cob-open="decos">✨ Klaim Dekorasi Gratis</button>' : ''}
+      </div>` : '';
+      layer.innerHTML = `<div class="ob-hole"></div>
+        <div class="ob-sheet" role="dialog" aria-modal="true" aria-label="Tutorial Fitur Profil">
+          <div class="ob-step"><span class="ob-ico">${st.icon}</span><div><b>${esc(st.title)}</b><p>${esc(st.text)}</p></div></div>
+          ${claimRow}
+          <div class="ob-foot">
+            <div class="ob-dots">${steps.map((_, i) => `<i class="${i === idx ? 'on' : ''}"></i>`).join('')}</div>
+            ${idx > 0 ? '<button type="button" class="ob-skip ob-prev" data-cob-prev>‹ Kembali</button>' : ''}
+            <button type="button" class="ob-skip" data-cob-skip>${isLast ? '' : 'Lewati'}</button>
+            <button type="button" class="primary ob-next" data-cob-next>${isLast ? 'Selesai' : 'Lanjut ›'}</button>
           </div>
         </div>`;
+      const el = findTarget(st.sel);
+      if (el) {
+        const r = el.getBoundingClientRect();
+        if (r.top < 70 || r.bottom > window.innerHeight - 70) el.scrollIntoView({ block: 'center', behavior: 'auto' });
+      }
+      place();
     };
 
-    modal.addEventListener('click', e => {
-      if (e.target.closest('[data-ct-close]')) { closeTut(''); return; }
-      const openTab = e.target.closest('[data-ct-open]')?.getAttribute('data-ct-open');
-      if (openTab) { closeTut(openTab); return; }
-      if (e.target.closest('[data-ct-next]')) { step++; renderStep(); }
+    layer.addEventListener('click', e => {
+      if (e.target.closest('[data-cob-skip]')) return closeTut('');
+      const openTab = e.target.closest('[data-cob-open]')?.getAttribute('data-cob-open');
+      if (openTab) return closeTut(openTab);
+      if (e.target.closest('[data-cob-prev]')) { if (idx > 0) { idx--; renderStep(); } return; }
+      if (e.target.closest('[data-cob-next]')) { if (idx >= steps.length - 1) return closeTut(''); idx++; renderStep(); }
     });
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
     renderStep();
   }
 

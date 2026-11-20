@@ -830,5 +830,24 @@ html.dark .free-claim-banner {
   color: inherit;
   border-color: var(--line, #cbd5e1);
 }
+.cosmetic-ob-claims {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.cosmetic-ob-claim-btn {
+  flex: 1 1 160px;
+  min-height: 38px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #15803d;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 850;
+  cursor: pointer;
+}
 
 
