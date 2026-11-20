@@ -850,4 +850,115 @@ html.dark .free-claim-banner {
   cursor: pointer;
 }
 
+/* ── Large Circular Avatar Hero inside Customization Page ─────────────────── */
+.cosmetic-profile-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 14px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  border: 1.5px solid var(--line, #dbe4de);
+  background: var(--surface, #f8fafc);
+}
+.cosmetic-profile-hero > *:not(.chat-row-bg) {
+  position: relative;
+  z-index: 1;
+}
+.cosmetic-profile-hero.has-banner {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #f8fafc;
+}
+.cosmetic-profile-hero.has-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(11, 15, 28, 0.92) 0%, rgba(15, 23, 42, 0.68) 48%, rgba(15, 23, 42, 0.18) 100%);
+  pointer-events: none;
+}
+.cosmetic-hero-av-btn {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.cosmetic-hero-av {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1cb0f6, #7c5cff);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  font-weight: 950;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.28);
+}
+.cosmetic-hero-av-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.cosmetic-hero-cam {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  z-index: 4;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1cb0f6;
+  color: #fff;
+  border: 2px solid var(--card, #fff);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.cosmetic-hero-info {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 3px;
+  justify-items: start;
+}
+.cosmetic-hero-info b {
+  font-size: 16px;
+  font-weight: 900;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cosmetic-profile-hero.has-banner .cosmetic-hero-info b:not([data-name-color]) {
+  color: #fff;
+}
+.cosmetic-hero-info small {
+  font-size: 12.5px;
+  font-weight: 600;
+  opacity: 0.78;
+}
+.cosmetic-hero-photo-btn {
+  margin-top: 4px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
 

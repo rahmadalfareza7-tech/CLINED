@@ -2956,6 +2956,7 @@ async function saveCroppedAvatar(){
     const endpoint=isBanner?'/banner':'/avatar';
     const data=await authApi(endpoint,{method:'POST',body:JSON.stringify({dataUrl})});
     authServerUser=data.user;authSyncProfile(authServerUser);renderAccount();
+    window.dispatchEvent(new Event('clined:profile-style'));
     closeAvatarCropModal();
     if(typeof beep==='function')beep('correct');showToast(isBanner?'Background chat berhasil diperbarui.':'Foto profil berhasil diperbarui.');
   }catch(error){showToast(error?.message||'Gagal mengunggah gambar.');}
@@ -2967,6 +2968,7 @@ async function removeAccountAvatar(){
   try{
     const data=await authApi('/avatar',{method:'DELETE',body:'{}'});
     authServerUser=data.user;authSyncProfile(authServerUser);renderAccount();
+    window.dispatchEvent(new Event('clined:profile-style'));
     showToast('Foto profil dihapus.');
   }catch(error){showToast(error?.message||'Gagal menghapus foto profil.');}
   finally{if(btn)btn.disabled=false;}
@@ -3260,21 +3262,17 @@ function renderHomeProfileShowcase(){
   const deco=user.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
   const nc=user.nameColor?` data-name-color="${esc(user.nameColor)}"`:'';
   const roleBadge=user.role==='admin'?'<em class="chat-badge b-admin">👑 Admin</em>':user.role==='helper'?'<em class="chat-badge b-helper">🛠️ Helper</em>':'';
-  el.innerHTML=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Ketuk untuk ganti foto profil">${avInner}${deco}</span>
+  el.innerHTML=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Buka halaman hias & ganti foto profil">${avInner}${deco}</span>
     <div class="home-profile-info">
       <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${roleBadge}</div>
       <small>@${esc(user.username)}</small>
     </div>
-    <div class="home-profile-actions">
-      <button type="button" class="home-profile-edit" id="homeProfilePhotoBtn" title="Ganti foto profil">📷 Foto</button>
-      <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>
-    </div>`;
+    <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>`;
+  const openHias=()=>window.CLINED_CARD_SHOP?.show?.('decos');
   const avBtn=$('homeProfileAvatarBtn');
-  if(avBtn){avBtn.onclick=()=>pickAccountAvatar();avBtn.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pickAccountAvatar();}};}
-  const photoBtn=$('homeProfilePhotoBtn');
-  if(photoBtn)photoBtn.onclick=()=>pickAccountAvatar();
+  if(avBtn){avBtn.onclick=openHias;avBtn.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openHias();}};}
   const editBtn=$('homeProfileEditBtn');
-  if(editBtn)editBtn.onclick=()=>window.CLINED_CARD_SHOP?.show?.('decos');
+  if(editBtn)editBtn.onclick=openHias;
 }
 window.addEventListener('clined:profile-style',renderHomeProfileShowcase);
 async function authChangePassword(event){

@@ -535,6 +535,29 @@
     { id: 'hologram', name: 'Hologram', dot: 'linear-gradient(135deg,#f472b6,#fbbf24,#34d399,#38bdf8,#a855f7)' }
   ];
 
+  function buildProfileHeroCard() {
+    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    const myName = me?.name || 'Nama Kamu';
+    const myUser = me?.username ? `@${me.username}` : '@username';
+    const myIni = String(myName || 'C').trim().charAt(0).toUpperCase() || 'C';
+    const myAv = me?.avatarUrl ? `<img class="cosmetic-hero-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
+    const deco = me?.avatarDeco ? `<img class="avatar-deco-img" src="${esc(me.avatarDeco)}" alt="" aria-hidden="true">` : '';
+    const colorAttr = me?.nameColor ? ` data-name-color="${esc(me.nameColor)}"` : '';
+    const bg = me?.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(me.bannerUrl)}')" aria-hidden="true"></span>` : '';
+    return `<div class="cosmetic-profile-hero${me?.bannerUrl ? ' has-banner' : ''}">
+      ${bg}
+      <button type="button" class="cosmetic-hero-av-btn" data-pick-avatar-photo title="Ganti foto profil">
+        <span class="cosmetic-hero-av">${myAv}${deco}</span>
+        <span class="cosmetic-hero-cam" aria-hidden="true">📷</span>
+      </button>
+      <div class="cosmetic-hero-info">
+        <b${colorAttr}>${esc(myName)}</b>
+        <small>${esc(myUser)}</small>
+        <button type="button" class="cosmetic-hero-photo-btn" data-pick-avatar-photo>📷 Ganti Foto Profil</button>
+      </div>
+    </div>`;
+  }
+
   function buildBannerShop() {
     const ownedSet = new Set(getOwnedBanners());
     const eq = getEquippedBanner();
@@ -576,7 +599,8 @@
     const bCats = [['all', `Semua (${BANNER_CATALOG.length})`], ['Cowok', '👦 Cowok (10)'], ['Cewek', '👧 Cewek (10)']];
     const bPills = bCats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${bannerFilter === k ? ' on' : ''}" data-banner-filter="${esc(k)}">${lbl}</button>`).join('');
     const freeBannerNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Nameplate Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
-    return `<div class="name-color-box">
+    return `${buildProfileHeroCard()}
+      <div class="name-color-box">
         <div class="name-color-box-head"><span>✨ Warna Nama Chat (Ala Discord)</span><small>Gratis pilih</small></div>
         <div class="name-color-grid">${colorPills}</div>
       </div>
@@ -611,7 +635,7 @@
     const cats = [['all', `Semua (${DECO_CATALOG.length})`], ['Cute & Animal', '🐱 Cute'], ['Celestial', '🌙 Celestial'], ['Dark & Gothic', '🖤 Dark'], ['Elemental & Aura', '🔥 Elemental'], ['Aesthetic & Anime', '🌸 Anime']];
     const pills = cats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${decoFilter === k ? ' on' : ''}" data-deco-filter="${esc(k)}">${lbl}</button>`).join('');
     const freeDecoNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Dekorasi Avatar Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
-    return `${freeDecoNotice}<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
+    return `${buildProfileHeroCard()}${freeDecoNotice}<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
       <div class="deco-filter-row">${pills}</div>
       <div class="deco-shop-grid">${items}</div>`;
   }
@@ -881,6 +905,12 @@
         }
       });
     });
+    document.querySelectorAll('#cardShopContainer [data-pick-avatar-photo]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (typeof window.pickAccountAvatar === 'function') window.pickAccountAvatar();
+        else document.getElementById('accountAvatarFile')?.click();
+      });
+    });
     document.querySelectorAll('#cardShopContainer [data-shop-tab]').forEach(btn => {
       btn.addEventListener('click', () => {
         const next = btn.getAttribute('data-shop-tab');
@@ -1078,14 +1108,14 @@
       {
         sel: '#homeProfileShowcase',
         icon: '🪪',
-        title: 'Profil Clinical Progress & Ganti Avatar',
-        text: 'Di sini tampil Nameplate, Dekorasi Avatar, dan warna namamu. Ketuk fotomu atau tombol 📷 Foto untuk langsung ganti foto profil kapan saja!'
+        title: 'Profil Clinical Progress',
+        text: 'Di sini tampil Nameplate, Dekorasi Avatar, dan warna namamu. Ketuk fotomu atau ✨ Hias untuk masuk ke halaman kustomisasi & ganti foto profil bulat!'
       },
       {
         sel: '#homeProfileEditBtn, .card-shop-fab',
         icon: '🎨',
-        title: 'Nameplates & Dekorasi Avatar',
-        text: 'Ketuk ✨ Hias (atau keranjang 🧺) untuk pasang Nameplate & Dekorasi Avatar. Setiap akun mendapat 1x Nameplate Gratis & 1x Dekorasi Avatar Gratis!'
+        title: 'Ganti Foto, Nameplates & Dekorasi',
+        text: 'Di dalam ✨ Hias (atau keranjang 🧺), kamu bisa ganti foto profil bulat besar, pasang Nameplate, & Dekorasi Avatar. Setiap akun mendapat 1x Nameplate Gratis & 1x Dekorasi Gratis!'
       },
       {
         sel: '#leaderboardTeaser, #floatingDashboardNav',
@@ -1191,6 +1221,7 @@
     renderHomeShowcaseBadge();
     hydrateFromServer();
     window.addEventListener('clined:sync-applied', onExternalSync);
+    window.addEventListener('clined:profile-style', onExternalSync);
     window.addEventListener('clined:auth-ready', () => { hydrateFromServer(); setTimeout(onExternalSync, 600); });
     window.addEventListener('clined:view-change', e => { if (e.detail === 'home') setTimeout(maybeStartCosmeticTutorial, 1200); });
     window.addEventListener('online', () => { if (cardDirty) pushServerCardState('merge'); else hydrateFromServer(); });
