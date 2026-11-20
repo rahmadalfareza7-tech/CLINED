@@ -621,19 +621,130 @@
     // Refresh halaman Materials kalau sedang aktif
     if(typeof window.renderMaterialsPage==='function' && document.getElementById('materialsPage')?.classList.contains('active')){window.renderMaterialsPage();}
   }catch(e){console.warn('Material links unavailable',e);}}
+  const canonicalBlockName = value => {
+    if(typeof window.CLINED_CANONICAL_BLOCK==='function') return window.CLINED_CANONICAL_BLOCK(value);
+    const v=String(value||'').trim().replace(/^BLOK\s+/i,'').replace(/_/g,' ').replace(/\s+/g,' ').toUpperCase();
+    if(!v)return 'OTHER';
+    if(v==='KEDOKTERAN KOMUNITAS'||v==='KEDOKOM')return 'KEDKOM';
+    if(v==='KEDOKTERAN KELUARGA'||v==='KEDKEL')return 'KEDKEL';
+    if(v==='MUSKULO'||v==='MUSKULOSKELETAL')return 'MUSKULOSKELETAL';
+    if(v==='ENDO'||v==='ENDOKRIN'||v==='ENDOKRINE')return 'ENDOKRINE';
+    if(v==='RESPIRASI'||v==='RESPIRATORY')return 'RESPIRATORY';
+    if(v==='KARDIO'||v==='KARDIOVASKULAR'||v==='KARDIOLOGI')return 'KARDIOLOGI';
+    if(v==='GASTRO'||v==='GASTROINTESTINAL'||v==='GIT')return 'GIT';
+    if(v==='PANCAINDRA'||v==='PANCA INDRA')return 'PANCA INDRA';
+    return v;
+  };
+  const refreshBankUI = () => {
+    if(typeof window.CLINED_REFRESH_BANK_UI==='function'){
+      window.CLINED_REFRESH_BANK_UI();
+    }else{
+      window.renderBanks?.();
+      window.renderCounts?.();
+    }
+  };
   async function hydrateGlobalBanks(){try{
     const catalog=await request('/api/banks');
     for(const item of catalog.banks||[]){
       const id=String(item.id);
+      const block=canonicalBlockName(item.block||'OTHER');
+      const serverVersion=Number(item.version||1);
+      const serverCount=Number(item.count||0);
       const existing=window.BANKS?.[id];
-      if(existing) { existing.count=Math.max(Number(existing.count||0),Number(item.count||0)); existing.name=String(item.name||existing.name||id); existing.block=String(item.block||existing.block||'OTHER'); existing.serverVersion=Number(item.version||existing.serverVersion||0); continue; }
+      if(existing) {
+        existing.name=String(item.name||existing.name||id);
+        existing.block=block;
+        existing.serverVersion=serverVersion;
+        if(serverVersion>Number(existing.staticVersion||0) && serverCount>0){
+          existing.count=serverCount;
+          if(existing.loaded && existing.source==='static') existing.loaded=false;
+        }else{
+          existing.count=Math.max(Number(existing.count||0),serverCount);
+        }
+        continue;
+      }
       // Metadata only: the question payload is fetched on demand by the quiz engine.
-      if(window.BANKS) window.BANKS[id]={name:String(item.name||id),count:Number(item.count||0),block:String(item.block||'OTHER'),data:[],loaded:false,version:Number(item.version||1)};
+      if(window.BANKS) window.BANKS[id]={name:String(item.name||id),count:serverCount,block,data:[],loaded:false,version:serverVersion,serverVersion,source:'server'};
     }
-    window.renderBanks?.();window.renderCounts?.();
+    refreshBankUI();
   }catch(e){console.warn('Global bank catalog unavailable',e);}}
   async function hydrateUpi(){try{const data=await request('/api/content/packages?module=UPI'),existing=window.upiGetCustomCards?.()||[],known=new Set(existing.map(c=>c.id));const fallback='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="640" height="360"%3E%3Crect width="100%25" height="100%25" fill="%23007aff"/%3E%3Ctext x="50%25" y="50%25" fill="white" font-size="32" text-anchor="middle" dominant-baseline="middle"%3EUPI%3C/text%3E%3C/svg%3E';const additions=[];for(const p of data.packages||[])for(const q of p.questions||[]){const id=`server-upi-${p.id}-${q.id}`;if(!known.has(id))additions.push({id,block:p.block||'SSP',material:q.material||'Histology',topic:p.title,image:q.image||fallback,prompt:q.soal,answer:q.pembahasan||q.answer||'Tidak ada pembahasan.',explanation:p.visibility==='public'?'Paket UPI publik.':'Paket UPI pribadi.'});}if(additions.length&&window.upiSaveCustomCards){window.upiSaveCustomCards(existing.concat(additions));window.upiRenderBlockSelector?.();}}catch(e){console.warn('UPI sync failed',e);}}
-  async function hydrateUab(){try{const data=await request('/api/content/packages?module=UAB');for(const p of data.packages||[])try{window.CLINED_BANK_ENGINE?.registerBank({id:`server-uab-${p.id}`,name:p.title,block:p.block||'UAB',version:1,schema:p.schema_version||'1.0',data:p.questions},{persist:true,source:'server-admin'});}catch{}window.renderBanks?.();window.renderCounts?.();await syncUabNodeStates();}catch(e){console.warn('UAB sync failed',e);}}
+  let uabMetaPromise=null, uabFullPromise=null, uabMetaDone=false, uabFullDone=false;
+  async function hydrateUab(options={}){
+    const full=options?.full!==false;
+    const force=Boolean(options?.force);
+    if(!full && !force && uabMetaPromise) return uabMetaPromise;
+    if(!full && !force && (uabMetaDone || uabFullDone)) return;
+    if(full && !force && uabFullPromise) return uabFullPromise;
+    const job=(async()=>{
+      try{
+        const endpoint=full?'/api/content/packages?module=UAB':'/api/content/packages?module=UAB&meta=1';
+        const data=await request(endpoint);
+        const pkgs=Array.isArray(data.packages)?data.packages:[];
+        const liveIds=new Set();
+        for(const p of pkgs){
+          const bankId=`server-uab-${p.id}`;
+          liveIds.add(bankId);
+          const block=canonicalBlockName(p.block||'UAB');
+          const count=full?(Array.isArray(p.questions)?p.questions.length:0):Number(p.question_count||0);
+          if(full){
+            const rawQs=Array.isArray(p.questions)?p.questions:[];
+            const safeQs=rawQs.map((q,i)=>({...q,id:String(q?.id||`${bankId}-${i+1}`)}));
+            try{
+              window.CLINED_BANK_ENGINE?.registerBank({id:bankId,name:p.title,block,version:1,schema:p.schema_version||'1.0',data:safeQs},{persist:true,source:'server-admin'});
+            }catch(regErr){
+              console.warn('Fallback register UAB bank',bankId,regErr);
+              if(window.BANKS){
+                window.BANKS[bankId]={name:String(p.title||bankId),block,count:safeQs.length,data:safeQs,loaded:true,version:1,schema:p.schema_version||'1.0',source:'server-admin'};
+              }
+              if(window.CLINED_BANK_ENGINE?.banks){
+                window.CLINED_BANK_ENGINE.banks[bankId]={name:String(p.title||bankId),block,version:1,count:safeQs.length,source:'server-admin'};
+              }
+            }
+            if(window.BANKS?.[bankId]){
+              window.BANKS[bankId].count=safeQs.length;
+              window.BANKS[bankId].loaded=true;
+            }
+          }else if(window.BANKS){
+            const prev=window.BANKS[bankId];
+            if(!prev || !prev.loaded || !Array.isArray(prev.data) || !prev.data.length){
+              window.BANKS[bankId]={name:String(p.title||bankId),block,count,data:[],loaded:false,version:1,schema:p.schema_version||'1.0',source:'server-admin'};
+            }else{
+              prev.name=String(p.title||prev.name||bankId);
+              prev.block=block;
+              prev.count=prev.data.length||count;
+            }
+            if(window.CLINED_BANK_ENGINE?.banks){
+              window.CLINED_BANK_ENGINE.banks[bankId]={name:String(p.title||bankId),block,version:1,count,source:'server-admin'};
+            }
+          }
+        }
+        if(window.BANKS){
+          for(const existingId of Object.keys(window.BANKS)){
+            if(existingId.startsWith('server-uab-') && !liveIds.has(existingId)) delete window.BANKS[existingId];
+          }
+        }
+        if(window.CLINED_BANK_ENGINE?.banks){
+          for(const existingId of Object.keys(window.CLINED_BANK_ENGINE.banks)){
+            if(existingId.startsWith('server-uab-') && !liveIds.has(existingId)) delete window.CLINED_BANK_ENGINE.banks[existingId];
+          }
+        }
+        if(full) uabFullDone=true;
+        else uabMetaDone=true;
+        refreshBankUI();
+        await syncUabNodeStates();
+      }catch(e){
+        console.warn('UAB sync failed',e);
+      }finally{
+        if(full){ if(uabFullPromise===job) uabFullPromise=null; }
+        else{ if(uabMetaPromise===job) uabMetaPromise=null; }
+      }
+    })();
+    if(full){ uabFullPromise=job; }
+    else{ uabMetaPromise=job; }
+    await job;
+  }
+  window.CLINED_HYDRATE_UAB=hydrateUab;
 
   // Map node button ID → block name (uppercase, same as BANKS block field)
   const UAB_NODE_BLOCK_MAP={
@@ -651,17 +762,7 @@
     try{
       // Kumpulkan blok yang punya soal: dari server UAB packages + global banks + local BANKS
       const activeBlocks=new Set();
-      const canonicalBlock=(value)=>{
-        const v=String(value||'').trim().toUpperCase().replace(/\s+/g,' ');
-        if(v==='KEDOKTERAN KOMUNITAS'||v==='KEDOKOM')return 'KEDKOM';
-        if(v==='KEDOKTERAN KELUARGA'||v==='KEDKEL')return 'KEDKEL';
-        if(v==='MUSKULO'||v==='MUSKULOSKELETAL')return 'MUSKULOSKELETAL';
-        if(v==='ENDO'||v==='ENDOKRIN')return 'ENDOKRINE';
-        if(v==='RESPIRASI')return 'RESPIRATORY';
-        if(v==='KARDIO'||v==='KARDIOVASKULAR')return 'KARDIOLOGI';
-        if(v==='GASTRO'||v==='GASTROINTESTINAL')return 'GIT';
-        return v;
-      };
+      const canonicalBlock=canonicalBlockName;
       const addActive=(value)=>{const b=canonicalBlock(value);if(b)activeBlocks.add(b);};
       // 1. Server UAB packages
       try{const d=await request('/api/content/packages?module=UAB&meta=1');(d.packages||[]).forEach(p=>{if(p.block&&Number(p.question_count||0)>0)addActive(p.block);});}catch{}
@@ -683,7 +784,7 @@
         (yd.links||[]).forEach(x=>{if(x.block&&x.url)addActive(x.block);});
       }catch{}
       // 2. Local BANKS object (kedkel, kedkom, SSP, dll yang hardcoded di app.js)
-      try{const BANKS=window.BANKS||{};Object.values(BANKS).forEach(b=>{if(b.block&&(b.data||[]).length)addActive(b.block);});}catch{}
+      try{const BANKS=window.BANKS||{};Object.values(BANKS).forEach(b=>{if(b.block&&(Number(b.count||0)>0||(b.data||[]).length>0))addActive(b.block);});}catch{}
       // 3. CLINED_BANK_ENGINE.banks (bank_*.js yang load via engine, sudah include block info)
       try{const eb=window.CLINED_BANK_ENGINE?.banks||{};Object.values(eb).forEach(b=>{if(b.block&&b.count>0)addActive(b.block);});}catch{}
       // Static banks may expose only an id/name rather than a normalized block field.
@@ -709,31 +810,43 @@
     }catch(e){console.warn('syncUabNodeStates failed',e);}
   }
   let bootState='unknown';
+  let bootInFlight=null;
   let nodeSyncTimer=null;
   function scheduleSyncUabNodeStates(){
     clearTimeout(nodeSyncTimer);
     nodeSyncTimer=setTimeout(()=>syncUabNodeStates().catch(()=>{}),300);
   }
-  async function boot(){
-    try{
-      const d=await request('/api/auth/me');
-      if(d.user){
-        if(bootState===String(d.user.id)) return;
-        bootState=String(d.user.id);
-        install(d.user);
-        await Promise.all([hydrateMaterials(),hydrateGlobalBanks()]);
-      }else{
-        bootState='logged-out';
+  async function boot(options={}){
+    const force=Boolean(options?.force);
+    if(bootInFlight && !force) return bootInFlight;
+    const job=(async()=>{
+      try{
+        const d=await request('/api/auth/me');
+        if(d.user){
+          const uid=String(d.user.id);
+          if(bootState===uid && !force) return;
+          install(d.user);
+          await Promise.all([hydrateMaterials(),hydrateGlobalBanks(),hydrateUab({full:false,force})]);
+          bootState=uid;
+        }else{
+          bootState='logged-out';
+          removeAdminControls();
+        }
+      }catch(e){
+        bootState='unknown';
         removeAdminControls();
       }
-    }catch(e){removeAdminControls();}
+    })();
+    bootInFlight=job;
+    try{await job;}finally{if(bootInFlight===job)bootInFlight=null;}
   }
-  window.addEventListener('load',boot,{once:true});
-  window.addEventListener('clined:auth-ready',()=>boot().catch(()=>{}),{passive:true});
-  let uabLoaded=false, upiLoaded=false;
+  if(document.readyState==='complete') boot().catch(()=>{});
+  else window.addEventListener('load',()=>boot().catch(()=>{}),{once:true});
+  window.addEventListener('clined:auth-ready',()=>boot({force:true}).catch(()=>{}),{passive:true});
+  let upiLoaded=false;
   window.addEventListener('clined:view-change',async e=>{
     const view=e.detail;
-    if(view==='uabPage' && !uabLoaded){uabLoaded=true;await hydrateUab();}
+    if(view==='uabPage' && !uabFullDone){await hydrateUab({full:true});}
     if(view==='upiPage' && !upiLoaded){upiLoaded=true;await hydrateUpi();}
   });
   // Metadata-only request; never download all UAB questions just to mark nodes active.
