@@ -1,4 +1,4 @@
-/* CLINED — Pembaca Editorial Ringkasan Full Blok KEDKEL (34 Materi • Selaras Jadwal TA 2026–2027) */
+/* CLINED — Pembaca Editorial 3D Ramah Mata: Ringkasan Full Blok KEDKEL (34 Materi • Jadwal TA 2026–2027) */
 (() => {
   'use strict';
 
@@ -91,7 +91,6 @@
     filter: 'all', // 'all' | 'w1'..'w5' | clusterId | 'todo' | 'star'
     q: '',
     open: new Set(['d01']),
-    readAll: false,
     font: (() => { try { return localStorage.getItem(FONT_KEY) || 'md'; } catch { return 'md'; } })(),
     done: readIdSet(DONE_KEY, LEGACY_DONE_KEY),
     star: readIdSet(STAR_KEY, LEGACY_STAR_KEY)
@@ -207,10 +206,10 @@
       ? `<button type="button" class="ks-act quiz-go" data-ks-quiz="${t.driveNo}">🎯 Latihan Soal</button>`
       : '';
 
-    const navPair = !S.readAll ? `<div class="ks-nav-pair">
-      <button type="button" class="ks-nav-btn" data-ks-jump="${prev ? esc(prev.id) : ''}" ${prev ? '' : 'disabled'}>‹ ${prev ? `${String(prev.no).padStart(2, '0')}. ${esc(prev.title.slice(0, 24))}${prev.title.length > 24 ? '…' : ''}` : 'Awal'}</button>
-      <button type="button" class="ks-nav-btn" data-ks-jump="${next ? esc(next.id) : ''}" ${next ? '' : 'disabled'}>${next ? `${String(next.no).padStart(2, '0')}. ${esc(next.title.slice(0, 24))}${next.title.length > 24 ? '…' : ''}` : 'Selesai'} ›</button>
-    </div>` : '';
+    const navPair = `<div class="ks-nav-pair">
+      <button type="button" class="ks-nav-btn" data-ks-jump="${prev ? esc(prev.id) : ''}" ${prev ? '' : 'disabled'}>‹ ${prev ? `${String(prev.no).padStart(2, '0')}. ${esc(prev.title.slice(0, 22))}${prev.title.length > 22 ? '…' : ''}` : 'Awal'}</button>
+      <button type="button" class="ks-nav-btn" data-ks-jump="${next ? esc(next.id) : ''}" ${next ? '' : 'disabled'}>${next ? `${String(next.no).padStart(2, '0')}. ${esc(next.title.slice(0, 22))}${next.title.length > 22 ? '…' : ''}` : 'Selesai'} ›</button>
+    </div>`;
 
     return `<div class="ks-body">
       <div class="ks-tldr-box"><small>Inti Cepat</small><p>${fmtInline(t.tldr, q)}</p></div>
@@ -221,13 +220,14 @@
         <button type="button" class="ks-act${star ? ' star-on' : ''}" data-ks-star="${esc(t.id)}">${star ? '★ Ditandai' : '☆ Tandai'}</button>
         ${driveBtn}
         ${quizBtn}
+        <button type="button" class="ks-act ks-act-collapse" data-ks-close="${esc(t.id)}">▴ Perkecil Materi</button>
       </div>
       ${navPair}
     </div>`;
   }
 
   function renderCard(t, idx, list) {
-    const isOpen = S.readAll || S.open.has(t.id) || (S.q.trim().length >= 2 && list.length <= 5);
+    const isOpen = S.open.has(t.id);
     const isDone = S.done.has(t.id);
     const isStar = S.star.has(t.id);
     const wk = topicWeekForClass(t, S.cls);
@@ -249,7 +249,7 @@
         </span>
         <span class="ks-head-right">
           ${isStar ? '<span class="ks-star-ind" title="Ditandai penting">★</span>' : ''}
-          <span class="ks-chev" aria-hidden="true">›</span>
+          <span class="ks-toggle-pill">${isOpen ? 'Tutup ▴' : 'Baca ▾'}</span>
         </span>
       </button>
       ${isOpen ? topicBodyHTML(t, idx, list) : ''}
@@ -258,7 +258,7 @@
 
   function renderListHTML(list, data) {
     if (!list.length) {
-      return '<div class="ks-empty"><div>Tidak ada materi yang cocok dengan filter ini.</div><button type="button" class="ks-ghost-btn" data-ks-reset>Tampilkan Semua Materi</button></div>';
+      return '<div class="ks-empty"><div>Tidak ada materi yang cocok dengan filter ini.</div><button type="button" class="ks-btn3d" data-ks-reset>Tampilkan Semua Materi</button></div>';
     }
     const useWeekGroups = S.viewBy === 'week' && !S.q.trim() && S.filter !== 'star' && S.filter !== 'todo';
     if (!useWeekGroups) {
@@ -305,6 +305,8 @@
     const list = filteredTopics();
     const doneCount = all.filter(t => S.done.has(t.id)).length;
     const starCount = all.filter(t => S.star.has(t.id)).length;
+    const openInListCount = list.filter(t => S.open.has(t.id)).length;
+    const allOpen = list.length > 0 && openInListCount === list.length;
     const pct = all.length ? Math.round((doneCount / all.length) * 100) : 0;
     const totalMin = all.reduce((sum, t) => sum + (Number(t.readMin) || 3), 0);
     const keepQ = document.activeElement?.matches?.('[data-ks-q]');
@@ -346,10 +348,10 @@
       }).join('')}
     </div>` : '';
 
-    const clsSeg = S.viewBy === 'week' ? `<div class="ks-seg" role="group" aria-label="Pilih kelas">
-      <button type="button" class="ks-seg-btn${S.cls === 'all' ? ' on' : ''}" data-ks-cls="all">A &amp; B</button>
-      <button type="button" class="ks-seg-btn${S.cls === 'A' ? ' on' : ''}" data-ks-cls="A">Kelas A</button>
-      <button type="button" class="ks-seg-btn${S.cls === 'B' ? ' on' : ''}" data-ks-cls="B">Kelas B</button>
+    const clsSeg = S.viewBy === 'week' ? `<div class="ks-btn-row" role="group" aria-label="Pilih kelas">
+      <button type="button" class="ks-btn3d${S.cls === 'all' ? ' on' : ''}" data-ks-cls="all">A &amp; B</button>
+      <button type="button" class="ks-btn3d${S.cls === 'A' ? ' on' : ''}" data-ks-cls="A">Kelas A</button>
+      <button type="button" class="ks-btn3d${S.cls === 'B' ? ' on' : ''}" data-ks-cls="B">Kelas B</button>
     </div>` : '';
 
     page.dataset.ksTheme = S.theme;
@@ -357,25 +359,28 @@
     page.innerHTML = `<div class="ks-shell${fontCls}" data-theme="${esc(S.theme)}">
       <header class="ks-masthead">
         <div class="ks-masthead-top">
-          <button type="button" class="ks-back" data-ks-back>‹ BLOK KEDKEL</button>
-          <div class="ks-toolbar">
-            <div class="ks-tool-group" role="group" aria-label="Tema baca">
-              <button type="button" class="ks-tool-btn${S.theme === 'paper' ? ' on' : ''}" data-ks-theme="paper" title="Mode Kertas Hangat (nyaman di mata)">Kertas</button>
-              <button type="button" class="ks-tool-btn${S.theme === 'light' ? ' on' : ''}" data-ks-theme="light" title="Mode Terang">Terang</button>
-              <button type="button" class="ks-tool-btn${S.theme === 'dark' ? ' on' : ''}" data-ks-theme="dark" title="Mode Malam">Malam</button>
-            </div>
-            <div class="ks-tool-group" role="group" aria-label="Ukuran huruf">
-              <button type="button" class="ks-tool-btn${S.font === 'sm' ? ' on' : ''}" data-ks-font="sm" title="Teks kecil">A-</button>
-              <button type="button" class="ks-tool-btn${S.font === 'md' ? ' on' : ''}" data-ks-font="md" title="Teks normal">A</button>
-              <button type="button" class="ks-tool-btn${S.font === 'lg' ? ' on' : ''}" data-ks-font="lg" title="Teks besar">A+</button>
-            </div>
-          </div>
+          <button type="button" class="ks-btn3d ks-back" data-ks-back>‹ BLOK KEDKEL</button>
         </div>
 
         <div class="ks-title-wrap">
           <div class="ks-eyebrow">RINGKASAN FULL BLOK · KEDKEL TA 2026–2027</div>
           <h2>Ringkasan Lengkap ${all.length} Materi</h2>
           <p>Disusun urut sesuai Jadwal Putaran 2 FK YARSI (Minggu 1–5) — lengkap dengan tabel ringkas, angka wajib, dan poin ujian.</p>
+        </div>
+
+        <div class="ks-prefs-bar">
+          <div class="ks-pref-group" role="group" aria-label="Tema warna baca">
+            <span class="ks-pref-lbl">Tema Baca:</span>
+            <button type="button" class="ks-btn3d ks-btn-sm${S.theme === 'paper' ? ' on' : ''}" data-ks-theme="paper">Kertas</button>
+            <button type="button" class="ks-btn3d ks-btn-sm${S.theme === 'light' ? ' on' : ''}" data-ks-theme="light">Terang</button>
+            <button type="button" class="ks-btn3d ks-btn-sm${S.theme === 'dark' ? ' on' : ''}" data-ks-theme="dark">Malam</button>
+          </div>
+          <div class="ks-pref-group" role="group" aria-label="Ukuran huruf bacaan">
+            <span class="ks-pref-lbl">Ukuran Teks:</span>
+            <button type="button" class="ks-btn3d ks-btn-sm${S.font === 'sm' ? ' on' : ''}" data-ks-font="sm">Kecil</button>
+            <button type="button" class="ks-btn3d ks-btn-sm${S.font === 'md' ? ' on' : ''}" data-ks-font="md">Normal</button>
+            <button type="button" class="ks-btn3d ks-btn-sm${S.font === 'lg' ? ' on' : ''}" data-ks-font="lg">Besar</button>
+          </div>
         </div>
 
         <div class="ks-prog-box">
@@ -387,7 +392,7 @@
         </div>
 
         <div class="ks-agenda-bar">
-          <button type="button" class="ks-agenda-toggle" data-ks-agenda aria-expanded="${S.showAgenda}">
+          <button type="button" class="ks-btn3d ks-agenda-toggle" data-ks-agenda aria-expanded="${S.showAgenda}">
             <span class="ks-agenda-summary"><strong>Jadwal Ujian:</strong> Prak. Farma 12 Nov · Pleno 20 Nov · <strong>UAB 24 Nov</strong> · UPER 26 Nov</span>
             <span class="ks-agenda-caret">${S.showAgenda ? 'Tutup ▴' : 'Detail ▾'}</span>
           </button>
@@ -402,9 +407,9 @@
         </div>
 
         <div class="ks-switch-row">
-          <div class="ks-seg" role="group" aria-label="Urutkan tampilan">
-            <button type="button" class="ks-seg-btn${S.viewBy === 'week' ? ' on' : ''}" data-ks-view="week">Per Minggu</button>
-            <button type="button" class="ks-seg-btn${S.viewBy === 'cluster' ? ' on' : ''}" data-ks-view="cluster">Per Klaster</button>
+          <div class="ks-btn-row" role="group" aria-label="Urutkan tampilan">
+            <button type="button" class="ks-btn3d${S.viewBy === 'week' ? ' on' : ''}" data-ks-view="week">Per Minggu</button>
+            <button type="button" class="ks-btn3d${S.viewBy === 'cluster' ? ' on' : ''}" data-ks-view="cluster">Per Klaster</button>
           </div>
           ${clsSeg}
         </div>
@@ -415,7 +420,10 @@
 
         <div class="ks-meta-row">
           <span>Menampilkan ${list.length} dari ${all.length} materi${S.viewBy === 'week' && S.cls !== 'all' ? ` · Urutan Kelas ${S.cls}` : ''}</span>
-          <button type="button" class="ks-link-btn" data-ks-mode="${S.readAll ? 'cards' : 'all'}">${S.readAll ? 'Ringkas ke daftar' : 'Buka semua materi'}</button>
+          <div class="ks-btn-row">
+            <button type="button" class="ks-btn3d ks-btn-sm${!allOpen && openInListCount === 0 ? ' on' : ''}" data-ks-expand="none">Tutup Semua</button>
+            <button type="button" class="ks-btn3d ks-btn-sm${allOpen ? ' on' : ''}" data-ks-expand="all">Buka Semua</button>
+          </div>
         </div>
       </div>
 
@@ -453,7 +461,6 @@
       if (id) {
         S.filter = 'all';
         S.q = '';
-        S.readAll = false;
         S.open = new Set([id]);
       }
     }
@@ -503,8 +510,12 @@
       S.filter = t.dataset.ksFilter;
       return render();
     }
-    if (t.dataset.ksMode) {
-      S.readAll = t.dataset.ksMode === 'all';
+    if (t.dataset.ksExpand) {
+      if (t.dataset.ksExpand === 'all') {
+        filteredTopics().forEach(item => S.open.add(item.id));
+      } else {
+        S.open.clear();
+      }
       return render();
     }
     if (t.hasAttribute('data-ks-reset')) {
@@ -513,10 +524,17 @@
     }
     if (t.dataset.ksToggle) {
       const id = t.dataset.ksToggle;
-      if (S.readAll) { S.readAll = false; S.open = new Set([id]); }
-      else if (S.open.has(id)) S.open.delete(id);
+      if (S.open.has(id)) S.open.delete(id);
       else S.open.add(id);
       return render();
+    }
+    if (t.dataset.ksClose) {
+      const id = t.dataset.ksClose;
+      S.open.delete(id);
+      render();
+      const card = page.querySelector(`[data-ks-card="${id}"]`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
     }
     if (t.dataset.ksJump) {
       const id = t.dataset.ksJump;
