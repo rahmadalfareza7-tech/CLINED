@@ -627,7 +627,7 @@
       const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : freeAvail ? 'free-claim' : '';
       const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${d.price} Beli`;
       return `<div class="deco-shop-card${isEquipped ? ' equipped' : ''}">
-        <div class="deco-shop-av" data-deco-preview="${esc(d.id)}">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
+        <div class="deco-shop-av">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
         <div class="deco-shop-title">${d.icon} ${esc(d.name)}</div>
         <div class="deco-shop-sub">${esc(d.cat)}</div>
         <button type="button" class="banner-shop-btn ${btnCls}" data-deco-id="${esc(d.id)}" ${!isOwned && !canBuy ? 'disabled' : ''}>${btnLabel}</button>
@@ -639,36 +639,6 @@
     return `${buildProfileHeroCard()}${freeDecoNotice}<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
       <div class="deco-filter-row">${pills}</div>
       <div class="deco-shop-grid">${items}</div>`;
-  }
-
-  const DECO_SVG_CACHE = new Map();
-  function hydrateDecoPreviews() {
-    const hosts = document.querySelectorAll('#cardShopContainer [data-deco-preview]');
-    if (!hosts.length) return;
-    hosts.forEach(async host => {
-      const id = host.getAttribute('data-deco-preview');
-      const item = DECO_CATALOG.find(x => x.id === id);
-      if (!item) return;
-      try {
-        let svgText = DECO_SVG_CACHE.get(id);
-        if (!svgText) {
-          const r = await fetch(item.img, { credentials: 'same-origin' });
-          if (!r.ok) return;
-          svgText = await r.text();
-          DECO_SVG_CACHE.set(id, svgText);
-        }
-        if (!host.isConnected) return;
-        const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-        const svg = doc.documentElement;
-        if (!svg || svg.nodeName.toLowerCase() !== 'svg') return;
-        const imported = document.importNode(svg, true);
-        imported.classList.add('avatar-deco-img');
-        imported.setAttribute('aria-hidden', 'true');
-        const oldImg = host.querySelector('.avatar-deco-img');
-        if (oldImg) oldImg.replaceWith(imported);
-        else host.appendChild(imported);
-      } catch {}
-    });
   }
 
   function buildShop() {
@@ -911,7 +881,6 @@
     if (c) { c.innerHTML = buildShop(); bindShop(); }
   }
   function bindShop() {
-    if (shopTab === 'decos') hydrateDecoPreviews();
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
     document.querySelectorAll('#cardShopContainer [data-pick-name-color]').forEach(btn => {
       btn.addEventListener('click', async () => {
