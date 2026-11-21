@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="css/onboarding.css?v=4">
 <link rel="stylesheet" href="css/social.css?v=16">
 <link rel="stylesheet" href="css/desktop.css?v=7">
-<link rel="stylesheet" href="css/home-ergonomic.css?v=14">
+<link rel="stylesheet" href="css/home-ergonomic.css?v=15">
 <link rel="stylesheet" href="css/top-notify.css?v=3">
 <link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=20">
 </head>
@@ -50,15 +50,26 @@
 </header>
 
 <section id="home" class="view active">
-  <section class="duo-learning-map" aria-label="Peta belajar CLINED">
-    <div class="duo-map-header">
-      <div><h3>Mulai dari sini</h3></div>
-</div>
-    <div class="duo-path" aria-label="Tahapan belajar">
-      <button class="duo-node done" type="button" id="duoNode1"><span>✓</span><small>Mulai</small></button>
-      <button class="duo-node current" type="button" id="duoNode2"><span>★</span><small>Kasus</small></button>
-      <button class="duo-node locked" type="button" id="duoNode3"><span>✦</span><small>Diagnosis</small></button>
-      <button class="duo-node locked" type="button" id="duoNode4"><span>🏆</span><small>Mastery</small></button>
+  <section class="duo-learning-map home-banner-slider" id="homeBannerSlider" aria-label="Banner CLINED" aria-roledescription="carousel">
+    <div class="hbs-track" id="hbsTrack">
+      <div class="hbs-slide" role="group" aria-roledescription="slide" aria-label="Slide 1 dari 2">
+        <picture>
+          <source media="(min-width: 760px)" srcset="assets/home-slider/slide-1-desktop.png?v=1">
+          <img src="assets/home-slider/slide-1-mobile.png?v=1" alt="Follow our social media: @CLINED.ID @ALFAREZA7_" draggable="false" loading="eager" decoding="async">
+        </picture>
+      </div>
+      <div class="hbs-slide" role="group" aria-roledescription="slide" aria-label="Slide 2 dari 2">
+        <picture>
+          <source media="(min-width: 760px)" srcset="assets/home-slider/slide-2-desktop.png?v=1">
+          <img src="assets/home-slider/slide-2-mobile.png?v=1" alt="CLINED" draggable="false" loading="lazy" decoding="async">
+        </picture>
+      </div>
+    </div>
+    <button type="button" class="hbs-arrow prev" data-hbs-dir="-1" aria-label="Slide sebelumnya">‹</button>
+    <button type="button" class="hbs-arrow next" data-hbs-dir="1" aria-label="Slide berikutnya">›</button>
+    <div class="hbs-dots" role="tablist" aria-label="Pilih slide">
+      <button type="button" class="hbs-dot active" data-hbs-go="0" role="tab" aria-selected="true" aria-label="Slide 1"></button>
+      <button type="button" class="hbs-dot" data-hbs-go="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
     </div>
   </section>
 
@@ -1087,7 +1098,7 @@
 <script src="js/auth-gate.js?v=2"></script>
 <script src="js/content-manager.js?v=26"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>
-<script src="js/inline-boot.js"></script>
+<script src="js/inline-boot.js?v=2"></script>
 <script src="js/new-features.js?v=13"></script>
 <script src="js/clinical-quest.js?v=18"></script>
 

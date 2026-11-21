@@ -10,8 +10,103 @@ html body #home > .stats,
 html body #home > .home-quick-row,
 html body #home > a.feedback-card { margin: 0 0 12px !important; }
 
-/* Peta belajar: dipadatkan agar aksi utama cepat terlihat */
+/* Peta belajar / Home Banner Slider */
 html body #home .duo-learning-map { padding: 12px 14px 10px !important; margin-bottom: 12px !important; }
+html body #home .duo-learning-map.home-banner-slider {
+  padding: 0 !important;
+  background: #ffffff !important;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+html body #home .duo-learning-map.home-banner-slider::after { display: none !important; content: none !important; }
+.hbs-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+.hbs-track.dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+}
+.hbs-track::-webkit-scrollbar { display: none; }
+.hbs-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.hbs-slide picture,
+.hbs-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+.hbs-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(15, 23, 42, 0.14);
+  background: rgba(255, 255, 255, 0.86);
+  color: #1c282e;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0.78;
+  transition: opacity .15s ease, transform .15s ease, background .15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+}
+.hbs-arrow:hover { opacity: 1; background: #ffffff; }
+.hbs-arrow:active { transform: translateY(-50%) scale(0.92); }
+.hbs-arrow.prev { left: 8px; }
+.hbs-arrow.next { right: 8px; }
+.hbs-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 7px;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(4px);
+}
+.hbs-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: rgba(15, 23, 42, 0.22);
+  cursor: pointer;
+  transition: width .2s ease, background .2s ease;
+}
+.hbs-dot.active {
+  width: 20px;
+  background: #58cc02;
+}
+@media (max-width: 520px) {
+  .hbs-arrow { width: 28px; height: 28px; font-size: 18px; opacity: 0.65; }
+  .hbs-dots { bottom: 5px; padding: 3px 7px; }
+}
 html body #home .duo-map-header h3 { font-size: 17px !important; margin: 0 0 8px !important; }
 html body #home .duo-unit-card { padding: 10px 12px !important; margin-bottom: 8px !important; }
 html body #home .duo-node { width: 64px !important; }
