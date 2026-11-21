@@ -23,25 +23,30 @@
   }
 
   /* ───────── tampilan publik ───────── */
-  let queue = [], showing = false;
+  let queue = [], showing = false, currentId = null, activeClose = null;
   const keyOf = a => `${a.id}:${new Date(a.updated_at || a.created_at).getTime()}`;
   function showNext() {
     if (showing) return;
     const a = queue.shift(); if (!a) return;
     const st = a.style || {};
     showing = true;
+    currentId = a.id;
     const layer = document.createElement('div');
     layer.className = `ann-layer pos-${st.position === 'bottom' ? 'bottom' : 'top'}`;
     layer.innerHTML = cardHTML(a, st);
     document.body.appendChild(layer);
     requestAnimationFrame(() => requestAnimationFrame(() => layer.classList.add('show')));
-    let timer = null;
+    let timer = null, closed = false;
     const close = (remember = true) => {
+      if (closed) return;
+      closed = true;
       clearTimeout(timer);
+      if (activeClose === close) activeClose = null;
       if (remember && (st.repeat || 'once') === 'once') { const s = rd(); s[keyOf(a)] = Date.now(); wr(s); }
       layer.classList.remove('show');
-      setTimeout(() => { layer.remove(); showing = false; setTimeout(showNext, 400); }, 320);
+      setTimeout(() => { layer.remove(); showing = false; currentId = null; setTimeout(showNext, 400); }, 320);
     };
+    activeClose = close;
     layer.addEventListener('click', e => {
       if (e.target.closest('[data-ann-x]')) return close(true);
       const l = e.target.closest('[data-ann-link]');
@@ -49,17 +54,37 @@
     });
     if (st.autoHide > 0) timer = setTimeout(() => close(true), st.autoHide * 1000);
   }
+  function enqueue(items) {
+    const seen = rd();
+    const fresh = (items || []).filter(a => a && a.style && (a.style.repeat === 'always' || !seen[keyOf(a)]));
+    const ids = new Set(queue.map(x => x.id));
+    fresh.slice(0, 3).forEach(a => { if (a.id !== currentId && !ids.has(a.id)) queue.push(a); });
+    showNext();
+  }
   async function load() {
     try {
       const r = await fetch('/api/announcements', { credentials: 'same-origin', cache: 'no-store' });
       if (!r.ok) return;
-      const seen = rd(), d = await r.json();
-      const fresh = (d.announcements || []).filter(a => a.style && (a.style.repeat === 'always' || !seen[keyOf(a)]));
-      const ids = new Set(queue.map(x => x.id));
-      fresh.slice(0, 3).forEach(a => { if (!ids.has(a.id)) queue.push(a); });
-      showNext();
+      const d = await r.json();
+      enqueue(d.announcements || []);
     } catch {}
   }
+  function onPush(m) {
+    if (!m) return;
+    if (m.kind === 'remove' && m.id) {
+      queue = queue.filter(x => x.id !== m.id);
+      if (currentId === m.id && activeClose) activeClose(false);
+      return;
+    }
+    if (m.kind === 'live' && m.announcement) {
+      if (currentId === m.announcement.id && activeClose) activeClose(false);
+      queue = queue.filter(x => x.id !== m.announcement.id);
+      enqueue([m.announcement]);
+      return;
+    }
+    load();
+  }
+  window.CLINED_ANNOUNCEMENT = { onPush, reload: load };
   const start = () => setTimeout(load, 1500);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
   document.addEventListener('visibilitychange', () => { if (!document.hidden && !showing) load(); });

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
-import { push, isOnline, onlineStats, openStream, connectionCount, setPresence, dropSession, dropUser, dropConn, heartbeat, HIDDEN_GRACE_MS } from '../lib/stream.mjs';
+import { push, broadcast, isOnline, onlineStats, openStream, connectionCount, setPresence, dropSession, dropUser, dropConn, heartbeat, HIDDEN_GRACE_MS } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
 const Q = n => Array.from({ length: n }, (_, i) => ({ id: 'q' + i, soal: 'Soal ' + i, opsi: ['a', 'b', 'c', 'd'], jawabanBenar: i % 4, pembahasan: 'pemb ' + i }));
@@ -114,7 +114,15 @@ test('SSE presence: hidden grace, multi-tab, heartbeat dead socket & session/log
   assert.equal(isOnline('u4', t0), false);
 
   openStream(new EventEmitter(), fakeRes(), 'u5', { now: t0 });
+  const b1 = fakeRes(), b2 = fakeRes();
+  openStream(new EventEmitter(), b1, 'u6', { now: t0 });
+  openStream(new EventEmitter(), b2, 'u7', { now: t0 });
+  assert.equal(broadcast('announcement', { kind: 'live', id: 'a1' }), 4);
+  assert.match(b1.out, /event: announcement\ndata: {"kind":"live","id":"a1"}\n\n/);
+  assert.match(b2.out, /event: announcement\ndata: {"kind":"live","id":"a1"}\n\n/);
   assert.equal(dropUser('u5'), 1);
+  assert.equal(dropUser('u6'), 1);
+  assert.equal(dropUser('u7'), 1);
   assert.equal(dropUser('u3'), 1);
   assert.equal(connectionCount(), 0);
 });

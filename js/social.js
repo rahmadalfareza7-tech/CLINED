@@ -1181,6 +1181,7 @@
     es.addEventListener('duel', ev => { lastBeatAt = Date.now(); onDuel(JSON.parse(ev.data || '{}')); });
     es.addEventListener('status', ev => { lastBeatAt = Date.now(); onStatus(JSON.parse(ev.data || '{}')); });
     es.addEventListener('chat', ev => { lastBeatAt = Date.now(); window.CLINED_CHAT?.onPush(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('announcement', ev => { lastBeatAt = Date.now(); window.CLINED_ANNOUNCEMENT?.onPush?.(JSON.parse(ev.data || '{}')); });
     es.onerror = () => {
       if (!es || es.readyState === 2) {
         es = null; connId = ''; lastBeatAt = 0;
