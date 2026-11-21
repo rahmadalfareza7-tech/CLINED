@@ -58,6 +58,7 @@ export async function contentApi({ request, response, url, user, pool, body, jso
     }
     list[idx] = next;
     await pool.query('UPDATE content_packages SET questions=$1::jsonb, updated_at=now() WHERE id=$2', [JSON.stringify(list), packageId]);
+    await pool.query('INSERT INTO activity_logs (id,user_id,action,metadata) VALUES ($1,$2,$3,$4::jsonb)', [randomUUID(), user.id, 'question_edited', JSON.stringify({ source: 'uab', packageId, bank: current.rows[0].title, questionId })]).catch(() => {});
     return json(response, 200, { ok: true, question: next });
   }
   // Admin/helper dapat menghapus satu soal UAB tanpa menghapus seluruh paket.

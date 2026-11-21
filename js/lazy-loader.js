@@ -40,8 +40,8 @@
       scripts: ['js/resep-data.js?v=7', 'js/resep-core.js?v=9', 'js/resep-editor.js?v=1', 'js/resep.js?v=16']
     },
     admin: {
-      styles: ['css/admin-people.css?v=2'],
-      scripts: ['js/admin-people.js?v=4', 'js/question-editor.js?v=1']
+      styles: ['css/admin-people.css?v=3'],
+      scripts: ['js/admin-people.js?v=5', 'js/question-editor.js?v=1']
     }
   };
 
