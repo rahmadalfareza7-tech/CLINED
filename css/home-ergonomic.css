@@ -313,6 +313,32 @@ html body #home #hubBtn .home-materials-icon { background: rgba(124,92,255,.18) 
   transform: translateY(3px) !important;
   border-bottom-width: 2px !important;
 }
+.ringkasan-kedkel-section {
+  margin-top: 10px !important;
+}
+.materi-button.ringkasan-kedkel-button {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+  border: 2px solid #1d4ed8 !important;
+  border-bottom: 5px solid #1e3a8a !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  gap: 8px !important;
+  width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+.materi-button.ringkasan-kedkel-button::after {
+  content: none !important;
+  display: none !important;
+}
+.materi-button.ringkasan-kedkel-button:active {
+  transform: translateY(3px) !important;
+  border-bottom-width: 2px !important;
+}
 html body:has(#resepPage.active) .card-shop-fab {
   display: none !important;
 }

@@ -39,6 +39,10 @@
       styles: [],
       scripts: ['js/resep-data.js?v=7', 'js/resep-core.js?v=9', 'js/resep-editor.js?v=1', 'js/resep.js?v=16']
     },
+    ringkasanKedkel: {
+      styles: ['css/kedkel-summary.css?v=1'],
+      scripts: ['js/kedkel-summary-data.js?v=1', 'js/kedkel-summary.js?v=1']
+    },
     admin: {
       styles: ['css/admin-people.css?v=3'],
       scripts: ['js/admin-people.js?v=6', 'js/question-editor.js?v=1']
@@ -97,6 +101,11 @@
       open: () => load('resep').then(() => window.CLINED_RESEP?.open?.()).catch(e => window.showToast?.(e.message, true))
     };
   }
+  if (!window.CLINED_KEDKEL_SUMMARY) {
+    window.CLINED_KEDKEL_SUMMARY = {
+      open: no => load('ringkasanKedkel').then(() => window.CLINED_KEDKEL_SUMMARY?.open?.(no)).catch(e => window.showToast?.(e.message, true))
+    };
+  }
   if (!window.CLINED_ADMIN_PEOPLE) {
     window.CLINED_ADMIN_PEOPLE = {
       mount: (host, opts) => load('admin').then(() => window.CLINED_ADMIN_PEOPLE?.mount?.(host, opts)).catch(() => {})
@@ -123,6 +132,12 @@
       e.preventDefault();
       window.showToast?.('Membuka Latihan Resep…');
       window.CLINED_RESEP.open();
+      return;
+    }
+    if (btn.id === 'openRingkasanKedkel' && !loaded.has('ringkasanKedkel')) {
+      e.preventDefault();
+      window.showToast?.('Membuka Ringkasan Full Blok KEDKEL…');
+      window.CLINED_KEDKEL_SUMMARY.open();
     }
   });
 
@@ -150,7 +165,10 @@
   else boot();
   window.addEventListener('clined:auth-ready', maybePreloadAdmin);
   window.addEventListener('clined:view-change', e => {
-    if (e.detail === 'blokKedkelPage') load('resep').catch(() => {});
+    if (e.detail === 'blokKedkelPage') {
+      load('resep').catch(() => {});
+      load('ringkasanKedkel').catch(() => {});
+    }
   });
 
   window.CLINED_LAZY = { load, isLoaded: n => loaded.has(n) };
