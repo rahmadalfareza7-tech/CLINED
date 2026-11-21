@@ -695,6 +695,18 @@ html body .floating-dashboard-nav .floating-nav-slider {
 html body .floating-dashboard-nav .floating-nav-item.active span:last-child {
   color: var(--text) !important;
 }
+html body .floating-dashboard-nav .floating-nav-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+  opacity: .84;
+  transition: transform .18s ease, opacity .18s ease;
+}
+html body .floating-dashboard-nav .floating-nav-item.active .floating-nav-img {
+  opacity: 1;
+  transform: scale(1.08);
+}
 
 /* Home quick tile Sosial icon: clinical teal instead of violet */
 html body #home #hubBtn .home-materials-icon {
