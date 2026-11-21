@@ -1,4 +1,4 @@
-/* CLINED — Pembaca Interaktif Ringkasan Full Blok KEDKEL (34 Materi • Selaras Jadwal TA 2026–2027) */
+/* CLINED — Pembaca Editorial Ringkasan Full Blok KEDKEL (34 Materi • Selaras Jadwal TA 2026–2027) */
 (() => {
   'use strict';
 
@@ -8,6 +8,7 @@
   const LEGACY_STAR_KEY = 'clined_kedkel_summary_star_v1';
   const FONT_KEY = 'clined_kedkel_summary_font_v1';
   const CLS_KEY = 'clined_kedkel_summary_cls_v1';
+  const THEME_KEY = 'clined_kedkel_summary_theme_v1';
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -51,7 +52,7 @@
   function driveInfo(driveNo) {
     if (!driveNo) return null;
     try {
-      const topics = window.CLINED_KEDKEL_2026_MATERI?.topics || [];
+      const topics = window.CLINED_KEDKEL_2026_MATERI?.TOPICS || window.CLINED_KEDKEL_2026_MATERI?.topics || [];
       return topics.find(t => Number(t.no) === Number(driveNo)) || null;
     } catch { return null; }
   }
@@ -62,10 +63,19 @@
     return Number(t.week || 1);
   }
 
-  function topicScheduleLabel(t, cls) {
-    if (cls === 'A') return `Kelas A: ${t.scheduleA || t.schedule}`;
-    if (cls === 'B') return `Kelas B: ${t.scheduleB || t.schedule}`;
+  function topicScheduleLabel(t, cls, detailed) {
+    if (cls === 'A') return `Kelas A · ${t.scheduleA || t.schedule}`;
+    if (cls === 'B') return `Kelas B · ${t.scheduleB || t.schedule}`;
+    if (detailed) return `A: ${t.scheduleA || '—'} · B: ${t.scheduleB || '—'}`;
     return t.schedule || '';
+  }
+
+  function defaultTheme() {
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === 'paper' || saved === 'light' || saved === 'dark') return saved;
+    } catch {}
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'paper';
   }
 
   const S = {
@@ -76,6 +86,8 @@
         return (v === 'A' || v === 'B') ? v : 'all';
       } catch { return 'all'; }
     })(),
+    theme: defaultTheme(), // 'paper' | 'light' | 'dark'
+    showAgenda: false,
     filter: 'all', // 'all' | 'w1'..'w5' | clusterId | 'todo' | 'star'
     q: '',
     open: new Set(['d01']),
@@ -151,6 +163,14 @@
     });
   }
 
+  function formatBulletItem(b, q) {
+    const m = String(b).match(/^\*\*([^*]+)\*\*:\s*(.+)$/);
+    if (m) {
+      return `<li><span class="ks-li-key">${fmtInline(m[1], q)}</span><span class="ks-li-sep"> — </span><span class="ks-li-val">${fmtInline(m[2], q)}</span></li>`;
+    }
+    return `<li><span class="ks-li-val">${fmtInline(b, q)}</span></li>`;
+  }
+
   function topicBodyHTML(t, idx, list) {
     const q = S.q.trim();
     const done = S.done.has(t.id);
@@ -159,42 +179,46 @@
     const prev = idx > 0 ? list[idx - 1] : null;
     const next = idx < list.length - 1 ? list[idx + 1] : null;
 
-    const secs = (t.sections || []).map(sec => {
+    const secs = (t.sections || []).map((sec, sIdx) => {
       const bullets = sec.bullets?.length
-        ? `<ul class="ks-ul">${sec.bullets.map(b => `<li>${fmtInline(b, q)}</li>`).join('')}</ul>`
+        ? `<ul class="ks-ul">${sec.bullets.map(b => formatBulletItem(b, q)).join('')}</ul>`
         : '';
       const tbl = sec.table
         ? `<div class="ks-table-wrap"><table class="ks-table"><thead><tr>${sec.table.headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${sec.table.rows.map(r => `<tr>${r.map(c => `<td>${fmtInline(c, q)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
         : '';
-      return `<div class="ks-sec"><h4>${fmtInline(sec.heading, q)}</h4>${bullets}${tbl}</div>`;
+      return `<section class="ks-sec">
+        <div class="ks-sec-head">
+          <span class="ks-sec-num">${String(sIdx + 1).padStart(2, '0')}</span>
+          <h4>${fmtInline(sec.heading, q)}</h4>
+        </div>
+        ${bullets}
+        ${tbl}
+      </section>`;
     }).join('');
 
     const hy = t.highYield?.length
-      ? `<div class="ks-hy"><div class="ks-hy-title">🎯 Poin Ujian &amp; Jembatan Keledai</div><ul>${t.highYield.map(x => `<li>${fmtInline(x, q)}</li>`).join('')}</ul></div>`
+      ? `<aside class="ks-hy"><div class="ks-hy-title">Poin Ujian &amp; Jembatan Keledai</div><ul>${t.highYield.map(x => `<li>${fmtInline(x, q)}</li>`).join('')}</ul></aside>`
       : '';
-
-    const schedBox = `<div class="ks-sched-note">📅 <strong>Jadwal TA 2026–2027:</strong> Kelas A ${esc(t.scheduleA || '—')} • Kelas B ${esc(t.scheduleB || '—')}${t.isScheduleExtra ? ' <span class="ks-new-pill">Materi Jadwal 26/27</span>' : ''}</div>`;
 
     const driveBtn = drv?.folderUrl
       ? `<a class="ks-act" href="${esc(drv.folderUrl)}" target="_blank" rel="noopener noreferrer">📂 Slide Drive</a>`
       : '';
     const quizBtn = (t.driveNo && window.CLINED_MATERI_LATIHAN?.open)
-      ? `<button type="button" class="ks-act quiz-go" data-ks-quiz="${t.driveNo}">🎯 Latihan Soal Materi Ini</button>`
+      ? `<button type="button" class="ks-act quiz-go" data-ks-quiz="${t.driveNo}">🎯 Latihan Soal</button>`
       : '';
 
     const navPair = !S.readAll ? `<div class="ks-nav-pair">
-      <button type="button" class="ks-nav-btn" data-ks-jump="${prev ? esc(prev.id) : ''}" ${prev ? '' : 'disabled'}>‹ ${prev ? `${String(prev.no).padStart(2, '0')}. ${esc(prev.title.slice(0, 22))}${prev.title.length > 22 ? '…' : ''}` : 'Awal'}</button>
-      <button type="button" class="ks-nav-btn" data-ks-jump="${next ? esc(next.id) : ''}" ${next ? '' : 'disabled'}>${next ? `${String(next.no).padStart(2, '0')}. ${esc(next.title.slice(0, 22))}${next.title.length > 22 ? '…' : ''}` : 'Selesai'} ›</button>
+      <button type="button" class="ks-nav-btn" data-ks-jump="${prev ? esc(prev.id) : ''}" ${prev ? '' : 'disabled'}>‹ ${prev ? `${String(prev.no).padStart(2, '0')}. ${esc(prev.title.slice(0, 24))}${prev.title.length > 24 ? '…' : ''}` : 'Awal'}</button>
+      <button type="button" class="ks-nav-btn" data-ks-jump="${next ? esc(next.id) : ''}" ${next ? '' : 'disabled'}>${next ? `${String(next.no).padStart(2, '0')}. ${esc(next.title.slice(0, 24))}${next.title.length > 24 ? '…' : ''}` : 'Selesai'} ›</button>
     </div>` : '';
 
     return `<div class="ks-body">
-      ${schedBox}
-      <div class="ks-tldr-box"><small>⚡ Inti Cepat (TL;DR)</small>${fmtInline(t.tldr, q)}</div>
-      ${secs}
+      <div class="ks-tldr-box"><small>Inti Cepat</small><p>${fmtInline(t.tldr, q)}</p></div>
+      <div class="ks-sections">${secs}</div>
       ${hy}
       <div class="ks-actions">
-        <button type="button" class="ks-act${done ? ' done-on' : ''}" data-ks-done="${esc(t.id)}">${done ? '✅ Sudah Dipelajari' : '☐ Tandai Dipelajari'}</button>
-        <button type="button" class="ks-act${star ? ' star-on' : ''}" data-ks-star="${esc(t.id)}">${star ? '⭐ Ditandai' : '☆ Tandai Penting'}</button>
+        <button type="button" class="ks-act${done ? ' done-on' : ''}" data-ks-done="${esc(t.id)}">${done ? '✓ Sudah Dipelajari' : '○ Tandai Dipelajari'}</button>
+        <button type="button" class="ks-act${star ? ' star-on' : ''}" data-ks-star="${esc(t.id)}">${star ? '★ Ditandai' : '☆ Tandai'}</button>
         ${driveBtn}
         ${quizBtn}
       </div>
@@ -207,23 +231,24 @@
     const isDone = S.done.has(t.id);
     const isStar = S.star.has(t.id);
     const wk = topicWeekForClass(t, S.cls);
-    const schedText = topicScheduleLabel(t, S.cls);
-    const extraBadge = t.isScheduleExtra ? ' <span class="ks-new-pill">Baru 26/27</span>' : '';
+    const schedText = topicScheduleLabel(t, S.cls, isOpen);
+    const extraBadge = t.isScheduleExtra ? '<span class="ks-new-pill">Jadwal 26/27</span>' : '';
 
     return `<article class="ks-card${isOpen ? ' open' : ''}${isDone ? ' done' : ''}" data-ks-card="${esc(t.id)}">
       <button type="button" class="ks-card-head" data-ks-toggle="${esc(t.id)}" aria-expanded="${isOpen}">
         <span class="ks-no">${isDone ? '✓' : String(t.no).padStart(2, '0')}</span>
         <span class="ks-card-main">
-          <span class="ks-card-title">${esc(t.icon)} ${fmtInline(t.title, S.q)}</span>
-          <span class="ks-card-badges">
+          <span class="ks-card-title">${fmtInline(t.title, S.q)}</span>
+          <span class="ks-card-meta">
             <span class="ks-wk-tag">M${wk}</span>
-            <span class="ks-sched-tag">📅 ${fmtInline(schedText, S.q)}</span>${extraBadge}
+            <span>${fmtInline(schedText, S.q)}</span>
+            ${extraBadge}
           </span>
-          <span class="ks-card-sub">${esc(t.dosen)} • ~${t.readMin} mnt baca</span>
+          <span class="ks-card-sub">${esc(t.dosen)} · ~${t.readMin} mnt baca</span>
           ${!isOpen ? `<span class="ks-card-tldr">${fmtInline(t.tldr, S.q)}</span>` : ''}
         </span>
         <span class="ks-head-right">
-          ${isStar ? '<span class="ks-star-ind" title="Ditandai penting">⭐</span>' : ''}
+          ${isStar ? '<span class="ks-star-ind" title="Ditandai penting">★</span>' : ''}
           <span class="ks-chev" aria-hidden="true">›</span>
         </span>
       </button>
@@ -233,7 +258,7 @@
 
   function renderListHTML(list, data) {
     if (!list.length) {
-      return '<div class="ks-empty"><span>🔎</span><div>Tidak ada materi yang cocok dengan filter ini.</div><button type="button" class="ks-mini-btn" data-ks-reset>Tampilkan Semua Materi</button></div>';
+      return '<div class="ks-empty"><div>Tidak ada materi yang cocok dengan filter ini.</div><button type="button" class="ks-ghost-btn" data-ks-reset>Tampilkan Semua Materi</button></div>';
     }
     const useWeekGroups = S.viewBy === 'week' && !S.q.trim() && S.filter !== 'star' && S.filter !== 'todo';
     if (!useWeekGroups) {
@@ -254,13 +279,13 @@
         const wm = weekMap.get(w);
         if (wm) {
           const cnt = countByWeek.get(w) || 0;
-          const clsNote = S.cls === 'all' ? '' : ` • Kelas ${S.cls}`;
+          const clsNote = S.cls === 'all' ? '' : ` · Kelas ${S.cls}`;
           html.push(`<div class="ks-week-hdr">
             <div class="ks-week-hdr-top">
-              <span class="ks-week-title">📅 ${esc(wm.label)} (${esc(wm.dates)})${esc(clsNote)}</span>
+              <span class="ks-week-title">${esc(wm.label)} <span class="ks-week-dates">· ${esc(wm.dates)}${esc(clsNote)}</span></span>
               <span class="ks-week-cnt">${cnt} materi</span>
             </div>
-            <div class="ks-week-agenda">${esc(wm.agenda)}</div>
+            <div class="ks-week-agenda">${esc(wm.agenda.replace(/🎯\s*/g, ''))}</div>
           </div>`);
         }
       }
@@ -293,81 +318,104 @@
         weekCounts.set(w, (weekCounts.get(w) || 0) + 1);
       }
       chips = [
-        { id: 'all', icon: '📚', label: `Semua (${all.length})` },
+        { id: 'all', label: `Semua (${all.length})` },
         ...(data.WEEKS || []).map(w => ({
           id: `w${w.id}`,
-          icon: '📅',
           label: `${w.short} (${weekCounts.get(w.id) || 0})`
         })),
-        { id: 'todo', icon: '⏳', label: `Belum (${Math.max(0, all.length - doneCount)})` },
-        { id: 'star', icon: '⭐', label: `Ditandai (${starCount})` }
+        { id: 'todo', label: `Belum (${Math.max(0, all.length - doneCount)})` },
+        { id: 'star', label: `Ditandai (${starCount})` }
       ];
     } else {
       chips = [
-        ...(data.CLUSTERS || []),
-        { id: 'todo', icon: '⏳', label: `Belum (${Math.max(0, all.length - doneCount)})` },
-        { id: 'star', icon: '⭐', label: `Ditandai (${starCount})` }
+        ...(data.CLUSTERS || []).map(c => ({ id: c.id, label: c.label })),
+        { id: 'todo', label: `Belum (${Math.max(0, all.length - doneCount)})` },
+        { id: 'star', label: `Ditandai (${starCount})` }
       ];
     }
 
-    const milestones = (data.SCHEDULE_META?.milestones || []).map(m => {
-      const isExam = /ujian|uper/i.test(m.label);
-      return `<div class="ks-ms-pill${isExam ? ' exam' : ''}">
-        <span class="ks-ms-lbl">${esc(m.icon)} ${esc(m.label)}</span>
-        <span class="ks-ms-dt">${esc(m.date)}</span>
-      </div>`;
-    }).join('');
-
-    const clsBar = S.viewBy === 'week' ? `<div class="ks-cls-pills" role="group" aria-label="Pilih kelas">
-      <button type="button" class="ks-mini-btn${S.cls === 'all' ? ' on' : ''}" data-ks-cls="all">A &amp; B</button>
-      <button type="button" class="ks-mini-btn${S.cls === 'A' ? ' on' : ''}" data-ks-cls="A">Kelas A</button>
-      <button type="button" class="ks-mini-btn${S.cls === 'B' ? ' on' : ''}" data-ks-cls="B">Kelas B</button>
+    const milestones = data.SCHEDULE_META?.milestones || [];
+    const agendaDetailHTML = S.showAgenda ? `<div class="ks-agenda-grid">
+      ${milestones.map(m => {
+        const isExam = /ujian|uper/i.test(m.label);
+        return `<div class="ks-agenda-item${isExam ? ' exam' : ''}">
+          <div class="ks-agenda-lbl">${esc(m.label)}</div>
+          <div class="ks-agenda-dt">${esc(m.date)}</div>
+          <div class="ks-agenda-note">${esc(m.note || '')}</div>
+        </div>`;
+      }).join('')}
     </div>` : '';
 
-    page.innerHTML = `<div class="ks-shell${fontCls}">
-      <div class="ks-hero">
-        <div class="ks-hero-top">
+    const clsSeg = S.viewBy === 'week' ? `<div class="ks-seg" role="group" aria-label="Pilih kelas">
+      <button type="button" class="ks-seg-btn${S.cls === 'all' ? ' on' : ''}" data-ks-cls="all">A &amp; B</button>
+      <button type="button" class="ks-seg-btn${S.cls === 'A' ? ' on' : ''}" data-ks-cls="A">Kelas A</button>
+      <button type="button" class="ks-seg-btn${S.cls === 'B' ? ' on' : ''}" data-ks-cls="B">Kelas B</button>
+    </div>` : '';
+
+    page.dataset.ksTheme = S.theme;
+
+    page.innerHTML = `<div class="ks-shell${fontCls}" data-theme="${esc(S.theme)}">
+      <header class="ks-masthead">
+        <div class="ks-masthead-top">
           <button type="button" class="ks-back" data-ks-back>‹ BLOK KEDKEL</button>
-          <div class="ks-tools">
-            <button type="button" class="ks-tool-btn${S.font === 'sm' ? ' on' : ''}" data-ks-font="sm" title="Teks kecil">A-</button>
-            <button type="button" class="ks-tool-btn${S.font === 'md' ? ' on' : ''}" data-ks-font="md" title="Teks normal">A</button>
-            <button type="button" class="ks-tool-btn${S.font === 'lg' ? ' on' : ''}" data-ks-font="lg" title="Teks besar">A+</button>
+          <div class="ks-toolbar">
+            <div class="ks-tool-group" role="group" aria-label="Tema baca">
+              <button type="button" class="ks-tool-btn${S.theme === 'paper' ? ' on' : ''}" data-ks-theme="paper" title="Mode Kertas Hangat (nyaman di mata)">Kertas</button>
+              <button type="button" class="ks-tool-btn${S.theme === 'light' ? ' on' : ''}" data-ks-theme="light" title="Mode Terang">Terang</button>
+              <button type="button" class="ks-tool-btn${S.theme === 'dark' ? ' on' : ''}" data-ks-theme="dark" title="Mode Malam">Malam</button>
+            </div>
+            <div class="ks-tool-group" role="group" aria-label="Ukuran huruf">
+              <button type="button" class="ks-tool-btn${S.font === 'sm' ? ' on' : ''}" data-ks-font="sm" title="Teks kecil">A-</button>
+              <button type="button" class="ks-tool-btn${S.font === 'md' ? ' on' : ''}" data-ks-font="md" title="Teks normal">A</button>
+              <button type="button" class="ks-tool-btn${S.font === 'lg' ? ' on' : ''}" data-ks-font="lg" title="Teks besar">A+</button>
+            </div>
           </div>
         </div>
-        <div>
-          <div class="ks-eyebrow">RINGKASAN FULL BLOK • KEDKEL TA 2026–2027</div>
-          <h2>📖 Ringkasan Lengkap ${all.length} Materi</h2>
-          <p>Disusun urut sesuai Jadwal Putaran 2 FK YARSI (Minggu 1–5: 19 Okt–20 Nov 2026) — lengkap dengan jadwal Kelas A/B, tabel ringkas &amp; poin ujian.</p>
+
+        <div class="ks-title-wrap">
+          <div class="ks-eyebrow">RINGKASAN FULL BLOK · KEDKEL TA 2026–2027</div>
+          <h2>Ringkasan Lengkap ${all.length} Materi</h2>
+          <p>Disusun urut sesuai Jadwal Putaran 2 FK YARSI (Minggu 1–5) — lengkap dengan tabel ringkas, angka wajib, dan poin ujian.</p>
         </div>
+
         <div class="ks-prog-box">
           <div class="ks-prog-head">
-            <span>Progres Belajar: ${doneCount} / ${all.length} materi (${pct}%)</span>
-            <span>⏱ ~${totalMin} mnt</span>
+            <span>Progres belajar <strong>${doneCount}/${all.length}</strong> (${pct}%)</span>
+            <span>~${totalMin} mnt total</span>
           </div>
           <div class="ks-prog-track"><i style="width:${pct}%"></i></div>
         </div>
-      </div>
 
-      ${milestones ? `<div class="ks-ms-strip" aria-label="Agenda penting dan ujian blok">${milestones}</div>` : ''}
+        <div class="ks-agenda-bar">
+          <button type="button" class="ks-agenda-toggle" data-ks-agenda aria-expanded="${S.showAgenda}">
+            <span class="ks-agenda-summary"><strong>Jadwal Ujian:</strong> Prak. Farma 12 Nov · Pleno 20 Nov · <strong>UAB 24 Nov</strong> · UPER 26 Nov</span>
+            <span class="ks-agenda-caret">${S.showAgenda ? 'Tutup ▴' : 'Detail ▾'}</span>
+          </button>
+          ${agendaDetailHTML}
+        </div>
+      </header>
 
       <div class="ks-controls">
-        <input type="search" class="ks-search" data-ks-q placeholder="🔍 Cari materi, dosen, jadwal, angka, atau istilah (mis. 85 dB, SnNout, pMDI, 2x24 jam)…" value="${esc(S.q)}" autocomplete="off" aria-label="Cari ringkasan materi">
+        <div class="ks-search-wrap">
+          <span class="ks-search-ico" aria-hidden="true">⌕</span>
+          <input type="search" class="ks-search" data-ks-q placeholder="Cari materi, dosen, istilah, atau angka (mis. 85 dB, PMK 411, SnNout, Duvall, pMDI)…" value="${esc(S.q)}" autocomplete="off" aria-label="Cari ringkasan materi">
+        </div>
+
         <div class="ks-switch-row">
-          <div class="ks-mode-pills" role="group" aria-label="Urutkan tampilan">
-            <button type="button" class="ks-mini-btn${S.viewBy === 'week' ? ' on' : ''}" data-ks-view="week">📅 Per Minggu</button>
-            <button type="button" class="ks-mini-btn${S.viewBy === 'cluster' ? ' on' : ''}" data-ks-view="cluster">🗂️ Per Klaster</button>
+          <div class="ks-seg" role="group" aria-label="Urutkan tampilan">
+            <button type="button" class="ks-seg-btn${S.viewBy === 'week' ? ' on' : ''}" data-ks-view="week">Per Minggu</button>
+            <button type="button" class="ks-seg-btn${S.viewBy === 'cluster' ? ' on' : ''}" data-ks-view="cluster">Per Klaster</button>
           </div>
-          ${clsBar}
+          ${clsSeg}
         </div>
+
         <div class="ks-chips" role="group" aria-label="Filter materi">
-          ${chips.map(c => `<button type="button" class="ks-chip${S.filter === c.id ? ' on' : ''}" data-ks-filter="${esc(c.id)}">${c.icon} ${esc(c.label)}</button>`).join('')}
+          ${chips.map(c => `<button type="button" class="ks-chip${S.filter === c.id ? ' on' : ''}" data-ks-filter="${esc(c.id)}">${esc(c.label)}</button>`).join('')}
         </div>
+
         <div class="ks-meta-row">
-          <span>Menampilkan ${list.length} dari ${all.length} materi${S.viewBy === 'week' && S.cls !== 'all' ? ` (Urutan Kelas ${S.cls})` : ''}</span>
-          <div class="ks-mode-pills">
-            <button type="button" class="ks-mini-btn${!S.readAll ? ' on' : ''}" data-ks-mode="cards">📑 Per Materi</button>
-            <button type="button" class="ks-mini-btn${S.readAll ? ' on' : ''}" data-ks-mode="all">📜 Buka Semua</button>
-          </div>
+          <span>Menampilkan ${list.length} dari ${all.length} materi${S.viewBy === 'week' && S.cls !== 'all' ? ` · Urutan Kelas ${S.cls}` : ''}</span>
+          <button type="button" class="ks-link-btn" data-ks-mode="${S.readAll ? 'cards' : 'all'}">${S.readAll ? 'Ringkas ke daftar' : 'Buka semua materi'}</button>
         </div>
       </div>
 
@@ -425,9 +473,18 @@
       window.show?.($('blokKedkelPage') ? 'blokKedkelPage' : 'home');
       return;
     }
+    if (t.dataset.ksTheme) {
+      S.theme = t.dataset.ksTheme;
+      try { localStorage.setItem(THEME_KEY, S.theme); } catch {}
+      return render();
+    }
     if (t.dataset.ksFont) {
       S.font = t.dataset.ksFont;
       try { localStorage.setItem(FONT_KEY, S.font); } catch {}
+      return render();
+    }
+    if (t.hasAttribute('data-ks-agenda')) {
+      S.showAgenda = !S.showAgenda;
       return render();
     }
     if (t.dataset.ksView) {

@@ -40,8 +40,8 @@
       scripts: ['js/resep-data.js?v=7', 'js/resep-core.js?v=9', 'js/resep-editor.js?v=1', 'js/resep.js?v=16']
     },
     ringkasanKedkel: {
-      styles: ['css/kedkel-summary.css?v=2'],
-      scripts: ['js/kedkel-summary-data.js?v=2', 'js/kedkel-summary.js?v=2']
+      styles: ['css/kedkel-summary.css?v=3'],
+      scripts: ['js/kedkel-summary-data.js?v=3', 'js/kedkel-summary.js?v=3']
     },
     admin: {
       styles: ['css/admin-people.css?v=3'],
