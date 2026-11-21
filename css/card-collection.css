@@ -532,6 +532,66 @@
   opacity: 0.48;
   cursor: not-allowed;
 }
+.banner-shop-card.is-admin-locked {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+.banner-shop-card.is-admin-locked .banner-shop-preview,
+.banner-shop-card.is-admin-locked .banner-shop-foot {
+  filter: grayscale(0.35) brightness(0.76);
+}
+.banner-chain-lock {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.18), rgba(15, 23, 42, 0.56));
+}
+.banner-chain-lock .chain-strand {
+  position: absolute;
+  left: -18%;
+  right: -18%;
+  height: 12px;
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #cbd5e1 0 10px,
+      #475569 10px 14px,
+      #94a3b8 14px 24px,
+      #1e293b 24px 28px
+    );
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(15, 23, 42, 0.85);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55);
+}
+.banner-chain-lock .chain-strand.a {
+  transform: rotate(-13deg);
+}
+.banner-chain-lock .chain-strand.b {
+  transform: rotate(13deg);
+}
+.banner-chain-lock .chain-badge {
+  position: relative;
+  z-index: 2;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.92);
+  color: #f8fafc;
+  border: 1.5px solid rgba(251, 191, 36, 0.65);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+}
+.banner-shop-btn.admin-locked {
+  background: #334155;
+  color: #e2e8f0;
+  opacity: 0.85;
+}
 .name-color-box {
   padding: 10px 12px;
   border-radius: 14px;

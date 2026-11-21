@@ -69,7 +69,9 @@
     { id: '17-rose-gold-velvet',    name: 'Rose Gold Velvet',    cat: 'Cewek', icon: '🌹', price: 18, desc: 'Cewek • Beludru mawar emas',         img: 'assets/banners/17-rose-gold-velvet.svg?v=2' },
     { id: '18-cotton-candy-sky',    name: 'Cotton Candy Sky',    cat: 'Cewek', icon: '☁️', price: 8,  desc: 'Cewek • Langit permen kapas',        img: 'assets/banners/18-cotton-candy-sky.svg?v=2' },
     { id: '19-crystal-prism',       name: 'Crystal Prism',       cat: 'Cewek', icon: '💎', price: 18, desc: 'Cewek • Prisma kristal berkilau',    img: 'assets/banners/19-crystal-prism.svg?v=2' },
-    { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 12, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg?v=2' }
+    { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 12, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg?v=2' },
+    // Admin Exclusive
+    { id: '21-creation-touch',      name: 'Creation Touch',      cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan penciptaan', img: 'assets/banners/21-creation-touch.svg?v=2' }
   ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
@@ -573,13 +575,32 @@
     const colorPills = NAME_COLORS.map(c => `<button type="button" class="name-color-pill${curColor === c.id ? ' on' : ''}" data-pick-name-color="${esc(c.id)}"><span class="name-color-dot" style="background:${c.dot}"></span>${esc(c.name)}</button>`).join('');
     const freeAvail = !isFreeBannerClaimed();
     const list = BANNER_CATALOG.filter(b => bannerFilter === 'all' || b.cat === bannerFilter);
+    const adminUser = isAdmin();
     const items = list.map(b => {
-      const isOwned = ownedSet.has(b.id);
-      const isEquipped = eq === b.id;
-      const canBuy = freeAvail || dia >= b.price;
-      const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : freeAvail ? 'free-claim' : '';
-      const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${b.price} Beli`;
-      return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}">
+      const lockedByRole = Boolean(b.adminOnly && !adminUser);
+      const isOwned = !lockedByRole && ownedSet.has(b.id);
+      const isEquipped = !lockedByRole && eq === b.id;
+      const canBuy = !lockedByRole && (freeAvail || dia >= b.price);
+      const btnCls = lockedByRole ? 'admin-locked' : isEquipped ? 'equipped' : isOwned ? 'equip' : (freeAvail && !b.adminOnly) ? 'free-claim' : '';
+      const btnLabel = lockedByRole
+        ? '🔒 Khusus Admin'
+        : isEquipped
+          ? '✓ Terpasang (Lepas)'
+          : isOwned
+            ? 'Pasang'
+            : (freeAvail && !b.adminOnly)
+              ? '🎁 Klaim Gratis'
+              : b.price === 0
+                ? '👑 Pasang (Admin)'
+                : `💎 ${b.price} Beli`;
+      const chainOverlay = lockedByRole
+        ? `<div class="banner-chain-lock" aria-hidden="true">
+            <span class="chain-strand a"></span>
+            <span class="chain-strand b"></span>
+            <span class="chain-badge">⛓️ 🔒 KHUSUS ADMIN</span>
+          </div>`
+        : '';
+      return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}${lockedByRole ? ' is-admin-locked' : ''}">
         <div class="banner-shop-preview">
           <img class="banner-shop-preview-bg" src="${esc(b.img)}" alt="" aria-hidden="true">
           <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
@@ -593,11 +614,12 @@
             <b>${b.icon} ${esc(b.name)}</b>
             <small>${esc(b.desc)}</small>
           </div>
-          <button type="button" class="banner-shop-btn ${btnCls}" data-banner-id="${esc(b.id)}" ${!isOwned && !canBuy ? 'disabled' : ''}>${btnLabel}</button>
+          <button type="button" class="banner-shop-btn ${btnCls}" data-banner-id="${esc(b.id)}" ${(lockedByRole || (!isOwned && !canBuy)) ? 'disabled' : ''}>${btnLabel}</button>
         </div>
+        ${chainOverlay}
       </div>`;
     }).join('');
-    const bCats = [['all', `Semua (${BANNER_CATALOG.length})`], ['Cowok', '👦 Cowok (10)'], ['Cewek', '👧 Cewek (10)']];
+    const bCats = [['all', `Semua (${BANNER_CATALOG.length})`], ['Cowok', '👦 Cowok (10)'], ['Cewek', '👧 Cewek (10)'], ['Eksklusif', '👑 Admin (1)']];
     const bPills = bCats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${bannerFilter === k ? ' on' : ''}" data-banner-filter="${esc(k)}">${lbl}</button>`).join('');
     const freeBannerNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Nameplate Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
     return `${buildProfileHeroCard()}
@@ -606,7 +628,7 @@
         <div class="name-color-grid">${colorPills}</div>
       </div>
       ${freeBannerNotice}
-      <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>10 Cowok • 10 Cewek</b></div>
+      <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>10 Cowok • 10 Cewek • 1 Admin</b></div>
       <div class="deco-filter-row">${bPills}</div>
       <div class="banner-shop-list">${items}</div>`;
   }
@@ -923,11 +945,12 @@
         const id = btn.getAttribute('data-banner-id');
         const item = BANNER_CATALOG.find(b => b.id === id);
         if (!item) return;
+        if (item.adminOnly && !isAdmin()) { window.showToast?.('🔒 Nameplate ini khusus Admin.'); return; }
         const owned = getOwnedBanners();
         const isOwned = owned.includes(id);
         const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
         if (!isOwned) {
-          const freeAvail = !isFreeBannerClaimed();
+          const freeAvail = !isFreeBannerClaimed() && !item.adminOnly;
           if (freeAvail) {
             markFreeBannerClaimed();
             setOwnedBanners([...owned, id]);
