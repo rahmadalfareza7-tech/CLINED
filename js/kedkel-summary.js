@@ -7,7 +7,6 @@
   const LEGACY_DONE_KEY = 'clined_kedkel_summary_done_v1';
   const LEGACY_STAR_KEY = 'clined_kedkel_summary_star_v1';
   const FONT_KEY = 'clined_kedkel_summary_font_v1';
-  const CLS_KEY = 'clined_kedkel_summary_cls_v1';
   const THEME_KEY = 'clined_kedkel_summary_theme_v1';
 
   const $ = id => document.getElementById(id);
@@ -57,19 +56,6 @@
     } catch { return null; }
   }
 
-  function topicWeekForClass(t, cls) {
-    if (cls === 'A') return Number(t.weekA || t.week || 1);
-    if (cls === 'B') return Number(t.weekB || t.week || 1);
-    return Number(t.week || 1);
-  }
-
-  function topicScheduleLabel(t, cls, detailed) {
-    if (cls === 'A') return `Kelas A · ${t.scheduleA || t.schedule}`;
-    if (cls === 'B') return `Kelas B · ${t.scheduleB || t.schedule}`;
-    if (detailed) return `A: ${t.scheduleA || '—'} · B: ${t.scheduleB || '—'}`;
-    return t.schedule || '';
-  }
-
   function defaultTheme() {
     try {
       const saved = localStorage.getItem(THEME_KEY);
@@ -80,17 +66,11 @@
 
   const S = {
     viewBy: 'week', // 'week' | 'cluster'
-    cls: (() => {
-      try {
-        const v = localStorage.getItem(CLS_KEY);
-        return (v === 'A' || v === 'B') ? v : 'all';
-      } catch { return 'all'; }
-    })(),
     theme: defaultTheme(), // 'paper' | 'light' | 'dark'
     showAgenda: false,
     filter: 'all', // 'all' | 'w1'..'w5' | clusterId | 'todo' | 'star'
     q: '',
-    open: new Set(['d01']),
+    open: new Set(['d06']),
     font: (() => { try { return localStorage.getItem(FONT_KEY) || 'md'; } catch { return 'md'; } })(),
     done: readIdSet(DONE_KEY, LEGACY_DONE_KEY),
     star: readIdSet(STAR_KEY, LEGACY_STAR_KEY)
@@ -116,8 +96,6 @@
       'minggu ' + t.week,
       'm' + t.week,
       t.schedule,
-      t.scheduleA,
-      t.scheduleB,
       t.title,
       t.dosen,
       t.tldr,
@@ -132,29 +110,16 @@
     return hay.includes(q);
   }
 
-  function orderedTopics() {
-    const data = window.CLINED_KEDKEL_SUMMARY_DATA;
-    const list = [...(data?.TOPICS || [])];
-    if (S.viewBy === 'week' && (S.cls === 'A' || S.cls === 'B')) {
-      list.sort((a, b) => {
-        const wa = topicWeekForClass(a, S.cls);
-        const wb = topicWeekForClass(b, S.cls);
-        if (wa !== wb) return wa - wb;
-        return a.no - b.no;
-      });
-    }
-    return list;
-  }
-
   function filteredTopics() {
-    const list = orderedTopics();
+    const data = window.CLINED_KEDKEL_SUMMARY_DATA;
+    const list = data?.TOPICS || [];
     const q = S.q.trim().toLowerCase();
     return list.filter(t => {
       if (S.filter === 'star' && !S.star.has(t.id)) return false;
       else if (S.filter === 'todo' && S.done.has(t.id)) return false;
       else if (S.filter.startsWith('w')) {
         const w = Number(S.filter.slice(1));
-        if (topicWeekForClass(t, S.cls) !== w) return false;
+        if (Number(t.week) !== w) return false;
       } else if (S.filter !== 'all' && S.filter !== 'star' && S.filter !== 'todo') {
         if (t.cluster !== S.filter) return false;
       }
@@ -226,8 +191,6 @@
     const isOpen = S.open.has(t.id);
     const isDone = S.done.has(t.id);
     const isStar = S.star.has(t.id);
-    const wk = topicWeekForClass(t, S.cls);
-    const schedText = topicScheduleLabel(t, S.cls, isOpen);
     const extraBadge = t.isScheduleExtra ? '<span class="ks-new-pill">Jadwal 26/27</span>' : '';
 
     return `<article class="ks-card${isOpen ? ' open' : ''}${isDone ? ' done' : ''}" data-ks-card="${esc(t.id)}">
@@ -236,8 +199,8 @@
         <span class="ks-card-main">
           <span class="ks-card-title">${fmtInline(t.title, S.q)}</span>
           <span class="ks-card-meta">
-            <span class="ks-wk-tag">M${wk}</span>
-            <span>${fmtInline(schedText, S.q)}</span>
+            <span class="ks-wk-tag">M${t.week}</span>
+            <span>${fmtInline(t.schedule || '', S.q)}</span>
             ${extraBadge}
           </span>
           <span class="ks-card-sub">${esc(t.dosen)} · ~${t.readMin} mnt baca</span>
@@ -265,23 +228,20 @@
     let currentWeek = null;
     const countByWeek = new Map();
     for (const t of list) {
-      const w = topicWeekForClass(t, S.cls);
-      countByWeek.set(w, (countByWeek.get(w) || 0) + 1);
+      countByWeek.set(t.week, (countByWeek.get(t.week) || 0) + 1);
     }
     list.forEach((t, idx) => {
-      const w = topicWeekForClass(t, S.cls);
-      if (w !== currentWeek) {
-        currentWeek = w;
-        const wm = weekMap.get(w);
+      if (t.week !== currentWeek) {
+        currentWeek = t.week;
+        const wm = weekMap.get(t.week);
         if (wm) {
-          const cnt = countByWeek.get(w) || 0;
-          const clsNote = S.cls === 'all' ? '' : ` · Kelas ${S.cls}`;
+          const cnt = countByWeek.get(t.week) || 0;
           html.push(`<div class="ks-week-hdr">
             <div class="ks-week-hdr-top">
-              <span class="ks-week-title">${esc(wm.label)} <span class="ks-week-dates">· ${esc(wm.dates)}${esc(clsNote)}</span></span>
+              <span class="ks-week-title">${esc(wm.label)} <span class="ks-week-dates">· ${esc(wm.dates)}</span></span>
               <span class="ks-week-cnt">${cnt} materi</span>
             </div>
-            <div class="ks-week-agenda">${esc(wm.agenda.replace(/🎯\s*/g, ''))}</div>
+            <div class="ks-week-agenda">${esc(wm.agenda)}</div>
           </div>`);
         }
       }
@@ -312,8 +272,7 @@
     if (S.viewBy === 'week') {
       const weekCounts = new Map();
       for (const t of all) {
-        const w = topicWeekForClass(t, S.cls);
-        weekCounts.set(w, (weekCounts.get(w) || 0) + 1);
+        weekCounts.set(t.week, (weekCounts.get(t.week) || 0) + 1);
       }
       chips = [
         { id: 'all', label: `Semua (${all.length})` },
@@ -344,12 +303,6 @@
       }).join('')}
     </div>` : '';
 
-    const clsSeg = S.viewBy === 'week' ? `<div class="ks-btn-row" role="group" aria-label="Pilih kelas">
-      <button type="button" class="ks-btn3d${S.cls === 'all' ? ' on' : ''}" data-ks-cls="all">A &amp; B</button>
-      <button type="button" class="ks-btn3d${S.cls === 'A' ? ' on' : ''}" data-ks-cls="A">Kelas A</button>
-      <button type="button" class="ks-btn3d${S.cls === 'B' ? ' on' : ''}" data-ks-cls="B">Kelas B</button>
-    </div>` : '';
-
     page.dataset.ksTheme = S.theme;
 
     page.innerHTML = `<div class="ks-shell${fontCls}" data-theme="${esc(S.theme)}">
@@ -361,7 +314,7 @@
         <div class="ks-title-wrap">
           <div class="ks-eyebrow">RINGKASAN FULL BLOK · KEDKEL TA 2026–2027</div>
           <h2>Ringkasan Lengkap ${all.length} Materi</h2>
-          <p>Disusun urut sesuai Jadwal Putaran 2 FK YARSI (Minggu 1–5) — lengkap dengan tabel ringkas, angka wajib, dan poin ujian.</p>
+          <p>Disusun urut sesuai Jadwal Blok Kedokteran Keluarga (Minggu 1–5) — lengkap dengan tabel ringkas, angka wajib, dan poin ujian.</p>
         </div>
 
         <div class="ks-prefs-bar">
@@ -407,7 +360,10 @@
             <button type="button" class="ks-btn3d${S.viewBy === 'week' ? ' on' : ''}" data-ks-view="week">Per Minggu</button>
             <button type="button" class="ks-btn3d${S.viewBy === 'cluster' ? ' on' : ''}" data-ks-view="cluster">Per Klaster</button>
           </div>
-          ${clsSeg}
+          <div class="ks-btn-row">
+            <button type="button" class="ks-btn3d ks-btn-sm${!allOpen && openInListCount === 0 ? ' on' : ''}" data-ks-expand="none">Tutup Semua</button>
+            <button type="button" class="ks-btn3d ks-btn-sm${allOpen ? ' on' : ''}" data-ks-expand="all">Buka Semua</button>
+          </div>
         </div>
 
         <div class="ks-chips" role="group" aria-label="Filter materi">
@@ -415,11 +371,7 @@
         </div>
 
         <div class="ks-meta-row">
-          <span>Menampilkan ${list.length} dari ${all.length} materi${S.viewBy === 'week' && S.cls !== 'all' ? ` · Urutan Kelas ${S.cls}` : ''}</span>
-          <div class="ks-btn-row">
-            <button type="button" class="ks-btn3d ks-btn-sm${!allOpen && openInListCount === 0 ? ' on' : ''}" data-ks-expand="none">Tutup Semua</button>
-            <button type="button" class="ks-btn3d ks-btn-sm${allOpen ? ' on' : ''}" data-ks-expand="all">Buka Semua</button>
-          </div>
+          <span>Menampilkan ${list.length} dari ${all.length} materi</span>
         </div>
       </div>
 
@@ -495,11 +447,6 @@
         S.viewBy = t.dataset.ksView;
         S.filter = 'all';
       }
-      return render();
-    }
-    if (t.dataset.ksCls) {
-      S.cls = t.dataset.ksCls;
-      try { localStorage.setItem(CLS_KEY, S.cls); } catch {}
       return render();
     }
     if (t.dataset.ksFilter) {

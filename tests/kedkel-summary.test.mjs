@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-test('Ringkasan Full Blok KEDKEL selaras jadwal TA 2026–2027 (34 materi, Minggu 1–5, 31 Drive + 3 tambahan)', () => {
+test('Ringkasan Full Blok KEDKEL selaras jadwal Kelas B TA 2026–2027 (34 materi, Minggu 1–5, 31 Drive + 3 tambahan)', () => {
   const ctx = { window: {} };
   vm.runInNewContext(fs.readFileSync(new URL('../js/kedkel-summary-data.js', import.meta.url), 'utf8'), ctx);
   const data = ctx.window.CLINED_KEDKEL_SUMMARY_DATA;
@@ -23,8 +23,6 @@ test('Ringkasan Full Blok KEDKEL selaras jadwal TA 2026–2027 (34 materi, Mingg
     assert.ok(t.id && !seenIds.has(t.id), `ID materi ${t.no} unik`);
     seenIds.add(t.id);
     assert.ok(t.week >= 1 && t.week <= 5, `Minggu materi ${t.no} valid (1..5)`);
-    assert.ok(t.weekA >= 1 && t.weekA <= 5, `Minggu Kelas A materi ${t.no} valid`);
-    assert.ok(t.weekB >= 1 && t.weekB <= 5, `Minggu Kelas B materi ${t.no} valid`);
     assert.ok(String(t.schedule || '').trim().length > 5, `Jadwal materi ${t.no} terisi`);
     assert.ok(clusterIds.has(t.cluster) && t.cluster !== 'all', `Klaster materi ${t.no} valid`);
     assert.ok(String(t.title || '').trim().length > 3, `Judul materi ${t.no} tidak kosong`);
@@ -44,8 +42,11 @@ test('Ringkasan Full Blok KEDKEL selaras jadwal TA 2026–2027 (34 materi, Mingg
   assert.equal(seenDriveNos.size, 31, 'Seluruh 31 materi Drive asli harus terhubung tepat 1x');
   assert.equal(extraCount, 3, 'Harus ada 3 materi tambahan jadwal TA 26/27 (Kecelakaan Kerja, Lab Rasional, Obat Cair & Inhalasi)');
 
-  // Pastikan urutan topik monoton naik berdasarkan minggu jadwal
-  for (let i = 1; i < data.TOPICS.length; i++) {
-    assert.ok(data.TOPICS[i].week >= data.TOPICS[i - 1].week, `Urutan minggu harus kronologis di index ${i}`);
+  // Pastikan urutan topik monoton naik berdasarkan minggu jadwal Kelas B (M1:7, M2:10, M3:10, M4:6, M5:1)
+  const counts = [0, 0, 0, 0, 0, 0];
+  for (let i = 0; i < data.TOPICS.length; i++) {
+    counts[data.TOPICS[i].week]++;
+    if (i > 0) assert.ok(data.TOPICS[i].week >= data.TOPICS[i - 1].week, `Urutan minggu harus kronologis di index ${i}`);
   }
+  assert.deepEqual(counts.slice(1), [7, 10, 10, 6, 1], 'Distribusi materi per minggu harus sesuai jadwal Kelas B');
 });

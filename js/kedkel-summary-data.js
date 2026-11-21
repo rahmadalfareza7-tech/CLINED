@@ -1,9 +1,9 @@
-/* CLINED — Ringkasan Full Blok Kedokteran Keluarga (34 Materi • Selaras Jadwal TA 2026–2027 FK YARSI) */
+/* CLINED — Ringkasan Full Blok Kedokteran Keluarga (34 Materi • Jadwal Kelas B TA 2026–2027 FK YARSI) */
 (() => {
   'use strict';
 
   const SCHEDULE_META = {
-  "title": "Jadwal Putaran 2 Semester Ganjil TA 2026–2027 FK YARSI",
+  "title": "Jadwal Putaran 2 Semester Ganjil TA 2026–2027 FK YARSI (Kelas B)",
   "block": "Blok Kedokteran Keluarga (Semester 7)",
   "period": "19 Oktober – 26 November 2026",
   "milestones": [
@@ -46,35 +46,35 @@
     "short": "M1",
     "label": "Minggu 1",
     "dates": "19–23 Okt 2026",
-    "agenda": "Pendahuluan Blok (Sel 20 Okt) • Fondasi Klinis, Komunikasi, Jiwa, Farma & K3"
+    "agenda": "Pendahuluan Blok (Sel 20 Okt) · Fondasi Farma, K3, Jiwa, Konseling & Diagnosis Holistik"
   },
   {
     "id": 2,
     "short": "M2",
     "label": "Minggu 2",
     "dates": "26–30 Okt 2026",
-    "agenda": "Praktikum Farma 1 • PBL S1 • Bimbingan TM 1 • KedKel, PCA, LTC & Lab Primer"
+    "agenda": "Praktikum Farma 1 (Kam 29 Okt) · PBL S1 · Bimbingan TM 1 · KedKel, Home Care, LTC & Komunikasi"
   },
   {
     "id": 3,
     "short": "M3",
     "label": "Minggu 3",
     "dates": "2–6 Nov 2026",
-    "agenda": "Praktikum Farma 2 & 3A • PBL S2 • Bimbingan TM 2 • Lansia, Keluarga, Gizi & Etika"
+    "agenda": "Praktikum Farma 2 (Kam 5 Nov) · PBL S2 · Bimbingan TM 2 · Lab Primer, K3, Etika, Lansia & PCA"
   },
   {
     "id": 4,
     "short": "M4",
     "label": "Minggu 4",
     "dates": "9–13 Nov 2026",
-    "agenda": "Praktikum Farma 3B • 🎯 Ujian Praktikum Farma (Kam 12 Nov) • PBL S3 • TM 3 & 4"
+    "agenda": "Praktikum Farma 3 (Sel 10 Nov) · Ujian Praktikum Farma (Kam 12 Nov) · PBL S3 · TM 3 & 4"
   },
   {
     "id": 5,
     "short": "M5",
     "label": "Minggu 5",
     "dates": "16–20 Nov 2026",
-    "agenda": "Feedback Tugas Baca (16–17 Nov) • Bimbingan TM 5 • Pleno Skenario 1–4 (Jum 20 Nov)"
+    "agenda": "Feedback Tugas Baca (Sen 16 Nov) · Bimbingan TM 5 (Rab 18 Nov) · Pleno Skenario 1–4 (Jum 20 Nov)"
   }
 ];
 
@@ -119,14 +119,203 @@
   const TOPICS = [
   {
     "no": 1,
+    "id": "d06",
+    "driveNo": 6,
+    "week": 1,
+    "schedule": "Rab, 21 Okt (14.50)",
+    "cluster": "farma",
+    "icon": "✅",
+    "title": "Rational Use of Medicine (Penggunaan Obat Rasional)",
+    "dosen": "dr. Lilian Batubara, M.Kes",
+    "readMin": 3,
+    "tldr": "Penggunaan obat rasional (POR) memastikan pasien mendapat obat sesuai indikasi klinis, dosis tepat, durasi cukup, dan biaya paling terjangkau melalui 6 langkah WHO.",
+    "sections": [
+      {
+        "heading": "Definisi WHO (1985) & Kriteria Obat Rasional",
+        "bullets": [
+          "**Definisi POR**: Pasien menerima obat sesuai kebutuhan klinis, dalam dosis yang memenuhi kebutuhan individual, untuk periode waktu yang adekuat, dengan biaya terendah bagi pasien dan masyarakat.",
+          "**Tepat Indikasi, Tepat Obat, Tepat Pasien, Tepat Dosis/Cara/Lama Pemberian, Tepat Informasi, dan Waspada Efek Samping**.",
+          "**Contoh klasik POIR (slide dr. Lilian)**: Pemberian **kortikosteroid sistemik untuk sakit tenggorokan ringan** (toksisitas lebih besar padahal ada alternatif aman) dan **peresepan mewah (*extravagant prescribing*)** (meresepkan obat bermerek mahal padahal tersedia generik/sejenis dengan efikasi setara)."
+        ]
+      },
+      {
+        "heading": "6 Langkah Proses Pengobatan Rasional (WHO)",
+        "bullets": [
+          "**1. Tetapkan masalah pasien** (diagnosis kerja yang akurat).",
+          "**2. Tetapkan tujuan terapi** (kuratif, simtomatik, atau preventif).",
+          "**3. Tentukan obat pilihan (*P-drug*)**: Dinilai dari 4 kriteria — **Efektivitas (kemanjuran), Keamanan, Kecocokan (kontraindikasi/interaksi), dan Biaya**.",
+          "**4. Mulai terapi & tulis resep** secara lengkap dan legal.",
+          "**5. Berikan informasi, instruksi & peringatan** (efek terapi, aturan pakai, efek samping, kapan kembali).",
+          "**6. Pantau (dan hentikan bila perlu)** respons terapi.",
+          "**4 Kriteria Pemilihan P-Drug (Langkah ke-3)**: **Efficacy** (kemanjuran), **Safety** (keamanan), **Suitability** (kecocokan terhadap kontraindikasi/kondisi khusus pasien — mis. **parasetamol** dipilih pada pasien ulkus peptikum karena iritasi lambung minimal), dan **Cost** (biaya terjangkau)."
+        ]
+      },
+      {
+        "heading": "10 Dasar Pertimbangan Pemilihan Obat",
+        "bullets": [
+          "Pilih obat yang paling *established* (bukti ilmiah kuat) dan hindari kombinasi tetap bila tidak perlu.",
+          "Gunakan **rute paling aman** (oral dipilih bila pasien bisa menelan) dan **dosis efektif terkecil**.",
+          "Kurangi polifarmasi untuk mencegah interaksi obat dan meningkatkan kepatuhan pasien.",
+          "Sesuaikan dengan kondisi khusus: usia (anak/lansia), kehamilan/menyusui, fungsi ginjal/hati, dan kemampuan ekonomi."
+        ]
+      }
+    ],
+    "highYield": [
+      "4 Kriteria pemilihan *P-drug* (Langkah ke-3 WHO): **E–K–K–B** (Efektivitas, Keamanan, Kecocokan, Biaya).",
+      "Rute paling aman bila pasien sadar & bisa menelan = **per oral**, dengan **dosis efektif terkecil**.",
+      "4 kriteria P-Drug: **Efficacy, Safety, Suitability, Cost**. Kortikosteroid untuk radang tenggorokan ringan = toksisitas > manfaat; obat bermerek mahal saat generik ada = **extravagant prescribing**."
+    ]
+  },
+  {
+    "no": 2,
+    "id": "d10",
+    "driveNo": 10,
+    "week": 1,
+    "schedule": "Kam, 22 Okt (07.55)",
+    "cluster": "farma",
+    "icon": "💊",
+    "title": "BSO Padat & Setengah Padat",
+    "dosen": "Drs. Dharma Permana, Apt., Ph.D",
+    "readMin": 4,
+    "tldr": "Pemilihan bentuk sediaan padat (serbuk, kapsul, tablet, supositoria) dan setengah padat (salep, krim, gel, pasta) bergantung pada stabilitas zat aktif, kecepatan absorpsi, lokasi kerja, dan kemampuan menelan pasien.",
+    "sections": [
+      {
+        "heading": "BSO Padat: Serbuk, Kapsul & Tablet Khusus",
+        "bullets": [
+          "**Pulveres (puyer/serbuk terbagi)**: Cocok untuk anak/dewasa sulit menelan, absorpsi lebih cepat daripada tablet (tidak butuh waktu disintegrasi 5–10 menit), lebih stabil dibanding cair; bobot ideal **300–1000 mg (rata-rata 500 mg)**; kurang cocok untuk zat higroskopis atau sangat pahit.",
+          "**Pulvis (serbuk tak terbagi)**: Oral untuk obat indeks terapi lebar (mis. oralit); topikal = **Pulvis adspersorius** (bedak tabur, kehalusan **100 mesh**).",
+          "**Tablet Sublingual & Bukal**: Melarut cepat di bawah lidah/pipi, absorpsi langsung lewat mukosa mulut → **menghindari first-pass metabolism hati** (kerja sangat cepat, mis. ISDN).",
+          "**Tablet Salut Enterik**: Disalut bahan tahan asam (selulosa asetat ftalat/shellac) agar **tidak hancur di lambung** melainkan di usus (melindungi lambung dari obat iritatif atau melindungi obat yang rusak oleh asam lambung) → **jangan digerus/dikunyah**.",
+          "**Tablet Lepas Lambat (*Sustained/Extended Release*)**: Melepaskan obat bertahap agar frekuensi minum lebih jarang → tidak boleh dibelah/digerus."
+        ]
+      },
+      {
+        "heading": "BSO Setengah Padat (Topikal & Mata)",
+        "table": {
+          "headers": [
+            "Bentuk Sediaan",
+            "Ciri Khas & Indikasi Utama"
+          ],
+          "rows": [
+            [
+              "Salep (Unguentum)",
+              "Basis berlemak/oklusif, bertahan lama di kulit; cocok untuk lesi kering/kronis/skuama"
+            ],
+            [
+              "Krim (Cremor)",
+              "Emulsi air + minyak (M/A mudah dicuci, tidak lengket); cocok untuk lesi basah/subakut/berambut"
+            ],
+            [
+              "Pasta",
+              "Mengandung **40–50% serbuk padat** (ZnO, amilum, talk); konsistensi kenyal, tidak berminyak, protektif/menyerap eksudat"
+            ],
+            [
+              "Gel",
+              "Basis air transparan, dingin, cepat meresap, tidak berminyak; cocok untuk area berambut/wajah"
+            ],
+            [
+              "Salep Mata (Oculentum)",
+              "**Wajib steril** & bebas partikel kasar; waktu kontak lebih lama daripada tetes mata, tapi dapat mengaburkan penglihatan sementara"
+            ]
+          ]
+        },
+        "bullets": [
+          "**Salep Mata (*Oculentum*)**: Wajib **steril** dan bebas partikel kasar; keunggulannya waktu kontak lebih lama dibanding tetes mata, tetapi basisnya lengket & mengaburkan penglihatan → **sebaiknya dipakai sebelum tidur**, dan **tidak boleh digunakan lagi setelah 1 bulan dibuka**."
+        ]
+      }
+    ],
+    "highYield": [
+      "Ingat angka emas: bobot pulveres ideal **500 mg (300–1000 mg)**; bedak tabur **100 mesh**; pasta mengandung **40–50% serbuk padat**.",
+      "Tablet **sublingual** = hindari *first-pass effect*; tablet **salut enterik** = pecah di usus, tidak boleh digerus.",
+      "**Salep mata (*oculentum*)**: kontak lebih lama tapi mengaburkan pandangan → pakai **sebelum tidur**, buang setelah **1 bulan** dibuka."
+    ]
+  },
+  {
+    "no": 3,
+    "id": "d15",
+    "driveNo": 15,
+    "week": 1,
+    "schedule": "Kam, 22 Okt (13.00)",
+    "cluster": "lansia_k3",
+    "icon": "🏭",
+    "title": "Ruang Lingkup Kesehatan Kerja & 7 Langkah Diagnosis PAK",
+    "dosen": "dr. Dian Mardhiyah, MKK, Sp.KKLP, Subsp.FOMC, Ph.D",
+    "readMin": 3,
+    "tldr": "Kesehatan kerja melindungi pekerja dari bahaya lingkungan kerja (fisik, kimia, biologi, ergonomi, psikososial), dan penetapan Penyakit Akibat Kerja (PAK) wajib mengikuti 7 langkah diagnosis baku.",
+    "sections": [
+      {
+        "heading": "Ruang Lingkup & Standar Kesehatan Kerja (K3)",
+        "bullets": [
+          "**4 Jenis Pemeriksaan Kesehatan Pekerja (Permenaker 2/1980)**: (1) **Awal** (sebelum diterima kerja), (2) **Berkala** (minimal 1x/tahun), (3) **Khusus** (pekerja berisiko tertentu), (4) **Purna Bakti** (3 bulan sebelum pensiun).",
+          "**Petugas P3K**: Risiko rendah = **1 : 150** pekerja; risiko tinggi = **1 : 100** pekerja.",
+          "**Gizi Kerja**: 50–200 pekerja wajib **ruang makan**; >200 pekerja wajib **kantin perusahaan**.",
+          "**NAB Kebisingan**: **85 dB** maksimal **8 jam/hari**; setiap naik +3 dB waktu pajanan dibagi dua (**88 dB = 4 jam**, **91 dB = 2 jam**). Program Konservasi Pendengaran memakai audiometri nada murni.",
+          "**Getaran lokal (*hand-arm vibration*)**: Paparan bor genggam/mesin getar memicu **Vibration White Finger (VWF)** (gangguan vaskular, saraf, dan sendi tangan).",
+          "**Kategori Skor Matriks Risiko K3**: **1–3 = Rendah**, **4–6 = Sedang**, **8–12 = Bermakna**, dan **15–25 = Tinggi**. Urutan 5 Hierarki Pengendalian Risiko: **Eliminasi → Substitusi → Pengendalian Teknik → Pengendalian Administratif → APD**."
+        ]
+      },
+      {
+        "heading": "7 Langkah Diagnosis Penyakit Akibat Kerja (PAK)",
+        "bullets": [
+          "**1. Tegakkan diagnosis klinis** sesuai prosedur medis.",
+          "**2. Tentukan pajanan yang dialami** pekerja di tempat kerja (saat ini & riwayat sebelumnya).",
+          "**3. Tentukan hubungan pajanan dengan diagnosis klinis** berdasarkan *evidence-based medicine*.",
+          "**4. Tentukan apakah besarnya pajanan cukup** untuk menimbulkan penyakit (dosis, durasi, NAB, pemakaian APD).",
+          "**5. Tentukan faktor individu** yang berperan (genetik, alergi, riwayat penyakit sebelumnya).",
+          "**6. Tentukan faktor lain di luar tempat kerja** (hobi, pekerjaan sampingan, lingkungan rumah).",
+          "**7. Tetapkan diagnosis okupasi**: Apakah **PAK**, penyakit diperberat pekerjaan, atau bukan PAK."
+        ]
+      }
+    ],
+    "highYield": [
+      "Urutan 7 Langkah PAK: **Klinis → Pajanan → Hubungan (EBM) → Besarnya pajanan → Faktor individu → Faktor luar kerja → Diagnosis PAK**.",
+      "Hafal angka K3: NAB bising **85 dB (8 jam) / 88 dB (4 jam) / 91 dB (2 jam)**; P3K **1:150** (rendah) / **1:100** (tinggi); kantin **>200 pekerja**.",
+      "Matriks Risiko K3: **1–3 Rendah**, **4–6 Sedang**, **8–12 Bermakna**, **15–25 Tinggi** (mis. skor 20 = Tinggi)."
+    ]
+  },
+  {
+    "no": 4,
+    "id": "d14",
+    "driveNo": 14,
+    "week": 1,
+    "schedule": "Kam, 22 Okt (14.50)",
+    "cluster": "islam_etika",
+    "icon": "⚖️",
+    "title": "Sebab-Sebab Perilaku Menyimpang dalam Islam",
+    "dosen": "Dr. dr. Endy M. Astiwara, MA, FIIS",
+    "readMin": 3,
+    "tldr": "Perilaku menyimpang dipahami dari dua sisi: teori sosiologis (anomi, labelling) dan akar spiritual dalam Islam (lemahnya iman, hawa nafsu/hirsh, dan terbiasa dengan maksiat yang menghitamkan kalbu).",
+    "sections": [
+      {
+        "heading": "Teori Sosiologis Penyimpangan",
+        "bullets": [
+          "**Anomi**: Kondisi masyarakat tanpa norma/nilai yang dihayati konsisten sebagai pedoman (terjadi saat nilai lama ditinggalkan, sementara nilai baru belum terbentuk).",
+          "**Teori Labelling**: Seseorang yang melakukan penyimpangan awal (*primary deviance*) diberi cap/stigma negatif oleh lingkungan, lalu menginternalisasi label tersebut dan terus mengulanginya (*secondary deviance*).",
+          "**Differential Association**: Penyimpangan dipelajari melalui pergaulan intensif dengan kelompok yang mendukung perilaku menyimpang."
+        ]
+      },
+      {
+        "heading": "Sebab Penyimpangan dalam Perspektif Al-Qur’an & Hadis",
+        "bullets": [
+          "**Kebebasan memilih & tanggung jawab**: Al-Qur’an menegaskan jalan petunjuk dan kesesatan sudah jelas (QS Al-Baqarah [2]: 256; QS Al-Kahfi [18]: 29), namun sebagian orang menutup diri dan sombong (QS Nuh [71]: 7).",
+          "**Terbiasa dengan keburukan (*Nuktah Sauda’*)**: HR Tirmidzi menjelaskan setiap dosa menimbulkan satu titik noda hitam di hati; bila diulang tanpa tobat, hati tertutup (*raan*) hingga tidak peka lagi terhadap kebenaran.",
+          "**Tamak (*Hirsh*) terhadap harta & kedudukan**: HR Tirmidzi & Ahmad mengibaratkan sifat tamak terhadap harta dan kehormatan lebih merusak agama seseorang daripada **dua serigala lapar yang dilepas di tengah kumpulan kambing**.",
+          "**Teori Labelling (Penyimpangan Primer → Sekunder)**: Pemberian cap/stigma negatif oleh masyarakat kepada pelaku **penyimpangan primer** mendorong pelaku menginternalisasi identitas \"penyimpang\" hingga terjerumus ke **penyimpangan sekunder** yang menetap."
+        ]
+      }
+    ],
+    "highYield": [
+      "Beda istilah: **Anomi** = hilangnya norma pedoman; **Labelling** = stigma memicu penyimpangan sekunder.",
+      "Hadis populer di soal: **Nuktah sauda’** (noda hitam di hati akibat dosa berulang) & **2 serigala lapar** (perumpamaan sifat tamak/*hirsh*).",
+      "**Labelling**: stigma pada penyimpangan primer memicu internalisasi peran penyimpang → masuk ke **penyimpangan sekunder**."
+    ]
+  },
+  {
+    "no": 5,
     "id": "d01",
     "driveNo": 1,
     "week": 1,
-    "weekA": 1,
-    "weekB": 1,
-    "schedule": "A: Rab 21 Okt • B: Jum 23 Okt",
-    "scheduleA": "Rab 21 Okt (07.55)",
-    "scheduleB": "Jum 23 Okt (07.55)",
+    "schedule": "Jum, 23 Okt (07.55)",
     "cluster": "jiwa",
     "icon": "🧠",
     "title": "Deteksi Dini Gangguan Jiwa & Risiko Bunuh Diri",
@@ -167,85 +356,69 @@
     ]
   },
   {
-    "no": 2,
-    "id": "d02",
-    "driveNo": 2,
+    "no": 6,
+    "id": "d07",
+    "driveNo": 7,
     "week": 1,
-    "weekA": 1,
-    "weekB": 2,
-    "schedule": "A: Rab 21 Okt (M1) • B: Jum 30 Okt (M2)",
-    "scheduleA": "Rab 21 Okt (09.45)",
-    "scheduleB": "Jum 30 Okt (09.45)",
+    "schedule": "Jum, 23 Okt (09.45)",
     "cluster": "fondasi",
-    "icon": "🗣️",
-    "title": "Teknik Komunikasi Dokter–Pasien",
-    "dosen": "Prof. dr. Hj. Qomariyah, MS, PKK, AIFM, Sp.KKLP",
-    "readMin": 3,
-    "tldr": "Komunikasi efektif adalah inti transaksi terapeutik: menyesuaikan pola hubungan dengan kondisi pasien, menjalankan komunikasi inti secara runtut, dan berempati saat menyampaikan berita buruk.",
+    "icon": "💬",
+    "title": "Konseling Individu",
+    "dosen": "dr. Maya Trisiswati, MKM",
+    "readMin": 2,
+    "tldr": "Konseling bukan memberi nasihat sepihak, melainkan membantu klien memahami masalahnya dan mengambil keputusan sendiri secara sadar dalam suasana aman, rahasia, dan empatik.",
     "sections": [
       {
-        "heading": "3 Model Klasik Hubungan Dokter–Pasien",
+        "heading": "Beda Pendidikan Kesehatan, Konsultasi & Konseling",
         "table": {
           "headers": [
-            "Model",
-            "Peran Dokter & Pasien",
-            "Contoh Kondisi"
+            "Pendekatan",
+            "Peran Dokter & Arah Keputusan"
           ],
           "rows": [
             [
-              "Activity–Passivity",
-              "Dokter aktif penuh, pasien pasif (seperti orang tua–bayi)",
-              "Pasien tidak sadar, koma, gawat darurat berat, anestesi"
+              "Pendidikan Kesehatan",
+              "Menyampaikan informasi agar sasaran sadar dan mau mengikuti anjuran"
             ],
             [
-              "Guidance–Cooperation",
-              "Dokter membimbing, pasien kooperatif mengikuti arahan",
-              "Penyakit akut ringan–sedang (ISPA, infeksi akut)"
+              "Konsultasi",
+              "Membantu analisis masalah dan memberi saran/rekomendasi profesional"
             ],
             [
-              "Mutual Participation",
-              "Kemitraan setara; dokter & pasien berbagi keputusan",
-              "Penyakit kronis (DM, hipertensi, asma, TBC jangka panjang)"
+              "Konseling",
+              "Membantu klien mengeksplorasi perasaan & alternatif agar klien mengambil keputusan sendiri"
             ]
           ]
         }
       },
       {
-        "heading": "Alur Komunikasi Inti & Keterampilan Dasar",
+        "heading": "Keterampilan Inti, Setting & Sikap Konselor",
         "bullets": [
-          "**5 Langkah Komunikasi Inti**: (1) Anamnesis → (2) Penetapan diagnosis → (3) Penyampaian hasil pemeriksaan → (4) Membangun transaksi pengobatan (kesepakatan terapi + edukasi efek samping & jadwal kontrol) → (5) Penutup.",
-          "**Verbal & Non-verbal**: Gunakan bahasa sederhana tanpa jargon medis, kontak mata hangat, intonasi tenang, posisi duduk sejajar, dan hindari sikap menghakimi atau memotong cerita pasien.",
-          "**Prinsip mendengar aktif**: Beri ruang pasien bicara di menit awal, klarifikasi dengan pertanyaan terbuka lalu tertutup, dan rangkum pemahaman pasien (*teach-back*).",
-          "**Inhibisi vs Empati**: **Inhibisi** adalah hambatan psikologis ketika pasien sulit/enggan mengungkapkan keluhan sebenarnya karena malu, takut, atau jarak emosional; **Empati** adalah kemampuan dokter memahami sudut pandang & perasaan pasien secara objektif sehingga mencairkan inhibisi."
+          "**Mendengar Aktif (3 bentuk refleksi)**: **Refleksi Isi** (mengulang inti fakta), **Refleksi Perasaan** (menangkap emosi di balik cerita), dan **Refleksi Makna** (menghubungkan fakta + perasaan).",
+          "**Perilaku verbal & non-verbal mendukung**: Bahasa mudah dimengerti, sesuai usia, kontak mata wajar, ekspresi ramah, humor ringan proporsional, tidak memotong/menghakimi/menggurui/berpidato.",
+          "**Setting waktu & tempat**: Durasi ideal **maksimal 45 menit**, hindari jam tidur/ibadah/terlalu pagi; tempat tidak harus di ruang praktik asalkan **tenang, nyaman, dan menjaga privasi**.",
+          "**5 Isi Konseling**: Informasi umum → Penilaian tingkat risiko → Rencana perubahan perilaku → Identifikasi hambatan (gender, adat, ekonomi) → Akses rujukan."
         ]
       },
       {
-        "heading": "5 Tahap Reaksi Psikologis Berita Buruk (Kübler-Ross)",
+        "heading": "Menangani Klien Sulit",
         "bullets": [
-          "**1. Denial & Isolation (Penolakan)**: Menyangkal hasil lab/diagnosis (\"Tidak mungkin, pasti salah periksa\").",
-          "**2. Anger (Marah)**: Melampiaskan kekesalan ke dokter, keluarga, atau takdir (\"Kenapa harus saya?\").",
-          "**3. Bargaining (Tawar-menawar)**: Berjanji berubah demi kesembuhan atau menunda kenyataan.",
-          "**4. Depression (Depresi)**: Kesedihan mendalam, menarik diri, merasa tidak berdaya.",
-          "**5. Acceptance (Penerimaan)**: Menerima kenyataan dengan tenang dan mulai fokus pada langkah penanganan."
+          "**Klien menangis tersedu**: Beri waktu meluapkan emosi, sediakan tisu/minum, yakinkan konselor hadir mendengarkan, jangan langsung menyuruh berhenti menangis.",
+          "**Klien pendiam/terpaksa**: Sampaikan jujur bahwa konseling sulit berhasil jika terpaksa, beri ruang tenang tanpa memaksa, bangun rasa aman secara bertahap."
         ]
       }
     ],
     "highYield": [
-      "Jembatan keledai Kübler-Ross: **DABDA** (*Denial → Anger → Bargaining → Depression → Acceptance*).",
-      "Pasien koma/IGD = **Activity–Passivity**; pasien infeksi akut sadar = **Guidance–Cooperation**; pasien DM/hipertensi kronis = **Mutual Participation**.",
-      "**Inhibisi** = pasien sulit mengungkap keluhan sebenarnya; diatasi lewat **empati** dan mendengar aktif."
+      "Durasi konseling individu: **maksimal 45 menit**; jangan dilakukan saat jam ibadah/tidur.",
+      "3 jenis refleksi dalam mendengar aktif: **Isi, Perasaan, Makna**."
     ]
   },
   {
-    "no": 3,
+    "no": 7,
     "id": "d04",
     "driveNo": 4,
     "week": 1,
-    "weekA": 1,
-    "weekB": 1,
-    "schedule": "A: Rab 21 Okt • B: Jum 23 Okt",
-    "scheduleA": "Rab 21 Okt (14.50)",
-    "scheduleB": "Jum 23 Okt (14.50)",
+    "schedule": "Jum, 23 Okt (14.50)",
     "cluster": "fondasi",
     "icon": "📋",
     "title": "Diagnosis Holistik",
@@ -323,198 +496,11 @@
     ]
   },
   {
-    "no": 4,
-    "id": "d06",
-    "driveNo": 6,
-    "week": 1,
-    "weekA": 2,
-    "weekB": 1,
-    "schedule": "B: Rab 21 Okt (M1) • A: Sen 26 Okt (M2)",
-    "scheduleA": "Sen 26 Okt (13.00)",
-    "scheduleB": "Rab 21 Okt (14.50)",
-    "cluster": "farma",
-    "icon": "✅",
-    "title": "Rational Use of Medicine (Penggunaan Obat Rasional)",
-    "dosen": "dr. Lilian Batubara, M.Kes",
-    "readMin": 3,
-    "tldr": "Penggunaan obat rasional (POR) memastikan pasien mendapat obat sesuai indikasi klinis, dosis tepat, durasi cukup, dan biaya paling terjangkau melalui 6 langkah WHO.",
-    "sections": [
-      {
-        "heading": "Definisi WHO (1985) & Kriteria Obat Rasional",
-        "bullets": [
-          "**Definisi POR**: Pasien menerima obat sesuai kebutuhan klinis, dalam dosis yang memenuhi kebutuhan individual, untuk periode waktu yang adekuat, dengan biaya terendah bagi pasien dan masyarakat.",
-          "**Tepat Indikasi, Tepat Obat, Tepat Pasien, Tepat Dosis/Cara/Lama Pemberian, Tepat Informasi, dan Waspada Efek Samping**.",
-          "**Contoh klasik POIR (slide dr. Lilian)**: Pemberian **kortikosteroid sistemik untuk sakit tenggorokan ringan** (toksisitas lebih besar padahal ada alternatif aman) dan **peresepan mewah (*extravagant prescribing*)** (meresepkan obat bermerek mahal padahal tersedia generik/sejenis dengan efikasi setara)."
-        ]
-      },
-      {
-        "heading": "6 Langkah Proses Pengobatan Rasional (WHO)",
-        "bullets": [
-          "**1. Tetapkan masalah pasien** (diagnosis kerja yang akurat).",
-          "**2. Tetapkan tujuan terapi** (kuratif, simtomatik, atau preventif).",
-          "**3. Tentukan obat pilihan (*P-drug*)**: Dinilai dari 4 kriteria — **Efektivitas (kemanjuran), Keamanan, Kecocokan (kontraindikasi/interaksi), dan Biaya**.",
-          "**4. Mulai terapi & tulis resep** secara lengkap dan legal.",
-          "**5. Berikan informasi, instruksi & peringatan** (efek terapi, aturan pakai, efek samping, kapan kembali).",
-          "**6. Pantau (dan hentikan bila perlu)** respons terapi.",
-          "**4 Kriteria Pemilihan P-Drug (Langkah ke-3)**: **Efficacy** (kemanjuran), **Safety** (keamanan), **Suitability** (kecocokan terhadap kontraindikasi/kondisi khusus pasien — mis. **parasetamol** dipilih pada pasien ulkus peptikum karena iritasi lambung minimal), dan **Cost** (biaya terjangkau)."
-        ]
-      },
-      {
-        "heading": "10 Dasar Pertimbangan Pemilihan Obat",
-        "bullets": [
-          "Pilih obat yang paling *established* (bukti ilmiah kuat) dan hindari kombinasi tetap bila tidak perlu.",
-          "Gunakan **rute paling aman** (oral dipilih bila pasien bisa menelan) dan **dosis efektif terkecil**.",
-          "Kurangi polifarmasi untuk mencegah interaksi obat dan meningkatkan kepatuhan pasien.",
-          "Sesuaikan dengan kondisi khusus: usia (anak/lansia), kehamilan/menyusui, fungsi ginjal/hati, dan kemampuan ekonomi."
-        ]
-      }
-    ],
-    "highYield": [
-      "4 Kriteria pemilihan *P-drug* (Langkah ke-3 WHO): **E–K–K–B** (Efektivitas, Keamanan, Kecocokan, Biaya).",
-      "Rute paling aman bila pasien sadar & bisa menelan = **per oral**, dengan **dosis efektif terkecil**.",
-      "4 kriteria P-Drug: **Efficacy, Safety, Suitability, Cost**. Kortikosteroid untuk radang tenggorokan ringan = toksisitas > manfaat; obat bermerek mahal saat generik ada = **extravagant prescribing**."
-    ]
-  },
-  {
-    "no": 5,
-    "id": "d07",
-    "driveNo": 7,
-    "week": 1,
-    "weekA": 1,
-    "weekB": 1,
-    "schedule": "A: Kam 22 Okt • B: Jum 23 Okt",
-    "scheduleA": "Kam 22 Okt (07.55)",
-    "scheduleB": "Jum 23 Okt (09.45)",
-    "cluster": "fondasi",
-    "icon": "💬",
-    "title": "Konseling Individu",
-    "dosen": "dr. Maya Trisiswati, MKM",
-    "readMin": 2,
-    "tldr": "Konseling bukan memberi nasihat sepihak, melainkan membantu klien memahami masalahnya dan mengambil keputusan sendiri secara sadar dalam suasana aman, rahasia, dan empatik.",
-    "sections": [
-      {
-        "heading": "Beda Pendidikan Kesehatan, Konsultasi & Konseling",
-        "table": {
-          "headers": [
-            "Pendekatan",
-            "Peran Dokter & Arah Keputusan"
-          ],
-          "rows": [
-            [
-              "Pendidikan Kesehatan",
-              "Menyampaikan informasi agar sasaran sadar dan mau mengikuti anjuran"
-            ],
-            [
-              "Konsultasi",
-              "Membantu analisis masalah dan memberi saran/rekomendasi profesional"
-            ],
-            [
-              "Konseling",
-              "Membantu klien mengeksplorasi perasaan & alternatif agar klien mengambil keputusan sendiri"
-            ]
-          ]
-        }
-      },
-      {
-        "heading": "Keterampilan Inti, Setting & Sikap Konselor",
-        "bullets": [
-          "**Mendengar Aktif (3 bentuk refleksi)**: **Refleksi Isi** (mengulang inti fakta), **Refleksi Perasaan** (menangkap emosi di balik cerita), dan **Refleksi Makna** (menghubungkan fakta + perasaan).",
-          "**Perilaku verbal & non-verbal mendukung**: Bahasa mudah dimengerti, sesuai usia, kontak mata wajar, ekspresi ramah, humor ringan proporsional, tidak memotong/menghakimi/menggurui/berpidato.",
-          "**Setting waktu & tempat**: Durasi ideal **maksimal 45 menit**, hindari jam tidur/ibadah/terlalu pagi; tempat tidak harus di ruang praktik asalkan **tenang, nyaman, dan menjaga privasi**.",
-          "**5 Isi Konseling**: Informasi umum → Penilaian tingkat risiko → Rencana perubahan perilaku → Identifikasi hambatan (gender, adat, ekonomi) → Akses rujukan."
-        ]
-      },
-      {
-        "heading": "Menangani Klien Sulit",
-        "bullets": [
-          "**Klien menangis tersedu**: Beri waktu meluapkan emosi, sediakan tisu/minum, yakinkan konselor hadir mendengarkan, jangan langsung menyuruh berhenti menangis.",
-          "**Klien pendiam/terpaksa**: Sampaikan jujur bahwa konseling sulit berhasil jika terpaksa, beri ruang tenang tanpa memaksa, bangun rasa aman secara bertahap."
-        ]
-      }
-    ],
-    "highYield": [
-      "Durasi konseling individu: **maksimal 45 menit**; jangan dilakukan saat jam ibadah/tidur.",
-      "3 jenis refleksi dalam mendengar aktif: **Isi, Perasaan, Makna**."
-    ]
-  },
-  {
-    "no": 6,
-    "id": "d10",
-    "driveNo": 10,
-    "week": 1,
-    "weekA": 1,
-    "weekB": 1,
-    "schedule": "B: Kam 22 Okt • A: Jum 23 Okt",
-    "scheduleA": "Jum 23 Okt (13.00)",
-    "scheduleB": "Kam 22 Okt (07.55)",
-    "cluster": "farma",
-    "icon": "💊",
-    "title": "BSO Padat & Setengah Padat",
-    "dosen": "Drs. Dharma Permana, Apt., Ph.D",
-    "readMin": 4,
-    "tldr": "Pemilihan bentuk sediaan padat (serbuk, kapsul, tablet, supositoria) dan setengah padat (salep, krim, gel, pasta) bergantung pada stabilitas zat aktif, kecepatan absorpsi, lokasi kerja, dan kemampuan menelan pasien.",
-    "sections": [
-      {
-        "heading": "BSO Padat: Serbuk, Kapsul & Tablet Khusus",
-        "bullets": [
-          "**Pulveres (puyer/serbuk terbagi)**: Cocok untuk anak/dewasa sulit menelan, absorpsi lebih cepat daripada tablet (tidak butuh waktu disintegrasi 5–10 menit), lebih stabil dibanding cair; bobot ideal **300–1000 mg (rata-rata 500 mg)**; kurang cocok untuk zat higroskopis atau sangat pahit.",
-          "**Pulvis (serbuk tak terbagi)**: Oral untuk obat indeks terapi lebar (mis. oralit); topikal = **Pulvis adspersorius** (bedak tabur, kehalusan **100 mesh**).",
-          "**Tablet Sublingual & Bukal**: Melarut cepat di bawah lidah/pipi, absorpsi langsung lewat mukosa mulut → **menghindari first-pass metabolism hati** (kerja sangat cepat, mis. ISDN).",
-          "**Tablet Salut Enterik**: Disalut bahan tahan asam (selulosa asetat ftalat/shellac) agar **tidak hancur di lambung** melainkan di usus (melindungi lambung dari obat iritatif atau melindungi obat yang rusak oleh asam lambung) → **jangan digerus/dikunyah**.",
-          "**Tablet Lepas Lambat (*Sustained/Extended Release*)**: Melepaskan obat bertahap agar frekuensi minum lebih jarang → tidak boleh dibelah/digerus."
-        ]
-      },
-      {
-        "heading": "BSO Setengah Padat (Topikal & Mata)",
-        "table": {
-          "headers": [
-            "Bentuk Sediaan",
-            "Ciri Khas & Indikasi Utama"
-          ],
-          "rows": [
-            [
-              "Salep (Unguentum)",
-              "Basis berlemak/oklusif, bertahan lama di kulit; cocok untuk lesi kering/kronis/skuama"
-            ],
-            [
-              "Krim (Cremor)",
-              "Emulsi air + minyak (M/A mudah dicuci, tidak lengket); cocok untuk lesi basah/subakut/berambut"
-            ],
-            [
-              "Pasta",
-              "Mengandung **40–50% serbuk padat** (ZnO, amilum, talk); konsistensi kenyal, tidak berminyak, protektif/menyerap eksudat"
-            ],
-            [
-              "Gel",
-              "Basis air transparan, dingin, cepat meresap, tidak berminyak; cocok untuk area berambut/wajah"
-            ],
-            [
-              "Salep Mata (Oculentum)",
-              "**Wajib steril** & bebas partikel kasar; waktu kontak lebih lama daripada tetes mata, tapi dapat mengaburkan penglihatan sementara"
-            ]
-          ]
-        },
-        "bullets": [
-          "**Salep Mata (*Oculentum*)**: Wajib **steril** dan bebas partikel kasar; keunggulannya waktu kontak lebih lama dibanding tetes mata, tetapi basisnya lengket & mengaburkan penglihatan → **sebaiknya dipakai sebelum tidur**, dan **tidak boleh digunakan lagi setelah 1 bulan dibuka**."
-        ]
-      }
-    ],
-    "highYield": [
-      "Ingat angka emas: bobot pulveres ideal **500 mg (300–1000 mg)**; bedak tabur **100 mesh**; pasta mengandung **40–50% serbuk padat**.",
-      "Tablet **sublingual** = hindari *first-pass effect*; tablet **salut enterik** = pecah di usus, tidak boleh digerus.",
-      "**Salep mata (*oculentum*)**: kontak lebih lama tapi mengaburkan pandangan → pakai **sebelum tidur**, buang setelah **1 bulan** dibuka."
-    ]
-  },
-  {
-    "no": 7,
+    "no": 8,
     "id": "d13",
     "driveNo": 13,
-    "week": 1,
-    "weekA": 1,
-    "weekB": 2,
-    "schedule": "A: Kam 22 Okt (M1) • B: Sen 26 Okt (M2)",
-    "scheduleA": "Kam 22 Okt (13.00)",
-    "scheduleB": "Sen 26 Okt (08.50)",
+    "week": 2,
+    "schedule": "Sen, 26 Okt (08.50)",
     "cluster": "islam_etika",
     "icon": "🛡️",
     "title": "Asuransi Syariah",
@@ -574,246 +560,71 @@
     ]
   },
   {
-    "no": 8,
-    "id": "d15",
-    "driveNo": 15,
-    "week": 1,
-    "weekA": 2,
-    "weekB": 1,
-    "schedule": "B: Kam 22 Okt (M1) • A: Kam 29 Okt (M2)",
-    "scheduleA": "Kam 29 Okt (14.50)",
-    "scheduleB": "Kam 22 Okt (13.00)",
-    "cluster": "lansia_k3",
-    "icon": "🏭",
-    "title": "Ruang Lingkup Kesehatan Kerja & 7 Langkah Diagnosis PAK",
-    "dosen": "dr. Dian Mardhiyah, MKK, Sp.KKLP, Subsp.FOMC, Ph.D",
+    "no": 9,
+    "id": "d27",
+    "driveNo": 27,
+    "week": 2,
+    "schedule": "Sen, 26 Okt (13.00)",
+    "cluster": "jiwa",
+    "icon": "🔄",
+    "title": "Model Perubahan & Determinan Perilaku Kesehatan",
+    "dosen": "dr. Nur Isnaeni Evry Kurniawati, MARS",
     "readMin": 3,
-    "tldr": "Kesehatan kerja melindungi pekerja dari bahaya lingkungan kerja (fisik, kimia, biologi, ergonomi, psikososial), dan penetapan Penyakit Akibat Kerja (PAK) wajib mengikuti 7 langkah diagnosis baku.",
+    "tldr": "Mengubah perilaku pasien tidak cukup dengan memberi informasi — dokter harus memetakan determinan (Lawrence Green, HBM), tahapan kesiapan berubah (TTM), dan memilih strategi perubahan WHO yang berkelanjutan.",
     "sections": [
       {
-        "heading": "Ruang Lingkup & Standar Kesehatan Kerja (K3)",
+        "heading": "Domain Bloom & Determinan Lawrence Green (PRECEDE–PROCEED)",
         "bullets": [
-          "**4 Jenis Pemeriksaan Kesehatan Pekerja (Permenaker 2/1980)**: (1) **Awal** (sebelum diterima kerja), (2) **Berkala** (minimal 1x/tahun), (3) **Khusus** (pekerja berisiko tertentu), (4) **Purna Bakti** (3 bulan sebelum pensiun).",
-          "**Petugas P3K**: Risiko rendah = **1 : 150** pekerja; risiko tinggi = **1 : 100** pekerja.",
-          "**Gizi Kerja**: 50–200 pekerja wajib **ruang makan**; >200 pekerja wajib **kantin perusahaan**.",
-          "**NAB Kebisingan**: **85 dB** maksimal **8 jam/hari**; setiap naik +3 dB waktu pajanan dibagi dua (**88 dB = 4 jam**, **91 dB = 2 jam**). Program Konservasi Pendengaran memakai audiometri nada murni.",
-          "**Getaran lokal (*hand-arm vibration*)**: Paparan bor genggam/mesin getar memicu **Vibration White Finger (VWF)** (gangguan vaskular, saraf, dan sendi tangan).",
-          "**Kategori Skor Matriks Risiko K3**: **1–3 = Rendah**, **4–6 = Sedang**, **8–12 = Bermakna**, dan **15–25 = Tinggi**. Urutan 5 Hierarki Pengendalian Risiko: **Eliminasi → Substitusi → Pengendalian Teknik → Pengendalian Administratif → APD**."
+          "**3 Domain Bloom**: **Kognitif** (Pengetahuan = *Tahu*) → **Afektif** (Sikap = *Mau*) → **Psikomotor** (Tindakan/Praktik = *Mampu*).",
+          "**Faktor Predisposisi (*Predisposing*)**: Faktor internal pendorong — pengetahuan, sikap, kepercayaan, nilai, persepsi.",
+          "**Faktor Pemungkin (*Enabling*)**: Sarana & lingkungan yang memungkinkan perilaku — ketersediaan faskes, jarak, biaya, akses obat/alat.",
+          "**Faktor Penguat (*Reinforcing*)**: Dukungan sosial dari keluarga, tokoh masyarakat, teman sebaya, dan umpan balik petugas kesehatan.",
+          "**6 Tahap TTM (Prochaska & DiClemente)**: (1) *Precontemplation* (belum berniat berubah dalam 6 bulan), (2) *Contemplation* (menimbang untung-rugi untuk berubah dalam 6 bulan), (3) **Preparation (Persiapan)** (sudah berniat berubah dalam **1 bulan ke depan** & mulai ambil langkah awal), (4) *Action* (sedang berubah <6 bulan), (5) *Maintenance* (bertahan ≥6 bulan), (6) *Termination* / *Relapse*."
         ]
       },
       {
-        "heading": "7 Langkah Diagnosis Penyakit Akibat Kerja (PAK)",
+        "heading": "Teori Utama Perubahan Perilaku",
         "bullets": [
-          "**1. Tegakkan diagnosis klinis** sesuai prosedur medis.",
-          "**2. Tentukan pajanan yang dialami** pekerja di tempat kerja (saat ini & riwayat sebelumnya).",
-          "**3. Tentukan hubungan pajanan dengan diagnosis klinis** berdasarkan *evidence-based medicine*.",
-          "**4. Tentukan apakah besarnya pajanan cukup** untuk menimbulkan penyakit (dosis, durasi, NAB, pemakaian APD).",
-          "**5. Tentukan faktor individu** yang berperan (genetik, alergi, riwayat penyakit sebelumnya).",
-          "**6. Tentukan faktor lain di luar tempat kerja** (hobi, pekerjaan sampingan, lingkungan rumah).",
-          "**7. Tetapkan diagnosis okupasi**: Apakah **PAK**, penyakit diperberat pekerjaan, atau bukan PAK."
+          "**Transtheoretical Model / TTM (Prochaska & DiClemente — 6 tahap)**: (1) **Precontemplation** (belum berniat) → (2) **Contemplation** (mulai menimbang) → (3) **Preparation** (sudah bersiap/berencana segera) → (4) **Action** (mulai menjalankan) → (5) **Maintenance** (mempertahankan ≥6 bulan) → (6) *Termination/Relapse*.",
+          "**Health Belief Model (Janz & Becker)**: *Perceived susceptibility* (kerentanan), *severity* (keparahan), *benefits* (manfaat), *barriers* (hambatan), *self-efficacy*, dan ***Cues to action*** (pemicu/isyarat dari lingkungan/media/orang sekitar).",
+          "**Adopsi Inovasi (5 tahap)**: **Awareness → Interest → Evaluation → Trial → Adoption**."
         ]
-      }
-    ],
-    "highYield": [
-      "Urutan 7 Langkah PAK: **Klinis → Pajanan → Hubungan (EBM) → Besarnya pajanan → Faktor individu → Faktor luar kerja → Diagnosis PAK**.",
-      "Hafal angka K3: NAB bising **85 dB (8 jam) / 88 dB (4 jam) / 91 dB (2 jam)**; P3K **1:150** (rendah) / **1:100** (tinggi); kantin **>200 pekerja**.",
-      "Matriks Risiko K3: **1–3 Rendah**, **4–6 Sedang**, **8–12 Bermakna**, **15–25 Tinggi** (mis. skor 20 = Tinggi)."
-    ]
-  },
-  {
-    "no": 9,
-    "id": "s01",
-    "driveNo": null,
-    "isScheduleExtra": true,
-    "cluster": "lansia_k3",
-    "icon": "🦺",
-    "title": "Kecelakaan Kerja (K3 & Return to Work)",
-    "dosen": "dr. Dian Mardiyah, MKK, Sp.KKLP, Subsp.COPC, Ph.D",
-    "readMin": 4,
-    "tldr": "Kecelakaan kerja (KK) adalah insiden akut terkait hubungan kerja (termasuk rute wajar berangkat–pulang) yang dicegah lewat hierarki pengendalian K3, wajib dilaporkan ke BPJS Ketenagakerjaan maksimal 2×24 jam, dan ditindaklanjuti dengan program Return to Work.",
-    "sections": [
+      },
       {
-        "heading": "Definisi, Ruang Lingkup & Perbedaan KK vs PAK",
+        "heading": "3 Strategi Perubahan Perilaku Menurut WHO",
         "table": {
           "headers": [
-            "Aspek",
-            "Kecelakaan Kerja (KK)",
-            "Penyakit Akibat Kerja (PAK)"
+            "Strategi",
+            "Mekanisme & Kelebihan/Kelemahan"
           ],
           "rows": [
             [
-              "Onset",
-              "Akut, mendadak, tidak terduga pada waktu & lokasi tertentu",
-              "Kronik/bertahap akibat pajanan kumulatif di tempat kerja"
+              "Power Approach (Paksaan/Aturan)",
+              "Lewat hukum/perintah/sanksi → hasil **cepat**, tetapi **tidak bertahan lama** karena bukan dari kesadaran"
             ],
             [
-              "Penyebab",
-              "Insiden mekanis, jatuh, terjepit, listrik, bahan kimia akut, kecelakaan lalu lintas rute kerja",
-              "Pajanan bahaya fisik (bising), kimia, biologi, ergonomi, psikososial"
+              "Information Approach",
+              "Edukasi/penyuluhan satu arah → meningkatkan pengetahuan, namun belum tentu langsung jadi perilaku"
             ],
             [
-              "Ruang Lingkup JKK",
-              "Di tempat kerja & dalam perjalanan berangkat/pulang melalui rute wajar (PP No. 44/2015)",
-              "Ditegakkan melalui 7 Langkah Diagnosis PAK (Perpres No. 7/2019)"
+              "Participatory Approach",
+              "Diskusi & pelibatan aktif masyarakat → perubahan paling **mendalam dan berkelanjutan**"
             ]
           ]
         }
-      },
-      {
-        "heading": "Faktor Penyebab (Teori Domino Heinrich & Piramida Kecelakaan)",
-        "bullets": [
-          "**Unsafe Act (~88%)**: Perilaku tidak aman pekerja — tidak memakai APD, melanggar SOP, bekerja terburu-buru, kelelahan (*fatigue*), atau kurang pelatihan.",
-          "**Unsafe Condition (~10%)**: Lingkungan/alat tidak aman — lantai licin, mesin tanpa pelindung (*guarding*), pencahayaan buruk, kebocoran bahan kimia, ventilasi kurang.",
-          "**Faktor Tak Terduga / Act of God (~2%)**: Kejadian alam di luar kendali manusia.",
-          "**Konsep Near Miss (Nyaris Celaka)**: Menurut Piramida Bird, di balik 1 cedera fatal terdapat ratusan insiden ringan dan ribuan *near miss* — pelaporan *near miss* krusial untuk mencegah kecelakaan berat."
-        ]
-      },
-      {
-        "heading": "Pencegahan, Tata Laksana, Pelaporan & Return to Work (RTW)",
-        "bullets": [
-          "**Hierarki Pengendalian Bahaya (paling efektif → terakhir)**: (1) **Eliminasi** → (2) **Substitusi** → (3) **Rekayasa Teknik (*Engineering*)** → (4) **Pengendalian Administratif** (SOP, rotasi shift, pelatihan) → (5) **APD** (benteng terakhir).",
-          "**Peran Dokter Layanan Primer**: Pertolongan pertama & stabilisasi kegawatdaruratan (ABCDE), rujukan tepat, dokumentasi rekam medis akurat mengenai kronologi hubungan kerja, serta pencegahan kecacatan.",
-          "**Pelaporan JKK (BPJS Ketenagakerjaan & Disnaker)**: **Tahap I** wajib dilaporkan maksimal **2×24 jam** sejak kejadian; **Tahap II** dilaporkan setelah pekerja sembuh, cacat, atau meninggal untuk penetapan manfaat JKK.",
-          "**Return to Work (RTW)**: Program pendampingan medis & rehabilitasi kerja terstruktur (penilaian *fit to work*, modifikasi tugas/jam kerja, evaluasi tempat kerja) agar pekerja pascacedera dapat kembali bekerja dengan aman dan produktif."
-        ]
       }
     ],
     "highYield": [
-      "Batas waktu pelaporan awal (Tahap I) Kecelakaan Kerja ke BPJS Ketenagakerjaan & Disnaker adalah **2×24 jam**.",
-      "Kecelakaan lalu lintas saat berangkat atau pulang kerja melalui **rute yang wajar dan biasa dilalui** termasuk **Kecelakaan Kerja** (ditanggung JKK).",
-      "Penyebab terbanyak KK menurut Heinrich adalah **unsafe act (~88%)**; pengendalian paling efektif adalah **Eliminasi**, sedangkan **APD selalu pilihan terakhir**."
-    ],
-    "week": 1,
-    "weekA": 1,
-    "weekB": 3,
-    "schedule": "A: Kam 22 Okt (M1) & Rab 4 Nov (M3) • B: Sel 3 Nov (M3)",
-    "scheduleA": "Kam 22 Okt (14.50) & Rab 4 Nov (07.55)",
-    "scheduleB": "Sel 3 Nov (07.55)"
+      "Lawrence Green: **Predisposing** (dalam diri), **Enabling** (sarana/akses), **Reinforcing** (dukungan keluarga/nakes).",
+      "Strategi WHO paling langgeng = **Participatory Approach**; paling cepat tapi rapuh = **Power Approach**."
+    ]
   },
   {
     "no": 10,
-    "id": "d14",
-    "driveNo": 14,
-    "week": 1,
-    "weekA": 2,
-    "weekB": 1,
-    "schedule": "B: Kam 22 Okt (M1) • A: Jum 30 Okt (M2)",
-    "scheduleA": "Jum 30 Okt (09.45)",
-    "scheduleB": "Kam 22 Okt (14.50)",
-    "cluster": "islam_etika",
-    "icon": "⚖️",
-    "title": "Sebab-Sebab Perilaku Menyimpang dalam Islam",
-    "dosen": "Dr. dr. Endy M. Astiwara, MA, FIIS",
-    "readMin": 3,
-    "tldr": "Perilaku menyimpang dipahami dari dua sisi: teori sosiologis (anomi, labelling) dan akar spiritual dalam Islam (lemahnya iman, hawa nafsu/hirsh, dan terbiasa dengan maksiat yang menghitamkan kalbu).",
-    "sections": [
-      {
-        "heading": "Teori Sosiologis Penyimpangan",
-        "bullets": [
-          "**Anomi**: Kondisi masyarakat tanpa norma/nilai yang dihayati konsisten sebagai pedoman (terjadi saat nilai lama ditinggalkan, sementara nilai baru belum terbentuk).",
-          "**Teori Labelling**: Seseorang yang melakukan penyimpangan awal (*primary deviance*) diberi cap/stigma negatif oleh lingkungan, lalu menginternalisasi label tersebut dan terus mengulanginya (*secondary deviance*).",
-          "**Differential Association**: Penyimpangan dipelajari melalui pergaulan intensif dengan kelompok yang mendukung perilaku menyimpang."
-        ]
-      },
-      {
-        "heading": "Sebab Penyimpangan dalam Perspektif Al-Qur’an & Hadis",
-        "bullets": [
-          "**Kebebasan memilih & tanggung jawab**: Al-Qur’an menegaskan jalan petunjuk dan kesesatan sudah jelas (QS Al-Baqarah [2]: 256; QS Al-Kahfi [18]: 29), namun sebagian orang menutup diri dan sombong (QS Nuh [71]: 7).",
-          "**Terbiasa dengan keburukan (*Nuktah Sauda’*)**: HR Tirmidzi menjelaskan setiap dosa menimbulkan satu titik noda hitam di hati; bila diulang tanpa tobat, hati tertutup (*raan*) hingga tidak peka lagi terhadap kebenaran.",
-          "**Tamak (*Hirsh*) terhadap harta & kedudukan**: HR Tirmidzi & Ahmad mengibaratkan sifat tamak terhadap harta dan kehormatan lebih merusak agama seseorang daripada **dua serigala lapar yang dilepas di tengah kumpulan kambing**.",
-          "**Teori Labelling (Penyimpangan Primer → Sekunder)**: Pemberian cap/stigma negatif oleh masyarakat kepada pelaku **penyimpangan primer** mendorong pelaku menginternalisasi identitas \"penyimpang\" hingga terjerumus ke **penyimpangan sekunder** yang menetap."
-        ]
-      }
-    ],
-    "highYield": [
-      "Beda istilah: **Anomi** = hilangnya norma pedoman; **Labelling** = stigma memicu penyimpangan sekunder.",
-      "Hadis populer di soal: **Nuktah sauda’** (noda hitam di hati akibat dosa berulang) & **2 serigala lapar** (perumpamaan sifat tamak/*hirsh*).",
-      "**Labelling**: stigma pada penyimpangan primer memicu internalisasi peran penyimpang → masuk ke **penyimpangan sekunder**."
-    ]
-  },
-  {
-    "no": 11,
-    "id": "d16",
-    "driveNo": 16,
-    "week": 1,
-    "weekA": 1,
-    "weekB": 2,
-    "schedule": "A: Jum 23 Okt (M1) • B: Sel 27 Okt (M2)",
-    "scheduleA": "Jum 23 Okt (07.55)",
-    "scheduleB": "Sel 27 Okt (09.45)",
-    "cluster": "fondasi",
-    "icon": "🏠",
-    "title": "Home Visit, Home Care & Palliative Care",
-    "dosen": "dr. Zwasta Pribadi Mahardhika, M.Med.Ed, Sp.KKLP",
-    "readMin": 5,
-    "tldr": "Pelayanan di rumah menjaga kesinambungan perawatan holistik: Home Visit setara rawat jalan terbatas, Home Care setara rawat inap di rumah, dan Palliative Care berfokus pada kualitas hidup penyakit mengancam jiwa.",
-    "sections": [
-      {
-        "heading": "Perbedaan Home Visit, Home Care & Palliative Care",
-        "table": {
-          "headers": [
-            "Layanan",
-            "Ruang Lingkup & Fokus Utama"
-          ],
-          "rows": [
-            [
-              "Home Visit (Kunjungan Rumah)",
-              "Lebih terbatas — setara **rawat jalan (ambulatory)**; mengenal kehidupan/lingkungan pasien & evaluasi medis ringan"
-            ],
-            [
-              "Home Care (Perawatan di Rumah)",
-              "Lebih luas — setara **rawat inap (hospitalization)** di rumah untuk pasien kronis, lansia, pasca-RS, atau disabilitas berat"
-            ],
-            [
-              "Palliative Care",
-              "Meningkatkan kualitas hidup pasien & keluarga pada penyakit terminal/mengancam jiwa lewat kendali nyeri, psikososial, dan spiritual"
-            ]
-          ]
-        },
-        "bullets": [
-          "**Beda Tegas Home Visit vs Home Care vs Hospis**: **Home Visit** terbatas untuk mengenal kehidupan pasien & pertolongan **rawat jalan (*ambulatory services*)**; **Home Care** mencakup tindakan medis di rumah setara **rawat inap (*hospitalization*)** (mis. NGT, dekubitus derajat III, pemantauan harian); **Hospis (*Hospice*)** adalah fasilitas khusus di luar rumah bagi pasien terminal yang tidak dapat dirawat di rumah tetapi tidak membutuhkan tindakan RS, dalam suasana seperti rumah sendiri.",
-          "**3 Masalah Utama Home Visit/Home Care**: (1) Panggilan kunjungan rumah yang tidak diperlukan, (2) Ketergantungan pasien/keluarga yang berlebihan, dan (3) Keterbatasan waktu, biaya, atau peralatan medis di rumah."
-        ]
-      },
-      {
-        "heading": "6 Langkah Pengumpulan Data saat Home Visit",
-        "bullets": [
-          "**1.** Mempersiapkan daftar nama keluarga yang akan dikunjungi.",
-          "**2.** Mengatur jadwal kunjungan bersama pasien/keluarga.",
-          "**3.** Mempersiapkan macam data yang akan dikumpulkan (klinis, lingkungan, keluarga).",
-          "**4.** Melakukan kunjungan rumah dan observasi langsung.",
-          "**5.** Mencatat data hasil kunjungan secara sistematis.",
-          "**6.** Menyampaikan hasil & merencanakan tindak lanjut bersama keluarga.",
-          "**Prinsip Filosofis & Indikasi Perawatan Paliatif**: Menganggap kematian sebagai **proses normal**, **tidak bertujuan mempercepat (anti-eutanasia) maupun menghambat kematian**, **menghindari tindakan yang sia-sia**, serta menggunakan pendekatan tim. **Indikasi** tidak terbatas kanker — mencakup semua penyakit mengancam jiwa dengan nyeri/gejala fisik tak teratasi, stres psikososial berat, atau kebutuhan spiritual."
-        ]
-      },
-      {
-        "heading": "Manfaat, Faktor Pendorong & Hambatan",
-        "bullets": [
-          "**Manfaat**: Memahami latar belakang pasien secara nyata, mempererat hubungan dokter–pasien, menjamin kebutuhan kesehatan terpenuhi, dan meningkatkan kepuasan.",
-          "**4 Faktor pendorong**: Kemudahan sistem komunikasi, kemajuan iptek kedokteran, ketersediaan alat medis portabel/canggih, dan sikap/harapan masyarakat.",
-          "**Masalah/kendala**: Keterbatasan peralatan/tindakan medis di rumah, waktu & jarak tempuh dokter, serta biaya dan keselamatan petugas.",
-          "**Advanced Care Planning (ACP) & Bereavement**: Bantu pasien menyusun **ACP** (wasiat/tujuan perawatan & *informed consent* keputusan DNR) selagi masih sadar dan kompeten; lingkup paliatif berlanjut hingga **dukungan masa dukacita (*bereavement*)** dan perawatan keluarga setelah pasien meninggal."
-        ]
-      }
-    ],
-    "highYield": [
-      "Beda kunci: **Home Visit** = lingkup rawat jalan (*ambulatory*); **Home Care** = lingkup rawat inap (*hospitalization*).",
-      "Palliative care bukan hanya untuk saat menjelang ajal, tetapi berfokus pada **kualitas hidup & martabat pasien**.",
-      "**Home Visit** = rawat jalan (*ambulatory*); **Home Care** = setara rawat inap (*hospitalization*); **Hospis** = fasilitas khusus suasana rumah bagi pasien terminal.",
-      "Paliatif: kematian adalah proses normal (tidak mempercepat/menghambat), hindari tindakan sia-sia, susun **ACP/DNR** saat pasien kompeten, lanjut **bereavement care**."
-    ]
-  },
-  {
-    "no": 12,
     "id": "d12",
     "driveNo": 12,
-    "week": 1,
-    "weekA": 1,
-    "weekB": 2,
-    "schedule": "A: Jum 23 Okt (M1) • B: Sen 26 Okt (M2)",
-    "scheduleA": "Jum 23 Okt (09.45)",
-    "scheduleB": "Sen 26 Okt (14.50)",
+    "week": 2,
+    "schedule": "Sen, 26 Okt (14.50)",
     "cluster": "farma",
     "icon": "🧪",
     "title": "BSO Cairan (Oral, Parenteral & Topikal)",
@@ -871,206 +682,11 @@
     ]
   },
   {
-    "no": 13,
-    "id": "d27",
-    "driveNo": 27,
-    "week": 2,
-    "weekA": 3,
-    "weekB": 2,
-    "schedule": "B: Sen 26 Okt (M2) • A: Sel 3 Nov (M3)",
-    "scheduleA": "Sel 3 Nov (07.55)",
-    "scheduleB": "Sen 26 Okt (13.00)",
-    "cluster": "jiwa",
-    "icon": "🔄",
-    "title": "Model Perubahan & Determinan Perilaku Kesehatan",
-    "dosen": "dr. Nur Isnaeni Evry Kurniawati, MARS",
-    "readMin": 3,
-    "tldr": "Mengubah perilaku pasien tidak cukup dengan memberi informasi — dokter harus memetakan determinan (Lawrence Green, HBM), tahapan kesiapan berubah (TTM), dan memilih strategi perubahan WHO yang berkelanjutan.",
-    "sections": [
-      {
-        "heading": "Domain Bloom & Determinan Lawrence Green (PRECEDE–PROCEED)",
-        "bullets": [
-          "**3 Domain Bloom**: **Kognitif** (Pengetahuan = *Tahu*) → **Afektif** (Sikap = *Mau*) → **Psikomotor** (Tindakan/Praktik = *Mampu*).",
-          "**Faktor Predisposisi (*Predisposing*)**: Faktor internal pendorong — pengetahuan, sikap, kepercayaan, nilai, persepsi.",
-          "**Faktor Pemungkin (*Enabling*)**: Sarana & lingkungan yang memungkinkan perilaku — ketersediaan faskes, jarak, biaya, akses obat/alat.",
-          "**Faktor Penguat (*Reinforcing*)**: Dukungan sosial dari keluarga, tokoh masyarakat, teman sebaya, dan umpan balik petugas kesehatan.",
-          "**6 Tahap TTM (Prochaska & DiClemente)**: (1) *Precontemplation* (belum berniat berubah dalam 6 bulan), (2) *Contemplation* (menimbang untung-rugi untuk berubah dalam 6 bulan), (3) **Preparation (Persiapan)** (sudah berniat berubah dalam **1 bulan ke depan** & mulai ambil langkah awal), (4) *Action* (sedang berubah <6 bulan), (5) *Maintenance* (bertahan ≥6 bulan), (6) *Termination* / *Relapse*."
-        ]
-      },
-      {
-        "heading": "Teori Utama Perubahan Perilaku",
-        "bullets": [
-          "**Transtheoretical Model / TTM (Prochaska & DiClemente — 6 tahap)**: (1) **Precontemplation** (belum berniat) → (2) **Contemplation** (mulai menimbang) → (3) **Preparation** (sudah bersiap/berencana segera) → (4) **Action** (mulai menjalankan) → (5) **Maintenance** (mempertahankan ≥6 bulan) → (6) *Termination/Relapse*.",
-          "**Health Belief Model (Janz & Becker)**: *Perceived susceptibility* (kerentanan), *severity* (keparahan), *benefits* (manfaat), *barriers* (hambatan), *self-efficacy*, dan ***Cues to action*** (pemicu/isyarat dari lingkungan/media/orang sekitar).",
-          "**Adopsi Inovasi (5 tahap)**: **Awareness → Interest → Evaluation → Trial → Adoption**."
-        ]
-      },
-      {
-        "heading": "3 Strategi Perubahan Perilaku Menurut WHO",
-        "table": {
-          "headers": [
-            "Strategi",
-            "Mekanisme & Kelebihan/Kelemahan"
-          ],
-          "rows": [
-            [
-              "Power Approach (Paksaan/Aturan)",
-              "Lewat hukum/perintah/sanksi → hasil **cepat**, tetapi **tidak bertahan lama** karena bukan dari kesadaran"
-            ],
-            [
-              "Information Approach",
-              "Edukasi/penyuluhan satu arah → meningkatkan pengetahuan, namun belum tentu langsung jadi perilaku"
-            ],
-            [
-              "Participatory Approach",
-              "Diskusi & pelibatan aktif masyarakat → perubahan paling **mendalam dan berkelanjutan**"
-            ]
-          ]
-        }
-      }
-    ],
-    "highYield": [
-      "Lawrence Green: **Predisposing** (dalam diri), **Enabling** (sarana/akses), **Reinforcing** (dukungan keluarga/nakes).",
-      "Strategi WHO paling langgeng = **Participatory Approach**; paling cepat tapi rapuh = **Power Approach**."
-    ]
-  },
-  {
-    "no": 14,
-    "id": "d26",
-    "driveNo": 26,
-    "week": 2,
-    "weekA": 2,
-    "weekB": 2,
-    "schedule": "A: Sen 26 Okt • B: Kam 29 Okt",
-    "scheduleA": "Sen 26 Okt (14.50)",
-    "scheduleB": "Kam 29 Okt (09.45)",
-    "cluster": "lansia_k3",
-    "icon": "🩺",
-    "title": "Long-Term Care (Perawatan Jangka Panjang)",
-    "dosen": "DR. dr. Erlina Wijayanti, MPH, Sp.KKLP",
-    "readMin": 3,
-    "tldr": "Long-Term Care (LTC) menyediakan dukungan medis dan non-medis jangka panjang bagi lansia atau pasien penyakit kronis yang mengalami penurunan ADL/IADL agar tetap aman dan menekan angka rawat inap berulang.",
-    "sections": [
-      {
-        "heading": "ADL vs IADL (Dasar Penilaian Kebutuhan LTC)",
-        "table": {
-          "headers": [
-            "Kategori",
-            "Aktivitas yang Dinilai"
-          ],
-          "rows": [
-            [
-              "ADLs (Activities of Daily Living)",
-              "Perawatan diri dasar: **mandi, berpakaian, makan, toileting, berpindah tempat**"
-            ],
-            [
-              "IADLs (Instrumental ADLs)",
-              "Kemandirian lebih kompleks: **mengurus keuangan, belanja, memasak, mengelola obat, telepon/transportasi**"
-            ]
-          ]
-        }
-      },
-      {
-        "heading": "Perbandingan Jenis Layanan Residensial LTC",
-        "table": {
-          "headers": [
-            "Layanan",
-            "Kapasitas & Karakteristik"
-          ],
-          "rows": [
-            [
-              "In-Home Care / Aging in Place",
-              "Perawatan di rumah sendiri + kunjungan rutin perawat puskesmas & dukungan keluarga"
-            ],
-            [
-              "Assisted Living",
-              "Kapasitas besar (puluhan–ratusan), penghuni relatif **lebih mandiri**, layanan medis minimal"
-            ],
-            [
-              "Residential Care",
-              "Kapasitas kecil (**4–10 orang**), suasana mirip rumah tinggal, penghuni lebih bergantung pada *caregiver* & supervisi lebih ketat"
-            ],
-            [
-              "Nursing Home (Panti Perawatan)",
-              "Perawatan medis & keperawatan 24 jam bagi ketergantungan berat"
-            ]
-          ]
-        }
-      },
-      {
-        "heading": "Model Pembiayaan & Dampak Klinis LTC",
-        "bullets": [
-          "**Pembiayaan dunia**: Inggris (**Welfare State** / pajak pemerintah), Amerika Serikat (**Commercial Insurance** / swasta), Jepang & Jerman (**Social Insurance** / asuransi sosial jangka panjang).",
-          "**Model LFP (Longitudinal Family Physician — Kanada 2024)**: Pembiayaan berbasis 3 komponen — waktu pelayanan (komitmen jam/hari), jumlah interaksi/kunjungan, serta ukuran & kompleksitas panel pasien.",
-          "**Dampak terbukti (Balqis-Ali et al., BMC Geriatrics 2024)**: *Continuity of Care* dan *Caregiver Integration* secara signifikan **menurunkan angka rawat inap ulang (readmisi) dan kunjungan IGD**.",
-          "**Model PJP Integratif Berbasis *Aging in Place* (Balqis-Ali et al., BMC Geriatrics 2024)**: Kombinasi *home care* perawat puskesmas, dukungan *caregiver* terlatih paruh waktu, telekonsultasi dokter keluarga, fisioterapi, penilaian gizi, serta ***deprescribing* polifarmasi**."
-        ]
-      }
-    ],
-    "highYield": [
-      "Beda **Assisted Living** (puluhan–ratusan, lebih mandiri) vs **Residential Care** (4–10 orang, suasana rumah, supervisi lebih ketat).",
-      "**ADLs** = mandi/makan/berpakaian; **IADLs** = masak/belanja/atur uang."
-    ]
-  },
-  {
-    "no": 15,
-    "id": "d08",
-    "driveNo": 8,
-    "week": 2,
-    "weekA": 2,
-    "weekB": 2,
-    "schedule": "A: Sel 27 Okt • B: Jum 30 Okt",
-    "scheduleA": "Sel 27 Okt (07.55)",
-    "scheduleB": "Jum 30 Okt (07.55)",
-    "cluster": "jiwa",
-    "icon": "🚨",
-    "title": "Perilaku Menyimpang & Kesehatan Reproduksi",
-    "dosen": "dr. Maya Trisiswati, MKM",
-    "readMin": 4,
-    "tldr": "Perilaku menyimpang remaja (NAPZA, seks berisiko, aborsi, tawuran, adiksi gadget) saling berkaitan erat dan harus dicegah lewat ketahanan keluarga, komunikasi asertif, dan continuum of care.",
-    "sections": [
-      {
-        "heading": "Jenis, Keterkaitan & Kontinuum NAPZA",
-        "bullets": [
-          "**Definisi**: Tingkah laku yang bertentangan dengan norma dan hukum masyarakat (NAPZA, seks bebas/berisiko, aborsi, tawuran, adiksi gadget).",
-          "**Lingkaran risiko**: Adiksi gadget & alkohol/NAPZA menjadi pintu masuk seks berisiko → meningkatkan risiko **IMS, HIV/AIDS, KTD (Kehamilan Tidak Diinginkan), aborsi tidak aman, kemandulan, kanker serviks**, hingga gangguan jiwa & sanksi pidana.",
-          "**Kontinuum Penggunaan NAPZA (Burrows et al., 1999)**: **Abstinen** (tak pernah pakai) → **Eksperimental** (coba-coba) → **Rekreasional** (saat kumpul/pesta) → **Reguler / Habitual** (rutin) → **Tergantung** (adiksi/dependensi).",
-          "**Fakta Kekerasan Anak & Remaja (SNPHAR 2018)**: **2 dari 3** anak/remaja pernah mengalami minimal 1 jenis kekerasan (emosional 23–36%, fisik, seksual yang saling tumpang tindih), dan **3 dari 4 pelaku kekerasan terhadap anak & remaja adalah teman atau sebayanya**."
-        ]
-      },
-      {
-        "heading": "Fakta Kekerasan Remaja & Respons Pelecehan Seksual",
-        "bullets": [
-          "**Data SNPHAR 2018**: 2 dari 3 anak/remaja pernah mengalami minimal satu bentuk kekerasan (emosional, fisik, atau seksual) dan sering tumpang tindih.",
-          "**6 Langkah Respons Laporan Pelecehan Seksual**: (1) Dengarkan keluhan dengan baik → (2) Jangan bereaksi berlebihan → (3) Tenangkan korban & yakinkan ia tidak bersalah → (4) Catat kronologi secara objektif → (5) Jaga kerahasiaan → (6) Rujuk ke layanan perlindungan/medis/psikologis."
-        ]
-      },
-      {
-        "heading": "Pencegahan & Peran Orang Tua",
-        "bullets": [
-          "**Bekal informasi remaja**: Kespro dasar, memahami dorongan seksual, pencegahan pelecehan seksual, dan **keterampilan bersikap asertif** (berani menolak ajakan berisiko).",
-          "**4 Peran kunci orang tua**: Menjadi sahabat remaja, pendengar yang baik, sumber informasi kespro yang lengkap & jujur, serta meninggalkan gaya komunikasi menyalahkan/membandingkan.",
-          "**6 Langkah Respons Baku Laporan Pelecehan Seksual**: (1) Dengarkan keluhan dengan baik, (2) **Tidak bereaksi berlebihan**, (3) Tegaskan kejadian tersebut **bukan kesalahannya**, (4) Puji keberaniannya melapor, (5) Bantu melaporkan ke pihak berwenang yang tepat, (6) Bantu mencari pertolongan profesional.",
-          "**Bekal Pencegahan untuk Remaja**: Edukasi kespro dasar, pemahaman dorongan seksual, pencegahan pelecehan, pengembangan **tindakan asertif** (berani menolak & kenali *toxic relationship*), serta pemanfaatan dampak positif kemajuan teknologi."
-        ]
-      }
-    ],
-    "highYield": [
-      "Urutan Kontinuum NAPZA: **Abstinen → Eksperimental → Rekreasional → Reguler/Habitual → Tergantung**.",
-      "Seks berisiko dan NAPZA saling menjadi **pintu masuk** satu sama lain.",
-      "SNPHAR 2018: **3 dari 4 pelaku kekerasan anak/remaja adalah teman/sebaya**. Respons pelecehan: dengar tenang, **bukan salah korban**, puji keberanian, lapor & rujuk."
-    ]
-  },
-  {
-    "no": 16,
+    "no": 11,
     "id": "d03",
     "driveNo": 3,
     "week": 2,
-    "weekA": 2,
-    "weekB": 2,
-    "schedule": "B: Sel 27 Okt • A: Jum 30 Okt",
-    "scheduleA": "Jum 30 Okt (07.55)",
-    "scheduleB": "Sel 27 Okt (07.55)",
+    "schedule": "Sel, 27 Okt (07.55)",
     "cluster": "fondasi",
     "icon": "👨‍👩‍👧‍👦",
     "title": "Konsep Dasar Kedokteran Keluarga",
@@ -1144,15 +760,80 @@
     ]
   },
   {
-    "no": 17,
+    "no": 12,
+    "id": "d16",
+    "driveNo": 16,
+    "week": 2,
+    "schedule": "Sel, 27 Okt (09.45)",
+    "cluster": "fondasi",
+    "icon": "🏠",
+    "title": "Home Visit, Home Care & Palliative Care",
+    "dosen": "dr. Zwasta Pribadi Mahardhika, M.Med.Ed, Sp.KKLP",
+    "readMin": 5,
+    "tldr": "Pelayanan di rumah menjaga kesinambungan perawatan holistik: Home Visit setara rawat jalan terbatas, Home Care setara rawat inap di rumah, dan Palliative Care berfokus pada kualitas hidup penyakit mengancam jiwa.",
+    "sections": [
+      {
+        "heading": "Perbedaan Home Visit, Home Care & Palliative Care",
+        "table": {
+          "headers": [
+            "Layanan",
+            "Ruang Lingkup & Fokus Utama"
+          ],
+          "rows": [
+            [
+              "Home Visit (Kunjungan Rumah)",
+              "Lebih terbatas — setara **rawat jalan (ambulatory)**; mengenal kehidupan/lingkungan pasien & evaluasi medis ringan"
+            ],
+            [
+              "Home Care (Perawatan di Rumah)",
+              "Lebih luas — setara **rawat inap (hospitalization)** di rumah untuk pasien kronis, lansia, pasca-RS, atau disabilitas berat"
+            ],
+            [
+              "Palliative Care",
+              "Meningkatkan kualitas hidup pasien & keluarga pada penyakit terminal/mengancam jiwa lewat kendali nyeri, psikososial, dan spiritual"
+            ]
+          ]
+        },
+        "bullets": [
+          "**Beda Tegas Home Visit vs Home Care vs Hospis**: **Home Visit** terbatas untuk mengenal kehidupan pasien & pertolongan **rawat jalan (*ambulatory services*)**; **Home Care** mencakup tindakan medis di rumah setara **rawat inap (*hospitalization*)** (mis. NGT, dekubitus derajat III, pemantauan harian); **Hospis (*Hospice*)** adalah fasilitas khusus di luar rumah bagi pasien terminal yang tidak dapat dirawat di rumah tetapi tidak membutuhkan tindakan RS, dalam suasana seperti rumah sendiri.",
+          "**3 Masalah Utama Home Visit/Home Care**: (1) Panggilan kunjungan rumah yang tidak diperlukan, (2) Ketergantungan pasien/keluarga yang berlebihan, dan (3) Keterbatasan waktu, biaya, atau peralatan medis di rumah."
+        ]
+      },
+      {
+        "heading": "6 Langkah Pengumpulan Data saat Home Visit",
+        "bullets": [
+          "**1.** Mempersiapkan daftar nama keluarga yang akan dikunjungi.",
+          "**2.** Mengatur jadwal kunjungan bersama pasien/keluarga.",
+          "**3.** Mempersiapkan macam data yang akan dikumpulkan (klinis, lingkungan, keluarga).",
+          "**4.** Melakukan kunjungan rumah dan observasi langsung.",
+          "**5.** Mencatat data hasil kunjungan secara sistematis.",
+          "**6.** Menyampaikan hasil & merencanakan tindak lanjut bersama keluarga.",
+          "**Prinsip Filosofis & Indikasi Perawatan Paliatif**: Menganggap kematian sebagai **proses normal**, **tidak bertujuan mempercepat (anti-eutanasia) maupun menghambat kematian**, **menghindari tindakan yang sia-sia**, serta menggunakan pendekatan tim. **Indikasi** tidak terbatas kanker — mencakup semua penyakit mengancam jiwa dengan nyeri/gejala fisik tak teratasi, stres psikososial berat, atau kebutuhan spiritual."
+        ]
+      },
+      {
+        "heading": "Manfaat, Faktor Pendorong & Hambatan",
+        "bullets": [
+          "**Manfaat**: Memahami latar belakang pasien secara nyata, mempererat hubungan dokter–pasien, menjamin kebutuhan kesehatan terpenuhi, dan meningkatkan kepuasan.",
+          "**4 Faktor pendorong**: Kemudahan sistem komunikasi, kemajuan iptek kedokteran, ketersediaan alat medis portabel/canggih, dan sikap/harapan masyarakat.",
+          "**Masalah/kendala**: Keterbatasan peralatan/tindakan medis di rumah, waktu & jarak tempuh dokter, serta biaya dan keselamatan petugas.",
+          "**Advanced Care Planning (ACP) & Bereavement**: Bantu pasien menyusun **ACP** (wasiat/tujuan perawatan & *informed consent* keputusan DNR) selagi masih sadar dan kompeten; lingkup paliatif berlanjut hingga **dukungan masa dukacita (*bereavement*)** dan perawatan keluarga setelah pasien meninggal."
+        ]
+      }
+    ],
+    "highYield": [
+      "Beda kunci: **Home Visit** = lingkup rawat jalan (*ambulatory*); **Home Care** = lingkup rawat inap (*hospitalization*).",
+      "Palliative care bukan hanya untuk saat menjelang ajal, tetapi berfokus pada **kualitas hidup & martabat pasien**.",
+      "**Home Visit** = rawat jalan (*ambulatory*); **Home Care** = setara rawat inap (*hospitalization*); **Hospis** = fasilitas khusus suasana rumah bagi pasien terminal.",
+      "Paliatif: kematian adalah proses normal (tidak mempercepat/menghambat), hindari tindakan sia-sia, susun **ACP/DNR** saat pasien kompeten, lanjut **bereavement care**."
+    ]
+  },
+  {
+    "no": 13,
     "id": "d09",
     "driveNo": 9,
     "week": 2,
-    "weekA": 2,
-    "weekB": 2,
-    "schedule": "A: Sel 27 Okt • B: Kam 29 Okt",
-    "scheduleA": "Sel 27 Okt (09.45)",
-    "scheduleB": "Kam 29 Okt (07.55)",
+    "schedule": "Kam, 29 Okt (07.55)",
     "cluster": "jiwa",
     "icon": "🧩",
     "title": "Psikoedukasi",
@@ -1187,15 +868,196 @@
     ]
   },
   {
-    "no": 18,
+    "no": 14,
+    "id": "d26",
+    "driveNo": 26,
+    "week": 2,
+    "schedule": "Kam, 29 Okt (09.45)",
+    "cluster": "lansia_k3",
+    "icon": "🩺",
+    "title": "Long-Term Care (Perawatan Jangka Panjang)",
+    "dosen": "DR. dr. Erlina Wijayanti, MPH, Sp.KKLP",
+    "readMin": 3,
+    "tldr": "Long-Term Care (LTC) menyediakan dukungan medis dan non-medis jangka panjang bagi lansia atau pasien penyakit kronis yang mengalami penurunan ADL/IADL agar tetap aman dan menekan angka rawat inap berulang.",
+    "sections": [
+      {
+        "heading": "ADL vs IADL (Dasar Penilaian Kebutuhan LTC)",
+        "table": {
+          "headers": [
+            "Kategori",
+            "Aktivitas yang Dinilai"
+          ],
+          "rows": [
+            [
+              "ADLs (Activities of Daily Living)",
+              "Perawatan diri dasar: **mandi, berpakaian, makan, toileting, berpindah tempat**"
+            ],
+            [
+              "IADLs (Instrumental ADLs)",
+              "Kemandirian lebih kompleks: **mengurus keuangan, belanja, memasak, mengelola obat, telepon/transportasi**"
+            ]
+          ]
+        }
+      },
+      {
+        "heading": "Perbandingan Jenis Layanan Residensial LTC",
+        "table": {
+          "headers": [
+            "Layanan",
+            "Kapasitas & Karakteristik"
+          ],
+          "rows": [
+            [
+              "In-Home Care / Aging in Place",
+              "Perawatan di rumah sendiri + kunjungan rutin perawat puskesmas & dukungan keluarga"
+            ],
+            [
+              "Assisted Living",
+              "Kapasitas besar (puluhan–ratusan), penghuni relatif **lebih mandiri**, layanan medis minimal"
+            ],
+            [
+              "Residential Care",
+              "Kapasitas kecil (**4–10 orang**), suasana mirip rumah tinggal, penghuni lebih bergantung pada *caregiver* & supervisi lebih ketat"
+            ],
+            [
+              "Nursing Home (Panti Perawatan)",
+              "Perawatan medis & keperawatan 24 jam bagi ketergantungan berat"
+            ]
+          ]
+        }
+      },
+      {
+        "heading": "Model Pembiayaan & Dampak Klinis LTC",
+        "bullets": [
+          "**Pembiayaan dunia**: Inggris (**Welfare State** / pajak pemerintah), Amerika Serikat (**Commercial Insurance** / swasta), Jepang & Jerman (**Social Insurance** / asuransi sosial jangka panjang).",
+          "**Model LFP (Longitudinal Family Physician — Kanada 2024)**: Pembiayaan berbasis 3 komponen — waktu pelayanan (komitmen jam/hari), jumlah interaksi/kunjungan, serta ukuran & kompleksitas panel pasien.",
+          "**Dampak terbukti (Balqis-Ali et al., BMC Geriatrics 2024)**: *Continuity of Care* dan *Caregiver Integration* secara signifikan **menurunkan angka rawat inap ulang (readmisi) dan kunjungan IGD**.",
+          "**Model PJP Integratif Berbasis *Aging in Place* (Balqis-Ali et al., BMC Geriatrics 2024)**: Kombinasi *home care* perawat puskesmas, dukungan *caregiver* terlatih paruh waktu, telekonsultasi dokter keluarga, fisioterapi, penilaian gizi, serta ***deprescribing* polifarmasi**."
+        ]
+      }
+    ],
+    "highYield": [
+      "Beda **Assisted Living** (puluhan–ratusan, lebih mandiri) vs **Residential Care** (4–10 orang, suasana rumah, supervisi lebih ketat).",
+      "**ADLs** = mandi/makan/berpakaian; **IADLs** = masak/belanja/atur uang."
+    ]
+  },
+  {
+    "no": 15,
+    "id": "d08",
+    "driveNo": 8,
+    "week": 2,
+    "schedule": "Jum, 30 Okt (07.55)",
+    "cluster": "jiwa",
+    "icon": "🚨",
+    "title": "Perilaku Menyimpang & Kesehatan Reproduksi",
+    "dosen": "dr. Maya Trisiswati, MKM",
+    "readMin": 4,
+    "tldr": "Perilaku menyimpang remaja (NAPZA, seks berisiko, aborsi, tawuran, adiksi gadget) saling berkaitan erat dan harus dicegah lewat ketahanan keluarga, komunikasi asertif, dan continuum of care.",
+    "sections": [
+      {
+        "heading": "Jenis, Keterkaitan & Kontinuum NAPZA",
+        "bullets": [
+          "**Definisi**: Tingkah laku yang bertentangan dengan norma dan hukum masyarakat (NAPZA, seks bebas/berisiko, aborsi, tawuran, adiksi gadget).",
+          "**Lingkaran risiko**: Adiksi gadget & alkohol/NAPZA menjadi pintu masuk seks berisiko → meningkatkan risiko **IMS, HIV/AIDS, KTD (Kehamilan Tidak Diinginkan), aborsi tidak aman, kemandulan, kanker serviks**, hingga gangguan jiwa & sanksi pidana.",
+          "**Kontinuum Penggunaan NAPZA (Burrows et al., 1999)**: **Abstinen** (tak pernah pakai) → **Eksperimental** (coba-coba) → **Rekreasional** (saat kumpul/pesta) → **Reguler / Habitual** (rutin) → **Tergantung** (adiksi/dependensi).",
+          "**Fakta Kekerasan Anak & Remaja (SNPHAR 2018)**: **2 dari 3** anak/remaja pernah mengalami minimal 1 jenis kekerasan (emosional 23–36%, fisik, seksual yang saling tumpang tindih), dan **3 dari 4 pelaku kekerasan terhadap anak & remaja adalah teman atau sebayanya**."
+        ]
+      },
+      {
+        "heading": "Fakta Kekerasan Remaja & Respons Pelecehan Seksual",
+        "bullets": [
+          "**Data SNPHAR 2018**: 2 dari 3 anak/remaja pernah mengalami minimal satu bentuk kekerasan (emosional, fisik, atau seksual) dan sering tumpang tindih.",
+          "**6 Langkah Respons Laporan Pelecehan Seksual**: (1) Dengarkan keluhan dengan baik → (2) Jangan bereaksi berlebihan → (3) Tenangkan korban & yakinkan ia tidak bersalah → (4) Catat kronologi secara objektif → (5) Jaga kerahasiaan → (6) Rujuk ke layanan perlindungan/medis/psikologis."
+        ]
+      },
+      {
+        "heading": "Pencegahan & Peran Orang Tua",
+        "bullets": [
+          "**Bekal informasi remaja**: Kespro dasar, memahami dorongan seksual, pencegahan pelecehan seksual, dan **keterampilan bersikap asertif** (berani menolak ajakan berisiko).",
+          "**4 Peran kunci orang tua**: Menjadi sahabat remaja, pendengar yang baik, sumber informasi kespro yang lengkap & jujur, serta meninggalkan gaya komunikasi menyalahkan/membandingkan.",
+          "**6 Langkah Respons Baku Laporan Pelecehan Seksual**: (1) Dengarkan keluhan dengan baik, (2) **Tidak bereaksi berlebihan**, (3) Tegaskan kejadian tersebut **bukan kesalahannya**, (4) Puji keberaniannya melapor, (5) Bantu melaporkan ke pihak berwenang yang tepat, (6) Bantu mencari pertolongan profesional.",
+          "**Bekal Pencegahan untuk Remaja**: Edukasi kespro dasar, pemahaman dorongan seksual, pencegahan pelecehan, pengembangan **tindakan asertif** (berani menolak & kenali *toxic relationship*), serta pemanfaatan dampak positif kemajuan teknologi."
+        ]
+      }
+    ],
+    "highYield": [
+      "Urutan Kontinuum NAPZA: **Abstinen → Eksperimental → Rekreasional → Reguler/Habitual → Tergantung**.",
+      "Seks berisiko dan NAPZA saling menjadi **pintu masuk** satu sama lain.",
+      "SNPHAR 2018: **3 dari 4 pelaku kekerasan anak/remaja adalah teman/sebaya**. Respons pelecehan: dengar tenang, **bukan salah korban**, puji keberanian, lapor & rujuk."
+    ]
+  },
+  {
+    "no": 16,
+    "id": "d02",
+    "driveNo": 2,
+    "week": 2,
+    "schedule": "Jum, 30 Okt (09.45)",
+    "cluster": "fondasi",
+    "icon": "🗣️",
+    "title": "Teknik Komunikasi Dokter–Pasien",
+    "dosen": "Prof. dr. Hj. Qomariyah, MS, PKK, AIFM, Sp.KKLP",
+    "readMin": 3,
+    "tldr": "Komunikasi efektif adalah inti transaksi terapeutik: menyesuaikan pola hubungan dengan kondisi pasien, menjalankan komunikasi inti secara runtut, dan berempati saat menyampaikan berita buruk.",
+    "sections": [
+      {
+        "heading": "3 Model Klasik Hubungan Dokter–Pasien",
+        "table": {
+          "headers": [
+            "Model",
+            "Peran Dokter & Pasien",
+            "Contoh Kondisi"
+          ],
+          "rows": [
+            [
+              "Activity–Passivity",
+              "Dokter aktif penuh, pasien pasif (seperti orang tua–bayi)",
+              "Pasien tidak sadar, koma, gawat darurat berat, anestesi"
+            ],
+            [
+              "Guidance–Cooperation",
+              "Dokter membimbing, pasien kooperatif mengikuti arahan",
+              "Penyakit akut ringan–sedang (ISPA, infeksi akut)"
+            ],
+            [
+              "Mutual Participation",
+              "Kemitraan setara; dokter & pasien berbagi keputusan",
+              "Penyakit kronis (DM, hipertensi, asma, TBC jangka panjang)"
+            ]
+          ]
+        }
+      },
+      {
+        "heading": "Alur Komunikasi Inti & Keterampilan Dasar",
+        "bullets": [
+          "**5 Langkah Komunikasi Inti**: (1) Anamnesis → (2) Penetapan diagnosis → (3) Penyampaian hasil pemeriksaan → (4) Membangun transaksi pengobatan (kesepakatan terapi + edukasi efek samping & jadwal kontrol) → (5) Penutup.",
+          "**Verbal & Non-verbal**: Gunakan bahasa sederhana tanpa jargon medis, kontak mata hangat, intonasi tenang, posisi duduk sejajar, dan hindari sikap menghakimi atau memotong cerita pasien.",
+          "**Prinsip mendengar aktif**: Beri ruang pasien bicara di menit awal, klarifikasi dengan pertanyaan terbuka lalu tertutup, dan rangkum pemahaman pasien (*teach-back*).",
+          "**Inhibisi vs Empati**: **Inhibisi** adalah hambatan psikologis ketika pasien sulit/enggan mengungkapkan keluhan sebenarnya karena malu, takut, atau jarak emosional; **Empati** adalah kemampuan dokter memahami sudut pandang & perasaan pasien secara objektif sehingga mencairkan inhibisi."
+        ]
+      },
+      {
+        "heading": "5 Tahap Reaksi Psikologis Berita Buruk (Kübler-Ross)",
+        "bullets": [
+          "**1. Denial & Isolation (Penolakan)**: Menyangkal hasil lab/diagnosis (\"Tidak mungkin, pasti salah periksa\").",
+          "**2. Anger (Marah)**: Melampiaskan kekesalan ke dokter, keluarga, atau takdir (\"Kenapa harus saya?\").",
+          "**3. Bargaining (Tawar-menawar)**: Berjanji berubah demi kesembuhan atau menunda kenyataan.",
+          "**4. Depression (Depresi)**: Kesedihan mendalam, menarik diri, merasa tidak berdaya.",
+          "**5. Acceptance (Penerimaan)**: Menerima kenyataan dengan tenang dan mulai fokus pada langkah penanganan."
+        ]
+      }
+    ],
+    "highYield": [
+      "Jembatan keledai Kübler-Ross: **DABDA** (*Denial → Anger → Bargaining → Depression → Acceptance*).",
+      "Pasien koma/IGD = **Activity–Passivity**; pasien infeksi akut sadar = **Guidance–Cooperation**; pasien DM/hipertensi kronis = **Mutual Participation**.",
+      "**Inhibisi** = pasien sulit mengungkap keluhan sebenarnya; diatasi lewat **empati** dan mendengar aktif."
+    ]
+  },
+  {
+    "no": 17,
     "id": "d11",
     "driveNo": 11,
     "week": 2,
-    "weekA": 2,
-    "weekB": 2,
-    "schedule": "A: Rab 28 Okt • B: Jum 30 Okt",
-    "scheduleA": "Rab 28 Okt (07.55)",
-    "scheduleB": "Jum 30 Okt (10.40)",
+    "schedule": "Jum, 30 Okt (10.40)",
     "cluster": "farma",
     "icon": "📖",
     "title": "Formularium & Obat Esensial (DOEN & Fornas)",
@@ -1227,68 +1089,93 @@
     ]
   },
   {
-    "no": 19,
-    "id": "d05",
-    "driveNo": 5,
-    "week": 2,
-    "weekA": 2,
-    "weekB": 3,
-    "schedule": "A: Rab 28 Okt (M2) • B: Jum 6 Nov (M3)",
-    "scheduleA": "Rab 28 Okt (08.50)",
-    "scheduleB": "Jum 6 Nov (07.55)",
-    "cluster": "fondasi",
-    "icon": "🤝",
-    "title": "Patient-Centered Approach, Family-Focused & Community-Oriented",
-    "dosen": "DR. dr. Erlina Wijayanti, MPH, Sp.KKLP",
-    "readMin": 4,
-    "tldr": "Patient-Centered Care (PCC) menempatkan pasien sebagai pribadi unik yang berotonomi penuh dalam 8 dimensi pelayanan, diperluas ke pemberdayaan keluarga dan orientasi komunitas.",
+    "no": 18,
+    "id": "d29",
+    "driveNo": 29,
+    "week": 3,
+    "schedule": "Sen, 2 Nov (07.55)",
+    "cluster": "islam_etika",
+    "icon": "❤️",
+    "title": "Perawatan & Pendampingan Lansia Perspektif Islam",
+    "dosen": "Afrizal Tw, Lc., MA., Ph.D",
+    "readMin": 2,
+    "tldr": "\"Gelar bertambah, bakti tak berkurang\": kesibukan profesi dokter hanya mengubah cara berbakti kepada orang tua lanjut usia, bukan menghapus kewajiban *birrul walidain* baik saat hidup maupun setelah wafat.",
     "sections": [
       {
-        "heading": "8 Dimensi Patient-Centered Care (PCC)",
+        "heading": "Etika Al-Qur’an & Kerangka 4 Kuadran Harian Bakti",
         "bullets": [
-          "**1. Menghormati pilihan, nilai & penilaian pasien**: Menerima pasien sebagai pribadi, menjaga kerahasiaan, melibatkan dalam keputusan.",
-          "**2. Koordinasi & integrasi pelayanan**: Kolaborasi multidisiplin antara layanan klinis dan layanan dukungan.",
-          "**3. Informasi, komunikasi & edukasi**: Memberi informasi penyakit/terapi yang jelas, jujur, dan mudah dipahami.",
-          "**4. Kenyamanan fisik**: Tata laksana nyeri, kenyamanan lingkungan, dan bantuan aktivitas harian.",
-          "**5. Dukungan emosional**: Empati, mendengarkan penuh perhatian, meredakan rasa takut dan cemas.",
-          "**6. Pelibatan keluarga & teman**: Menghargai peran pendamping sebagai mitra perawatan.",
-          "**7. Transisi & kontinuitas pelayanan**: Perencanaan pulang, jadwal kontrol, rujuk balik, dan dukungan pasca-rawat.",
-          "**8. Akses terhadap pelayanan**: Kemudahan menjangkau fasilitas, waktu tunggu wajar, dan ketersediaan rujukan.",
-          "**Aplikasi PCA pada pasien TB**: Jelaskan penyakit & terapinya secara empatik, **tata laksana keluhan mual/efek samping OAT**, pilih & latih **PMO** (Pengawas Menelan Obat), beri jadwal kontrol fleksibel, serta sediakan **kontak HP petugas** agar pasien patuh hingga tuntas."
+          "**QS Al-Isra’ [17]: 23**: Larangan mengucapkan kata *\"ah\" (uff)* atau membentak, serta perintah berkata mulia (**qaulan kariman**) — saring emosi lelah sebelum berbicara kepada orang tua.",
+          "**Kuadran 1 — Waktu Komunikasi**: Menyepakati jadwal telepon/kunjungan rutin yang realistis.",
+          "**Kuadran 2 — Kabar Sebelum Sibuk**: Manajemen ekspektasi (memberi tahu sebelum jaga/ujian dan menepati janji menghubungi balik).",
+          "**Kuadran 3 — Perhatian Utuh**: Kehadiran 100% tanpa distraksi gawai saat bersama atau menelepon orang tua.",
+          "**Kuadran 4 — Doa & Empati Aktif**: Mendoakan dan memahami kebutuhan emosional orang tua di masa senja."
         ]
       },
       {
-        "heading": "Penerapan pada Penyakit Kronis/Infeksi (Contoh: Pasien TB)",
+        "heading": "Bakti Setelah Orang Tua Wafat & Ijabah Doa",
         "bullets": [
-          "**Menjaga kepatuhan OAT hingga tuntas**: Edukasi penyakit & durasi pengobatan, kelola efek samping obat sejak dini, pilih PMO (Pengawas Menelan Obat) yang dipercaya pasien, serta bantu mengatasi hambatan ekonomi/transportasi dan stigma.",
-          "**Family-Focused**: Edukasi etika batuk, ventilasi rumah, skrining kontak serumah, dan dukungan emosional keluarga.",
-          "**Community-Oriented**: Memahami literasi kesehatan masyarakat, budaya setempat, dan mengintegrasikan layanan primer dengan program kesehatan komunitas."
-        ]
-      },
-      {
-        "heading": "Family Wellness Plan & COPC (Institute of Medicine, 1983)",
-        "bullets": [
-          "**Langkah Family Wellness Plan**: Identifikasi anggota keluarga & usia → kategorisasi siklus kehidupan → asesmen risiko kesehatan → susun intervensi pencegahan spesifik tiap anggota (contoh remaja putri: kebersihan genitalia, suplementasi zat besi cegah anemia, edukasi ibadah mahdhah; usia dewasa: **manajemen stres** kerja dengan poin edukasi spesifik).",
-          "**Pemilihan Instrumen Family-Focused**: **Family SCREEM** (sumber daya & hambatan keluarga) + **Family Life Line** (kronologi stresor); **Family Map** (struktur interaksi) + **Family APGAR** (kekuatan & kualitas ikatan keluarga).",
-          "**COPC (Community-Oriented Primary Care)**: Strategi sistematis yang memadukan **pelayanan klinis individu di dalam komunitas** dengan **aspek kedokteran komunitas** (surveilans kesehatan masyarakat & kemitraan aktif komunitas untuk merencanakan layanan promotif–preventif–kuratif–rehabilitatif terintegrasi)."
+          "**3 Bentuk Konkret Bakti Pasca-Wafat**: (1) **Doa dan istighfar** tiada henti, (2) **Sedekah jariyah** atas nama orang tua, (3) **Menjaga silaturahmi** serta memuliakan kerabat dan sahabat orang tua.",
+          "**3 Bentuk Pengabulan Doa (HR Ahmad)**: Selama tidak mengandung dosa/putus silaturahmi, Allah pasti memberi salah satu dari: (1) disegerakan di dunia, (2) **disimpan sebagai pahala akhirat**, atau (3) **dihindarkan dari keburukan yang sebanding**."
         ]
       }
     ],
     "highYield": [
-      "Hati-hati membedakan Dimensi 2 (**Koordinasi multidisiplin**) vs Dimensi 7 (**Transisi & Kontinuitas** saat pulang/kontrol/rujuk balik) vs Dimensi 5 (**Dukungan Emosional** mengurangi takut/cemas).",
-      "**COPC** = integrasi **pelayanan klinis individu** + **kedokteran komunitas** (surveilans & kemitraan komunitas)."
+      "Hafal 4 Kuadran Harian: **Waktu Komunikasi → Kabar Sebelum Sibuk → Perhatian Utuh → Doa/Empati**.",
+      "QS Al-Isra’ [17]: 23 → larangan *uff* & perintah **qaulan kariman**."
+    ]
+  },
+  {
+    "no": 19,
+    "id": "d17",
+    "driveNo": 17,
+    "week": 3,
+    "schedule": "Sen, 2 Nov (09.45)",
+    "cluster": "islam_etika",
+    "icon": "🤲",
+    "title": "Aspek Religi dalam Pengelolaan Pasien",
+    "dosen": "dr. Zwasta Pribadi Mahardhika, M.Med.Ed, Sp.KKLP",
+    "readMin": 4,
+    "tldr": "Dalam perspektif Islam, ikhtiar berobat berjalan beriringan dengan tawakal; dokter memadukan kompetensi, empati, amanah, dan kepekaan terhadap praktik keagamaan pasien dalam rencana terapi.",
+    "sections": [
+      {
+        "heading": "Ikhtiar, Tawakal & 3 Pilar Peran Dokter",
+        "bullets": [
+          "**Berobat adalah perintah**: Hadis *\"Wahai hamba-hamba Allah, berobatlah\"* (HR Tirmidzi) dipadukan dengan tawakal QS Asy-Syu’ara [26]: 80 (*\"Dan apabila aku sakit, Dialah yang menyembuhkanku\"*).",
+          "**Sabar saat sakit**: Sakit menjadi penggugur dosa (HR Bukhari), sekaligus mendorong harapan dan kepatuhan terapi.",
+          "**3 Pilar Kewajiban Dokter**: (1) **Compassion** (kasih sayang & empati), (2) **Competence** (kompetensi & belajar sepanjang hayat), (3) **Trust** (amanah & kerahasiaan pasien).",
+          "**Prinsip Etika Islam**: **Sanctity of Life** (kesucian nyawa — QS Al-An’am [6]: 151), keadilan, dan tidak membahayakan."
+        ]
+      },
+      {
+        "heading": "Menghormati Praktik Keagamaan & Integrasi Spiritual Care",
+        "bullets": [
+          "**4 Dimensi Sensitivitas Keagamaan**: (1) **Dietary considerations** (makanan/obat halal), (2) **Gender sensitivity** (menjaga aurat/preferensi pemeriksa bila memungkinkan), (3) **Prayer & worship** (kemudahan ibadah/tayammum/puasa saat sakit), (4) **Modesty & privacy**.",
+          "**4 Tahap Integrasi Perawatan Spiritual**: (1) **Assessment** (kaji kebutuhan & distres spiritual) → (2) **Collaboration** (libatkan keluarga/rohaniawan) → (3) **Integration** (selaraskan dengan rencana terapi) → (4) **Follow-up**.",
+          "**Shared Decision-Making**: Open communication + Education + Respect for patient values + Collaborative plan."
+        ]
+      },
+      {
+        "heading": "3 Pilar Dokter dalam Islam, 4 Dimensi Praktik Pasien & Tantangan",
+        "bullets": [
+          "**Ikhtiar & Tawakal**: Islam memerintahkan **ikhtiar mencari pengobatan medis** (\"Wahai hamba-hamba Allah, berobatlah...\") seraya tetap bertawakal dan bersabar kepada Allah SWT — keduanya saling melengkapi, bukan bertentangan.",
+          "**3 Pilar Peran & Kewajiban Dokter dalam Islam**: (1) **Compassion** (kasih sayang & empati, HR. Bukhari), (2) **Competence** (kompetensi klinis & pembelajaran berkelanjutan), dan (3) **Trust** (amanah, menjaga kerahasiaan & kepentingan terbaik pasien).",
+          "**4 Dimensi Menghormati Praktik Keagamaan Pasien**: (1) **Dietary considerations** (makanan & informasi kehalalan terapi/obat), (2) **Gender concordance & privacy** (tenaga medis sesama jenis bila memungkinkan & jaga aurat), (3) **Prayer facilitation** (waktu & sarana salat/tayamum), dan (4) **Spiritual communication**.",
+          "**Tantangan Integrasi Aspek Religi**: Menyeimbangkan **bukti ilmiah (*evidence-based*) dengan keyakinan religius**, perbedaan interpretasi ajaran agama antar pasien/keluarga, serta keterbatasan sumber daya/waktu layanan."
+        ]
+      }
+    ],
+    "highYield": [
+      "3 Pilar Dokter dalam Islam: **Compassion, Competence, Trust**.",
+      "4 Tahap *Spiritual Care*: **Assessment → Collaboration → Integration → Follow-up**.",
+      "3 pilar dokter dalam Islam: **Compassion** (kasih sayang), **Competence** (kompetensi berkelanjutan), **Trust** (amanah & kerahasiaan)."
     ]
   },
   {
     "no": 20,
     "id": "d20",
     "driveNo": 20,
-    "week": 2,
-    "weekA": 2,
-    "weekB": 3,
-    "schedule": "A: Kam 29 Okt (M2) • B: Sen 2 Nov (M3)",
-    "scheduleA": "Kam 29 Okt (13.00)",
-    "scheduleB": "Sen 2 Nov (13.00)",
+    "week": 3,
+    "schedule": "Sen, 2 Nov (13.00)",
     "cluster": "farma",
     "icon": "🔬",
     "title": "Konsep Dasar & Regulasi Laboratorium Layanan Primer",
@@ -1350,6 +1237,8 @@
     "id": "s02",
     "driveNo": null,
     "isScheduleExtra": true,
+    "week": 3,
+    "schedule": "Sen, 2 Nov (13.55)",
     "cluster": "farma",
     "icon": "🧪",
     "title": "Pemeriksaan Laboratorium Rasional pada Layanan Kedokteran Keluarga",
@@ -1406,102 +1295,124 @@
       "Sumber kesalahan laboratorium paling dominan adalah tahap **pra-analitik (~60–70%)**, sehingga persiapan pasien & pengambilan sampel krusial.",
       "Ingat kaidah uji diagnostik: **SnNout** (Sensitivitas tinggi → Negatif menyingkirkan penyakit, untuk **skrining**) dan **SpPin** (Spesifisitas tinggi → Positif memastikan penyakit, untuk **konfirmasi**).",
       "Puasa standar pemeriksaan **GDP & profil lipid (trigliserida)** adalah **8–12 jam** (boleh minum air putih biasa)."
-    ],
-    "week": 2,
-    "weekA": 2,
-    "weekB": 3,
-    "schedule": "A: Kam 29 Okt (M2) • B: Sen 2 Nov (M3)",
-    "scheduleA": "Kam 29 Okt (13.55)",
-    "scheduleB": "Sen 2 Nov (13.55)"
+    ]
   },
   {
     "no": 22,
-    "id": "d29",
-    "driveNo": 29,
+    "id": "s01",
+    "driveNo": null,
+    "isScheduleExtra": true,
     "week": 3,
-    "weekA": 3,
-    "weekB": 3,
-    "schedule": "B: Sen 2 Nov • A: Kam 5 Nov",
-    "scheduleA": "Kam 5 Nov (09.45)",
-    "scheduleB": "Sen 2 Nov (07.55)",
-    "cluster": "islam_etika",
-    "icon": "❤️",
-    "title": "Perawatan & Pendampingan Lansia Perspektif Islam",
-    "dosen": "Afrizal Tw, Lc., MA., Ph.D",
-    "readMin": 2,
-    "tldr": "\"Gelar bertambah, bakti tak berkurang\": kesibukan profesi dokter hanya mengubah cara berbakti kepada orang tua lanjut usia, bukan menghapus kewajiban *birrul walidain* baik saat hidup maupun setelah wafat.",
+    "schedule": "Sel, 3 Nov (07.55)",
+    "cluster": "lansia_k3",
+    "icon": "🦺",
+    "title": "Kecelakaan Kerja (K3 & Return to Work)",
+    "dosen": "dr. Dian Mardiyah, MKK, Sp.KKLP, Subsp.COPC, Ph.D",
+    "readMin": 4,
+    "tldr": "Kecelakaan kerja (KK) adalah insiden akut terkait hubungan kerja (termasuk rute wajar berangkat–pulang) yang dicegah lewat hierarki pengendalian K3, wajib dilaporkan ke BPJS Ketenagakerjaan maksimal 2×24 jam, dan ditindaklanjuti dengan program Return to Work.",
     "sections": [
       {
-        "heading": "Etika Al-Qur’an & Kerangka 4 Kuadran Harian Bakti",
+        "heading": "Definisi, Ruang Lingkup & Perbedaan KK vs PAK",
+        "table": {
+          "headers": [
+            "Aspek",
+            "Kecelakaan Kerja (KK)",
+            "Penyakit Akibat Kerja (PAK)"
+          ],
+          "rows": [
+            [
+              "Onset",
+              "Akut, mendadak, tidak terduga pada waktu & lokasi tertentu",
+              "Kronik/bertahap akibat pajanan kumulatif di tempat kerja"
+            ],
+            [
+              "Penyebab",
+              "Insiden mekanis, jatuh, terjepit, listrik, bahan kimia akut, kecelakaan lalu lintas rute kerja",
+              "Pajanan bahaya fisik (bising), kimia, biologi, ergonomi, psikososial"
+            ],
+            [
+              "Ruang Lingkup JKK",
+              "Di tempat kerja & dalam perjalanan berangkat/pulang melalui rute wajar (PP No. 44/2015)",
+              "Ditegakkan melalui 7 Langkah Diagnosis PAK (Perpres No. 7/2019)"
+            ]
+          ]
+        }
+      },
+      {
+        "heading": "Faktor Penyebab (Teori Domino Heinrich & Piramida Kecelakaan)",
         "bullets": [
-          "**QS Al-Isra’ [17]: 23**: Larangan mengucapkan kata *\"ah\" (uff)* atau membentak, serta perintah berkata mulia (**qaulan kariman**) — saring emosi lelah sebelum berbicara kepada orang tua.",
-          "**Kuadran 1 — Waktu Komunikasi**: Menyepakati jadwal telepon/kunjungan rutin yang realistis.",
-          "**Kuadran 2 — Kabar Sebelum Sibuk**: Manajemen ekspektasi (memberi tahu sebelum jaga/ujian dan menepati janji menghubungi balik).",
-          "**Kuadran 3 — Perhatian Utuh**: Kehadiran 100% tanpa distraksi gawai saat bersama atau menelepon orang tua.",
-          "**Kuadran 4 — Doa & Empati Aktif**: Mendoakan dan memahami kebutuhan emosional orang tua di masa senja."
+          "**Unsafe Act (~88%)**: Perilaku tidak aman pekerja — tidak memakai APD, melanggar SOP, bekerja terburu-buru, kelelahan (*fatigue*), atau kurang pelatihan.",
+          "**Unsafe Condition (~10%)**: Lingkungan/alat tidak aman — lantai licin, mesin tanpa pelindung (*guarding*), pencahayaan buruk, kebocoran bahan kimia, ventilasi kurang.",
+          "**Faktor Tak Terduga / Act of God (~2%)**: Kejadian alam di luar kendali manusia.",
+          "**Konsep Near Miss (Nyaris Celaka)**: Menurut Piramida Bird, di balik 1 cedera fatal terdapat ratusan insiden ringan dan ribuan *near miss* — pelaporan *near miss* krusial untuk mencegah kecelakaan berat."
         ]
       },
       {
-        "heading": "Bakti Setelah Orang Tua Wafat & Ijabah Doa",
+        "heading": "Pencegahan, Tata Laksana, Pelaporan & Return to Work (RTW)",
         "bullets": [
-          "**3 Bentuk Konkret Bakti Pasca-Wafat**: (1) **Doa dan istighfar** tiada henti, (2) **Sedekah jariyah** atas nama orang tua, (3) **Menjaga silaturahmi** serta memuliakan kerabat dan sahabat orang tua.",
-          "**3 Bentuk Pengabulan Doa (HR Ahmad)**: Selama tidak mengandung dosa/putus silaturahmi, Allah pasti memberi salah satu dari: (1) disegerakan di dunia, (2) **disimpan sebagai pahala akhirat**, atau (3) **dihindarkan dari keburukan yang sebanding**."
+          "**Hierarki Pengendalian Bahaya (paling efektif → terakhir)**: (1) **Eliminasi** → (2) **Substitusi** → (3) **Rekayasa Teknik (*Engineering*)** → (4) **Pengendalian Administratif** (SOP, rotasi shift, pelatihan) → (5) **APD** (benteng terakhir).",
+          "**Peran Dokter Layanan Primer**: Pertolongan pertama & stabilisasi kegawatdaruratan (ABCDE), rujukan tepat, dokumentasi rekam medis akurat mengenai kronologi hubungan kerja, serta pencegahan kecacatan.",
+          "**Pelaporan JKK (BPJS Ketenagakerjaan & Disnaker)**: **Tahap I** wajib dilaporkan maksimal **2×24 jam** sejak kejadian; **Tahap II** dilaporkan setelah pekerja sembuh, cacat, atau meninggal untuk penetapan manfaat JKK.",
+          "**Return to Work (RTW)**: Program pendampingan medis & rehabilitasi kerja terstruktur (penilaian *fit to work*, modifikasi tugas/jam kerja, evaluasi tempat kerja) agar pekerja pascacedera dapat kembali bekerja dengan aman dan produktif."
         ]
       }
     ],
     "highYield": [
-      "Hafal 4 Kuadran Harian: **Waktu Komunikasi → Kabar Sebelum Sibuk → Perhatian Utuh → Doa/Empati**.",
-      "QS Al-Isra’ [17]: 23 → larangan *uff* & perintah **qaulan kariman**."
+      "Batas waktu pelaporan awal (Tahap I) Kecelakaan Kerja ke BPJS Ketenagakerjaan & Disnaker adalah **2×24 jam**.",
+      "Kecelakaan lalu lintas saat berangkat atau pulang kerja melalui **rute yang wajar dan biasa dilalui** termasuk **Kecelakaan Kerja** (ditanggung JKK).",
+      "Penyebab terbanyak KK menurut Heinrich adalah **unsafe act (~88%)**; pengendalian paling efektif adalah **Eliminasi**, sedangkan **APD selalu pilihan terakhir**."
     ]
   },
   {
     "no": 23,
-    "id": "d17",
-    "driveNo": 17,
+    "id": "d19",
+    "driveNo": 19,
     "week": 3,
-    "weekA": 3,
-    "weekB": 3,
-    "schedule": "B: Sen 2 Nov • A: Rab 4 Nov",
-    "scheduleA": "Rab 4 Nov (09.45)",
-    "scheduleB": "Sen 2 Nov (09.45)",
+    "schedule": "Sel, 3 Nov (09.45)",
     "cluster": "islam_etika",
-    "icon": "🤲",
-    "title": "Aspek Religi dalam Pengelolaan Pasien",
-    "dosen": "dr. Zwasta Pribadi Mahardhika, M.Med.Ed, Sp.KKLP",
+    "icon": "📝",
+    "title": "Informed Consent (Persetujuan Tindakan Medis)",
+    "dosen": "dr. Farah Primadani Karouw, Sp.F",
     "readMin": 4,
-    "tldr": "Dalam perspektif Islam, ikhtiar berobat berjalan beriringan dengan tawakal; dokter memadukan kompetensi, empati, amanah, dan kepekaan terhadap praktik keagamaan pasien dalam rencana terapi.",
+    "tldr": "Transaksi terapeutik adalah perjanjian upaya (inspanningverbintenis), dan Pasal 293 UU Kesehatan No. 17/2023 mewajibkan penjelasan minimal 7 unsur sebelum persetujuan tindakan medis.",
     "sections": [
       {
-        "heading": "Ikhtiar, Tawakal & 3 Pilar Peran Dokter",
+        "heading": "Landasan Hukum & Jenis Perjanjian Medis",
         "bullets": [
-          "**Berobat adalah perintah**: Hadis *\"Wahai hamba-hamba Allah, berobatlah\"* (HR Tirmidzi) dipadukan dengan tawakal QS Asy-Syu’ara [26]: 80 (*\"Dan apabila aku sakit, Dialah yang menyembuhkanku\"*).",
-          "**Sabar saat sakit**: Sakit menjadi penggugur dosa (HR Bukhari), sekaligus mendorong harapan dan kepatuhan terapi.",
-          "**3 Pilar Kewajiban Dokter**: (1) **Compassion** (kasih sayang & empati), (2) **Competence** (kompetensi & belajar sepanjang hayat), (3) **Trust** (amanah & kerahasiaan pasien).",
-          "**Prinsip Etika Islam**: **Sanctity of Life** (kesucian nyawa — QS Al-An’am [6]: 151), keadilan, dan tidak membahayakan."
+          "**Landasan**: UUD 1945, **UU Kesehatan No. 17 Tahun 2023 (Pasal 293)**, KODEKI, dan Permenkes Persetujuan Tindakan Medis.",
+          "**Inspanningverbintenis (Perjanjian Upaya)**: Dokter berjanji berupaya maksimal sesuai standar profesi, standar pelayanan, dan SOP — **bukan** *Resultaatverbintenis* (janji pasti sembuh).",
+          "**Tujuan Informed Consent**: Melindungi pasien dari tindakan yang tidak diperlukan sekaligus memberikan perlindungan hukum bagi dokter karena setiap tindakan medis mengandung risiko.",
+          "**Presumed Consent**: Pada kegawatdaruratan mengancam nyawa (*life-threatening emergency*) saat pasien tidak sadar/tak kompeten dan tidak ada waktu memadai mencari keluarga/wali, dokter berwenang segera bertindak menyelamatkan nyawa (*life-saving*)."
         ]
       },
       {
-        "heading": "Menghormati Praktik Keagamaan & Integrasi Spiritual Care",
+        "heading": "7 Unsur Wajib Penjelasan (Pasal 293 Ayat 3 UU No. 17/2023)",
         "bullets": [
-          "**4 Dimensi Sensitivitas Keagamaan**: (1) **Dietary considerations** (makanan/obat halal), (2) **Gender sensitivity** (menjaga aurat/preferensi pemeriksa bila memungkinkan), (3) **Prayer & worship** (kemudahan ibadah/tayammum/puasa saat sakit), (4) **Modesty & privacy**.",
-          "**4 Tahap Integrasi Perawatan Spiritual**: (1) **Assessment** (kaji kebutuhan & distres spiritual) → (2) **Collaboration** (libatkan keluarga/rohaniawan) → (3) **Integration** (selaraskan dengan rencana terapi) → (4) **Follow-up**.",
-          "**Shared Decision-Making**: Open communication + Education + Respect for patient values + Collaborative plan."
+          "**1.** Diagnosis",
+          "**2.** Indikasi",
+          "**3.** Tindakan pelayanan kesehatan yang dilakukan dan tujuannya",
+          "**4.** Risiko dan komplikasi yang mungkin terjadi",
+          "**5.** Alternatif tindakan lain dan risikonya",
+          "**6.** Risiko apabila tindakan tidak dilakukan",
+          "**7.** Prognosis setelah memperoleh tindakan",
+          "**Batas Usia & Emancipated Minor**: Anak **<18 tahun** umumnya butuh *informed permission* orang tua (termasuk remaja <18 tahun di asrama sekolah yang masih dibiayai orang tua!). Pengecualian hanya bagi **emancipated minor** (<18 tahun yang sudah menikah, mandiri secara finansial/hukum, atau anggota militer)."
         ]
       },
       {
-        "heading": "3 Pilar Dokter dalam Islam, 4 Dimensi Praktik Pasien & Tantangan",
+        "heading": "Bentuk Persetujuan, Proxy Consent & Pengecualian",
         "bullets": [
-          "**Ikhtiar & Tawakal**: Islam memerintahkan **ikhtiar mencari pengobatan medis** (\"Wahai hamba-hamba Allah, berobatlah...\") seraya tetap bertawakal dan bersabar kepada Allah SWT — keduanya saling melengkapi, bukan bertentangan.",
-          "**3 Pilar Peran & Kewajiban Dokter dalam Islam**: (1) **Compassion** (kasih sayang & empati, HR. Bukhari), (2) **Competence** (kompetensi klinis & pembelajaran berkelanjutan), dan (3) **Trust** (amanah, menjaga kerahasiaan & kepentingan terbaik pasien).",
-          "**4 Dimensi Menghormati Praktik Keagamaan Pasien**: (1) **Dietary considerations** (makanan & informasi kehalalan terapi/obat), (2) **Gender concordance & privacy** (tenaga medis sesama jenis bila memungkinkan & jaga aurat), (3) **Prayer facilitation** (waktu & sarana salat/tayamum), dan (4) **Spiritual communication**.",
-          "**Tantangan Integrasi Aspek Religi**: Menyeimbangkan **bukti ilmiah (*evidence-based*) dengan keyakinan religius**, perbedaan interpretasi ajaran agama antar pasien/keluarga, serta keterbatasan sumber daya/waktu layanan."
+          "**Expressed Consent**: Dinyatakan tegas secara lisan atau tertulis (tindakan berisiko tinggi wajib tertulis).",
+          "**Implied Consent**: Tersirat dari sikap/perilaku pasien (mis. mengulurkan lengan untuk suntik/tensi).",
+          "**Urutan Proxy Consent** (bila pasien tidak kompeten): **(1) Suami/Istri → (2) Orang tua kandung → (3) Anak kandung → (4) Saudara kandung**.",
+          "**Anak <18 tahun**: Orang tua memberi *informed permission*, kecuali **emancipated minor** (mis. sudah menikah, mandiri finansial, ibu dari anak, atau anggota militer).",
+          "**Kegawatdaruratan mengancam nyawa**: Tindakan penyelamatan tetap dilakukan tanpa menunda persetujuan; penjelasan diberikan segera setelah kondisi stabil."
         ]
       }
     ],
     "highYield": [
-      "3 Pilar Dokter dalam Islam: **Compassion, Competence, Trust**.",
-      "4 Tahap *Spiritual Care*: **Assessment → Collaboration → Integration → Follow-up**.",
-      "3 pilar dokter dalam Islam: **Compassion** (kasih sayang), **Competence** (kompetensi berkelanjutan), **Trust** (amanah & kerahasiaan)."
+      "Hafal 7 unsur Pasal 293 UU 17/2023: **D–I–T–R–A–R–P** (Diagnosis, Indikasi, Tindakan+tujuan, Risiko+komplikasi, Alternatif, Risiko bila tidak dilakukan, Prognosis).",
+      "Urutan wali (*proxy*): **1. Suami/Istri → 2. Orang tua → 3. Anak → 4. Saudara kandung**.",
+      "**Presumed consent** berlaku pada *life-threatening emergency*. Remaja <18 tahun di asrama yang masih dibiayai orang tua **BUKAN** *emancipated minor* → tetap butuh izin orang tua."
     ]
   },
   {
@@ -1509,11 +1420,7 @@
     "id": "d25",
     "driveNo": 25,
     "week": 3,
-    "weekA": 3,
-    "weekB": 3,
-    "schedule": "A: Sen 2 Nov • B: Kam 5 Nov",
-    "scheduleA": "Sen 2 Nov (14.50)",
-    "scheduleB": "Kam 5 Nov (13.00)",
+    "schedule": "Kam, 5 Nov (13.00)",
     "cluster": "jiwa",
     "icon": "🏡",
     "title": "Ketahanan Keluarga",
@@ -1591,111 +1498,10 @@
   },
   {
     "no": 25,
-    "id": "d30",
-    "driveNo": 30,
-    "week": 3,
-    "weekA": 3,
-    "weekB": 3,
-    "schedule": "A: Sel 3 Nov • B: Jum 6 Nov",
-    "scheduleA": "Sel 3 Nov (09.45)",
-    "scheduleB": "Jum 6 Nov (09.45)",
-    "cluster": "gizi_lingkungan",
-    "icon": "🌾",
-    "title": "Perbaikan Gizi Masyarakat & Aksesibilitas Pangan Beragam",
-    "dosen": "DR. Rifda Wulansari, SP, M.Kes",
-    "readMin": 3,
-    "tldr": "Stunting Indonesia turun ke 19,8% (SSGI 2024) namun beban ganda gizi tetap menantang; solusinya memadukan 3 strategi gizi (spesifik, sensitif, tata kelola) dan 4 pilar ketahanan pangan B2SA.",
-    "sections": [
-      {
-        "heading": "Situasi Gizi Nasional & 3 Pilar Strategi Perbaikan Gizi",
-        "bullets": [
-          "**Tren SSGI**: Stunting turun dari 21,6% (2022) menjadi **19,8% (2024)**, namun masih ada disparitas wilayah serta beban ganda (*wasting* dan *overweight*).",
-          "**1. Strategi Spesifik Gizi** (menyasar langsung biologis & asupan): Intervensi **1000 HPK**, TTD ibu hamil (**90 tablet**) & remaja putri (**1 tablet/minggu**), Vitamin A balita, PMT balita gizi kurang & bumil KEK, ASI eksklusif 6 bulan + MP-ASI, tata laksana gizi buruk & infeksi.",
-          "**2. Strategi Sensitif Gizi** (sektor non-kesehatan): Ketahanan pangan rumah tangga, pengentasan kemiskinan (PKH/BPNT), pendidikan & literasi gizi ibu, air bersih & sanitasi, pertanian keluarga, dan Posyandu aktif.",
-          "**3. Strategi Sistem & Tata Kelola (*Enabling Environment*)**: Regulasi/RPJMN, kolaborasi multisektor, surveilans SSGI, dan digitalisasi layanan."
-        ]
-      },
-      {
-        "heading": "4 Pilar Ketahanan Pangan & Pangan B2SA",
-        "bullets": [
-          "**4 Pilar Ketahanan Pangan**: (1) **Ketersediaan (*Availability*)**, (2) **Akses (*Access* — fisik, ekonomi, sosial-budaya, informasi)**, (3) **Pemanfaatan (*Utilization*)**, dan (4) **Stabilitas (*Stability*)**.",
-          "**Aksesibilitas Pangan Beragam (B2SA — Beragam, Bergizi Seimbang, dan Aman)**: Diversifikasi pangan lokal (umbi, jagung, sorgum, kacang-kacangan) dan pemanfaatan pekarangan melalui **KRPL (Kawasan Rumah Pangan Lestari)**.",
-          "**Strategi Aksesibilitas Pangan Beragam (B2SA)**: Diversifikasi produksi pangan lokal (**umbi, sorgum, jagung, kacang-kacangan**) & **Kawasan Rumah Pangan Lestari (KRPL)**, perbaikan distribusi logistik termasuk **rantai dingin (*cold chain*)** untuk sayur/buah/protein hewani, serta edukasi & bantuan pangan bergizi."
-        ]
-      }
-    ],
-    "highYield": [
-      "Beda cepat: **Spesifik Gizi** = TTD, Vit A, PMT, ASI, 1000 HPK (kesehatan langsung); **Sensitif Gizi** = air bersih, sanitasi, bansos, pendidikan ibu, pertanian.",
-      "4 Pilar Ketahanan Pangan: **Ketersediaan – Akses – Pemanfaatan – Stabilitas**.",
-      "Kunci aksesibilitas pangan **B2SA**: diversifikasi pangan lokal + **KRPL** + logistik **rantai dingin (*cold chain*)** untuk sayur, buah, & protein hewani."
-    ]
-  },
-  {
-    "no": 26,
-    "id": "d19",
-    "driveNo": 19,
-    "week": 3,
-    "weekA": 3,
-    "weekB": 3,
-    "schedule": "B: Sel 3 Nov • A: Menyesuaikan jadwal",
-    "scheduleA": "Menyesuaikan jadwal",
-    "scheduleB": "Sel 3 Nov (09.45)",
-    "cluster": "islam_etika",
-    "icon": "📝",
-    "title": "Informed Consent (Persetujuan Tindakan Medis)",
-    "dosen": "dr. Farah Primadani Karouw, Sp.F",
-    "readMin": 4,
-    "tldr": "Transaksi terapeutik adalah perjanjian upaya (inspanningverbintenis), dan Pasal 293 UU Kesehatan No. 17/2023 mewajibkan penjelasan minimal 7 unsur sebelum persetujuan tindakan medis.",
-    "sections": [
-      {
-        "heading": "Landasan Hukum & Jenis Perjanjian Medis",
-        "bullets": [
-          "**Landasan**: UUD 1945, **UU Kesehatan No. 17 Tahun 2023 (Pasal 293)**, KODEKI, dan Permenkes Persetujuan Tindakan Medis.",
-          "**Inspanningverbintenis (Perjanjian Upaya)**: Dokter berjanji berupaya maksimal sesuai standar profesi, standar pelayanan, dan SOP — **bukan** *Resultaatverbintenis* (janji pasti sembuh).",
-          "**Tujuan Informed Consent**: Melindungi pasien dari tindakan yang tidak diperlukan sekaligus memberikan perlindungan hukum bagi dokter karena setiap tindakan medis mengandung risiko.",
-          "**Presumed Consent**: Pada kegawatdaruratan mengancam nyawa (*life-threatening emergency*) saat pasien tidak sadar/tak kompeten dan tidak ada waktu memadai mencari keluarga/wali, dokter berwenang segera bertindak menyelamatkan nyawa (*life-saving*)."
-        ]
-      },
-      {
-        "heading": "7 Unsur Wajib Penjelasan (Pasal 293 Ayat 3 UU No. 17/2023)",
-        "bullets": [
-          "**1.** Diagnosis",
-          "**2.** Indikasi",
-          "**3.** Tindakan pelayanan kesehatan yang dilakukan dan tujuannya",
-          "**4.** Risiko dan komplikasi yang mungkin terjadi",
-          "**5.** Alternatif tindakan lain dan risikonya",
-          "**6.** Risiko apabila tindakan tidak dilakukan",
-          "**7.** Prognosis setelah memperoleh tindakan",
-          "**Batas Usia & Emancipated Minor**: Anak **<18 tahun** umumnya butuh *informed permission* orang tua (termasuk remaja <18 tahun di asrama sekolah yang masih dibiayai orang tua!). Pengecualian hanya bagi **emancipated minor** (<18 tahun yang sudah menikah, mandiri secara finansial/hukum, atau anggota militer)."
-        ]
-      },
-      {
-        "heading": "Bentuk Persetujuan, Proxy Consent & Pengecualian",
-        "bullets": [
-          "**Expressed Consent**: Dinyatakan tegas secara lisan atau tertulis (tindakan berisiko tinggi wajib tertulis).",
-          "**Implied Consent**: Tersirat dari sikap/perilaku pasien (mis. mengulurkan lengan untuk suntik/tensi).",
-          "**Urutan Proxy Consent** (bila pasien tidak kompeten): **(1) Suami/Istri → (2) Orang tua kandung → (3) Anak kandung → (4) Saudara kandung**.",
-          "**Anak <18 tahun**: Orang tua memberi *informed permission*, kecuali **emancipated minor** (mis. sudah menikah, mandiri finansial, ibu dari anak, atau anggota militer).",
-          "**Kegawatdaruratan mengancam nyawa**: Tindakan penyelamatan tetap dilakukan tanpa menunda persetujuan; penjelasan diberikan segera setelah kondisi stabil."
-        ]
-      }
-    ],
-    "highYield": [
-      "Hafal 7 unsur Pasal 293 UU 17/2023: **D–I–T–R–A–R–P** (Diagnosis, Indikasi, Tindakan+tujuan, Risiko+komplikasi, Alternatif, Risiko bila tidak dilakukan, Prognosis).",
-      "Urutan wali (*proxy*): **1. Suami/Istri → 2. Orang tua → 3. Anak → 4. Saudara kandung**.",
-      "**Presumed consent** berlaku pada *life-threatening emergency*. Remaja <18 tahun di asrama yang masih dibiayai orang tua **BUKAN** *emancipated minor* → tetap butuh izin orang tua."
-    ]
-  },
-  {
-    "no": 27,
     "id": "d18",
     "driveNo": 18,
     "week": 3,
-    "weekA": 3,
-    "weekB": 3,
-    "schedule": "A: Kam 5 Nov (07.55) • B: Kam 5 Nov (14.50)",
-    "scheduleA": "Kam 5 Nov (07.55)",
-    "scheduleB": "Kam 5 Nov (14.50)",
+    "schedule": "Kam, 5 Nov (14.50)",
     "cluster": "lansia_k3",
     "icon": "👴",
     "title": "Pelayanan Kesehatan Kelompok Usia Lansia",
@@ -1728,15 +1534,97 @@
     ]
   },
   {
+    "no": 26,
+    "id": "d05",
+    "driveNo": 5,
+    "week": 3,
+    "schedule": "Jum, 6 Nov (07.55)",
+    "cluster": "fondasi",
+    "icon": "🤝",
+    "title": "Patient-Centered Approach, Family-Focused & Community-Oriented",
+    "dosen": "DR. dr. Erlina Wijayanti, MPH, Sp.KKLP",
+    "readMin": 4,
+    "tldr": "Patient-Centered Care (PCC) menempatkan pasien sebagai pribadi unik yang berotonomi penuh dalam 8 dimensi pelayanan, diperluas ke pemberdayaan keluarga dan orientasi komunitas.",
+    "sections": [
+      {
+        "heading": "8 Dimensi Patient-Centered Care (PCC)",
+        "bullets": [
+          "**1. Menghormati pilihan, nilai & penilaian pasien**: Menerima pasien sebagai pribadi, menjaga kerahasiaan, melibatkan dalam keputusan.",
+          "**2. Koordinasi & integrasi pelayanan**: Kolaborasi multidisiplin antara layanan klinis dan layanan dukungan.",
+          "**3. Informasi, komunikasi & edukasi**: Memberi informasi penyakit/terapi yang jelas, jujur, dan mudah dipahami.",
+          "**4. Kenyamanan fisik**: Tata laksana nyeri, kenyamanan lingkungan, dan bantuan aktivitas harian.",
+          "**5. Dukungan emosional**: Empati, mendengarkan penuh perhatian, meredakan rasa takut dan cemas.",
+          "**6. Pelibatan keluarga & teman**: Menghargai peran pendamping sebagai mitra perawatan.",
+          "**7. Transisi & kontinuitas pelayanan**: Perencanaan pulang, jadwal kontrol, rujuk balik, dan dukungan pasca-rawat.",
+          "**8. Akses terhadap pelayanan**: Kemudahan menjangkau fasilitas, waktu tunggu wajar, dan ketersediaan rujukan.",
+          "**Aplikasi PCA pada pasien TB**: Jelaskan penyakit & terapinya secara empatik, **tata laksana keluhan mual/efek samping OAT**, pilih & latih **PMO** (Pengawas Menelan Obat), beri jadwal kontrol fleksibel, serta sediakan **kontak HP petugas** agar pasien patuh hingga tuntas."
+        ]
+      },
+      {
+        "heading": "Penerapan pada Penyakit Kronis/Infeksi (Contoh: Pasien TB)",
+        "bullets": [
+          "**Menjaga kepatuhan OAT hingga tuntas**: Edukasi penyakit & durasi pengobatan, kelola efek samping obat sejak dini, pilih PMO (Pengawas Menelan Obat) yang dipercaya pasien, serta bantu mengatasi hambatan ekonomi/transportasi dan stigma.",
+          "**Family-Focused**: Edukasi etika batuk, ventilasi rumah, skrining kontak serumah, dan dukungan emosional keluarga.",
+          "**Community-Oriented**: Memahami literasi kesehatan masyarakat, budaya setempat, dan mengintegrasikan layanan primer dengan program kesehatan komunitas."
+        ]
+      },
+      {
+        "heading": "Family Wellness Plan & COPC (Institute of Medicine, 1983)",
+        "bullets": [
+          "**Langkah Family Wellness Plan**: Identifikasi anggota keluarga & usia → kategorisasi siklus kehidupan → asesmen risiko kesehatan → susun intervensi pencegahan spesifik tiap anggota (contoh remaja putri: kebersihan genitalia, suplementasi zat besi cegah anemia, edukasi ibadah mahdhah; usia dewasa: **manajemen stres** kerja dengan poin edukasi spesifik).",
+          "**Pemilihan Instrumen Family-Focused**: **Family SCREEM** (sumber daya & hambatan keluarga) + **Family Life Line** (kronologi stresor); **Family Map** (struktur interaksi) + **Family APGAR** (kekuatan & kualitas ikatan keluarga).",
+          "**COPC (Community-Oriented Primary Care)**: Strategi sistematis yang memadukan **pelayanan klinis individu di dalam komunitas** dengan **aspek kedokteran komunitas** (surveilans kesehatan masyarakat & kemitraan aktif komunitas untuk merencanakan layanan promotif–preventif–kuratif–rehabilitatif terintegrasi)."
+        ]
+      }
+    ],
+    "highYield": [
+      "Hati-hati membedakan Dimensi 2 (**Koordinasi multidisiplin**) vs Dimensi 7 (**Transisi & Kontinuitas** saat pulang/kontrol/rujuk balik) vs Dimensi 5 (**Dukungan Emosional** mengurangi takut/cemas).",
+      "**COPC** = integrasi **pelayanan klinis individu** + **kedokteran komunitas** (surveilans & kemitraan komunitas)."
+    ]
+  },
+  {
+    "no": 27,
+    "id": "d30",
+    "driveNo": 30,
+    "week": 3,
+    "schedule": "Jum, 6 Nov (09.45)",
+    "cluster": "gizi_lingkungan",
+    "icon": "🌾",
+    "title": "Perbaikan Gizi Masyarakat & Aksesibilitas Pangan Beragam",
+    "dosen": "DR. Rifda Wulansari, SP, M.Kes",
+    "readMin": 3,
+    "tldr": "Stunting Indonesia turun ke 19,8% (SSGI 2024) namun beban ganda gizi tetap menantang; solusinya memadukan 3 strategi gizi (spesifik, sensitif, tata kelola) dan 4 pilar ketahanan pangan B2SA.",
+    "sections": [
+      {
+        "heading": "Situasi Gizi Nasional & 3 Pilar Strategi Perbaikan Gizi",
+        "bullets": [
+          "**Tren SSGI**: Stunting turun dari 21,6% (2022) menjadi **19,8% (2024)**, namun masih ada disparitas wilayah serta beban ganda (*wasting* dan *overweight*).",
+          "**1. Strategi Spesifik Gizi** (menyasar langsung biologis & asupan): Intervensi **1000 HPK**, TTD ibu hamil (**90 tablet**) & remaja putri (**1 tablet/minggu**), Vitamin A balita, PMT balita gizi kurang & bumil KEK, ASI eksklusif 6 bulan + MP-ASI, tata laksana gizi buruk & infeksi.",
+          "**2. Strategi Sensitif Gizi** (sektor non-kesehatan): Ketahanan pangan rumah tangga, pengentasan kemiskinan (PKH/BPNT), pendidikan & literasi gizi ibu, air bersih & sanitasi, pertanian keluarga, dan Posyandu aktif.",
+          "**3. Strategi Sistem & Tata Kelola (*Enabling Environment*)**: Regulasi/RPJMN, kolaborasi multisektor, surveilans SSGI, dan digitalisasi layanan."
+        ]
+      },
+      {
+        "heading": "4 Pilar Ketahanan Pangan & Pangan B2SA",
+        "bullets": [
+          "**4 Pilar Ketahanan Pangan**: (1) **Ketersediaan (*Availability*)**, (2) **Akses (*Access* — fisik, ekonomi, sosial-budaya, informasi)**, (3) **Pemanfaatan (*Utilization*)**, dan (4) **Stabilitas (*Stability*)**.",
+          "**Aksesibilitas Pangan Beragam (B2SA — Beragam, Bergizi Seimbang, dan Aman)**: Diversifikasi pangan lokal (umbi, jagung, sorgum, kacang-kacangan) dan pemanfaatan pekarangan melalui **KRPL (Kawasan Rumah Pangan Lestari)**.",
+          "**Strategi Aksesibilitas Pangan Beragam (B2SA)**: Diversifikasi produksi pangan lokal (**umbi, sorgum, jagung, kacang-kacangan**) & **Kawasan Rumah Pangan Lestari (KRPL)**, perbaikan distribusi logistik termasuk **rantai dingin (*cold chain*)** untuk sayur/buah/protein hewani, serta edukasi & bantuan pangan bergizi."
+        ]
+      }
+    ],
+    "highYield": [
+      "Beda cepat: **Spesifik Gizi** = TTD, Vit A, PMT, ASI, 1000 HPK (kesehatan langsung); **Sensitif Gizi** = air bersih, sanitasi, bansos, pendidikan ibu, pertanian.",
+      "4 Pilar Ketahanan Pangan: **Ketersediaan – Akses – Pemanfaatan – Stabilitas**.",
+      "Kunci aksesibilitas pangan **B2SA**: diversifikasi pangan lokal + **KRPL** + logistik **rantai dingin (*cold chain*)** untuk sayur, buah, & protein hewani."
+    ]
+  },
+  {
     "no": 28,
     "id": "d21",
     "driveNo": 21,
     "week": 4,
-    "weekA": 4,
-    "weekB": 4,
-    "schedule": "B: Sen 9 Nov • A: Rab 11 Nov",
-    "scheduleA": "Rab 11 Nov (07.55)",
-    "scheduleB": "Sen 9 Nov (07.55)",
+    "schedule": "Sen, 9 Nov (07.55)",
     "cluster": "gizi_lingkungan",
     "icon": "🏃",
     "title": "Aktivitas Fisik",
@@ -1792,11 +1680,7 @@
     "id": "d22",
     "driveNo": 22,
     "week": 4,
-    "weekA": 4,
-    "weekB": 4,
-    "schedule": "B: Sen 9 Nov • A: Kam 12 Nov",
-    "scheduleA": "Kam 12 Nov (09.45)",
-    "scheduleB": "Sen 9 Nov (08.50)",
+    "schedule": "Sen, 9 Nov (08.50)",
     "cluster": "gizi_lingkungan",
     "icon": "🍽️",
     "title": "Pengelolaan Gizi dalam Keluarga",
@@ -1863,11 +1747,7 @@
     "id": "d28",
     "driveNo": 28,
     "week": 4,
-    "weekA": 4,
-    "weekB": 4,
-    "schedule": "B: Sen 9 Nov (13.00) • A: Sen 9 Nov (14.50)",
-    "scheduleA": "Sen 9 Nov (14.50)",
-    "scheduleB": "Sen 9 Nov (13.00)",
+    "schedule": "Sen, 9 Nov (13.00)",
     "cluster": "islam_etika",
     "icon": "🚦",
     "title": "Pencegahan & Penanganan Kecelakaan Lalu Lintas (Perspektif Islam)",
@@ -1900,9 +1780,72 @@
   },
   {
     "no": 31,
+    "id": "d23",
+    "driveNo": 23,
+    "week": 4,
+    "schedule": "Kam, 12 Nov (09.45)",
+    "cluster": "gizi_lingkungan",
+    "icon": "🏙️",
+    "title": "Kesehatan Perkotaan & Pedesaan",
+    "dosen": "DR. Kholis Ernawati, M.Kes",
+    "readMin": 3,
+    "tldr": "Profil penyakit kota dan desa kontras: kota didominasi PTM, polusi, dan stres mental, sedangkan desa didominasi penyakit menular, sanitasi/air terbatas, dan akses faskes rendah — keduanya dinilai mutunya lewat SERVQUAL.",
+    "sections": [
+      {
+        "heading": "Perbandingan Masalah Kesehatan Kota vs Desa",
+        "table": {
+          "headers": [
+            "Dimensi",
+            "Perkotaan (Urban)",
+            "Perdesaan (Rural)"
+          ],
+          "rows": [
+            [
+              "Penyakit Dominan",
+              "**PTM** (hipertensi, DM, jantung, stroke, kanker), gangguan mental/stres, penyakit padat penduduk",
+              "**Penyakit menular** (diare, malaria, DBD, TBC)"
+            ],
+            [
+              "Faktor Risiko Utama",
+              "Kepadatan tinggi, polusi udara, gaya hidup sedenter, pola makan tinggi kalori, tekanan hidup",
+              "Akses faskes & nakes terbatas, air bersih kurang (**48,7%**), sanitasi kurang (**69,7%**), literasi lebih rendah"
+            ],
+            [
+              "Fokus Intervensi",
+              "Pencegahan PTM berbasis komunitas, **telemedicine/digital**, pengendalian polusi & ruang terbuka",
+              "Pemerataan faskes/nakes, perbaikan air bersih & sanitasi, edukasi kesehatan & posyandu"
+            ]
+          ]
+        }
+      },
+      {
+        "heading": "Evaluasi Mutu Layanan: 5 Dimensi SERVQUAL",
+        "bullets": [
+          "**5 Dimensi SERVQUAL (Parasuraman)**: (1) **Tangibility** (bukti fisik), (2) **Reliability** (keandalan), (3) **Responsiveness** (daya tanggap), (4) **Assurance** (jaminan/kompetensi), (5) **Empathy** (empati) — ditambah *Accessibility* & *Affordability* (Sarumpaet et al., 2012).",
+          "**Temuan utama KIA kota vs desa**: Harapan masyarakat terhadap mutu layanan KIA sama-sama tinggi baik di kota maupun desa, tetapi kesenjangan kepuasan (*gap*) lebih besar di desa akibat akses & keterbatasan sarana."
+        ]
+      },
+      {
+        "heading": "Strategi Intervensi Kesehatan Pedesaan vs Perkotaan",
+        "bullets": [
+          "**Intervensi Kesehatan Pedesaan** (akses faskes terbatas, air bersih kurang **48,7%**, sanitasi kurang **69,7%**): Penyelenggaraan **klinik keliling**, **telemedicine** untuk menjembatani akses spesialis, perbaikan infrastruktur air bersih & sanitasi, edukasi komunitas, serta **insentif tenaga kesehatan daerah terpencil**.",
+          "**Intervensi Kesehatan Perkotaan** (beban PTM, polusi, stres, gaya hidup sedenter): Program **pencegahan PTM berbasis komunitas**, pemanfaatan teknologi digital (**telemedicine & aplikasi kesehatan**), serta perbaikan lingkungan perkotaan termasuk **penyediaan ruang terbuka hijau**."
+        ]
+      }
+    ],
+    "highYield": [
+      "5 Dimensi SERVQUAL: **R–A–T–E–R** (*Reliability, Assurance, Tangibles, Empathy, Responsiveness*).",
+      "Kota = **PTM + mental + polusi**; Desa = **Penyakit menular + akses + sanitasi (69,7% kurang) & air bersih (48,7% kurang)**.",
+      "Data pedesaan: kurang air bersih **48,7%** & kurang sanitasi **69,7%** → atasi dengan klinik keliling, telemedicine, sanitasi, & insentif nakes."
+    ]
+  },
+  {
+    "no": 32,
     "id": "s03",
     "driveNo": null,
     "isScheduleExtra": true,
+    "week": 4,
+    "schedule": "Kam, 12 Nov (13.00) · Feedback Sen, 16 Nov",
     "cluster": "farma",
     "icon": "💨",
     "title": "Tugas Baca: Penggunaan Obat Cair & Inhalasi",
@@ -1965,77 +1908,6 @@
       "Pasca-penggunaan **kortikosteroid inhalasi (ICS)** wajib **berkumur lalu membuang air kumuran** untuk mencegah *oral thrush* dan disfonia.",
       "Pada anak, lansia, atau pasien kesulitan koordinasi pMDI, tambahkan **spacer** agar obat masuk optimal ke saluran napas bawah.",
       "Jangan takar sirup anak dengan sendok dapur — gunakan **spuit oral / sendok takar mL** (1 sdt = 5 mL) dan selalu **kocok suspensi** sebelum pakai."
-    ],
-    "week": 4,
-    "weekA": 4,
-    "weekB": 4,
-    "schedule": "A: Sel 10 Nov • B: Kam 12 Nov (+ Feedback M5: 16–17 Nov)",
-    "scheduleA": "Sel 10 Nov (07.55) + Feedback Sel 17 Nov",
-    "scheduleB": "Kam 12 Nov (13.00) + Feedback Sen 16 Nov"
-  },
-  {
-    "no": 32,
-    "id": "d23",
-    "driveNo": 23,
-    "week": 4,
-    "weekA": 4,
-    "weekB": 4,
-    "schedule": "A: Sel 10 Nov • B: Kam 12 Nov",
-    "scheduleA": "Sel 10 Nov (09.45)",
-    "scheduleB": "Kam 12 Nov (09.45)",
-    "cluster": "gizi_lingkungan",
-    "icon": "🏙️",
-    "title": "Kesehatan Perkotaan & Pedesaan",
-    "dosen": "DR. Kholis Ernawati, M.Kes",
-    "readMin": 3,
-    "tldr": "Profil penyakit kota dan desa kontras: kota didominasi PTM, polusi, dan stres mental, sedangkan desa didominasi penyakit menular, sanitasi/air terbatas, dan akses faskes rendah — keduanya dinilai mutunya lewat SERVQUAL.",
-    "sections": [
-      {
-        "heading": "Perbandingan Masalah Kesehatan Kota vs Desa",
-        "table": {
-          "headers": [
-            "Dimensi",
-            "Perkotaan (Urban)",
-            "Perdesaan (Rural)"
-          ],
-          "rows": [
-            [
-              "Penyakit Dominan",
-              "**PTM** (hipertensi, DM, jantung, stroke, kanker), gangguan mental/stres, penyakit padat penduduk",
-              "**Penyakit menular** (diare, malaria, DBD, TBC)"
-            ],
-            [
-              "Faktor Risiko Utama",
-              "Kepadatan tinggi, polusi udara, gaya hidup sedenter, pola makan tinggi kalori, tekanan hidup",
-              "Akses faskes & nakes terbatas, air bersih kurang (**48,7%**), sanitasi kurang (**69,7%**), literasi lebih rendah"
-            ],
-            [
-              "Fokus Intervensi",
-              "Pencegahan PTM berbasis komunitas, **telemedicine/digital**, pengendalian polusi & ruang terbuka",
-              "Pemerataan faskes/nakes, perbaikan air bersih & sanitasi, edukasi kesehatan & posyandu"
-            ]
-          ]
-        }
-      },
-      {
-        "heading": "Evaluasi Mutu Layanan: 5 Dimensi SERVQUAL",
-        "bullets": [
-          "**5 Dimensi SERVQUAL (Parasuraman)**: (1) **Tangibility** (bukti fisik), (2) **Reliability** (keandalan), (3) **Responsiveness** (daya tanggap), (4) **Assurance** (jaminan/kompetensi), (5) **Empathy** (empati) — ditambah *Accessibility* & *Affordability* (Sarumpaet et al., 2012).",
-          "**Temuan utama KIA kota vs desa**: Harapan masyarakat terhadap mutu layanan KIA sama-sama tinggi baik di kota maupun desa, tetapi kesenjangan kepuasan (*gap*) lebih besar di desa akibat akses & keterbatasan sarana."
-        ]
-      },
-      {
-        "heading": "Strategi Intervensi Kesehatan Pedesaan vs Perkotaan",
-        "bullets": [
-          "**Intervensi Kesehatan Pedesaan** (akses faskes terbatas, air bersih kurang **48,7%**, sanitasi kurang **69,7%**): Penyelenggaraan **klinik keliling**, **telemedicine** untuk menjembatani akses spesialis, perbaikan infrastruktur air bersih & sanitasi, edukasi komunitas, serta **insentif tenaga kesehatan daerah terpencil**.",
-          "**Intervensi Kesehatan Perkotaan** (beban PTM, polusi, stres, gaya hidup sedenter): Program **pencegahan PTM berbasis komunitas**, pemanfaatan teknologi digital (**telemedicine & aplikasi kesehatan**), serta perbaikan lingkungan perkotaan termasuk **penyediaan ruang terbuka hijau**."
-        ]
-      }
-    ],
-    "highYield": [
-      "5 Dimensi SERVQUAL: **R–A–T–E–R** (*Reliability, Assurance, Tangibles, Empathy, Responsiveness*).",
-      "Kota = **PTM + mental + polusi**; Desa = **Penyakit menular + akses + sanitasi (69,7% kurang) & air bersih (48,7% kurang)**.",
-      "Data pedesaan: kurang air bersih **48,7%** & kurang sanitasi **69,7%** → atasi dengan klinik keliling, telemedicine, sanitasi, & insentif nakes."
     ]
   },
   {
@@ -2043,11 +1915,7 @@
     "id": "d24",
     "driveNo": 24,
     "week": 4,
-    "weekA": 4,
-    "weekB": 4,
-    "schedule": "A: Rab 11 Nov • B: Jum 13 Nov",
-    "scheduleA": "Rab 11 Nov (08.50)",
-    "scheduleB": "Jum 13 Nov (09.45)",
+    "schedule": "Jum, 13 Nov (09.45)",
     "cluster": "gizi_lingkungan",
     "icon": "🏡",
     "title": "Penilaian Rumah Sehat, Perumahan & PHBS dalam DH",
@@ -2087,11 +1955,7 @@
     "id": "d31",
     "driveNo": 31,
     "week": 5,
-    "weekA": 5,
-    "weekB": 5,
-    "schedule": "B: Sen 16 Nov (13.00) • A: Sen 16 Nov (14.50)",
-    "scheduleA": "Sen 16 Nov (14.50)",
-    "scheduleB": "Sen 16 Nov (13.00)",
+    "schedule": "Sen, 16 Nov (13.00)",
     "cluster": "islam_etika",
     "icon": "🤝",
     "title": "Ta’awun dalam Pandangan Islam",
