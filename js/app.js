@@ -358,6 +358,8 @@ function show(id, options={}){
   document.querySelectorAll(".view.motion-page-enter").forEach(v=>v.classList.remove("motion-page-enter"));
   document.body.classList.toggle("quiz-context", id === "quiz");
   document.body.classList.toggle("home-context", id === "home");
+  const headerNavBtn=document.getElementById("headerNavBtn");
+  if(headerNavBtn) headerNavBtn.hidden = (id !== "quiz");
 
   if(!options.fromHistory && !__spaHistoryLock){
     try{

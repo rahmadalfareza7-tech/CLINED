@@ -722,6 +722,13 @@ html body #home #hubBtn .home-materials-icon {
   background: var(--med-soft) !important;
 }
 
+/* Navigasi soal (#headerNavBtn) hanya tampil saat halaman #quiz aktif */
+body.home-context #headerNavBtn,
+body:not(.quiz-context) #headerNavBtn,
+body:not(:has(#quiz.view.active)) #headerNavBtn {
+  display: none !important;
+}
+
 /* Clean custom scrollbars on desktop */
 @media (hover: hover) and (pointer: fine) {
   ::-webkit-scrollbar { width: 8px; height: 8px; }
