@@ -92,17 +92,7 @@ function renderXP(){
   if($("xpNextText"))$("xpNextText").textContent=info.level>=XP_MAX_LEVEL?"MAX LEVEL":`${(info.need-info.current).toLocaleString('id-ID')} XP ke Level ${info.level+1}`;
   if($("xpLive"))$("xpLive").textContent=`⚡ ${info.total.toLocaleString('id-ID')} XP`;
   if($("playerBadges")){
-    const badges=[];
-    if(info.level>=2)badges.push("🔥 Pejuang");
-    if(info.level>=5)badges.push("🩺 Klinik");
-    if(info.level>=10)badges.push("🎯 Koas");
-    if(info.level>=20)badges.push("🧠 Senior");
-    if(info.level>=30)badges.push("⚕️ Dokter Muda");
-    if(info.level>=45)badges.push("👨‍⚕️ Dokter");
-    if(info.level>=60)badges.push("🏥 Spesialis");
-    if(info.level>=75)badges.push("⭐ Konsulen");
-    if(info.level>=90)badges.push("🏆 Master");
-    $("playerBadges").innerHTML=badges.map(x=>`<span>${x}</span>`).join("");
+    $("playerBadges").querySelectorAll(":scope > span").forEach(el=>el.remove());
   }
 }
 function showXPPopup(gained,reason,levelUp=false){

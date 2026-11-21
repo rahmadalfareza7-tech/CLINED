@@ -30,8 +30,8 @@
 <link rel="stylesheet" href="css/ui-tweaks.css?v=1">
 <link rel="stylesheet" href="css/onboarding.css?v=4">
 <link rel="stylesheet" href="css/social.css?v=16">
-<link rel="stylesheet" href="css/desktop.css?v=7">
-<link rel="stylesheet" href="css/home-ergonomic.css?v=15">
+<link rel="stylesheet" href="css/desktop.css?v=8">
+<link rel="stylesheet" href="css/home-ergonomic.css?v=16">
 <link rel="stylesheet" href="css/top-notify.css?v=3">
 <link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=20">
 </head>
@@ -73,35 +73,7 @@
     </div>
   </section>
 
-  <section class="duo-reward-strip" aria-label="Ringkasan progres">
-    <div class="duo-reward-item">
-      
-      <span class="duo-reward-icon streak">🔥</span><div><b id="duoHudStreak">0</b><small>Streak</small></div>
-    </div>
-    <div class="duo-reward-item">
-      <span class="duo-reward-icon xp">⚡</span>
-      <div><b id="duoHudXp">0</b><small>XP</small></div>
-    </div>
-    <button type="button" class="duo-reward-item duo-cal" id="duoCalBtn" data-sp-open aria-label="Buka Rencana Belajar dan kalender ujian">
-      <span class="duo-reward-icon goal cal-ico" id="duoCalIco" aria-hidden="true">📅</span>
-      <div><b id="duoCalDays">＋</b><small id="duoCalLbl">Ujian</small></div>
-    </button>
-    <div class="duo-reward-item">
-      <span class="duo-reward-icon focus">💚</span>
-      <div><b id="duoHudFocus">5</b><small>Energi</small></div>
-    </div>
-  </section>
-
-
-<div class="home-question-search" role="search">
-  <span aria-hidden="true">⌕</span>
-  <input id="homeQuestionSearch" type="search"
-         placeholder="Cari soal, diagnosis, obat, atau materi..."
-         aria-label="Cari soal dan materi" autocomplete="off">
-  <button id="homeQuestionSearchBtn" type="button">Cari</button>
-</div>
-
-<div class="card player-card">
+  <div class="card player-card">
     <div class="home-profile-strip" id="homeProfileShowcase" hidden></div>
     <div class="player-top">
       <div>
@@ -124,6 +96,33 @@
       </div>
     </div>
   </div>
+
+  <section class="duo-reward-strip" aria-label="Ringkasan progres">
+    <div class="duo-reward-item">
+      
+      <span class="duo-reward-icon streak">🔥</span><div><b id="duoHudStreak">0</b><small>Streak</small></div>
+    </div>
+    <div class="duo-reward-item">
+      <span class="duo-reward-icon xp">⚡</span>
+      <div><b id="duoHudXp">0</b><small>XP</small></div>
+    </div>
+    <button type="button" class="duo-reward-item duo-cal" id="duoCalBtn" data-sp-open aria-label="Buka Rencana Belajar dan kalender ujian">
+      <span class="duo-reward-icon goal cal-ico" id="duoCalIco" aria-hidden="true">📅</span>
+      <div><b id="duoCalDays">＋</b><small id="duoCalLbl">Ujian</small></div>
+    </button>
+    <div class="duo-reward-item">
+      <span class="duo-reward-icon focus">💚</span>
+      <div><b id="duoHudFocus">5</b><small>Energi</small></div>
+    </div>
+  </section>
+
+<div class="home-question-search" role="search">
+  <span aria-hidden="true">⌕</span>
+  <input id="homeQuestionSearch" type="search"
+         placeholder="Cari soal, diagnosis, obat, atau materi..."
+         aria-label="Cari soal dan materi" autocomplete="off">
+  <button id="homeQuestionSearchBtn" type="button">Cari</button>
+</div>
 
   <div class="card daily-home-card" id="dailyHomeCard"></div>
   <div id="resumeCard" class="card resume-card" hidden>
@@ -1094,7 +1093,7 @@
 <script src="js/online-sync.js?v=9"></script>
 <script src="js/ability-classifier.js?v=1"></script>
 <script src="js/kedkel-2026-materi.js?v=3"></script>
-<script src="js/app.js?v=static-banks-v51"></script>
+<script src="js/app.js?v=static-banks-v52"></script>
 <script src="js/auth-gate.js?v=2"></script>
 <script src="js/content-manager.js?v=26"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>

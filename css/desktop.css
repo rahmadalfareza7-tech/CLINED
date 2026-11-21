@@ -7,7 +7,7 @@
   /* BERANDA: dua kolom (alur kolom mengikuti urutan), peta belajar & statistik atas selebar penuh */
   html body #home.active { display: block; column-count: 2; column-gap: 20px; }
   html body #home > * { break-inside: avoid; }
-  html body #home > .duo-learning-map, html body #home > .duo-reward-strip { column-span: all; }
+  html body #home > .duo-learning-map, html body #home > .player-card, html body #home > .duo-reward-strip { column-span: all; }
   html body #home .duo-learning-map { padding: 14px 24px 12px !important; }
   html body #home .duo-path { max-width: 640px; margin-inline: auto; }
   html body #home #menuSectionContent.menu-grid, html body #home #menuSectionContent { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
