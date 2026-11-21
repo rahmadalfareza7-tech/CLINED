@@ -65,7 +65,7 @@
   else start();
 })();
 
-// --- Home Banner Slider: auto-slide + manual swipe/drag/arrows/dots ---
+// --- Home Banner Slider: smooth horizontal slide (auto + touch swipe + mouse drag + arrows + dots) ---
 (function () {
   function bootSlider() {
     var root = document.getElementById('homeBannerSlider');
@@ -92,10 +92,25 @@
       });
     }
 
+    function applyTransform(dxPx) {
+      if (dxPx) {
+        track.style.transform = 'translate3d(calc(' + (-idx * 100) + '% + ' + dxPx + 'px), 0, 0)';
+      } else {
+        track.style.transform = 'translate3d(' + (-idx * 100) + '%, 0, 0)';
+      }
+    }
+
     function goTo(n, instant) {
       updateDots(n);
-      var w = track.clientWidth || 1;
-      track.scrollTo({ left: idx * w, behavior: instant ? 'auto' : 'smooth' });
+      if (instant) {
+        track.classList.add('dragging');
+        applyTransform(0);
+        void track.offsetWidth;
+        track.classList.remove('dragging');
+      } else {
+        track.classList.remove('dragging');
+        applyTransform(0);
+      }
     }
 
     function stopAuto() {
@@ -110,9 +125,7 @@
         goTo(idx + 1, false);
       }, INTERVAL);
     }
-    function resetAuto() {
-      startAuto();
-    }
+    function resetAuto() { startAuto(); }
 
     root.addEventListener('click', function (e) {
       var arr = e.target.closest('[data-hbs-dir]');
@@ -128,56 +141,81 @@
       }
     });
 
-    var scrollRaf = 0;
-    track.addEventListener('scroll', function () {
-      if (scrollRaf) return;
-      scrollRaf = requestAnimationFrame(function () {
-        scrollRaf = 0;
-        var w = track.clientWidth || 1;
-        var cur = Math.round(track.scrollLeft / w);
-        if (cur !== idx && cur >= 0 && cur < count) updateDots(cur);
-      });
-    }, { passive: true });
-
-    // Pause on hover / touch
+    // Pause on hover (desktop)
     root.addEventListener('mouseenter', function () { paused = true; });
     root.addEventListener('mouseleave', function () { paused = false; });
-    track.addEventListener('touchstart', function () { paused = true; }, { passive: true });
-    track.addEventListener('touchend', function () { paused = false; resetAuto(); }, { passive: true });
 
-    // Mouse drag support for desktop
-    var dragging = false, startX = 0, startScroll = 0;
-    track.addEventListener('mousedown', function (e) {
-      if (e.button !== 0) return;
-      dragging = true;
+    // Live horizontal touch swipe (mobile)
+    var tActive = false, tStartX = 0, tStartY = 0, tDx = 0, tLocked = null;
+    track.addEventListener('touchstart', function (e) {
+      if (!e.touches || e.touches.length !== 1) return;
+      tActive = true;
       paused = true;
-      startX = e.clientX;
-      startScroll = track.scrollLeft;
-      track.classList.add('dragging');
-    });
-    window.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      track.scrollLeft = startScroll - (e.clientX - startX);
-    });
-    window.addEventListener('mouseup', function (e) {
-      if (!dragging) return;
-      dragging = false;
+      tStartX = e.touches[0].clientX;
+      tStartY = e.touches[0].clientY;
+      tDx = 0;
+      tLocked = null;
+    }, { passive: true });
+    track.addEventListener('touchmove', function (e) {
+      if (!tActive || !e.touches || e.touches.length !== 1) return;
+      var dx = e.touches[0].clientX - tStartX;
+      var dy = e.touches[0].clientY - tStartY;
+      if (tLocked === null) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        tLocked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (tLocked === 'x') track.classList.add('dragging');
+      }
+      if (tLocked !== 'x') return;
+      tDx = dx;
+      applyTransform(dx);
+    }, { passive: true });
+    function endTouch() {
+      if (!tActive) return;
+      tActive = false;
       paused = false;
-      track.classList.remove('dragging');
-      var dx = e.clientX - startX;
-      var w = track.clientWidth || 1;
-      if (Math.abs(dx) > Math.min(50, w * 0.15)) {
-        goTo(idx + (dx < 0 ? 1 : -1), false);
+      var w = root.clientWidth || 300;
+      if (tLocked === 'x' && Math.abs(tDx) > Math.min(48, w * 0.14)) {
+        goTo(idx + (tDx < 0 ? 1 : -1), false);
       } else {
         goTo(idx, false);
       }
+      tDx = 0;
+      tLocked = null;
+      resetAuto();
+    }
+    track.addEventListener('touchend', endTouch, { passive: true });
+    track.addEventListener('touchcancel', endTouch, { passive: true });
+
+    // Live mouse drag (desktop)
+    var mDragging = false, mStartX = 0, mDx = 0;
+    track.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return;
+      mDragging = true;
+      paused = true;
+      mStartX = e.clientX;
+      mDx = 0;
+      track.classList.add('dragging');
+    });
+    window.addEventListener('mousemove', function (e) {
+      if (!mDragging) return;
+      mDx = e.clientX - mStartX;
+      applyTransform(mDx);
+    });
+    window.addEventListener('mouseup', function () {
+      if (!mDragging) return;
+      mDragging = false;
+      paused = false;
+      var w = root.clientWidth || 300;
+      if (Math.abs(mDx) > Math.min(50, w * 0.12)) {
+        goTo(idx + (mDx < 0 ? 1 : -1), false);
+      } else {
+        goTo(idx, false);
+      }
+      mDx = 0;
       resetAuto();
     });
 
-    window.addEventListener('resize', function () {
-      goTo(idx, true);
-    }, { passive: true });
-
+    goTo(0, true);
     startAuto();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootSlider, { once: true });

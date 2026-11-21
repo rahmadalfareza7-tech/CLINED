@@ -23,24 +23,21 @@ html body #home .duo-learning-map.home-banner-slider {
 html body #home .duo-learning-map.home-banner-slider::after { display: none !important; content: none !important; }
 .hbs-track {
   display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  transform: translate3d(0%, 0, 0);
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+  will-change: transform;
   cursor: grab;
+  touch-action: pan-y;
 }
 .hbs-track.dragging {
   cursor: grabbing;
-  scroll-behavior: auto;
-  scroll-snap-type: none;
+  transition: none !important;
 }
-.hbs-track::-webkit-scrollbar { display: none; }
 .hbs-slide {
   flex: 0 0 100%;
   width: 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  min-width: 100%;
 }
 .hbs-slide picture,
 .hbs-slide img {
