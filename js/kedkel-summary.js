@@ -1,23 +1,38 @@
-/* CLINED — Pembaca Interaktif Ringkasan Full Blok KEDKEL (31 Materi) */
+/* CLINED — Pembaca Interaktif Ringkasan Full Blok KEDKEL (34 Materi • Selaras Jadwal TA 2026–2027) */
 (() => {
   'use strict';
 
-  const DONE_KEY = 'clined_kedkel_summary_done_v1';
-  const STAR_KEY = 'clined_kedkel_summary_star_v1';
+  const DONE_KEY = 'clined_kedkel_summary_done_v2';
+  const STAR_KEY = 'clined_kedkel_summary_star_v2';
+  const LEGACY_DONE_KEY = 'clined_kedkel_summary_done_v1';
+  const LEGACY_STAR_KEY = 'clined_kedkel_summary_star_v1';
   const FONT_KEY = 'clined_kedkel_summary_font_v1';
+  const CLS_KEY = 'clined_kedkel_summary_cls_v1';
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
 
-  const readSet = key => {
+  const readIdSet = (key, legacyKey) => {
     try {
-      const v = JSON.parse(localStorage.getItem(key) || '[]');
-      return new Set(Array.isArray(v) ? v.map(Number).filter(Boolean) : []);
-    } catch { return new Set(); }
+      const raw = localStorage.getItem(key);
+      if (raw !== null) {
+        const v = JSON.parse(raw);
+        return new Set(Array.isArray(v) ? v.map(String).filter(Boolean) : []);
+      }
+      if (legacyKey) {
+        const leg = JSON.parse(localStorage.getItem(legacyKey) || '[]');
+        if (Array.isArray(leg) && leg.length) {
+          const migrated = new Set(leg.map(n => 'd' + String(Number(n)).padStart(2, '0')).filter(x => x !== 'dNaN'));
+          localStorage.setItem(key, JSON.stringify([...migrated]));
+          return migrated;
+        }
+      }
+    } catch {}
+    return new Set();
   };
-  const writeSet = (key, set) => {
+  const writeIdSet = (key, set) => {
     try { localStorage.setItem(key, JSON.stringify([...set])); } catch {}
   };
 
@@ -33,21 +48,41 @@
     return html;
   }
 
-  function driveInfo(no) {
+  function driveInfo(driveNo) {
+    if (!driveNo) return null;
     try {
       const topics = window.CLINED_KEDKEL_2026_MATERI?.topics || [];
-      return topics.find(t => Number(t.no) === Number(no)) || null;
+      return topics.find(t => Number(t.no) === Number(driveNo)) || null;
     } catch { return null; }
   }
 
+  function topicWeekForClass(t, cls) {
+    if (cls === 'A') return Number(t.weekA || t.week || 1);
+    if (cls === 'B') return Number(t.weekB || t.week || 1);
+    return Number(t.week || 1);
+  }
+
+  function topicScheduleLabel(t, cls) {
+    if (cls === 'A') return `Kelas A: ${t.scheduleA || t.schedule}`;
+    if (cls === 'B') return `Kelas B: ${t.scheduleB || t.schedule}`;
+    return t.schedule || '';
+  }
+
   const S = {
-    cluster: 'all',
+    viewBy: 'week', // 'week' | 'cluster'
+    cls: (() => {
+      try {
+        const v = localStorage.getItem(CLS_KEY);
+        return (v === 'A' || v === 'B') ? v : 'all';
+      } catch { return 'all'; }
+    })(),
+    filter: 'all', // 'all' | 'w1'..'w5' | clusterId | 'todo' | 'star'
     q: '',
-    open: new Set([1]),
+    open: new Set(['d01']),
     readAll: false,
     font: (() => { try { return localStorage.getItem(FONT_KEY) || 'md'; } catch { return 'md'; } })(),
-    done: readSet(DONE_KEY),
-    star: readSet(STAR_KEY)
+    done: readIdSet(DONE_KEY, LEGACY_DONE_KEY),
+    star: readIdSet(STAR_KEY, LEGACY_STAR_KEY)
   };
 
   function ensurePage() {
@@ -67,6 +102,11 @@
     if (!q) return true;
     const hay = [
       String(t.no).padStart(2, '0'),
+      'minggu ' + t.week,
+      'm' + t.week,
+      t.schedule,
+      t.scheduleA,
+      t.scheduleB,
       t.title,
       t.dosen,
       t.tldr,
@@ -81,23 +121,41 @@
     return hay.includes(q);
   }
 
-  function filteredTopics() {
+  function orderedTopics() {
     const data = window.CLINED_KEDKEL_SUMMARY_DATA;
-    const list = data?.TOPICS || [];
+    const list = [...(data?.TOPICS || [])];
+    if (S.viewBy === 'week' && (S.cls === 'A' || S.cls === 'B')) {
+      list.sort((a, b) => {
+        const wa = topicWeekForClass(a, S.cls);
+        const wb = topicWeekForClass(b, S.cls);
+        if (wa !== wb) return wa - wb;
+        return a.no - b.no;
+      });
+    }
+    return list;
+  }
+
+  function filteredTopics() {
+    const list = orderedTopics();
     const q = S.q.trim().toLowerCase();
     return list.filter(t => {
-      if (S.cluster === 'star' && !S.star.has(t.no)) return false;
-      else if (S.cluster === 'todo' && S.done.has(t.no)) return false;
-      else if (S.cluster !== 'all' && S.cluster !== 'star' && S.cluster !== 'todo' && t.cluster !== S.cluster) return false;
+      if (S.filter === 'star' && !S.star.has(t.id)) return false;
+      else if (S.filter === 'todo' && S.done.has(t.id)) return false;
+      else if (S.filter.startsWith('w')) {
+        const w = Number(S.filter.slice(1));
+        if (topicWeekForClass(t, S.cls) !== w) return false;
+      } else if (S.filter !== 'all' && S.filter !== 'star' && S.filter !== 'todo') {
+        if (t.cluster !== S.filter) return false;
+      }
       return matchesSearch(t, q);
     });
   }
 
   function topicBodyHTML(t, idx, list) {
     const q = S.q.trim();
-    const done = S.done.has(t.no);
-    const star = S.star.has(t.no);
-    const drv = driveInfo(t.no);
+    const done = S.done.has(t.id);
+    const star = S.star.has(t.id);
+    const drv = driveInfo(t.driveNo);
     const prev = idx > 0 ? list[idx - 1] : null;
     const next = idx < list.length - 1 ? list[idx + 1] : null;
 
@@ -115,30 +173,100 @@
       ? `<div class="ks-hy"><div class="ks-hy-title">🎯 Poin Ujian &amp; Jembatan Keledai</div><ul>${t.highYield.map(x => `<li>${fmtInline(x, q)}</li>`).join('')}</ul></div>`
       : '';
 
+    const schedBox = `<div class="ks-sched-note">📅 <strong>Jadwal TA 2026–2027:</strong> Kelas A ${esc(t.scheduleA || '—')} • Kelas B ${esc(t.scheduleB || '—')}${t.isScheduleExtra ? ' <span class="ks-new-pill">Materi Jadwal 26/27</span>' : ''}</div>`;
+
     const driveBtn = drv?.folderUrl
       ? `<a class="ks-act" href="${esc(drv.folderUrl)}" target="_blank" rel="noopener noreferrer">📂 Slide Drive</a>`
       : '';
-    const quizBtn = window.CLINED_MATERI_LATIHAN?.open
-      ? `<button type="button" class="ks-act quiz-go" data-ks-quiz="${t.no}">🎯 Latihan Soal Materi Ini</button>`
+    const quizBtn = (t.driveNo && window.CLINED_MATERI_LATIHAN?.open)
+      ? `<button type="button" class="ks-act quiz-go" data-ks-quiz="${t.driveNo}">🎯 Latihan Soal Materi Ini</button>`
       : '';
 
     const navPair = !S.readAll ? `<div class="ks-nav-pair">
-      <button type="button" class="ks-nav-btn" data-ks-jump="${prev ? prev.no : ''}" ${prev ? '' : 'disabled'}>‹ ${prev ? `${String(prev.no).padStart(2, '0')}. ${esc(prev.title.slice(0, 22))}${prev.title.length > 22 ? '…' : ''}` : 'Awal'}</button>
-      <button type="button" class="ks-nav-btn" data-ks-jump="${next ? next.no : ''}" ${next ? '' : 'disabled'}>${next ? `${String(next.no).padStart(2, '0')}. ${esc(next.title.slice(0, 22))}${next.title.length > 22 ? '…' : ''}` : 'Selesai'} ›</button>
+      <button type="button" class="ks-nav-btn" data-ks-jump="${prev ? esc(prev.id) : ''}" ${prev ? '' : 'disabled'}>‹ ${prev ? `${String(prev.no).padStart(2, '0')}. ${esc(prev.title.slice(0, 22))}${prev.title.length > 22 ? '…' : ''}` : 'Awal'}</button>
+      <button type="button" class="ks-nav-btn" data-ks-jump="${next ? esc(next.id) : ''}" ${next ? '' : 'disabled'}>${next ? `${String(next.no).padStart(2, '0')}. ${esc(next.title.slice(0, 22))}${next.title.length > 22 ? '…' : ''}` : 'Selesai'} ›</button>
     </div>` : '';
 
     return `<div class="ks-body">
+      ${schedBox}
       <div class="ks-tldr-box"><small>⚡ Inti Cepat (TL;DR)</small>${fmtInline(t.tldr, q)}</div>
       ${secs}
       ${hy}
       <div class="ks-actions">
-        <button type="button" class="ks-act${done ? ' done-on' : ''}" data-ks-done="${t.no}">${done ? '✅ Sudah Dipelajari' : '☐ Tandai Dipelajari'}</button>
-        <button type="button" class="ks-act${star ? ' star-on' : ''}" data-ks-star="${t.no}">${star ? '⭐ Ditandai' : '☆ Tandai Penting'}</button>
+        <button type="button" class="ks-act${done ? ' done-on' : ''}" data-ks-done="${esc(t.id)}">${done ? '✅ Sudah Dipelajari' : '☐ Tandai Dipelajari'}</button>
+        <button type="button" class="ks-act${star ? ' star-on' : ''}" data-ks-star="${esc(t.id)}">${star ? '⭐ Ditandai' : '☆ Tandai Penting'}</button>
         ${driveBtn}
         ${quizBtn}
       </div>
       ${navPair}
     </div>`;
+  }
+
+  function renderCard(t, idx, list) {
+    const isOpen = S.readAll || S.open.has(t.id) || (S.q.trim().length >= 2 && list.length <= 5);
+    const isDone = S.done.has(t.id);
+    const isStar = S.star.has(t.id);
+    const wk = topicWeekForClass(t, S.cls);
+    const schedText = topicScheduleLabel(t, S.cls);
+    const extraBadge = t.isScheduleExtra ? ' <span class="ks-new-pill">Baru 26/27</span>' : '';
+
+    return `<article class="ks-card${isOpen ? ' open' : ''}${isDone ? ' done' : ''}" data-ks-card="${esc(t.id)}">
+      <button type="button" class="ks-card-head" data-ks-toggle="${esc(t.id)}" aria-expanded="${isOpen}">
+        <span class="ks-no">${isDone ? '✓' : String(t.no).padStart(2, '0')}</span>
+        <span class="ks-card-main">
+          <span class="ks-card-title">${esc(t.icon)} ${fmtInline(t.title, S.q)}</span>
+          <span class="ks-card-badges">
+            <span class="ks-wk-tag">M${wk}</span>
+            <span class="ks-sched-tag">📅 ${fmtInline(schedText, S.q)}</span>${extraBadge}
+          </span>
+          <span class="ks-card-sub">${esc(t.dosen)} • ~${t.readMin} mnt baca</span>
+          ${!isOpen ? `<span class="ks-card-tldr">${fmtInline(t.tldr, S.q)}</span>` : ''}
+        </span>
+        <span class="ks-head-right">
+          ${isStar ? '<span class="ks-star-ind" title="Ditandai penting">⭐</span>' : ''}
+          <span class="ks-chev" aria-hidden="true">›</span>
+        </span>
+      </button>
+      ${isOpen ? topicBodyHTML(t, idx, list) : ''}
+    </article>`;
+  }
+
+  function renderListHTML(list, data) {
+    if (!list.length) {
+      return '<div class="ks-empty"><span>🔎</span><div>Tidak ada materi yang cocok dengan filter ini.</div><button type="button" class="ks-mini-btn" data-ks-reset>Tampilkan Semua Materi</button></div>';
+    }
+    const useWeekGroups = S.viewBy === 'week' && !S.q.trim() && S.filter !== 'star' && S.filter !== 'todo';
+    if (!useWeekGroups) {
+      return list.map((t, idx) => renderCard(t, idx, list)).join('');
+    }
+    const weekMap = new Map((data.WEEKS || []).map(w => [w.id, w]));
+    const html = [];
+    let currentWeek = null;
+    const countByWeek = new Map();
+    for (const t of list) {
+      const w = topicWeekForClass(t, S.cls);
+      countByWeek.set(w, (countByWeek.get(w) || 0) + 1);
+    }
+    list.forEach((t, idx) => {
+      const w = topicWeekForClass(t, S.cls);
+      if (w !== currentWeek) {
+        currentWeek = w;
+        const wm = weekMap.get(w);
+        if (wm) {
+          const cnt = countByWeek.get(w) || 0;
+          const clsNote = S.cls === 'all' ? '' : ` • Kelas ${S.cls}`;
+          html.push(`<div class="ks-week-hdr">
+            <div class="ks-week-hdr-top">
+              <span class="ks-week-title">📅 ${esc(wm.label)} (${esc(wm.dates)})${esc(clsNote)}</span>
+              <span class="ks-week-cnt">${cnt} materi</span>
+            </div>
+            <div class="ks-week-agenda">${esc(wm.agenda)}</div>
+          </div>`);
+        }
+      }
+      html.push(renderCard(t, idx, list));
+    });
+    return html.join('');
   }
 
   function render() {
@@ -150,38 +278,51 @@
     }
     const all = data.TOPICS || [];
     const list = filteredTopics();
-    const doneCount = S.done.size;
+    const doneCount = all.filter(t => S.done.has(t.id)).length;
+    const starCount = all.filter(t => S.star.has(t.id)).length;
     const pct = all.length ? Math.round((doneCount / all.length) * 100) : 0;
     const totalMin = all.reduce((sum, t) => sum + (Number(t.readMin) || 3), 0);
     const keepQ = document.activeElement?.matches?.('[data-ks-q]');
     const fontCls = S.font === 'lg' ? ' ks-lg' : S.font === 'sm' ? ' ks-sm' : '';
 
-    const chips = [
-      ...data.CLUSTERS,
-      { id: 'todo', icon: '⏳', label: `Belum (${Math.max(0, all.length - doneCount)})` },
-      { id: 'star', icon: '⭐', label: `Ditandai (${S.star.size})` }
-    ];
+    let chips;
+    if (S.viewBy === 'week') {
+      const weekCounts = new Map();
+      for (const t of all) {
+        const w = topicWeekForClass(t, S.cls);
+        weekCounts.set(w, (weekCounts.get(w) || 0) + 1);
+      }
+      chips = [
+        { id: 'all', icon: '📚', label: `Semua (${all.length})` },
+        ...(data.WEEKS || []).map(w => ({
+          id: `w${w.id}`,
+          icon: '📅',
+          label: `${w.short} (${weekCounts.get(w.id) || 0})`
+        })),
+        { id: 'todo', icon: '⏳', label: `Belum (${Math.max(0, all.length - doneCount)})` },
+        { id: 'star', icon: '⭐', label: `Ditandai (${starCount})` }
+      ];
+    } else {
+      chips = [
+        ...(data.CLUSTERS || []),
+        { id: 'todo', icon: '⏳', label: `Belum (${Math.max(0, all.length - doneCount)})` },
+        { id: 'star', icon: '⭐', label: `Ditandai (${starCount})` }
+      ];
+    }
 
-    const cards = list.map((t, idx) => {
-      const isOpen = S.readAll || S.open.has(t.no) || (S.q.trim().length >= 2 && list.length <= 5);
-      const isDone = S.done.has(t.no);
-      const isStar = S.star.has(t.no);
-      return `<article class="ks-card${isOpen ? ' open' : ''}${isDone ? ' done' : ''}" data-ks-card="${t.no}">
-        <button type="button" class="ks-card-head" data-ks-toggle="${t.no}" aria-expanded="${isOpen}">
-          <span class="ks-no">${isDone ? '✓' : String(t.no).padStart(2, '0')}</span>
-          <span class="ks-card-main">
-            <span class="ks-card-title">${esc(t.icon)} ${fmtInline(t.title, S.q)}</span>
-            <span class="ks-card-sub">Materi ${String(t.no).padStart(2, '0')} • ${esc(t.dosen)} • ~${t.readMin} mnt baca</span>
-            ${!isOpen ? `<span class="ks-card-tldr">${fmtInline(t.tldr, S.q)}</span>` : ''}
-          </span>
-          <span class="ks-head-right">
-            ${isStar ? '<span class="ks-star-ind" title="Ditandai penting">⭐</span>' : ''}
-            <span class="ks-chev" aria-hidden="true">›</span>
-          </span>
-        </button>
-        ${isOpen ? topicBodyHTML(t, idx, list) : ''}
-      </article>`;
+    const milestones = (data.SCHEDULE_META?.milestones || []).map(m => {
+      const isExam = /ujian|uper/i.test(m.label);
+      return `<div class="ks-ms-pill${isExam ? ' exam' : ''}">
+        <span class="ks-ms-lbl">${esc(m.icon)} ${esc(m.label)}</span>
+        <span class="ks-ms-dt">${esc(m.date)}</span>
+      </div>`;
     }).join('');
+
+    const clsBar = S.viewBy === 'week' ? `<div class="ks-cls-pills" role="group" aria-label="Pilih kelas">
+      <button type="button" class="ks-mini-btn${S.cls === 'all' ? ' on' : ''}" data-ks-cls="all">A &amp; B</button>
+      <button type="button" class="ks-mini-btn${S.cls === 'A' ? ' on' : ''}" data-ks-cls="A">Kelas A</button>
+      <button type="button" class="ks-mini-btn${S.cls === 'B' ? ' on' : ''}" data-ks-cls="B">Kelas B</button>
+    </div>` : '';
 
     page.innerHTML = `<div class="ks-shell${fontCls}">
       <div class="ks-hero">
@@ -194,9 +335,9 @@
           </div>
         </div>
         <div>
-          <div class="ks-eyebrow">RINGKASAN FULL BLOK • KEDKEL 2026</div>
-          <h2>📖 Ringkasan Lengkap 31 Materi</h2>
-          <p>Disusun langsung dari seluruh PPT &amp; PDF kuliah Blok Kedokteran Keluarga — ringkas, terstruktur, lengkap dengan tabel perbandingan &amp; poin ujian.</p>
+          <div class="ks-eyebrow">RINGKASAN FULL BLOK • KEDKEL TA 2026–2027</div>
+          <h2>📖 Ringkasan Lengkap ${all.length} Materi</h2>
+          <p>Disusun urut sesuai Jadwal Putaran 2 FK YARSI (Minggu 1–5: 19 Okt–20 Nov 2026) — lengkap dengan jadwal Kelas A/B, tabel ringkas &amp; poin ujian.</p>
         </div>
         <div class="ks-prog-box">
           <div class="ks-prog-head">
@@ -207,13 +348,22 @@
         </div>
       </div>
 
+      ${milestones ? `<div class="ks-ms-strip" aria-label="Agenda penting dan ujian blok">${milestones}</div>` : ''}
+
       <div class="ks-controls">
-        <input type="search" class="ks-search" data-ks-q placeholder="🔍 Cari materi, dosen, angka, atau istilah (mis. 85 dB, Duvall, PMK 411, AKG)…" value="${esc(S.q)}" autocomplete="off" aria-label="Cari ringkasan materi">
-        <div class="ks-chips" role="group" aria-label="Filter klaster materi">
-          ${chips.map(c => `<button type="button" class="ks-chip${S.cluster === c.id ? ' on' : ''}" data-ks-cluster="${esc(c.id)}">${c.icon} ${esc(c.label)}</button>`).join('')}
+        <input type="search" class="ks-search" data-ks-q placeholder="🔍 Cari materi, dosen, jadwal, angka, atau istilah (mis. 85 dB, SnNout, pMDI, 2x24 jam)…" value="${esc(S.q)}" autocomplete="off" aria-label="Cari ringkasan materi">
+        <div class="ks-switch-row">
+          <div class="ks-mode-pills" role="group" aria-label="Urutkan tampilan">
+            <button type="button" class="ks-mini-btn${S.viewBy === 'week' ? ' on' : ''}" data-ks-view="week">📅 Per Minggu</button>
+            <button type="button" class="ks-mini-btn${S.viewBy === 'cluster' ? ' on' : ''}" data-ks-view="cluster">🗂️ Per Klaster</button>
+          </div>
+          ${clsBar}
+        </div>
+        <div class="ks-chips" role="group" aria-label="Filter materi">
+          ${chips.map(c => `<button type="button" class="ks-chip${S.filter === c.id ? ' on' : ''}" data-ks-filter="${esc(c.id)}">${c.icon} ${esc(c.label)}</button>`).join('')}
         </div>
         <div class="ks-meta-row">
-          <span>Menampilkan ${list.length} dari ${all.length} materi</span>
+          <span>Menampilkan ${list.length} dari ${all.length} materi${S.viewBy === 'week' && S.cls !== 'all' ? ` (Urutan Kelas ${S.cls})` : ''}</span>
           <div class="ks-mode-pills">
             <button type="button" class="ks-mini-btn${!S.readAll ? ' on' : ''}" data-ks-mode="cards">📑 Per Materi</button>
             <button type="button" class="ks-mini-btn${S.readAll ? ' on' : ''}" data-ks-mode="all">📜 Buka Semua</button>
@@ -222,7 +372,7 @@
       </div>
 
       <div class="ks-list">
-        ${cards || '<div class="ks-empty"><span>🔎</span><div>Tidak ada materi yang cocok dengan filter ini.</div><button type="button" class="ks-mini-btn" data-ks-reset>Tampilkan Semua Materi</button></div>'}
+        ${renderListHTML(list, data)}
       </div>
     </div>`;
 
@@ -232,13 +382,32 @@
     }
   }
 
-  function open(topicNo) {
+  function resolveTopicId(topicKey) {
+    const topics = window.CLINED_KEDKEL_SUMMARY_DATA?.TOPICS || [];
+    if (!topicKey) return null;
+    const str = String(topicKey);
+    const byId = topics.find(t => t.id === str);
+    if (byId) return byId.id;
+    const num = Number(topicKey);
+    if (!Number.isNaN(num)) {
+      const byDrive = topics.find(t => Number(t.driveNo) === num);
+      if (byDrive) return byDrive.id;
+      const byNo = topics.find(t => Number(t.no) === num);
+      if (byNo) return byNo.id;
+    }
+    return null;
+  }
+
+  function open(topicKey) {
     ensurePage();
-    if (topicNo) {
-      S.cluster = 'all';
-      S.q = '';
-      S.readAll = false;
-      S.open = new Set([Number(topicNo)]);
+    if (topicKey) {
+      const id = resolveTopicId(topicKey);
+      if (id) {
+        S.filter = 'all';
+        S.q = '';
+        S.readAll = false;
+        S.open = new Set([id]);
+      }
     }
     render();
     if (typeof window.show === 'function') window.show('kedkelSummaryPage');
@@ -261,8 +430,20 @@
       try { localStorage.setItem(FONT_KEY, S.font); } catch {}
       return render();
     }
-    if (t.dataset.ksCluster) {
-      S.cluster = t.dataset.ksCluster;
+    if (t.dataset.ksView) {
+      if (S.viewBy !== t.dataset.ksView) {
+        S.viewBy = t.dataset.ksView;
+        S.filter = 'all';
+      }
+      return render();
+    }
+    if (t.dataset.ksCls) {
+      S.cls = t.dataset.ksCls;
+      try { localStorage.setItem(CLS_KEY, S.cls); } catch {}
+      return render();
+    }
+    if (t.dataset.ksFilter) {
+      S.filter = t.dataset.ksFilter;
       return render();
     }
     if (t.dataset.ksMode) {
@@ -270,40 +451,40 @@
       return render();
     }
     if (t.hasAttribute('data-ks-reset')) {
-      S.cluster = 'all'; S.q = '';
+      S.filter = 'all'; S.q = '';
       return render();
     }
     if (t.dataset.ksToggle) {
-      const no = Number(t.dataset.ksToggle);
-      if (S.readAll) { S.readAll = false; S.open = new Set([no]); }
-      else if (S.open.has(no)) S.open.delete(no);
-      else S.open.add(no);
+      const id = t.dataset.ksToggle;
+      if (S.readAll) { S.readAll = false; S.open = new Set([id]); }
+      else if (S.open.has(id)) S.open.delete(id);
+      else S.open.add(id);
       return render();
     }
     if (t.dataset.ksJump) {
-      const no = Number(t.dataset.ksJump);
-      if (!no) return;
-      S.open = new Set([no]);
+      const id = t.dataset.ksJump;
+      if (!id) return;
+      S.open = new Set([id]);
       render();
-      const card = page.querySelector(`[data-ks-card="${no}"]`);
+      const card = page.querySelector(`[data-ks-card="${id}"]`);
       if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
     if (t.dataset.ksDone) {
-      const no = Number(t.dataset.ksDone);
-      if (S.done.has(no)) S.done.delete(no); else S.done.add(no);
-      writeSet(DONE_KEY, S.done);
+      const id = t.dataset.ksDone;
+      if (S.done.has(id)) S.done.delete(id); else S.done.add(id);
+      writeIdSet(DONE_KEY, S.done);
       return render();
     }
     if (t.dataset.ksStar) {
-      const no = Number(t.dataset.ksStar);
-      if (S.star.has(no)) S.star.delete(no); else S.star.add(no);
-      writeSet(STAR_KEY, S.star);
+      const id = t.dataset.ksStar;
+      if (S.star.has(id)) S.star.delete(id); else S.star.add(id);
+      writeIdSet(STAR_KEY, S.star);
       return render();
     }
     if (t.dataset.ksQuiz) {
-      const no = Number(t.dataset.ksQuiz);
-      window.CLINED_MATERI_LATIHAN?.open?.('KEDKEL', 'KEDKEL', 'blokKedkelPage', no);
+      const driveNo = Number(t.dataset.ksQuiz);
+      window.CLINED_MATERI_LATIHAN?.open?.('KEDKEL', 'KEDKEL', 'blokKedkelPage', driveNo);
     }
   });
 
