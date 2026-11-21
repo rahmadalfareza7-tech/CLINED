@@ -41,7 +41,7 @@
     },
     ringkasanKedkel: {
       styles: ['css/kedkel-summary.css?v=5'],
-      scripts: ['js/kedkel-summary-data.js?v=3', 'js/kedkel-summary.js?v=4']
+      scripts: ['js/kedkel-summary-data.js?v=3', 'js/kedkel-summary.js?v=5']
     },
     admin: {
       styles: ['css/admin-people.css?v=3'],

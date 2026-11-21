@@ -65,36 +65,7 @@
   const getPack = i => i === 'flag' ? S.flagPack : S.packs[i];
 
   /* ---------- data ---------- */
-  async function loadKedkelTryoutQuestions() {
-    const bankIds = window.CLINED_KEDKEL_2026_MATERI?.BANK_IDS || ['kedkel-2026-tryout-1', 'kedkel-2026-tryout-2'];
-    const loadOne = async (bankId) => {
-      try {
-        await window.CLINED_BANKS_READY?.();
-        await window.CLINED_ENSURE_BANK_LOADED?.(bankId);
-        const bank = window.BANKS?.[bankId];
-        if (Array.isArray(bank?.data) && bank.data.length) return bank.data;
-      } catch {}
-      try {
-        const r = await fetch(`/api/banks/${encodeURIComponent(bankId)}`, { credentials: 'same-origin', cache: 'default' });
-        if (r.ok) {
-          const d = await r.json().catch(() => ({}));
-          if (Array.isArray(d?.bank?.questions) && d.bank.questions.length) return d.bank.questions;
-        }
-      } catch {}
-      try {
-        const r = await fetch(`/seed-data/banks/${encodeURIComponent(bankId)}.json`, { credentials: 'same-origin', cache: 'no-store' });
-        if (r.ok) {
-          const arr = await r.json().catch(() => []);
-          if (Array.isArray(arr) && arr.length) return arr;
-        }
-      } catch {}
-      return [];
-    };
-    const parts = await Promise.all(bankIds.map(loadOne));
-    return parts.flat();
-  }
-
-  async function fetchPacks(block) {
+  async function fetchPacks() {
     let packages = [];
     let fetchError = null;
     try {
@@ -111,15 +82,6 @@
         packages = c.packages;
       } else {
         fetchError = err;
-      }
-    }
-    if (norm(block) === 'KEDKEL' && window.CLINED_KEDKEL_2026_MATERI?.buildLatihanMateriPacks) {
-      const qs = await loadKedkelTryoutQuestions();
-      const virtualPacks = window.CLINED_KEDKEL_2026_MATERI.buildLatihanMateriPacks(qs);
-      if (virtualPacks.length) {
-        const seen = new Set(packages.map(p => String(p.id)));
-        packages = [...virtualPacks.filter(p => !seen.has(String(p.id))), ...packages];
-        return packages;
       }
     }
     if (fetchError) {
@@ -245,9 +207,8 @@
     }).join('');
     const showLf = [cnt.new, cnt.prog, cnt.done].filter(Boolean).length >= 2;
     if (!showLf) S.lf = 'all';
-    const showBobotBtn = S.block === 'KEDKEL' && window.CLINED_KEDKEL_2026_MATERI?.openBobotModal;
     body().innerHTML = `${S.offline ? '<div class="ml-note">📡 Mode offline • menampilkan data terakhir yang tersimpan.</div>' : ''}
-      <div class="ml-hero"><span class="ml-hero-icon">📝</span><div><b>${packs.length} materi • ${totalQ} soal</b><small>Jawab, lihat pembahasan tiap pilihan, kumpulkan XP.</small></div>${showBobotBtn ? '<button type="button" class="ml-bobot-btn" data-ml-bobot>📊 Deskripsi Bobot Soal</button>' : ''}</div>
+      <div class="ml-hero"><span class="ml-hero-icon">📝</span><div><b>${packs.length} materi • ${totalQ} soal</b><small>Jawab, lihat pembahasan tiap pilihan, kumpulkan XP.</small></div></div>
       <div class="ml-toolbar">
         <div class="ml-search"><span class="ml-search-ico" aria-hidden="true">🔍</span><input type="search" id="mlSearch" class="ml-search-input" placeholder="Cari materi…" value="${esc(S.q)}" autocomplete="off" enterkeyhint="search" aria-label="Cari materi"><button type="button" class="ml-search-clear" data-ml-clear aria-label="Hapus pencarian" hidden>✕</button></div>
         ${showLf ? `<div class="ml-chips ml-lf" role="tablist" aria-label="Filter status">${[['all', 'Semua'], ['new', 'Belum'], ['prog', 'Berjalan'], ['done', 'Selesai']].filter(([k]) => k === 'all' || cnt[k]).map(([k, l]) => `<button type="button" class="ml-chip${S.lf === k ? ' on' : ''}" data-ml-lf="${k}">${l} <i>${cnt[k]}</i></button>`).join('')}</div>` : ''}

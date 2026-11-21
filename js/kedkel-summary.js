@@ -202,9 +202,6 @@
     const driveBtn = drv?.folderUrl
       ? `<a class="ks-act" href="${esc(drv.folderUrl)}" target="_blank" rel="noopener noreferrer">📂 Slide Drive</a>`
       : '';
-    const quizBtn = (t.driveNo && window.CLINED_MATERI_LATIHAN?.open)
-      ? `<button type="button" class="ks-act quiz-go" data-ks-quiz="${t.driveNo}">🎯 Latihan Soal</button>`
-      : '';
 
     const navPair = `<div class="ks-nav-pair">
       <button type="button" class="ks-nav-btn" data-ks-jump="${prev ? esc(prev.id) : ''}" ${prev ? '' : 'disabled'}>‹ ${prev ? `${String(prev.no).padStart(2, '0')}. ${esc(prev.title.slice(0, 22))}${prev.title.length > 22 ? '…' : ''}` : 'Awal'}</button>
@@ -219,7 +216,6 @@
         <button type="button" class="ks-act${done ? ' done-on' : ''}" data-ks-done="${esc(t.id)}">${done ? '✓ Sudah Dipelajari' : '○ Tandai Dipelajari'}</button>
         <button type="button" class="ks-act${star ? ' star-on' : ''}" data-ks-star="${esc(t.id)}">${star ? '★ Ditandai' : '☆ Tandai'}</button>
         ${driveBtn}
-        ${quizBtn}
         <button type="button" class="ks-act ks-act-collapse" data-ks-close="${esc(t.id)}">▴ Perkecil Materi</button>
       </div>
       ${navPair}
@@ -556,10 +552,6 @@
       if (S.star.has(id)) S.star.delete(id); else S.star.add(id);
       writeIdSet(STAR_KEY, S.star);
       return render();
-    }
-    if (t.dataset.ksQuiz) {
-      const driveNo = Number(t.dataset.ksQuiz);
-      window.CLINED_MATERI_LATIHAN?.open?.('KEDKEL', 'KEDKEL', 'blokKedkelPage', driveNo);
     }
   });
 
