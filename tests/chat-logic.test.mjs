@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cleanMessage, badgesOf, isOpen, tierOf, canChat, MAX_LEN } from '../lib/chat-logic.mjs';
+import { cleanMessage, badgesOf, isOpen, tierOf, canChat, compareUsers, MAX_LEN } from '../lib/chat-logic.mjs';
 
 test('cleanMessage: kosong, terlalu panjang, rapikan spasi', () => {
   assert.ok(cleanMessage('   ').error);
@@ -24,4 +24,23 @@ test('canChat: teman, terbuka, diblokir', () => {
   assert.equal(canChat({ friend: null, bOpen: true }), true);
   assert.equal(canChat({ friend: 'accepted', blocked: true }), false);
   assert.equal(isOpen({ role: 'student' }), false);
+});
+test('compareUsers: chat belum dibaca & percakapan terbaru selalu paling atas', () => {
+  const arr = [
+    { name: 'Admin A', role: 'admin', online: true, unread: 0, lastAt: 0 },
+    { name: 'Teman B', role: 'student', friend: 'accepted', online: true, unread: 0, lastAt: 0 },
+    { name: 'User Chat Lama', role: 'student', unread: 0, lastAt: 1000 },
+    { name: 'User Chat Baru', role: 'student', unread: 0, lastAt: 5000 },
+    { name: 'User Unread Lama', role: 'student', unread: 1, lastAt: 2000 },
+    { name: 'User Unread Baru', role: 'student', unread: 2, lastAt: 4000 }
+  ];
+  arr.sort(compareUsers);
+  assert.deepEqual(arr.map(x => x.name), [
+    'User Unread Baru',
+    'User Unread Lama',
+    'User Chat Baru',
+    'User Chat Lama',
+    'Admin A',
+    'Teman B'
+  ]);
 });

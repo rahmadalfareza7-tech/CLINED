@@ -62,8 +62,13 @@
   };
 
   /* ───────── daftar pengguna ───────── */
-  const group = u => (u.badges?.length ? 0 : u.friend === 'accepted' ? 1 : 2);
-  const GT = ['Admin, Helper & Tempat bertanya', 'Teman', 'Pengguna lain'];
+  const hasChat = u => (u.unread || 0) > 0 || (u.lastAt || 0) > 0;
+  const group = u => (hasChat(u) ? 0 : u.badges?.length ? 1 : u.friend === 'accepted' ? 2 : 3);
+  const GT = ['💬 Percakapan Terbaru', 'Admin, Helper & Tempat bertanya', 'Teman', 'Pengguna lain'];
+  const sortRecent = (a, b) =>
+    (((b.unread || 0) > 0 ? 1 : 0) - ((a.unread || 0) > 0 ? 1 : 0))
+    || ((b.lastAt || 0) - (a.lastAt || 0))
+    || String(a.name || '').localeCompare(String(b.name || ''), 'id');
   const isAdmin = () => {
     try { return typeof authCurrentUser === 'function' && authCurrentUser()?.role === 'admin'; }
     catch { return false; }
@@ -133,8 +138,11 @@
   function listHTML() {
     const q = C.q.trim().toLowerCase();
     const all = (C.users || []).filter(u => !q || u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q));
-    let html = q ? '' : selfCardHTML();
-    [0, 1, 2].forEach(g => { const rows = all.filter(u => group(u) === g); if (rows.length) html += `<div class="chat-grp"><h4>${GT[g]} <small>${rows.length}</small>${g === 2 ? onlineBadge() : ''}</h4>${rows.map(rowHTML).join('')}</div>`; });
+    const recent = all.filter(u => group(u) === 0).sort(sortRecent);
+    let html = '';
+    if (recent.length) html += `<div class="chat-grp"><h4>${GT[0]} <small>${recent.length}</small></h4>${recent.map(rowHTML).join('')}</div>`;
+    if (!q) html += selfCardHTML();
+    [1, 2, 3].forEach(g => { const rows = all.filter(u => group(u) === g); if (rows.length) html += `<div class="chat-grp"><h4>${GT[g]} <small>${rows.length}</small>${g === 3 ? onlineBadge() : ''}</h4>${rows.map(rowHTML).join('')}</div>`; });
     return `<div class="card soc-card chat-card"><div class="chat-hero"><span class="chat-hero-ico">💬</span><div><h3>Chat</h3><p>Tanya soal ke Admin, Helper & Tempat bertanya, atau ngobrol dengan teman.</p></div>${bellHTML()}</div>
       <div class="chat-pad">${pushNoteHTML()}
       <div class="chat-searchbox"><input type="search" class="chat-search" data-chat-q placeholder="Cari nama atau username…" value="${esc(C.q)}" aria-label="Cari pengguna" autocomplete="off"></div>
@@ -209,7 +217,10 @@
     C.busy = true;
     try {
       const d = await api('/api/chat/send', { method: 'POST', body: { to: C.peer.id, text } });
-      i.value = ''; C.thread.messages.push(d.message); render(); scrollEnd(); $('chatInput')?.focus();
+      i.value = ''; C.thread.messages.push(d.message);
+      const u = (C.users || []).find(x => x.id === C.peer.id);
+      if (u) { u.lastAt = d.message.at || Date.now(); u.lastText = 'Kamu: ' + text.slice(0, 60); }
+      render(); scrollEnd(); $('chatInput')?.focus();
     } catch (e) { toast(e.message, true); } finally { C.busy = false; }
   }
 
@@ -243,7 +254,13 @@
     if (here && C.peer && C.peer.id === m.from?.id) { loadThread(false).catch(() => {}); return; }
     toast(`💬 ${m.from?.name || 'Seseorang'}: ${m.text || 'pesan baru'}`);
     setDot(C.unread + 1);
-    if (here && !C.peer) loadUsers().then(render).catch(() => {});
+    const sender = (C.users || []).find(x => x.id === m.from?.id);
+    if (sender) {
+      sender.unread = (sender.unread || 0) + 1;
+      sender.lastAt = Date.now();
+      sender.lastText = String(m.text || 'pesan baru').slice(0, 60);
+    }
+    if (here && !C.peer) { render(); loadUsers().then(render).catch(() => {}); }
   }
   async function refreshDot() { try { setDot((await api('/api/chat/unread')).unread || 0); } catch {} }
   function deepLink(id) {
