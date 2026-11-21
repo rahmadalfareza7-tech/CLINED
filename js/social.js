@@ -1118,17 +1118,78 @@
   });
 
   /* ───────── realtime ───────── */
-  let es = null, nextTry = 0, delay = 3000;
-  function connect() {
-    if (es || Date.now() < nextTry || !loggedIn() || typeof EventSource === 'undefined') return;
-    es = new EventSource('/api/stream');
-    es.addEventListener('ready', () => { delay = 3000; loadLobby().catch(() => {}); window.CLINED_CHAT?.refreshDot(); });
-    es.addEventListener('friend', ev => onFriend(JSON.parse(ev.data || '{}')));
-    es.addEventListener('duel', ev => onDuel(JSON.parse(ev.data || '{}')));
-    es.addEventListener('status', ev => onStatus(JSON.parse(ev.data || '{}')));
-    es.addEventListener('chat', ev => window.CLINED_CHAT?.onPush(JSON.parse(ev.data || '{}')));
-    es.onerror = () => { if (es.readyState === 2) { es = null; nextTry = Date.now() + delay; delay = Math.min(delay * 2, 60000); } };
+  const HEARTBEAT_STALE_MS = 40_000, IDLE_MS = 5 * 60_000, LOBBY_POLL_MS = 12_000;
+  let es = null, nextTry = 0, delay = 3000, connId = '', lastBeatAt = 0, lastInteract = Date.now(), isIdle = false, lastLobbyPoll = 0;
+
+  function sendPresence(state, useBeacon = false) {
+    if (!connId) return;
+    const payload = JSON.stringify({ connId, state });
+    if (useBeacon && navigator.sendBeacon) {
+      try {
+        if (navigator.sendBeacon('/api/stream/presence', new Blob([payload], { type: 'application/json' }))) return;
+      } catch {}
+    }
+    if (!loggedIn() && state !== 'offline') return;
+    fetch('/api/stream/presence', {
+      method: 'POST', credentials: 'same-origin', keepalive: true,
+      headers: { 'Content-Type': 'application/json' }, body: payload
+    }).catch(() => {});
   }
+
+  function closeStream(sendOffline = false) {
+    const prevConn = connId;
+    connId = '';
+    lastBeatAt = 0;
+    if (es) { try { es.close(); } catch {} es = null; }
+    if (sendOffline && prevConn) {
+      const payload = JSON.stringify({ connId: prevConn, state: 'offline' });
+      let sent = false;
+      if (navigator.sendBeacon) {
+        try { sent = navigator.sendBeacon('/api/stream/presence', new Blob([payload], { type: 'application/json' })); } catch {}
+      }
+      if (!sent) {
+        fetch('/api/stream/presence', {
+          method: 'POST', credentials: 'same-origin', keepalive: true,
+          headers: { 'Content-Type': 'application/json' }, body: payload
+        }).catch(() => {});
+      }
+    }
+  }
+
+  function connect() {
+    if (es || Date.now() < nextTry || !loggedIn() || navigator.onLine === false || typeof EventSource === 'undefined') return;
+    const vis = document.visibilityState === 'visible' && !isIdle ? '1' : '0';
+    es = new EventSource('/api/stream?vis=' + vis);
+    es.onopen = () => { lastBeatAt = Date.now(); };
+    es.addEventListener('ready', ev => {
+      delay = 3000;
+      lastBeatAt = Date.now();
+      try { connId = JSON.parse(ev.data || '{}').connId || ''; } catch { connId = ''; }
+      if (document.visibilityState !== 'visible' || isIdle) sendPresence('hidden');
+      refreshSocialViews();
+      window.CLINED_CHAT?.refreshDot();
+    });
+    es.addEventListener('ping', () => { lastBeatAt = Date.now(); });
+    es.addEventListener('friend', ev => { lastBeatAt = Date.now(); onFriend(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('duel', ev => { lastBeatAt = Date.now(); onDuel(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('status', ev => { lastBeatAt = Date.now(); onStatus(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('chat', ev => { lastBeatAt = Date.now(); window.CLINED_CHAT?.onPush(JSON.parse(ev.data || '{}')); });
+    es.onerror = () => {
+      if (!es || es.readyState === 2) {
+        es = null; connId = ''; lastBeatAt = 0;
+        nextTry = Date.now() + delay; delay = Math.min(delay * 2, 60000);
+      }
+    };
+  }
+
+  function refreshSocialViews() {
+    lastLobbyPoll = Date.now();
+    loadLobby().then(() => {
+      if (activeView() === 'socialPage') renderLobby(false);
+      else if (activeView() === 'hubPage' && S.hubTab === 'teman') renderHub(false);
+    }).catch(() => {});
+  }
+
   function onFriend(m) {
     const n = m.from?.name || 'Seseorang';
     if (m.kind === 'request') toast(`👋 ${n} ingin berteman denganmu`);
@@ -1143,8 +1204,8 @@
     if (activeView() === 'hubPage' && S.hubTab === 'status') loadFeed().then(() => { const open = [...S.openC]; Promise.all(open.map(id => api('/api/status/comments?id=' + encodeURIComponent(id)).then(d => { S.comments[id] = d.comments || []; }).catch(() => {}))).then(() => renderHub(false)); });
   }
   function reconnectStream() {
-    if (es && es.readyState !== 2) { try { es.close(); } catch {} }
-    es = null; nextTry = 0; delay = 3000;
+    closeStream(false);
+    nextTry = 0; delay = 3000;
     connect();
   }
   function onDuel(m) {
@@ -1174,17 +1235,68 @@
   function boot() { ensureShell(); connect(); }
   setInterval(() => {
     ensureShell();
+    if (!loggedIn()) {
+      if (es) closeStream(true);
+      return;
+    }
+    const now = Date.now();
+    if (es && es.readyState === 1 && lastBeatAt && (now - lastBeatAt) > HEARTBEAT_STALE_MS) {
+      reconnectStream();
+      return;
+    }
+    if (document.visibilityState === 'visible' && !isIdle && (now - lastInteract) >= IDLE_MS) {
+      isIdle = true;
+      sendPresence('hidden');
+    }
     connect();
     if (activeView() === 'duelPage' && S.D && S.D.status !== 'finished' && (!es || es.readyState !== 1)) {
       refreshDuel();
     }
+    if (document.visibilityState === 'visible' && (now - lastLobbyPoll) >= LOBBY_POLL_MS) {
+      const v = activeView();
+      const typing = document.activeElement?.matches?.('[data-soc-code],[data-soc-user],[data-soc-cinput]');
+      if (!typing && (v === 'socialPage' || (v === 'hubPage' && S.hubTab === 'teman'))) {
+        refreshSocialViews();
+      }
+    }
   }, 4000);
-  window.addEventListener('clined:auth-ready', () => { reconnectStream(); });
-  window.addEventListener('online', () => { reconnectStream(); if (activeView() === 'duelPage' && S.D) refreshDuel(); });
+
+  const markActive = () => {
+    if (document.visibilityState !== 'visible') return;
+    const now = Date.now();
+    const wasIdle = isIdle;
+    lastInteract = now;
+    if (wasIdle) {
+      isIdle = false;
+      if (!es || es.readyState !== 1 || (lastBeatAt && (now - lastBeatAt) > HEARTBEAT_STALE_MS)) reconnectStream();
+      else sendPresence('visible');
+    }
+  };
+  ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(ev =>
+    window.addEventListener(ev, markActive, { passive: true, capture: true })
+  );
+  window.addEventListener('clined:auth-ready', () => { lastInteract = Date.now(); isIdle = false; reconnectStream(); });
+  window.addEventListener('clined:auth-logout', () => { closeStream(true); });
+  window.addEventListener('offline', () => { closeStream(false); });
+  window.addEventListener('online', () => { lastInteract = Date.now(); isIdle = false; reconnectStream(); if (activeView() === 'duelPage' && S.D) refreshDuel(); });
+  window.addEventListener('pagehide', () => { closeStream(true); });
+  window.addEventListener('beforeunload', () => { closeStream(true); });
+  window.addEventListener('pageshow', e => {
+    if (!loggedIn()) return;
+    lastInteract = Date.now(); isIdle = false;
+    if (e.persisted || !es || es.readyState !== 1 || (lastBeatAt && (Date.now() - lastBeatAt) > HEARTBEAT_STALE_MS)) reconnectStream();
+    else sendPresence('visible');
+  });
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && loggedIn()) {
-      if (!es || es.readyState !== 1) reconnectStream();
+    if (!loggedIn()) { if (es) closeStream(true); return; }
+    if (document.visibilityState === 'visible') {
+      lastInteract = Date.now(); isIdle = false;
+      if (!es || es.readyState !== 1 || (lastBeatAt && (Date.now() - lastBeatAt) > HEARTBEAT_STALE_MS)) reconnectStream();
+      else sendPresence('visible');
       if (activeView() === 'duelPage' && S.D && S.D.status !== 'finished') refreshDuel();
+      if (activeView() === 'socialPage' || (activeView() === 'hubPage' && S.hubTab === 'teman')) refreshSocialViews();
+    } else {
+      sendPresence('hidden', true);
     }
   });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
@@ -1193,5 +1305,5 @@
       const pTier = getRank(p.tier || { rp: p.rp || 0 });
       const pCard = p.me ? (getMyShowcaseCard() || p.card) : p.card;
       return `<div class="duel-lb-row${p.me ? ' me' : ''}"><span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>${avatar(p)}<div class="duel-lb-main"><div class="duel-lb-top"><b class="duel-lb-name">${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b><span class="duel-lb-wins">🏆 ${p.wins} Menang</span></div><div class="duel-lb-bottom">${rankPill(pTier, true)}${cardPill(pCard)}<small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small></div></div></div>`;
-    }).join(''), openChat: () => { S.hubTab = 'chat'; renderHub(); }, openStatus: () => { S.hubTab = 'status'; S.feed = null; renderHub(); }, open: openLobby, refresh: () => renderLobby(true) };
+    }).join(''), isStreamOnline: () => !!es && es.readyState === 1 && navigator.onLine !== false && !isIdle && (!lastBeatAt || (Date.now() - lastBeatAt) <= HEARTBEAT_STALE_MS), openChat: () => { S.hubTab = 'chat'; renderHub(); }, openStatus: () => { S.hubTab = 'status'; S.feed = null; renderHub(); }, open: openLobby, refresh: () => renderLobby(true) };
 })();

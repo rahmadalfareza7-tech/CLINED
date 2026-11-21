@@ -117,7 +117,8 @@
     if (me.role === 'admin') meBadges.push('admin');
     else if (me.role === 'helper') meBadges.push('helper');
     if (me.isMentor) meBadges.push('mentor');
-    const u = { ...me, online: true, badges: meBadges };
+    const selfOnline = window.CLINED_SOCIAL?.isStreamOnline ? window.CLINED_SOCIAL.isStreamOnline() : navigator.onLine !== false;
+    const u = { ...me, online: selfOnline, badges: meBadges };
     const banner = u.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(u.bannerUrl)}')" aria-hidden="true"></span>` : '';
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
     return `<div class="chat-grp"><h4>Profil Kamu</h4><div class="chat-row chat-self${u.bannerUrl ? ' has-banner' : ''}">${banner}${av(u)}
@@ -161,8 +162,15 @@
     if (!C.peer) return;
     const d = await api('/api/chat/messages?with=' + encodeURIComponent(C.peer.id));
     const prev = C.thread?.messages?.length || 0;
+    const prevOnline = !!C.peer?.online;
     C.peer = { ...C.peer, ...d.peer }; C.thread = d;
     if (first || d.messages.length !== prev) { render(); scrollEnd(); }
+    else if (!!C.peer.online !== prevOnline && C.host?.isConnected) {
+      const headAv = C.host.querySelector('.chat-head .soc-av');
+      const headSub = C.host.querySelector('.chat-head .chat-who > small');
+      if (headAv) headAv.classList.toggle('on', !!C.peer.online);
+      if (headSub) headSub.textContent = `@${C.peer.username}${C.peer.online ? ' • online' : ''}`;
+    }
   }
   const scrollEnd = () => { const m = $('chatMsgs'); if (m) m.scrollTop = m.scrollHeight; };
   function startPoll() { stopPoll(); C.timer = setInterval(() => { if (document.hidden || !C.host?.isConnected) return; (C.peer ? loadThread(false) : loadUsers().then(() => { if (!document.activeElement?.matches?.('[data-chat-q]')) render(); })).catch(() => {}); }, 6000); }
@@ -244,5 +252,10 @@
   navigator.serviceWorker?.addEventListener?.('message', e => { if (e.data?.type === 'open-chat') deepLink(e.data.id); });
   try { const q = new URLSearchParams(location.search).get('chat'); if (q) { deepLink(q); history.replaceState(null, '', location.pathname + location.hash); } } catch {}
   window.addEventListener('clined:profile-style', () => { if (C.host?.isConnected && !C.peer) render(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !C.host?.isConnected) return;
+    loadOnlineStats();
+    (C.peer ? loadThread(false) : loadUsers().then(() => { if (!document.activeElement?.matches?.('[data-chat-q]')) render(); })).catch(() => {});
+  });
   window.CLINED_CHAT = { unread: 0, mount, stop: () => { stopPoll(); stopOnlinePoll(); C.peer = null; C.thread = null; }, onPush, refreshDot };
 })();

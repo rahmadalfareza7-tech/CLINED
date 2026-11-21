@@ -3393,6 +3393,7 @@ async function authLogout(){
 
     await authApi('/logout',{method:'POST',body:'{}'});
     authServerUser=null;
+    window.dispatchEvent(new Event('clined:auth-logout'));
     // Pertahankan data belajar lokal setelah logout.
     // Jangan panggil switchUser('') karena fungsi tersebut menghapus
     // data belajar, cursor, dan antrean sinkronisasi.

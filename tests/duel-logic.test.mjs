@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
-import { push, isOnline, openStream, connectionCount } from '../lib/stream.mjs';
+import { push, isOnline, onlineStats, openStream, connectionCount, setPresence, dropSession, dropUser, dropConn, heartbeat, HIDDEN_GRACE_MS } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
 const Q = n => Array.from({ length: n }, (_, i) => ({ id: 'q' + i, soal: 'Soal ' + i, opsi: ['a', 'b', 'c', 'd'], jawabanBenar: i % 4, pembahasan: 'pemb ' + i }));
@@ -75,6 +75,48 @@ test('SSE: push sampai ke pengguna, online/offline, batas 4 koneksi, bersih saat
   assert.ok(res.ended, 'koneksi tertua ditutup saat melebihi batas');
   const before = connectionCount(); req.emit('close'); assert.equal(connectionCount(), before);   // sudah dibuang, tidak dihitung dua kali
   olds.forEach(r => r.emit('close')); assert.ok(!isOnline('u1'));
+});
+
+test('SSE presence: hidden grace, multi-tab, heartbeat dead socket & session/logout cleanup', () => {
+  const t0 = 1_700_000_000_000;
+  const r1 = fakeRes(), r2 = fakeRes(), rBg = fakeRes();
+  openStream(new EventEmitter(), r1, 'u2', { connId: 'c1', sessionId: 's1', expiresAt: t0 + 120_000, now: t0 });
+  openStream(new EventEmitter(), r2, 'u2', { connId: 'c2', sessionId: 's2', expiresAt: t0 + 50_000, now: t0 });
+  openStream(new EventEmitter(), rBg, 'u3', { connId: 'c3', visible: false, now: t0 });
+
+  assert.equal(isOnline('u2', t0), true);
+  assert.equal(isOnline('u3', t0), false, 'tab dibuka di background tidak langsung online');
+  assert.equal(onlineStats(t0).accounts, 1);
+
+  setPresence('u2', 'c1', 'hidden', t0 + 1000);
+  setPresence('u2', 'c2', 'hidden', t0 + 1000);
+  assert.equal(isOnline('u2', t0 + 30_000), true, 'masih online selama masa tenggang hidden');
+  assert.equal(isOnline('u2', t0 + 1000 + HIDDEN_GRACE_MS), false, 'offline setelah melewati masa tenggang hidden');
+  assert.equal(onlineStats(t0 + 1000 + HIDDEN_GRACE_MS).accounts, 0);
+
+  setPresence('u2', 'c1', 'visible', t0 + 70_000);
+  assert.equal(isOnline('u2', t0 + 70_000), true, 'kembali online saat satu tab aktif lagi');
+
+  // Socket stalled (writableNeedDrain) & session expired dibersihkan heartbeat
+  r1.writableNeedDrain = true;
+  heartbeat(t0 + 80_000);
+  assert.equal(r1.ended, true, 'socket macet ditutup heartbeat');
+  assert.equal(isOnline('u2', t0 + 80_000), false, 's2 juga sudah kedaluwarsa & dibersihkan');
+
+  // dropSession hanya memutus sesi target, dropUser memutus semua, dropConn memutus satu koneksi
+  const a1 = fakeRes(), a2 = fakeRes();
+  openStream(new EventEmitter(), a1, 'u4', { connId: 'ca1', sessionId: 'sa', now: t0 });
+  openStream(new EventEmitter(), a2, 'u4', { connId: 'ca2', sessionId: 'sb', now: t0 });
+  assert.equal(dropSession('sa'), 1);
+  assert.equal(a1.ended, true);
+  assert.equal(isOnline('u4', t0), true, 'sesi sb masih aktif');
+  assert.equal(dropConn('u4', 'ca2'), 1);
+  assert.equal(isOnline('u4', t0), false);
+
+  openStream(new EventEmitter(), fakeRes(), 'u5', { now: t0 });
+  assert.equal(dropUser('u5'), 1);
+  assert.equal(dropUser('u3'), 1);
+  assert.equal(connectionCount(), 0);
 });
 
 test('timer per soal: batas total, awal soal, terlambat', () => {
