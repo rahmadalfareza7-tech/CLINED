@@ -46,31 +46,6 @@ html body #home .duo-learning-map.home-banner-slider::after { display: none !imp
   height: auto;
   pointer-events: none;
 }
-.hbs-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(15, 23, 42, 0.14);
-  background: rgba(255, 255, 255, 0.86);
-  color: #1c282e;
-  font-size: 20px;
-  font-weight: 800;
-  line-height: 1;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  opacity: 0.78;
-  transition: opacity .15s ease, transform .15s ease, background .15s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
-}
-.hbs-arrow:hover { opacity: 1; background: #ffffff; }
-.hbs-arrow:active { transform: translateY(-50%) scale(0.92); }
-.hbs-arrow.prev { left: 8px; }
-.hbs-arrow.next { right: 8px; }
 .hbs-dots {
   position: absolute;
   left: 50%;
@@ -101,7 +76,6 @@ html body #home .duo-learning-map.home-banner-slider::after { display: none !imp
   background: #58cc02;
 }
 @media (max-width: 520px) {
-  .hbs-arrow { width: 28px; height: 28px; font-size: 18px; opacity: 0.65; }
   .hbs-dots { bottom: 5px; padding: 3px 7px; }
 }
 html body #home .duo-map-header h3 { font-size: 17px !important; margin: 0 0 8px !important; }
