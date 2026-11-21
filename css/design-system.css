@@ -684,6 +684,7 @@ html body .floating-dashboard-nav .floating-nav-slider {
   border: 2px solid rgba(88, 204, 2, .45) !important;
   box-shadow: none !important;
   border-radius: 16px !important;
+  transition: left 160ms cubic-bezier(.22, 1, .36, 1), transform 160ms cubic-bezier(.22, 1, .36, 1), width 160ms cubic-bezier(.22, 1, .36, 1) !important;
 }
 
 :root.dark html body .floating-dashboard-nav .floating-nav-slider {

@@ -676,15 +676,17 @@
   async function renderHub(reload = true) {
     ensureShell();
     const body = $('hubBody'); if (!body) return;
-    if (reload) {
-      if (!S.F || (S.hubTab === 'status' && S.feed == null)) { body.dataset.lastHtml = ''; body.innerHTML = '<p class="soc-empty">Memuat…</p>'; }
-      try { await Promise.all([loadLobby(), S.hubTab === 'status' ? loadFeed() : Promise.resolve()]); } catch (e) { body.dataset.lastHtml = ''; body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; }
-    }
     if (S.hubTab === 'chat') {
       if (!reload && $('chatHost')) return;
       body.dataset.lastHtml = '';
       body.innerHTML = hubTabs() + '<div id="chatHost"></div>';
-      window.CLINED_CHAT?.mount($('chatHost')); return;
+      window.CLINED_CHAT?.mount($('chatHost'));
+      if (reload && !S.F) loadLobby().catch(() => {});
+      return;
+    }
+    if (reload) {
+      if (!S.F || (S.hubTab === 'status' && S.feed == null)) { body.dataset.lastHtml = ''; body.innerHTML = '<p class="soc-empty">Memuat…</p>'; }
+      try { await Promise.all([loadLobby(), S.hubTab === 'status' ? loadFeed() : Promise.resolve()]); } catch (e) { body.dataset.lastHtml = ''; body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; }
     }
     window.CLINED_CHAT?.stop?.();
     const nextHtml = hubTabs() + (S.hubTab === 'status' ? statusHTML() : lobbyHTML().friends);

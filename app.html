@@ -21,7 +21,7 @@
 <title>CLINED — Clinical Education</title>
 <meta name="clined-release" content="v29-unified-design">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="css/motion.css?v=auth-layout-v2">
+<link rel="stylesheet" href="css/motion.css?v=auth-layout-v3">
 <link rel="stylesheet" href="css/latihan-materi.css?v=8">
 <link rel="stylesheet" href="css/study-plus.css?v=11">
 <link rel="stylesheet" href="css/announcement.css?v=1">
@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="css/desktop.css?v=7">
 <link rel="stylesheet" href="css/home-ergonomic.css?v=13">
 <link rel="stylesheet" href="css/top-notify.css?v=3">
-<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=17">
+<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=19">
 </head>
 <body class="auth-pending">
 
@@ -1106,14 +1106,24 @@
       nav.style.setProperty('--floating-index', String(Math.max(0,i)));
     }
 
+    let lastNavKey='', lastNavAt=0;
     function route(key){
+      const now=Date.now();
+      if(key===lastNavKey && now-lastNavAt<220) return;
+      lastNavKey=key; lastNavAt=now;
+
+      if(key==='chat' && window.CLINED_SOCIAL && window.CLINED_SOCIAL.openChat){
+        setActive(key);
+        try{window.CLINED_SOCIAL.openChat();}catch(e){console.warn(e);}
+        window.scrollTo(0,0);
+        return;
+      }
+
       const target={home:'home',dashboard:'clinicalDashboard',uab:'uabPage',chat:'hubPage',account:'accountPage'}[key];
       if(!target || !document.getElementById(target)) return;
 
-      // Always use the application's single SPA router. This keeps its current
-      // view state, browser history, body classes and page lifecycle in sync.
       if(typeof window.show==='function'){
-        window.show(target,{force:true});
+        window.show(target);
       } else {
         document.querySelectorAll('.view.active').forEach(v=>v.classList.remove('active'));
         document.getElementById(target).classList.add('active');
@@ -1125,43 +1135,28 @@
       if(key==='uab' && typeof window.syncUabStats==='function'){
         try{window.syncUabStats();}catch(e){console.warn(e);}
       }
-      if(key==='chat' && window.CLINED_SOCIAL && window.CLINED_SOCIAL.openChat){
-        try{window.CLINED_SOCIAL.openChat();}catch(e){console.warn(e);}
-      }
       if(key==='account' && typeof window.renderAccount==='function'){
         try{window.renderAccount();}catch(e){console.warn(e);}
       }
       window.scrollTo(0,0);
     }
 
-    // One and only one navigation listener. Capture phase means no page-level
-    // delegated listener can steal the tap. It handles ALL four buttons.
     nav.addEventListener('click',function(e){
       const btn=e.target.closest('[data-floating-nav]');
       if(!btn || !nav.contains(btn)) return;
       e.preventDefault();
       e.stopImmediatePropagation();
-      const key=btn.dataset.floatingNav;
-      btn.classList.remove('nav-pop'); void btn.offsetWidth; btn.classList.add('nav-pop');
-      route(key);
-      setTimeout(()=>btn.classList.remove('nav-pop'),520);
+      route(btn.dataset.floatingNav);
     },true);
 
     nav.addEventListener('pointerup',function(e){
+      if(e.pointerType==='mouse' && e.button!==0) return;
       const btn=e.target.closest('[data-floating-nav]');
       if(!btn || !nav.contains(btn)) return;
       e.preventDefault();
       e.stopImmediatePropagation();
       route(btn.dataset.floatingNav);
     },true);
-
-    nav.addEventListener('touchend',function(e){
-      const btn=e.target.closest('[data-floating-nav]');
-      if(!btn || !nav.contains(btn)) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      route(btn.dataset.floatingNav);
-    },{capture:true,passive:false});
 
     // Keep the selected item synchronized whenever the SPA router changes page.
     window.addEventListener('clined:view-change',function(e){
@@ -1185,7 +1180,7 @@
 <script src="js/onboarding.js?v=6"></script>
 <script src="js/userbank-parser.js?v=3"></script>
 <script src="js/userbank.js?v=5"></script>
-<script src="js/social.js?v=22"></script>
+<script src="js/social.js?v=23"></script>
 <script src="js/chat.js?v=9"></script>
 <script src="js/xp-sync.js?v=2"></script>
 <script src="js/announcement.js?v=2"></script>

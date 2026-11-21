@@ -9,7 +9,7 @@
   --motion-fast:160ms;
   --motion-hover:200ms;
   --motion-panel:340ms;
-  --motion-page:420ms;
+  --motion-page:140ms;
 }
 
 /* Progress fills are compositor-friendly: JavaScript updates a CSS variable,
@@ -59,42 +59,24 @@
   }
 }
 
-/* Page changes keep one primary motion; direct children follow in a short,
-   bounded sequence so the page does not feel flat or move all at once. */
+/* Snappy page changes: immediate visibility with a subtle, fast 140ms settle. */
 .view.motion-page-enter > :not(script){
   animation:clined-page-reveal var(--motion-page) var(--motion-ease) both;
 }
-.view.motion-page-enter > :nth-child(2){animation-delay:35ms}
-.view.motion-page-enter > :nth-child(3){animation-delay:70ms}
-.view.motion-page-enter > :nth-child(4){animation-delay:105ms}
-.view.motion-page-enter > :nth-child(5){animation-delay:140ms}
-.view.motion-page-enter > :nth-child(n+6){animation-delay:165ms}
 
 #achievementsPage.motion-page-enter .achievement-item,
 #materialsPage.motion-page-enter .material-block-card,
 #library.motion-page-enter .library-result,
 #wrong.motion-page-enter .wrong-item{
-  animation:clined-list-reveal 360ms var(--motion-ease) both;
+  animation:clined-list-reveal 140ms var(--motion-ease) both;
 }
-#achievementsPage.motion-page-enter .achievement-item:nth-child(2),
-#materialsPage.motion-page-enter .material-block-card:nth-child(2),
-#library.motion-page-enter .library-result:nth-child(2),
-#wrong.motion-page-enter .wrong-item:nth-child(2){animation-delay:35ms}
-#achievementsPage.motion-page-enter .achievement-item:nth-child(3),
-#materialsPage.motion-page-enter .material-block-card:nth-child(3),
-#library.motion-page-enter .library-result:nth-child(3),
-#wrong.motion-page-enter .wrong-item:nth-child(3){animation-delay:70ms}
-#achievementsPage.motion-page-enter .achievement-item:nth-child(n+4),
-#materialsPage.motion-page-enter .material-block-card:nth-child(n+4),
-#library.motion-page-enter .library-result:nth-child(n+4),
-#wrong.motion-page-enter .wrong-item:nth-child(n+4){animation-delay:105ms}
 
 @keyframes clined-page-reveal{
-  from{opacity:0;transform:translate3d(0,10px,0)}
+  from{opacity:.88;transform:translate3d(0,6px,0)}
   to{opacity:1;transform:translate3d(0,0,0)}
 }
 @keyframes clined-list-reveal{
-  from{opacity:0;transform:translate3d(0,7px,0)}
+  from{opacity:.9;transform:translate3d(0,4px,0)}
   to{opacity:1;transform:translate3d(0,0,0)}
 }
 
