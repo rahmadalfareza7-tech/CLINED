@@ -1315,5 +1315,5 @@
       const pTier = getRank(p.tier || { rp: p.rp || 0 });
       const pCard = p.me ? (getMyShowcaseCard() || p.card) : p.card;
       return `<div class="duel-lb-row${p.me ? ' me' : ''}"><span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>${avatar(p)}<div class="duel-lb-main"><div class="duel-lb-top"><b class="duel-lb-name">${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b><span class="duel-lb-wins">🏆 ${p.wins} Menang</span></div><div class="duel-lb-bottom">${rankPill(pTier, true)}${cardPill(pCard)}<small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small></div></div></div>`;
-    }).join(''), isStreamOnline: () => !!es && es.readyState === 1 && navigator.onLine !== false && !isIdle && (!lastBeatAt || (Date.now() - lastBeatAt) <= HEARTBEAT_STALE_MS), openChat: () => { S.hubTab = 'chat'; renderHub(); }, openStatus: () => { S.hubTab = 'status'; S.feed = null; renderHub(); }, open: openLobby, refresh: () => renderLobby(true) };
+    }).join(''), isStreamOnline: () => !!es && es.readyState === 1 && navigator.onLine !== false && !isIdle && (!lastBeatAt || (Date.now() - lastBeatAt) <= HEARTBEAT_STALE_MS), openChat: () => openHub('chat'), openStatus: () => openHub('status'), open: openLobby, refresh: () => renderLobby(true) };
 })();
