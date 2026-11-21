@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
-<link rel="stylesheet" href="css/landing.css?v=4">
+<link rel="stylesheet" href="css/landing.css?v=5">
 </head>
 <body>
 
@@ -23,6 +23,7 @@
   </a>
   <div class="top-actions">
     <button class="icon-btn" id="themeBtn" type="button" aria-label="Ganti tema" title="Ganti tema">🌙</button>
+    <button class="btn btn-small btn-pwa-dl" type="button" data-pwa-install aria-label="Download CLINED ke Homescreen">⬇ Download</button>
     <a class="btn btn-small" href="./app.html" data-cta="login">Masuk</a>
   </div>
 </header>
@@ -43,6 +44,7 @@
           </dl>
           <div class="cta-row">
             <a class="btn" href="./app.html" data-cta="start">Mulai belajar</a>
+            <button class="btn btn-pwa-dl" type="button" data-pwa-install aria-label="Download CLINED ke Homescreen">⬇ Download</button>
             <button class="btn btn-ghost" type="button" data-go-next>Lihat fitur</button>
           </div>
         </div>
@@ -304,5 +306,6 @@
 </div>
 
 <script src="js/landing.js?v=4" defer></script>
+<script src="js/pwa-install.js?v=1" defer></script>
 </body>
 </html>

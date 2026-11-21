@@ -1,6 +1,41 @@
 /* CLINED — Ergonomi Beranda & Buat Soal (v1)
    Dimuat PALING AKHIR. Target: layar HP, jempol, area sentuh >= 44px. */
 
+/* Tombol Download (Install ke Homescreen) di Header */
+.header .pwa-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 2px solid #46a302;
+  border-bottom: 4px solid #3c8d00;
+  background: #58cc02;
+  color: #ffffff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+  flex: none;
+  transition: transform .1s ease, border-bottom-width .1s ease;
+}
+.header .pwa-dl-btn[hidden] { display: none !important; }
+.header .pwa-dl-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+@media (max-width: 430px) {
+  .header .pwa-dl-btn {
+    height: 34px;
+    padding: 0 9px;
+    font-size: 11px;
+    border-radius: 10px;
+  }
+}
+
 /* ───────────── BERANDA ───────────── */
 
 /* Jarak antar blok seragam */

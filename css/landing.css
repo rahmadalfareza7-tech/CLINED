@@ -350,3 +350,6 @@ h2{font-size:clamp(27px,6.6vw,44px)}
 @keyframes am-fade{from{opacity:0}to{opacity:1}}
 @keyframes am-pop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.am-backdrop,.am-card{animation:none}}
+
+.btn-pwa-dl{background:var(--blue,#1cb0f6);box-shadow:0 4px 0 var(--blue-d,#0b84c0);color:#fff}
+.btn-pwa-dl[hidden]{display:none!important}
