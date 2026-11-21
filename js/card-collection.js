@@ -71,7 +71,8 @@
     { id: '19-crystal-prism',       name: 'Crystal Prism',       cat: 'Cewek', icon: '💎', price: 18, desc: 'Cewek • Prisma kristal berkilau',    img: 'assets/banners/19-crystal-prism.svg?v=2' },
     { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 12, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg?v=2' },
     // Admin Exclusive
-    { id: '21-creation-touch',      name: 'Creation Touch',      cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan penciptaan', img: 'assets/banners/21-creation-touch.svg?v=2' }
+    { id: '21-creation-touch',      name: 'Creation Touch',      cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan penciptaan', img: 'assets/banners/21-creation-touch.svg?v=2' },
+    { id: '22-abyssal-touch',       name: 'Abyssal Touch',       cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan kegelapan abisal', img: 'assets/banners/22-abyssal-touch.svg?v=2' }
   ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
