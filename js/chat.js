@@ -4,12 +4,12 @@
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const toast = (m, e) => window.showToast?.(m, !!e);
-  const C = { pending: null, users: null, q: '', peer: null, thread: null, host: null, unread: 0, timer: null, busy: false };
+  const C = { pending: null, users: null, q: '', peer: null, thread: null, host: null, unread: 0, timer: null, busy: false, lastHtml: '' };
   const BADGE = { admin: ['👑', 'Admin'], helper: ['🛠️', 'Helper'], mentor: ['🙋', 'Tempat bertanya'] };
   const initials = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || '?';
   const HUES = [[28,176,246,124,92,255],[255,150,0,255,75,75],[88,204,2,0,180,150],[255,99,160,160,90,255],[0,184,217,60,100,230],[255,196,0,255,120,0]];
   const hue = n => { let h = 0; for (const c of String(n || '')) h = (h * 31 + c.charCodeAt(0)) >>> 0; const x = HUES[h % HUES.length]; return `background:linear-gradient(135deg,rgb(${x[0]},${x[1]},${x[2]}),rgb(${x[3]},${x[4]},${x[5]}))`; };
-  const av = (p, cls = '') => `<span class="soc-av ${cls}${p.online ? ' on' : ''}${p.avatarDeco ? ' has-deco' : ''}" style="${p.avatarUrl ? '' : hue(p.name)}" aria-hidden="true">${p.avatarUrl ? `<img class="soc-av-img" src="${esc(p.avatarUrl)}" alt="" loading="lazy">` : esc(initials(p.name))}${p.avatarDeco ? `<img class="avatar-deco-img" src="${esc(p.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
+  const av = (p, cls = '') => `<span class="soc-av ${cls}${p.online ? ' on' : ''}${p.avatarDeco ? ' has-deco' : ''}" style="${p.avatarUrl ? '' : hue(p.name)}" aria-hidden="true">${p.avatarUrl ? `<img class="soc-av-img" src="${esc(p.avatarUrl)}" alt="">` : esc(initials(p.name))}${p.avatarDeco ? `<img class="avatar-deco-img" src="${esc(p.avatarDeco)}" alt="">` : ''}</span>`;
   const ago = t => { if (!t) return ''; const m = Math.round((Date.now() - t) / 6e4); return m < 1 ? 'baru' : m < 60 ? m + ' mnt' : m < 1440 ? Math.floor(m / 60) + ' jam' : Math.floor(m / 1440) + ' hr'; };
   const badges = p => (p.badges || []).map(b => `<em class="chat-badge b-${b}">${BADGE[b][0]} ${BADGE[b][1]}</em>`).join('');
   const clock = t => new Date(t).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -76,8 +76,13 @@
       const r = await fetch('/api/admin/online-stats', { credentials: 'same-origin' });
       const d = await r.json();
       if (r.ok && d.ok) {
+        const prev = onlineStats?.accounts;
         onlineStats = d;
-        if (C.host?.isConnected && !C.peer && !document.hidden) render();
+        if (C.host?.isConnected && !C.peer && !document.hidden && prev !== d.accounts) {
+          const badge = C.host.querySelector('.chat-online-total');
+          if (badge) badge.textContent = `${d.accounts} online`;
+          else render();
+        }
       }
     } catch {}
   }
@@ -178,15 +183,18 @@
 
   function render() {
     if (!C.host) return;
+    const nextHtml = C.peer ? threadHTML() : listHTML();
+    if (nextHtml === C.lastHtml) return;
+    C.lastHtml = nextHtml;
     const keepQ = document.activeElement?.matches?.('[data-chat-q]'), inp = $('chatInput')?.value;
-    C.host.innerHTML = C.peer ? threadHTML() : listHTML();
+    C.host.innerHTML = nextHtml;
     if (C.peer) { const i = $('chatInput'); if (i && inp) { i.value = inp; const b = document.querySelector('[data-chat-send]'); if (b) b.disabled = !inp.trim(); } scrollEnd(); }
     else if (keepQ) { const e = C.host.querySelector('[data-chat-q]'); e?.focus(); e?.setSelectionRange(e.value.length, e.value.length); }
   }
   async function mount(host) {
-    C.host = host; C.peer = null; C.thread = null;
+    C.host = host; C.peer = null; C.thread = null; C.lastHtml = '';
     render();
-    try { await Promise.all([loadUsers(), pushState()]); } catch (e) { host.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; }
+    try { await Promise.all([loadUsers(), pushState()]); } catch (e) { C.lastHtml = ''; host.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; }
     render(); startPoll(); startOnlinePoll();
     if (C.pending) { const id = C.pending; C.pending = null; openPeer(id); }
   }

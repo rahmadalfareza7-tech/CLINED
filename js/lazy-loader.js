@@ -41,7 +41,7 @@
     },
     admin: {
       styles: ['css/admin-people.css?v=3'],
-      scripts: ['js/admin-people.js?v=5', 'js/question-editor.js?v=1']
+      scripts: ['js/admin-people.js?v=6', 'js/question-editor.js?v=1']
     }
   };
 

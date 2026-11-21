@@ -259,7 +259,7 @@
 
   /* ───────── LOBI & ARENA VISUAL ───────── */
   const initials = n => esc(String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase());
-  const avatar = (p, cls = '') => `<span class="soc-av ${cls}${p?.online ? ' on' : ''}${p?.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${p?.avatarUrl ? `<img class="soc-av-img" src="${esc(p.avatarUrl)}" alt="" loading="lazy">` : initials(p?.name)}${p?.avatarDeco ? `<img class="avatar-deco-img" src="${esc(p.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
+  const avatar = (p, cls = '') => `<span class="soc-av ${cls}${p?.online ? ' on' : ''}${p?.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${p?.avatarUrl ? `<img class="soc-av-img" src="${esc(p.avatarUrl)}" alt="">` : initials(p?.name)}${p?.avatarDeco ? `<img class="avatar-deco-img" src="${esc(p.avatarDeco)}" alt="">` : ''}</span>`;
   const resolveCard = raw => {
     if (!raw || !raw.id) return null;
     if (window.CLINED_CARDS?.getCardById) return window.CLINED_CARDS.getCardById(raw.id, raw.star || 1);
@@ -663,9 +663,12 @@
   async function renderLobby(reload = true) {
     ensureShell();
     const body = $('socialBody'); if (!body) return;
-    if (reload) { if (!S.F) body.innerHTML = '<p class="soc-empty">Memuat Arena Duel…</p>'; try { await Promise.all([loadLobby(), loadBanks()]); } catch (e) { body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; } }
+    if (reload) { if (!S.F) { body.dataset.lastHtml = ''; body.innerHTML = '<p class="soc-empty">Memuat Arena Duel…</p>'; } try { await Promise.all([loadLobby(), loadBanks()]); } catch (e) { body.dataset.lastHtml = ''; body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; } }
+    const nextHtml = lobbyHTML().duel;
+    if (body.dataset.lastHtml === nextHtml) return;
     const keep = { code: $('socCode')?.value };
-    body.innerHTML = lobbyHTML().duel;
+    body.dataset.lastHtml = nextHtml;
+    body.innerHTML = nextHtml;
     if (keep.code && $('socCode')) $('socCode').value = keep.code;
   }
   const hubTabs = () => { const tab = (k, label, extra = '') => `<button type="button" role="tab" aria-selected="${S.hubTab === k}" class="${S.hubTab === k ? 'on' : ''}" data-soc-tab="${k}">${label}${extra}</button>`;
@@ -674,17 +677,21 @@
     ensureShell();
     const body = $('hubBody'); if (!body) return;
     if (reload) {
-      if (!S.F || (S.hubTab === 'status' && S.feed == null)) body.innerHTML = '<p class="soc-empty">Memuat…</p>';
-      try { await Promise.all([loadLobby(), S.hubTab === 'status' ? loadFeed() : Promise.resolve()]); } catch (e) { body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; }
+      if (!S.F || (S.hubTab === 'status' && S.feed == null)) { body.dataset.lastHtml = ''; body.innerHTML = '<p class="soc-empty">Memuat…</p>'; }
+      try { await Promise.all([loadLobby(), S.hubTab === 'status' ? loadFeed() : Promise.resolve()]); } catch (e) { body.dataset.lastHtml = ''; body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; }
     }
     if (S.hubTab === 'chat') {
       if (!reload && $('chatHost')) return;
+      body.dataset.lastHtml = '';
       body.innerHTML = hubTabs() + '<div id="chatHost"></div>';
       window.CLINED_CHAT?.mount($('chatHost')); return;
     }
     window.CLINED_CHAT?.stop?.();
+    const nextHtml = hubTabs() + (S.hubTab === 'status' ? statusHTML() : lobbyHTML().friends);
+    if (body.dataset.lastHtml === nextHtml) return;
     const keep = { user: $('socUser')?.value };
-    body.innerHTML = hubTabs() + (S.hubTab === 'status' ? statusHTML() : lobbyHTML().friends);
+    body.dataset.lastHtml = nextHtml;
+    body.innerHTML = nextHtml;
     if (keep.user && $('socUser')) $('socUser').value = keep.user;
   }
   const refreshActive = () => (activeView() === 'hubPage' ? renderHub(true) : renderLobby(true));

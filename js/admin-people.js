@@ -18,7 +18,7 @@
   const dayKey = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? 'Hari ini' : new Date(n - 864e5).toDateString() === d.toDateString() ? 'Kemarin' : d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' }); };
 
   function mount(host, { request, confirm, selfId }) {
-    const S = { tab: 'users', users: null, acts: null, q: '', aq: '', role: 'all', sort: 'role', filter: 'all', open: null, timer: null, busy: new Set(), refreshing: false };
+    const S = { tab: 'users', users: null, acts: null, q: '', aq: '', role: 'all', sort: 'role', filter: 'all', open: null, timer: null, busy: new Set(), refreshing: false, lastBodyHtml: '', lastStatsHtml: '' };
     host.classList.add('ap');
     host.innerHTML = `<div class="ap-hero"><div class="ap-hero-top"><div class="ap-hero-t"><span class="ap-kick">ADMIN</span><h3>Pengguna &amp; aktivitas</h3></div><button type="button" class="ap-refresh" data-ap-refresh aria-label="Segarkan data" title="Segarkan data">↻</button></div><div class="ap-stats" data-ap-stats></div></div>
       <div class="ap-tabs" role="tablist"><button type="button" role="tab" data-ap-tab="users" class="on">👥 Pengguna</button><button type="button" role="tab" data-ap-tab="acts">🕘 Aktivitas</button></div>
@@ -31,7 +31,8 @@
       const u = S.users || [], c = r => u.filter(x => x.role === r).length;
       const onlineNow = u.filter(x => x.online).length;
       const activeToday = u.filter(x => x.online || (x.lastLoginAt && (Date.now() - new Date(x.lastLoginAt).getTime()) < 864e5)).length;
-      $('[data-ap-stats]').innerHTML = S.users ? `<span><b>${onlineNow}</b>Online</span><span><b>${u.length}</b>Pengguna</span><span><b>${activeToday}</b>Aktif 24j</span><span><b>${c('admin')}</b>Admin</span><span><b>${c('helper')}</b>Helper</span><span><b>${u.filter(x => x.isMentor).length}</b>Mentor</span>` : '';
+      const nextStats = S.users ? `<span><b>${onlineNow}</b>Online</span><span><b>${u.length}</b>Pengguna</span><span><b>${activeToday}</b>Aktif 24j</span><span><b>${c('admin')}</b>Admin</span><span><b>${c('helper')}</b>Helper</span><span><b>${u.filter(x => x.isMentor).length}</b>Mentor</span>` : '';
+      if (nextStats !== S.lastStatsHtml) { S.lastStatsHtml = nextStats; $('[data-ap-stats]').innerHTML = nextStats; }
     };
 
     /* ───── Pengguna ───── */
@@ -68,7 +69,7 @@
       const tags = `<em class="ap-tag r-${esc(u.role)}">${ROLES[u.role]?.[0] || ''} ${ROLES[u.role]?.[1] || esc(u.role)}</em>${u.isMentor ? '<em class="ap-tag r-mentor">🙋 Tempat bertanya</em>' : ''}${xpBadge}`;
       return `<article class="ap-user${open ? ' open' : ''}${busy ? ' busy' : ''}">
         <button type="button" class="ap-user-head" data-ap-open="${esc(u.id)}" aria-expanded="${open}">
-          <span class="ap-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${u.avatarUrl ? `<img class="ap-av-img" src="${esc(u.avatarUrl)}" alt="" loading="lazy">` : esc(ini(u.name))}${u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="" loading="lazy">` : ''}</span>
+          <span class="ap-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${u.avatarUrl ? `<img class="ap-av-img" src="${esc(u.avatarUrl)}" alt="">` : esc(ini(u.name))}${u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : ''}</span>
           <span class="ap-user-main"><b${nc}>${esc(u.name)}${me ? ' <small class="ap-you">kamu</small>' : ''}</b><small>@${esc(u.username)} • ${rel(u.lastLoginAt)}${onlineTag}</small><span class="ap-tags">${tags}</span></span>
           <span class="ap-chev" aria-hidden="true">›</span></button>
         ${open ? `<div class="ap-user-body">
@@ -128,10 +129,14 @@
     };
 
     const draw = () => {
-      const body = $('[data-ap-body]'), keepQ = document.activeElement?.matches?.('[data-ap-q]'), keepAQ = document.activeElement?.matches?.('[data-ap-aq]');
-      body.innerHTML = S.tab === 'users' ? usersHTML() : actsHTML();
-      if (keepQ) { const e = body.querySelector('[data-ap-q]'); e?.focus(); e?.setSelectionRange(e.value.length, e.value.length); }
-      else if (keepAQ) { const e = body.querySelector('[data-ap-aq]'); e?.focus(); e?.setSelectionRange(e.value.length, e.value.length); }
+      const body = $('[data-ap-body]'), nextBodyHtml = S.tab === 'users' ? usersHTML() : actsHTML();
+      if (nextBodyHtml !== S.lastBodyHtml) {
+        S.lastBodyHtml = nextBodyHtml;
+        const keepQ = document.activeElement?.matches?.('[data-ap-q]'), keepAQ = document.activeElement?.matches?.('[data-ap-aq]');
+        body.innerHTML = nextBodyHtml;
+        if (keepQ) { const e = body.querySelector('[data-ap-q]'); e?.focus(); e?.setSelectionRange(e.value.length, e.value.length); }
+        else if (keepAQ) { const e = body.querySelector('[data-ap-aq]'); e?.focus(); e?.setSelectionRange(e.value.length, e.value.length); }
+      }
       stats();
     };
     const loadUsers = async () => { try { S.users = (await request('/api/admin/users')).users || []; } catch (e) { S.users = S.users || []; msg(e.message || 'Gagal memuat pengguna.', true); } };

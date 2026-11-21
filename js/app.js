@@ -3447,7 +3447,7 @@ function renderHomeProfileShowcase(){
   const el=$('homeProfileShowcase');
   if(!el)return;
   const user=typeof authCurrentUser==='function'?authCurrentUser():null;
-  if(!user){el.hidden=true;el.innerHTML='';return;}
+  if(!user){el.hidden=true;if(el.dataset.lastHtml){el.dataset.lastHtml='';el.innerHTML='';}return;}
   el.hidden=false;
   el.classList.toggle('has-banner',!!user.bannerUrl);
   const bg=user.bannerUrl?`<span class="chat-row-bg" style="background-image:url('${esc(user.bannerUrl)}')" aria-hidden="true"></span>`:'';
@@ -3456,12 +3456,15 @@ function renderHomeProfileShowcase(){
   const deco=user.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
   const nc=user.nameColor?` data-name-color="${esc(user.nameColor)}"`:'';
   const roleBadge=user.role==='admin'?'<em class="chat-badge b-admin">👑 Admin</em>':user.role==='helper'?'<em class="chat-badge b-helper">🛠️ Helper</em>':'';
-  el.innerHTML=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Buka halaman hias & ganti foto profil">${avInner}${deco}</span>
+  const nextHtml=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Buka halaman hias & ganti foto profil">${avInner}${deco}</span>
     <div class="home-profile-info">
       <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${roleBadge}</div>
       <small>@${esc(user.username)}</small>
     </div>
     <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>`;
+  if(el.dataset.lastHtml===nextHtml)return;
+  el.dataset.lastHtml=nextHtml;
+  el.innerHTML=nextHtml;
   const openHias=()=>window.CLINED_CARD_SHOP?.show?.('decos');
   const avBtn=$('homeProfileAvatarBtn');
   if(avBtn){avBtn.onclick=openHias;avBtn.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openHias();}};}
