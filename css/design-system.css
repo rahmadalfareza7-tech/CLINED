@@ -1525,3 +1525,340 @@ body.dark .chat-badge.b-xp100k {
 @media (prefers-reduced-motion: reduce) {
   .chat-badge.b-xp100k { animation: none; }
 }
+
+/* ── Header Live IV Drip Study Timer Pill ────────────────────────────────── */
+html body .header .hdr-iv-pill {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 36px !important;
+  padding: 0 11px 0 9px !important;
+  border-radius: 999px !important;
+  border: 2px solid color-mix(in srgb, var(--iv-fluid, #14b8a6) 45%, var(--line, #dbe4de)) !important;
+  border-bottom-width: 3px !important;
+  background: var(--card, #ffffff) !important;
+  color: var(--text, #1a2822) !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  font-variant-numeric: tabular-nums !important;
+  cursor: pointer !important;
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--iv-fluid, #14b8a6) 18%, transparent) !important;
+  transition: transform 0.14s var(--ease-ui), border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+html body .header .hdr-iv-pill[hidden] {
+  display: none !important;
+}
+html body .header .hdr-iv-pill:active {
+  transform: translateY(1px) scale(0.98) !important;
+}
+:root.dark html body .header .hdr-iv-pill,
+:root.dark .header .hdr-iv-pill {
+  background: #14211c !important;
+  color: #edf5f1 !important;
+}
+.hdr-iv-pill[data-fluid="nacl"] { --iv-fluid: #1cb0f6; }
+.hdr-iv-pill[data-fluid="blood"] { --iv-fluid: #f43f5e; }
+.hdr-iv-pill[data-fluid="vita"] { --iv-fluid: #58cc02; }
+.hdr-iv-pill[data-phase="rest"] { --iv-fluid: #10b981; }
+.hdr-iv-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted, #5d7067);
+}
+:root.dark .hdr-iv-icon { color: #b7cbc1; }
+.hdr-iv-time {
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.hdr-iv-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--iv-fluid, #14b8a6);
+  box-shadow: 0 0 8px var(--iv-fluid, #14b8a6);
+  flex: none;
+}
+.hdr-iv-pill[data-state="running"] .hdr-iv-dot {
+  animation: hdr-iv-pulse 1.4s ease-in-out infinite;
+}
+.hdr-iv-pill[data-state="running"] .hdr-iv-drop {
+  animation: hdr-iv-drip 1.35s cubic-bezier(0.45, 0, 0.85, 0.65) infinite;
+}
+.hdr-iv-pill[data-state="paused"] .hdr-iv-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.65);
+  animation: none;
+}
+.hdr-iv-pill[data-state="paused"] .hdr-iv-drop {
+  opacity: 0.35;
+  animation: none;
+}
+@keyframes hdr-iv-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.75); opacity: 0.45; }
+}
+@keyframes hdr-iv-drip {
+  0% { transform: translateY(-2.5px) scale(0.75); opacity: 0; }
+  25% { opacity: 1; transform: translateY(-1px) scale(1); }
+  85% { opacity: 1; transform: translateY(2.2px) scale(0.95); }
+  100% { opacity: 0; transform: translateY(3.4px) scale(0.6); }
+}
+@media (max-width: 460px) {
+  body.iv-timer-active .header .brand p { display: none !important; }
+  html body .header .hdr-iv-pill {
+    height: 33px !important;
+    padding: 0 8px 0 7px !important;
+    gap: 5px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* ── IV Drip Study Timer Page ────────────────────────────────────────────── */
+.iv-timer-card {
+  --iv-fluid-hi: #7dd3fc;
+  --iv-fluid-top: #1cb0f6;
+  --iv-fluid-bot: #0d9488;
+  --iv-accent-soft: rgba(28, 176, 246, 0.14);
+}
+.iv-timer-card[data-fluid="blood"] {
+  --iv-fluid-hi: #fda4af;
+  --iv-fluid-top: #fb7185;
+  --iv-fluid-bot: #e11d48;
+  --iv-accent-soft: rgba(244, 63, 94, 0.14);
+}
+.iv-timer-card[data-fluid="vita"] {
+  --iv-fluid-hi: #bef264;
+  --iv-fluid-top: #58cc02;
+  --iv-fluid-bot: #15803d;
+  --iv-accent-soft: rgba(88, 204, 2, 0.15);
+}
+.iv-timer-card[data-phase="rest"] {
+  --iv-fluid-hi: #6ee7b7;
+  --iv-fluid-top: #10b981;
+  --iv-fluid-bot: #047857;
+  --iv-accent-soft: rgba(16, 185, 129, 0.16);
+}
+.iv-timer-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1.5px solid var(--line, #dbe4de);
+  background: var(--card, #ffffff);
+}
+.iv-seg {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--surface, #edf3ef);
+  border: 1.5px solid var(--line, #dbe4de);
+  flex: 1 1 200px;
+}
+.iv-seg-btn {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted, #5d7067);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+.iv-seg-btn.active {
+  background: var(--card, #ffffff);
+  color: var(--text, #1a2822);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+}
+:root.dark .iv-seg-btn.active {
+  background: #273731;
+  color: #f4faf6;
+}
+.iv-fluid-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.iv-fluid-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line, #dbe4de);
+  background: var(--surface, #f2f7f4);
+  color: var(--muted, #5d7067);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.iv-fluid-chip.active {
+  border-color: var(--iv-fluid-top);
+  background: var(--iv-accent-soft);
+  color: var(--text, #1a2822);
+}
+.iv-fdot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.iv-fdot.nacl { background: linear-gradient(135deg, #38bdf8, #0d9488); }
+.iv-fdot.blood { background: linear-gradient(135deg, #fb7185, #e11d48); }
+.iv-fdot.vita { background: linear-gradient(135deg, #84cc16, #16a34a); }
+
+.iv-stage {
+  position: relative;
+  padding: 20px 20px 22px !important;
+  background: radial-gradient(75% 65% at 50% 34%, var(--iv-accent-soft), transparent 72%), var(--surface, #f2f7f4) !important;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+.iv-status-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.iv-stage .timer-mode-label {
+  margin-bottom: 0 !important;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: var(--iv-accent-soft);
+  color: var(--iv-fluid-bot) !important;
+}
+:root.dark .iv-stage .timer-mode-label {
+  color: var(--iv-fluid-hi) !important;
+}
+.iv-ml-pill {
+  font-size: 11px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line, #dbe4de);
+  background: var(--card, #ffffff);
+  color: var(--muted, #5d7067);
+}
+.iv-bag-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: 4px 0 2px;
+  filter: drop-shadow(0 12px 24px rgba(15, 23, 42, 0.09));
+}
+:root.dark .iv-bag-wrap {
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.42));
+}
+.iv-frame-stroke { stroke: #64748b; }
+.iv-frame-fill { fill: #64748b; }
+.iv-bag-bg { fill: rgba(255, 255, 255, 0.78); }
+.iv-chamber-bg { fill: rgba(255, 255, 255, 0.65); }
+.iv-ticks line { stroke: rgba(15, 23, 42, 0.28); }
+:root.dark .iv-frame-stroke { stroke: #94b4a8; }
+:root.dark .iv-frame-fill { fill: #94b4a8; }
+:root.dark .iv-bag-bg { fill: rgba(15, 24, 21, 0.75); }
+:root.dark .iv-chamber-bg { fill: rgba(15, 24, 21, 0.65); }
+:root.dark .iv-ticks line { stroke: rgba(255, 255, 255, 0.42); }
+
+.iv-liquid-group {
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.iv-wave-front {
+  animation: iv-wave-slide 3.4s linear infinite;
+  animation-play-state: paused;
+}
+.iv-wave-back {
+  animation: iv-wave-slide-rev 4.8s linear infinite;
+  animation-play-state: paused;
+}
+.iv-timer-card[data-state="running"] .iv-wave-front,
+.iv-timer-card[data-state="running"] .iv-wave-back {
+  animation-play-state: running;
+}
+@keyframes iv-wave-slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-140px); }
+}
+@keyframes iv-wave-slide-rev {
+  0% { transform: translateX(-140px); }
+  100% { transform: translateX(0); }
+}
+
+.iv-drop {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center top;
+}
+.iv-timer-card[data-state="running"] .iv-drop {
+  animation: iv-drop-fall 1.35s cubic-bezier(0.42, 0, 0.85, 0.68) infinite;
+}
+.iv-timer-card[data-state="paused"] .iv-drop {
+  opacity: 0.7;
+  transform: translateY(2px) scale(0.85);
+}
+@keyframes iv-drop-fall {
+  0% { transform: translateY(-2px) scale(0.35); opacity: 0; }
+  22% { transform: translateY(1px) scale(1); opacity: 1; }
+  78% { transform: translateY(20px) scale(0.95); opacity: 1; }
+  92% { transform: translateY(24px) scale(1.25, 0.45); opacity: 0.4; }
+  100% { transform: translateY(25px) scale(0.2); opacity: 0; }
+}
+
+.iv-bubble {
+  opacity: 0;
+}
+.iv-timer-card[data-state="running"] .iv-bubble.b1 {
+  animation: iv-bubble-rise 3.1s ease-in infinite;
+}
+.iv-timer-card[data-state="running"] .iv-bubble.b2 {
+  animation: iv-bubble-rise 4s ease-in 1.1s infinite;
+}
+.iv-timer-card[data-state="running"] .iv-bubble.b3 {
+  animation: iv-bubble-rise 3.6s ease-in 2s infinite;
+}
+@keyframes iv-bubble-rise {
+  0% { transform: translateY(10px) scale(0.5); opacity: 0; }
+  25% { opacity: 0.55; }
+  85% { opacity: 0.35; }
+  100% { transform: translateY(-84px) scale(1.1); opacity: 0; }
+}
+
+.iv-stage .timer-clock {
+  font-size: 56px !important;
+  letter-spacing: -2px !important;
+  margin-bottom: 2px !important;
+  font-variant-numeric: tabular-nums !important;
+}
+.iv-context-line {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--iv-fluid-bot);
+  margin-bottom: 2px;
+}
+:root.dark .iv-context-line {
+  color: var(--iv-fluid-hi);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hdr-iv-pill .hdr-iv-dot,
+  .hdr-iv-pill .hdr-iv-drop,
+  .iv-wave-front,
+  .iv-wave-back,
+  .iv-drop,
+  .iv-bubble {
+    animation: none !important;
+  }
+}
+

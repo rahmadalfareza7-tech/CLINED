@@ -214,102 +214,394 @@ window.CLINED_Leaderboard = (function () {
   return { load, openPage, refreshTeaser };
 })();
 
-// ── STUDY TIMER (POMODORO) ────────────────────────────────────────────────
+// ── STUDY TIMER (INFUS BELAJAR — POMODORO & STOPWATCH + HEADER PILL) ──────
 window.CLINED_StudyTimer = (function () {
   const MODES = {
     pomodoro: { work: 25 * 60, rest: 5 * 60, label: 'Pomodoro' },
     short: { work: 15 * 60, rest: 3 * 60, label: 'Fokus Singkat' },
     long: { work: 50 * 60, rest: 10 * 60, label: 'Deep Work' }
   };
+  const STATE_KEY = 'clined_iv_timer_state_v1';
+  const FLUID_KEY = 'clined_iv_timer_fluid_v1';
+  const FLUIDS = new Set(['nacl', 'blood', 'vita']);
 
   let interval = null;
   let running = false;
+  let kind = 'pomodoro'; // 'pomodoro' | 'stopwatch'
   let phase = 'work'; // 'work' | 'rest'
-  let seconds = MODES.pomodoro.work;
   let mode = 'pomodoro';
+  let fluid = (() => {
+    const saved = String(localStorage.getItem(FLUID_KEY) || 'nacl');
+    return FLUIDS.has(saved) ? saved : 'nacl';
+  })();
+  let seconds = MODES.pomodoro.work; // remaining in pomodoro, elapsed in stopwatch
+  let deadlineMs = 0; // wall-clock deadline when pomodoro is running
+  let startedAtMs = 0; // wall-clock anchor when stopwatch is running
   let sessionsToday = Number(localStorage.getItem('clined_timer_sessions_' + new Date().toDateString()) || 0);
 
+  const cardEl = () => document.getElementById('ivTimerCard');
   const clockEl = () => document.getElementById('timerClock');
   const labelEl = () => document.getElementById('timerModeLabel');
+  const volEl = () => document.getElementById('ivVolumeLabel');
+  const ctxEl = () => document.getElementById('ivContextLine');
+  const liquidEl = () => document.getElementById('ivLiquidGroup');
   const startBtn = () => document.getElementById('timerStartBtn');
+  const resetBtn = () => document.getElementById('timerResetBtn');
   const sessionEl = () => document.getElementById('timerSessionCount');
+  const modeGridEl = () => document.getElementById('timerModeGrid');
+  const hdrPillEl = () => document.getElementById('headerIvTimerPill');
+  const hdrTextEl = () => document.getElementById('headerIvTimerText');
+  const hdrFillEl = () => document.getElementById('hdrIvFillRect');
 
   function fmt(s) {
-    const m = Math.floor(s / 60);
-    return `${String(m).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
+    const safe = Math.max(0, Math.floor(Number(s) || 0));
+    const h = Math.floor(safe / 3600);
+    const m = Math.floor((safe % 3600) / 60);
+    const sec = safe % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  }
+
+  function currentTotalSec() {
+    if (kind === 'stopwatch') return 3600;
+    return MODES[mode][phase === 'work' ? 'work' : 'rest'];
+  }
+
+  function isSessionActive() {
+    if (running) return true;
+    if (kind === 'stopwatch') return seconds > 0;
+    return phase === 'rest' || seconds < currentTotalSec();
+  }
+
+  function computeFillRatio() {
+    if (kind === 'stopwatch') {
+      // Siklus visual 60 menit perlahan turun dari 100% -> 12% agar cairan tetap terasa mengalir
+      const cycleSec = 60 * 60;
+      const frac = 1 - ((seconds % cycleSec) / cycleSec);
+      return Math.max(0.12, Math.min(1, frac));
+    }
+    const total = Math.max(1, currentTotalSec());
+    return Math.max(0, Math.min(1, seconds / total));
+  }
+
+  function detectStudyContext() {
+    let blk = '';
+    try {
+      if (typeof window.getCurrentBlockId === 'function') blk = String(window.getCurrentBlockId() || '').trim();
+      if (!blk) blk = String(localStorage.getItem('current_block') || localStorage.getItem('last_worked_block') || '').trim();
+    } catch {}
+    const clean = blk.replace(/^BLOK\s+/i, '').trim().toUpperCase();
+    const roleText = kind === 'stopwatch'
+      ? 'Stopwatch Belajar'
+      : phase === 'rest'
+        ? 'Istirahat & Pemulihan'
+        : MODES[mode].label;
+    return clean ? `🩺 BLOK ${clean} • ${roleText}` : `🩺 ${roleText} • CLINED`;
+  }
+
+  function persistState() {
+    try {
+      if (!isSessionActive()) {
+        localStorage.removeItem(STATE_KEY);
+        return;
+      }
+      localStorage.setItem(STATE_KEY, JSON.stringify({
+        running, kind, mode, phase, seconds, deadlineMs, startedAtMs, updatedAt: Date.now()
+      }));
+    } catch {}
+  }
+
+  function hydrateState() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(STATE_KEY) || 'null');
+      if (!raw || typeof raw !== 'object') return;
+      if (raw.kind === 'pomodoro' || raw.kind === 'stopwatch') kind = raw.kind;
+      if (MODES[raw.mode]) mode = raw.mode;
+      if (raw.phase === 'work' || raw.phase === 'rest') phase = raw.phase;
+      running = Boolean(raw.running);
+      seconds = Math.max(0, Math.floor(Number(raw.seconds) || 0));
+      deadlineMs = Number(raw.deadlineMs) || 0;
+      startedAtMs = Number(raw.startedAtMs) || 0;
+      if (running) {
+        if (kind === 'pomodoro' && deadlineMs > 0) {
+          seconds = Math.max(0, Math.ceil((deadlineMs - Date.now()) / 1000));
+          if (seconds <= 0) {
+            running = false;
+            deadlineMs = 0;
+            completePomodoroPhase(true);
+            return;
+          }
+        } else if (kind === 'stopwatch' && startedAtMs > 0) {
+          seconds = Math.max(0, Math.floor((Date.now() - startedAtMs) / 1000));
+        }
+        startInterval();
+      }
+    } catch {}
+  }
+
+  function playChime() {
+    try {
+      if (typeof window.beep === 'function') { window.beep('level'); return; }
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      const ctx = new Ctx();
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(660, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(); osc.stop(ctx.currentTime + 0.46);
+    } catch {}
+  }
+
+  function completePomodoroPhase(silentRestore = false) {
+    if (phase === 'work') {
+      sessionsToday++;
+      try { localStorage.setItem('clined_timer_sessions_' + new Date().toDateString(), String(sessionsToday)); } catch {}
+      phase = 'rest';
+      seconds = MODES[mode].rest;
+      if (!silentRestore) {
+        if (typeof showToast === 'function') showToast('🎉 Infus fokus habis! 1 sesi selesai — waktunya istirahat.', false);
+        playChime();
+      }
+      if (running) deadlineMs = Date.now() + seconds * 1000;
+    } else {
+      phase = 'work';
+      seconds = MODES[mode].work;
+      if (!silentRestore) {
+        if (typeof showToast === 'function') showToast('💧 Istirahat selesai! Infus fokus baru siap mengalir.', false);
+        playChime();
+      }
+      if (running) deadlineMs = Date.now() + seconds * 1000;
+    }
+    persistState();
   }
 
   function render() {
-    const c = clockEl(); if (!c) return;
-    c.textContent = fmt(seconds);
+    const active = isSessionActive();
+    const state = running ? 'running' : active ? 'paused' : 'idle';
+    const ratio = computeFillRatio();
+    const text = fmt(seconds);
+
+    const card = cardEl();
+    if (card) {
+      card.dataset.fluid = fluid;
+      card.dataset.phase = kind === 'pomodoro' ? phase : 'work';
+      card.dataset.state = state;
+    }
+
+    const c = clockEl();
+    if (c) c.textContent = text;
+
     const l = labelEl();
-    if (l) l.textContent = phase === 'work' ? 'BELAJAR' : 'ISTIRAHAT';
+    if (l) {
+      l.textContent = kind === 'stopwatch'
+        ? (running ? 'STOPWATCH AKTIF' : active ? 'STOPWATCH JEDA' : 'STOPWATCH')
+        : (phase === 'work' ? (running ? 'INFUS FOKUS' : active ? 'INFUS JEDA' : 'SIAP INFUS') : 'ISTIRAHAT');
+    }
+
+    const vol = volEl();
+    if (vol) {
+      if (kind === 'stopwatch') {
+        const mlDripped = Math.round((seconds / 60) * 16.6);
+        vol.textContent = `${mlDripped} mL masuk`;
+      } else {
+        const mlLeft = Math.round(ratio * 500);
+        vol.textContent = `${mlLeft} mL`;
+      }
+    }
+
+    const liq = liquidEl();
+    if (liq) {
+      // Clip area tinggi 132px (y=42..174); translateY 0 = penuh, 134 = kosong
+      const offsetY = Math.round((1 - ratio) * 132);
+      liq.style.transform = `translateY(${offsetY}px)`;
+    }
+
+    const ctx = ctxEl();
+    if (ctx) ctx.textContent = detectStudyContext();
+
     const s = startBtn();
-    if (s) s.textContent = running ? '⏸ Jeda' : '▶ ' + (seconds < MODES[mode][phase === 'work' ? 'work' : 'rest'] ? 'Lanjutkan' : 'Mulai');
-    const se = sessionEl(); if (se) se.textContent = sessionsToday;
-    document.title = running ? `${fmt(seconds)} — CLINED` : 'CLINED — Clinical Education';
+    if (s) {
+      s.textContent = running
+        ? '⏸ Jeda'
+        : active
+          ? '▶ Lanjutkan'
+          : (kind === 'stopwatch' ? '▶ Mulai Stopwatch' : '▶ Mulai Infus');
+    }
+    const rb = resetBtn();
+    if (rb) rb.textContent = active ? '⏹ Selesai' : '↺ Reset';
+
+    const se = sessionEl();
+    if (se) se.textContent = sessionsToday;
+
+    const mg = modeGridEl();
+    if (mg) mg.hidden = (kind !== 'pomodoro');
+
+    document.querySelectorAll('.iv-seg-btn').forEach(b => {
+      const on = b.dataset.timerKind === kind;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+    document.querySelectorAll('.iv-fluid-chip').forEach(b => {
+      b.classList.toggle('active', b.dataset.ivFluid === fluid);
+    });
+    document.querySelectorAll('.timer-mode-choice').forEach(b => {
+      b.classList.toggle('active', b.dataset.timerMode === mode);
+    });
+
+    // Header Live IV Drip Pill — muncul otomatis saat Study Timer aktif di seluruh halaman
+    const pill = hdrPillEl();
+    if (pill) {
+      pill.hidden = !active;
+      pill.dataset.state = state;
+      pill.dataset.fluid = fluid;
+      pill.dataset.phase = kind === 'pomodoro' ? phase : 'work';
+      const ht = hdrTextEl();
+      if (ht) ht.textContent = text;
+      const hf = hdrFillEl();
+      if (hf) {
+        const h = Math.max(0, +(13.5 * ratio).toFixed(2));
+        const y = +(7 + (13.5 - h)).toFixed(2);
+        hf.setAttribute('y', String(y));
+        hf.setAttribute('height', String(h));
+      }
+    }
+    document.body.classList.toggle('iv-timer-active', active);
+    document.title = running ? `💧 ${text} — CLINED` : 'CLINED — Clinical Education';
+  }
+
+  function startInterval() {
+    clearInterval(interval);
+    interval = setInterval(tick, 500);
   }
 
   function tick() {
     if (!running) return;
-    seconds--;
-    if (seconds < 0) {
-      if (phase === 'work') {
-        sessionsToday++;
-        localStorage.setItem('clined_timer_sessions_' + new Date().toDateString(), sessionsToday);
-        phase = 'rest';
-        seconds = MODES[mode].rest;
-        if (typeof showToast === 'function') showToast('🎉 Sesi selesai! Waktunya istirahat.', false);
-        try { new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAA').play(); } catch {}
-      } else {
-        phase = 'work';
-        seconds = MODES[mode].work;
-        if (typeof showToast === 'function') showToast('⏱ Istirahat selesai. Ayo belajar lagi!', false);
-      }
+    if (kind === 'stopwatch') {
+      seconds = Math.max(0, Math.floor((Date.now() - startedAtMs) / 1000));
+      render();
+      return;
+    }
+    const rem = Math.ceil((deadlineMs - Date.now()) / 1000);
+    if (rem <= 0) {
+      seconds = 0;
+      completePomodoroPhase(false);
+    } else {
+      seconds = rem;
     }
     render();
   }
 
   function toggleRunning() {
-    running = !running;
-    if (running) { interval = setInterval(tick, 1000); }
-    else { clearInterval(interval); }
+    if (running) {
+      tick();
+      running = false;
+      clearInterval(interval);
+      deadlineMs = 0;
+      startedAtMs = 0;
+    } else {
+      running = true;
+      if (kind === 'stopwatch') {
+        startedAtMs = Date.now() - seconds * 1000;
+      } else {
+        if (seconds <= 0) seconds = currentTotalSec();
+        deadlineMs = Date.now() + seconds * 1000;
+      }
+      startInterval();
+    }
+    persistState();
     render();
   }
 
   function reset() {
-    running = false; clearInterval(interval);
-    phase = 'work'; seconds = MODES[mode].work;
+    const wasStopwatchDone = kind === 'stopwatch' && seconds >= 60;
+    running = false;
+    clearInterval(interval);
+    deadlineMs = 0;
+    startedAtMs = 0;
+    if (wasStopwatchDone) {
+      sessionsToday++;
+      try { localStorage.setItem('clined_timer_sessions_' + new Date().toDateString(), String(sessionsToday)); } catch {}
+      if (typeof showToast === 'function') showToast(`🎉 Sesi stopwatch ${fmt(seconds)} tercatat!`, false);
+    }
+    phase = 'work';
+    seconds = kind === 'stopwatch' ? 0 : MODES[mode].work;
+    persistState();
+    render();
+  }
+
+  function openPage() {
+    if (typeof window.show === 'function') window.show('studyTimerPage', { force: true });
+    else {
+      document.querySelectorAll('.view.active').forEach(v => v.classList.remove('active'));
+      document.getElementById('studyTimerPage')?.classList.add('active');
+    }
     render();
   }
 
   document.getElementById('timerStartBtn')?.addEventListener('click', toggleRunning);
   document.getElementById('timerResetBtn')?.addEventListener('click', reset);
+  document.getElementById('headerIvTimerPill')?.addEventListener('click', openPage);
+  document.getElementById('studyTimerMenuBtn')?.addEventListener('click', openPage);
+
+  document.getElementById('backFromStudyTimer')?.addEventListener('click', () => {
+    // Jangan matikan timer saat kembali ke Beranda agar infus tetap menetes di header!
+    if (typeof window.show === 'function') window.show('home');
+    else {
+      document.getElementById('studyTimerPage')?.classList.remove('active');
+      document.getElementById('home')?.classList.add('active');
+    }
+    render();
+  });
 
   document.addEventListener('click', e => {
+    const kindBtn = e.target.closest('[data-timer-kind]');
+    if (kindBtn) {
+      const next = kindBtn.dataset.timerKind;
+      if (next && next !== kind && (next === 'pomodoro' || next === 'stopwatch')) {
+        running = false; clearInterval(interval); deadlineMs = 0; startedAtMs = 0;
+        kind = next;
+        phase = 'work';
+        seconds = kind === 'stopwatch' ? 0 : MODES[mode].work;
+        persistState();
+        render();
+      }
+      return;
+    }
+    const fluidBtn = e.target.closest('[data-iv-fluid]');
+    if (fluidBtn) {
+      const f = fluidBtn.dataset.ivFluid;
+      if (FLUIDS.has(f)) {
+        fluid = f;
+        try { localStorage.setItem(FLUID_KEY, fluid); } catch {}
+        render();
+      }
+      return;
+    }
     const choice = e.target.closest('[data-timer-mode]');
-    if (!choice) return;
-    mode = choice.dataset.timerMode;
-    document.querySelectorAll('.timer-mode-choice').forEach(c => c.classList.toggle('active', c.dataset.timerMode === mode));
-    reset();
+    if (choice && MODES[choice.dataset.timerMode]) {
+      mode = choice.dataset.timerMode;
+      running = false; clearInterval(interval); deadlineMs = 0; startedAtMs = 0;
+      phase = 'work';
+      seconds = MODES[mode].work;
+      persistState();
+      render();
+    }
   });
 
-  document.getElementById('studyTimerMenuBtn')?.addEventListener('click', () => {
-    document.querySelectorAll('.view.active').forEach(v => v.classList.remove('active'));
-    document.getElementById('studyTimerPage')?.classList.add('active');
-    render();
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && running) tick();
   });
-  document.getElementById('backFromStudyTimer')?.addEventListener('click', () => {
-    document.getElementById('studyTimerPage')?.classList.remove('active');
-    document.getElementById('home')?.classList.add('active');
-    running = false; clearInterval(interval);
-    document.title = 'CLINED — Clinical Education';
-    render();
-  });
-
+  window.addEventListener('clined:view-change', () => { if (isSessionActive()) render(); });
   window.addEventListener('clined:sync-applied', () => {
     sessionsToday = Number(localStorage.getItem('clined_timer_sessions_' + new Date().toDateString()) || 0);
     render();
   });
+
+  hydrateState();
   render();
+  return { openPage, toggleRunning, reset, fmt };
 })();

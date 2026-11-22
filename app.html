@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="css/desktop.css?v=8">
 <link rel="stylesheet" href="css/home-ergonomic.css?v=18">
 <link rel="stylesheet" href="css/top-notify.css?v=6">
-<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=21">
+<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=22">
 <link rel="stylesheet" href="css/member-sidebar.css?v=4">
 </head>
 <body class="auth-pending">
@@ -44,6 +44,23 @@
     <div class="logo logo-image"><img src="assets/clined-logo.png" alt="CLINED"></div>
     <div><h1>CLINED</h1><p>Clinical Education By Reza FKUY23</p></div>
   </div>
+  <button id="headerIvTimerPill" class="hdr-iv-pill" type="button" hidden aria-label="Buka Study Timer Infus" title="Study Timer aktif — ketuk untuk membuka">
+    <span class="hdr-iv-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 30" width="16" height="20" fill="none">
+        <rect x="9" y="1.2" width="6" height="2.4" rx="1.2" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M12 3.6V5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <rect x="4.5" y="5.5" width="15" height="16.5" rx="4.2" stroke="currentColor" stroke-width="1.8"/>
+        <clipPath id="hdrIvBagClip"><rect x="6" y="7" width="12" height="13.5" rx="2.8"/></clipPath>
+        <g clip-path="url(#hdrIvBagClip)">
+          <rect id="hdrIvFillRect" x="6" y="7" width="12" height="13.5" fill="var(--iv-fluid, #14b8a6)"/>
+        </g>
+        <path d="M12 22v3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <circle class="hdr-iv-drop" cx="12" cy="27.2" r="1.9" fill="var(--iv-fluid, #14b8a6)"/>
+      </svg>
+    </span>
+    <span class="hdr-iv-time" id="headerIvTimerText">25:00</span>
+    <span class="hdr-iv-dot" aria-hidden="true"></span>
+  </button>
   <button id="pwaInstallHeaderBtn" class="pwa-dl-btn" type="button" data-pwa-install aria-label="Download CLINED ke Homescreen" title="Download CLINED ke Homescreen">⬇ <span>Download</span></button>
   <button id="soundBtn" class="icon-btn" aria-label="Suara">🔊</button>
   <button id="headerNavBtn" class="icon-btn" aria-label="Navigasi soal" title="Navigasi soal">☷</button>
@@ -1009,23 +1026,110 @@
   </div>
 </section>
 
-<!-- STUDY TIMER PAGE -->
+<!-- STUDY TIMER PAGE (INFUS BELAJAR) -->
 <section id="studyTimerPage" class="view exam-page-view">
   <div class="exam-page-header">
     <button class="back-link" id="backFromStudyTimer" type="button">‹ Beranda</button>
-    <div><div class="eyebrow">CLINED • FOKUS</div><h2>⏱ Study Timer</h2><p>Metode Pomodoro — 25 menit belajar, 5 menit istirahat.</p></div>
+    <div><div class="eyebrow">CLINED • INFUS BELAJAR</div><h2>💧 Study Timer</h2><p>Infus terus menetes saat kamu belajar — tetap berjalan di header walau pindah halaman.</p></div>
   </div>
-  <div class="card nested-card study-timer-card">
-    <div class="timer-display" id="timerDisplay">
-      <div class="timer-mode-label" id="timerModeLabel">BELAJAR</div>
+  <div class="card nested-card study-timer-card iv-timer-card" id="ivTimerCard" data-fluid="nacl" data-state="idle">
+    <div class="iv-timer-top">
+      <div class="iv-seg" role="tablist" aria-label="Jenis timer">
+        <button type="button" class="iv-seg-btn active" data-timer-kind="pomodoro" role="tab" aria-selected="true">🍅 Pomodoro</button>
+        <button type="button" class="iv-seg-btn" data-timer-kind="stopwatch" role="tab" aria-selected="false">⏱ Stopwatch</button>
+      </div>
+      <div class="iv-fluid-picker" aria-label="Pilih cairan infus">
+        <button type="button" class="iv-fluid-chip active" data-iv-fluid="nacl" title="NaCl / RL (Teal-Sky)"><span class="iv-fdot nacl"></span>NaCl</button>
+        <button type="button" class="iv-fluid-chip" data-iv-fluid="blood" title="Transfusi PRC (Merah Klinis)"><span class="iv-fdot blood"></span>PRC</button>
+        <button type="button" class="iv-fluid-chip" data-iv-fluid="vita" title="Vitamin (Hijau CLINED)"><span class="iv-fdot vita"></span>Vit B</button>
+      </div>
+    </div>
+
+    <div class="timer-display iv-stage" id="timerDisplay">
+      <div class="iv-status-row">
+        <span class="timer-mode-label" id="timerModeLabel">INFUS FOKUS</span>
+        <span class="iv-ml-pill" id="ivVolumeLabel">500 mL</span>
+      </div>
+
+      <div class="iv-bag-wrap" aria-hidden="true">
+        <svg class="iv-bag-svg" viewBox="0 0 180 250" width="168" height="232" fill="none">
+          <defs>
+            <linearGradient id="ivFluidGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--iv-fluid-top, #38bdf8)"/>
+              <stop offset="100%" stop-color="var(--iv-fluid-bot, #0d9488)"/>
+            </linearGradient>
+            <linearGradient id="ivWaveTopGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--iv-fluid-hi, #7dd3fc)" stop-opacity="0.72"/>
+              <stop offset="100%" stop-color="var(--iv-fluid-top, #38bdf8)" stop-opacity="0.92"/>
+            </linearGradient>
+            <linearGradient id="ivGlassSheen" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
+              <stop offset="35%" stop-color="#ffffff" stop-opacity="0.06"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+            <clipPath id="ivBagInnerClip">
+              <rect x="34" y="42" width="112" height="132" rx="28"/>
+            </clipPath>
+          </defs>
+
+          <!-- Gantungan infus -->
+          <rect x="74" y="8" width="32" height="14" rx="7" class="iv-frame-stroke" stroke-width="4.2"/>
+          <path d="M90 22V38" class="iv-frame-stroke" stroke-width="4.2" stroke-linecap="round"/>
+
+          <!-- Badan kantong infus (background transparan) -->
+          <rect x="30" y="38" width="120" height="140" rx="31" class="iv-bag-bg"/>
+
+          <!-- Cairan infus bergelombang yang terus turun sesuai sisa waktu -->
+          <g clip-path="url(#ivBagInnerClip)">
+            <g id="ivLiquidGroup" class="iv-liquid-group" style="transform: translateY(0px)">
+              <!-- Gelombang belakang -->
+              <path class="iv-wave iv-wave-back" d="M 10 46 Q 45 38 80 46 T 150 46 T 220 46 T 290 46 L 290 205 L 10 205 Z" fill="url(#ivWaveTopGrad)"/>
+              <!-- Gelombang depan + badan cairan -->
+              <path class="iv-wave iv-wave-front" d="M 10 49 Q 45 56 80 49 T 150 49 T 220 49 T 290 49 L 290 205 L 10 205 Z" fill="url(#ivFluidGrad)"/>
+              <!-- Gelembung mikro naik saat aktif -->
+              <circle class="iv-bubble b1" cx="62" cy="150" r="2.6" fill="#ffffff" fill-opacity="0.45"/>
+              <circle class="iv-bubble b2" cx="108" cy="162" r="2.1" fill="#ffffff" fill-opacity="0.38"/>
+              <circle class="iv-bubble b3" cx="84" cy="142" r="1.8" fill="#ffffff" fill-opacity="0.42"/>
+            </g>
+            <!-- Kilau kaca di sisi kiri -->
+            <rect x="34" y="42" width="36" height="132" fill="url(#ivGlassSheen)"/>
+          </g>
+
+          <!-- Garis skala volume mL -->
+          <g class="iv-ticks" stroke-linecap="round">
+            <line x1="46" y1="64" x2="62" y2="64" stroke-width="2.6"/>
+            <line x1="46" y1="86" x2="57" y2="86" stroke-width="2.2"/>
+            <line x1="46" y1="108" x2="64" y2="108" stroke-width="2.6"/>
+            <line x1="46" y1="130" x2="57" y2="130" stroke-width="2.2"/>
+            <line x1="46" y1="152" x2="62" y2="152" stroke-width="2.6"/>
+          </g>
+
+          <!-- Outline kaca kantong infus -->
+          <rect x="30" y="38" width="120" height="140" rx="31" class="iv-frame-stroke" stroke-width="4.4"/>
+
+          <!-- Port bawah + Drip Chamber (bilik tetes) -->
+          <rect x="81" y="178" width="18" height="10" rx="4" class="iv-frame-fill"/>
+          <rect x="78" y="188" width="24" height="36" rx="10" class="iv-chamber-bg iv-frame-stroke" stroke-width="3.2"/>
+          <!-- Meniskus cairan di dasar bilik tetes -->
+          <path d="M80 214 Q90 217 100 214 L100 217 A8 8 0 0 1 92 224 L88 224 A8 8 0 0 1 80 217 Z" fill="var(--iv-fluid-bot, #0d9488)" fill-opacity="0.88"/>
+          <!-- Tetesan animasi jatuh di dalam bilik tetes -->
+          <path class="iv-drop" d="M90 190 C90 190 94.5 196.2 94.5 199.2 A4.5 4.5 0 1 1 85.5 199.2 C85.5 196.2 90 190 90 190 Z" fill="var(--iv-fluid-top, #38bdf8)"/>
+          <!-- Selang infus keluar -->
+          <path d="M90 224V244" class="iv-frame-stroke" stroke-width="3.8" stroke-linecap="round"/>
+          <path d="M90 225V243" stroke="var(--iv-fluid-bot, #0d9488)" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+        </svg>
+      </div>
+
       <div class="timer-clock" id="timerClock" aria-live="polite" aria-atomic="true">25:00</div>
-      <div class="timer-session-count"><span id="timerSessionCount">0</span> sesi selesai hari ini</div>
+      <div class="iv-context-line" id="ivContextLine">🩺 Fokus Belajar • CLINED</div>
+      <div class="timer-session-count"><span id="timerSessionCount">0</span> sesi infus selesai hari ini</div>
     </div>
+
     <div class="timer-controls">
-      <button class="timer-btn timer-start" id="timerStartBtn" type="button">▶ Mulai</button>
-      <button class="timer-btn timer-reset" id="timerResetBtn" type="button">↺ Reset</button>
+      <button class="timer-btn timer-start" id="timerStartBtn" type="button">▶ Mulai Infus</button>
+      <button class="timer-btn timer-reset" id="timerResetBtn" type="button">⏹ Selesai</button>
     </div>
-    <div class="timer-mode-grid">
+    <div class="timer-mode-grid" id="timerModeGrid">
       <button class="timer-mode-choice active" data-timer-mode="pomodoro" type="button">🍅 Pomodoro<small>25 / 5 mnt</small></button>
       <button class="timer-mode-choice" data-timer-mode="short" type="button">⚡ Fokus Singkat<small>15 / 3 mnt</small></button>
       <button class="timer-mode-choice" data-timer-mode="long" type="button">🧠 Deep Work<small>50 / 10 mnt</small></button>
@@ -1034,10 +1138,10 @@
   <div class="card nested-card">
     <div class="section-title">Tips belajar efektif</div>
     <ul class="timer-tips">
-      <li>Singkirkan HP dan notifikasi selama sesi belajar.</li>
-      <li>Tulis target soal sebelum mulai timer.</li>
-      <li>Istirahat benar-benar: jalan, minum air, peregangan.</li>
-      <li>Setelah 4 sesi, ambil istirahat panjang 20–30 menit.</li>
+      <li>Aktifkan infus lalu kerjakan soal seperti biasa — timer tetap menetes di header atas.</li>
+      <li>Tulis target soal sebelum mulai sesi infus agar fokus tetap terjaga.</li>
+      <li>Saat fase istirahat, lepaskan layar sejenak: minum air dan peregangan.</li>
+      <li>Setelah 4 sesi infus, ambil istirahat panjang 20–30 menit.</li>
     </ul>
   </div>
 </section>
@@ -1091,7 +1195,7 @@
 <script src="js/content-manager.js?v=26"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>
 <script src="js/inline-boot.js?v=3"></script>
-<script src="js/new-features.js?v=18"></script>
+<script src="js/new-features.js?v=19"></script>
 <script src="js/clinical-quest.js?v=18"></script>
 
 <script id="clined-floating-dashboard-navigation-final">
