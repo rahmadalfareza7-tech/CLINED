@@ -509,5 +509,11 @@
     }
   });
 
+  window.addEventListener('clined:sync-applied', () => {
+    S.done = readIdSet(DONE_KEY, LEGACY_DONE_KEY);
+    S.star = readIdSet(STAR_KEY, LEGACY_STAR_KEY);
+    if (document.getElementById('kedkelSummaryPage')?.classList.contains('active')) render();
+  });
+
   window.CLINED_KEDKEL_SUMMARY = { open, render };
 })();

@@ -559,7 +559,7 @@ function wrongFx(playBeep=true){
 }
 
 function initTheme(){
-  if(get(KEY.theme,"light")==="dark")document.documentElement.classList.add("dark");
+  document.documentElement.classList.toggle("dark",get(KEY.theme,"light")==="dark");
   soundEnabled=get(KEY.sound,true);updateThemeIcon();updateSoundIcon();
 }
 function updateThemeIcon(){
@@ -3388,9 +3388,21 @@ async function authRestoreSession(){
   catch{authServerUser=null;}
   renderAccount();renderAccountAuthState();
   try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
-  if(authServerUser){window.CLINED_AUTH_GATE?.unlock?.();restoreLastView();}
+  if(authServerUser){
+    window.CLINED_AUTH_GATE?.unlock?.();
+    window.dispatchEvent(new Event('clined:auth-ready'));
+    restoreLastView();
+  }
   else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
 }
+window.addEventListener('clined:sync-applied',()=>{
+  try{initTheme();}catch{}
+  try{renderXP();}catch{}
+  try{if(typeof renderHomeClinicalDashboard==='function')renderHomeClinicalDashboard();}catch{}
+  try{if(typeof renderAchievements==='function'&&$('achievementsPage')?.classList.contains('active'))renderAchievements();}catch{}
+  try{if(typeof renderWrong==='function'&&$('wrong')?.classList.contains('active'))renderWrong();}catch{}
+  try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
+});
 function authSetError(id,message){const el=$(id);if(!el)return;el.textContent=message;el.hidden=!message;}
 function authOpenModal(mode='signup',opts={}){
   const modal=$('accountAuthModal');if(!modal)return;

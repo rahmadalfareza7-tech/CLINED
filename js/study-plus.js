@@ -275,6 +275,10 @@
     if (e.detail === 'studyPlusPage') renderPage();
   });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { renderTodayCard(); checkReminder(); } });
+  window.addEventListener('clined:sync-applied', () => {
+    renderTodayCard();
+    if (document.getElementById('studyPlusPage')?.classList.contains('active')) renderPage();
+  });
   setInterval(checkReminder, 60000);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   window.CLINED_STUDY_PLUS = { startToday, buildToday, computePlan, exportBackup, renderTodayCard };

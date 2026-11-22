@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS duel_career_stats (
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  wins INTEGER NOT NULL DEFAULT 0,
+  losses INTEGER NOT NULL DEFAULT 0,
+  draws INTEGER NOT NULL DEFAULT 0,
+  total INTEGER NOT NULL DEFAULT 0,
+  streak INTEGER NOT NULL DEFAULT 0,
+  best_streak INTEGER NOT NULL DEFAULT 0,
+  rp INTEGER NOT NULL DEFAULT 0,
+  last_card JSONB,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_duel_career_stats_rp ON duel_career_stats (rp DESC, wins DESC);
+
+CREATE TABLE IF NOT EXISTS duel_career_applied (
+  duel_id UUID PRIMARY KEY REFERENCES duels(id) ON DELETE CASCADE,
+  host_rp_delta INTEGER NOT NULL DEFAULT 0,
+  host_prev_rp INTEGER NOT NULL DEFAULT 0,
+  host_new_rp INTEGER NOT NULL DEFAULT 0,
+  guest_rp_delta INTEGER NOT NULL DEFAULT 0,
+  guest_prev_rp INTEGER NOT NULL DEFAULT 0,
+  guest_new_rp INTEGER NOT NULL DEFAULT 0,
+  applied_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

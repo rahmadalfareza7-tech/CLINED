@@ -339,6 +339,9 @@ Jawaban: B`;
   });
 
   window.addEventListener('clined:view-change', () => ensureShell());
+  window.addEventListener('clined:sync-applied', () => {
+    if (document.getElementById('userBankPage')?.classList.contains('active')) render();
+  });
   const init = () => ensureShell();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   window.CLINED_USERBANK = { startPractice, _index: index, _loadDeck: loadDeck, _addToDeck: addToDeck, _exportObj: exportObj };

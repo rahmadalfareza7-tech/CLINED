@@ -298,5 +298,9 @@ window.CLINED_StudyTimer = (function () {
     render();
   });
 
+  window.addEventListener('clined:sync-applied', () => {
+    sessionsToday = Number(localStorage.getItem('clined_timer_sessions_' + new Date().toDateString()) || 0);
+    render();
+  });
   render();
 })();
