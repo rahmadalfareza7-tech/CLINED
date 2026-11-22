@@ -107,7 +107,7 @@
         return `<span class="ap-chg">@${esc(a.metadata.targetUsername)} • +${Number(a.metadata.amount || 0).toLocaleString('id-ID')} 💎</span>`;
       }
       if (a.action === 'admin_give_diamond_all') {
-        return `<span class="ap-chg">+${Number(a.metadata?.amount || 0).toLocaleString('id-ID')} 💎 ke ${Number(a.metadata?.recipients || 0)} member</span>`;
+        return `<span class="ap-chg">+${Number(a.metadata?.amount || 0).toLocaleString('id-ID')} 💎 ke ${Number(a.metadata?.recipients || 0)} member online</span>`;
       }
       if (a.action === 'admin_reset_code' && a.metadata?.targetUsername) {
         return `<span class="ap-chg">@${esc(a.metadata.targetUsername)} • berlaku ${esc(a.metadata.expiresMinutes || 30)}m</span>`;

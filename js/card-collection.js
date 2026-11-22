@@ -1335,9 +1335,9 @@
     el.setAttribute('role', 'status');
     el.setAttribute('aria-live', 'polite');
     const msg = isAll
-      ? `Admin telah memberikan semua orang tambahan diamond sebanyak <b>${amtText} 💎</b>`
+      ? `Admin telah memberikan semua orang yang sedang online tambahan diamond sebanyak <b>${amtText} 💎</b>`
       : `Admin telah memberikan kamu tambahan diamond sebanyak <b>${amtText} 💎</b>`;
-    el.innerHTML = `<div class="dgb-ico" aria-hidden="true">💎</div><div class="dgb-body"><div class="dgb-title">${isAll ? 'Bonus Diamond Untuk Semua' : 'Bonus Diamond Dari Admin'}</div><div class="dgb-msg">${msg}</div></div><button type="button" class="dgb-x" aria-label="Tutup">✕</button>`;
+    el.innerHTML = `<div class="dgb-ico" aria-hidden="true">💎</div><div class="dgb-body"><div class="dgb-title">${isAll ? 'Bonus Diamond Member Online' : 'Bonus Diamond Dari Admin'}</div><div class="dgb-msg">${msg}</div></div><button type="button" class="dgb-x" aria-label="Tutup">✕</button>`;
     const dismiss = () => {
       clearTimeout(grantBannerTimer);
       el.classList.remove('show');

@@ -2964,11 +2964,11 @@ async function runAdminGiveDiamondAllCommand(rawQuery){
   }
   const ok=typeof window.clinedConfirm==='function'
     ? await window.clinedConfirm({
-        title:`Berikan +${amount.toLocaleString('id-ID')} 💎 ke semua member?`,
-        text:'Semua member akan langsung menerima tambahan diamond dan pemberitahuan meluncur dari atas.',
-        ok:'Ya, kirim ke semua'
+        title:`Berikan +${amount.toLocaleString('id-ID')} 💎 ke semua member online?`,
+        text:'Hanya member yang terdeteksi sedang online saat ini yang akan menerima tambahan diamond dan pemberitahuan dari atas.',
+        ok:'Ya, kirim ke yang online'
       })
-    : window.confirm(`Berikan +${amount.toLocaleString('id-ID')} diamond ke semua member?`);
+    : window.confirm(`Berikan +${amount.toLocaleString('id-ID')} diamond ke semua member yang sedang online?`);
   if(!ok)return true;
   const input=$('homeQuestionSearch');
   if(input)input.value='';
