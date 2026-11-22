@@ -72,7 +72,33 @@
     { id: '20-golden-honeybee',     name: 'Golden Honeybee',     cat: 'Cewek', icon: '🐝', price: 12, desc: 'Cewek • Madu emas hangat',           img: 'assets/banners/20-golden-honeybee.svg?v=2' },
     // Admin Exclusive
     { id: '21-creation-touch',      name: 'Creation Touch',      cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan penciptaan', img: 'assets/banners/21-creation-touch.svg?v=2' },
-    { id: '22-abyssal-touch',       name: 'Abyssal Touch',       cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan kegelapan abisal', img: 'assets/banners/22-abyssal-touch.svg?v=2' }
+    { id: '22-abyssal-touch',       name: 'Abyssal Touch',       cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan kegelapan abisal', img: 'assets/banners/22-abyssal-touch.svg?v=2' },
+    // Vol. 2 — 10 Cowok
+    { id: '23-pressed-glass',       name: 'Pressed Glass',       cat: 'Cowok', icon: '🧊', price: 8,  desc: 'Cowok • Kaca tekan bertekstur',      img: 'assets/banners/23-pressed-glass.svg?v=2' },
+    { id: '24-manga-rage',          name: 'Manga Rage',          cat: 'Cowok', icon: '💢', price: 12, desc: 'Cowok • Energi amarah manga',        img: 'assets/banners/24-manga-rage.svg?v=2' },
+    { id: '25-vengeance-flame',     name: 'Vengeance Flame',     cat: 'Cowok', icon: '🔥', price: 15, desc: 'Cowok • Kobaran api dendam',         img: 'assets/banners/25-vengeance-flame.svg?v=2' },
+    { id: '26-pixel-cityscape',     name: 'Pixel Cityscape',     cat: 'Cowok', icon: '🌆', price: 12, desc: 'Cowok • Kota piksel malam',          img: 'assets/banners/26-pixel-cityscape.svg?v=2' },
+    { id: '27-volt-strike',         name: 'Volt Strike',         cat: 'Cowok', icon: '⚡', price: 15, desc: 'Cowok • Sambaran petir neon',        img: 'assets/banners/27-volt-strike.svg?v=2' },
+    { id: '28-arcade-overdrive',    name: '8-Bit Overdrive',     cat: 'Cowok', icon: '🕹️', price: 15, desc: 'Cowok • Overdrive arcade retro',     img: 'assets/banners/28-arcade-overdrive.svg?v=2' },
+    { id: '29-street-crown',        name: 'Street Crown',        cat: 'Cowok', icon: '👑', price: 18, desc: 'Cowok • Mahkota grafiti jalanan',    img: 'assets/banners/29-street-crown.svg?v=2' },
+    { id: '30-caution-zone',        name: 'Caution Zone',        cat: 'Cowok', icon: '⚠️', price: 12, desc: 'Cowok • Zona peringatan industrial', img: 'assets/banners/30-caution-zone.svg?v=2' },
+    { id: '31-pixel-phantom',       name: 'Pixel Phantom',       cat: 'Cowok', icon: '👾', price: 15, desc: 'Cowok • Hantu piksel misterius',     img: 'assets/banners/31-pixel-phantom.svg?v=2' },
+    { id: '32-higanbana-ink',       name: 'Higanbana Ink',       cat: 'Cowok', icon: '🌺', price: 18, desc: 'Cowok • Tinta bunga higanbana',      img: 'assets/banners/32-higanbana-ink.svg?v=2' },
+    // Vol. 2 — 10 Cewek
+    { id: '33-cat-beans',           name: 'Cat Beans',           cat: 'Cewek', icon: '🐾', price: 12, desc: 'Cewek • Telapak kucing gemas',       img: 'assets/banners/33-cat-beans.svg?v=2' },
+    { id: '34-tropical-hibiscus',   name: 'Tropical Hibiscus',   cat: 'Cewek', icon: '🌺', price: 12, desc: 'Cewek • Kembang sepatu tropis',      img: 'assets/banners/34-tropical-hibiscus.svg?v=2' },
+    { id: '35-spring-meadow',       name: 'Spring Meadow',       cat: 'Cewek', icon: '🌼', price: 8,  desc: 'Cewek • Padang bunga musim semi',    img: 'assets/banners/35-spring-meadow.svg?v=2' },
+    { id: '36-twilight-spark',      name: 'Twilight Spark',      cat: 'Cewek', icon: '✨', price: 12, desc: 'Cewek • Kilau senja lembut',         img: 'assets/banners/36-twilight-spark.svg?v=2' },
+    { id: '37-sakura-corner',       name: 'Sakura Corner',       cat: 'Cewek', icon: '🌸', price: 15, desc: 'Cewek • Sudut bunga sakura',         img: 'assets/banners/37-sakura-corner.svg?v=2' },
+    { id: '38-berry-milk',          name: 'Berry Milk',          cat: 'Cewek', icon: '🍓', price: 12, desc: 'Cewek • Susu stroberi pastel',       img: 'assets/banners/38-berry-milk.svg?v=2' },
+    { id: '39-moon-bunny',          name: 'Moon Bunny',          cat: 'Cewek', icon: '🐰', price: 15, desc: 'Cewek • Kelinci bulan sabit',        img: 'assets/banners/39-moon-bunny.svg?v=2' },
+    { id: '40-peach-fizz',          name: 'Peach Fizz',          cat: 'Cewek', icon: '🍑', price: 12, desc: 'Cewek • Soda persik segar',          img: 'assets/banners/40-peach-fizz.svg?v=2' },
+    { id: '41-coquette-bow',        name: 'Coquette Bow',        cat: 'Cewek', icon: '🎀', price: 18, desc: 'Cewek • Pita coquette manis',        img: 'assets/banners/41-coquette-bow.svg?v=2' },
+    { id: '42-froggy-leaf',         name: 'Froggy Leaf',         cat: 'Cewek', icon: '🐸', price: 8,  desc: 'Cewek • Katak kecil & daun segar',   img: 'assets/banners/42-froggy-leaf.svg?v=2' },
+    // Vol. 2 — 3 Klub Bola
+    { id: '43-manchester-united',   name: 'Manchester United',   cat: 'Klub Bola', icon: '⚽', price: 18, desc: 'Klub Bola • Red Devils Edition',  img: 'assets/banners/43-manchester-united.svg?v=2' },
+    { id: '44-real-madrid',         name: 'Real Madrid',         cat: 'Klub Bola', icon: '⚽', price: 18, desc: 'Klub Bola • Los Blancos Edition', img: 'assets/banners/44-real-madrid.svg?v=2' },
+    { id: '45-fc-barcelona',        name: 'FC Barcelona',        cat: 'Klub Bola', icon: '⚽', price: 18, desc: 'Klub Bola • Blaugrana Edition',   img: 'assets/banners/45-fc-barcelona.svg?v=2' }
   ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
@@ -620,7 +646,15 @@
         ${chainOverlay}
       </div>`;
     }).join('');
-    const bCats = [['all', `Semua (${BANNER_CATALOG.length})`], ['Cowok', '👦 Cowok (10)'], ['Cewek', '👧 Cewek (10)'], ['Eksklusif', '👑 Admin (1)']];
+    const countCat = c => BANNER_CATALOG.filter(b => b.cat === c).length;
+    const nCowok = countCat('Cowok'), nCewek = countCat('Cewek'), nBola = countCat('Klub Bola'), nAdmin = countCat('Eksklusif');
+    const bCats = [
+      ['all', `Semua (${BANNER_CATALOG.length})`],
+      ['Cowok', `👦 Cowok (${nCowok})`],
+      ['Cewek', `👧 Cewek (${nCewek})`],
+      ['Klub Bola', `⚽ Klub Bola (${nBola})`],
+      ['Eksklusif', `👑 Admin (${nAdmin})`]
+    ];
     const bPills = bCats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${bannerFilter === k ? ' on' : ''}" data-banner-filter="${esc(k)}">${lbl}</button>`).join('');
     const freeBannerNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Nameplate Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
     return `${buildProfileHeroCard()}
@@ -629,7 +663,7 @@
         <div class="name-color-grid">${colorPills}</div>
       </div>
       ${freeBannerNotice}
-      <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>10 Cowok • 10 Cewek • 1 Admin</b></div>
+      <div class="card-collection-head"><span>Background Profil Chat (${ownedSet.size}/${BANNER_CATALOG.length})</span><b>${nCowok} Cowok • ${nCewek} Cewek • ${nBola} Klub Bola • ${nAdmin} Admin</b></div>
       <div class="deco-filter-row">${bPills}</div>
       <div class="banner-shop-list">${items}</div>`;
   }
