@@ -75,6 +75,7 @@
         bannerUrl: me.bannerUrl || '',
         nameColor: me.nameColor || '',
         avatarDeco: me.avatarDeco || '',
+        xp100k: Boolean(me.xp100k),
         badges: badgesForUser(me),
         online: true,
         isMe: true,
@@ -104,6 +105,7 @@
           : u.isMe
             ? '<span class="ms-role-tag me">Kamu</span>'
             : '';
+    const xpBadge = u.xp100k ? '<span class="ms-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K</span>' : '';
     const sub = u.lastText
       ? u.lastText
       : u.isMe
@@ -119,7 +121,7 @@
     return `<button type="button" class="ms-row${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
       <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
       <span class="ms-meta">
-        <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${roleTag}</span>
+        <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${roleTag}</span>
         <span class="ms-sub">${esc(sub)}</span>
       </span>
       ${unread}
@@ -267,6 +269,7 @@
         : badges.includes('mentor')
           ? '<span class="ms-role-tag mentor">Mentor</span>'
           : '';
+    const xpBadge = u.xp100k ? '<span class="ms-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</span>' : '';
 
     const layer = document.createElement('div');
     layer.className = 'ms-pop-layer';
@@ -275,7 +278,7 @@
         <div class="ms-pop-hero${hasBanner ? ' has-banner' : ''}"${bannerStyle}>
           <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
           <span class="ms-meta">
-            <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${roleTag}</span>
+            <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${roleTag}</span>
             <span class="ms-sub">@${esc(u.username)} • ${u.online ? 'Online' : 'Offline'}</span>
           </span>
           <button type="button" class="ms-pop-close" data-msp-close aria-label="Tutup">✕</button>

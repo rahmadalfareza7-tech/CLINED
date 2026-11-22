@@ -1185,6 +1185,7 @@
     es.addEventListener('chat', ev => { lastBeatAt = Date.now(); window.CLINED_CHAT?.onPush(JSON.parse(ev.data || '{}')); });
     es.addEventListener('announcement', ev => { lastBeatAt = Date.now(); window.CLINED_ANNOUNCEMENT?.onPush?.(JSON.parse(ev.data || '{}')); });
     es.addEventListener('diamonds_grant', ev => { lastBeatAt = Date.now(); window.CLINED_CARDS?.onAdminGrant?.(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('xp_100k_unlock', ev => { lastBeatAt = Date.now(); window.CLINED_XP_100K?.onUnlock?.(JSON.parse(ev.data || '{}')); });
     es.onerror = () => {
       if (!es || es.readyState === 2) {
         es = null; connId = ''; lastBeatAt = 0;
@@ -1315,6 +1316,9 @@
       const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
       const pTier = getRank(p.tier || { rp: p.rp || 0 });
       const pCard = p.me ? (getMyShowcaseCard() || p.card) : p.card;
-      return `<div class="duel-lb-row${p.me ? ' me' : ''}"><span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>${avatar(p)}<div class="duel-lb-main"><div class="duel-lb-top"><b class="duel-lb-name">${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b><span class="duel-lb-wins">🏆 ${p.wins} Menang</span></div><div class="duel-lb-bottom">${rankPill(pTier, true)}${cardPill(pCard)}<small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small></div></div></div>`;
+      const bg = p.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(p.bannerUrl)}')" aria-hidden="true"></span>` : '';
+      const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
+      const xpBadge = p.xp100k ? ' <em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+      return `<div class="duel-lb-row${p.me ? ' me' : ''}${p.bannerUrl ? ' has-banner' : ''}">${bg}<span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>${avatar(p)}<div class="duel-lb-main"><div class="duel-lb-top"><b class="duel-lb-name"${nc}>${esc(p.name)} ${xpBadge}${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b><span class="duel-lb-wins">🏆 ${p.wins} Menang</span></div><div class="duel-lb-bottom">${rankPill(pTier, true)}${cardPill(pCard)}<small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small></div></div></div>`;
     }).join(''), isStreamOnline: () => !!es && es.readyState === 1 && navigator.onLine !== false && !isIdle && (!lastBeatAt || (Date.now() - lastBeatAt) <= HEARTBEAT_STALE_MS), openChat: () => openHub('chat'), openStatus: () => openHub('status'), open: openLobby, refresh: () => renderLobby(true) };
 })();

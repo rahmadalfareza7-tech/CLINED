@@ -53,6 +53,13 @@
 .chat-head .soc-av { width: 44px; height: 44px; background: rgba(255,255,255,.25); box-shadow: inset 0 0 0 2px rgba(255,255,255,.5); }
 .chat-head .soc-av.on::after { border-color: #0d9488; }
 .chat-head .chat-badge { background: rgba(255,255,255,.22) !important; color: #fff !important; }
+.chat-head .chat-badge.b-xp100k {
+  background: linear-gradient(120deg, #fde68a 0%, #f59e0b 55%, #fef08a 100%) !important;
+  color: #3f2200 !important;
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  text-shadow: none !important;
+}
 .chat-back { width: 40px; height: 40px; min-height: 40px !important; padding: 0 !important; border-radius: 12px !important; font-size: 24px; line-height: 1; border: 0 !important; background: rgba(255,255,255,.2) !important; color: #fff !important; cursor: pointer; }
 .chat-ttl { display: flex; align-items: center; gap: 6px; justify-content: center; padding: 6px 12px; font-size: 11.5px; font-weight: 800; opacity: .75; background: var(--surface, #edf2ee); }
 .chat-msgs { display: flex; flex-direction: column; gap: 3px; height: min(56vh, 520px); min-height: 260px; overflow-y: auto; overscroll-behavior: contain; padding: 14px 12px; background: var(--surface, #edf2ee); scroll-behavior: smooth; }

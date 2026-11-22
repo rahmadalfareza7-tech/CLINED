@@ -22,7 +22,12 @@
     try {
       const batch = q.slice(0, 50);
       const r = await fetch('/api/xp', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ events: batch }) });
-      if (r.ok) { wr(rd().slice(batch.length)); if (rd().length) { busy = false; return flush(); } }
+      if (r.ok) {
+        const d = await r.json().catch(() => ({}));
+        if (d?.unlocked100k?.unlocked) window.CLINED_XP_100K?.onUnlock?.(d.unlocked100k);
+        wr(rd().slice(batch.length));
+        if (rd().length) { busy = false; return flush(); }
+      }
       else if (r.status >= 400 && r.status < 500 && r.status !== 401 && r.status !== 429) wr(rd().slice(batch.length)); // data ditolak, buang agar tidak macet
     } catch {} finally { busy = false; }
   }

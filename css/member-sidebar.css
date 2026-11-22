@@ -449,6 +449,32 @@
     background: rgba(139, 92, 246, 0.34);
     color: #e9d5ff;
   }
+  .ms-xp100k {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 1px 6px;
+    border-radius: 99px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    color: #422006;
+    background: linear-gradient(120deg, #fde68a 0%, #fbbf24 50%, #f59e0b 100%);
+    border: 1px solid rgba(217, 119, 6, 0.55);
+    box-shadow: 0 1px 4px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    white-space: nowrap;
+  }
+  body.dark .ms-xp100k,
+  html.dark .ms-xp100k,
+  .ms-row.has-banner .ms-xp100k,
+  .ms-pop-hero.has-banner .ms-xp100k {
+    color: #fef3c7;
+    background: linear-gradient(120deg, rgba(180, 83, 9, 0.92), rgba(217, 119, 6, 0.95));
+    border-color: rgba(253, 224, 71, 0.72);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  }
   .ms-sub {
     font-size: 11px;
     font-weight: 700;

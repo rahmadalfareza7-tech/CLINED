@@ -248,6 +248,7 @@
         }
         apply(accepted);
         if(saved.updatedAt)localStorage.setItem(CURSOR,saved.updatedAt);
+        if(saved.unlocked100k?.unlocked)window.CLINED_XP_100K?.onUnlock?.(saved.unlocked100k);
       }
       dirty=getQueue().length>0;
       lastPullAt=Date.now();

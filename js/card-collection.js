@@ -576,6 +576,12 @@
     { id: 'hologram', name: 'Hologram', dot: 'linear-gradient(135deg,#f472b6,#fbbf24,#34d399,#38bdf8,#a855f7)' }
   ];
 
+  function has100kBadge(me) {
+    let localXp = 0;
+    try { localXp = Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0; } catch {}
+    return Boolean(me?.xp100k || localXp >= 100000);
+  }
+
   function buildProfileHeroCard() {
     const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
     const myName = me?.name || 'Nama Kamu';
@@ -584,6 +590,7 @@
     const myAv = me?.avatarUrl ? `<img class="cosmetic-hero-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
     const deco = me?.avatarDeco ? `<img class="avatar-deco-img" src="${esc(me.avatarDeco)}" alt="" aria-hidden="true">` : '';
     const colorAttr = me?.nameColor ? ` data-name-color="${esc(me.nameColor)}"` : '';
+    const xpBadge = has100kBadge(me) ? ' <em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
     const bg = me?.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(me.bannerUrl)}')" aria-hidden="true"></span>` : '';
     return `<div class="cosmetic-profile-hero${me?.bannerUrl ? ' has-banner' : ''}">
       ${bg}
@@ -592,7 +599,7 @@
         <span class="cosmetic-hero-cam" aria-hidden="true">📷</span>
       </button>
       <div class="cosmetic-hero-info">
-        <b${colorAttr}>${esc(myName)}</b>
+        <b${colorAttr}>${esc(myName)}</b>${xpBadge}
         <small>${esc(myUser)}</small>
         <button type="button" class="cosmetic-hero-photo-btn" data-pick-avatar-photo>📷 Ganti Foto Profil</button>
       </div>
@@ -610,6 +617,7 @@
     const myAv = me?.avatarUrl ? `<img src="${esc(me.avatarUrl)}" alt="">` : esc(myIni);
     const curColor = me?.nameColor || '';
     const colorAttr = curColor ? ` data-name-color="${esc(curColor)}"` : '';
+    const xpPreviewBadge = has100kBadge(me) ? ' <em class="chat-badge b-xp100k compact">⚜️ 100K Legend</em>' : '';
     const colorPills = NAME_COLORS.map(c => `<button type="button" class="name-color-pill${curColor === c.id ? ' on' : ''}" data-pick-name-color="${esc(c.id)}"><span class="name-color-dot" style="background:${c.dot}"></span>${esc(c.name)}</button>`).join('');
     const freeAvail = !isFreeBannerClaimed();
     const seen = getSeenCosmetics();
@@ -655,7 +663,7 @@
           <img class="banner-shop-preview-bg" src="${esc(b.img)}" alt="" aria-hidden="true">
           <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
           <div class="banner-shop-preview-txt">
-            <b${colorAttr}>${esc(myName)}</b>
+            <b${colorAttr}>${esc(myName)}</b>${xpPreviewBadge}
             <small>${esc(myUser)} • ${b.icon} ${esc(b.name)}</small>
           </div>
         </div>
@@ -1514,6 +1522,14 @@
     getBonusDuelXp: () => getEquippedCard()?.buff?.duelXp || 0,
     openShop: showShop,
     onAdminGrant,
+    onXp100kReward: diamonds => {
+      if (!Number.isFinite(Number(diamonds))) return;
+      applyingServer = true;
+      try {
+        localStorage.setItem(KEY_DIA, String(Math.max(0, Math.floor(Number(diamonds)))));
+      } finally { applyingServer = false; }
+      onExternalSync();
+    },
     previewCard: id => {
       const c = CARD_CATALOG.find(x => x.id === id);
       if (c) showCardPreview(c);

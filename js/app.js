@@ -3383,8 +3383,57 @@ function restoreLastView(){
   show(wanted,{force:true,fromHistory:true});
 }
 window.addEventListener('clined:before-reload',()=>{try{saveSession();}catch{}});
+let xp100kBannerTimer=null;
+function showXp100kNotification(info){
+  const diamondBonus=Math.max(0,Math.floor(Number(info?.diamondBonus??50)));
+  const xpTotal=Number(info?.xpTotal)||100000;
+  const old=document.getElementById('clinedXp100kBanner');
+  if(old)old.remove();
+  clearTimeout(xp100kBannerTimer);
+  const el=document.createElement('div');
+  el.id='clinedXp100kBanner';
+  el.className='xp100k-unlock-banner';
+  el.setAttribute('role','status');
+  el.setAttribute('aria-live','polite');
+  const diaPill=diamondBonus>0?`<span class="x100b-pill dia">💎 +${diamondBonus.toLocaleString('id-ID')} Bonus Diamond</span>`:'';
+  el.innerHTML=`<div class="x100b-ico" aria-hidden="true">⚜️</div><div class="x100b-body"><div class="x100b-kicker">Pencapaian Eksklusif • ${xpTotal.toLocaleString('id-ID')} All-Time XP</div><div class="x100b-title">Selamat! Kamu mencapai 100.000 All-Time XP!</div><div class="x100b-sub">Hadiah otomatis aktif di akun dan bannerplate kamu:</div><div class="x100b-rewards"><span class="x100b-pill">⚜️ Badge "100K Legend"</span>${diaPill}</div></div><button type="button" class="x100b-x" aria-label="Tutup">✕</button>`;
+  const dismiss=()=>{
+    clearTimeout(xp100kBannerTimer);
+    el.classList.remove('show');
+    setTimeout(()=>el.remove(),380);
+  };
+  el.querySelector('.x100b-x')?.addEventListener('click',dismiss);
+  document.body.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  xp100kBannerTimer=setTimeout(dismiss,9000);
+}
+function handleXp100kUnlock(info){
+  if(!info)return;
+  if(authServerUser&&!authServerUser.xp100k)authServerUser.xp100k=true;
+  if(Number.isFinite(Number(info.diamonds))){
+    if(window.CLINED_CARDS?.onXp100kReward){
+      window.CLINED_CARDS.onXp100kReward(Number(info.diamonds));
+    }else{
+      try{localStorage.setItem('clined_diamonds_v1',String(Math.max(0,Math.floor(Number(info.diamonds)))));}catch{}
+    }
+  }
+  try{renderHomeProfileShowcase();}catch{}
+  try{window.dispatchEvent(new CustomEvent('clined:profile-style'));}catch{}
+  const uid=authServerUser?.id||'anon';
+  const seenKey='clined_xp100k_notif_seen_v1';
+  let seenMap={};
+  try{seenMap=JSON.parse(localStorage.getItem(seenKey)||'{}')||{};}catch{seenMap={};}
+  if(!seenMap[uid]){
+    seenMap[uid]=new Date().toISOString();
+    try{localStorage.setItem(seenKey,JSON.stringify(seenMap));}catch{}
+    showXp100kNotification(info);
+  }
+}
+window.CLINED_XP_100K={onUnlock:handleXp100kUnlock,show:showXp100kNotification};
+
 async function authRestoreSession(){
-  try{const data=await authApi('/me',{method:'GET',headers:{}});authServerUser=data.user||null;authScopeUser(authServerUser);authSyncProfile(authServerUser);if(authServerUser)await authRestoreMissingLearningState();}
+  let unlocked100k=null;
+  try{const data=await authApi('/me',{method:'GET',headers:{}});authServerUser=data.user||null;unlocked100k=data.unlocked100k||null;authScopeUser(authServerUser);authSyncProfile(authServerUser);if(authServerUser)await authRestoreMissingLearningState();}
   catch{authServerUser=null;}
   renderAccount();renderAccountAuthState();
   try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
@@ -3392,6 +3441,9 @@ async function authRestoreSession(){
     window.CLINED_AUTH_GATE?.unlock?.();
     window.dispatchEvent(new Event('clined:auth-ready'));
     restoreLastView();
+    if(unlocked100k?.unlocked||authServerUser.xp100k){
+      setTimeout(()=>handleXp100kUnlock(unlocked100k||{unlocked:true,xpTotal:Math.max(100000,Number(get(KEY.xp,0))||0),diamondBonus:50}),700);
+    }
   }
   else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
 }
@@ -3442,6 +3494,7 @@ async function authLogin(){
   const password=String($('authPassword').value||'');
   const data=await authApi('/login',{method:'POST',body:JSON.stringify({identifier,password})});
   authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);await authRestoreMissingLearningState();window.dispatchEvent(new Event('clined:auth-ready'));loadServerBanks({force:true}).catch(()=>{});
+  if(data.user?.xp100k){setTimeout(()=>handleXp100kUnlock({unlocked:true,xpTotal:Math.max(100000,Number(get(KEY.xp,0))||0),diamondBonus:50}),700);}
 }
 async function authResetPassword(){
   const username=String($('authLoginIdentifier').value||'').trim().toLowerCase();
@@ -3545,9 +3598,10 @@ function renderHomeProfileShowcase(){
   const deco=user.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
   const nc=user.nameColor?` data-name-color="${esc(user.nameColor)}"`:'';
   const roleBadge=user.role==='admin'?'<em class="chat-badge b-admin">👑 Admin</em>':user.role==='helper'?'<em class="chat-badge b-helper">🛠️ Helper</em>':'';
+  const xp100Badge=(user.xp100k||(Number(get(KEY.xp,0))||0)>=100000)?'<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>':'';
   const nextHtml=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Buka halaman hias & ganti foto profil">${avInner}${deco}</span>
     <div class="home-profile-info">
-      <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${roleBadge}</div>
+      <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${xp100Badge}${roleBadge}</div>
       <small>@${esc(user.username)}</small>
     </div>
     <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>`;
