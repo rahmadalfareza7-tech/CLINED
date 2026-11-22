@@ -44,7 +44,18 @@
     { id: '18-anime-angry',          name: 'Anime Angry',          cat: 'Aesthetic & Anime', icon: '💢', price: 8,  desc: 'Aesthetic & Anime', img: 'assets/decorations/18-anime-angry.svg?v=2' },
     { id: '19-shark-frill',          name: 'Apex Shark',           cat: 'Dark & Gothic',     icon: '🦈', price: 12, desc: 'Dark & Gothic',     img: 'assets/decorations/19-shark-frill.svg?v=2' },
     { id: '20-sakura-breeze',        name: 'Sakura Breeze',        cat: 'Aesthetic & Anime', icon: '🌸', price: 15, desc: 'Aesthetic & Anime', img: 'assets/decorations/20-sakura-breeze.svg?v=2' },
-    { id: '21-chrome-liquid-gothic', name: 'Chrome Liquid Gothic', cat: 'Dark & Gothic',     icon: '⛓️', price: 20, desc: 'Dark & Gothic',     img: 'assets/decorations/21-chrome-liquid-gothic.svg?v=2' }
+    { id: '21-chrome-liquid-gothic', name: 'Chrome Liquid Gothic', cat: 'Dark & Gothic',     icon: '⛓️', price: 20, desc: 'Dark & Gothic',     img: 'assets/decorations/21-chrome-liquid-gothic.svg?v=2' },
+    // Vol. 2 — 10 Avatar Decorations
+    { id: '22-fallen-angel-white',      name: 'Fallen Angel (White)',      cat: 'Dark & Gothic',    icon: '🪽', price: 18, isNew: true, desc: 'Dark & Gothic',    img: 'assets/decorations/22-fallen-angel-white.svg?v=2' },
+    { id: '23-bloodweb',                name: 'Bloodweb',                  cat: 'Dark & Gothic',    icon: '🕸️', price: 18, isNew: true, desc: 'Dark & Gothic',    img: 'assets/decorations/23-bloodweb.svg?v=2' },
+    { id: '24-jack-skellington-bones',  name: 'Jack Skellington (Bones)',  cat: 'Dark & Gothic',    icon: '💀', price: 18, isNew: true, desc: 'Dark & Gothic',    img: 'assets/decorations/24-jack-skellington-bones.svg?v=2' },
+    { id: '25-trapped-souls',           name: 'Trapped Souls',             cat: 'Dark & Gothic',    icon: '👻', price: 18, isNew: true, desc: 'Dark & Gothic',    img: 'assets/decorations/25-trapped-souls.svg?v=2' },
+    { id: '26-cloud-nine',              name: 'Cloud Nine',                cat: 'Celestial',        icon: '☁️', price: 15, isNew: true, desc: 'Celestial',        img: 'assets/decorations/26-cloud-nine.svg?v=2' },
+    { id: '27-reynas-leer',             name: "Reyna's Leer",              cat: 'Elemental & Aura', icon: '👁️', price: 20, isNew: true, desc: 'Elemental & Aura', img: 'assets/decorations/27-reynas-leer.svg?v=2' },
+    { id: '28-cozy-cat',                name: 'Cozy Cat',                  cat: 'Cute & Animal',    icon: '🐱', price: 12, isNew: true, desc: 'Cute & Animal',    img: 'assets/decorations/28-cozy-cat.svg?v=2' },
+    { id: '29-nom-kitty',               name: 'Nom Kitty',                 cat: 'Cute & Animal',    icon: '🐾', price: 15, isNew: true, desc: 'Cute & Animal',    img: 'assets/decorations/29-nom-kitty.svg?v=2' },
+    { id: '30-sleepy-bee',              name: 'Sleepy Bee',                cat: 'Cute & Animal',    icon: '🐝', price: 12, isNew: true, desc: 'Cute & Animal',    img: 'assets/decorations/30-sleepy-bee.svg?v=2' },
+    { id: '31-hammy-green',             name: 'Hammy (Green)',             cat: 'Cute & Animal',    icon: '🐹', price: 12, isNew: true, desc: 'Cute & Animal',    img: 'assets/decorations/31-hammy-green.svg?v=2' }
   ];
 
   const BANNER_CATALOG = [
@@ -74,31 +85,31 @@
     { id: '21-creation-touch',      name: 'Creation Touch',      cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan penciptaan', img: 'assets/banners/21-creation-touch.svg?v=2' },
     { id: '22-abyssal-touch',       name: 'Abyssal Touch',       cat: 'Eksklusif', icon: '👑', price: 0, adminOnly: true, desc: 'Admin Exclusive • Sentuhan kegelapan abisal', img: 'assets/banners/22-abyssal-touch.svg?v=2' },
     // Vol. 2 — 10 Cowok
-    { id: '23-pressed-glass',       name: 'Pressed Glass',       cat: 'Cowok', icon: '🧊', price: 8,  desc: 'Cowok • Kaca tekan bertekstur',      img: 'assets/banners/23-pressed-glass.svg?v=2' },
-    { id: '24-manga-rage',          name: 'Manga Rage',          cat: 'Cowok', icon: '💢', price: 12, desc: 'Cowok • Energi amarah manga',        img: 'assets/banners/24-manga-rage.svg?v=2' },
-    { id: '25-vengeance-flame',     name: 'Vengeance Flame',     cat: 'Cowok', icon: '🔥', price: 15, desc: 'Cowok • Kobaran api dendam',         img: 'assets/banners/25-vengeance-flame.svg?v=2' },
-    { id: '26-pixel-cityscape',     name: 'Pixel Cityscape',     cat: 'Cowok', icon: '🌆', price: 12, desc: 'Cowok • Kota piksel malam',          img: 'assets/banners/26-pixel-cityscape.svg?v=2' },
-    { id: '27-volt-strike',         name: 'Volt Strike',         cat: 'Cowok', icon: '⚡', price: 15, desc: 'Cowok • Sambaran petir neon',        img: 'assets/banners/27-volt-strike.svg?v=2' },
-    { id: '28-arcade-overdrive',    name: '8-Bit Overdrive',     cat: 'Cowok', icon: '🕹️', price: 15, desc: 'Cowok • Overdrive arcade retro',     img: 'assets/banners/28-arcade-overdrive.svg?v=2' },
-    { id: '29-street-crown',        name: 'Street Crown',        cat: 'Cowok', icon: '👑', price: 18, desc: 'Cowok • Mahkota grafiti jalanan',    img: 'assets/banners/29-street-crown.svg?v=2' },
-    { id: '30-caution-zone',        name: 'Caution Zone',        cat: 'Cowok', icon: '⚠️', price: 12, desc: 'Cowok • Zona peringatan industrial', img: 'assets/banners/30-caution-zone.svg?v=2' },
-    { id: '31-pixel-phantom',       name: 'Pixel Phantom',       cat: 'Cowok', icon: '👾', price: 15, desc: 'Cowok • Hantu piksel misterius',     img: 'assets/banners/31-pixel-phantom.svg?v=2' },
-    { id: '32-higanbana-ink',       name: 'Higanbana Ink',       cat: 'Cowok', icon: '🌺', price: 18, desc: 'Cowok • Tinta bunga higanbana',      img: 'assets/banners/32-higanbana-ink.svg?v=2' },
+    { id: '23-pressed-glass',       name: 'Pressed Glass',       cat: 'Cowok', icon: '🧊', price: 8,  isNew: true, desc: 'Cowok • Kaca tekan bertekstur',      img: 'assets/banners/23-pressed-glass.svg?v=2' },
+    { id: '24-manga-rage',          name: 'Manga Rage',          cat: 'Cowok', icon: '💢', price: 12, isNew: true, desc: 'Cowok • Energi amarah manga',        img: 'assets/banners/24-manga-rage.svg?v=2' },
+    { id: '25-vengeance-flame',     name: 'Vengeance Flame',     cat: 'Cowok', icon: '🔥', price: 15, isNew: true, desc: 'Cowok • Kobaran api dendam',         img: 'assets/banners/25-vengeance-flame.svg?v=2' },
+    { id: '26-pixel-cityscape',     name: 'Pixel Cityscape',     cat: 'Cowok', icon: '🌆', price: 12, isNew: true, desc: 'Cowok • Kota piksel malam',          img: 'assets/banners/26-pixel-cityscape.svg?v=2' },
+    { id: '27-volt-strike',         name: 'Volt Strike',         cat: 'Cowok', icon: '⚡', price: 15, isNew: true, desc: 'Cowok • Sambaran petir neon',        img: 'assets/banners/27-volt-strike.svg?v=2' },
+    { id: '28-arcade-overdrive',    name: '8-Bit Overdrive',     cat: 'Cowok', icon: '🕹️', price: 15, isNew: true, desc: 'Cowok • Overdrive arcade retro',     img: 'assets/banners/28-arcade-overdrive.svg?v=2' },
+    { id: '29-street-crown',        name: 'Street Crown',        cat: 'Cowok', icon: '👑', price: 18, isNew: true, desc: 'Cowok • Mahkota grafiti jalanan',    img: 'assets/banners/29-street-crown.svg?v=2' },
+    { id: '30-caution-zone',        name: 'Caution Zone',        cat: 'Cowok', icon: '⚠️', price: 12, isNew: true, desc: 'Cowok • Zona peringatan industrial', img: 'assets/banners/30-caution-zone.svg?v=2' },
+    { id: '31-pixel-phantom',       name: 'Pixel Phantom',       cat: 'Cowok', icon: '👾', price: 15, isNew: true, desc: 'Cowok • Hantu piksel misterius',     img: 'assets/banners/31-pixel-phantom.svg?v=2' },
+    { id: '32-higanbana-ink',       name: 'Higanbana Ink',       cat: 'Cowok', icon: '🌺', price: 18, isNew: true, desc: 'Cowok • Tinta bunga higanbana',      img: 'assets/banners/32-higanbana-ink.svg?v=2' },
     // Vol. 2 — 10 Cewek
-    { id: '33-cat-beans',           name: 'Cat Beans',           cat: 'Cewek', icon: '🐾', price: 12, desc: 'Cewek • Telapak kucing gemas',       img: 'assets/banners/33-cat-beans.svg?v=2' },
-    { id: '34-tropical-hibiscus',   name: 'Tropical Hibiscus',   cat: 'Cewek', icon: '🌺', price: 12, desc: 'Cewek • Kembang sepatu tropis',      img: 'assets/banners/34-tropical-hibiscus.svg?v=2' },
-    { id: '35-spring-meadow',       name: 'Spring Meadow',       cat: 'Cewek', icon: '🌼', price: 8,  desc: 'Cewek • Padang bunga musim semi',    img: 'assets/banners/35-spring-meadow.svg?v=2' },
-    { id: '36-twilight-spark',      name: 'Twilight Spark',      cat: 'Cewek', icon: '✨', price: 12, desc: 'Cewek • Kilau senja lembut',         img: 'assets/banners/36-twilight-spark.svg?v=2' },
-    { id: '37-sakura-corner',       name: 'Sakura Corner',       cat: 'Cewek', icon: '🌸', price: 15, desc: 'Cewek • Sudut bunga sakura',         img: 'assets/banners/37-sakura-corner.svg?v=2' },
-    { id: '38-berry-milk',          name: 'Berry Milk',          cat: 'Cewek', icon: '🍓', price: 12, desc: 'Cewek • Susu stroberi pastel',       img: 'assets/banners/38-berry-milk.svg?v=2' },
-    { id: '39-moon-bunny',          name: 'Moon Bunny',          cat: 'Cewek', icon: '🐰', price: 15, desc: 'Cewek • Kelinci bulan sabit',        img: 'assets/banners/39-moon-bunny.svg?v=2' },
-    { id: '40-peach-fizz',          name: 'Peach Fizz',          cat: 'Cewek', icon: '🍑', price: 12, desc: 'Cewek • Soda persik segar',          img: 'assets/banners/40-peach-fizz.svg?v=2' },
-    { id: '41-coquette-bow',        name: 'Coquette Bow',        cat: 'Cewek', icon: '🎀', price: 18, desc: 'Cewek • Pita coquette manis',        img: 'assets/banners/41-coquette-bow.svg?v=2' },
-    { id: '42-froggy-leaf',         name: 'Froggy Leaf',         cat: 'Cewek', icon: '🐸', price: 8,  desc: 'Cewek • Katak kecil & daun segar',   img: 'assets/banners/42-froggy-leaf.svg?v=2' },
+    { id: '33-cat-beans',           name: 'Cat Beans',           cat: 'Cewek', icon: '🐾', price: 12, isNew: true, desc: 'Cewek • Telapak kucing gemas',       img: 'assets/banners/33-cat-beans.svg?v=2' },
+    { id: '34-tropical-hibiscus',   name: 'Tropical Hibiscus',   cat: 'Cewek', icon: '🌺', price: 12, isNew: true, desc: 'Cewek • Kembang sepatu tropis',      img: 'assets/banners/34-tropical-hibiscus.svg?v=2' },
+    { id: '35-spring-meadow',       name: 'Spring Meadow',       cat: 'Cewek', icon: '🌼', price: 8,  isNew: true, desc: 'Cewek • Padang bunga musim semi',    img: 'assets/banners/35-spring-meadow.svg?v=2' },
+    { id: '36-twilight-spark',      name: 'Twilight Spark',      cat: 'Cewek', icon: '✨', price: 12, isNew: true, desc: 'Cewek • Kilau senja lembut',         img: 'assets/banners/36-twilight-spark.svg?v=2' },
+    { id: '37-sakura-corner',       name: 'Sakura Corner',       cat: 'Cewek', icon: '🌸', price: 15, isNew: true, desc: 'Cewek • Sudut bunga sakura',         img: 'assets/banners/37-sakura-corner.svg?v=2' },
+    { id: '38-berry-milk',          name: 'Berry Milk',          cat: 'Cewek', icon: '🍓', price: 12, isNew: true, desc: 'Cewek • Susu stroberi pastel',       img: 'assets/banners/38-berry-milk.svg?v=2' },
+    { id: '39-moon-bunny',          name: 'Moon Bunny',          cat: 'Cewek', icon: '🐰', price: 15, isNew: true, desc: 'Cewek • Kelinci bulan sabit',        img: 'assets/banners/39-moon-bunny.svg?v=2' },
+    { id: '40-peach-fizz',          name: 'Peach Fizz',          cat: 'Cewek', icon: '🍑', price: 12, isNew: true, desc: 'Cewek • Soda persik segar',          img: 'assets/banners/40-peach-fizz.svg?v=2' },
+    { id: '41-coquette-bow',        name: 'Coquette Bow',        cat: 'Cewek', icon: '🎀', price: 18, isNew: true, desc: 'Cewek • Pita coquette manis',        img: 'assets/banners/41-coquette-bow.svg?v=2' },
+    { id: '42-froggy-leaf',         name: 'Froggy Leaf',         cat: 'Cewek', icon: '🐸', price: 8,  isNew: true, desc: 'Cewek • Katak kecil & daun segar',   img: 'assets/banners/42-froggy-leaf.svg?v=2' },
     // Vol. 2 — 3 Klub Bola
-    { id: '43-manchester-united',   name: 'Manchester United',   cat: 'Klub Bola', icon: '⚽', price: 18, desc: 'Klub Bola • Red Devils Edition',  img: 'assets/banners/43-manchester-united.svg?v=2' },
-    { id: '44-real-madrid',         name: 'Real Madrid',         cat: 'Klub Bola', icon: '⚽', price: 18, desc: 'Klub Bola • Los Blancos Edition', img: 'assets/banners/44-real-madrid.svg?v=2' },
-    { id: '45-fc-barcelona',        name: 'FC Barcelona',        cat: 'Klub Bola', icon: '⚽', price: 18, desc: 'Klub Bola • Blaugrana Edition',   img: 'assets/banners/45-fc-barcelona.svg?v=2' }
+    { id: '43-manchester-united',   name: 'Manchester United',   cat: 'Klub Bola', icon: '⚽', price: 18, isNew: true, desc: 'Klub Bola • Red Devils Edition',  img: 'assets/banners/43-manchester-united.svg?v=2' },
+    { id: '44-real-madrid',         name: 'Real Madrid',         cat: 'Klub Bola', icon: '⚽', price: 18, isNew: true, desc: 'Klub Bola • Los Blancos Edition', img: 'assets/banners/44-real-madrid.svg?v=2' },
+    { id: '45-fc-barcelona',        name: 'FC Barcelona',        cat: 'Klub Bola', icon: '⚽', price: 18, isNew: true, desc: 'Klub Bola • Blaugrana Edition',   img: 'assets/banners/45-fc-barcelona.svg?v=2' }
   ];
 
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
@@ -601,13 +612,24 @@
     const colorAttr = curColor ? ` data-name-color="${esc(curColor)}"` : '';
     const colorPills = NAME_COLORS.map(c => `<button type="button" class="name-color-pill${curColor === c.id ? ' on' : ''}" data-pick-name-color="${esc(c.id)}"><span class="name-color-dot" style="background:${c.dot}"></span>${esc(c.name)}</button>`).join('');
     const freeAvail = !isFreeBannerClaimed();
-    const list = BANNER_CATALOG.filter(b => bannerFilter === 'all' || b.cat === bannerFilter);
+    const seen = getSeenCosmetics();
+    const list = BANNER_CATALOG
+      .filter(b => bannerFilter === 'all' || b.cat === bannerFilter)
+      .slice()
+      .sort((a, b) => {
+        const ua = (a.isNew && !seen.has('banner:' + a.id)) ? 0 : 1;
+        const ub = (b.isNew && !seen.has('banner:' + b.id)) ? 0 : 1;
+        return ua - ub;
+      });
     const adminUser = isAdmin();
     const items = list.map(b => {
       const lockedByRole = Boolean(b.adminOnly && !adminUser);
       const isOwned = !lockedByRole && ownedSet.has(b.id);
       const isEquipped = !lockedByRole && eq === b.id;
       const canBuy = !lockedByRole && (freeAvail || dia >= b.price);
+      const isUnseenNew = Boolean(b.isNew && !seen.has('banner:' + b.id));
+      const newAttr = isUnseenNew ? ` data-new-cosmetic="banner:${esc(b.id)}"` : '';
+      const newBadge = isUnseenNew ? '<span class="cosmetic-new-badge">NEW</span>' : '';
       const btnCls = lockedByRole ? 'admin-locked' : isEquipped ? 'equipped' : isOwned ? 'equip' : (freeAvail && !b.adminOnly) ? 'free-claim' : '';
       const btnLabel = lockedByRole
         ? '🔒 Khusus Admin'
@@ -627,7 +649,8 @@
             <span class="chain-badge"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>KHUSUS ADMIN</span></span>
           </div>`
         : '';
-      return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}${lockedByRole ? ' is-admin-locked' : ''}">
+      return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}${lockedByRole ? ' is-admin-locked' : ''}"${newAttr}>
+        ${newBadge}
         <div class="banner-shop-preview">
           <img class="banner-shop-preview-bg" src="${esc(b.img)}" alt="" aria-hidden="true">
           <span class="banner-shop-preview-av" aria-hidden="true">${myAv}</span>
@@ -673,17 +696,29 @@
     const eq = getEquippedDeco();
     const dia = getDia();
     const freeAvail = !isFreeDecoClaimed();
+    const seen = getSeenCosmetics();
     const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
     const myIni = String(me?.name || 'C').trim().charAt(0).toUpperCase() || 'C';
     const myAv = me?.avatarUrl ? `<img class="deco-shop-av-img" src="${esc(me.avatarUrl)}" alt="">` : `<span>${esc(myIni)}</span>`;
-    const list = DECO_CATALOG.filter(x => decoFilter === 'all' || x.cat === decoFilter);
+    const list = DECO_CATALOG
+      .filter(x => decoFilter === 'all' || x.cat === decoFilter)
+      .slice()
+      .sort((a, b) => {
+        const ua = (a.isNew && !seen.has('deco:' + a.id)) ? 0 : 1;
+        const ub = (b.isNew && !seen.has('deco:' + b.id)) ? 0 : 1;
+        return ua - ub;
+      });
     const items = list.map(d => {
       const isOwned = ownedSet.has(d.id);
       const isEquipped = eq === d.id;
       const canBuy = freeAvail || dia >= d.price;
+      const isUnseenNew = Boolean(d.isNew && !seen.has('deco:' + d.id));
+      const newAttr = isUnseenNew ? ` data-new-cosmetic="deco:${esc(d.id)}"` : '';
+      const newBadge = isUnseenNew ? '<span class="cosmetic-new-badge">NEW</span>' : '';
       const btnCls = isEquipped ? 'equipped' : isOwned ? 'equip' : freeAvail ? 'free-claim' : '';
       const btnLabel = isEquipped ? '✓ Terpasang (Lepas)' : isOwned ? 'Pasang' : freeAvail ? '🎁 Klaim Gratis' : `💎 ${d.price} Beli`;
-      return `<div class="deco-shop-card${isEquipped ? ' equipped' : ''}">
+      return `<div class="deco-shop-card${isEquipped ? ' equipped' : ''}"${newAttr}>
+        ${newBadge}
         <div class="deco-shop-av">${myAv}<img class="avatar-deco-img" src="${esc(d.img)}" alt="" aria-hidden="true"></div>
         <div class="deco-shop-title">${d.icon} ${esc(d.name)}</div>
         <div class="deco-shop-sub">${esc(d.cat)}</div>
@@ -704,6 +739,8 @@
     const cost = getPackCost();
     const hasDisc = cost < BASE_PACK_COST;
     const diaStep = getQuizPerDiamond();
+    const newBannersCnt = getUnseenNewCount('banner');
+    const newDecosCnt = getUnseenNewCount('deco');
     const cardsBody = `${buildEquippedBanner()}
       <div class="card-pack-card">
         <img class="card-pack-img" src="assets/cards/fab-basket.png" alt="Organ Pack">
@@ -734,8 +771,8 @@
       </div>
       <div class="card-shop-tabs" role="tablist">
         <button type="button" class="card-shop-tab${shopTab === 'cards' ? ' on' : ''}" data-shop-tab="cards" role="tab" aria-selected="${shopTab === 'cards'}">🃏 Kartu</button>
-        <button type="button" class="card-shop-tab${shopTab === 'banners' ? ' on' : ''}" data-shop-tab="banners" role="tab" aria-selected="${shopTab === 'banners'}">🎨 Banner (${BANNER_CATALOG.length})</button>
-        <button type="button" class="card-shop-tab${shopTab === 'decos' ? ' on' : ''}" data-shop-tab="decos" role="tab" aria-selected="${shopTab === 'decos'}">✨ Dekorasi (${DECO_CATALOG.length})</button>
+        <button type="button" class="card-shop-tab${shopTab === 'banners' ? ' on' : ''}" data-shop-tab="banners" role="tab" aria-selected="${shopTab === 'banners'}">🎨 Banner (${BANNER_CATALOG.length}) <span class="shop-tab-new" data-tab-new="banner"${newBannersCnt ? '' : ' hidden'}>NEW</span></button>
+        <button type="button" class="card-shop-tab${shopTab === 'decos' ? ' on' : ''}" data-shop-tab="decos" role="tab" aria-selected="${shopTab === 'decos'}">✨ Dekorasi (${DECO_CATALOG.length}) <span class="shop-tab-new" data-tab-new="deco"${newDecosCnt ? '' : ' hidden'}>NEW</span></button>
       </div>
       ${shopTab === 'banners' ? buildBannerShop() : shopTab === 'decos' ? buildDecoShop() : cardsBody}
     </div>`;
@@ -933,9 +970,93 @@
     host.appendChild(btn);
   }
 
+  const KEY_SEEN_NEW = 'clined_seen_cosmetics_v1';
+  let newCosmeticObserver = null;
+  const newCosmeticTimers = new Map();
+
+  function getSeenCosmetics() {
+    try {
+      const arr = JSON.parse(localStorage.getItem(KEY_SEEN_NEW) || '[]');
+      return new Set(Array.isArray(arr) ? arr.filter(x => typeof x === 'string') : []);
+    } catch { return new Set(); }
+  }
+  function markCosmeticSeen(key) {
+    if (!key) return false;
+    const set = getSeenCosmetics();
+    if (set.has(key)) return false;
+    set.add(key);
+    try { localStorage.setItem(KEY_SEEN_NEW, JSON.stringify([...set])); } catch {}
+    return true;
+  }
+  function getUnseenNewCount(kind) {
+    const seen = getSeenCosmetics();
+    if (kind === 'banner') return BANNER_CATALOG.filter(b => b.isNew && !seen.has('banner:' + b.id)).length;
+    if (kind === 'deco') return DECO_CATALOG.filter(d => d.isNew && !seen.has('deco:' + d.id)).length;
+    return getUnseenNewCount('banner') + getUnseenNewCount('deco');
+  }
+  function updateNewBadgesUI() {
+    const bCnt = getUnseenNewCount('banner');
+    const dCnt = getUnseenNewCount('deco');
+    const total = bCnt + dCnt;
+    const fabBadge = document.querySelector('#cardShopFab .fab-new-badge');
+    if (fabBadge) fabBadge.hidden = total === 0;
+    const tabB = document.querySelector('#cardShopContainer [data-tab-new="banner"]');
+    if (tabB) tabB.hidden = bCnt === 0;
+    const tabD = document.querySelector('#cardShopContainer [data-tab-new="deco"]');
+    if (tabD) tabD.hidden = dCnt === 0;
+  }
+  function stopObservingNewCosmetics() {
+    if (newCosmeticObserver) { newCosmeticObserver.disconnect(); newCosmeticObserver = null; }
+    for (const t of newCosmeticTimers.values()) clearTimeout(t);
+    newCosmeticTimers.clear();
+  }
+  function observeNewCosmetics() {
+    stopObservingNewCosmetics();
+    const sheet = document.querySelector('#cardShopContainer .card-shop-sheet');
+    if (!sheet) return;
+    const targets = sheet.querySelectorAll('[data-new-cosmetic]');
+    if (!targets.length) return;
+    if (typeof IntersectionObserver !== 'function') {
+      targets.forEach(el => {
+        markCosmeticSeen(el.getAttribute('data-new-cosmetic'));
+        el.querySelector('.cosmetic-new-badge')?.classList.add('is-seen');
+      });
+      updateNewBadgesUI();
+      return;
+    }
+    newCosmeticObserver = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        const el = entry.target;
+        const key = el.getAttribute('data-new-cosmetic');
+        if (!key) continue;
+        if (entry.isIntersecting) {
+          if (!newCosmeticTimers.has(key)) {
+            const tm = setTimeout(() => {
+              newCosmeticTimers.delete(key);
+              markCosmeticSeen(key);
+              el.querySelector('.cosmetic-new-badge')?.classList.add('is-seen');
+              newCosmeticObserver?.unobserve(el);
+              updateNewBadgesUI();
+            }, 650);
+            newCosmeticTimers.set(key, tm);
+          }
+        } else if (newCosmeticTimers.has(key)) {
+          clearTimeout(newCosmeticTimers.get(key));
+          newCosmeticTimers.delete(key);
+        }
+      }
+    }, { root: sheet, threshold: 0.35 });
+    targets.forEach(el => newCosmeticObserver.observe(el));
+  }
+
   function refreshShop() {
     const c = document.getElementById('cardShopContainer');
-    if (c) { c.innerHTML = buildShop(); bindShop(); }
+    if (c) {
+      c.innerHTML = buildShop();
+      bindShop();
+      observeNewCosmetics();
+      updateNewBadgesUI();
+    }
   }
   function bindShop() {
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
@@ -1097,6 +1218,8 @@
     document.addEventListener('touchmove', blockScroll, { passive: false });
   }
   function hideShop() {
+    stopObservingNewCosmetics();
+    updateNewBadgesUI();
     document.getElementById('cardShopModal')?.classList.remove('open');
     document.getElementById('floatingDashboardNav')?.style.removeProperty('display');
     document.removeEventListener('touchmove', blockScroll);
@@ -1109,7 +1232,8 @@
     fab.id = 'cardShopFab';
     fab.className = 'card-shop-fab';
     fab.setAttribute('aria-label', 'Card Shop');
-    fab.innerHTML = `<img class="fab-basket-img" src="assets/cards/fab-basket.png" alt="">
+    const hasNew = getUnseenNewCount('all') > 0;
+    fab.innerHTML = `<span class="fab-new-badge"${hasNew ? '' : ' hidden'}>NEW</span><img class="fab-basket-img" src="assets/cards/fab-basket.png" alt="">
       <span class="fab-dia"><span data-diamond-count>${getDia() === Infinity ? '∞' : getDia()}</span> 💎</span>`;
     document.body.appendChild(fab);
 
