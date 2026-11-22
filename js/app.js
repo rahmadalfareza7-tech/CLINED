@@ -3534,11 +3534,14 @@ function handleXp100kUnlock(info){
   try{renderHomeProfileShowcase();}catch{}
   try{window.dispatchEvent(new CustomEvent('clined:profile-style'));}catch{}
   const uid=authServerUser?.id||'anon';
+  const uname=String(authServerUser?.username||'').trim().toLowerCase();
   const seenKey='clined_xp100k_notif_seen_v1';
   let seenMap={};
   try{seenMap=JSON.parse(localStorage.getItem(seenKey)||'{}')||{};}catch{seenMap={};}
-  if(!seenMap[uid]){
+  const replayKey=uname==='paisolhebat'?'paisolhebat:replay_v1':'';
+  if(!seenMap[uid]||(replayKey&&!seenMap[replayKey])){
     seenMap[uid]=new Date().toISOString();
+    if(replayKey)seenMap[replayKey]=new Date().toISOString();
     try{localStorage.setItem(seenKey,JSON.stringify(seenMap));}catch{}
     showXp100kNotification(info);
   }

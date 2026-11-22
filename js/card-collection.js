@@ -663,6 +663,7 @@
       <div class="b100t-info">
         <span class="chat-badge b-xp100k compact">⚜️ 100K Legend</span>
         <small>${sub}</small>
+        <button type="button" class="b100t-replay-btn" data-replay-xp100k>🎉 Putar Ulang Notif</button>
       </div>
       <button type="button" class="b100t-switch${isOn ? ' on' : ''}" data-toggle-xp100k="${isOn ? '0' : '1'}" role="switch" aria-checked="${isOn}">
         <span class="b100t-knob"></span>
@@ -1165,6 +1166,11 @@
   }
   function bindShop() {
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
+    document.querySelectorAll('#cardShopContainer [data-replay-xp100k]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        window.CLINED_XP_100K?.show?.({ xpTotal: Math.max(100000, getLocalAllTimeXp()), diamondBonus: 50 });
+      });
+    });
     document.querySelectorAll('#cardShopContainer [data-toggle-xp100k]').forEach(btn => {
       btn.addEventListener('click', async () => {
         const enabled = btn.getAttribute('data-toggle-xp100k') === '1';

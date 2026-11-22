@@ -1146,6 +1146,30 @@ body.dark .badge100k-toggle-box {
   line-height: 1.35;
   opacity: 0.82;
 }
+.b100t-replay-btn {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(217, 119, 6, 0.45);
+  background: rgba(245, 158, 11, 0.14);
+  color: #92400e;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+.b100t-replay-btn:hover { background: rgba(245, 158, 11, 0.24); }
+.b100t-replay-btn:active { transform: scale(0.96); }
+:root.dark .b100t-replay-btn,
+body.dark .b100t-replay-btn {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(251, 191, 36, 0.42);
+  color: #fde68a;
+}
 .b100t-switch {
   flex: none;
   position: relative;
