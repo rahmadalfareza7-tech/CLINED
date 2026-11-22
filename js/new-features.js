@@ -14,7 +14,10 @@ window.CLINED_Leaderboard = (function () {
       try { await window.CLINED_ONLINE_SYNC?.sync?.(); } catch {}
     }
     const r = await fetch('/api/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
-    if (!r.ok) return null;
+    if (!r.ok) {
+      if (r.status === 401) return { __unauth: true };
+      throw new Error(`HTTP ${r.status}`);
+    }
     lbData = await r.json();
     lbLoadedAt = Date.now();
     return lbData;
@@ -40,10 +43,10 @@ window.CLINED_Leaderboard = (function () {
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat…</div>';
     try {
       const data = await fetchLeaderboard(true);
-      if (!data) { listEl.innerHTML = '<div class="leaderboard-loading">Belum bisa memuat. Masuk akun dulu.</div>'; return; }
+      if (!data || data.__unauth) { listEl.innerHTML = '<div class="leaderboard-loading">Belum bisa memuat. Masuk akun dulu.</div>'; return; }
       render(listEl, lbTab);
       loadTeaser();
-    } catch { listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat.</div>'; }
+    } catch { listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat. Coba muat ulang halaman.</div>'; }
   }
 
   async function refreshTeaser(force = false) {
@@ -56,7 +59,7 @@ window.CLINED_Leaderboard = (function () {
     }
     try {
       const data = await fetchLeaderboard();
-      if (data) loadTeaser();
+      if (data && !data.__unauth) loadTeaser();
     } catch {}
   }
 
