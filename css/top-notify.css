@@ -208,6 +208,47 @@ html body .clined-toast.show { transform: translate(-50%, 0) !important; opacity
 .dgb-title { font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.9; }
 .dgb-msg { font-size: 13.5px; font-weight: 700; line-height: 1.4; }
 .dgb-msg b { font-weight: 950; color: #fef08a; }
+.dgb-note {
+  margin-top: 6px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.42;
+  color: #ffffff;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.dgb-dialog-field { display: grid; gap: 6px; margin-top: 4px; }
+.dgb-dialog-label { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; font-weight: 900; color: var(--text, #1f2d33); }
+.dgb-dialog-label span { font-size: 11.5px; font-weight: 800; color: var(--muted, #5f6f76); }
+.dgb-dialog-input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 78px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 2px solid var(--line, #dbe4de);
+  background: var(--surface, #f4f7f5);
+  color: var(--text, #1f2d33);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.45;
+  resize: vertical;
+  outline: none;
+}
+.dgb-dialog-input:focus {
+  border-color: #1cb0f6;
+  box-shadow: 0 0 0 3px rgba(28, 176, 246, 0.18);
+}
+:root.dark .dgb-dialog-input {
+  background: #101916;
+  color: #eef5f1;
+  border-color: #293832;
+}
 .dgb-x {
   width: 28px;
   height: 28px;

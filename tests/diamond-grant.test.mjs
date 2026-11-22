@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import {
   parseDiamondGrantAmount,
   parseGiveDiamondAllCommand,
+  cleanDiamondGrantNote,
   MAX_DIAMOND_GRANT,
+  MAX_DIAMOND_NOTE,
 } from '../lib/diamond-grant.mjs';
 
 test('parseDiamondGrantAmount accepts positive integers and formatted strings within limit', () => {
@@ -18,11 +20,18 @@ test('parseDiamondGrantAmount accepts positive integers and formatted strings wi
   assert.equal(parseDiamondGrantAmount('abc'), null);
 });
 
-test('parseGiveDiamondAllCommand parses /givediamondtoall command accurately', () => {
-  assert.deepEqual(parseGiveDiamondAllCommand('/givediamondtoall 500'), { matched: true, amount: 500 });
-  assert.deepEqual(parseGiveDiamondAllCommand('  /GiveDiamondToAll 1.500 '), { matched: true, amount: 1500 });
-  assert.deepEqual(parseGiveDiamondAllCommand('/givediamondtoall'), { matched: true, amount: null });
-  assert.deepEqual(parseGiveDiamondAllCommand('/givediamondtoall -50'), { matched: true, amount: null });
+test('parseGiveDiamondAllCommand parses /givediamondtoall command with optional note accurately', () => {
+  assert.deepEqual(parseGiveDiamondAllCommand('/givediamondtoall 500'), { matched: true, amount: 500, note: '' });
+  assert.deepEqual(parseGiveDiamondAllCommand('  /GiveDiamondToAll 1.500 '), { matched: true, amount: 1500, note: '' });
+  assert.deepEqual(parseGiveDiamondAllCommand('/givediamondtoall 500 Semangat belajar UAB ya!'), { matched: true, amount: 500, note: 'Semangat belajar UAB ya!' });
+  assert.deepEqual(parseGiveDiamondAllCommand('/givediamondtoall'), { matched: true, amount: null, note: '' });
+  assert.deepEqual(parseGiveDiamondAllCommand('/givediamondtoall -50'), { matched: true, amount: null, note: '' });
   assert.equal(parseGiveDiamondAllCommand('givediamondtoall 500'), null);
   assert.equal(parseGiveDiamondAllCommand('hipertensi'), null);
+});
+
+test('cleanDiamondGrantNote trims, strips control chars, and enforces max length', () => {
+  assert.equal(cleanDiamondGrantNote('  Halo   semua!\u0007\u202E  '), 'Halo semua!');
+  assert.equal(cleanDiamondGrantNote('a'.repeat(MAX_DIAMOND_NOTE + 50)).length, MAX_DIAMOND_NOTE);
+  assert.equal(cleanDiamondGrantNote(''), '');
 });

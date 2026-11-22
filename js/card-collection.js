@@ -1594,10 +1594,12 @@
     el.className = 'dia-grant-banner';
     el.setAttribute('role', 'status');
     el.setAttribute('aria-live', 'polite');
+    const note = String(data?.note || '').trim();
+    const noteHtml = note ? `<div class="dgb-note">“${esc(note)}”</div>` : '';
     const msg = isAll
       ? `Admin telah memberikan semua orang yang sedang online tambahan diamond sebanyak <b>${amtText} 💎</b>`
       : `Admin telah memberikan kamu tambahan diamond sebanyak <b>${amtText} 💎</b>`;
-    el.innerHTML = `<div class="dgb-ico" aria-hidden="true">💎</div><div class="dgb-body"><div class="dgb-title">${isAll ? 'Bonus Diamond Member Online' : 'Bonus Diamond Dari Admin'}</div><div class="dgb-msg">${msg}</div></div><button type="button" class="dgb-x" aria-label="Tutup">✕</button>`;
+    el.innerHTML = `<div class="dgb-ico" aria-hidden="true">💎</div><div class="dgb-body"><div class="dgb-title">${isAll ? 'Bonus Diamond Member Online' : 'Bonus Diamond Dari Admin'}</div><div class="dgb-msg">${msg}</div>${noteHtml}</div><button type="button" class="dgb-x" aria-label="Tutup">✕</button>`;
     const dismiss = () => {
       clearTimeout(grantBannerTimer);
       el.classList.remove('show');
@@ -1606,7 +1608,7 @@
     el.querySelector('.dgb-x')?.addEventListener('click', dismiss);
     document.body.appendChild(el);
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
-    grantBannerTimer = setTimeout(dismiss, 6500);
+    grantBannerTimer = setTimeout(dismiss, note ? 9000 : 6500);
   }
 
   function onAdminGrant(data) {

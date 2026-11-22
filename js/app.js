@@ -3066,38 +3066,81 @@ if($("closeClinicalDashboard"))$("closeClinicalDashboard").onclick=()=>{
 if($("flashcardsBtn"))$("flashcardsBtn").onclick=initFlashcards;
 if($("bookmarkDrillBtn"))$("bookmarkDrillBtn").onclick=startBookmarkDrill;
 if($("smart10Btn"))$("smart10Btn").onclick=startSmart10;
+function openGiveDiamondAllDialog(amount, initialNote=''){
+  return new Promise(resolve=>{
+    const layer=document.createElement('div');
+    layer.className='cdlg-layer';
+    const amtText=amount.toLocaleString('id-ID');
+    layer.innerHTML=`<div class="cdlg-card" role="dialog" aria-modal="true" aria-labelledby="dgbDlgT" data-tone="info">
+      <div class="cdlg-head"><span class="cdlg-ico" aria-hidden="true">💎</span><h3 class="cdlg-title" id="dgbDlgT">Berikan +${amtText} 💎 ke semua member online?</h3></div>
+      <div class="cdlg-body">
+        <p>Hanya member yang terdeteksi sedang <b>online</b> saat ini yang akan menerima tambahan diamond dan notifikasi dari atas.</p>
+        <div class="dgb-dialog-field">
+          <div class="dgb-dialog-label"><label for="dgbDialogNote">Kata-kata / Pesan (opsional)</label><span id="dgbDialogCount">0/240</span></div>
+          <textarea id="dgbDialogNote" class="dgb-dialog-input" rows="3" maxlength="240" placeholder="Tulis kata-kata buat member online… (contoh: Semangat belajar UAB ya!)"></textarea>
+        </div>
+      </div>
+      <div class="cdlg-actions">
+        <button type="button" class="secondary cdlg-cancel">Batal</button>
+        <button type="button" class="primary cdlg-ok" data-tone="info">💎 Kirim ke yang online</button>
+      </div>
+    </div>`;
+    const ta=layer.querySelector('#dgbDialogNote');
+    const cnt=layer.querySelector('#dgbDialogCount');
+    const syncCnt=()=>{ if(cnt&&ta) cnt.textContent=`${ta.value.length}/240`; };
+    if(ta){ ta.value=String(initialNote||'').slice(0,240); syncCnt(); ta.addEventListener('input',syncCnt); }
+    const prevFocus=document.activeElement;
+    let done=false;
+    const finish=res=>{
+      if(done)return; done=true;
+      document.removeEventListener('keydown',onKey,true);
+      layer.classList.remove('show');
+      setTimeout(()=>{layer.remove();try{prevFocus?.focus?.();}catch{}},240);
+      resolve(res);
+    };
+    const onKey=e=>{
+      if(e.key==='Escape'){e.preventDefault();finish(null);}
+      else if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();finish({note:(ta?.value||'').trim()});}
+    };
+    layer.addEventListener('click',e=>{
+      if(e.target.closest('.cdlg-ok')) return finish({note:(ta?.value||'').trim()});
+      if(e.target.closest('.cdlg-cancel')||e.target===layer) return finish(null);
+    });
+    document.addEventListener('keydown',onKey,true);
+    document.body.appendChild(layer);
+    requestAnimationFrame(()=>{layer.classList.add('show');ta?.focus({preventScroll:true});if(ta)ta.setSelectionRange(ta.value.length,ta.value.length);});
+  });
+}
 async function runAdminGiveDiamondAllCommand(rawQuery){
   const me=typeof authCurrentUser==='function'?authCurrentUser():null;
   if(!me||me.role!=='admin')return false;
-  const rest=rawQuery.replace(/^\/givediamondtoall\b/i,'').trim().replace(/[.,_\s]+/g,'');
-  if(!/^\d+$/.test(rest)){
-    showToast('Format: /givediamondtoall <nominal> (contoh: /givediamondtoall 500)');
+  const restRaw=rawQuery.replace(/^\/givediamondtoall\b/i,'').trim();
+  const match=restRaw.match(/^([^\s]+)(?:\s+([\s\S]+))?$/);
+  const amtClean=match?match[1].replace(/[.,_]+/g,''):'';
+  if(!/^\d+$/.test(amtClean)){
+    showToast('Format: /givediamondtoall <nominal> [pesan opsional] (contoh: /givediamondtoall 500 Semangat!)');
     return true;
   }
-  const amount=Number(rest);
+  const amount=Number(amtClean);
   if(!Number.isSafeInteger(amount)||amount<1||amount>1000000){
     showToast('Nominal diamond harus 1 – 1.000.000.');
     return true;
   }
-  const ok=typeof window.clinedConfirm==='function'
-    ? await window.clinedConfirm({
-        title:`Berikan +${amount.toLocaleString('id-ID')} 💎 ke semua member online?`,
-        text:'Hanya member yang terdeteksi sedang online saat ini yang akan menerima tambahan diamond dan pemberitahuan dari atas.',
-        ok:'Ya, kirim ke yang online'
-      })
-    : window.confirm(`Berikan +${amount.toLocaleString('id-ID')} diamond ke semua member yang sedang online?`);
-  if(!ok)return true;
+  const inlineNote=match&&match[2]?match[2].trim():'';
+  const confirmed=await openGiveDiamondAllDialog(amount, inlineNote);
+  if(!confirmed)return true;
+  const note=String(confirmed.note||'').trim().slice(0,240);
   const input=$('homeQuestionSearch');
   if(input)input.value='';
   try{
     const res=await fetch('/api/admin/diamonds/give-all',{
       method:'POST',credentials:'same-origin',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({amount})
+      body:JSON.stringify({amount, note})
     });
     const data=await res.json().catch(()=>({}));
     if(!res.ok)throw Error(data.error||'Gagal membagikan diamond.');
-    window.CLINED_CARDS?.onAdminGrant?.({id:data.id,scope:'all',amount:data.amount||amount,recipients:data.recipients});
+    window.CLINED_CARDS?.onAdminGrant?.({id:data.id,scope:'all',amount:data.amount||amount,recipients:data.recipients,note:data.note??note});
   }catch(err){
     showToast(err?.message||'Gagal membagikan diamond.');
   }
