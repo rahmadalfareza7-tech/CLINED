@@ -372,14 +372,17 @@
   async function refreshDot() { try { setDot((await api('/api/chat/unread')).unread || 0); } catch {} }
   function deepLink(id) {
     if (!/^[0-9a-f-]{36}$/i.test(String(id || ''))) return;
+    const go = () => {
+      if (typeof authCurrentUser === 'function' && !authCurrentUser()) return false;
+      if (!window.CLINED_SOCIAL) return false;
+      C.pending = id; C.peer = null; window.CLINED_SOCIAL.openChat();
+      return true;
+    };
+    if (go()) return;
     let n = 0;
     const t = setInterval(() => {
-      if (++n > 40) return clearInterval(t);
-      if (typeof authCurrentUser === 'function' && !authCurrentUser()) return;
-      if (!window.CLINED_SOCIAL) return;
-      clearInterval(t);
-      C.pending = id; C.peer = null; window.CLINED_SOCIAL.openChat();
-    }, 500);
+      if (++n > 40 || go()) clearInterval(t);
+    }, 300);
   }
   navigator.serviceWorker?.addEventListener?.('message', e => { if (e.data?.type === 'open-chat') deepLink(e.data.id); });
   try { const q = new URLSearchParams(location.search).get('chat'); if (q) { deepLink(q); history.replaceState(null, '', location.pathname + location.hash); } } catch {}
@@ -389,5 +392,5 @@
     loadOnlineStats();
     (C.peer ? loadThread(false) : loadUsers().then(() => { if (!document.activeElement?.matches?.('[data-chat-q]')) render(); })).catch(() => {});
   });
-  window.CLINED_CHAT = { unread: 0, mount, stop: () => { stopPoll(); stopOnlinePoll(); C.peer = null; C.thread = null; }, onPush, refreshDot };
+  window.CLINED_CHAT = { unread: 0, mount, stop: () => { stopPoll(); stopOnlinePoll(); C.peer = null; C.thread = null; }, onPush, refreshDot, openWith: deepLink };
 })();

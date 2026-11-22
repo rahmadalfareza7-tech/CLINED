@@ -1,0 +1,475 @@
+/* CLINED — Discord-style Right Member Sidebar (Desktop ≥1280px). Mobile & tablet untouched. */
+.ms-sidebar,
+.ms-reopen {
+  display: none;
+}
+
+@media (min-width: 1280px) and (hover: hover) and (pointer: fine) {
+  body.ms-open {
+    padding-right: 268px !important;
+  }
+  body.ms-open.quiz-context {
+    padding-right: 0 !important;
+  }
+  body.ms-open .floating-dashboard-nav {
+    left: calc(50% - 134px) !important;
+  }
+  body.ms-open.quiz-context .floating-dashboard-nav {
+    left: 50% !important;
+  }
+  html body.ms-open .card-shop-fab {
+    right: 288px;
+  }
+
+  .ms-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 268px;
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    background: var(--card, #ffffff);
+    border-left: 1.5px solid var(--line, #e2e8e4);
+    box-shadow: -8px 0 28px rgba(15, 23, 42, 0.06);
+    color: var(--text, #1f2a23);
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+    font-family: inherit;
+  }
+  body.dark .ms-sidebar,
+  html.dark .ms-sidebar {
+    background: #14171f;
+    border-left-color: rgba(255, 255, 255, 0.08);
+    box-shadow: -10px 0 32px rgba(0, 0, 0, 0.38);
+    color: #eef2f7;
+  }
+  body:not(.ms-open) .ms-sidebar,
+  body.quiz-context .ms-sidebar,
+  body.auth-pending .ms-sidebar {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Floating tab to reopen when collapsed */
+  .ms-reopen {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 890;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 38px;
+    padding: 0 13px;
+    border-radius: 13px;
+    border: 1.5px solid var(--line, #dbe4de);
+    border-bottom-width: 3px;
+    background: var(--card, #ffffff);
+    color: var(--text, #1f2a23);
+    font: 800 12.5px/1 inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .ms-reopen:hover {
+    transform: translateY(-1px);
+  }
+  body.dark .ms-reopen,
+  html.dark .ms-reopen {
+    background: #1b202b;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #eef2f7;
+  }
+  .ms-reopen-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+  }
+  body.ms-open .ms-reopen,
+  body.quiz-context .ms-reopen,
+  body.auth-pending .ms-reopen {
+    display: none !important;
+  }
+
+  /* Sidebar Header */
+  .ms-head {
+    flex: none;
+    padding: 14px 12px 10px;
+    border-bottom: 1.5px solid var(--line, #e6ece8);
+    display: grid;
+    gap: 9px;
+  }
+  body.dark .ms-head,
+  html.dark .ms-head {
+    border-bottom-color: rgba(255, 255, 255, 0.07);
+  }
+  .ms-head-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .ms-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13.5px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+  .ms-online-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 99px;
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803d;
+    font-size: 11px;
+    font-weight: 900;
+  }
+  body.dark .ms-online-pill,
+  html.dark .ms-online-pill {
+    background: rgba(34, 197, 94, 0.18);
+    color: #4ade80;
+  }
+  .ms-online-pill i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.85);
+    display: inline-block;
+  }
+  .ms-hide-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    border: 1.5px solid var(--line, #dbe4de);
+    background: var(--surface, #f3f6f4);
+    color: var(--muted, #64748b);
+    font: 900 15px/1 inherit;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    padding: 0;
+  }
+  .ms-hide-btn:hover {
+    color: var(--text, #1f2a23);
+  }
+  body.dark .ms-hide-btn,
+  html.dark .ms-hide-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+  }
+  .ms-search {
+    width: 100%;
+    height: 34px;
+    min-height: 34px !important;
+    padding: 0 11px !important;
+    border-radius: 10px !important;
+    border: 1.5px solid var(--line, #dbe4de) !important;
+    background: var(--surface, #f4f7f5) !important;
+    color: inherit !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+  }
+  .ms-search:focus {
+    outline: none;
+    border-color: var(--sky, #1cb0f6) !important;
+  }
+  body.dark .ms-search,
+  html.dark .ms-search {
+    background: #0d0f14 !important;
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    color: #e2e8f0 !important;
+  }
+
+  /* Scrollable Member List */
+  .ms-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 8px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.25) transparent;
+  }
+  .ms-body::-webkit-scrollbar {
+    width: 5px;
+  }
+  .ms-body::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.28);
+    border-radius: 99px;
+  }
+
+  .ms-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ms-group-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 8px 3px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted, #64748b);
+    user-select: none;
+  }
+  body.dark .ms-group-hdr,
+  html.dark .ms-group-hdr {
+    color: #949ba4;
+  }
+  .ms-group-toggle {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .ms-group-toggle:hover {
+    background: rgba(100, 116, 139, 0.08);
+  }
+
+  /* Member Row — Discord style with nameplate/banner support */
+  .ms-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background 0.14s ease, transform 0.14s ease;
+  }
+  .ms-row:hover {
+    background: rgba(100, 116, 139, 0.1);
+  }
+  body.dark .ms-row:hover,
+  html.dark .ms-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .ms-row.is-offline {
+    opacity: 0.56;
+  }
+  .ms-row.is-offline:hover {
+    opacity: 0.92;
+  }
+
+  /* Equipped Nameplate / Banner background (just like Discord Nitro Nameplates!) */
+  .ms-row.has-banner {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+  .ms-row.has-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(10, 14, 22, 0.72) 0%, rgba(10, 14, 22, 0.44) 62%, rgba(10, 14, 22, 0.22) 100%);
+    pointer-events: none;
+    z-index: 0;
+    transition: background 0.15s ease;
+  }
+  .ms-row.has-banner:hover::before {
+    background: linear-gradient(90deg, rgba(10, 14, 22, 0.62) 0%, rgba(10, 14, 22, 0.34) 62%, rgba(10, 14, 22, 0.16) 100%);
+  }
+  .ms-row.has-banner > * {
+    position: relative;
+    z-index: 1;
+  }
+  .ms-row.has-banner .ms-name:not([data-name-color]) {
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  }
+  .ms-row.has-banner .ms-sub {
+    color: rgba(255, 255, 255, 0.84);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+  }
+
+  /* Avatar + Decoration + Presence Dot */
+  .ms-av {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 900;
+    flex: none;
+    overflow: visible;
+  }
+  .ms-av > img.ms-av-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+  }
+  .ms-av .avatar-deco-img {
+    position: absolute;
+    inset: -18%;
+    width: 136%;
+    height: 136%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 3;
+    object-fit: contain;
+  }
+  .ms-av::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid var(--card, #ffffff);
+    background: #94a3b8;
+    z-index: 4;
+  }
+  body.dark .ms-av::after,
+  html.dark .ms-av::after {
+    border-color: #14171f;
+    background: #5c6370;
+  }
+  .ms-av.on::after {
+    background: #22c55e;
+    box-shadow: 0 0 7px 1px rgba(34, 197, 94, 0.85);
+  }
+
+  /* Member Name & Meta */
+  .ms-meta {
+    min-width: 0;
+    display: grid;
+    gap: 1px;
+  }
+  .ms-name-line {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+  }
+  .ms-name {
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ms-role-tag {
+    flex: none;
+    padding: 1px 5px;
+    border-radius: 5px;
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+  }
+  .ms-role-tag.admin {
+    background: rgba(245, 158, 11, 0.22);
+    color: #b45309;
+  }
+  body.dark .ms-role-tag.admin,
+  html.dark .ms-role-tag.admin,
+  .ms-row.has-banner .ms-role-tag.admin {
+    background: rgba(245, 158, 11, 0.28);
+    color: #fde68a;
+  }
+  .ms-role-tag.helper {
+    background: rgba(28, 176, 246, 0.2);
+    color: #0369a1;
+  }
+  body.dark .ms-role-tag.helper,
+  html.dark .ms-role-tag.helper,
+  .ms-row.has-banner .ms-role-tag.helper {
+    background: rgba(28, 176, 246, 0.28);
+    color: #bae6fd;
+  }
+  .ms-role-tag.mentor {
+    background: rgba(88, 204, 2, 0.2);
+    color: #2f7d00;
+  }
+  body.dark .ms-role-tag.mentor,
+  html.dark .ms-role-tag.mentor,
+  .ms-row.has-banner .ms-role-tag.mentor {
+    background: rgba(88, 204, 2, 0.28);
+    color: #bbf7d0;
+  }
+  .ms-role-tag.me {
+    background: rgba(139, 92, 246, 0.2);
+    color: #6d28d9;
+  }
+  body.dark .ms-role-tag.me,
+  html.dark .ms-role-tag.me,
+  .ms-row.has-banner .ms-role-tag.me {
+    background: rgba(139, 92, 246, 0.34);
+    color: #e9d5ff;
+  }
+  .ms-sub {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted, #64748b);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  body.dark .ms-sub,
+  html.dark .ms-sub {
+    color: #949ba4;
+  }
+
+  .ms-unread {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 99px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.45);
+  }
+
+  .ms-empty {
+    padding: 20px 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted, #64748b);
+  }
+}
