@@ -624,7 +624,7 @@
         ? `<div class="banner-chain-lock" aria-hidden="true">
             <span class="chain-strand a"></span>
             <span class="chain-strand b"></span>
-            <span class="chain-badge">⛓️ 🔒 KHUSUS ADMIN</span>
+            <span class="chain-badge"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>KHUSUS ADMIN</span></span>
           </div>`
         : '';
       return `<div class="banner-shop-card${isEquipped ? ' equipped' : ''}${lockedByRole ? ' is-admin-locked' : ''}">
