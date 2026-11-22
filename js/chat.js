@@ -20,7 +20,20 @@
     if (!r.ok) throw Object.assign(new Error(d.error || `Permintaan gagal (${r.status}).`), { status: r.status });
     return d;
   }
-  const setDot = n => { C.unread = n; document.querySelectorAll('[data-chat-dot]').forEach(d => { d.textContent = n > 9 ? '9+' : n; d.hidden = !n; }); try { window.CLINED_CHAT.unread = n; window.dispatchEvent(new Event('clined:chat-unread')); } catch {} };
+  const setDot = n => {
+    const count = Math.max(0, Number(n) || 0);
+    C.unread = count;
+    document.querySelectorAll('[data-chat-dot]').forEach(d => {
+      d.textContent = count > 9 ? '9+' : String(count);
+      d.hidden = !count;
+    });
+    const chatNavBtn = document.querySelector('#floatingDashboardNav .floating-nav-item[data-floating-nav="chat"]');
+    if (chatNavBtn) {
+      chatNavBtn.classList.toggle('has-unread', count > 0);
+      chatNavBtn.setAttribute('aria-label', count > 0 ? `Chat (${count} pesan belum terbaca)` : 'Chat');
+    }
+    try { window.CLINED_CHAT.unread = count; window.dispatchEvent(new Event('clined:chat-unread')); } catch {}
+  };
 
   /* ───────── notifikasi HP (Web Push) ───────── */
   const PUSH = { supported: 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window, key: undefined, on: false, busy: false };
@@ -215,7 +228,15 @@
   async function openPeer(id) {
     const u = (C.users || []).find(x => x.id === id); if (!u) return;
     C.peer = u; C.thread = null; render();
-    try { await loadThread(true); loadUsers().catch(() => {}); } catch (e) { toast(e.message, true); C.peer = null; render(); }
+    try {
+      await loadThread(true);
+      if (u.unread > 0) {
+        const dec = u.unread;
+        u.unread = 0;
+        setDot(Math.max(0, C.unread - dec));
+      }
+      loadUsers().catch(() => {});
+    } catch (e) { toast(e.message, true); C.peer = null; render(); }
   }
   async function send() {
     const i = $('chatInput'); if (!i || C.busy) return;
@@ -393,10 +414,22 @@
   navigator.serviceWorker?.addEventListener?.('message', e => { if (e.data?.type === 'open-chat') deepLink(e.data.id); });
   try { const q = new URLSearchParams(location.search).get('chat'); if (q) { deepLink(q); history.replaceState(null, '', location.pathname + location.hash); } } catch {}
   window.addEventListener('clined:profile-style', () => { if (C.host?.isConnected && !C.peer) render(); });
+  window.addEventListener('clined:auth-ready', () => {
+    if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
+    else setDot(0);
+  });
+  window.addEventListener('online', () => {
+    if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
+  });
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState !== 'visible' || !C.host?.isConnected) return;
+    if (document.visibilityState !== 'visible') return;
+    if (!C.host?.isConnected) {
+      if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
+      return;
+    }
     loadOnlineStats();
     (C.peer ? loadThread(false) : loadUsers().then(() => { if (!document.activeElement?.matches?.('[data-chat-q]')) render(); })).catch(() => {});
   });
+  if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
   window.CLINED_CHAT = { unread: 0, mount, stop: () => { stopPoll(); stopOnlinePoll(); C.peer = null; C.thread = null; }, onPush, refreshDot, openWith: deepLink };
 })();

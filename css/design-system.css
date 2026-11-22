@@ -716,6 +716,46 @@ html body .floating-dashboard-nav .floating-nav-img {
 html body .floating-dashboard-nav .floating-nav-item.active .floating-nav-img {
   opacity: 1;
 }
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="chat"],
+html body .floating-dashboard-nav .floating-nav-item[data-floating-nav="chat"] .floating-nav-icon {
+  position: relative !important;
+  overflow: visible !important;
+}
+html body .floating-dashboard-nav .floating-nav-badge {
+  position: absolute !important;
+  top: -5px !important;
+  right: -8px !important;
+  min-width: 17px !important;
+  height: 17px !important;
+  padding: 0 4.5px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #ff5b5b 0%, #e11d48 100%) !important;
+  color: #ffffff !important;
+  font-style: normal !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.45) !important;
+  pointer-events: none !important;
+  z-index: 5 !important;
+  animation: clinedNavBadgePop 0.28s cubic-bezier(.22, 1.4, .36, 1) both;
+}
+:root.dark html body .floating-dashboard-nav .floating-nav-badge {
+  border-color: #17201d !important;
+  box-shadow: 0 2px 10px rgba(244, 63, 94, 0.55) !important;
+}
+html body .floating-dashboard-nav .floating-nav-badge[hidden] {
+  display: none !important;
+}
+@keyframes clinedNavBadgePop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
 /* Home quick tile Sosial icon: clinical teal instead of violet */
 html body #home #hubBtn .home-materials-icon {
