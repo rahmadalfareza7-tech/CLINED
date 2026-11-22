@@ -112,6 +112,32 @@
     { id: '45-fc-barcelona',        name: 'FC Barcelona',        cat: 'Klub Bola', icon: '⚽', price: 18, isNew: true, desc: 'Klub Bola • Blaugrana Edition',   img: 'assets/banners/45-fc-barcelona.svg?v=2' }
   ];
 
+  // Nameplate eksklusif pribadi per akun — TIDAK muncul di shop untuk user lain.
+  const PERSONAL_EXCLUSIVE_BANNERS = [
+    {
+      id: 'luuk-helix-nameplate',
+      name: 'Luuk Helix',
+      cat: 'Eksklusif',
+      icon: '🧬',
+      price: 0,
+      exclusiveFor: ['thelazyraccoon'],
+      desc: 'Eksklusif Pribadi • Khusus @thelazyraccoon',
+      img: 'assets/banners/luuk-helix-nameplate.svg?v=2'
+    }
+  ];
+  const currentUsername = () => {
+    try {
+      const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      return String(u?.username || '').trim().toLowerCase().replace(/^@+/, '');
+    } catch { return ''; }
+  };
+  const getPersonalExclusiveBanners = () => {
+    const uname = currentUsername();
+    if (!uname) return [];
+    return PERSONAL_EXCLUSIVE_BANNERS.filter(b => Array.isArray(b.exclusiveFor) && b.exclusiveFor.includes(uname));
+  };
+  const getVisibleBannerCatalog = () => [...getPersonalExclusiveBanners(), ...BANNER_CATALOG];
+
   // Threshold jumlah duplikat untuk naik bintang otomatis: ★1=1, ★2=2, ★3=4, ★4=7, ★5=10
   const STAR_COPY_THRESHOLDS = [1, 2, 4, 7, 10];
   // Biaya upgrade bintang instan via Diamond (untuk naik ke ★2, ★3, ★4, ★5)
@@ -226,6 +252,7 @@
   }
   function applyServerCardState(d) {
     if (!d || !d.exists) return;
+    let bannerChanged = false;
     applyingServer = true;
     try {
       if (!isAdmin() && Number.isFinite(Number(d.diamonds))) localStorage.setItem(KEY_DIA, String(Math.max(0, Number(d.diamonds))));
@@ -233,13 +260,25 @@
       if (d.stars && typeof d.stars === 'object') localStorage.setItem(KEY_STARS, JSON.stringify(d.stars));
       if (typeof d.equippedId === 'string' && d.equippedId) localStorage.setItem(KEY_EQUIP, d.equippedId);
       if (Array.isArray(d.ownedBanners)) localStorage.setItem(KEY_BANNERS, JSON.stringify(d.ownedBanners));
-      if (typeof d.equippedBanner === 'string') localStorage.setItem(KEY_EQ_BANNER, d.equippedBanner);
+      if (typeof d.equippedBanner === 'string') {
+        localStorage.setItem(KEY_EQ_BANNER, d.equippedBanner);
+        const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+        if (me) {
+          const cleanId = d.equippedBanner.replace(/[^a-z0-9-]/gi, '');
+          const nextUrl = cleanId ? `assets/banners/${cleanId}.svg?v=2` : '';
+          if (me.bannerUrl !== nextUrl && (!me.bannerUrl || me.bannerUrl.startsWith('assets/banners/'))) {
+            me.bannerUrl = nextUrl;
+            bannerChanged = true;
+          }
+        }
+      }
       if (Array.isArray(d.ownedDecos)) localStorage.setItem(KEY_DECOS, JSON.stringify(d.ownedDecos));
       if (typeof d.equippedDeco === 'string') localStorage.setItem(KEY_EQ_DECO, d.equippedDeco);
       if (d.freeBannerClaimed) localStorage.setItem(KEY_FREE_BANNER, '1');
       if (d.freeDecoClaimed) localStorage.setItem(KEY_FREE_DECO, '1');
       if (d.cosmeticTutorialDone) localStorage.setItem(KEY_COSMETIC_TUT, '1');
     } finally { applyingServer = false; }
+    if (bannerChanged) window.dispatchEvent(new Event('clined:profile-style'));
     onExternalSync();
   }
   let serverHydrated = false;
@@ -671,35 +710,42 @@
     const colorPills = NAME_COLORS.map(c => `<button type="button" class="name-color-pill${curColor === c.id ? ' on' : ''}" data-pick-name-color="${esc(c.id)}"><span class="name-color-dot" style="background:${c.dot}"></span>${esc(c.name)}</button>`).join('');
     const freeAvail = !isFreeBannerClaimed();
     const seen = getSeenCosmetics();
-    const list = BANNER_CATALOG
+    const visibleCatalog = getVisibleBannerCatalog();
+    const list = visibleCatalog
       .filter(b => bannerFilter === 'all' || b.cat === bannerFilter)
       .slice()
       .sort((a, b) => {
+        const ea = a.exclusiveFor ? 0 : 1;
+        const eb = b.exclusiveFor ? 0 : 1;
+        if (ea !== eb) return ea - eb;
         const ua = (a.isNew && !seen.has('banner:' + a.id)) ? 0 : 1;
         const ub = (b.isNew && !seen.has('banner:' + b.id)) ? 0 : 1;
         return ua - ub;
       });
     const adminUser = isAdmin();
     const items = list.map(b => {
+      const isPersonalExcl = Boolean(b.exclusiveFor);
       const lockedByRole = Boolean(b.adminOnly && !adminUser);
-      const isOwned = !lockedByRole && ownedSet.has(b.id);
+      const isOwned = !lockedByRole && (isPersonalExcl || ownedSet.has(b.id));
       const isEquipped = !lockedByRole && eq === b.id;
       const canBuy = !lockedByRole && (freeAvail || dia >= b.price);
       const isUnseenNew = Boolean(b.isNew && !seen.has('banner:' + b.id));
       const newAttr = isUnseenNew ? ` data-new-cosmetic="banner:${esc(b.id)}"` : '';
       const newBadge = isUnseenNew ? '<span class="cosmetic-new-badge">NEW</span>' : '';
-      const btnCls = lockedByRole ? 'admin-locked' : isEquipped ? 'equipped' : isOwned ? 'equip' : (freeAvail && !b.adminOnly) ? 'free-claim' : '';
+      const btnCls = lockedByRole ? 'admin-locked' : isEquipped ? 'equipped' : isOwned ? 'equip' : (freeAvail && !b.adminOnly && !isPersonalExcl) ? 'free-claim' : '';
       const btnLabel = lockedByRole
         ? '🔒 Khusus Admin'
         : isEquipped
           ? '✓ Terpasang (Lepas)'
-          : isOwned
-            ? 'Pasang'
-            : (freeAvail && !b.adminOnly)
-              ? '🎁 Klaim Gratis'
-              : b.price === 0
-                ? '👑 Pasang (Admin)'
-                : `💎 ${b.price} Beli`;
+          : isPersonalExcl
+            ? `${b.icon} Pasang (Eksklusif)`
+            : isOwned
+              ? 'Pasang'
+              : (freeAvail && !b.adminOnly)
+                ? '🎁 Klaim Gratis'
+                : b.price === 0
+                  ? '👑 Pasang (Admin)'
+                  : `💎 ${b.price} Beli`;
       const chainOverlay = lockedByRole
         ? `<div class="banner-chain-lock" aria-hidden="true">
             <span class="chain-strand a"></span>
@@ -727,14 +773,14 @@
         ${chainOverlay}
       </div>`;
     }).join('');
-    const countCat = c => BANNER_CATALOG.filter(b => b.cat === c).length;
+    const countCat = c => visibleCatalog.filter(b => b.cat === c).length;
     const nCowok = countCat('Cowok'), nCewek = countCat('Cewek'), nBola = countCat('Klub Bola'), nAdmin = countCat('Eksklusif');
     const bCats = [
-      ['all', `Semua (${BANNER_CATALOG.length})`],
+      ['all', `Semua (${visibleCatalog.length})`],
       ['Cowok', `👦 Cowok (${nCowok})`],
       ['Cewek', `👧 Cewek (${nCewek})`],
       ['Klub Bola', `⚽ Klub Bola (${nBola})`],
-      ['Eksklusif', `👑 Admin (${nAdmin})`]
+      ['Eksklusif', `👑 Eksklusif (${nAdmin})`]
     ];
     const bPills = bCats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${bannerFilter === k ? ' on' : ''}" data-banner-filter="${esc(k)}">${lbl}</button>`).join('');
     const freeBannerNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Nameplate Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
@@ -1186,14 +1232,16 @@
     document.querySelectorAll('#cardShopContainer [data-banner-id]').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-banner-id');
-        const item = BANNER_CATALOG.find(b => b.id === id);
+        const item = getVisibleBannerCatalog().find(b => b.id === id);
         if (!item) return;
         if (item.adminOnly && !isAdmin()) { window.showToast?.('🔒 Nameplate ini khusus Admin.'); return; }
+        if (item.exclusiveFor && !item.exclusiveFor.includes(currentUsername())) { window.showToast?.('🔒 Nameplate eksklusif ini tidak tersedia.'); return; }
         const owned = getOwnedBanners();
-        const isOwned = owned.includes(id);
+        const isPersonalExcl = Boolean(item.exclusiveFor);
+        const isOwned = isPersonalExcl || owned.includes(id);
         const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
         if (!isOwned) {
-          const freeAvail = !isFreeBannerClaimed() && !item.adminOnly;
+          const freeAvail = !isFreeBannerClaimed() && !item.adminOnly && !isPersonalExcl;
           if (freeAvail) {
             markFreeBannerClaimed();
             setOwnedBanners([...owned, id]);
@@ -1213,6 +1261,7 @@
           if (me) me.bannerUrl = '';
           window.showToast?.('Background chat dilepas.');
         } else {
+          if (!owned.includes(id)) setOwnedBanners([...owned, id]);
           setEquippedBanner(id);
           if (me) me.bannerUrl = item.img;
           window.showToast?.(`${item.icon} ${item.name} dipasang!`);

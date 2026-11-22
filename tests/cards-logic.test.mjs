@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cleanCardId, cleanCardList, cleanStars, cleanDiamonds, mergeCardStates } from '../lib/cards-logic.mjs';
+import { cleanCardId, cleanCardList, cleanStars, cleanDiamonds, mergeCardStates, canUseBanner, exclusiveBannersForUser } from '../lib/cards-logic.mjs';
 
 test('cleanCardId accepts valid lowercase card IDs and rejects invalid', () => {
   assert.equal(cleanCardId('Cor'), 'cor');
@@ -64,4 +64,43 @@ test('mergeCardStates preserves one-time free claim and cosmetic tutorial flags'
   assert.equal(claimed.freeBannerClaimed, true);
   assert.equal(claimed.freeDecoClaimed, true);
   assert.equal(claimed.cosmeticTutorialDone, true);
+});
+
+test('personal exclusive banner luuk-helix-nameplate is restricted strictly to @thelazyraccoon', () => {
+  assert.equal(canUseBanner('luuk-helix-nameplate', { username: 'thelazyraccoon' }), true);
+  assert.equal(canUseBanner('luuk-helix-nameplate', { username: '@TheLazyRaccoon' }), true);
+  assert.equal(canUseBanner('luuk-helix-nameplate', { username: 'otheruser', isAdmin: false }), false);
+  assert.equal(canUseBanner('luuk-helix-nameplate', { username: 'adminuser', isAdmin: true }), false);
+  assert.deepEqual(exclusiveBannersForUser('thelazyraccoon'), ['luuk-helix-nameplate']);
+  assert.deepEqual(exclusiveBannersForUser('someoneelse'), []);
+
+  // Other users (even admin) cannot sneak it in via PUT /api/cards
+  const blocked = mergeCardStates(
+    null,
+    { ownedBanners: ['luuk-helix-nameplate', '01-blood-eclipse'], equippedBanner: 'luuk-helix-nameplate' },
+    'save',
+    { isAdmin: true, username: 'adminuser' }
+  );
+  assert.deepEqual(blocked.ownedBanners, ['01-blood-eclipse']);
+  assert.equal(blocked.equippedBanner, '');
+
+  // Stale offline device merge does not unequip @thelazyraccoon's exclusive banner
+  const keptOnMerge = mergeCardStates(
+    { ownedBanners: ['luuk-helix-nameplate', '01-blood-eclipse'], equippedBanner: 'luuk-helix-nameplate' },
+    { ownedBanners: ['01-blood-eclipse'], equippedBanner: '01-blood-eclipse' },
+    'merge',
+    { isAdmin: false, username: 'thelazyraccoon' }
+  );
+  assert.equal(keptOnMerge.equippedBanner, 'luuk-helix-nameplate');
+  assert.ok(keptOnMerge.ownedBanners.includes('luuk-helix-nameplate'));
+
+  // Explicit save lets @thelazyraccoon unequip or re-equip freely
+  const explicitSave = mergeCardStates(
+    { ownedBanners: ['luuk-helix-nameplate', '01-blood-eclipse'], equippedBanner: 'luuk-helix-nameplate' },
+    { ownedBanners: ['luuk-helix-nameplate', '01-blood-eclipse'], equippedBanner: '' },
+    'save',
+    { isAdmin: false, username: 'thelazyraccoon' }
+  );
+  assert.equal(explicitSave.equippedBanner, '');
+  assert.ok(explicitSave.ownedBanners.includes('luuk-helix-nameplate'));
 });
