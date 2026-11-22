@@ -307,10 +307,11 @@
     const commentKey = window.CLINED_QC?.keyOf('latihan-materi-' + S.block, q.id);
     const left = R.ans.filter(x => x == null).length;
     const others = left - (done ? 0 : 1);
+    const totalXp = (() => { try { return Math.max(0, Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0); } catch { return 0; } })();
     body().innerHTML = `<div class="card ml-card">
         <div class="ml-top">
           <span class="ml-pill">Soal ${R.pos + 1} / ${R.qs.length}</span>
-          <span class="ml-live"><button type="button" class="ml-flag${fl ? ' on' : ''}" data-ml-flag aria-pressed="${fl}" aria-label="Tandai soal">${fl ? '★' : '☆'}</button><span>✓ ${score} benar</span>${st > 1 ? `<span class="ml-fire">🔥 ${st} beruntun</span>` : ''}</span>
+          <span class="ml-live"><button type="button" class="ml-flag${fl ? ' on' : ''}" data-ml-flag aria-pressed="${fl}" aria-label="Tandai soal">${fl ? '★' : '☆'}</button><span>✓ ${score} benar</span>${st > 1 ? `<span class="ml-fire">🔥 ${st} beruntun</span>` : ''}<span class="xp-live" data-ml-xp-live>⚡ ${totalXp.toLocaleString('id-ID')} XP</span></span>
         </div>
         <div class="ml-progress" role="progressbar" aria-valuemin="0" aria-valuemax="${R.qs.length}" aria-valuenow="${R.qs.length - left}"><i style="width:${Math.round((R.qs.length - left) / R.qs.length * 100)}%"></i></div>
         <div class="ml-nav" id="mlNav" aria-label="Navigasi soal">${R.qs.map((qq, i) => { const a = R.ans[i]; const c = i === R.pos ? ' cur' : ''; const st2 = a == null ? '' : a === qq.benar ? ' ok' : ' bad'; return `<button type="button" class="ml-dot${c}${st2}" data-ml-goto="${i}" aria-label="Soal ${i + 1}">${i + 1}</button>`; }).join('')}</div>
@@ -387,8 +388,8 @@
     const streak = streakOf(R, R.pos);
     try {
       const gain = good ? 20 + Math.min(30, Math.max(0, (streak - 1) * 5)) : 5;
-      R.xp += gain;
-      window.addXP?.(gain, good ? (streak > 1 ? `Latihan Materi • streak ${streak} 🔥` : 'Latihan Materi • benar') : 'Tetap semangat—jawaban salah', { kind: 'materi', ref: q.id, block: S.block });
+      const xpRes = window.addXP?.(gain, good ? (streak > 1 ? `Latihan Materi • streak ${streak} 🔥` : 'Latihan Materi • benar') : 'Tetap semangat—jawaban salah', { kind: 'materi', ref: q.id, block: S.block });
+      R.xp += Number(xpRes?.gained || 0);
     } catch {}
     // sambungkan ke sistem utama: target harian, statistik kemampuan, daftar soal salah
     const rec = { stat: { p: q.orig[k], ci: q.orig[q.benar] }, id: q.id, bank: 'Latihan Materi', soal: q.soal, opsi: q.opsi, jawabanBenar: q.benar, pembahasan: q.pembahasan, pembahasanPilihan: q.per, catatanKlinis: q.catatan };

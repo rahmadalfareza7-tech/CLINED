@@ -11,7 +11,10 @@ window.CLINED_Leaderboard = (function () {
 
   async function fetchLeaderboard(syncFirst = false) {
     if (syncFirst) {
-      try { await window.CLINED_ONLINE_SYNC?.sync?.(); } catch {}
+      await Promise.allSettled([
+        window.CLINED_XP?.flush?.(),
+        window.CLINED_ONLINE_SYNC?.sync?.({ force: true })
+      ]);
     }
     const r = await fetch('/api/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
     if (!r.ok) {
@@ -200,6 +203,7 @@ window.CLINED_Leaderboard = (function () {
   });
 
   window.addEventListener('clined:auth-ready', () => refreshTeaser(true));
+  window.addEventListener('clined:xp-gained', () => { lbLoadedAt = 0; blockCache.clear(); });
   window.addEventListener('clined:view-change', e => {
     if (e.detail === 'home') refreshTeaser();
     if (e.detail === 'leaderboardPage') load();

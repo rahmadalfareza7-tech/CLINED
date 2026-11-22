@@ -43,6 +43,7 @@
     const { rows } = buildToday();
     if (!rows.length) { toast('Belum ada soal untuk hari ini. Kerjakan beberapa kuis dulu ya.', true); return; }
     quiz = rows; selectedBank = rows[0].bank; selectedCount = rows.length;
+    quizMode = 'study'; window.__clinedFinishing = false; window.__examReview = false;
     pos = 0; score = 0; streak = 0; sessionXP = 0; lastXPGain = 0; playerHP = 100; enemyHP = 100; wrongCombo = 0;
     answered = false; selectedAnswer = null; flagged = new Set(); timerDuration = 0; timerSeconds = 0; timerDeadline = 0;
     try { clearSession(); } catch {}

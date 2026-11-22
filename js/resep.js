@@ -337,7 +337,9 @@ function awardFarmakoXP(correctCount,reason,refPrefix,silentPopup=false){
     }
     S.sessionXp=(S.sessionXp||0)+totalGain;
     const xpAfter=getTotalXP();
-    const leveledUp=Math.floor(xpAfter/100)>Math.floor(xpBefore/100);
+    const leveledUp=typeof window.xpLevel==='function'
+      ? window.xpLevel(xpAfter)>window.xpLevel(xpBefore)
+      : Math.floor(xpAfter/100)>Math.floor(xpBefore/100);
     if(!silentPopup&&n>1&&totalGain>0&&typeof window.showXPPopup==='function'){
       try{window.showXPPopup(totalGain,label,leveledUp);}catch{}
     }

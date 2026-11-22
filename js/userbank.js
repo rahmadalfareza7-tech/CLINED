@@ -121,6 +121,7 @@ Jawaban: B`;
     if (!all.length) return toast('Deck ini belum punya soal yang valid.', true);
     const pick = shuffle(all).slice(0, count === 'all' ? all.length : Math.min(all.length, +count || 10));
     quiz = buildQuiz(m, pick); selectedBank = 'userbank'; selectedCount = quiz.length;
+    quizMode = 'study'; window.__clinedFinishing = false; window.__examReview = false;
     pos = 0; score = 0; streak = 0; sessionXP = 0; lastXPGain = 0; playerHP = 100; enemyHP = 100; wrongCombo = 0;
     answered = false; selectedAnswer = null; flagged = new Set(); timerDuration = 0; timerSeconds = 0; timerDeadline = 0;
     window.__ubLast = { deckId, count };

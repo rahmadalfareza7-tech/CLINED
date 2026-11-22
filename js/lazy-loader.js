@@ -37,7 +37,7 @@
     },
     resep: {
       styles: [],
-      scripts: ['js/resep-data.js?v=7', 'js/resep-core.js?v=9', 'js/resep-editor.js?v=1', 'js/resep.js?v=16']
+      scripts: ['js/resep-data.js?v=7', 'js/resep-core.js?v=9', 'js/resep-editor.js?v=1', 'js/resep.js?v=17']
     },
     ringkasanKedkel: {
       styles: ['css/kedkel-summary.css?v=5'],

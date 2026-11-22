@@ -131,8 +131,21 @@
       }
       if(key==='clined_xp_daily_refs_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'){
         if(loc.day&&loc.day===srv.day){
-          const refs={...(srv.refs||{}),...(loc.refs||{})};
-          return{value:JSON.stringify({day:srv.day,refs}),dirty:Object.keys(refs).length>Object.keys(srv.refs||{}).length};
+          const v=Math.max(Number(loc.v)||1,Number(srv.v)||1);
+          const lRefs=loc.refs&&typeof loc.refs==='object'?loc.refs:{};
+          const sRefs=srv.refs&&typeof srv.refs==='object'?srv.refs:{};
+          const refs={};
+          const keys=new Set([...Object.keys(sRefs),...Object.keys(lRefs)]);
+          let dirty=v>(Number(srv.v)||1);
+          for(const k of keys){
+            const lv=Number(lRefs[k])||0, sv=Number(sRefs[k])||0;
+            const normL=(Number(loc.v)>=2)?lv:(lv?9999:0);
+            const normS=(Number(srv.v)>=2)?sv:(sv?9999:0);
+            const mx=Math.max(normL,normS);
+            refs[k]=mx;
+            if(mx>normS||!(k in sRefs))dirty=true;
+          }
+          return{value:JSON.stringify({v,day:srv.day,refs}),dirty};
         }
         return{value:JSON.stringify(String(loc.day||'')>String(srv.day||'')?loc:srv),dirty:String(loc.day||'')>String(srv.day||'')};
       }
@@ -143,25 +156,32 @@
     }catch{}
     return null;
   }
+  function parseXpNum(raw){
+    if(typeof raw==='number')return Number.isFinite(raw)&&raw>=0?Math.round(raw):null;
+    if(typeof raw!=='string'||!raw.trim())return null;
+    try{
+      const p=JSON.parse(raw);
+      const n=Number(p);
+      return Number.isFinite(n)&&n>=0?Math.round(n):null;
+    }catch{
+      const n=Number(raw);
+      return Number.isFinite(n)&&n>=0?Math.round(n):null;
+    }
+  }
   function apply(state){
     let restoreXP=null;
     const rePush=[];
     const xpKey='gaster_v11_xp';
-    const xpNumber=raw=>{
-      if(typeof raw!=='string'||!/^\s*\d+\s*$/.test(raw))return null;
-      const n=Number(raw);
-      return Number.isSafeInteger(n)&&n>=0?n:null;
-    };
     suppress=true;
     try{
       for(const [key,item] of Object.entries(state||{})){
         if(!safe(key)||!item)continue;
         if(key===xpKey){
           const localRaw=localStorage.getItem(xpKey);
-          const localXP=xpNumber(localRaw);
-          const serverXP=item.deleted?null:xpNumber(item.value);
+          const localXP=parseXpNum(localRaw);
+          const serverXP=item.deleted?null:parseXpNum(item.value);
           if(localXP!==null&&(serverXP===null||localXP>serverXP)){
-            restoreXP=localRaw;
+            restoreXP=String(localXP);
             continue;
           }
         }
@@ -238,16 +258,19 @@
         const confirmed=group.filter(op=>{
           if(!Object.prototype.hasOwnProperty.call(accepted,op.key))return false;
           const result=accepted[op.key];
-          return op.type==='delete'
-            ? result?.deleted===true
-            : result?.deleted!==true&&result?.value===op.value;
+          if(op.type==='delete')return result?.deleted===true;
+          if(op.key==='gaster_v11_xp'&&result?.deleted!==true){
+            const rv=parseXpNum(result?.value), ov=parseXpNum(op.value);
+            if(rv!==null&&ov!==null&&rv>=ov)return true;
+          }
+          return result?.deleted!==true&&result?.value===op.value;
         });
         if(confirmed.length){
           const ids=new Set(confirmed.map(op=>op.id));
           setQueue(getQueue().filter(op=>!ids.has(op.id)),true);
         }
         apply(accepted);
-        if(saved.updatedAt)localStorage.setItem(CURSOR,saved.updatedAt);
+        if(saved.updatedAt)nativeSet(CURSOR,saved.updatedAt);
         if(saved.unlocked100k?.unlocked)window.CLINED_XP_100K?.onUnlock?.(saved.unlocked100k);
       }
       dirty=getQueue().length>0;
@@ -263,7 +286,19 @@
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushBeacon();});
   window.addEventListener('clined:auth-ready',()=>sync({force:true}));
   setInterval(()=>sync(),PERIODIC_PULL_MS);
-  let dirtyTimer=0;
-  window.CLINED_ONLINE_SYNC={sync,switchUser,clearLocalLearningData,markDirty:()=>{dirty=true;clearTimeout(dirtyTimer);dirtyTimer=setTimeout(()=>sync({force:true}),900)}};
+  let dirtyTimer=0, dirtySince=0;
+  window.CLINED_ONLINE_SYNC={
+    sync,switchUser,clearLocalLearningData,
+    markDirty:()=>{
+      dirty=true;
+      if(!dirtySince)dirtySince=Date.now();
+      if(Date.now()-dirtySince>=2500){
+        clearTimeout(dirtyTimer);dirtyTimer=0;dirtySince=0;
+        sync({force:true});
+      }else if(!dirtyTimer){
+        dirtyTimer=setTimeout(()=>{dirtyTimer=0;dirtySince=0;sync({force:true});},900);
+      }
+    }
+  };
   window.addEventListener('load',()=>sync({force:true}),{once:true});
 })();

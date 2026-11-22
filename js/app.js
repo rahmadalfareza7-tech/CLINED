@@ -45,52 +45,76 @@ function todayXpKey(){
     return d.toISOString().slice(0,10);
   }catch{return new Date().toISOString().slice(0,10);}
 }
-function claimDailyXpRef(kind,ref){
-  if(!ref || String(ref).startsWith('rnd:'))return true;
+function claimDailyXpRef(kind,ref,amount=0){
+  const req=Math.max(0,Math.round(Number(amount)||0));
+  if(req<=0)return {delta:0,total:0,duplicate:true};
+  if(!ref || String(ref).startsWith('rnd:'))return {delta:req,total:req,duplicate:false};
   try{
     const day=todayXpKey(), key='clined_xp_daily_refs_v1';
     const raw=JSON.parse(localStorage.getItem(key)||'{}');
-    const map=(raw && raw.day===day && raw.refs && typeof raw.refs==='object')?raw.refs:{};
+    const sameDay=Boolean(raw && raw.day===day && raw.refs && typeof raw.refs==='object');
+    const isV2=sameDay && Number(raw.v)>=2;
+    const map=sameDay?{...raw.refs}:{};
     const token=`${kind||'quiz'}|${String(ref).slice(0,80)}`;
-    if(map[token])return false;
-    map[token]=1;
-    localStorage.setItem(key,JSON.stringify({day,refs:map}));
-    return true;
-  }catch{return true;}
+    const prevRaw=map[token];
+    const prev=prevRaw ? (isV2 ? (Number(prevRaw)||0) : Infinity) : 0;
+    if(req<=prev)return {delta:0,total:Number.isFinite(prev)?prev:req,duplicate:true};
+    const nextMap={};
+    for(const [k,v] of Object.entries(map)){
+      nextMap[k]=isV2?(Number(v)||0):(v?9999:0);
+    }
+    nextMap[token]=req;
+    localStorage.setItem(key,JSON.stringify({v:2,day,refs:nextMap}));
+    return {delta:req-prev,total:req,upgraded:prev>0,duplicate:false};
+  }catch{return {delta:req,total:req,duplicate:false};}
 }
 function addXP(amount,reason="",meta){
   const before=Number(get(KEY.xp,0))||0;
-  const gained=Math.max(0,Math.round(amount));
+  const requested=Math.max(0,Math.round(amount));
   const kind=meta?.kind||"quiz";
   const ref=meta?.ref||("rnd:"+Math.random().toString(36).slice(2,10));
-  if(gained<=0 || !claimDailyXpRef(kind,ref)){
+  const claim=claimDailyXpRef(kind,ref,requested);
+  if(requested<=0 || claim.delta<=0){
+    if(!meta?.silent && meta?.notifyDuplicate){
+      showToast("✓ XP soal ini sudah tercatat hari ini");
+    }
     return {before,after:before,gained:0,leveledUp:false,duplicate:true};
   }
+  const gained=claim.delta;
   const rawBankBlock=(typeof blockForBank==='function'&&typeof selectedBank!=='undefined'&&!window.__clinedCustomQuiz)?blockForBank(selectedBank):'';
   const evBlock=meta?.block||(rawBankBlock&&rawBankBlock!=='OTHER'?rawBankBlock:'')||(typeof selectedBank!=='undefined'&&selectedBank==='userbank'?'':(typeof getCurrentBlockId==='function'?getCurrentBlockId():''));
-  try{if(gained>0 && kind!=="userbank")window.CLINED_XP?.enqueue(kind,ref,gained,evBlock);}catch(e){}
+  try{if(claim.total>0 && kind!=="userbank")window.CLINED_XP?.enqueue(kind,ref,claim.total,evBlock);}catch(e){}
   const after=before+gained;
   set(KEY.xp,after);
   // Push XP immediately instead of waiting for the periodic sync interval.
   try{window.CLINED_ONLINE_SYNC?.markDirty?.();}catch(e){console.warn('XP sync trigger skipped',e);}
+  if(before<100000 && after>=100000){
+    try{window.CLINED_XP?.flush?.();}catch{}
+    try{window.CLINED_ONLINE_SYNC?.sync?.({force:true});}catch{}
+  }
   lastXPGain=gained;sessionXP+=gained;
   renderXP();
+  try{window.dispatchEvent(new CustomEvent('clined:xp-gained',{detail:{before,after,gained,kind,ref}}));}catch{}
   const leveledUp=xpLevel(after)>xpLevel(before);
-  if(!meta?.silent)showXPPopup(gained,reason,leveledUp);
+  if(!meta?.silent)showXPPopup(gained,claim.upgraded?`${reason||"Jawaban benar"} (upgrade XP)`:reason,leveledUp);
   clearTimeout(window.__clinedAchTimer);
   window.__clinedAchTimer=setTimeout(()=>{try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}},450);
-  return {before,after,gained,leveledUp};
+  return {before,after,gained,leveledUp,upgraded:!!claim.upgraded};
 }
 function renderXP(){
   const info=xpInfo(Number(get(KEY.xp,0))||0);
   const pct=Math.min(100,Math.round(info.current/Math.max(1,info.need)*100));
+  const fmtTotal=info.total.toLocaleString('id-ID');
   if($("levelBadge"))$("levelBadge").textContent=`Lv. ${info.level}`;
   if($("xpTitle"))$("xpTitle").textContent=xpTitle(info.level);
-  if($("xpTotal"))$("xpTotal").textContent=`${info.total.toLocaleString('id-ID')} XP`;
+  if($("xpTotal"))$("xpTotal").textContent=`${fmtTotal} XP`;
   setProgress($("xpBar"),pct);
   if($("xpProgressText"))$("xpProgressText").textContent=`${info.current.toLocaleString('id-ID')} / ${info.need.toLocaleString('id-ID')} XP`;
   if($("xpNextText"))$("xpNextText").textContent=info.level>=XP_MAX_LEVEL?"MAX LEVEL":`${(info.need-info.current).toLocaleString('id-ID')} XP ke Level ${info.level+1}`;
-  if($("xpLive"))$("xpLive").textContent=`⚡ ${info.total.toLocaleString('id-ID')} XP`;
+  if($("xpLive"))$("xpLive").textContent=`⚡ ${fmtTotal} XP`;
+  if($("duoHudXp"))$("duoHudXp").textContent=fmtTotal;
+  if($("uabXpStat"))$("uabXpStat").textContent=fmtTotal;
+  document.querySelectorAll("[data-ml-xp-live]").forEach(el=>{el.textContent=`⚡ ${fmtTotal} XP`;});
   if($("playerBadges")){
     $("playerBadges").querySelectorAll(":scope > span").forEach(el=>el.remove());
   }
@@ -358,7 +382,9 @@ function show(id, options={}){
     }catch{}
   }
 
-  if(id==="home") renderHomeClinicalDashboard();
+  if(id==="home"){renderHomeClinicalDashboard();renderXP();}
+  if(id==="uabPage"){renderXP();syncUabStats();}
+  if(id==="clinicalDashboard") renderXP();
   if(id==="achievementsPage" && typeof renderAchievements==="function") renderAchievements();
   const __blockPages={
     blokBm1Page:["BM1","blokBm1Page"],blokBm2Page:["BM2","blokBm2Page"],blokHncPage:["HNC","blokHncPage"],
@@ -423,7 +449,7 @@ function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern)}ca
       const hudXp=document.getElementById("duoHudXp");
       const hudStreak=document.getElementById("duoHudStreak");
       const hudGoal=document.getElementById("duoHudGoal");
-      if(hudXp && xpEl) hudXp.textContent=(xpEl.textContent||"0").replace(/\\s*XP/i,"");
+      if(hudXp && xpEl) hudXp.textContent=(xpEl.textContent||"0").replace(/\s*XP/i,"");
       if(hudStreak) hudStreak.textContent=String(calculateDailyStreak(streakData().counts));
       if(hudGoal && dailyEl) hudGoal.textContent=dailyEl.textContent||"0/5";
     }catch(e){}
@@ -1495,6 +1521,15 @@ async function examSubmit(){
   });
   if(ok)finish();
 }
+function quizXpRef(q){
+  const raw=String(q?.id||'').trim();
+  const bank=String(q?.bank||selectedBank||'').trim();
+  if(!raw)return bank?`${bank}-q${q?.no||pos+1}`:`q-${pos+1}`;
+  if(bank && bank!=='userbank' && !raw.includes('-') && !raw.includes(':')){
+    return `${bank}:${raw}`;
+  }
+  return raw;
+}
 function gradeExam(){
   let good=0,totalXP=0;
   quiz.forEach(q=>{
@@ -1513,24 +1548,27 @@ function gradeExam(){
       return;
     }
     recordDailyQuestion();
+    const ref=quizXpRef(q);
+    const kind=q.bank==="userbank"?"userbank":"quiz";
     if(!valid){
-      addXP(5,"Soal dikerjakan",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id,silent:true});
-      totalXP+=5;
+      const r=addXP(5,"Soal dikerjakan",{kind,ref,silent:true});
+      totalXP+=Number(r?.gained||0);
       return;
     }
     recordQuestionPerformance(q,correct);
     if(correct){
       recordRight(q);
-      addXP(20,"Jawaban benar",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id,silent:true});
-      totalXP+=20;
+      const r=addXP(20,"Jawaban benar",{kind,ref,silent:true});
+      totalXP+=Number(r?.gained||0);
     }else{
       recordWrong(q);
-      addXP(5,"Jawaban salah",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id,silent:true});
-      totalXP+=5;
+      const r=addXP(5,"Jawaban salah",{kind,ref,silent:true});
+      totalXP+=Number(r?.gained||0);
     }
   });
   score=good;
-  if(totalXP)showXPPopup(totalXP,"Ujian selesai");
+  renderXP();
+  if(totalXP>0)showXPPopup(totalXP,"Ujian selesai");
 }
 
 function runChunkedAfterPaint(tasks){
@@ -1553,19 +1591,21 @@ function answer(i){
   answered=true;selectedAnswer=i;
   const q=quiz[pos];
   const answerPos=pos;
+  const ref=quizXpRef(q);
+  const kind=q.bank==="userbank"?"userbank":"quiz";
   if(q.incomplete || q.jawabanBenar==null){
     q.selectedAnswer=i;
     document.querySelectorAll(".answer").forEach(b=>b.disabled=true);
     $("nextBtn").hidden=false;$("nextBtn").style.display="block";$("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
+    try{recordDailyQuestion();}catch{}
+    try{addXP(5,"Soal dikerjakan",{kind,ref,notifyDuplicate:true});}catch{}
+    try{saveSession();}catch{}
     requestAnimationFrame(()=>{
       if(pos!==answerPos)return;
       if(quizMode==="study"){$("explainText").innerHTML=allExplanations(q);$("explain").style.display="block";}
     });
     runChunkedAfterPaint([
-      ()=>{recordDailyQuestion();},
-      ()=>{addXP(5,"Soal dikerjakan",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});},
-      ()=>{if(quizMode==="study" && pos===answerPos)mountBankQuestionComments(q,$("explainText"));},
-      ()=>{saveSession();}
+      ()=>{if(quizMode==="study" && pos===answerPos)mountBankQuestionComments(q,$("explainText"));}
     ]);
     return;
   }
@@ -1584,6 +1624,19 @@ function answer(i){
   $("nextBtn").style.display="block";
   $("nextBtn").textContent=pos===quiz.length-1?"Lihat Hasil":"Selanjutnya";
   const curStreak=streak, curBtn=ansBtns[i];
+  // Catat progres & XP secara sinkron agar #xpLive, #xpBar, sessionXP, dan hasil akhir selalu langsung naik tanpa delay.
+  try{recordDailyQuestion();}catch{}
+  try{recordQuestionPerformance(q,good);}catch{}
+  try{if(good&&q.jawabanBenar!=null)recordRight(q);else if(!good)recordWrong(q);}catch{}
+  try{
+    if(good){
+      const gain=20 + Math.min(30,Math.max(0,(curStreak-1)*5));
+      addXP(gain,curStreak>1?`Jawaban benar • streak ${curStreak} 🔥`:"Jawaban benar",{kind,ref,notifyDuplicate:true});
+    }else{
+      addXP(5,"Tetap semangat—jawaban salah",{kind,ref,notifyDuplicate:true});
+    }
+  }catch{}
+  try{saveSession();}catch{}
   requestAnimationFrame(()=>{
     if(pos!==answerPos)return;
     if(quizMode==="study"){
@@ -1601,19 +1654,7 @@ function answer(i){
     }
   });
   runChunkedAfterPaint([
-    ()=>{recordDailyQuestion();},
-    ()=>{recordQuestionPerformance(q,good);},
-    ()=>{if(good&&q.jawabanBenar!=null)recordRight(q);else if(!good)recordWrong(q);},
-    ()=>{
-      if(good){
-        const gain=20 + Math.min(30,Math.max(0,(curStreak-1)*5));
-        addXP(gain,curStreak>1?`Jawaban benar • streak ${curStreak} 🔥`:"Jawaban benar",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
-      }else{
-        addXP(5,"Tetap semangat—jawaban salah",{kind:q.bank==="userbank"?"userbank":"quiz",ref:q.id});
-      }
-    },
-    ()=>{if(quizMode==="study" && pos===answerPos)mountBankQuestionComments(q,$("explainText"));},
-    ()=>{saveSession();}
+    ()=>{if(quizMode==="study" && pos===answerPos)mountBankQuestionComments(q,$("explainText"));}
   ]);
 }
 function goToQuestion(target){
@@ -2038,6 +2079,9 @@ function startCustomQuiz(list,{shuffleList=true,limit=20}={}){
   const base=(list||[]).filter(q=>q&&q.jawabanBenar!=null&&Array.isArray(q.opsi));
   if(!base.length){showToast("Belum ada soal untuk dilatih.");return false}
   window.__clinedCustomQuiz=true;
+  window.__clinedFinishing=false;
+  window.__examReview=false;
+  quizMode="study";
   quiz=(shuffleList?shuffle(base):base).slice(0,limit).map(wrongToQuiz);
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
@@ -2076,6 +2120,9 @@ function startSmartReview(){
   }).filter(Boolean);
   if(!quiz.length){showToast('Soal review tidak tersedia di bank saat ini.');return;}
   window.__clinedCustomQuiz=true;
+  window.__clinedFinishing=false;
+  window.__examReview=false;
+  quizMode="study";
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show('quiz');renderQuestion();startTimer();
 }
@@ -2140,6 +2187,7 @@ function resolveQuestionRef(id){
 }
 function startSingleQuestion(bankId,idx){
   const q=rawToQuiz(bankId,idx); if(!q)return;
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizMode="study";
   selectedBank=bankId;selectedCount=1;quiz=[q];pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
 }
@@ -2147,6 +2195,7 @@ function startBookmarkDrill(){
   const ids=get(KEY.book,[]),rows=[];
   ids.forEach(id=>{const ref=resolveQuestionRef(id);if(ref)rows.push(rawToQuiz(ref.bankId,ref.idx));});
   if(!rows.length){showToast("Belum ada soal bookmark. Simpan beberapa soal dulu.");return;}
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizMode="study";
   quiz=shuffle(rows).slice(0,Math.min(20,rows.length));selectedCount=quiz.length;selectedBank=quiz[0].bank;pos=0;score=0;streak=0;sessionXP=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
 }
@@ -2165,6 +2214,7 @@ function renderBookmarks(){
 function startSmart10(){
   const candidates=[];
   Object.entries(BANKS).forEach(([bankId,b])=>b.data.forEach((q,i)=>{if(q?.opsi?.length>=2)candidates.push(rawToQuiz(bankId,i));}));
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizMode="study";
   quiz=shuffle(candidates).slice(0,10);selectedCount=quiz.length;selectedBank=quiz[0]?.bank||"utama";pos=0;score=0;streak=0;sessionXP=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
 }
@@ -2640,15 +2690,15 @@ function renderClinicalDashboard(){
   const hist=get(KEY.hist,[]);
   const xp=Number(get(KEY.xp,0))||0;
   const wrong=get(KEY.wrong,{});
-  const total=hist.reduce((a,h)=>a+(Number(h.total)||0),0);
-  const correct=hist.reduce((a,h)=>a+(Number(h.correct)||0),0);
+  const total=hist.reduce((a,h)=>a+(Number(h.validTotal??h.total)||0),0);
+  const correct=hist.reduce((a,h)=>a+(Number(h.score??h.correct)||0),0);
   const acc=total?Math.round(correct/total*100):0;
   const today=new Date().toISOString().slice(0,10);
   const todayCount=hist.filter(h=>String(h.date||h.timestamp||'').slice(0,10)===today).reduce((a,h)=>a+(Number(h.total)||0),0);
   const mission={target:20,done:todayCount};
   renderRadarChart('dashboardRadarChart','dashboardRadarLegend',dashboardBlock());
   if($('dashboardMission'))$('dashboardMission').innerHTML=`<div><b>🎯 Misi Hari Ini</b><span>${Math.min(mission.done,mission.target)}/${mission.target} soal</span></div><div class="mission-track"><i style="width:${Math.min(100,mission.done/mission.target*100)}%"></i></div><small>${mission.done>=mission.target?'Misi selesai. Pertahankan momentum!':`Kurang ${mission.target-mission.done} soal lagi.`}</small>`;
-  if($('dashboardStats'))$('dashboardStats').innerHTML=[['⚡',xp+' XP','Clinical XP'],['📚',hist.length,'Sesi'],['🎯',acc+'%','Akurasi'],['📝',todayCount,'Soal hari ini']].map(x=>`<div class="dashboard-stat"><span>${x[0]}</span><b>${x[1]}</b><small>${x[2]}</small></div>`).join('');
+  if($('dashboardStats'))$('dashboardStats').innerHTML=[['⚡',xp.toLocaleString('id-ID')+' XP','Clinical XP'],['📚',hist.length,'Sesi'],['🎯',acc+'%','Akurasi'],['📝',todayCount,'Soal hari ini']].map(x=>`<div class="dashboard-stat"><span>${x[0]}</span><b>${x[1]}</b><small>${x[2]}</small></div>`).join('');
   const wrongEntries=Object.entries(wrong||{}).sort((a,b)=>(b[1]?.wrong||0)-(a[1]?.wrong||0)).slice(0,3);
   const rec=wrongEntries.length?wrongEntries.map(([id,v])=>`<div class="recommend-card"><b>🔁 Review soal ${esc(id)}</b><small>${Number(v?.wrong||0)}× salah • jadikan target review</small></div>`).join(''):`<div class="recommend-card"><b>🧠 Mulai Smart 10</b><small>Latihan campuran untuk membangun clinical recall.</small></div>`;
   if($('dashboardRecommendations'))$('dashboardRecommendations').innerHTML=rec+`<button class="primary" id="dashboardSmartBtn">⚡ Mulai Smart 10</button>`;
@@ -2657,11 +2707,11 @@ function renderClinicalDashboard(){
 
 if($("backFromGoogleDrive"))$("backFromGoogleDrive").onclick=()=>show("home");
 function syncUabStats(){
-  const streak=Number(localStorage.getItem("clined_streak")||localStorage.getItem("streak")||0);
-  const xp=Number(localStorage.getItem("clined_xp")||localStorage.getItem("xp")||0);
-  const gems=Number(localStorage.getItem("clined_gems")||localStorage.getItem("gems")||0);
+  const streak=typeof calculateDailyStreak==='function'?calculateDailyStreak(streakData().counts):Number(localStorage.getItem("clined_streak")||0);
+  const xp=Number(get(KEY.xp,0))||0;
+  const gems=Number(localStorage.getItem("clined_diamonds_v1")||localStorage.getItem("clined_gems")||0)||0;
   const a=document.getElementById("uabStreakStat"),b=document.getElementById("uabXpStat"),c=document.getElementById("uabGemStat");
-  if(a)a.textContent=streak; if(b)b.textContent=xp; if(c)c.textContent=gems;
+  if(a)a.textContent=String(streak); if(b)b.textContent=xp.toLocaleString('id-ID'); if(c)c.textContent=String(gems);
 }
 
 /* UPI Flash Card — per-block active recall + spaced repetition. */

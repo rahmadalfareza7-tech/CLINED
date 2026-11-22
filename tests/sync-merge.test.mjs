@@ -63,3 +63,27 @@ test('mergeJsonKey merges streak, SM2, notes, and best scores without data loss'
   assert.equal(timer.value, '4');
   assert.equal(timer.dirty, true);
 });
+
+test('mergeJsonKey merges clined_xp_daily_refs_v1 v2 XP upgrades and v1 legacy entries safely', () => {
+  const upgraded = mergeJsonKey(
+    'clined_xp_daily_refs_v1',
+    JSON.stringify({ v: 2, day: '2026-11-22', refs: { 'quiz|q1': 20, 'quiz|q2': 5 } }),
+    JSON.stringify({ v: 2, day: '2026-11-22', refs: { 'quiz|q1': 5, 'quiz|q3': 25 } })
+  );
+  assert.equal(upgraded.dirty, true);
+  assert.deepEqual(JSON.parse(upgraded.value), {
+    v: 2,
+    day: '2026-11-22',
+    refs: { 'quiz|q1': 20, 'quiz|q2': 5, 'quiz|q3': 25 }
+  });
+
+  const legacy = mergeJsonKey(
+    'clined_xp_daily_refs_v1',
+    JSON.stringify({ v: 2, day: '2026-11-22', refs: { 'quiz|q2': 20 } }),
+    JSON.stringify({ day: '2026-11-22', refs: { 'quiz|q1': 1 } })
+  );
+  const lv = JSON.parse(legacy.value);
+  assert.equal(lv.v, 2);
+  assert.equal(lv.refs['quiz|q1'], 9999);
+  assert.equal(lv.refs['quiz|q2'], 20);
+});
