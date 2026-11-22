@@ -140,6 +140,7 @@
 
   /* ---------- list ---------- */
   async function openList(block, label, pageId, startMateriNo = null) {
+    flushPendingPick();
     if (block) { if (block !== S.block) { S.q = ''; S.lf = 'all'; S.lim = 12; } S.block = block; S.label = label; S.pageId = pageId; }
     if (!S.block) { window.show?.('home'); return; }
     S.run = null;
@@ -295,6 +296,42 @@
     });
   }
 
+  let pendingPostPick = [];
+  let postPickTimer = 0;
+  function flushPendingPick() {
+    if (postPickTimer) { clearTimeout(postPickTimer); postPickTimer = 0; }
+    if (!pendingPostPick.length) return;
+    const tasks = pendingPostPick.splice(0);
+    for (const fn of tasks) { try { fn(); } catch {} }
+  }
+  function schedulePostPick(fn) {
+    pendingPostPick.push(fn);
+    if (!postPickTimer) {
+      postPickTimer = setTimeout(() => {
+        postPickTimer = 0;
+        flushPendingPick();
+      }, 32);
+    }
+  }
+  window.addEventListener('pagehide', flushPendingPick);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushPendingPick(); });
+
+  function renderDockHTML(R, done, left, others) {
+    return `${R.pos > 0 ? '<button type="button" class="secondary ml-prev" data-ml-prev>Sebelumnya</button>' : ''}${done ? `<button type="button" class="primary ml-next" data-ml-next>${left > 0 ? 'Lanjut' : 'Lihat hasil 🏁'}</button>` : `<button type="button" class="secondary ml-skip" data-ml-skip ${others > 0 ? '' : 'disabled'}>Lewati</button>`}`;
+  }
+
+  function mountCommentsDeferred(R, q, posSnap) {
+    const commentKey = window.CLINED_QC?.keyOf('latihan-materi-' + S.block, q.id);
+    if (!commentKey) return;
+    setTimeout(() => {
+      if (S.run !== R || R.pos !== posSnap || R.done) return;
+      const host = body()?.querySelector('[data-materi-qcomments]');
+      if (host && host.dataset.qid === String(q.id)) {
+        window.CLINED_QC?.mount(host, commentKey);
+      }
+    }, 60);
+  }
+
   function renderQ() {
     const R = S.run, q = R.qs[R.pos], picked = R.ans[R.pos], done = picked != null;
     if (!done && R.t0Pos !== R.pos) { R.t0 = Date.now(); R.t0Pos = R.pos; }
@@ -304,31 +341,25 @@
 
     const pptQuizBar = window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(q, 'quiz') || '';
     const explain = done ? explainHTML(q, picked, false) : '';
-    const commentKey = window.CLINED_QC?.keyOf('latihan-materi-' + S.block, q.id);
     const left = R.ans.filter(x => x == null).length;
     const others = left - (done ? 0 : 1);
     const totalXp = (() => { try { return Math.max(0, Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0); } catch { return 0; } })();
-    body().innerHTML = `<div class="card ml-card">
+    body().innerHTML = `<div class="card ml-card" data-ml-pos="${R.pos}" data-ml-qid="${esc(q.id)}">
         <div class="ml-top">
           <span class="ml-pill">Soal ${R.pos + 1} / ${R.qs.length}</span>
-          <span class="ml-live"><button type="button" class="ml-flag${fl ? ' on' : ''}" data-ml-flag aria-pressed="${fl}" aria-label="Tandai soal">${fl ? '★' : '☆'}</button><span>✓ ${score} benar</span>${st > 1 ? `<span class="ml-fire">🔥 ${st} beruntun</span>` : ''}<span class="xp-live" data-ml-xp-live>⚡ ${totalXp.toLocaleString('id-ID')} XP</span></span>
+          <span class="ml-live"><button type="button" class="ml-flag${fl ? ' on' : ''}" data-ml-flag aria-pressed="${fl}" aria-label="Tandai soal">${fl ? '★' : '☆'}</button><span data-ml-score>✓ ${score} benar</span><span class="ml-fire" data-ml-streak${st > 1 ? '' : ' hidden'}>${st > 1 ? `🔥 ${st} beruntun` : ''}</span><span class="xp-live" data-ml-xp-live>⚡ ${totalXp.toLocaleString('id-ID')} XP</span></span>
         </div>
         <div class="ml-progress" role="progressbar" aria-valuemin="0" aria-valuemax="${R.qs.length}" aria-valuenow="${R.qs.length - left}"><i style="width:${Math.round((R.qs.length - left) / R.qs.length * 100)}%"></i></div>
         <div class="ml-nav" id="mlNav" aria-label="Navigasi soal">${R.qs.map((qq, i) => { const a = R.ans[i]; const c = i === R.pos ? ' cur' : ''; const st2 = a == null ? '' : a === qq.benar ? ' ok' : ' bad'; return `<button type="button" class="ml-dot${c}${st2}" data-ml-goto="${i}" aria-label="Soal ${i + 1}">${i + 1}</button>`; }).join('')}</div>
         <div class="ml-question">${esc(q.soal)}</div>
         ${pptQuizBar ? `<div class="quiz-materi-bar">${pptQuizBar}</div>` : ''}
         <div class="ml-options">${q.opsi.map((o, k) => `<button type="button" class="ml-opt${done ? (k === q.benar ? ' ok' : k === picked ? ' bad' : '') : ''}" data-ml-pick="${k}" ${done ? 'disabled' : ''}><span class="ml-letter">${L[k]}</span><span class="ml-opt-text">${esc(o)}</span></button>`).join('')}</div>
-        ${explain}
-        ${done ? '<div class="qcomments-slot" data-materi-qcomments></div>' : ''}
+        <div class="ml-explain-host" data-ml-explain-host>${explain}</div>
       </div>
-      ${left > 0 && left < R.qs.length ? `<button type="button" class="ml-finish-early" data-ml-finish>Akhiri latihan (${left} soal belum dijawab)</button>` : ''}
-      <div class="ml-dock"><div class="ml-dock-row">
-        ${R.pos > 0 ? '<button type="button" class="secondary ml-prev" data-ml-prev>Sebelumnya</button>' : ''}
-        ${done ? `<button type="button" class="primary ml-next" data-ml-next>${left > 0 ? 'Lanjut' : 'Lihat hasil 🏁'}</button>` : `<button type="button" class="secondary ml-skip" data-ml-skip ${others > 0 ? '' : 'disabled'}>Lewati</button>`}
-      </div></div>`;
-    if (done && commentKey) {
-      window.CLINED_QC?.mount(body().querySelector('[data-materi-qcomments]'), commentKey);
-    }
+      <div class="ml-dock"><div class="ml-dock-row" data-ml-dock-row>${renderDockHTML(R, done, left, others)}</div></div>
+      <button type="button" class="ml-finish-early" data-ml-finish${left > 0 && left < R.qs.length ? '' : ' hidden'}>Akhiri latihan (${left} soal belum dijawab)</button>
+      <div class="card ml-card ml-qcomments-card qcomments-slot" data-materi-qcomments data-qid="${esc(q.id)}"${done ? '' : ' hidden'}></div>`;
+    if (done) mountCommentsDeferred(R, q, R.pos);
     const nav = $('mlNav'), cur = nav?.querySelector('.cur');
     if (nav && cur) nav.scrollLeft = Math.max(0, cur.offsetLeft - nav.clientWidth / 2 + cur.clientWidth / 2);
   }
@@ -337,7 +368,7 @@
     const unanswered = picked == null, good = picked === q.benar;
     const pptExplain = window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(q, 'explain') || '';
     const canEdit = window.clinedCanEditQuestions?.() && /^[0-9a-f-]{36}$/i.test(String(q.pk || ''));
-    return `<div class="explain ml-explain">
+    return `<div class="explain ml-explain" data-qid="${esc(q.id)}">
       <div class="explain-title ${unanswered ? 'skip' : good ? 'ok' : 'bad'}">${unanswered ? '⏭️ Belum dijawab' : good ? '✅ Benar!' : '❌ Kurang tepat'}</div>
       ${q.pembahasan ? `<div class="main-explain"><b>🎯 Konsep inti:</b> ${esc(q.pembahasan)}</div>` : ''}
       ${q.catatan ? `<div class="clinical-note"><b>🩺 Catatan klinis:</b> ${esc(q.catatan)}</div>` : ''}
@@ -362,20 +393,67 @@
     return -1;
   }
   function go(i) {
+    flushPendingPick();
     const R = S.run; if (!R || i < 0 || i >= R.qs.length) return;
     R.pos = i; save(R); renderQ(); window.scrollTo({ top: 0, behavior: 'auto' });
   }
   function skip() {
+    flushPendingPick();
     const R = S.run; if (!R || R.ans[R.pos] != null) return;
     const t = nextUnanswered(R, R.pos);
     if (t < 0) { window.showToast?.('Ini satu-satunya soal yang belum dijawab.'); return; }
     go(t);
   }
   async function finishEarly() {
+    flushPendingPick();
     const R = S.run; if (!R) return;
     const left = R.ans.filter(x => x == null).length;
     if (!left) return finish();
     if (await clinedConfirm({ title: 'Akhiri latihan sekarang?', icon: '🏁', lines: [`**${left} soal** belum dijawab dan akan dihitung salah.`], ok: 'Akhiri latihan', cancel: 'Lanjut mengerjakan' })) finish();
+  }
+
+  function applyPickInPlace(R, q, k, good, score, st, left) {
+    const root = body();
+    const card = root?.querySelector(`.ml-card[data-ml-pos="${R.pos}"]`);
+    if (!card) return false;
+    card.querySelectorAll('.ml-opt').forEach((btn, idx) => {
+      btn.disabled = true;
+      btn.classList.toggle('ok', idx === q.benar);
+      btn.classList.toggle('bad', idx === k && !good);
+    });
+    const scoreEl = card.querySelector('[data-ml-score]');
+    if (scoreEl) scoreEl.textContent = `✓ ${score} benar`;
+    const streakEl = card.querySelector('[data-ml-streak]');
+    if (streakEl) {
+      streakEl.hidden = !(st > 1);
+      streakEl.textContent = st > 1 ? `🔥 ${st} beruntun` : '';
+    }
+    const prog = card.querySelector('.ml-progress');
+    if (prog) {
+      const doneCnt = R.qs.length - left;
+      prog.setAttribute('aria-valuenow', String(doneCnt));
+      const bar = prog.querySelector('i');
+      if (bar) bar.style.width = `${Math.round(doneCnt / R.qs.length * 100)}%`;
+    }
+    const dot = card.querySelector(`.ml-dot[data-ml-goto="${R.pos}"]`);
+    if (dot) dot.classList.add(good ? 'ok' : 'bad');
+    const expHost = card.querySelector('[data-ml-explain-host]');
+    if (expHost) expHost.innerHTML = explainHTML(q, k, false);
+    const dockRow = root.querySelector('[data-ml-dock-row]');
+    if (dockRow) dockRow.innerHTML = renderDockHTML(R, true, left, left);
+    const finBtn = root.querySelector('[data-ml-finish]');
+    if (finBtn) {
+      const showFin = left > 0 && left < R.qs.length;
+      finBtn.hidden = !showFin;
+      if (showFin) finBtn.textContent = `Akhiri latihan (${left} soal belum dijawab)`;
+    }
+    const qcHost = root.querySelector('[data-materi-qcomments]');
+    if (qcHost) {
+      qcHost.hidden = false;
+      qcHost.dataset.qid = String(q.id);
+      mountCommentsDeferred(R, q, R.pos);
+    }
+    return true;
   }
 
   function pick(k) {
@@ -384,30 +462,46 @@
     if (!Number.isInteger(k) || k < 0 || k >= q.opsi.length) return;
     R.ans[R.pos] = k;
     const good = k === q.benar;
-    try { recordTime(q, Math.min(180, Math.max(1, Math.round((Date.now() - (R.t0 || Date.now())) / 1000))), good); } catch {}
+    const elapsedSec = Math.min(180, Math.max(1, Math.round((Date.now() - (R.t0 || Date.now())) / 1000)));
     const streak = streakOf(R, R.pos);
+    const score = scoreOf(R);
+    const left = R.ans.filter(x => x == null).length;
+
+    // 1. Update UI langsung di tempat tanpa menghancurkan DOM atau mengunci scroll
+    if (!applyPickInPlace(R, q, k, good, score, streak, left)) {
+      renderQ();
+    }
+    // 2. Catat XP sinkron agar tampilan XP live langsung naik tanpa delay
     try {
       const gain = good ? 20 + Math.min(30, Math.max(0, (streak - 1) * 5)) : 5;
       const xpRes = window.addXP?.(gain, good ? (streak > 1 ? `Latihan Materi • streak ${streak} 🔥` : 'Latihan Materi • benar') : 'Tetap semangat—jawaban salah', { kind: 'materi', ref: q.id, block: S.block });
       R.xp += Number(xpRes?.gained || 0);
     } catch {}
-    // sambungkan ke sistem utama: target harian, statistik kemampuan, daftar soal salah
-    const rec = { stat: { p: q.orig[k], ci: q.orig[q.benar] }, id: q.id, bank: 'Latihan Materi', soal: q.soal, opsi: q.opsi, jawabanBenar: q.benar, pembahasan: q.pembahasan, pembahasanPilihan: q.per, catatanKlinis: q.catatan };
-    try { window.recordDailyQuestion?.(); } catch {}
-    try { window.recordQuestionPerformance?.(rec, good); } catch {}
-    if (!good) { try { window.recordWrong?.(rec); } catch {} }
     try { if (good) navigator.vibrate?.(15); else navigator.vibrate?.([30, 40, 30]); } catch {}
-    save(R);
-    renderQ();
-    // pastikan pembahasan terlihat di layar kecil
-    requestAnimationFrame(() => document.querySelector('.ml-explain')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+
+    // 3. Jalankan pencatatan storage sekunder setelah frame render agar scroll & tombol Lanjut selalu responsif instan
+    const rec = { stat: { p: q.orig[k], ci: q.orig[q.benar] }, id: q.id, bank: 'Latihan Materi', soal: q.soal, opsi: q.opsi, jawabanBenar: q.benar, pembahasan: q.pembahasan, pembahasanPilihan: q.per, catatanKlinis: q.catatan };
+    schedulePostPick(() => {
+      try { recordTime(q, elapsedSec, good); } catch {}
+      try { window.recordDailyQuestion?.(); } catch {}
+      try { window.recordQuestionPerformance?.(rec, good); } catch {}
+      if (!good) { try { window.recordWrong?.(rec); } catch {} }
+      try { save(R); } catch {}
+    });
   }
 
   function flagCurrent() {
     const R = S.run; if (!R) return;
     const on = toggleFlag(R.qs[R.pos]);
     window.showToast?.(on ? '⭐ Soal ditandai' : 'Tanda dihapus');
-    renderQ();
+    const btn = body()?.querySelector('[data-ml-flag]');
+    if (btn) {
+      btn.classList.toggle('on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.textContent = on ? '★' : '☆';
+    } else {
+      renderQ();
+    }
   }
 
   function editCurrent() {
@@ -426,6 +520,7 @@
     window.clinedReportQuestion({ id: q.id, source: 'mat', bank: `${S.label} • ${R.title}`, soal: q.soal, text });
   }
   function next() {
+    flushPendingPick();
     const R = S.run; if (!R || R.ans[R.pos] == null) return;
     const t = nextUnanswered(R, R.pos);
     if (t >= 0) return go(t);
@@ -433,6 +528,7 @@
   }
 
   function finish() {
+    flushPendingPick();
     const R = S.run, score = scoreOf(R), total = R.qs.length, pct = Math.round(score / total * 100);
     let record = false;
     if (R.persist) {

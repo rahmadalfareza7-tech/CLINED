@@ -97,9 +97,16 @@ function addXP(amount,reason="",meta){
   try{window.dispatchEvent(new CustomEvent('clined:xp-gained',{detail:{before,after,gained,kind,ref}}));}catch{}
   const leveledUp=xpLevel(after)>xpLevel(before);
   if(!meta?.silent)showXPPopup(gained,claim.upgraded?`${reason||"Jawaban benar"} (upgrade XP)`:reason,leveledUp);
-  clearTimeout(window.__clinedAchTimer);
-  window.__clinedAchTimer=setTimeout(()=>{try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}},450);
+  scheduleAchievementCheck(false);
   return {before,after,gained,leveledUp,upgraded:!!claim.upgraded};
+}
+function scheduleAchievementCheck(silent=false){
+  clearTimeout(window.__clinedAchTimer);
+  window.__clinedAchTimer=setTimeout(()=>{
+    const run=()=>{try{if(typeof checkNewAchievements==='function')checkNewAchievements(silent?{silent:true}:{});}catch{}};
+    if(typeof requestIdleCallback==='function')requestIdleCallback(run,{timeout:1200});
+    else run();
+  },600);
 }
 function renderXP(){
   const info=xpInfo(Number(get(KEY.xp,0))||0);
@@ -710,20 +717,17 @@ function recordQuestionPerformance(q,correct){
   prev.lastAnswered=new Date().toISOString(); prev.bank=q.bank||selectedBank; prev.no=q.no;
   prev.primary=p.primary; prev.weights=p.weights;
   all[id]=prev; set(KEY.qstats,all);
-  clearTimeout(window.__clinedAchTimer);
-  window.__clinedAchTimer=setTimeout(()=>{
-    try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
-  },450);
+  scheduleAchievementCheck(false);
 }
 
 function abilityEvidence(){
-  const qstats=get(KEY.qstats,{}), wrongList=get(KEY.wrong,[]);
+  const qstats=get(KEY.qstats,{}), wrongList=get(KEY.wrong,[]), abilityMap=get(KEY.abilityMap,{})||{};
   const wrongById={};
   (Array.isArray(wrongList)?wrongList:[]).forEach(w=>wrongById[w.id]=Number(w.wrong||0));
   const evidence={}; ABILITIES.forEach(a=>evidence[a]={attempts:0,correct:0,wrong:0,questions:0});
   for(const [id,st] of Object.entries(qstats||{})){
     const attempts=Number(st.attempts||0); if(!attempts) continue;
-    const profile=st.weights||get(KEY.abilityMap,{})[id]?.weights||{Recall:1};
+    const profile=st.weights||abilityMap[id]?.weights||{Recall:1};
     const correct=Number(st.correct||0), wrong=Number(st.wrong||Math.max(0,attempts-correct));
     for(const ability of Object.keys(profile)){
       const w=Number(profile[ability])||0;
@@ -735,7 +739,7 @@ function abilityEvidence(){
   }
   for(const [id,wrongCount] of Object.entries(wrongById)){
     if(qstats[id]) continue;
-    const profile=get(KEY.abilityMap,{})[id]?.weights; if(!profile) continue;
+    const profile=abilityMap[id]?.weights; if(!profile) continue;
     for(const ability of Object.keys(profile)){
       const w=Number(profile[ability])||0;
       evidence[ability].attempts+=wrongCount*w;
@@ -1994,8 +1998,7 @@ function calculateDailyStreak(counts){
 function renderDailyStreak(){
   const data=streakData(),today=localDayKey(),count=Math.min(5,Number(data.counts[today]||0));
   const streakDays=calculateDailyStreak(data.counts);
-  data.streak=streakDays;
-  set(KEY.dailyStreak,data);
+  if(Number(data.streak||0)!==streakDays){data.streak=streakDays;set(KEY.dailyStreak,data);}
   const bar=$("dailyStreakBar"), title=$("dailyStreakTitle"), sub=$("dailyStreakSub"), countEl=$("dailyStreakCount"), flame=$("streakFlame");
   if(!bar||!title||!sub||!countEl)return;
   setProgress(bar,count/5*100);
@@ -2594,17 +2597,29 @@ function resetCurrentBlockStatistics(){
   const btn=$('resetBlockStatsBtn');
   if(btn){const old=btn.textContent;btn.textContent=`${blockLabel(block)} direset ✓`;setTimeout(()=>btn.textContent=old,1400);}
 }
+const __abilityTotalsCache=new Map();
 function abilityQuestionTotals(scope="current"){
-  const totals=Object.fromEntries(ABILITIES.map(a=>[a,0]));
   const block=scope==='all'?null:(scope||dashboardBlock());
-  for(const [bankId,bankObj] of Object.entries(BANKS||{})){
+  const entries=Object.entries(BANKS||{});
+  let sig=String(block||'all');
+  for(let i=0;i<entries.length;i++){
+    const [bankId,bankObj]=entries[i];
     if(scope!=="all" && blockForBank(bankId)!==block) continue;
-    for(const q of (bankObj.data||[])){
+    sig+='|'+bankId+':'+(bankObj?.data?.length||0);
+  }
+  const cached=__abilityTotalsCache.get(sig);
+  if(cached) return {...cached};
+  const totals=Object.fromEntries(ABILITIES.map(a=>[a,0]));
+  for(let i=0;i<entries.length;i++){
+    const [bankId,bankObj]=entries[i];
+    if(scope!=="all" && blockForBank(bankId)!==block) continue;
+    for(const q of (bankObj?.data||[])){
       const c=questionAbilityProfile(q).primary;
       if(ABILITIES.includes(c)) totals[c]++;
     }
   }
-  return totals;
+  __abilityTotalsCache.set(sig,totals);
+  return {...totals};
 }
 
 function clinicalAbilityStats(scope='current'){
@@ -3506,10 +3521,10 @@ async function authRestoreSession(){
 window.addEventListener('clined:sync-applied',()=>{
   try{initTheme();}catch{}
   try{renderXP();}catch{}
-  try{if(typeof renderHomeClinicalDashboard==='function')renderHomeClinicalDashboard();}catch{}
+  try{if(typeof renderHomeClinicalDashboard==='function'&&$('home')?.classList.contains('active'))renderHomeClinicalDashboard();}catch{}
   try{if(typeof renderAchievements==='function'&&$('achievementsPage')?.classList.contains('active'))renderAchievements();}catch{}
   try{if(typeof renderWrong==='function'&&$('wrong')?.classList.contains('active'))renderWrong();}catch{}
-  try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
+  try{scheduleAchievementCheck(true);}catch{}
 });
 function authSetError(id,message){const el=$(id);if(!el)return;el.textContent=message;el.hidden=!message;}
 function authOpenModal(mode='signup',opts={}){
@@ -3740,7 +3755,11 @@ function achievementCatalog(){
   const uniqueCards=new Set((Array.isArray(cardRaw)?cardRaw:[]).map(c=>c?.id).filter(Boolean)).size;
   const questDone=Object.keys((get('clined_clinical_quest_v1',{})||{}).completed||{}).length;
   const resepDone=Object.keys(get('clined_resep_best_v1',{})||{}).length;
-  const ab=(name)=>componentProgress(name).answered;
+  const abCounts={};
+  for(const st of Object.values(qstats)){
+    if(st?.primary) abCounts[st.primary]=(abCounts[st.primary]||0)+Number(st.attempts||0);
+  }
+  const ab=(name)=>abCounts[name]||0;
 
   return [
     {id:'first_step',icon:'🎓',title:'First Step',desc:'Menyelesaikan sesi kuis pertama',cat:'kuis',current:Math.min(1,hist.length),target:1,unlocked:hist.length>=1},

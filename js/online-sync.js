@@ -168,10 +168,11 @@
       return Number.isFinite(n)&&n>=0?Math.round(n):null;
     }
   }
-  function apply(state){
+  function apply(state, opts={}){
     let restoreXP=null;
     const rePush=[];
     const xpKey='gaster_v11_xp';
+    let changed=Boolean(opts&&opts.forceNotify);
     suppress=true;
     try{
       for(const [key,item] of Object.entries(state||{})){
@@ -185,21 +186,25 @@
             continue;
           }
         }
-        if(item.deleted){nativeRemove(key);continue;}
+        if(item.deleted){
+          if(localStorage.getItem(key)!==null){nativeRemove(key);changed=true;}
+          continue;
+        }
         if(typeof item.value==='string'){
-          const merged=mergeJsonKey(key,localStorage.getItem(key),item.value);
+          const prevVal=localStorage.getItem(key);
+          const merged=mergeJsonKey(key,prevVal,item.value);
           if(merged){
-            nativeSet(key,merged.value);
+            if(prevVal!==merged.value){nativeSet(key,merged.value);changed=true;}
             if(merged.dirty)rePush.push([key,merged.value]);
           }else{
-            nativeSet(key,item.value);
+            if(prevVal!==item.value){nativeSet(key,item.value);changed=true;}
           }
         }
       }
     }finally{suppress=false;}
     if(restoreXP!==null)markSet(xpKey,restoreXP);
     for(const [k,v] of rePush)markSet(k,v);
-    if(Object.keys(state||{}).length)window.dispatchEvent(new CustomEvent('clined:sync-applied'));
+    if(changed&&Object.keys(state||{}).length)window.dispatchEvent(new CustomEvent('clined:sync-applied'));
   }
   function snapshot(serverState){for(const key of learningKeys())if(!serverState[key])enqueue({id:uuid(),type:'set',key,value:localStorage.getItem(key),updatedAt:new Date().toISOString()});}
   async function pull(force=false){let cursor=localStorage.getItem(CURSOR);let loops=0;while(loops++<10){
@@ -207,7 +212,7 @@
     // Full sync hanya dilakukan saat user belum punya cursor (akun/perangkat baru).
     const path=cursor?`/api/sync?since=${encodeURIComponent(cursor)}`:'/api/sync';
     const d=await request(path);
-    if(d.mode==='full'){apply(d.state||{});snapshot(d.state||{});}else apply(d.changes||{});
+    if(d.mode==='full'){apply(d.state||{},{forceNotify:true});snapshot(d.state||{});}else apply(d.changes||{});
     if(d.updatedAt){cursor=d.updatedAt;nativeSet(CURSOR,d.updatedAt);}
     if(!d.hasMore)return d;
   }
@@ -236,23 +241,26 @@
       await pull(force);
       const ops=getQueue().slice();
       const batches=[];
-      let batch=[];
+      let batch=[], batchEst=32;
       for(const op of ops){
-        const candidate=[...batch,op];
-        if(batch.length&&new Blob([JSON.stringify({operations:candidate})]).size>450000){
+        const opEst=(String(op?.key||'').length+String(op?.value||'').length)*2+160;
+        if(batch.length&&batchEst+opEst>420000){
           batches.push(batch);
           batch=[op];
+          batchEst=32+opEst;
         }else{
-          batch=candidate;
+          batch.push(op);
+          batchEst+=opEst;
         }
       }
       if(batch.length)batches.push(batch);
 
       for(const group of batches){
-        if(new Blob([JSON.stringify({operations:group})]).size>520000)continue;
+        const bodyStr=JSON.stringify({operations:group});
+        if(new Blob([bodyStr]).size>520000)continue;
         const saved=await request('/api/sync',{
           method:'POST',
-          body:JSON.stringify({operations:group})
+          body:bodyStr
         });
         const accepted=saved.changes||{};
         const confirmed=group.filter(op=>{

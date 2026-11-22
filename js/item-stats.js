@@ -61,13 +61,18 @@
   }
   async function showCrowd(q) {
     if (!q || !q.id || q.bank === 'userbank') return;
-    const st = await crowdFor(String(q.id)); if (!st) return;
+    const qidStr = String(q.id);
+    const st = await crowdFor(qidStr); if (!st) return;
     const put = () => {
       const box = document.querySelector('.view.active #explain, .view.active .ml-explain'); if (!box) return false;
+      if (box.dataset.qid && box.dataset.qid !== qidStr) return true;
       box.querySelector('.crowd-stat')?.remove();
       const el = document.createElement('div'); el.className = 'crowd-stat';
       el.textContent = `📊 ${st.correct}% mahasiswa menjawab benar (dari ${st.n} jawaban)`;
-      box.insertBefore(el, box.firstChild); return true;
+      const reportBtn = box.querySelector('.ml-report');
+      if (reportBtn) box.insertBefore(el, reportBtn);
+      else box.appendChild(el);
+      return true;
     };
     if (!put()) setTimeout(put, 350);
   }

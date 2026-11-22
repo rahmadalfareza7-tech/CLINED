@@ -65,7 +65,7 @@
 .ml-options{display:grid;gap:9px}
 .ml-opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:13px 14px;border-radius:15px;
   border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);
-  font-family:inherit;font-size:15px;font-weight:800;line-height:1.45;cursor:pointer;
+  font-family:inherit;font-size:15px;font-weight:800;line-height:1.45;cursor:pointer;touch-action:manipulation;
   transition:transform .09s ease,border-color .15s ease,background-color .15s ease}
 .ml-opt:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
 .ml-opt:disabled{cursor:default;opacity:1}
@@ -88,9 +88,12 @@
 .ml-review .option-review-text{white-space:pre-line;overflow-wrap:anywhere}
 .ml-review.is-picked.is-wrong{border-color:rgba(255,75,75,.55)}
 
-/* tombol lanjut & lewati berada rapi di bawah kartu soal agar tidak menutupi opsi */
+/* tombol lanjut & lewati berada tepat di bawah kartu soal agar tidak pernah bergeser saat diskusi dimuat */
 .ml-dock{position:static;width:100%;padding:4px 0 0;background:none;pointer-events:auto}
 .ml-dock .primary{display:flex!important;box-shadow:0 8px 22px rgba(0,0,0,.18)!important}
+.ml-dock button,.ml-dot,.ml-finish-early{touch-action:manipulation}
+.ml-qcomments-card[hidden],.ml-finish-early[hidden],.ml-fire[hidden]{display:none!important}
+.ml-qcomments-card{margin-top:4px!important}
 
 /* ── Hasil ── */
 .ml-result{text-align:center;padding:22px 16px!important;margin-bottom:0!important}

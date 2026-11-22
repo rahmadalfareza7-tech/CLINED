@@ -79,41 +79,59 @@
     while (walker.nextNode()) len += walker.currentNode.nodeValue.length;
     return String(G.terms.length) + '|' + len;
   }
-  function annotate(root) {
-    if (busy || !G.matcher || !G.matcher.re || !root) return;
+  function annotate(root, onDone) {
+    if (busy || !G.matcher || !G.matcher.re || !root || !root.isConnected) { onDone?.(); return; }
     const sig = contentSignature(root);
-    if (root.dataset.glDone === sig) return;
+    if (root.dataset.glDone === sig) { onDone?.(); return; }
     busy = true;
     try {
       root.querySelectorAll('.gl-term').forEach(b => b.replaceWith(document.createTextNode(b.textContent)));
       root.normalize();
       const used = new Set(), walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement?.closest('button,a,.gl-term,textarea,script,style,.qcomments-slot,.explain-materi-box') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
       const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
-      for (const node of nodes) {
-        const hits = window.ClinedGlossaryMatch.find(node.nodeValue, G.matcher, 12).filter(h => !used.has(h.id));
-        if (!hits.length) continue;
-        const frag = document.createDocumentFragment(); let pos = 0;
-        for (const h of hits) {
-          used.add(h.id); frag.append(node.nodeValue.slice(pos, h.start));
-          const b = document.createElement('button'); b.type = 'button'; b.className = 'gl-term'; b.dataset.glId = h.id; b.textContent = node.nodeValue.slice(h.start, h.end);
-          b.setAttribute('aria-label', 'Arti istilah ' + b.textContent); frag.append(b); pos = h.end;
+      let ni = 0;
+      const runChunk = () => {
+        if (!root.isConnected) { busy = false; onDone?.(); return; }
+        const start = performance.now();
+        try {
+          while (ni < nodes.length) {
+            const node = nodes[ni++];
+            if (!node.isConnected) continue;
+            const hits = window.ClinedGlossaryMatch.find(node.nodeValue, G.matcher, 12).filter(h => !used.has(h.id));
+            if (hits.length) {
+              const frag = document.createDocumentFragment(); let pos = 0;
+              for (const h of hits) {
+                used.add(h.id); frag.append(node.nodeValue.slice(pos, h.start));
+                const b = document.createElement('button'); b.type = 'button'; b.className = 'gl-term'; b.dataset.glId = h.id; b.textContent = node.nodeValue.slice(h.start, h.end);
+                b.setAttribute('aria-label', 'Arti istilah ' + b.textContent); frag.append(b); pos = h.end;
+              }
+              frag.append(node.nodeValue.slice(pos)); node.replaceWith(frag);
+            }
+            if (performance.now() - start > 8 && ni < nodes.length) {
+              setTimeout(runChunk, 0);
+              return;
+            }
+          }
+          root.dataset.glDone = sig;
+        } finally {
+          if (ni >= nodes.length || !root.isConnected) { busy = false; onDone?.(); }
         }
-        frag.append(node.nodeValue.slice(pos)); node.replaceWith(frag);
-      }
-      root.dataset.glDone = sig;
-    } finally { busy = false; }
+      };
+      runChunk();
+    } catch { busy = false; onDone?.(); }
   }
   function sweep() {
-    if (!G.matcher?.re) return;
+    if (!G.matcher?.re || busy) return;
     const els = [...document.querySelectorAll(TARGETS)];
     let idx = 0;
     const step = () => {
       if (idx >= els.length) return;
-      annotate(els[idx++]);
-      if (idx < els.length) {
-        if (typeof requestIdleCallback === 'function') requestIdleCallback(step, { timeout: 200 });
-        else setTimeout(step, 16);
-      }
+      annotate(els[idx++], () => {
+        if (idx < els.length) {
+          if (typeof requestIdleCallback === 'function') requestIdleCallback(step, { timeout: 200 });
+          else setTimeout(step, 16);
+        }
+      });
     };
     step();
   }
