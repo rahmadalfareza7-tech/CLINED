@@ -248,11 +248,118 @@
     if (e.target.matches?.('[data-chat-q]')) { C.q = e.target.value; render(); }
     if (e.target.id === 'chatInput') { const b = document.querySelector('[data-chat-send]'); if (b) b.disabled = !e.target.value.trim(); e.target.style.height = 'auto'; e.target.style.height = Math.min(120, e.target.scrollHeight) + 'px'; }
   });
+  /* ───────── Notif Balas Cepat (Quick Reply tanpa keluar halaman/kuis) ───────── */
+  let qrTimer = null;
+  function dismissQuickReply() {
+    clearTimeout(qrTimer); qrTimer = null;
+    const el = $('clinedChatQReply');
+    if (!el) return;
+    el.classList.remove('show');
+    setTimeout(() => { if (el && !el.classList.contains('show')) el.remove(); }, 240);
+  }
+  function scheduleQuickReplyHide(ms = 8000) {
+    clearTimeout(qrTimer);
+    qrTimer = setTimeout(() => {
+      const el = $('clinedChatQReply');
+      const inp = el?.querySelector('.cqr-input');
+      if (inp && (document.activeElement === inp || inp.value.trim())) return;
+      dismissQuickReply();
+    }, ms);
+  }
+  function showQuickReplyBanner(m) {
+    const fromId = m?.from?.id || '';
+    const fromName = m?.from?.name || 'Seseorang';
+    const text = String(m?.text || 'pesan baru');
+    if (!fromId) { toast(`💬 ${fromName}: ${text}`); return; }
+
+    let el = $('clinedChatQReply');
+    const samePeer = el && el.dataset.peerId === fromId;
+    if (samePeer) {
+      const msgEl = el.querySelector('.cqr-text');
+      if (msgEl) msgEl.textContent = text;
+      el.classList.add('show');
+      scheduleQuickReplyHide(8000);
+      return;
+    }
+    if (el) el.remove();
+
+    const u = (C.users || []).find(x => x.id === fromId);
+    const avHtml = u?.avatarUrl
+      ? `<span class="cqr-av"><img src="${esc(u.avatarUrl)}" alt=""></span>`
+      : `<span class="cqr-av" style="${hue(fromName)}">${esc(initials(fromName))}</span>`;
+
+    el = document.createElement('div');
+    el.id = 'clinedChatQReply';
+    el.className = 'chat-qreply';
+    el.dataset.peerId = fromId;
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    el.innerHTML = `<div class="cqr-top">
+        ${avHtml}
+        <div class="cqr-info">
+          <div class="cqr-name"><b>${esc(fromName)}</b><span>Pesan baru</span></div>
+          <p class="cqr-text">${esc(text)}</p>
+        </div>
+        <button type="button" class="cqr-close" aria-label="Tutup notifikasi">✕</button>
+      </div>
+      <form class="cqr-form" autocomplete="off">
+        <input type="text" class="cqr-input" maxlength="1000" placeholder="Balas cepat ke ${esc(fromName)}…" aria-label="Balas cepat">
+        <button type="submit" class="cqr-send" disabled aria-label="Kirim balasan">➤</button>
+      </form>`;
+
+    const form = el.querySelector('.cqr-form');
+    const inp = el.querySelector('.cqr-input');
+    const btn = el.querySelector('.cqr-send');
+    const closeBtn = el.querySelector('.cqr-close');
+
+    closeBtn.addEventListener('click', dismissQuickReply);
+    inp.addEventListener('focus', () => clearTimeout(qrTimer));
+    inp.addEventListener('blur', () => { if (!inp.value.trim()) scheduleQuickReplyHide(4500); });
+    inp.addEventListener('input', () => {
+      clearTimeout(qrTimer);
+      btn.disabled = !inp.value.trim();
+    });
+    el.addEventListener('mouseenter', () => clearTimeout(qrTimer));
+    el.addEventListener('mouseleave', () => { if (document.activeElement !== inp && !inp.value.trim()) scheduleQuickReplyHide(4500); });
+
+    let sending = false;
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (sending) return;
+      const reply = inp.value.trim();
+      if (!reply) return;
+      sending = true;
+      btn.disabled = true;
+      inp.disabled = true;
+      try {
+        const d = await api('/api/chat/send', { method: 'POST', body: { to: fromId, text: reply } });
+        const peer = (C.users || []).find(x => x.id === fromId);
+        if (peer) {
+          peer.unread = 0;
+          peer.lastAt = d.message?.at || Date.now();
+          peer.lastText = 'Kamu: ' + reply.slice(0, 60);
+        }
+        refreshDot();
+        dismissQuickReply();
+        toast(`✓ Balasan terkirim ke ${fromName}`);
+      } catch (err) {
+        sending = false;
+        inp.disabled = false;
+        btn.disabled = !inp.value.trim();
+        toast(err.message || 'Gagal mengirim balasan.', true);
+      }
+    });
+
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    scheduleQuickReplyHide(8000);
+  }
+
   /* Dipanggil social.js saat event SSE 'chat' tiba */
   function onPush(m) {
     const here = document.querySelector('.view.active')?.id === 'hubPage' && C.host?.isConnected;
     if (here && C.peer && C.peer.id === m.from?.id) { loadThread(false).catch(() => {}); return; }
-    toast(`💬 ${m.from?.name || 'Seseorang'}: ${m.text || 'pesan baru'}`);
+    showQuickReplyBanner(m);
     setDot(C.unread + 1);
     const sender = (C.users || []).find(x => x.id === m.from?.id);
     if (sender) {
