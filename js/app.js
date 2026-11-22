@@ -2183,11 +2183,120 @@ function renderFlashcard(){
   $("flashRevealBtn").textContent=ENH.flashShown?"Sembunyikan Jawaban":"Tampilkan Jawaban";
 }
 let libraryRenderToken = 0;
+let libraryMateriCache = { at: 0, packages: null };
+let libraryLastResults = [];
+let libraryShownCount = 25;
+
+function syncLibraryBankOptions() {
+  const sel = $("libraryBank");
+  if (!sel || typeof BANKS !== "object") return;
+  const cur = sel.value || "all";
+  const entries = Object.entries(BANKS);
+  const sig = entries.map(([id, b]) => `${id}:${b?.name || id}`).join("|");
+  if (sel.dataset.bankSig === sig) return;
+  sel.dataset.bankSig = sig;
+  sel.innerHTML = `<option value="all">Semua bank</option>` + entries
+    .map(([id, b]) => `<option value="${esc(id)}">${esc(b?.name || id)}</option>`)
+    .join("");
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+  else sel.value = "all";
+}
+
+function renderLibraryItemHTML(x) {
+  const q = x.q;
+  const opts = Array.isArray(q.opsi) ? q.opsi : [];
+  const key = Number(q.jawabanBenar);
+  const explanations = q.pembahasanPilihan;
+  const explanationFor = i => {
+    if (Array.isArray(explanations)) return explanations[i] || "";
+    if (explanations && typeof explanations === "object")
+      return explanations[i] || explanations[String(i)] || "";
+    return "";
+  };
+
+  const optionHtml = opts.map((o, i) => {
+    const correct = q.jawabanBenar != null && i === key;
+    const exp = explanationFor(i);
+    return `<div class="library-review-option${correct ? " is-key" : ""}">
+      <b>${esc(letter(i))}. ${esc(o)}</b>
+      ${correct ? "<small>Kunci jawaban</small>" : ""}
+      ${exp ? `<p>${esc(exp)}</p>` : ""}
+    </div>`;
+  }).join("");
+
+  const action = x.type === "bank"
+    ? `<button class="secondary small-btn library-start"
+         data-bank="${esc(x.bankId)}" data-idx="${x.idx}">Latihan soal ini</button>`
+    : `<button class="secondary small-btn library-materi-open"
+         data-block="${esc(x.pack.block || "")}">Buka Latihan Materi</button>`;
+
+  return `<article class="library-result">
+    <div class="library-result-head">
+      <b>${esc(x.title)} • Soal ${esc(q.no || x.idx + 1)}</b>
+      <small>${x.type === "materi" ? "Latihan Materi" :
+        `Kunci ${q.jawabanBenar == null ? "Belum tersedia" : esc(letter(key))}`}</small>
+    </div>
+    <p>${esc(q.soal || "Teks soal tidak tersedia.")}</p>
+    <details class="library-review-detail">
+      <summary>Lihat kunci dan pembahasan</summary>
+      <div class="library-review-options">${optionHtml}</div>
+      <div class="library-answer">
+        <b>Pembahasan</b>
+        <p>${esc(q.pembahasan || q.catatan || "Belum ada pembahasan khusus.")}</p>
+        ${window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(x.type === "bank" ? { ...q, bank: x.bankId } : q, "explain") || ""}
+      </div>
+    </details>
+    ${action}
+  </article>`;
+}
+
+function paintLibraryResults(query) {
+  const summary = $("librarySummary");
+  const output = $("libraryResults");
+  if (!summary || !output) return;
+  const total = libraryLastResults.length;
+  const limited = libraryLastResults.slice(0, libraryShownCount);
+  summary.textContent = query
+    ? `${total} hasil ditemukan • menampilkan ${limited.length}`
+    : `${total} soal tersedia • menampilkan ${limited.length}`;
+
+  const moreBtn = total > limited.length
+    ? `<button type="button" class="secondary library-load-more" id="libraryLoadMoreBtn">Muat lebih banyak (${Math.min(25, total - limited.length)} dari ${total - limited.length} tersisa)</button>`
+    : "";
+
+  output.innerHTML = limited.length
+    ? limited.map(renderLibraryItemHTML).join("") + moreBtn
+    : '<div class="empty">Tidak ditemukan. Coba kata kunci lain.</div>';
+
+  output.querySelectorAll(".library-start").forEach(button => {
+    button.onclick = () => startSingleQuestion(
+      button.dataset.bank, Number(button.dataset.idx)
+    );
+  });
+
+  output.querySelectorAll(".library-materi-open").forEach(button => {
+    button.onclick = () => {
+      const block = button.dataset.block;
+      if (!block || !window.CLINED_LATIHAN_MATERI?.open) {
+        showToast?.("Blok Latihan Materi tidak tersedia.", true);
+        return;
+      }
+      window.CLINED_LATIHAN_MATERI.open(block, block, "home");
+    };
+  });
+
+  const loadMore = $("libraryLoadMoreBtn");
+  if (loadMore) {
+    loadMore.onclick = () => {
+      libraryShownCount += 25;
+      paintLibraryResults(query);
+    };
+  }
+}
 
 async function renderLibrary(){
   const token = ++libraryRenderToken;
   const query = String($("librarySearch")?.value || "").trim().toLowerCase();
-  const filter = window.__clinedReviewBankId || $("libraryBank")?.value || "all";
   const summary = $("librarySummary");
   const output = $("libraryResults");
   if (!summary || !output) return;
@@ -2199,7 +2308,9 @@ async function renderLibrary(){
     if (typeof window.CLINED_BANKS_READY === "function") {
       await window.CLINED_BANKS_READY();
     }
+    syncLibraryBankOptions();
 
+    const filter = window.__clinedReviewBankId || $("libraryBank")?.value || "all";
     const bankEntries = Object.entries(BANKS)
       .filter(([id]) => filter === "all" || id === filter);
 
@@ -2232,24 +2343,31 @@ async function renderLibrary(){
     }
 
     let packs = [];
-    try {
-      const response = await fetch("/api/content/packages?module=MAT", {
-        credentials: "same-origin",
-        cache: "no-store"
-      });
-      if (!response.ok) throw new Error("Paket Latihan Materi tidak dapat dimuat.");
-      const data = await response.json();
-      packs = Array.isArray(data.packages) ? data.packages : [];
-      try {
-        localStorage.setItem("materi_packs_cache_v1",
-          JSON.stringify({ at: Date.now(), packages: packs }));
-      } catch {}
-    } catch (err) {
-      try {
-        const cache = JSON.parse(localStorage.getItem("materi_packs_cache_v1") || "null");
-        if (Array.isArray(cache?.packages)) packs = cache.packages;
-      } catch {}
-      if (!packs.length) console.warn("Pencarian Latihan Materi:", err);
+    if (filter === "all") {
+      if (Array.isArray(libraryMateriCache.packages) && (Date.now() - libraryMateriCache.at) < 60000) {
+        packs = libraryMateriCache.packages;
+      } else {
+        try {
+          const response = await fetch("/api/content/packages?module=MAT", {
+            credentials: "same-origin",
+            cache: "no-store"
+          });
+          if (!response.ok) throw new Error("Paket Latihan Materi tidak dapat dimuat.");
+          const data = await response.json();
+          packs = Array.isArray(data.packages) ? data.packages : [];
+          libraryMateriCache = { at: Date.now(), packages: packs };
+          try {
+            localStorage.setItem("materi_packs_cache_v1",
+              JSON.stringify({ at: Date.now(), packages: packs }));
+          } catch {}
+        } catch (err) {
+          try {
+            const cache = JSON.parse(localStorage.getItem("materi_packs_cache_v1") || "null");
+            if (Array.isArray(cache?.packages)) packs = cache.packages;
+          } catch {}
+          if (!packs.length) console.warn("Pencarian Latihan Materi:", err);
+        }
+      }
     }
 
     for (const pack of packs) {
@@ -2280,75 +2398,9 @@ async function renderLibrary(){
 
     if (token !== libraryRenderToken) return;
 
-    const limited = results.slice(0, 60);
-    summary.textContent = query
-      ? `${results.length} hasil • menampilkan ${limited.length}`
-      : `${results.length} soal tersedia • bank soal dan Latihan Materi`;
-
-    output.innerHTML = limited.length ? limited.map((x, n) => {
-      const q = x.q;
-      const opts = Array.isArray(q.opsi) ? q.opsi : [];
-      const key = Number(q.jawabanBenar);
-      const explanations = q.pembahasanPilihan;
-      const explanationFor = i => {
-        if (Array.isArray(explanations)) return explanations[i] || "";
-        if (explanations && typeof explanations === "object")
-          return explanations[i] || explanations[String(i)] || "";
-        return "";
-      };
-
-      const optionHtml = opts.map((o, i) => {
-        const correct = q.jawabanBenar != null && i === key;
-        const exp = explanationFor(i);
-        return `<div class="library-review-option${correct ? " is-key" : ""}">
-          <b>${esc(letter(i))}. ${esc(o)}</b>
-          ${correct ? "<small>Kunci jawaban</small>" : ""}
-          ${exp ? `<p>${esc(exp)}</p>` : ""}
-        </div>`;
-      }).join("");
-
-      const action = x.type === "bank"
-        ? `<button class="secondary small-btn library-start"
-             data-bank="${esc(x.bankId)}" data-idx="${x.idx}">Latihan soal ini</button>`
-        : `<button class="secondary small-btn library-materi-open"
-             data-block="${esc(x.pack.block || "")}">Buka Latihan Materi</button>`;
-
-      return `<article class="library-result">
-        <div class="library-result-head">
-          <b>${esc(x.title)} • Soal ${esc(q.no || x.idx + 1)}</b>
-          <small>${x.type === "materi" ? "Latihan Materi" :
-            `Kunci ${q.jawabanBenar == null ? "Belum tersedia" : esc(letter(key))}`}</small>
-        </div>
-        <p>${esc(q.soal || "Teks soal tidak tersedia.")}</p>
-        <details class="library-review-detail">
-          <summary>Lihat kunci dan pembahasan</summary>
-          <div class="library-review-options">${optionHtml}</div>
-          <div class="library-answer">
-            <b>Pembahasan</b>
-            <p>${esc(q.pembahasan || q.catatan || "Belum ada pembahasan khusus.")}</p>
-            ${window.CLINED_KEDKEL_2026_MATERI?.renderPptBarHTML?.(x.type === "bank" ? { ...q, bank: x.bankId } : q, "explain") || ""}
-          </div>
-        </details>
-        ${action}
-      </article>`;
-    }).join("") : '<div class="empty">Tidak ditemukan. Coba kata kunci lain.</div>';
-
-    output.querySelectorAll(".library-start").forEach(button => {
-      button.onclick = () => startSingleQuestion(
-        button.dataset.bank, Number(button.dataset.idx)
-      );
-    });
-
-    output.querySelectorAll(".library-materi-open").forEach(button => {
-      button.onclick = () => {
-        const block = button.dataset.block;
-        if (!block || !window.CLINED_LATIHAN_MATERI?.open) {
-          showToast?.("Blok Latihan Materi tidak tersedia.", true);
-          return;
-        }
-        window.CLINED_LATIHAN_MATERI.open(block, block, "home");
-      };
-    });
+    libraryLastResults = results;
+    libraryShownCount = 25;
+    paintLibraryResults(query);
   } catch (err) {
     if (token !== libraryRenderToken) return;
     summary.textContent = "Pencarian gagal dimuat.";
@@ -2999,6 +3051,7 @@ function openHomeQuestionSearch(){
   if ($("libraryBank")) $("libraryBank").value = "all";
   window.__clinedReviewBankId = null;
   show("library");
+  window.scrollTo({ top: 0, behavior: "instant" });
   renderLibrary();
 }
 
@@ -3012,9 +3065,10 @@ if ($("homeQuestionSearch"))
     }
   });
 
+let librarySearchDebounce = null;
 if($("libraryBtn"))$("libraryBtn").onclick=()=>{renderLibrary();show("library");setTimeout(()=>$("librarySearch")?.focus(),120)};
 if($("reviewLibraryBtn"))$("reviewLibraryBtn").onclick=()=>{if($("librarySearch"))$("librarySearch").value="";if($("libraryBank"))$("libraryBank").value="all";renderLibrary();show("library")};
-if($("librarySearch"))$("librarySearch").addEventListener("input",renderLibrary);
+if($("librarySearch"))$("librarySearch").addEventListener("input",()=>{clearTimeout(librarySearchDebounce);librarySearchDebounce=setTimeout(renderLibrary,180);});
 if($("libraryBank"))$("libraryBank").addEventListener("change",renderLibrary);
 if($("flashRevealBtn"))$("flashRevealBtn").onclick=()=>{ENH.flashShown=!ENH.flashShown;renderFlashcard()};
 if($("flashNextBtn"))$("flashNextBtn").onclick=()=>{if(!ENH.flash.length)return;ENH.flashPos=(ENH.flashPos+1)%ENH.flash.length;ENH.flashShown=false;renderFlashcard()};

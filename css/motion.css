@@ -47,7 +47,7 @@
 @media (hover:hover) and (pointer:fine){
   :where(.card,.nested-card,.menu-card,.dashboard-card,.achievement-card,.account-auth-card,
   .exam-launch-card,.home-materials-link,.feedback-card,.material-block-card,.study-tool,
-  .bank-choice,.answer,.choice):not([hidden]):hover{
+  .bank-choice,.answer,.choice):not([hidden]):not(#library > .card):hover{
     transform:translateY(-2px);
   }
   :where(button,.menu-item,.floating-nav-item,.account-security-btn,.account-action,.bookmark,
@@ -60,13 +60,12 @@
 }
 
 /* Snappy page changes: immediate visibility with a subtle, fast 140ms settle. */
-.view.motion-page-enter > :not(script){
+.view:not(#library).motion-page-enter > :not(script){
   animation:clined-page-reveal var(--motion-page) var(--motion-ease) both;
 }
 
 #achievementsPage.motion-page-enter .achievement-item,
 #materialsPage.motion-page-enter .material-block-card,
-#library.motion-page-enter .library-result,
 #wrong.motion-page-enter .wrong-item{
   animation:clined-list-reveal 140ms var(--motion-ease) both;
 }
