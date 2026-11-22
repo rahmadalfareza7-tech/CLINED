@@ -8,10 +8,11 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const hue = n => { let h = 0; for (const c of String(n || '')) h = (h * 31 + c.charCodeAt(0)) >>> 0; return `linear-gradient(135deg,${HUES[h % HUES.length]})`; };
   const ini = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || '?';
-  const desktopMq = window.matchMedia('(min-width: 1280px) and (hover: hover) and (pointer: fine)');
+  const tabletUpMq = window.matchMedia('(min-width: 768px)');
+  const dockedMq = window.matchMedia('(min-width: 1024px)');
 
   const S = {
-    open: true,
+    open: dockedMq.matches,
     showOffline: false,
     users: null,
     q: '',
@@ -23,25 +24,29 @@
   try {
     const saved = localStorage.getItem(PREF_KEY);
     if (saved === '0') S.open = false;
+    else if (saved === '1' && dockedMq.matches) S.open = true;
   } catch {}
 
   let aside = null;
   let reopenBtn = null;
+  let backdrop = null;
 
   function isLoggedIn() {
     return typeof window.authCurrentUser === 'function' && !!window.authCurrentUser();
   }
 
   function applyOpenState() {
-    const active = S.open && desktopMq.matches && isLoggedIn();
+    const active = S.open && tabletUpMq.matches && isLoggedIn();
     document.body.classList.toggle('ms-open', active);
   }
 
   function setOpen(next) {
     S.open = !!next;
-    try { localStorage.setItem(PREF_KEY, S.open ? '1' : '0'); } catch {}
+    if (dockedMq.matches) {
+      try { localStorage.setItem(PREF_KEY, S.open ? '1' : '0'); } catch {}
+    }
     applyOpenState();
-    if (S.open && desktopMq.matches && isLoggedIn()) {
+    if (S.open && tabletUpMq.matches && isLoggedIn()) {
       loadMembers();
       startPoll();
     } else {
@@ -198,7 +203,7 @@
   }
 
   async function loadMembers() {
-    if (S.loading || !isLoggedIn() || !desktopMq.matches) return;
+    if (S.loading || !isLoggedIn() || !tabletUpMq.matches) return;
     S.loading = true;
     try {
       const res = await fetch('/api/chat/users', { credentials: 'same-origin', cache: 'no-store' });
@@ -215,7 +220,7 @@
   function startPoll() {
     stopPoll();
     S.poll = setInterval(() => {
-      if (document.hidden || !S.open || !desktopMq.matches || !isLoggedIn()) return;
+      if (document.hidden || !S.open || !tabletUpMq.matches || !isLoggedIn()) return;
       if (document.body.classList.contains('quiz-context')) return;
       loadMembers();
     }, POLL_MS);
@@ -227,6 +232,12 @@
 
   function mountDom() {
     if (aside) return;
+    backdrop = document.createElement('div');
+    backdrop.className = 'ms-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener('click', () => setOpen(false));
+
     aside = document.createElement('aside');
     aside.id = 'memberSidebar';
     aside.className = 'ms-sidebar';
@@ -255,6 +266,7 @@
       if (e.target.closest('[data-ms-toggle-offline]')) { S.showOffline = !S.showOffline; render(); return; }
       const row = e.target.closest('[data-ms-uid]');
       if (!row) return;
+      if (!dockedMq.matches) setOpen(false);
       if (row.dataset.msMe === '1') {
         if (typeof window.show === 'function') window.show('accountPage');
         return;
@@ -280,7 +292,7 @@
   function boot() {
     mountDom();
     applyOpenState();
-    if (isLoggedIn() && desktopMq.matches) {
+    if (isLoggedIn() && tabletUpMq.matches) {
       loadMembers();
       if (S.open) startPoll();
     }
@@ -289,15 +301,23 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 
-  desktopMq.addEventListener?.('change', () => {
+  const onViewportChange = () => {
+    if (!dockedMq.matches && S.open) S.open = false;
     applyOpenState();
-    if (desktopMq.matches && isLoggedIn() && S.open) { loadMembers(); startPoll(); }
-    else stopPoll();
-  });
+    if (tabletUpMq.matches && isLoggedIn()) {
+      loadMembers();
+      if (S.open) startPoll();
+      else stopPoll();
+    } else {
+      stopPoll();
+    }
+  };
+  tabletUpMq.addEventListener?.('change', onViewportChange);
+  dockedMq.addEventListener?.('change', onViewportChange);
 
   window.addEventListener('clined:auth-ready', () => {
     applyOpenState();
-    if (desktopMq.matches) { loadMembers(); if (S.open) startPoll(); }
+    if (tabletUpMq.matches) { loadMembers(); if (S.open) startPoll(); }
   });
   window.addEventListener('clined:auth-logout', () => {
     S.users = null;
@@ -305,10 +325,10 @@
     stopPoll();
     applyOpenState();
   });
-  window.addEventListener('clined:profile-style', () => { if (S.open && desktopMq.matches) render(); });
-  window.addEventListener('clined:chat-unread', () => { if (S.open && desktopMq.matches && isLoggedIn()) loadMembers(); });
+  window.addEventListener('clined:profile-style', () => { if (S.open && tabletUpMq.matches) render(); });
+  window.addEventListener('clined:chat-unread', () => { if (tabletUpMq.matches && isLoggedIn()) loadMembers(); });
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && S.open && desktopMq.matches && isLoggedIn()) loadMembers();
+    if (!document.hidden && S.open && tabletUpMq.matches && isLoggedIn()) loadMembers();
   });
 
   window.CLINED_MEMBER_SIDEBAR = { refresh: loadMembers, setOpen };

@@ -1,24 +1,32 @@
-/* CLINED — Discord-style Right Member Sidebar (Desktop ≥1280px). Mobile & tablet untouched. */
+/* CLINED — Discord-style Right Member Sidebar (PC, Tablet & iPad ≥768px). Mobile phones (<768px) untouched. */
 .ms-sidebar,
-.ms-reopen {
+.ms-reopen,
+.ms-backdrop {
   display: none;
 }
 
-@media (min-width: 1280px) and (hover: hover) and (pointer: fine) {
-  body.ms-open {
-    padding-right: 268px !important;
+@media (min-width: 768px) {
+  :root {
+    --ms-w: 268px;
+    --ms-half: 134px;
   }
-  body.ms-open.quiz-context {
-    padding-right: 0 !important;
+
+  /* Overlay backdrop for tablet/iPad portrait (768px–1023px) */
+  .ms-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 895;
+    background: rgba(15, 23, 42, 0.34);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    display: block;
   }
-  body.ms-open .floating-dashboard-nav {
-    left: calc(50% - 134px) !important;
-  }
-  body.ms-open.quiz-context .floating-dashboard-nav {
-    left: 50% !important;
-  }
-  html body.ms-open .card-shop-fab {
-    right: 288px;
+  body.ms-open:not(.quiz-context):not(.auth-pending) .ms-backdrop {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .ms-sidebar {
@@ -26,22 +34,24 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 268px;
+    width: var(--ms-w);
     z-index: 900;
     display: flex;
     flex-direction: column;
     background: var(--card, #ffffff);
     border-left: 1.5px solid var(--line, #e2e8e4);
-    box-shadow: -8px 0 28px rgba(15, 23, 42, 0.06);
+    box-shadow: -8px 0 28px rgba(15, 23, 42, 0.12);
     color: var(--text, #1f2a23);
     transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
     font-family: inherit;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   body.dark .ms-sidebar,
   html.dark .ms-sidebar {
     background: #14171f;
     border-left-color: rgba(255, 255, 255, 0.08);
-    box-shadow: -10px 0 32px rgba(0, 0, 0, 0.38);
+    box-shadow: -10px 0 32px rgba(0, 0, 0, 0.42);
     color: #eef2f7;
   }
   body:not(.ms-open) .ms-sidebar,
@@ -52,11 +62,11 @@
     pointer-events: none;
   }
 
-  /* Floating tab to reopen when collapsed */
+  /* Floating tab to open/reopen when collapsed */
   .ms-reopen {
     position: fixed;
-    top: 16px;
-    right: 16px;
+    top: calc(14px + env(safe-area-inset-top, 0px));
+    right: 14px;
     z-index: 890;
     display: inline-flex;
     align-items: center;
@@ -70,7 +80,7 @@
     color: var(--text, #1f2a23);
     font: 800 12.5px/1 inherit;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
     transition: transform 0.16s ease, box-shadow 0.16s ease;
   }
   .ms-reopen:hover {
@@ -146,13 +156,13 @@
     display: inline-block;
   }
   .ms-hide-btn {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 9px;
     border: 1.5px solid var(--line, #dbe4de);
     background: var(--surface, #f3f6f4);
     color: var(--muted, #64748b);
-    font: 900 15px/1 inherit;
+    font: 900 16px/1 inherit;
     cursor: pointer;
     display: grid;
     place-items: center;
@@ -169,14 +179,14 @@
   }
   .ms-search {
     width: 100%;
-    height: 34px;
-    min-height: 34px !important;
+    height: 36px;
+    min-height: 36px !important;
     padding: 0 11px !important;
     border-radius: 10px !important;
     border: 1.5px solid var(--line, #dbe4de) !important;
     background: var(--surface, #f4f7f5) !important;
     color: inherit !important;
-    font-size: 12.5px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
   }
   .ms-search:focus {
@@ -195,6 +205,7 @@
     flex: 1 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     padding: 10px 8px 20px;
     display: flex;
     flex-direction: column;
@@ -242,7 +253,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 3px 8px;
+    padding: 4px 8px;
     border-radius: 8px;
     cursor: pointer;
   }
@@ -283,7 +294,7 @@
     opacity: 0.92;
   }
 
-  /* Equipped Nameplate / Banner background (just like Discord Nitro Nameplates!) */
+  /* Equipped Nameplate / Banner background */
   .ms-row.has-banner {
     background-size: cover;
     background-position: center;
@@ -471,5 +482,41 @@
     font-size: 12px;
     font-weight: 700;
     color: var(--muted, #64748b);
+  }
+}
+
+/* Docked side-by-side layout on PC & iPad/Tablet Landscape (≥1024px) */
+@media (min-width: 1024px) {
+  :root {
+    --ms-w: 248px;
+    --ms-half: 124px;
+  }
+  .ms-backdrop {
+    display: none !important;
+  }
+  .ms-sidebar {
+    box-shadow: -8px 0 28px rgba(15, 23, 42, 0.06);
+  }
+  body.ms-open {
+    padding-right: var(--ms-w) !important;
+  }
+  body.ms-open.quiz-context {
+    padding-right: 0 !important;
+  }
+  body.ms-open .floating-dashboard-nav {
+    left: calc(50% - var(--ms-half)) !important;
+  }
+  body.ms-open.quiz-context .floating-dashboard-nav {
+    left: 50% !important;
+  }
+  html body.ms-open .card-shop-fab {
+    right: calc(var(--ms-w) + 18px);
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --ms-w: 268px;
+    --ms-half: 134px;
   }
 }
