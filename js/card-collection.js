@@ -577,9 +577,36 @@
   ];
 
   function has100kBadge(me) {
+    if (me && typeof me.xp100k === 'boolean') return me.xp100k;
     let localXp = 0;
     try { localXp = Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0; } catch {}
     return Boolean(me?.xp100k || localXp >= 100000);
+  }
+
+  function canToggle100kBadge(me) {
+    if (isAdmin()) return true;
+    let localXp = 0;
+    try { localXp = Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0; } catch {}
+    return Boolean(me?.xp100kToggleable || me?.xp100kUnlocked || me?.xp100k || localXp >= 100000);
+  }
+
+  function buildBadge100kToggleBox() {
+    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    if (!me || !canToggle100kBadge(me)) return '';
+    const isOn = has100kBadge(me);
+    const sub = isAdmin() && !me.xp100kUnlocked
+      ? 'Akses Khusus Admin • Bebas nyalakan atau matikan badge di semua bannerplate'
+      : 'Tampilkan atau sembunyikan badge pencapaian 100.000 All-Time XP di semua bannerplate';
+    return `<div class="badge100k-toggle-box">
+      <div class="b100t-info">
+        <span class="chat-badge b-xp100k compact">⚜️ 100K Legend</span>
+        <small>${sub}</small>
+      </div>
+      <button type="button" class="b100t-switch${isOn ? ' on' : ''}" data-toggle-xp100k="${isOn ? '0' : '1'}" role="switch" aria-checked="${isOn}">
+        <span class="b100t-knob"></span>
+        <span>${isOn ? 'ON' : 'OFF'}</span>
+      </button>
+    </div>`;
   }
 
   function buildProfileHeroCard() {
@@ -689,6 +716,7 @@
     const bPills = bCats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${bannerFilter === k ? ' on' : ''}" data-banner-filter="${esc(k)}">${lbl}</button>`).join('');
     const freeBannerNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Nameplate Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
     return `${buildProfileHeroCard()}
+      ${buildBadge100kToggleBox()}
       <div class="name-color-box">
         <div class="name-color-box-head"><span>✨ Warna Nama Chat (Ala Discord)</span><small>Gratis pilih</small></div>
         <div class="name-color-grid">${colorPills}</div>
@@ -736,7 +764,7 @@
     const cats = [['all', `Semua (${DECO_CATALOG.length})`], ['Cute & Animal', '🐱 Cute'], ['Celestial', '🌙 Celestial'], ['Dark & Gothic', '🖤 Dark'], ['Elemental & Aura', '🔥 Elemental'], ['Aesthetic & Anime', '🌸 Anime']];
     const pills = cats.map(([k, lbl]) => `<button type="button" class="deco-filter-btn${decoFilter === k ? ' on' : ''}" data-deco-filter="${esc(k)}">${lbl}</button>`).join('');
     const freeDecoNotice = freeAvail ? `<div class="free-claim-banner">🎁 <span>Hadiah Akun: Kamu punya <b>1x Klaim Dekorasi Avatar Gratis</b>! Pilih salah satu di bawah tanpa memakai Diamond.</span></div>` : '';
-    return `${buildProfileHeroCard()}${freeDecoNotice}<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
+    return `${buildProfileHeroCard()}${buildBadge100kToggleBox()}${freeDecoNotice}<div class="card-collection-head"><span>Dekorasi Avatar (${ownedSet.size}/${DECO_CATALOG.length})</span><b>5 Kategori</b></div>
       <div class="deco-filter-row">${pills}</div>
       <div class="deco-shop-grid">${items}</div>`;
   }
@@ -1068,6 +1096,34 @@
   }
   function bindShop() {
     document.getElementById('closeCardShop')?.addEventListener('click', hideShop);
+    document.querySelectorAll('#cardShopContainer [data-toggle-xp100k]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const enabled = btn.getAttribute('data-toggle-xp100k') === '1';
+        btn.disabled = true;
+        try {
+          const r = await fetch('/api/auth/badge-100k', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ enabled })
+          });
+          const d = await r.json().catch(() => ({}));
+          if (!r.ok) throw new Error(d.error || 'Gagal mengatur badge 100K.');
+          const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+          if (me && d.user) {
+            me.xp100k = Boolean(d.user.xp100k);
+            me.xp100kToggleable = Boolean(d.user.xp100kToggleable);
+            me.xp100kUnlocked = Boolean(d.user.xp100kUnlocked);
+          }
+          window.dispatchEvent(new Event('clined:profile-style'));
+          window.showToast?.(enabled ? '⚜️ Badge 100K Legend dinyalakan!' : 'Badge 100K Legend dimatikan.');
+          refreshShop();
+        } catch (e) {
+          window.showToast?.(e.message || 'Gagal mengatur badge 100K.', true);
+          btn.disabled = false;
+        }
+      });
+    });
     document.querySelectorAll('#cardShopContainer [data-pick-name-color]').forEach(btn => {
       btn.addEventListener('click', async () => {
         const color = btn.getAttribute('data-pick-name-color') || '';

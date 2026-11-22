@@ -131,7 +131,8 @@
     const selfOnline = window.CLINED_SOCIAL?.isStreamOnline ? window.CLINED_SOCIAL.isStreamOnline() : navigator.onLine !== false;
     let localXp = 0;
     try { localXp = Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0; } catch {}
-    const u = { ...me, online: selfOnline, badges: meBadges, xp100k: Boolean(me.xp100k || localXp >= 100000) };
+    const has100k = typeof me.xp100k === 'boolean' ? me.xp100k : localXp >= 100000;
+    const u = { ...me, online: selfOnline, badges: meBadges, xp100k: has100k };
     const banner = u.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(u.bannerUrl)}')" aria-hidden="true"></span>` : '';
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
     const xp100 = u.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';

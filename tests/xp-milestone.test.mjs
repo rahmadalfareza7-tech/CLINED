@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { XP_100K_THRESHOLD, XP_100K_DIAMOND_BONUS, parseXpValue, maybeUnlock100kBadge } from '../lib/xp-milestone.mjs';
+import { XP_100K_THRESHOLD, XP_100K_DIAMOND_BONUS, parseXpValue, maybeUnlock100kBadge, canUse100kBadge, is100kBadgeVisible } from '../lib/xp-milestone.mjs';
 
 test('xp-milestone constants match 100K requirement and +50 diamond reward', () => {
   assert.equal(XP_100K_THRESHOLD, 100_000);
@@ -13,6 +13,25 @@ test('parseXpValue parses JSON strings, plain numbers, and invalid values safely
   assert.equal(parseXpValue(99999), 99999);
   assert.equal(parseXpValue('invalid'), 0);
   assert.equal(parseXpValue(null), 0);
+});
+
+test('canUse100kBadge and is100kBadgeVisible support ON/OFF toggle and Admin access', () => {
+  const lockedStudent = { role: 'student', badge_100k_at: null, badge_100k_visible: null };
+  assert.equal(canUse100kBadge(lockedStudent), false);
+  assert.equal(is100kBadgeVisible(lockedStudent), false);
+  assert.equal(is100kBadgeVisible({ role: 'student', badge_100k_at: null, badge_100k_visible: true }), false);
+
+  const unlockedStudent = { role: 'student', badge_100k_at: '2026-11-22T00:00:00Z', badge_100k_visible: null };
+  assert.equal(canUse100kBadge(unlockedStudent), true);
+  assert.equal(is100kBadgeVisible(unlockedStudent), true);
+  assert.equal(is100kBadgeVisible({ ...unlockedStudent, badge_100k_visible: false }), false);
+  assert.equal(is100kBadgeVisible({ ...unlockedStudent, badge_100k_visible: true }), true);
+
+  const adminNoXp = { role: 'admin', badge_100k_at: null, badge_100k_visible: null };
+  assert.equal(canUse100kBadge(adminNoXp), true);
+  assert.equal(is100kBadgeVisible(adminNoXp), false);
+  assert.equal(is100kBadgeVisible({ ...adminNoXp, badge_100k_visible: true }), true);
+  assert.equal(is100kBadgeVisible({ ...adminNoXp, badge_100k_visible: false }), false);
 });
 
 test('maybeUnlock100kBadge ignores null pool, empty userId, or sub-threshold XP cleanly', async () => {

@@ -66,21 +66,26 @@
   function getMergedList() {
     const list = Array.isArray(S.users) ? S.users.slice() : [];
     const me = typeof window.authCurrentUser === 'function' ? window.authCurrentUser() : null;
-    if (me && !list.some(x => x.id === me.id)) {
-      list.push({
-        id: me.id,
-        name: me.name || me.username || 'Kamu',
-        username: me.username || '',
-        avatarUrl: me.avatarUrl || '',
-        bannerUrl: me.bannerUrl || '',
-        nameColor: me.nameColor || '',
-        avatarDeco: me.avatarDeco || '',
-        xp100k: Boolean(me.xp100k),
-        badges: badgesForUser(me),
-        online: true,
-        isMe: true,
-        unread: 0,
-      });
+    if (me) {
+      const idx = list.findIndex(x => x.id === me.id);
+      if (idx >= 0) {
+        list[idx] = { ...list[idx], bannerUrl: me.bannerUrl ?? list[idx].bannerUrl, nameColor: me.nameColor ?? list[idx].nameColor, avatarDeco: me.avatarDeco ?? list[idx].avatarDeco, xp100k: typeof me.xp100k === 'boolean' ? me.xp100k : list[idx].xp100k };
+      } else {
+        list.push({
+          id: me.id,
+          name: me.name || me.username || 'Kamu',
+          username: me.username || '',
+          avatarUrl: me.avatarUrl || '',
+          bannerUrl: me.bannerUrl || '',
+          nameColor: me.nameColor || '',
+          avatarDeco: me.avatarDeco || '',
+          xp100k: Boolean(me.xp100k),
+          badges: badgesForUser(me),
+          online: true,
+          isMe: true,
+          unread: 0,
+        });
+      }
     }
     return list;
   }

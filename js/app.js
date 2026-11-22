@@ -3409,7 +3409,13 @@ function showXp100kNotification(info){
 }
 function handleXp100kUnlock(info){
   if(!info)return;
-  if(authServerUser&&!authServerUser.xp100k)authServerUser.xp100k=true;
+  if(authServerUser){
+    authServerUser.xp100kToggleable=true;
+    authServerUser.xp100kUnlocked=true;
+    if(info.unlocked===true||typeof authServerUser.xp100k!=='boolean'){
+      authServerUser.xp100k=true;
+    }
+  }
   if(Number.isFinite(Number(info.diamonds))){
     if(window.CLINED_CARDS?.onXp100kReward){
       window.CLINED_CARDS.onXp100kReward(Number(info.diamonds));
@@ -3441,8 +3447,8 @@ async function authRestoreSession(){
     window.CLINED_AUTH_GATE?.unlock?.();
     window.dispatchEvent(new Event('clined:auth-ready'));
     restoreLastView();
-    if(unlocked100k?.unlocked||authServerUser.xp100k){
-      setTimeout(()=>handleXp100kUnlock(unlocked100k||{unlocked:true,xpTotal:Math.max(100000,Number(get(KEY.xp,0))||0),diamondBonus:50}),700);
+    if(unlocked100k?.unlocked||authServerUser.xp100kUnlocked){
+      setTimeout(()=>handleXp100kUnlock(unlocked100k||{xpTotal:Math.max(100000,Number(get(KEY.xp,0))||0),diamondBonus:50}),700);
     }
   }
   else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
@@ -3494,7 +3500,7 @@ async function authLogin(){
   const password=String($('authPassword').value||'');
   const data=await authApi('/login',{method:'POST',body:JSON.stringify({identifier,password})});
   authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);await authRestoreMissingLearningState();window.dispatchEvent(new Event('clined:auth-ready'));loadServerBanks({force:true}).catch(()=>{});
-  if(data.user?.xp100k){setTimeout(()=>handleXp100kUnlock({unlocked:true,xpTotal:Math.max(100000,Number(get(KEY.xp,0))||0),diamondBonus:50}),700);}
+  if(data.user?.xp100kUnlocked){setTimeout(()=>handleXp100kUnlock({xpTotal:Math.max(100000,Number(get(KEY.xp,0))||0),diamondBonus:50}),700);}
 }
 async function authResetPassword(){
   const username=String($('authLoginIdentifier').value||'').trim().toLowerCase();
@@ -3598,7 +3604,8 @@ function renderHomeProfileShowcase(){
   const deco=user.avatarDeco?`<img class="avatar-deco-img" src="${esc(user.avatarDeco)}" alt="" aria-hidden="true">`:'';
   const nc=user.nameColor?` data-name-color="${esc(user.nameColor)}"`:'';
   const roleBadge=user.role==='admin'?'<em class="chat-badge b-admin">👑 Admin</em>':user.role==='helper'?'<em class="chat-badge b-helper">🛠️ Helper</em>':'';
-  const xp100Badge=(user.xp100k||(Number(get(KEY.xp,0))||0)>=100000)?'<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>':'';
+  const show100k=typeof user.xp100k==='boolean'?user.xp100k:(Number(get(KEY.xp,0))||0)>=100000;
+  const xp100Badge=show100k?'<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>':'';
   const nextHtml=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Buka halaman hias & ganti foto profil">${avInner}${deco}</span>
     <div class="home-profile-info">
       <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${xp100Badge}${roleBadge}</div>
