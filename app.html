@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
-<link rel="stylesheet" href="css/style.css?v=bank-progress-1">
+<link rel="stylesheet" href="css/style.css?v=bank-progress-2">
 <link rel="stylesheet" href="css/polish.css?v=1">
 <link rel="stylesheet" href="css/clinical-quest.css?v=4">
 <link rel="stylesheet" href="css/clined-ui-fixes.css?v=1">
@@ -868,16 +868,24 @@
     <h2 id="accountModalTitle">Buat akun</h2>
     <p id="accountModalSubtitle">Simpan progres belajarmu dengan akun CLINED.</p>
     <form id="accountAuthForm" data-mode="signup" novalidate>
+      <div class="account-reset-info" id="authResetInfo" hidden>
+        <strong>Belum punya kode reset?</strong>
+        <p>Minta kode reset sekali pakai ke Admin lewat DM Instagram <a href="https://instagram.com/clined.id" target="_blank" rel="noopener noreferrer">@clined.id</a> dengan menyebutkan <b>username</b> kamu. Kode berlaku 30 menit.</p>
+      </div>
       <div class="account-modal-fields" id="signupFields">
         <div><label for="authName">Nama <small style="display:block;margin-top:3px;font-weight:700;color:var(--muted);font-size:11px;line-height:1.35">Harus pakai Nama Asli dan Angkatan</small></label><input id="authName" type="text" maxlength="60" autocomplete="name" placeholder="Nama Asli + Angkatan (contoh: Reza FKUY23)"><small style="display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.4">Gunakan nama asli dan cantumkan angkatan kamu.</small></div>
         <div><label for="authUsername">Username</label><input id="authUsername" type="text" maxlength="24" autocomplete="username" autocapitalize="none" placeholder="username"></div>
       </div>
       <label id="authLoginIdentifierLabel" for="authLoginIdentifier" hidden>Username</label>
       <input id="authLoginIdentifier" type="text" autocomplete="username" autocapitalize="none" placeholder="Username" hidden>
-      <label for="authPassword">Password</label>
+      <label id="authResetCodeLabel" for="authResetCode" hidden>Kode reset dari Admin</label>
+      <input id="authResetCode" type="text" maxlength="12" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="Contoh: ABCD-1234" hidden>
+      <label id="authPasswordLabel" for="authPassword">Password</label>
       <div class="account-password-field"><input id="authPassword" type="password" minlength="8" autocomplete="new-password"><button type="button" class="account-password-toggle" data-password-toggle="authPassword" aria-label="Tampilkan password">Lihat</button></div>
+      <div class="account-forgot-row" id="authForgotRow" hidden><button type="button" class="account-forgot" id="forgotPasswordBtn">Lupa password?</button></div>
       <label id="authPasswordConfirmLabel" for="authPasswordConfirm">Konfirmasi password</label>
       <div class="account-password-field" id="authPasswordConfirmField"><input id="authPasswordConfirm" type="password" minlength="8" autocomplete="new-password"><button type="button" class="account-password-toggle" data-password-toggle="authPasswordConfirm" aria-label="Tampilkan password">Lihat</button></div>
+      <div class="account-form-success" id="accountFormSuccess" role="status" hidden></div>
       <div class="account-form-error" id="accountFormError" role="alert" hidden></div>
       <button class="account-action account-save" id="submitAccountAuth" type="submit">BUAT AKUN</button>
       <button class="account-modal-switch" id="switchAccountAuth" type="button">Sudah punya akun? Masuk</button>
@@ -1077,7 +1085,7 @@
 <script src="js/online-sync.js?v=9"></script>
 <script src="js/ability-classifier.js?v=1"></script>
 <script src="js/kedkel-2026-materi.js?v=3"></script>
-<script src="js/app.js?v=static-banks-v53"></script>
+<script src="js/app.js?v=static-banks-v54"></script>
 <script src="js/auth-gate.js?v=2"></script>
 <script src="js/content-manager.js?v=26"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>
@@ -1183,7 +1191,7 @@
 <script src="js/glossary-match.js?v=1"></script>
 <script src="js/glossary.js?v=4"></script>
 <script src="js/usage.js?v=2"></script>
-<script src="js/lazy-loader.js?v=17"></script>
+<script src="js/lazy-loader.js?v=18"></script>
 <script src="js/pwa-install.js?v=1"></script>
 </body>
 </html>

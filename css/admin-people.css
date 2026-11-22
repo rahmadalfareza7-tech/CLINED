@@ -57,6 +57,15 @@
 .ap-switch i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform .2s; }
 .ap-switch input:checked + i { background: var(--brand, #58cc02); } .ap-switch input:checked + i::after { transform: translateX(22px); }
 .ap-switch input:focus-visible + i { outline: 3px solid var(--sky-soft, rgba(28,176,246,.4)); outline-offset: 2px; }
+.ap-reset-btn { min-height: 46px; border-radius: 14px; border: 2px solid var(--sky, #1cb0f6); border-bottom-width: 4px; background: var(--sky-soft, rgba(28,176,246,.12)); color: var(--sky-text, #0b7bb3); font: inherit; font-weight: 800; font-size: 14px; cursor: pointer; }
+.ap-reset-btn:disabled { opacity: .5; }
+.ap-reset-box { display: grid; gap: 8px; padding: 12px; border-radius: 14px; border: 2px solid var(--sky, #1cb0f6); background: var(--sky-soft, rgba(28,176,246,.08)); }
+.ap-reset-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 800; color: var(--sky-text, #0b7bb3); }
+.ap-reset-head small { opacity: .8; font-weight: 700; }
+.ap-reset-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 22px; font-weight: 900; letter-spacing: .14em; text-align: center; padding: 8px 10px; border-radius: 10px; background: var(--card, #fff); border: 1.5px dashed var(--sky, #1cb0f6); color: inherit; user-select: all; }
+.ap-reset-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.ap-copy-btn { min-height: 40px; padding: 0 12px; border-radius: 11px; border: 2px solid var(--line, #dbe4de); border-bottom-width: 3px; background: var(--card, #fff); color: inherit; font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer; }
+.ap-copy-btn.primary { background: var(--sky, #1cb0f6); border-color: var(--sky-dark, #1690cb); color: #fff; }
 .ap-danger { min-height: 46px; border-radius: 14px; border: 2px solid var(--danger, #ff4b4b); border-bottom-width: 4px; background: var(--danger-soft, rgba(255,75,75,.09)); color: var(--danger-text, #c92a2a); font: inherit; font-weight: 800; font-size: 14px; cursor: pointer; }
 .ap-danger.ghost { background: transparent; border-width: 2px; margin-top: 4px; font-size: 13px; }
 .ap-danger:disabled { opacity: .5; }

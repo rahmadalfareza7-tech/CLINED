@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
-<link rel="stylesheet" href="css/landing.css?v=5">
+<link rel="stylesheet" href="css/landing.css?v=6">
 </head>
 <body>
 
@@ -279,6 +279,10 @@
     <h2 id="amTitle">Masuk</h2>
     <p class="am-sub" id="amSub">Masuk dengan username dan password kamu.</p>
     <form id="amForm" data-mode="login" novalidate>
+      <div class="am-reset-info" id="amResetInfo" hidden>
+        <strong>Belum punya kode reset?</strong>
+        <p>Minta kode reset sekali pakai ke Admin lewat DM Instagram <a href="https://instagram.com/clined.id" target="_blank" rel="noopener noreferrer">@clined.id</a> dengan menyebutkan <b>username</b> kamu. Kode berlaku 30 menit.</p>
+      </div>
       <div id="amSignup" hidden>
         <label for="amName">Nama</label>
         <input id="amName" type="text" maxlength="40" autocomplete="name" placeholder="Contoh: Reza FKUY23">
@@ -286,18 +290,26 @@
       </div>
       <label for="amUser">Username</label>
       <input id="amUser" type="text" maxlength="24" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Username">
-      <label for="amPass">Password</label>
+      <div id="amCodeWrap" hidden>
+        <label for="amCode">Kode reset dari Admin</label>
+        <input id="amCode" type="text" maxlength="12" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" placeholder="Contoh: ABCD-1234">
+      </div>
+      <label for="amPass" id="amPassLabel">Password</label>
       <div class="am-pass">
         <input id="amPass" type="password" minlength="8" autocomplete="current-password">
         <button type="button" class="am-eye" data-am-eye="amPass" aria-label="Tampilkan password">Lihat</button>
       </div>
+      <div class="am-forgot-row" id="amForgotRow">
+        <button class="am-forgot" id="amForgot" type="button">Lupa password?</button>
+      </div>
       <div id="amConfirmWrap" hidden>
-        <label for="amConfirm">Konfirmasi password</label>
+        <label for="amConfirm" id="amConfirmLabel">Konfirmasi password</label>
         <div class="am-pass">
           <input id="amConfirm" type="password" minlength="8" autocomplete="new-password">
           <button type="button" class="am-eye" data-am-eye="amConfirm" aria-label="Tampilkan konfirmasi password">Lihat</button>
         </div>
       </div>
+      <p class="am-success" id="amSuccess" role="status" hidden></p>
       <p class="am-error" id="amError" role="alert" hidden></p>
       <button class="btn am-submit" id="amSubmit" type="submit">Masuk</button>
       <button class="am-switch" id="amSwitch" type="button">Belum punya akun? Buat akun</button>
@@ -305,7 +317,7 @@
   </section>
 </div>
 
-<script src="js/landing.js?v=4" defer></script>
+<script src="js/landing.js?v=5" defer></script>
 <script src="js/pwa-install.js?v=1" defer></script>
 </body>
 </html>

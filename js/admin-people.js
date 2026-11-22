@@ -18,7 +18,7 @@
   const dayKey = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? 'Hari ini' : new Date(n - 864e5).toDateString() === d.toDateString() ? 'Kemarin' : d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' }); };
 
   function mount(host, { request, confirm, selfId }) {
-    const S = { tab: 'users', users: null, acts: null, q: '', aq: '', role: 'all', sort: 'role', filter: 'all', open: null, timer: null, busy: new Set(), refreshing: false, lastBodyHtml: '', lastStatsHtml: '' };
+    const S = { tab: 'users', users: null, acts: null, q: '', aq: '', role: 'all', sort: 'role', filter: 'all', open: null, timer: null, busy: new Set(), refreshing: false, lastBodyHtml: '', lastStatsHtml: '', resetCodes: {} };
     host.classList.add('ap');
     host.innerHTML = `<div class="ap-hero"><div class="ap-hero-top"><div class="ap-hero-t"><span class="ap-kick">ADMIN</span><h3>Pengguna &amp; aktivitas</h3></div><button type="button" class="ap-refresh" data-ap-refresh aria-label="Segarkan data" title="Segarkan data">↻</button></div><div class="ap-stats" data-ap-stats></div></div>
       <div class="ap-tabs" role="tablist"><button type="button" role="tab" data-ap-tab="users" class="on">👥 Pengguna</button><button type="button" role="tab" data-ap-tab="acts">🕘 Aktivitas</button></div>
@@ -62,6 +62,7 @@
     };
     const userCard = u => {
       const open = S.open === u.id, me = u.id === selfId, busy = S.busy.has(u.id);
+      const rc = S.resetCodes[u.id] || null;
       const xpNum = Number(u.xpTotal) || 0;
       const xpBadge = xpNum > 0 ? `<em class="ap-tag">⚡ ${xpNum.toLocaleString('id-ID')} XP</em>` : '';
       const onlineTag = u.online ? ' • <span class="ap-on">● online</span>' : '';
@@ -77,12 +78,22 @@
           <div class="ap-lbl">Role</div>
           <div class="ap-seg" role="group" aria-label="Ubah role">${Object.entries(ROLES).map(([k, [i, l]]) => `<button type="button" data-ap-setrole="${k}" data-uid="${esc(u.id)}" class="${u.role === k ? 'on' : ''}" ${u.role === k || busy || (me && k !== 'admin') ? 'disabled' : ''}>${i} ${l}</button>`).join('')}</div>
           <label class="ap-switch"><span><b>🙋 Tempat bertanya</b><small>Bisa dichat siapa saja tanpa berteman. Boleh dobel dengan role lain.</small></span><input type="checkbox" data-ap-mentor="${esc(u.id)}" ${u.isMentor ? 'checked' : ''} ${busy ? 'disabled' : ''}><i aria-hidden="true"></i></label>
-          ${me ? '<p class="ap-note">Akun yang sedang dipakai tidak bisa diturunkan atau dihapus.</p>' : `<button type="button" class="ap-danger" data-ap-del="${esc(u.id)}" data-name="${esc(u.name)}" ${busy ? 'disabled' : ''}>🗑️ Hapus pengguna</button>`}
+          ${me ? '<p class="ap-note">Akun yang sedang dipakai tidak bisa diturunkan atau dihapus.</p>' : `
+            <button type="button" class="ap-reset-btn" data-ap-resetcode="${esc(u.id)}" data-name="${esc(u.name)}" data-user="${esc(u.username)}" ${busy ? 'disabled' : ''}>🔑 Buat Kode Reset Password</button>
+            ${rc ? `<div class="ap-reset-box">
+              <div class="ap-reset-head"><span>Kode Reset Sekali Pakai</span><small>Berlaku ${esc(rc.expiresMinutes || 30)} menit</small></div>
+              <div class="ap-reset-code">${esc(rc.code)}</div>
+              <div class="ap-reset-actions">
+                <button type="button" class="ap-copy-btn primary" data-ap-copydm="${esc(u.id)}">📋 Salin Pesan DM</button>
+                <button type="button" class="ap-copy-btn" data-ap-copycode="${esc(u.id)}">Salin Kode</button>
+              </div>
+            </div>` : ''}
+            <button type="button" class="ap-danger" data-ap-del="${esc(u.id)}" data-name="${esc(u.name)}" ${busy ? 'disabled' : ''}>🗑️ Hapus pengguna</button>`}
         </div>` : ''}</article>`;
     };
 
     /* ───── Aktivitas ───── */
-    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'], question_edited: ['✏️', 'Edit soal', 'edit'] };
+    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'], question_edited: ['✏️', 'Edit soal', 'edit'], admin_reset_code: ['🔑', 'Kode reset dibuat', 'role'], password_reset: ['🔐', 'Password direset', 'login'] };
     const actExtra = a => {
       if (a.action === 'role_changed') {
         const m = a.metadata || {};
@@ -91,6 +102,12 @@
         if (m.from && m.to && m.from !== m.to) parts.push(`${m.from} → ${m.to}`);
         if (typeof m.mentorTo === 'boolean' && m.mentorFrom !== m.mentorTo) parts.push(`Tempat bertanya: ${m.mentorTo ? 'aktif' : 'nonaktif'}`);
         return parts.length ? `<span class="ap-chg">${esc(parts.join(' • '))}</span>` : '';
+      }
+      if (a.action === 'admin_reset_code' && a.metadata?.targetUsername) {
+        return `<span class="ap-chg">@${esc(a.metadata.targetUsername)} • berlaku ${esc(a.metadata.expiresMinutes || 30)}m</span>`;
+      }
+      if (a.action === 'password_reset') {
+        return '<span class="ap-chg">Menggunakan kode reset Admin</span>';
       }
       if (a.action === 'question_edited' && a.metadata?.questionId) {
         return `<span class="ap-chg">${esc(a.metadata.bank || a.metadata.source || 'Bank')} • ${esc(a.metadata.questionId)}</span>`;
@@ -148,6 +165,18 @@
       if (btn) btn.classList.remove('spin');
       draw();
     };
+    const copyText = async (text, okMsg) => {
+      try {
+        await navigator.clipboard.writeText(text);
+        msg(okMsg);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); msg(okMsg); } catch { msg('Gagal menyalin otomatis. Salin manual ya.', true); }
+        ta.remove();
+      }
+    };
 
     host.addEventListener('click', async e => {
       const t = e.target.closest('button'); if (!t || !host.contains(t)) return;
@@ -163,6 +192,32 @@
         S.busy.add(id); draw();
         try { const d = await request(`/api/admin/users/${encodeURIComponent(id)}/role`, { method: 'PATCH', body: JSON.stringify({ role }) }); msg(d.message || 'Role diperbarui.'); await refresh(); }
         catch (err) { msg(err.message || 'Role gagal diperbarui.', true); } finally { S.busy.delete(id); draw(); }
+        return;
+      }
+      if (t.dataset.apResetcode) {
+        const id = t.dataset.apResetcode, name = t.dataset.name || 'Pengguna', username = t.dataset.user || '';
+        if (!(await confirm({ title: `Buat kode reset untuk ${name}?`, text: `Kode sekali pakai berlaku 30 menit untuk akun @${username}. Kode sebelumnya (jika ada) akan diganti.`, ok: 'Ya, buat kode' }))) return;
+        S.busy.add(id); draw();
+        try {
+          const d = await request(`/api/admin/users/${encodeURIComponent(id)}/reset-code`, { method: 'POST', body: JSON.stringify({}) });
+          S.resetCodes[id] = { code: d.code, expiresMinutes: d.expiresMinutes || 30, username: d.username || username, name: d.name || name };
+          msg(`Kode reset untuk @${d.username || username} siap dikirim via DM @clined.id.`);
+          await loadActs();
+        } catch (err) { msg(err.message || 'Gagal membuat kode reset.', true); }
+        finally { S.busy.delete(id); draw(); }
+        return;
+      }
+      if (t.dataset.apCopydm) {
+        const rc = S.resetCodes[t.dataset.apCopydm];
+        if (!rc) return;
+        const dm = `Halo ${rc.name} (@${rc.username}), ini kode reset password CLINED kamu:\n\n${rc.code}\n\nMasukkan kode tersebut di menu "Lupa password?" pada halaman Login CLINED. Kode berlaku ${rc.expiresMinutes} menit dan hanya bisa dipakai 1 kali ya.`;
+        copyText(dm, 'Pesan DM siap tempel ke Instagram!');
+        return;
+      }
+      if (t.dataset.apCopycode) {
+        const rc = S.resetCodes[t.dataset.apCopycode];
+        if (!rc) return;
+        copyText(rc.code, `Kode ${rc.code} disalin!`);
         return;
       }
       if (t.dataset.apDel) {

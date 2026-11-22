@@ -211,32 +211,51 @@
     flip.setAttribute('aria-pressed', String(on));
   });
 
-  /* ---------- Modal masuk / daftar (tetap di landing) ---------- */
+  /* ---------- Modal masuk / daftar / reset password (tetap di landing) ---------- */
   const modal = $('#authModal');
   const form = $('#amForm');
   const f = {
     title: $('#amTitle'), sub: $('#amSub'), signup: $('#amSignup'), confirmWrap: $('#amConfirmWrap'),
+    resetInfo: $('#amResetInfo'), codeWrap: $('#amCodeWrap'), code: $('#amCode'),
+    forgotRow: $('#amForgotRow'), forgot: $('#amForgot'), passLabel: $('#amPassLabel'), confirmLabel: $('#amConfirmLabel'),
     name: $('#amName'), user: $('#amUser'), pass: $('#amPass'), confirm: $('#amConfirm'),
-    error: $('#amError'), submit: $('#amSubmit'), sw: $('#amSwitch'),
+    success: $('#amSuccess'), error: $('#amError'), submit: $('#amSubmit'), sw: $('#amSwitch'),
   };
   const backdropTargets = ['.top', '.stage', '.controls'];
   let opener = null;
   let busy = false;
 
   const setError = (msg) => { f.error.textContent = msg || ''; f.error.hidden = !msg; };
+  const setSuccess = (msg) => { if (!f.success) return; f.success.textContent = msg || ''; f.success.hidden = !msg; };
 
-  function setMode(mode) {
+  function setMode(mode, { keepUser = '', successMsg = '' } = {}) {
     const signup = mode === 'signup';
+    const reset = mode === 'reset';
     form.dataset.mode = mode;
     form.reset();
+    if (keepUser) f.user.value = keepUser;
     setError('');
-    f.title.textContent = signup ? 'Buat akun' : 'Masuk';
-    f.sub.textContent = signup ? 'Cukup username dan password, tanpa perlu email.' : 'Masuk dengan username dan password kamu.';
+    setSuccess(successMsg);
+    f.title.textContent = signup ? 'Buat akun' : reset ? 'Reset password' : 'Masuk';
+    f.sub.textContent = signup
+      ? 'Cukup username dan password, tanpa perlu email.'
+      : reset
+        ? 'Masukkan kode reset dari Admin @clined.id dan buat password baru.'
+        : 'Masuk dengan username dan password kamu.';
     f.signup.hidden = !signup;
-    f.confirmWrap.hidden = !signup;
-    f.pass.autocomplete = signup ? 'new-password' : 'current-password';
-    f.submit.textContent = signup ? 'Buat akun' : 'Masuk';
-    f.sw.textContent = signup ? 'Sudah punya akun? Masuk' : 'Belum punya akun? Buat akun';
+    if (f.resetInfo) f.resetInfo.hidden = !reset;
+    if (f.codeWrap) f.codeWrap.hidden = !reset;
+    if (f.forgotRow) f.forgotRow.hidden = signup || reset;
+    f.confirmWrap.hidden = !(signup || reset);
+    if (f.passLabel) f.passLabel.textContent = reset ? 'Password baru' : 'Password';
+    if (f.confirmLabel) f.confirmLabel.textContent = reset ? 'Konfirmasi password baru' : 'Konfirmasi password';
+    f.pass.autocomplete = (signup || reset) ? 'new-password' : 'current-password';
+    f.submit.textContent = signup ? 'Buat akun' : reset ? 'Simpan password baru' : 'Masuk';
+    f.sw.textContent = signup
+      ? 'Sudah punya akun? Masuk'
+      : reset
+        ? 'Kembali ke halaman Masuk'
+        : 'Belum punya akun? Buat akun';
     [f.pass, f.confirm].forEach((i) => { i.type = 'password'; });
     modal.querySelectorAll('[data-am-eye]').forEach((b) => { b.textContent = 'Lihat'; });
   }
@@ -262,7 +281,15 @@
 
   modal.querySelectorAll('[data-am-close]').forEach((el) => el.addEventListener('click', closeModal));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalOpen) closeModal(); });
-  f.sw.addEventListener('click', () => openModalMode(form.dataset.mode === 'signup' ? 'login' : 'signup'));
+  f.sw.addEventListener('click', () => {
+    const cur = form.dataset.mode;
+    openModalMode(cur === 'login' ? 'signup' : 'login');
+  });
+  f.forgot?.addEventListener('click', () => {
+    const typedUser = f.user.value.trim();
+    setMode('reset', { keepUser: typedUser });
+    (typedUser ? f.code : f.user)?.focus();
+  });
   function openModalMode(mode) { setMode(mode); (mode === 'signup' ? f.name : f.user).focus(); }
 
   modal.querySelectorAll('[data-am-eye]').forEach((b) => b.addEventListener('click', () => {
@@ -283,17 +310,26 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (busy) return;
-    const signup = form.dataset.mode === 'signup';
+    const mode = form.dataset.mode;
+    const signup = mode === 'signup';
+    const reset = mode === 'reset';
     const username = f.user.value.trim().toLowerCase();
     const password = f.pass.value;
     const name = f.name.value.trim();
+    const code = f.code ? f.code.value.trim() : '';
     setError('');
+    setSuccess('');
 
     if (signup) {
       if (name.length < 2 || name.length > 40) return setError('Nama harus terdiri dari 2–40 karakter.');
       if (!/^[a-z0-9._-]{3,24}$/.test(username)) return setError('Username 3–24 karakter: huruf kecil, angka, titik, garis bawah, atau strip.');
       if (password.length < 8) return setError('Password minimal 8 karakter.');
       if (password !== f.confirm.value) return setError('Konfirmasi password tidak sama.');
+    } else if (reset) {
+      if (!username) return setError('Isi username kamu terlebih dahulu.');
+      if (!code) return setError('Isi kode reset dari Admin @clined.id.');
+      if (password.length < 8) return setError('Password baru minimal 8 karakter.');
+      if (password !== f.confirm.value) return setError('Konfirmasi password baru tidak sama.');
     } else if (!username || !password) {
       return setError('Isi username dan password.');
     }
@@ -302,6 +338,20 @@
     f.submit.disabled = true;
     f.submit.textContent = 'Memproses…';
     try {
+      if (reset) {
+        const res = await fetch('/api/auth/reset-password', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, code, newPassword: password }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Reset password gagal. Coba lagi.');
+        busy = false;
+        f.submit.disabled = false;
+        setMode('login', { keepUser: username, successMsg: data.message || 'Password berhasil direset! Silakan masuk dengan password baru.' });
+        f.pass.focus();
+        return;
+      }
       const res = await fetch(signup ? '/api/auth/register' : '/api/auth/login', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -317,7 +367,7 @@
       setError(offline ? 'Tidak bisa terhubung ke server. Periksa koneksi lalu coba lagi.' : err.message);
       busy = false;
       f.submit.disabled = false;
-      f.submit.textContent = signup ? 'Buat akun' : 'Masuk';
+      f.submit.textContent = signup ? 'Buat akun' : reset ? 'Simpan password baru' : 'Masuk';
     }
   });
 

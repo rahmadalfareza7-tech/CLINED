@@ -956,6 +956,17 @@ html,body,#app,.app,main,.view{max-width:100%;overflow-x:clip}
 .account-modal-card input{width:100%;min-height:50px;border:2px solid #d7e3e7;border-radius:15px;background:#f8fbfc;color:#24343b;padding:0 13px;font:700 15px inherit;outline:none}
 .account-modal-card input:focus{border-color:#58bff2;box-shadow:0 0 0 3px rgba(88,191,242,.15)}
 .account-form-error{margin-top:10px;padding:10px 12px;border-radius:13px;background:#fff0f0;border:2px solid #ffd0d0;color:#c13b3b;font-size:12px;font-weight:800}
+.account-form-success{margin-top:10px;padding:10px 12px;border-radius:13px;background:#ecf9e4;border:2px solid #b9e99d;color:#2f7d00;font-size:12px;font-weight:800}
+.account-forgot-row{display:flex;justify-content:flex-end;margin-top:6px}
+.account-forgot-row[hidden]{display:none!important}
+.account-forgot{border:0;background:transparent;padding:4px 2px;color:#149bd1;font-size:12px;font-weight:900;cursor:pointer}
+.account-forgot:hover{text-decoration:underline}
+.account-reset-info{margin:0 0 10px;padding:11px 13px;border-radius:14px;background:#eef8fd;border:2px solid #c5e6f7;font-size:12px;line-height:1.45;color:#24343b}
+.account-reset-info[hidden]{display:none!important}
+.account-reset-info strong{display:block;font-size:12.5px;font-weight:900;margin-bottom:3px;color:#0e7cb0}
+.account-reset-info p{margin:0!important;font-size:12px!important;color:#31434a!important;line-height:1.45!important}
+.account-reset-info a{color:#0e7cb0;font-weight:900;text-decoration:underline}
+#authResetCode{text-transform:uppercase;letter-spacing:.08em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .account-modal-switch{width:100%;margin-top:10px;border:0;background:transparent;color:#149bd1;font-weight:900;padding:10px;cursor:pointer}
 button,.card,.exam-launch-card,.block-card,.menu-item,.answer,.choice,.duo-banner,.duo-unit-card,.duo-node,.uab-node,.floating-nav-item,.icon-btn,.materi-button,.back-link,.primary,.secondary,.feedback-card{-webkit-tap-highlight-color:transparent;transform:translateZ(0);will-change:transform}
 button:not(:disabled),a,.google-drive-section,[role="button"]{transition:transform var(--motion-fast) var(--motion-smooth),filter var(--motion-fast) var(--motion-smooth),box-shadow var(--motion-fast) var(--motion-smooth),background-color var(--motion-ui) var(--motion-smooth),border-color var(--motion-ui) var(--motion-smooth)}

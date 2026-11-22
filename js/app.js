@@ -3295,20 +3295,29 @@ async function authRestoreSession(){
   else{window.CLINED_AUTH_GATE?.lock?.();authOpenModal('login');}
 }
 function authSetError(id,message){const el=$(id);if(!el)return;el.textContent=message;el.hidden=!message;}
-function authOpenModal(mode='signup'){
+function authOpenModal(mode='signup',opts={}){
   const modal=$('accountAuthModal');if(!modal)return;
-  const signup=mode==='signup';
+  const signup=mode==='signup',reset=mode==='reset';
   $('accountAuthForm').reset();$('accountAuthForm').dataset.mode=mode;
-  $('accountModalTitle').textContent=signup?'Buat akun':'Masuk';
-  $('accountModalSubtitle').textContent=signup?'Cukup username dan password, tanpa perlu email.':'Masuk dengan username dan password kamu.';
-  $('signupFields').hidden=!signup;$('authLoginIdentifier').hidden=signup;$('authLoginIdentifierLabel').hidden=signup;
-  $('authPasswordConfirmField').hidden=!signup;$('authPasswordConfirmLabel').hidden=!signup;
-  $('authPasswordConfirm').required=signup;
-  $('authPassword').autocomplete=signup?'new-password':'current-password';
-  $('submitAccountAuth').textContent=signup?'BUAT AKUN':'MASUK';
-  $('switchAccountAuth').textContent=signup?'Sudah punya akun? Masuk':'Belum punya akun? Buat akun';
-  authSetError('accountFormError','');modal.hidden=false;modal.setAttribute('aria-hidden','false');
-  setTimeout(()=>$(signup?'authName':'authLoginIdentifier')?.focus(),30);
+  if(opts.keepUser&&$('authLoginIdentifier'))$('authLoginIdentifier').value=opts.keepUser;
+  $('accountModalTitle').textContent=signup?'Buat akun':reset?'Reset password':'Masuk';
+  $('accountModalSubtitle').textContent=signup?'Cukup username dan password, tanpa perlu email.':reset?'Masukkan kode reset dari Admin @clined.id dan buat password baru.':'Masuk dengan username dan password kamu.';
+  $('signupFields').hidden=!signup;
+  $('authLoginIdentifier').hidden=signup;$('authLoginIdentifierLabel').hidden=signup;
+  if($('authResetInfo'))$('authResetInfo').hidden=!reset;
+  if($('authResetCode'))$('authResetCode').hidden=!reset;
+  if($('authResetCodeLabel'))$('authResetCodeLabel').hidden=!reset;
+  if($('authForgotRow'))$('authForgotRow').hidden=signup||reset;
+  if($('authPasswordLabel'))$('authPasswordLabel').textContent=reset?'Password baru':'Password';
+  if($('authPasswordConfirmLabel'))$('authPasswordConfirmLabel').textContent=reset?'Konfirmasi password baru':'Konfirmasi password';
+  $('authPasswordConfirmField').hidden=!(signup||reset);$('authPasswordConfirmLabel').hidden=!(signup||reset);
+  $('authPasswordConfirm').required=signup||reset;
+  $('authPassword').autocomplete=(signup||reset)?'new-password':'current-password';
+  $('submitAccountAuth').textContent=signup?'BUAT AKUN':reset?'SIMPAN PASSWORD BARU':'MASUK';
+  $('switchAccountAuth').textContent=signup?'Sudah punya akun? Masuk':reset?'Kembali ke halaman Masuk':'Belum punya akun? Buat akun';
+  authSetError('accountFormError','');authSetError('accountFormSuccess',opts.successMsg||'');
+  modal.hidden=false;modal.setAttribute('aria-hidden','false');
+  setTimeout(()=>$(signup?'authName':(reset&&opts.keepUser)?'authResetCode':'authLoginIdentifier')?.focus(),30);
 }
 function authCloseModal(){const modal=$('accountAuthModal');if(modal){modal.hidden=true;modal.setAttribute('aria-hidden','true');}}
 async function authCreateAccount(){
@@ -3325,9 +3334,31 @@ async function authLogin(){
   const data=await authApi('/login',{method:'POST',body:JSON.stringify({identifier,password})});
   authServerUser=data.user;authScopeUser(authServerUser);authSyncProfile(authServerUser);await authRestoreMissingLearningState();window.dispatchEvent(new Event('clined:auth-ready'));loadServerBanks({force:true}).catch(()=>{});
 }
+async function authResetPassword(){
+  const username=String($('authLoginIdentifier').value||'').trim().toLowerCase();
+  const code=String($('authResetCode')?.value||'').trim();
+  const newPassword=String($('authPassword').value||''),confirm=String($('authPasswordConfirm').value||'');
+  if(!username)throw Error('Isi username kamu terlebih dahulu.');
+  if(!code)throw Error('Isi kode reset dari Admin @clined.id.');
+  if(newPassword.length<8)throw Error('Password baru minimal 8 karakter.');
+  if(newPassword!==confirm)throw Error('Konfirmasi password baru tidak sama.');
+  const data=await authApi('/reset-password',{method:'POST',body:JSON.stringify({username,code,newPassword})});
+  return { username, message: data.message||'Password berhasil direset! Silakan masuk dengan password baru.' };
+}
 async function authSubmit(event){
-  event.preventDefault();if(authBusy)return;authBusy=true;authSetError('accountFormError','');
-  try{if(event.currentTarget.dataset.mode==='signup')await authCreateAccount();else await authLogin();authCloseModal();window.CLINED_AUTH_GATE?.unlock?.();renderAccount();renderAccountAuthState();show('home',{force:true});showToast('Akun siap digunakan.');}
+  event.preventDefault();if(authBusy)return;authBusy=true;authSetError('accountFormError','');authSetError('accountFormSuccess','');
+  try{
+    const mode=event.currentTarget.dataset.mode;
+    if(mode==='reset'){
+      const res=await authResetPassword();
+      authOpenModal('login',{keepUser:res.username,successMsg:res.message});
+      $('authPassword')?.focus();
+      showToast('Password berhasil direset.');
+      return;
+    }
+    if(mode==='signup')await authCreateAccount();else await authLogin();
+    authCloseModal();window.CLINED_AUTH_GATE?.unlock?.();renderAccount();renderAccountAuthState();show('home',{force:true});showToast('Akun siap digunakan.');
+  }
   catch(error){authSetError('accountFormError',error?.message||'Akun tidak dapat diproses.');}
   finally{authBusy=false;}
 }
@@ -3436,7 +3467,8 @@ function setupAuthSecurity(){
   $('createAccountBtn')?.addEventListener('click',()=>authOpenModal('signup'));
   $('loginAccountBtn')?.addEventListener('click',()=>authOpenModal('login'));
   $('accountAuthForm')?.addEventListener('submit',authSubmit);
-  $('switchAccountAuth')?.addEventListener('click',()=>authOpenModal($('accountAuthForm').dataset.mode==='signup'?'login':'signup'));
+  $('switchAccountAuth')?.addEventListener('click',()=>authOpenModal($('accountAuthForm').dataset.mode==='login'?'signup':'login'));
+  $('forgotPasswordBtn')?.addEventListener('click',()=>authOpenModal('reset',{keepUser:String($('authLoginIdentifier')?.value||'').trim()}));
   $('closeAccountModal')?.addEventListener('click',authCloseModal);document.querySelectorAll('[data-close-account-modal]').forEach(el=>el.addEventListener('click',authCloseModal));
   $('changePasswordBtn')?.addEventListener('click',openChangePassword);$('closePasswordModal')?.addEventListener('click',closeChangePassword);document.querySelectorAll('[data-close-password-modal]').forEach(el=>el.addEventListener('click',closeChangePassword));
   $('changePasswordForm')?.addEventListener('submit',authChangePassword);$('logoutAccountBtn')?.addEventListener('click',authLogout);$('deleteAccountBtn')?.addEventListener('click',deleteAccount);
