@@ -576,27 +576,50 @@
     { id: 'hologram', name: 'Hologram', dot: 'linear-gradient(135deg,#f472b6,#fbbf24,#34d399,#38bdf8,#a855f7)' }
   ];
 
+  function getLocalAllTimeXp() {
+    try { return Math.max(0, Math.round(Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0)); }
+    catch { return 0; }
+  }
+
   function has100kBadge(me) {
     if (me && typeof me.xp100k === 'boolean') return me.xp100k;
-    let localXp = 0;
-    try { localXp = Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0; } catch {}
-    return Boolean(me?.xp100k || localXp >= 100000);
+    return Boolean(me?.xp100k || getLocalAllTimeXp() >= 100000);
   }
 
   function canToggle100kBadge(me) {
     if (isAdmin()) return true;
-    let localXp = 0;
-    try { localXp = Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0; } catch {}
-    return Boolean(me?.xp100kToggleable || me?.xp100kUnlocked || me?.xp100k || localXp >= 100000);
+    return Boolean(me?.xp100kToggleable || me?.xp100kUnlocked || me?.xp100k || getLocalAllTimeXp() >= 100000);
   }
 
   function buildBadge100kToggleBox() {
     const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
-    if (!me || !canToggle100kBadge(me)) return '';
+    if (!me) return '';
+    const unlocked = canToggle100kBadge(me);
+    if (!unlocked) {
+      const curXp = getLocalAllTimeXp();
+      const pct = Math.min(100, Math.floor((curXp / 100000) * 100));
+      return `<div class="badge100k-toggle-box is-locked">
+        <div class="b100t-info">
+          <div class="b100t-title-row">
+            <span class="chat-badge b-xp100k compact">⚜️ 100K Legend</span>
+            <span class="b100t-lock-tag">🔒 Terkunci</span>
+          </div>
+          <small>Capai <b>100.000 All-Time XP</b> untuk membuka badge eksklusif ini di bannerplate + bonus <b>💎 50 Diamond</b>.</small>
+          <div class="b100t-prog-wrap">
+            <div class="b100t-prog-bar"><span style="width:${pct}%"></span></div>
+            <span class="b100t-prog-txt">⚡ ${curXp.toLocaleString('id-ID')} / 100.000 XP (${pct}%)</span>
+          </div>
+        </div>
+        <button type="button" class="b100t-switch is-locked" disabled aria-disabled="true" title="Capai 100.000 All-Time XP untuk membuka">
+          <span>🔒</span>
+          <span>OFF</span>
+        </button>
+      </div>`;
+    }
     const isOn = has100kBadge(me);
     const sub = isAdmin() && !me.xp100kUnlocked
       ? 'Akses Khusus Admin • Bebas nyalakan atau matikan badge di semua bannerplate'
-      : 'Tampilkan atau sembunyikan badge pencapaian 100.000 All-Time XP di semua bannerplate';
+      : 'Terbuka! Bebas nyalakan atau matikan badge 100.000 All-Time XP di semua bannerplate';
     return `<div class="badge100k-toggle-box">
       <div class="b100t-info">
         <span class="chat-badge b-xp100k compact">⚜️ 100K Legend</span>

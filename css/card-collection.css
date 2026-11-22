@@ -1194,4 +1194,67 @@ body.dark .b100t-switch {
   opacity: 0.55;
   cursor: wait;
 }
-
+.badge100k-toggle-box.is-locked {
+  border-color: var(--line, #cbd5e1);
+  border-style: dashed;
+  background: var(--surface, #f8fafc);
+}
+:root.dark .badge100k-toggle-box.is-locked,
+body.dark .badge100k-toggle-box.is-locked {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+.badge100k-toggle-box.is-locked .chat-badge.b-xp100k {
+  filter: grayscale(0.55) opacity(0.85);
+  animation: none;
+}
+.b100t-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.b100t-lock-tag {
+  font-size: 10px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: rgba(100, 116, 139, 0.16);
+  color: var(--muted, #475569);
+}
+:root.dark .b100t-lock-tag,
+body.dark .b100t-lock-tag {
+  background: rgba(148, 163, 184, 0.18);
+  color: #cbd5e1;
+}
+.b100t-prog-wrap {
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  margin-top: 3px;
+}
+.b100t-prog-bar {
+  width: 100%;
+  max-width: 240px;
+  height: 7px;
+  border-radius: 99px;
+  background: rgba(148, 163, 184, 0.25);
+  overflow: hidden;
+}
+.b100t-prog-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+.b100t-prog-txt {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--muted, #64748b);
+}
+.b100t-switch.is-locked {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+  justify-content: center;
+  padding: 4px 10px;
+}
