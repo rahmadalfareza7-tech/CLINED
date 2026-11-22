@@ -114,7 +114,7 @@
       ? `<img class="ms-av-img" src="${esc(u.avatarUrl)}" alt="" loading="lazy">`
       : esc(ini(u.name));
     const deco = u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : '';
-    const title = u.isMe ? 'Buka profil kamu' : `Chat dengan ${u.name}`;
+    const title = u.isMe ? 'Buka profil kamu' : isAdmin() ? `Chat / Fitur Admin — ${u.name}` : `Chat dengan ${u.name}`;
 
     return `<button type="button" class="ms-row${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
       <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
@@ -230,6 +230,187 @@
     if (S.poll) { clearInterval(S.poll); S.poll = null; }
   }
 
+  function isAdmin() {
+    const me = typeof window.authCurrentUser === 'function' ? window.authCurrentUser() : null;
+    return me?.role === 'admin';
+  }
+
+  let popLayer = null;
+  function closeAdminPopup() {
+    if (popLayer) { popLayer.remove(); popLayer = null; }
+  }
+
+  function openDirectChat(uid) {
+    if (!dockedMq.matches) setOpen(false);
+    if (uid && window.CLINED_CHAT?.openWith) {
+      window.CLINED_CHAT.openWith(uid);
+    } else if (window.CLINED_SOCIAL?.openChat) {
+      window.CLINED_SOCIAL.openChat();
+    }
+  }
+
+  function openAdminMemberPopup(u) {
+    if (!isAdmin() || !u) return;
+    closeAdminPopup();
+    const badges = badgesForUser(u);
+    const hasBanner = !!u.bannerUrl;
+    const bannerStyle = hasBanner ? ` style="background-image:url('${esc(u.bannerUrl)}')"` : '';
+    const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
+    const avInner = u.avatarUrl
+      ? `<img class="ms-av-img" src="${esc(u.avatarUrl)}" alt="">`
+      : esc(ini(u.name));
+    const deco = u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : '';
+    const roleTag = badges.includes('admin')
+      ? '<span class="ms-role-tag admin">Admin</span>'
+      : badges.includes('helper')
+        ? '<span class="ms-role-tag helper">Helper</span>'
+        : badges.includes('mentor')
+          ? '<span class="ms-role-tag mentor">Mentor</span>'
+          : '';
+
+    const layer = document.createElement('div');
+    layer.className = 'ms-pop-layer';
+    layer.innerHTML = `
+      <div class="ms-pop-card" role="dialog" aria-modal="true" aria-label="Aksi Member">
+        <div class="ms-pop-hero${hasBanner ? ' has-banner' : ''}"${bannerStyle}>
+          <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
+          <span class="ms-meta">
+            <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${roleTag}</span>
+            <span class="ms-sub">@${esc(u.username)} • ${u.online ? 'Online' : 'Offline'}</span>
+          </span>
+          <button type="button" class="ms-pop-close" data-msp-close aria-label="Tutup">✕</button>
+        </div>
+        <div class="ms-pop-body">
+          <div class="ms-pop-choices">
+            <button type="button" class="ms-pop-btn chat" data-msp-chat>💬 Chat</button>
+            <button type="button" class="ms-pop-btn admin" data-msp-toggle-admin>🛡️ Fitur Admin</button>
+          </div>
+          <div class="ms-pop-admin-panel" data-msp-admin hidden>
+            <div class="ms-pop-sec-lbl">💎 Tambah Diamond</div>
+            <div class="ms-pop-presets">
+              <button type="button" class="ms-pop-chip" data-msp-preset="50">+50</button>
+              <button type="button" class="ms-pop-chip" data-msp-preset="100">+100</button>
+              <button type="button" class="ms-pop-chip" data-msp-preset="250">+250</button>
+              <button type="button" class="ms-pop-chip" data-msp-preset="500">+500</button>
+              <button type="button" class="ms-pop-chip" data-msp-preset="1000">+1.000</button>
+            </div>
+            <form class="ms-pop-dia-row" data-msp-dia-form>
+              <input type="number" class="ms-pop-input" data-msp-dia-input min="1" max="1000000" step="1" inputmode="numeric" placeholder="Nominal diamond…">
+              <button type="submit" class="ms-pop-send-dia" data-msp-dia-submit>💎 Kirim</button>
+            </form>
+            <button type="button" class="ms-pop-reset-btn" data-msp-reset>🔑 Buat Kode Reset Password</button>
+            <div class="ms-pop-reset-out" data-msp-reset-out hidden></div>
+            <p class="ms-pop-status" data-msp-status role="status" hidden></p>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(layer);
+    popLayer = layer;
+
+    const statusEl = layer.querySelector('[data-msp-status]');
+    const setStatus = (msg, bad = false) => {
+      if (!statusEl) return;
+      statusEl.textContent = msg || '';
+      statusEl.className = 'ms-pop-status' + (msg ? (bad ? ' bad' : ' ok') : '');
+      statusEl.hidden = !msg;
+    };
+
+    const onKey = e => { if (e.key === 'Escape') { closeAdminPopup(); document.removeEventListener('keydown', onKey); } };
+    document.addEventListener('keydown', onKey);
+
+    layer.addEventListener('click', async e => {
+      if (e.target === layer || e.target.closest('[data-msp-close]')) {
+        closeAdminPopup();
+        document.removeEventListener('keydown', onKey);
+        return;
+      }
+      if (e.target.closest('[data-msp-chat]')) {
+        closeAdminPopup();
+        document.removeEventListener('keydown', onKey);
+        openDirectChat(u.id);
+        return;
+      }
+      const toggleBtn = e.target.closest('[data-msp-toggle-admin]');
+      if (toggleBtn) {
+        const panel = layer.querySelector('[data-msp-admin]');
+        const opening = panel.hidden;
+        panel.hidden = !opening;
+        toggleBtn.classList.toggle('on', opening);
+        if (opening) layer.querySelector('[data-msp-dia-input]')?.focus();
+        return;
+      }
+      const preset = e.target.closest('[data-msp-preset]');
+      if (preset) {
+        const inp = layer.querySelector('[data-msp-dia-input]');
+        if (inp) { inp.value = preset.dataset.mspPreset; inp.focus(); }
+        return;
+      }
+      const resetBtn = e.target.closest('[data-msp-reset]');
+      if (resetBtn) {
+        resetBtn.disabled = true;
+        setStatus('');
+        try {
+          const res = await fetch(`/api/admin/users/${encodeURIComponent(u.id)}/reset-code`, {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+          });
+          const d = await res.json().catch(() => ({}));
+          if (!res.ok) throw Error(d.error || 'Gagal membuat kode reset.');
+          const out = layer.querySelector('[data-msp-reset-out]');
+          out.hidden = false;
+          out.innerHTML = `<div class="ms-pop-reset-code">${esc(d.code)}</div><button type="button" class="ms-pop-chip" data-msp-copydm="${esc(d.code)}">📋 Salin Pesan DM</button>`;
+          setStatus(`Kode reset untuk @${u.username} berlaku ${d.expiresMinutes || 30} menit.`);
+        } catch (err) {
+          setStatus(err.message || 'Gagal membuat kode reset.', true);
+        } finally {
+          resetBtn.disabled = false;
+        }
+        return;
+      }
+      const copyBtn = e.target.closest('[data-msp-copydm]');
+      if (copyBtn) {
+        const code = copyBtn.dataset.mspCopydm;
+        const dm = `Halo ${u.name} (@${u.username}), ini kode reset password CLINED kamu:\n\n${code}\n\nMasukkan kode tersebut di menu "Lupa password?" pada halaman Login CLINED. Kode berlaku 30 menit dan hanya bisa dipakai 1 kali ya.`;
+        try { await navigator.clipboard.writeText(dm); setStatus('Pesan DM disalin!'); }
+        catch { setStatus('Gagal menyalin otomatis. Salin kode di atas secara manual.', true); }
+      }
+    });
+
+    layer.querySelector('[data-msp-dia-form]')?.addEventListener('submit', async e => {
+      e.preventDefault();
+      const inp = layer.querySelector('[data-msp-dia-input]');
+      const btn = layer.querySelector('[data-msp-dia-submit]');
+      const amount = Math.floor(Number(inp?.value || 0));
+      if (!Number.isSafeInteger(amount) || amount < 1 || amount > 1000000) {
+        setStatus('Masukkan nominal diamond antara 1 – 1.000.000.', true);
+        inp?.focus();
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Mengirim…';
+      setStatus('');
+      try {
+        const res = await fetch(`/api/admin/users/${encodeURIComponent(u.id)}/diamonds`, {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount })
+        });
+        const d = await res.json().catch(() => ({}));
+        if (!res.ok) throw Error(d.error || 'Gagal menambahkan diamond.');
+        inp.value = '';
+        setStatus(d.message || `Berhasil menambah +${amount.toLocaleString('id-ID')} 💎 untuk @${u.username}.`);
+        if (typeof window.showToast === 'function') window.showToast(`+${amount.toLocaleString('id-ID')} 💎 dikirim ke @${u.username}`);
+      } catch (err) {
+        setStatus(err.message || 'Gagal menambahkan diamond.', true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '💎 Kirim';
+      }
+    });
+  }
+
   function mountDom() {
     if (aside) return;
     backdrop = document.createElement('div');
@@ -266,17 +447,20 @@
       if (e.target.closest('[data-ms-toggle-offline]')) { S.showOffline = !S.showOffline; render(); return; }
       const row = e.target.closest('[data-ms-uid]');
       if (!row) return;
-      if (!dockedMq.matches) setOpen(false);
       if (row.dataset.msMe === '1') {
+        if (!dockedMq.matches) setOpen(false);
         if (typeof window.show === 'function') window.show('accountPage');
         return;
       }
       const uid = row.dataset.msUid;
-      if (uid && window.CLINED_CHAT?.openWith) {
-        window.CLINED_CHAT.openWith(uid);
-      } else if (window.CLINED_SOCIAL?.openChat) {
-        window.CLINED_SOCIAL.openChat();
+      if (isAdmin()) {
+        const target = getMergedList().find(x => x.id === uid);
+        if (target) {
+          openAdminMemberPopup(target);
+          return;
+        }
       }
+      openDirectChat(uid);
     });
 
     aside.addEventListener('input', e => {
@@ -320,6 +504,7 @@
     if (tabletUpMq.matches) { loadMembers(); if (S.open) startPoll(); }
   });
   window.addEventListener('clined:auth-logout', () => {
+    closeAdminPopup();
     S.users = null;
     S.lastHtml = '';
     stopPoll();

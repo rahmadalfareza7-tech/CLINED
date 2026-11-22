@@ -520,3 +520,276 @@
     --ms-half: 134px;
   }
 }
+
+/* Admin-only Member Action Pop-up (Chat & Fitur Admin) */
+.ms-pop-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: ms-pop-fade 0.16s ease both;
+}
+.ms-pop-card {
+  width: min(370px, 100%);
+  border-radius: 22px;
+  border: 2px solid var(--line, #dbe4de);
+  border-bottom-width: 5px;
+  background: var(--card, #ffffff);
+  color: var(--text, #1f2a23);
+  box-shadow: 0 22px 54px rgba(15, 23, 42, 0.34);
+  overflow: hidden;
+  animation: ms-pop-in 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+body.dark .ms-pop-card,
+html.dark .ms-pop-card {
+  background: #171b24;
+  border-color: rgba(255, 255, 255, 0.11);
+  color: #eef2f7;
+}
+.ms-pop-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 30px;
+  gap: 11px;
+  align-items: center;
+  padding: 15px 14px;
+  background: var(--surface, #f2f6f4);
+  border-bottom: 1.5px solid var(--line, #e2e8e4);
+}
+body.dark .ms-pop-hero,
+html.dark .ms-pop-hero {
+  background: #1e2330;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+.ms-pop-hero.has-banner {
+  background-size: cover;
+  background-position: center;
+}
+.ms-pop-hero.has-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 14, 22, 0.78) 0%, rgba(10, 14, 22, 0.45) 70%, rgba(10, 14, 22, 0.25) 100%);
+  pointer-events: none;
+}
+.ms-pop-hero > * {
+  position: relative;
+  z-index: 1;
+}
+.ms-pop-hero .ms-av {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+}
+.ms-pop-hero.has-banner .ms-name:not([data-name-color]) {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+.ms-pop-hero.has-banner .ms-sub {
+  color: rgba(255, 255, 255, 0.86);
+}
+.ms-pop-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  background: rgba(15, 23, 42, 0.14);
+  color: inherit;
+  font: 900 15px/1 inherit;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.ms-pop-hero.has-banner .ms-pop-close {
+  background: rgba(0, 0, 0, 0.42);
+  color: #fff;
+}
+.ms-pop-body {
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+.ms-pop-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.ms-pop-btn {
+  min-height: 48px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 2px solid var(--line, #dbe4de);
+  border-bottom-width: 4px;
+  background: var(--card, #ffffff);
+  color: inherit;
+  font: 800 13.5px/1.2 inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.ms-pop-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+.ms-pop-btn.chat {
+  background: #1cb0f6;
+  border-color: #0d8fd0;
+  color: #fff;
+}
+.ms-pop-btn.admin {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(139, 92, 246, 0.14));
+  border-color: rgba(245, 158, 11, 0.55);
+  color: #b45309;
+}
+body.dark .ms-pop-btn.admin,
+html.dark .ms-pop-btn.admin {
+  color: #fde68a;
+  border-color: rgba(251, 191, 36, 0.45);
+}
+.ms-pop-btn.admin.on {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #b45309;
+  color: #fff;
+}
+
+.ms-pop-admin-panel {
+  display: grid;
+  gap: 11px;
+  padding: 12px;
+  border-radius: 15px;
+  background: var(--surface, #f4f7f5);
+  border: 1.5px solid var(--line, #dbe4de);
+}
+.ms-pop-admin-panel[hidden] {
+  display: none !important;
+}
+body.dark .ms-pop-admin-panel,
+html.dark .ms-pop-admin-panel {
+  background: #11141c;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.ms-pop-sec-lbl {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #64748b);
+}
+.ms-pop-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ms-pop-chip {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 99px;
+  border: 1.5px solid var(--line, #dbe4de);
+  background: var(--card, #fff);
+  color: inherit;
+  font: 800 12px/1 inherit;
+  cursor: pointer;
+}
+.ms-pop-chip:hover {
+  border-color: #0ea5e9;
+  color: #0284c7;
+}
+body.dark .ms-pop-chip,
+html.dark .ms-pop-chip {
+  background: #1b202c;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.ms-pop-dia-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+.ms-pop-input {
+  height: 40px;
+  min-height: 40px !important;
+  padding: 0 12px !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--line, #dbe4de) !important;
+  background: var(--card, #fff) !important;
+  color: inherit !important;
+  font: 800 14px/1 inherit !important;
+}
+body.dark .ms-pop-input,
+html.dark .ms-pop-input {
+  background: #1b202c !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.ms-pop-send-dia {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 2px solid #0284c7;
+  border-bottom-width: 4px;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: #fff;
+  font: 900 13px/1 inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ms-pop-send-dia:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+.ms-pop-reset-btn {
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(28, 176, 246, 0.45);
+  background: rgba(28, 176, 246, 0.1);
+  color: #0b7bb3;
+  font: 800 12.5px/1.2 inherit;
+  cursor: pointer;
+}
+body.dark .ms-pop-reset-btn,
+html.dark .ms-pop-reset-btn {
+  color: #7dd3fc;
+}
+.ms-pop-reset-out {
+  display: grid;
+  gap: 6px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1.5px dashed #1cb0f6;
+  background: var(--card, #fff);
+  text-align: center;
+}
+body.dark .ms-pop-reset-out,
+html.dark .ms-pop-reset-out {
+  background: #1b202c;
+}
+.ms-pop-reset-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  user-select: all;
+}
+.ms-pop-status {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.ms-pop-status[hidden] { display: none; }
+.ms-pop-status.ok { background: rgba(34, 197, 94, 0.14); color: #15803d; }
+.ms-pop-status.bad { background: rgba(239, 68, 68, 0.14); color: #dc2626; }
+body.dark .ms-pop-status.ok, html.dark .ms-pop-status.ok { color: #86efac; }
+body.dark .ms-pop-status.bad, html.dark .ms-pop-status.bad { color: #fca5a5; }
+@keyframes ms-pop-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ms-pop-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }

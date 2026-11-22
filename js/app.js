@@ -2949,10 +2949,53 @@ if($("closeClinicalDashboard"))$("closeClinicalDashboard").onclick=()=>{
 if($("flashcardsBtn"))$("flashcardsBtn").onclick=initFlashcards;
 if($("bookmarkDrillBtn"))$("bookmarkDrillBtn").onclick=startBookmarkDrill;
 if($("smart10Btn"))$("smart10Btn").onclick=startSmart10;
+async function runAdminGiveDiamondAllCommand(rawQuery){
+  const me=typeof authCurrentUser==='function'?authCurrentUser():null;
+  if(!me||me.role!=='admin')return false;
+  const rest=rawQuery.replace(/^\/givediamondtoall\b/i,'').trim().replace(/[.,_\s]+/g,'');
+  if(!/^\d+$/.test(rest)){
+    showToast('Format: /givediamondtoall <nominal> (contoh: /givediamondtoall 500)');
+    return true;
+  }
+  const amount=Number(rest);
+  if(!Number.isSafeInteger(amount)||amount<1||amount>1000000){
+    showToast('Nominal diamond harus 1 – 1.000.000.');
+    return true;
+  }
+  const ok=typeof window.clinedConfirm==='function'
+    ? await window.clinedConfirm({
+        title:`Berikan +${amount.toLocaleString('id-ID')} 💎 ke semua member?`,
+        text:'Semua member akan langsung menerima tambahan diamond dan pemberitahuan meluncur dari atas.',
+        ok:'Ya, kirim ke semua'
+      })
+    : window.confirm(`Berikan +${amount.toLocaleString('id-ID')} diamond ke semua member?`);
+  if(!ok)return true;
+  const input=$('homeQuestionSearch');
+  if(input)input.value='';
+  try{
+    const res=await fetch('/api/admin/diamonds/give-all',{
+      method:'POST',credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({amount})
+    });
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok)throw Error(data.error||'Gagal membagikan diamond.');
+    window.CLINED_CARDS?.onAdminGrant?.({id:data.id,scope:'all',amount:data.amount||amount,recipients:data.recipients});
+  }catch(err){
+    showToast(err?.message||'Gagal membagikan diamond.');
+  }
+  return true;
+}
 function openHomeQuestionSearch(){
   const input = $("homeQuestionSearch");
+  const rawQuery = String(input?.value || "").trim();
+  const me = typeof authCurrentUser === "function" ? authCurrentUser() : null;
+  if (me?.role === "admin" && /^\/givediamondtoall(?:\s|$)/i.test(rawQuery)) {
+    runAdminGiveDiamondAllCommand(rawQuery);
+    return;
+  }
   const target = $("librarySearch");
-  if (target) target.value = String(input?.value || "").trim();
+  if (target) target.value = rawQuery;
   if ($("libraryBank")) $("libraryBank").value = "all";
   window.__clinedReviewBankId = null;
   show("library");

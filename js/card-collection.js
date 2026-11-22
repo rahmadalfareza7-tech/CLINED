@@ -1318,6 +1318,63 @@
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
 
+  const seenGrantIds = new Set();
+  let grantBannerTimer = null;
+  function showDiamondGrantBanner(data) {
+    const amount = Math.max(0, Math.floor(Number(data?.amount) || 0));
+    if (!amount) return;
+    const isAll = data?.scope === 'all';
+    const amtText = amount.toLocaleString('id-ID');
+    const old = document.getElementById('clinedDiaGrantBanner');
+    if (old) old.remove();
+    clearTimeout(grantBannerTimer);
+
+    const el = document.createElement('div');
+    el.id = 'clinedDiaGrantBanner';
+    el.className = 'dia-grant-banner';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    const msg = isAll
+      ? `Admin telah memberikan semua orang tambahan diamond sebanyak <b>${amtText} 💎</b>`
+      : `Admin telah memberikan kamu tambahan diamond sebanyak <b>${amtText} 💎</b>`;
+    el.innerHTML = `<div class="dgb-ico" aria-hidden="true">💎</div><div class="dgb-body"><div class="dgb-title">${isAll ? 'Bonus Diamond Untuk Semua' : 'Bonus Diamond Dari Admin'}</div><div class="dgb-msg">${msg}</div></div><button type="button" class="dgb-x" aria-label="Tutup">✕</button>`;
+    const dismiss = () => {
+      clearTimeout(grantBannerTimer);
+      el.classList.remove('show');
+      setTimeout(() => el.remove(), 340);
+    };
+    el.querySelector('.dgb-x')?.addEventListener('click', dismiss);
+    document.body.appendChild(el);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+    grantBannerTimer = setTimeout(dismiss, 6500);
+  }
+
+  function onAdminGrant(data) {
+    if (!data || !Number(data.amount)) return;
+    if (data.id) {
+      if (seenGrantIds.has(data.id)) return;
+      seenGrantIds.add(data.id);
+      if (seenGrantIds.size > 40) seenGrantIds.clear();
+    }
+    const amt = Math.max(0, Math.floor(Number(data.amount) || 0));
+    if (!isAdmin() && amt > 0) {
+      applyingServer = true;
+      try {
+        if (Number.isFinite(Number(data.diamonds))) {
+          localStorage.setItem(KEY_DIA, String(Math.max(0, Math.floor(Number(data.diamonds)))));
+        } else {
+          const cur = parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0;
+          localStorage.setItem(KEY_DIA, String(cur + amt));
+        }
+      } finally { applyingServer = false; }
+      onExternalSync();
+      if (!Number.isFinite(Number(data.diamonds))) {
+        hydrateFromServer().catch(() => {});
+      }
+    }
+    showDiamondGrantBanner(data);
+  }
+
   window.CLINED_CARD_SHOP = { show: showShop, hide: hideShop, showCosmeticTutorial: () => showCosmeticTutorial(true) };
   window.CLINED_CARDS = {
     catalog: CARD_CATALOG,
@@ -1332,6 +1389,7 @@
     getBonusQuizXp: () => getEquippedCard()?.buff?.quizXp || 0,
     getBonusDuelXp: () => getEquippedCard()?.buff?.duelXp || 0,
     openShop: showShop,
+    onAdminGrant,
     previewCard: id => {
       const c = CARD_CATALOG.find(x => x.id === id);
       if (c) showCardPreview(c);

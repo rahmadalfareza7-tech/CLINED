@@ -93,7 +93,7 @@
     };
 
     /* ───── Aktivitas ───── */
-    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'], question_edited: ['✏️', 'Edit soal', 'edit'], admin_reset_code: ['🔑', 'Kode reset dibuat', 'role'], password_reset: ['🔐', 'Password direset', 'login'] };
+    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'], question_edited: ['✏️', 'Edit soal', 'edit'], admin_reset_code: ['🔑', 'Kode reset dibuat', 'role'], password_reset: ['🔐', 'Password direset', 'login'], admin_give_diamond: ['💎', 'Tambah diamond', 'role'], admin_give_diamond_all: ['💎', 'Bagi diamond semua', 'role'] };
     const actExtra = a => {
       if (a.action === 'role_changed') {
         const m = a.metadata || {};
@@ -102,6 +102,12 @@
         if (m.from && m.to && m.from !== m.to) parts.push(`${m.from} → ${m.to}`);
         if (typeof m.mentorTo === 'boolean' && m.mentorFrom !== m.mentorTo) parts.push(`Tempat bertanya: ${m.mentorTo ? 'aktif' : 'nonaktif'}`);
         return parts.length ? `<span class="ap-chg">${esc(parts.join(' • '))}</span>` : '';
+      }
+      if (a.action === 'admin_give_diamond' && a.metadata?.targetUsername) {
+        return `<span class="ap-chg">@${esc(a.metadata.targetUsername)} • +${Number(a.metadata.amount || 0).toLocaleString('id-ID')} 💎</span>`;
+      }
+      if (a.action === 'admin_give_diamond_all') {
+        return `<span class="ap-chg">+${Number(a.metadata?.amount || 0).toLocaleString('id-ID')} 💎 ke ${Number(a.metadata?.recipients || 0)} member</span>`;
       }
       if (a.action === 'admin_reset_code' && a.metadata?.targetUsername) {
         return `<span class="ap-chg">@${esc(a.metadata.targetUsername)} • berlaku ${esc(a.metadata.expiresMinutes || 30)}m</span>`;
