@@ -382,10 +382,284 @@
     scheduleQuickReplyHide(8000);
   }
 
+  /* ───────── Kotak Chat Melayang (Floating Chat Box tanpa pindah halaman) ───────── */
+  const F = { el: null, peer: null, thread: null, minimized: false, unreadLocal: 0, busy: false, timer: null, lastKey: '' };
+
+  function stopFloatPoll() { clearInterval(F.timer); F.timer = null; }
+  function startFloatPoll() {
+    stopFloatPoll();
+    F.timer = setInterval(() => {
+      if (document.hidden || !F.el || !F.peer || F.minimized) return;
+      loadFloatThread(false).catch(() => {});
+    }, 6000);
+  }
+
+  function closeFloating() {
+    stopFloatPoll();
+    if (F.el) {
+      const box = F.el;
+      F.el = null;
+      box.classList.remove('open');
+      setTimeout(() => box.remove(), 200);
+    }
+    F.peer = null;
+    F.thread = null;
+    F.minimized = false;
+    F.unreadLocal = 0;
+    F.lastKey = '';
+  }
+
+  function floatMsgsHtml(list) {
+    if (!list) return '<div class="cf-loading">Memuat percakapan…</div>';
+    if (!list.length) return '<div class="chat-empty"><span>👋</span><b>Belum ada pesan</b><small>Sapa duluan!</small></div>';
+    let last = '', prev = null;
+    return list.map(m => {
+      const d = dayLbl(m.at), newDay = d !== last; last = d;
+      const cont = !newDay && prev && prev.mine === m.mine && m.at - prev.at < 3 * 6e4;
+      const gap = !newDay && prev && !cont;
+      prev = m;
+      return `${newDay ? `<div class="chat-day">${d}</div>` : ''}<div class="chat-msg ${m.mine ? 'me' : 'them'}${cont ? ' cont' : ''}${gap ? ' gap' : ''}"><p>${esc(m.text)}</p><small>${clock(m.at)}</small></div>`;
+    }).join('');
+  }
+
+  function renderFloatHeader() {
+    if (!F.el || !F.peer) return;
+    const p = F.peer;
+    const head = F.el.querySelector('[data-fc-head]');
+    if (!head) return;
+    head.classList.toggle('has-banner', !!p.bannerUrl);
+    const bg = p.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(p.bannerUrl)}')" aria-hidden="true"></span>` : '';
+    const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
+    const xp100 = p.xp100k ? '<em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K</em>' : '';
+    const minUnread = (F.minimized && F.unreadLocal > 0) ? `<span class="cf-min-badge">${F.unreadLocal > 9 ? '9+' : F.unreadLocal}</span>` : '';
+    head.innerHTML = `${bg}${av(p)}
+      <div class="cf-who">
+        <div class="cf-who-top"><b${nc}>${esc(p.name || p.username || 'Member')}</b>${xp100}${badges(p)}</div>
+        <small>@${esc(p.username || '')}${p.online ? ' • online' : ' • offline'}</small>
+      </div>
+      ${minUnread}
+      <div class="cf-acts">
+        <button type="button" class="cf-act" data-fc-expand title="Buka halaman Chat penuh" aria-label="Buka halaman Chat penuh">↗</button>
+        <button type="button" class="cf-act" data-fc-min title="${F.minimized ? 'Perbesar chat' : 'Perkecil chat'}" aria-label="${F.minimized ? 'Perbesar chat' : 'Perkecil chat'}">${F.minimized ? '▢' : '—'}</button>
+        <button type="button" class="cf-act" data-fc-close title="Tutup chat" aria-label="Tutup chat">✕</button>
+      </div>`;
+  }
+
+  function renderFloatFooter() {
+    if (!F.el || !F.peer) return;
+    const foot = F.el.querySelector('[data-fc-foot]');
+    if (!foot) return;
+    if (!F.thread) {
+      foot.innerHTML = '<div class="cf-locked">Menyiapkan ruang chat…</div>';
+      return;
+    }
+    if (F.thread.canChat) {
+      if (foot.querySelector('#floatChatInput')) return;
+      foot.innerHTML = `<div class="cf-compose">
+        <textarea id="floatChatInput" rows="1" maxlength="1000" placeholder="Tulis pesan…" aria-label="Tulis pesan"></textarea>
+        <button type="button" class="cf-send" data-fc-send aria-label="Kirim pesan" disabled>➤</button>
+      </div>`;
+      return;
+    }
+    const fr = F.peer.friend;
+    if (fr?.state === 'pending' && fr?.dir === 'in') {
+      foot.innerHTML = `<div class="cf-locked"><span>Ingin berteman denganmu</span><button type="button" class="cf-friend-btn" data-fc-friend="${esc(F.peer.username)}">✓ Terima Teman</button></div>`;
+    } else if (fr?.state === 'pending') {
+      foot.innerHTML = '<div class="cf-locked">⏳ Permintaan teman terkirim — tunggu diterima untuk mulai chat.</div>';
+    } else {
+      foot.innerHTML = `<div class="cf-locked"><span>Berteman dulu untuk membalas</span><button type="button" class="cf-friend-btn" data-fc-friend="${esc(F.peer.username)}">🤝 Tambah Teman</button></div>`;
+    }
+  }
+
+  function scrollFloatEnd() {
+    const m = F.el?.querySelector('[data-fc-msgs]');
+    if (m) m.scrollTop = m.scrollHeight;
+  }
+
+  function renderFloatMsgs(forceScroll = false) {
+    if (!F.el) return;
+    const box = F.el.querySelector('[data-fc-msgs]');
+    if (!box) return;
+    const msgs = F.thread?.messages || null;
+    const key = msgs ? `${msgs.length}:${msgs[msgs.length - 1]?.id || ''}` : 'loading';
+    if (key === F.lastKey && !forceScroll) return;
+    const nearBottom = forceScroll || (box.scrollHeight - box.scrollTop - box.clientHeight < 64);
+    F.lastKey = key;
+    box.innerHTML = floatMsgsHtml(msgs);
+    if (nearBottom) scrollFloatEnd();
+  }
+
+  async function loadFloatThread(first = false) {
+    if (!F.peer) return;
+    const targetId = F.peer.id;
+    const d = await api('/api/chat/messages?with=' + encodeURIComponent(targetId));
+    if (!F.peer || F.peer.id !== targetId || !F.el) return;
+    const prevOnline = !!F.peer.online;
+    const prevBanner = F.peer.bannerUrl || '';
+    const hadThread = !!F.thread;
+    F.peer = { ...F.peer, ...d.peer };
+    F.thread = d;
+    if (first || !hadThread || prevOnline !== !!F.peer.online || prevBanner !== (F.peer.bannerUrl || '')) {
+      renderFloatHeader();
+    }
+    renderFloatMsgs(first);
+    renderFloatFooter();
+    if (first) {
+      F.unreadLocal = 0;
+      const u = (C.users || []).find(x => x.id === targetId);
+      if (u && u.unread > 0) {
+        const dec = u.unread;
+        u.unread = 0;
+        setDot(Math.max(0, C.unread - dec));
+      }
+      refreshDot();
+      if (!F.minimized && F.thread.canChat) {
+        setTimeout(() => F.el?.querySelector('#floatChatInput')?.focus({ preventScroll: true }), 40);
+      }
+    }
+  }
+
+  async function sendFloat() {
+    const inp = F.el?.querySelector('#floatChatInput');
+    if (!inp || !F.peer || F.busy) return;
+    const text = inp.value.trim();
+    if (!text) return;
+    F.busy = true;
+    const btn = F.el?.querySelector('[data-fc-send]');
+    if (btn) btn.disabled = true;
+    try {
+      const d = await api('/api/chat/send', { method: 'POST', body: { to: F.peer.id, text } });
+      inp.value = '';
+      inp.style.height = 'auto';
+      if (!F.thread) F.thread = { canChat: true, messages: [] };
+      F.thread.messages.push(d.message);
+      const u = (C.users || []).find(x => x.id === F.peer.id);
+      if (u) { u.lastAt = d.message.at || Date.now(); u.lastText = 'Kamu: ' + text.slice(0, 60); }
+      renderFloatMsgs(true);
+      inp.focus({ preventScroll: true });
+    } catch (e) {
+      toast(e.message || 'Gagal mengirim pesan.', true);
+    } finally {
+      F.busy = false;
+      if (btn) btn.disabled = !inp.value.trim();
+    }
+  }
+
+  function ensureFloatShell() {
+    if (F.el && F.el.isConnected) return F.el;
+    const el = document.createElement('aside');
+    el.id = 'clinedFloatChat';
+    el.className = 'chat-float';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-label', 'Chat melayang');
+    el.innerHTML = `<div class="cf-head" data-fc-head></div>
+      <div class="cf-body" data-fc-body>
+        <div class="cf-ttl">🕒 Pesan hilang otomatis setelah 48 jam</div>
+        <div class="cf-msgs" data-fc-msgs></div>
+        <div class="cf-foot" data-fc-foot></div>
+      </div>`;
+    el.addEventListener('click', async e => {
+      if (e.target.closest('[data-fc-close]')) { closeFloating(); return; }
+      if (e.target.closest('[data-fc-expand]')) {
+        const pid = F.peer?.id;
+        closeFloating();
+        if (pid) deepLink(pid);
+        return;
+      }
+      if (e.target.closest('[data-fc-min]')) {
+        F.minimized = !F.minimized;
+        el.classList.toggle('is-min', F.minimized);
+        if (!F.minimized) {
+          F.unreadLocal = 0;
+          loadFloatThread(true).catch(() => {});
+        }
+        renderFloatHeader();
+        return;
+      }
+      if (F.minimized && e.target.closest('[data-fc-head]')) {
+        F.minimized = false;
+        el.classList.remove('is-min');
+        F.unreadLocal = 0;
+        renderFloatHeader();
+        loadFloatThread(true).catch(() => {});
+        return;
+      }
+      if (e.target.closest('[data-fc-send]')) { sendFloat(); return; }
+      const fBtn = e.target.closest('[data-fc-friend]');
+      if (fBtn) {
+        fBtn.disabled = true;
+        try {
+          const r = await api('/api/friends/request', { method: 'POST', body: { username: fBtn.dataset.fcFriend } });
+          toast(r.status === 'accepted' ? 'Sekarang berteman 🎉' : 'Permintaan teman dikirim');
+          await loadFloatThread(true);
+        } catch (err) {
+          fBtn.disabled = false;
+          toast(err.message || 'Gagal mengirim permintaan teman.', true);
+        }
+      }
+    });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeFloating(); return; }
+      if (e.target.id === 'floatChatInput' && e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+        e.preventDefault();
+        sendFloat();
+      }
+    });
+    el.addEventListener('input', e => {
+      if (e.target.id === 'floatChatInput') {
+        const b = el.querySelector('[data-fc-send]');
+        if (b) b.disabled = !e.target.value.trim() || F.busy;
+        e.target.style.height = 'auto';
+        e.target.style.height = Math.min(96, e.target.scrollHeight) + 'px';
+      }
+    });
+    document.body.appendChild(el);
+    F.el = el;
+    requestAnimationFrame(() => el.classList.add('open'));
+    return el;
+  }
+
+  async function openFloating(uid, peerHint = null) {
+    if (!/^[0-9a-f-]{36}$/i.test(String(uid || ''))) return;
+    if (typeof authCurrentUser === 'function' && !authCurrentUser()) return;
+    dismissQuickReply();
+    const cached = (C.users || []).find(x => x.id === uid);
+    const samePeer = F.peer && F.peer.id === uid && F.el?.isConnected;
+    F.peer = { ...(cached || {}), ...(peerHint || {}), id: uid };
+    F.minimized = false;
+    F.unreadLocal = 0;
+    if (!samePeer) {
+      F.thread = null;
+      F.lastKey = '';
+    }
+    const el = ensureFloatShell();
+    el.classList.remove('is-min');
+    renderFloatHeader();
+    renderFloatMsgs(true);
+    renderFloatFooter();
+    startFloatPoll();
+    try {
+      await loadFloatThread(true);
+    } catch (err) {
+      toast(err.message || 'Gagal memuat percakapan.', true);
+      if (!F.thread) closeFloating();
+    }
+  }
+
   /* Dipanggil social.js saat event SSE 'chat' tiba */
   function onPush(m) {
     const here = document.querySelector('.view.active')?.id === 'hubPage' && C.host?.isConnected;
     if (here && C.peer && C.peer.id === m.from?.id) { loadThread(false).catch(() => {}); return; }
+    if (F.el?.isConnected && F.peer && F.peer.id === m.from?.id) {
+      if (!F.minimized) {
+        loadFloatThread(false).catch(() => {});
+        return;
+      }
+      F.unreadLocal += 1;
+      renderFloatHeader();
+      setDot(C.unread + 1);
+      return;
+    }
     showQuickReplyBanner(m);
     setDot(C.unread + 1);
     const sender = (C.users || []).find(x => x.id === m.from?.id);
@@ -416,13 +690,15 @@
   window.addEventListener('clined:profile-style', () => { if (C.host?.isConnected && !C.peer) render(); });
   window.addEventListener('clined:auth-ready', () => {
     if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
-    else setDot(0);
+    else { setDot(0); closeFloating(); }
   });
+  window.addEventListener('clined:auth-logout', () => { setDot(0); closeFloating(); });
   window.addEventListener('online', () => {
     if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
   });
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') return;
+    if (F.el?.isConnected && F.peer && !F.minimized) loadFloatThread(false).catch(() => {});
     if (!C.host?.isConnected) {
       if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
       return;
@@ -431,5 +707,5 @@
     (C.peer ? loadThread(false) : loadUsers().then(() => { if (!document.activeElement?.matches?.('[data-chat-q]')) render(); })).catch(() => {});
   });
   if (typeof authCurrentUser === 'function' && authCurrentUser()) refreshDot();
-  window.CLINED_CHAT = { unread: 0, mount, stop: () => { stopPoll(); stopOnlinePoll(); C.peer = null; C.thread = null; }, onPush, refreshDot, openWith: deepLink };
+  window.CLINED_CHAT = { unread: 0, mount, stop: () => { stopPoll(); stopOnlinePoll(); C.peer = null; C.thread = null; }, onPush, refreshDot, openWith: deepLink, openFloating, closeFloating };
 })();

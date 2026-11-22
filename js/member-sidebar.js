@@ -247,9 +247,12 @@
     if (popLayer) { popLayer.remove(); popLayer = null; }
   }
 
-  function openDirectChat(uid) {
+  function openDirectChat(uid, peerObj = null) {
     if (!dockedMq.matches) setOpen(false);
-    if (uid && window.CLINED_CHAT?.openWith) {
+    const peer = peerObj || getMergedList().find(x => x.id === uid) || null;
+    if (uid && window.CLINED_CHAT?.openFloating) {
+      window.CLINED_CHAT.openFloating(uid, peer);
+    } else if (uid && window.CLINED_CHAT?.openWith) {
       window.CLINED_CHAT.openWith(uid);
     } else if (window.CLINED_SOCIAL?.openChat) {
       window.CLINED_SOCIAL.openChat();
@@ -336,7 +339,7 @@
       if (e.target.closest('[data-msp-chat]')) {
         closeAdminPopup();
         document.removeEventListener('keydown', onKey);
-        openDirectChat(u.id);
+        openDirectChat(u.id, u);
         return;
       }
       const toggleBtn = e.target.closest('[data-msp-toggle-admin]');
