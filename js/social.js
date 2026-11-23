@@ -1407,8 +1407,39 @@
           ? `📉 ${rpDelta} RP`
           : '🛡️ +0 RP (Proteksi Bronze)';
 
-      const review = R.review.map(q => `<details class="soc-rev"><summary><span class="soc-rn ${q.myChoice === q.correctIdx ? 'ok' : 'bad'}">${q.i + 1}</span>${esc(q.soal.slice(0, 90))}${q.soal.length > 90 ? '…' : ''}</summary>
-        <ul>${q.opsi.map((o, i) => `<li class="${i === q.correctIdx ? 'ok' : ''}">${L5[i]}. ${esc(o)} ${i === q.correctIdx ? '✓' : ''}${i === q.myChoice ? ' <em>kamu</em>' : ''}${!isMP && i === q.oppChoice ? ' <em class="opp">lawan</em>' : ''}</li>`).join('')}</ul>${q.myChoice === -1 ? '<p class="soc-pemb">⏰ Kamu tidak menjawab tepat waktu.</p>' : ''}${q.pembahasan ? `<p class="soc-pemb">${esc(q.pembahasan)}</p>` : ''}</details>`).join('');
+      const review = R.review.map(q => {
+        const isCorrect = q.myChoice === q.correctIdx;
+        const perOpt = Array.isArray(q.pembahasanPilihan) ? q.pembahasanPilihan : [];
+        const hasPerOpt = perOpt.some(t => String(t || '').trim());
+        const optsHtml = q.opsi.map((o, i) => {
+          const isKey = i === q.correctIdx;
+          const isMine = i === q.myChoice;
+          const isOpp = !isMP && i === q.oppChoice;
+          const optExp = hasPerOpt && perOpt[i] ? `<div class="soc-rev-opt-exp"><b>Analisis Opsi ${L5[i]}:</b> ${esc(perOpt[i])}</div>` : '';
+          return `<li class="${isKey ? 'ok' : isMine ? 'bad' : ''}">
+            <div class="soc-rev-opt-line">
+              <span class="soc-rev-letter">${L5[i]}.</span>
+              <span class="soc-rev-opt-txt">${esc(o)}</span>
+              ${isKey ? '<span class="soc-rev-key">✓ Kunci</span>' : ''}
+              ${isMine ? '<em>kamu</em>' : ''}
+              ${isOpp ? '<em class="opp">lawan</em>' : ''}
+            </div>
+            ${optExp}
+          </li>`;
+        }).join('');
+        return `<details class="soc-rev" open>
+          <summary>
+            <span class="soc-rn ${isCorrect ? 'ok' : 'bad'}">${q.i + 1}</span>
+            <span class="soc-rev-q">${esc(q.soal)}</span>
+          </summary>
+          <div class="soc-rev-body">
+            <ul>${optsHtml}</ul>
+            ${q.myChoice === -1 ? '<p class="soc-pemb warn">⏰ Kamu tidak menjawab tepat waktu.</p>' : ''}
+            ${q.pembahasan ? `<div class="soc-pemb"><b>💡 Pembahasan:</b><p>${esc(q.pembahasan)}</p></div>` : ''}
+            ${q.catatanKlinis ? `<div class="soc-pemb note"><b>🩺 Catatan Klinis:</b><p>${esc(q.catatanKlinis)}</p></div>` : ''}
+          </div>
+        </details>`;
+      }).join('');
 
       const rankResultCard = `
         <div class="duel-rank-result-card tier-${esc(newRk.key)}">

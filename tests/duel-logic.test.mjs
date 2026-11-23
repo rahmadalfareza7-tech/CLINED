@@ -52,8 +52,30 @@ test('viewFor: kunci hanya untuk soal yang sudah dijawab sendiri', () => {
   assert.ok(!JSON.stringify(v).includes('"jawabanBenar"'));
 });
 test('viewFor: duel selesai membuka ulasan lengkap; waiting tanpa soal', () => {
-  const fin = viewFor(duel(A([true, true, true]), A([false, false, false]), { status: 'finished', winnerId: 'H', reason: 'score' }), 'G');
+  const longSoal = 'Seorang laki-laki usia 54 tahun datang ke klinik dokter keluarga dengan keluhan nyeri dada substernal menjalar ke lengan kiri sejak 2 jam lalu disertai keringat dingin, mual, dan sesak napas. Riwayat hipertensi dan diabetes melitus tipe 2 tidak terkontrol sejak 10 tahun. Pemeriksaan fisik TD 160/95 mmHg, Nadi 108x/menit, RR 24x/menit, EKG menunjukkan ST elevasi di sadapan V1-V4. Apakah tata laksana awal yang paling tepat pada pasien ini?';
+  const longPemb = 'STEMI anterior memerlukan reperfusi segera serta pemberian MONACO (Morfin, Oksigen bila SpO2 < 90%, Nitrat sublingual, Aspirin loading 160-320 mg dikunyah, dan Clopidogrel/Ticagrelor) sebelum rujukan PCI primer.';
+  const rawQuestions = pickQuestions([{
+    id: 'q-long',
+    soal: longSoal,
+    opsi: ['Aspirin 320 mg dikunyah', 'Observasi 24 jam', 'Pulangkan pasien', 'Antasida sirup'],
+    jawabanBenar: 0,
+    pembahasan: longPemb,
+    pembahasan_klinis: {
+      A: 'Benar: Aspirin dosis loading menghambat agregasi trombosit secara cepat.',
+      B: 'Salah: Menunda reperfusi memperluas nekrosis miokard.',
+      C: 'Salah: Pasien dalam kondisi gawat darurat kardiovaskular.',
+      D: 'Salah: Bukan dispepsia fungsional.'
+    },
+    catatanKlinis: 'Golden period STEMI < 12 jam sejak onset nyeri dada.'
+  }, ...Q(2)], 3, () => 0.99);
+  const fin = viewFor(duel(A([true, true, true]), A([false, false, false]), { questions: rawQuestions, status: 'finished', winnerId: 'H', reason: 'score' }), 'G');
   assert.equal(fin.result.review.length, 3); assert.equal(fin.result.winnerId, 'H'); assert.equal(fin.opponent.score, 3);
+  const longRev = fin.result.review.find(r => r.soal === longSoal);
+  assert.ok(longRev, 'soal panjang > 400 karakter tidak boleh terpotong di review after-match');
+  assert.equal(longRev.pembahasan, longPemb);
+  assert.equal(longRev.pembahasanPilihan.length, 4);
+  assert.match(longRev.pembahasanPilihan[0], /Aspirin dosis loading/);
+  assert.equal(longRev.catatanKlinis, 'Golden period STEMI < 12 jam sejak onset nyeri dada.');
   const w = viewFor(duel({}, {}, { status: 'waiting', guestId: null }), 'H');
   assert.deepEqual(w.questions, []); assert.equal(w.opponent, null);
 });

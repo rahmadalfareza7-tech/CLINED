@@ -1182,17 +1182,142 @@ html body #duelPage .soc-btns2 button {
 }
 
 html body #duelPage .soc-rev {
-  background: transparent !important;
-  border: 0 !important;
-  border-top: 2px solid var(--line) !important;
-  border-radius: 0 !important;
-  padding: 10px 0 !important;
+  background: var(--surface) !important;
+  border: 2px solid var(--line) !important;
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  margin-top: 10px !important;
   color: var(--text) !important;
 }
 
+html body #duelPage .soc-rev summary {
+  display: grid !important;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px !important;
+  align-items: start !important;
+  cursor: pointer;
+  list-style: none;
+}
+
+html body #duelPage .soc-rev summary::-webkit-details-marker {
+  display: none;
+}
+
+html body #duelPage .soc-rev-q {
+  font-size: 14.5px;
+  font-weight: 800;
+  line-height: 1.55;
+  color: var(--text);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+html body #duelPage .soc-rev-body {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1.5px dashed var(--line);
+}
+
+html body #duelPage .soc-rev ul {
+  margin: 0 !important;
+  display: grid;
+  gap: 7px !important;
+}
+
+html body #duelPage .soc-rev li {
+  display: grid;
+  gap: 5px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+html body #duelPage .soc-rev li.ok {
+  background: var(--brand-soft);
+  border-color: rgba(88, 204, 2, .5);
+  color: var(--text) !important;
+}
+
+html body #duelPage .soc-rev li.bad {
+  background: var(--danger-soft);
+  border-color: rgba(255, 75, 75, .45);
+}
+
+html body #duelPage .soc-rev-opt-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+
+html body #duelPage .soc-rev-letter {
+  font-weight: 900;
+  color: var(--sky-text);
+}
+
+html body #duelPage .soc-rev-opt-txt {
+  flex: 1 1 200px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+html body #duelPage .soc-rev-key {
+  font-size: 11px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: var(--brand);
+  color: #fff;
+}
+
+html body #duelPage .soc-rev-opt-exp {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--muted);
+  padding-top: 5px;
+  border-top: 1px dashed var(--line);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+html body #duelPage .soc-rev-opt-exp b {
+  color: var(--text);
+  font-weight: 800;
+}
+
 html body #duelPage .soc-pemb {
-  color: var(--muted) !important;
+  margin: 0 !important;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  color: var(--text) !important;
   opacity: 1 !important;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+html body #duelPage .soc-pemb b {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12.5px;
+  font-weight: 900;
+  color: var(--sky-text);
+}
+
+html body #duelPage .soc-pemb p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
 }
 
 /* ───────── 7. Floating Wait Bar, Match-Found Modal, & Rank Modal ───────── */
