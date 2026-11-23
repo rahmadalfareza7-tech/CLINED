@@ -1624,9 +1624,11 @@
     el.setAttribute('aria-live', 'polite');
     const note = String(data?.note || '').trim();
     const noteHtml = note ? `<div class="dgb-note">“${esc(note)}”</div>` : '';
+    const rawAdminUser = String(data?.byUsername || '').trim().replace(/^@+/, '');
+    const adminActor = rawAdminUser ? `Admin <b>@${esc(rawAdminUser)}</b>` : 'Admin';
     const msg = isAll
-      ? `Admin telah memberikan semua orang yang sedang online tambahan diamond sebanyak <b>${amtText} 💎</b>`
-      : `Admin telah memberikan kamu tambahan diamond sebanyak <b>${amtText} 💎</b>`;
+      ? `${adminActor} telah memberikan semua orang yang sedang online tambahan diamond sebanyak <b>${amtText} 💎</b>`
+      : `${adminActor} telah memberikan kamu tambahan diamond sebanyak <b>${amtText} 💎</b>`;
     el.innerHTML = `<div class="dgb-ico" aria-hidden="true">💎</div><div class="dgb-body"><div class="dgb-title">${isAll ? 'Bonus Diamond Member Online' : 'Bonus Diamond Dari Admin'}</div><div class="dgb-msg">${msg}</div>${noteHtml}</div><button type="button" class="dgb-x" aria-label="Tutup">✕</button>`;
     const dismiss = () => {
       clearTimeout(grantBannerTimer);

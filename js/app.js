@@ -3186,7 +3186,8 @@ async function runAdminGiveDiamondAllCommand(rawQuery){
     });
     const data=await res.json().catch(()=>({}));
     if(!res.ok)throw Error(data.error||'Gagal membagikan diamond.');
-    window.CLINED_CARDS?.onAdminGrant?.({id:data.id,scope:'all',amount:data.amount||amount,recipients:data.recipients,note:data.note??note});
+    const meUser = typeof authCurrentUser === 'function' ? authCurrentUser()?.username || '' : '';
+    window.CLINED_CARDS?.onAdminGrant?.({id:data.id,scope:'all',amount:data.amount||amount,recipients:data.recipients,note:data.note??note,byUsername:data.byUsername||meUser});
   }catch(err){
     showToast(err?.message||'Gagal membagikan diamond.');
   }
