@@ -40,11 +40,36 @@
   html body #materiLatihanBody .ml-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   html body #adminContentWorkspace .admin-uab-packages { max-height: 62vh; }
 
-  /* Teman & Duel */
-  html body #socialBody { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 16px; }
-  html body #socialBody > .duel-hero,
-  html body #socialBody > .soc-lives,
-  html body #socialBody > .soc-invite { grid-column: 1 / -1; }
+  /* Teman & Duel — grid seimbang tanpa ruang kosong menggantung */
+  html body #socialBody { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 16px; }
+  html body #socialBody > .duel-lobby-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  html body #socialBody > .duel-lobby-grid > .duel-arena-card { grid-column: 1; grid-row: 1; align-self: start; }
+  html body #socialBody > .duel-lobby-grid > .duel-friends-card {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  html body #socialBody > .duel-lobby-grid > .duel-friends-card > .soc-sec { flex: 1 1 auto; align-content: start; }
+  html body #socialBody > .duel-lobby-grid > .soc-setup {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    height: 100%;
+    box-sizing: border-box;
+    align-content: start;
+  }
+  html body #socialBody .duel-lb-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
   html body #duelBody { max-width: 760px; margin-inline: auto; width: 100%; }
 
   /* Rencana Belajar */

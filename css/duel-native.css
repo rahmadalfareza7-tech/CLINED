@@ -453,6 +453,17 @@ html body #socialPage .duel-open-empty small {
   opacity: 1 !important;
 }
 
+html body #socialPage .duel-open-empty small b {
+  display: inline !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+  font-weight: 800 !important;
+}
+
+html body #socialPage .h2h-pill {
+  white-space: nowrap;
+}
+
 html body #socialPage .duel-join-now {
   box-shadow: none !important;
 }
@@ -609,10 +620,66 @@ html body #socialPage .duel-lb-row:not(.has-banner) .duel-lb-meta {
   opacity: 1 !important;
 }
 
+html body #socialPage .duel-lobby-grid {
+  display: contents;
+}
+
+@media (min-width: 1100px) {
+  html body #socialBody > .duel-lobby-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  html body #socialBody > .duel-lobby-grid > .duel-arena-card { grid-column: 1; grid-row: 1; align-self: start; }
+  html body #socialBody > .duel-lobby-grid > .duel-friends-card {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  html body #socialBody > .duel-lobby-grid > .duel-friends-card > .soc-sec { flex: 1 1 auto; align-content: start; }
+  html body #socialBody > .duel-lobby-grid > .soc-setup {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    height: 100%;
+    box-sizing: border-box;
+    align-content: start;
+  }
+  html body #socialBody .duel-lb-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
 html body #socialPage .duel-lb-row.has-banner {
   border-radius: 16px !important;
   border-bottom-width: 3px !important;
 }
+
+html body #socialPage .duel-lb-row.has-banner .duel-lb-wins {
+  background: rgba(15, 23, 42, .62);
+  padding: 2px 9px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: #ffffff !important;
+}
+
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill {
+  background: rgba(15, 23, 42, .62) !important;
+  border-color: rgba(255, 255, 255, .24) !important;
+  color: #f1f5f9 !important;
+}
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill.tier-bronze   { color: #fdba74 !important; border-color: rgba(251, 146, 60, .48) !important; }
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill.tier-silver   { color: #e2e8f0 !important; border-color: rgba(203, 213, 225, .45) !important; }
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill.tier-gold     { color: #fde047 !important; border-color: rgba(250, 204, 21, .5) !important; }
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill.tier-platinum { color: #5eead4 !important; border-color: rgba(45, 212, 191, .48) !important; }
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill.tier-diamond  { color: #7dd3fc !important; border-color: rgba(56, 189, 248, .5) !important; }
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill.tier-master   { color: #f0abfc !important; border-color: rgba(232, 121, 249, .5) !important; }
+html body #socialPage .duel-lb-row.has-banner .duel-rank-pill.tier-mythic   { color: #fef08a !important; border-color: rgba(250, 204, 21, .6) !important; }
 
 /* ───────── 4. Saat Lagi Duel: Papan Arena & Tarik Tambang ───────── */
 html body #duelPage .duel-arena-board {

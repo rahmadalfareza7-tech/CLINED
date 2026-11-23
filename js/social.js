@@ -706,7 +706,7 @@
       </div>
       <button type="button" class="primary soc-fight" data-soc-challenge="${esc(f.id)}" aria-label="Tantang ${esc(f.name)}">⚔️ Tantang</button>
     </div>`).join('') : '<p class="soc-empty">Belum ada teman untuk ditantang. Tambahkan teman di menu Sosial!</p>';
-    const quickHTML = `<div class="card soc-card"><div class="soc-title"><span>👥</span><div><h3>Tantang Teman &amp; Rekor H2H</h3><small class="soc-hint">Lihat rekor pertemuan Head-to-Head dengan temanmu</small></div></div><div class="soc-sec">${quick}</div><button type="button" class="secondary soc-big" data-soc-hub="teman">Kelola Teman di Sosial ›</button></div>`;
+    const quickHTML = `<div class="card soc-card duel-friends-card"><div class="soc-title"><span>👥</span><div><h3>Tantang Teman &amp; Rekor H2H</h3><small class="soc-hint">Lihat rekor pertemuan Head-to-Head dengan temanmu</small></div></div><div class="soc-sec">${quick}</div><button type="button" class="secondary soc-big" data-soc-hub="teman">Kelola Teman di Sosial ›</button></div>`;
 
     // 6. Papan Peringkat Ranked Gladiator Duel (Poin 9 + Sistem Rank RP)
     const lbRows = (S.leaderboard || []).map(p => {
@@ -757,7 +757,7 @@
       ${blocked ? `<details class="soc-sec"><summary>Diblokir (${F.blocked.length})</summary>${blocked}</details>` : ''}
     </div>`;
 
-    const duelAll = `${heroHTML}${inv}${mine ? `<div class="soc-lives">${mine}</div>` : ''}${openArenaHTML}${setupHTML}${quickHTML}${lbHTML}`;
+    const duelAll = `${heroHTML}${inv}${mine ? `<div class="soc-lives">${mine}</div>` : ''}<div class="duel-lobby-grid">${openArenaHTML}${setupHTML}${quickHTML}</div>${lbHTML}`;
     return { duel: duelAll, friends: friendsHTML0 };
   }
 
