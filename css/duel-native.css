@@ -2584,3 +2584,37 @@ html body #duelPage .duel-private-note {
   line-height: 1.45;
 }
 
+html body #duelPage .soc-opt {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html body #duelPage .soc-opt.picking,
+html body #duelPage .soc-opt.picking:disabled {
+  opacity: 1 !important;
+  border-color: var(--sky, #1cb0f6) !important;
+  background: var(--sky-soft, rgba(28, 176, 246, .14)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 3px 0 rgba(28, 176, 246, .45);
+  transform: translateY(1px);
+}
+
+html body #duelPage .soc-opt.picking .soc-l {
+  background: var(--sky, #1cb0f6) !important;
+  border-color: var(--sky, #1cb0f6) !important;
+  color: #fff !important;
+}
+
+html body #duelPage .soc-opt-sending {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(28, 176, 246, .18);
+  color: var(--sky-text, #0369a1);
+  white-space: nowrap;
+}
+

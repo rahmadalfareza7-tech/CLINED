@@ -14,7 +14,8 @@
     blocks: [], duelBanks: [], block: '', selectedBankIds: [], bankPickerOpen: false, bankSearch: '', bankAllBlocks: false,
     count: 10, sec: 30, mode: 'classic', wager: 0, isPublic: true, maxPlayers: 2,
     prizes: { first: 0, second: 0, third: 0, others: 0 },
-    D: null, fb: null, busy: false, tick: null, skew: 0, sentFor: -1,
+    D: null, fb: null, busy: false, answering: false, pendingChoice: null, duelSeq: 0, boardRefreshTimer: null,
+    tick: null, skew: 0, sentFor: -1,
     emotes: {}, oppFlash: null, mpExpandAll: false, inspectSearch: ''
   };
   const isAdmin = () => { try { return typeof authCurrentUser === 'function' && authCurrentUser()?.role === 'admin'; } catch { return false; } };
@@ -1077,7 +1078,20 @@
 
   /* ───────── RUANG DUEL & EMOTE REALTIME ───────── */
   const nowS = () => Date.now() + S.skew;
-  const syncD = d => { S.D = d; if (d?.serverNow) S.skew = d.serverNow - Date.now(); };
+  const syncD = d => {
+    if (d?.serverNow) S.skew = d.serverNow - Date.now();
+    if (S.D && d && S.D.id === d.id) {
+      if (S.D.status === 'finished' && d.status !== 'finished') return;
+      const prevAns = Array.isArray(S.D.myAnswers) ? S.D.myAnswers : [];
+      const nextAns = Array.isArray(d.myAnswers) ? d.myAnswers : [];
+      if (S.D.status === 'active' && d.status === 'active' && nextAns.length < prevAns.length) {
+        d.myAnswers = prevAns;
+        if (S.D.me) d.me = { ...d.me, ...S.D.me, answered: prevAns.length };
+        if (S.D.qStartAt) d.qStartAt = S.D.qStartAt;
+      }
+    }
+    S.D = d;
+  };
   function stopTick() { clearInterval(S.tick); S.tick = null; }
   function startTick() { stopTick(); S.tick = setInterval(tick, 200); }
   function tick() {
@@ -1087,7 +1101,7 @@
     if ($('duelGo')) { renderDuel(); return; }
     const clock = $('duelClock'); if (clock && !D.perQ) clock.textContent = fmtMs(D.deadlineAt - now);
     if (!D.perQ || D.isSpectator) return;
-    const qi = D.myAnswers.length; if (qi >= D.total || S.fb != null) return;
+    const qi = D.myAnswers.length; if (qi >= D.total || S.fb != null || S.answering) return;
     const left = D.perQ - (now - D.qStartAt), bar = $('duelQBar'), sec = $('duelQSec');
     if (bar) { bar.style.width = Math.max(0, Math.min(100, (left / D.perQ) * 100)) + '%'; bar.dataset.low = left < 5000 ? '1' : ''; }
     if (sec) sec.textContent = Math.max(0, Math.ceil(left / 1000));
@@ -1584,14 +1598,62 @@
     }
 
     // ───────── DUEL AKTIF (1v1 TUG-OF-WAR atau MULTIPLAYER LIVE RACE) ─────────
-    const pct = n => Math.round((n / D.total) * 100), mineN = D.myAnswers.length;
+    const mineN = D.myAnswers.length;
+    const board = activeBoardHTML(D);
+
+    if (nowS() < D.startedAt) {
+      return board + `<div class="card soc-card soc-center duel-countdown-card">
+        <div class="duel-tags-row center">${isMP ? `<span class="duel-tag mp">👥 ${D.playerCount} Pemain</span>` : ''}${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}${isMP ? '' : h2hBadge(opp?.id)}</div>
+        ${isMP ? '' : vsCardShowcaseHTML('Kamu', D.me?.card, opp?.name || 'Lawan', opp?.card)}
+        <p>${isMP ? 'Siapkan dirimu! Adu cepat &amp; skor benar dimulai dalam…' : 'Siapkan dirimu! Pertarungan dimulai dalam…'}</p>
+        <div class="soc-count" id="duelGo">${Math.max(1, Math.ceil((D.startedAt - nowS()) / 1000))}</div>
+        <p class="soc-hint">${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
+      </div>` + emoteBarHTML();
+    }
+
+    const fbIdx = S.fb != null && S.fb === mineN - 1 ? S.fb : null, qi = fbIdx != null ? fbIdx : mineN;
+    const qKey = `${D.id}:${qi}:${fbIdx != null ? 'fb' : 'q'}:${D.me?.eliminated ? 1 : 0}`;
+    let main;
+    if (D.me?.eliminated && isSD) {
+      main = `<div class="card soc-card soc-center"><div class="soc-emoji">💀</div><h3>Nyawamu Habis (KO)</h3><p>Skor akhirmu: ✅ ${D.me.score}/${D.total}. Pantau klasemen live di atas sampai peserta lain selesai!</p></div>`;
+    } else if (qi >= D.total) {
+      main = `<div class="card soc-card soc-center"><div class="soc-emoji soc-pulse">🏁</div><h3>${isMP ? 'Kamu Sudah Selesai! Menunggu peserta lain…' : `Menunggu ${oppName} menyelesaikan soal…`}</h3><p>Skormu: ✅ ${D.me.score}/${D.total} • ⏱ ${fmtMs(D.me.timeMs || 0)}${isMP ? ` • Peringkat sementara #${D.myRank}` : ''}. Kirim stiker sambil menunggu!</p></div>`;
+    } else {
+      const q = D.questions[qi], a = fbIdx != null ? D.myAnswers[qi] : null, timed = D.perQ > 0;
+      const isPicking = !a && S.answering && S.pendingChoice != null && S.pendingChoice >= 0;
+      main = `<div class="card soc-card duel-qcard" data-qkey="${esc(qKey)}">
+        ${timed && !a ? `<div class="soc-qtimer"><i id="duelQBar" style="width:100%"></i><b id="duelQSec">${D.perQ / 1000}</b></div>` : ''}
+        <div class="duel-qmeta">
+          <small class="soc-qn">SOAL ${qi + 1} DARI ${D.total}</small>
+          ${(D.me.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 Combo Streak ${D.me.streak}x!</span>` : ''}
+        </div>
+        <p class="soc-q">${esc(q.soal)}</p>
+        <div class="soc-opts">${q.opsi.map((o, i) => {
+          const pickedNow = isPicking && S.pendingChoice === i;
+          const cls = a ? (i === a.correctIdx ? 'ok' : i === a.choice ? 'bad' : '') : (pickedNow ? 'picking' : '');
+          return `<button type="button" class="soc-opt ${cls}" data-soc-opt="${i}" ${a || isPicking ? 'disabled' : ''}><span class="soc-l">${L5[i]}</span><span>${esc(o)}</span>${pickedNow ? '<em class="soc-opt-sending">⏳ Mengunci…</em>' : ''}</button>`;
+        }).join('')}</div>
+        ${a ? `<div class="soc-fb ${a.ok ? 'ok' : 'bad'}"><b>${a.ok ? `✅ Tepat sekali!${(D.me.streak || 0) >= 2 ? ` (🔥 Streak ${D.me.streak}x)` : ''}` : a.choice === -1 ? `⏰ Waktu habis!${isSD ? ' (-1 ❤️ Nyawa)' : ''}` : `❌ Kurang tepat!${isSD ? ' (-1 ❤️ Nyawa)' : ''}`}</b>${!timed && a.pembahasan ? `<p>${esc(a.pembahasan)}</p>` : ''}</div>${timed ? '' : `<button type="button" class="primary soc-big" data-soc-next>${qi + 1 < D.total ? 'Soal Berikutnya ›' : 'Lihat Hasil ›'}</button>`}` : ''}
+      </div>`;
+    }
+    return board + emoteBarHTML() + main + `<button type="button" class="secondary soc-big soc-danger" data-soc-leave>🏳️ ${isMP ? 'Keluar dari Race' : 'Menyerah dari Duel'}</button>`;
+  }
+
+  function activeBoardHTML(D) {
+    if (!D) return '';
+    const opp = D.opponent, oppName = esc(opp?.name || D.invited?.name || 'Lawan');
+    const isSD = D.mode === 'sudden_death';
+    const isMP = !!D.isMultiplayer;
+    const myRk = getRank(D.me?.rank || S.myStats?.rank || { rp: S.myStats?.rp || 0 });
+    const oppRk = opp ? getRank(opp.rank || { rp: 0 }) : null;
+    const flash = S.oppFlash && Date.now() < S.oppFlash.until ? S.oppFlash : null;
+    if (isMP) return mpBoardHTML(D, flash);
+    const pct = n => Math.round((n / (D.total || 1)) * 100), mineN = D.myAnswers.length;
     const myLiveScore = D.me.liveScore ?? D.me.score ?? 0;
     const oppLiveScore = opp?.liveScore ?? 0;
     const lead = myLiveScore - oppLiveScore;
-    const tugPct = Math.max(12, Math.min(88, 50 + lead * Math.round(36 / Math.max(3, D.total / 2))));
-
-    const board = isMP ? mpBoardHTML(D, flash) : `
-    <div class="duel-arena-board">
+    const tugPct = Math.max(12, Math.min(88, 50 + lead * Math.round(36 / Math.max(3, (D.total || 10) / 2))));
+    return `<div class="duel-arena-board">
       <div class="duel-board">
         <div class="duel-side me${(D.me.streak || 0) >= 2 ? ' on-fire' : ''}">
           ${emoteBubbleHTML('me')}
@@ -1643,40 +1705,9 @@
 
       ${flash ? `<div class="duel-opp-flash ${flash.ok ? 'ok' : 'bad'}">${esc(flash.text)}</div>` : ''}
     </div>`;
-
-    if (nowS() < D.startedAt) {
-      return board + `<div class="card soc-card soc-center duel-countdown-card">
-        <div class="duel-tags-row center">${isMP ? `<span class="duel-tag mp">👥 ${D.playerCount} Pemain</span>` : ''}${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}${isMP ? '' : h2hBadge(opp?.id)}</div>
-        ${isMP ? '' : vsCardShowcaseHTML('Kamu', D.me?.card, opp?.name || 'Lawan', opp?.card)}
-        <p>${isMP ? 'Siapkan dirimu! Adu cepat &amp; skor benar dimulai dalam…' : 'Siapkan dirimu! Pertarungan dimulai dalam…'}</p>
-        <div class="soc-count" id="duelGo">${Math.max(1, Math.ceil((D.startedAt - nowS()) / 1000))}</div>
-        <p class="soc-hint">${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
-      </div>` + emoteBarHTML();
-    }
-
-    const fbIdx = S.fb != null && S.fb === mineN - 1 ? S.fb : null, qi = fbIdx != null ? fbIdx : mineN;
-    let main;
-    if (D.me?.eliminated && isSD) {
-      main = `<div class="card soc-card soc-center"><div class="soc-emoji">💀</div><h3>Nyawamu Habis (KO)</h3><p>Skor akhirmu: ✅ ${D.me.score}/${D.total}. Pantau klasemen live di atas sampai peserta lain selesai!</p></div>`;
-    } else if (qi >= D.total) {
-      main = `<div class="card soc-card soc-center"><div class="soc-emoji soc-pulse">🏁</div><h3>${isMP ? 'Kamu Sudah Selesai! Menunggu peserta lain…' : `Menunggu ${oppName} menyelesaikan soal…`}</h3><p>Skormu: ✅ ${D.me.score}/${D.total} • ⏱ ${fmtMs(D.me.timeMs || 0)}${isMP ? ` • Peringkat sementara #${D.myRank}` : ''}. Kirim stiker sambil menunggu!</p></div>`;
-    } else {
-      const q = D.questions[qi], a = fbIdx != null ? D.myAnswers[qi] : null, timed = D.perQ > 0;
-      main = `<div class="card soc-card duel-qcard">
-        ${timed && !a ? `<div class="soc-qtimer"><i id="duelQBar" style="width:100%"></i><b id="duelQSec">${D.perQ / 1000}</b></div>` : ''}
-        <div class="duel-qmeta">
-          <small class="soc-qn">SOAL ${qi + 1} DARI ${D.total}</small>
-          ${(D.me.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 Combo Streak ${D.me.streak}x!</span>` : ''}
-        </div>
-        <p class="soc-q">${esc(q.soal)}</p>
-        <div class="soc-opts">${q.opsi.map((o, i) => { const cls = a ? (i === a.correctIdx ? 'ok' : i === a.choice ? 'bad' : '') : ''; return `<button type="button" class="soc-opt ${cls}" data-soc-opt="${i}" ${a ? 'disabled' : ''}><span class="soc-l">${L5[i]}</span><span>${esc(o)}</span></button>`; }).join('')}</div>
-        ${a ? `<div class="soc-fb ${a.ok ? 'ok' : 'bad'}"><b>${a.ok ? `✅ Tepat sekali!${(D.me.streak || 0) >= 2 ? ` (🔥 Streak ${D.me.streak}x)` : ''}` : a.choice === -1 ? `⏰ Waktu habis!${isSD ? ' (-1 ❤️ Nyawa)' : ''}` : `❌ Kurang tepat!${isSD ? ' (-1 ❤️ Nyawa)' : ''}`}</b>${!timed && a.pembahasan ? `<p>${esc(a.pembahasan)}</p>` : ''}</div>${timed ? '' : `<button type="button" class="primary soc-big" data-soc-next>${qi + 1 < D.total ? 'Soal Berikutnya ›' : 'Lihat Hasil ›'}</button>`}` : ''}
-      </div>`;
-    }
-    return board + emoteBarHTML() + main + `<button type="button" class="secondary soc-big soc-danger" data-soc-leave>🏳️ ${isMP ? 'Keluar dari Race' : 'Menyerah dari Duel'}</button>`;
   }
 
-  function renderDuel() {
+  function renderDuel(boardOnly = false) {
     ensureShell();
     const b = $('duelBody'); if (!b) return;
     const D = S.D;
@@ -1687,6 +1718,17 @@
         : D?.isMultiplayer
           ? `👥 Arena Multiplayer (${D.playerCount || 1}/${D.maxPlayers || 2})`
           : (D?.mode === 'sudden_death' ? '💀 Duel Sudden Death' : '⚔️ Arena Duel');
+    if (boardOnly && D?.status === 'active' && !D.isSpectator && nowS() >= D.startedAt) {
+      const mineN = D.myAnswers.length;
+      const fbIdx = S.fb != null && S.fb === mineN - 1 ? S.fb : null, qi = fbIdx != null ? fbIdx : mineN;
+      const qKey = `${D.id}:${qi}:${fbIdx != null ? 'fb' : 'q'}:${D.me?.eliminated ? 1 : 0}`;
+      const oldBoard = b.querySelector('.duel-arena-board');
+      const oldQ = b.querySelector('.duel-qcard');
+      if (oldBoard && (!oldQ || oldQ.dataset.qkey === qKey)) {
+        oldBoard.outerHTML = activeBoardHTML(D);
+        return;
+      }
+    }
     const activeEl = document.activeElement;
     const keepInspectFocus = activeEl?.matches?.('[data-soc-inspect-search]');
     const selPos = keepInspectFocus && typeof activeEl.selectionStart === 'number' ? activeEl.selectionStart : null;
@@ -1704,14 +1746,37 @@
     syncWaitingFloat();
   }
   async function openDuel(id) {
-    S.fb = null; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage');
+    S.fb = null; S.answering = false; S.pendingChoice = null; S.mpExpandAll = false; S.inspectSearch = '';
+    if (S.boardRefreshTimer) { clearTimeout(S.boardRefreshTimer); S.boardRefreshTimer = null; }
+    window.show('duelPage');
     $('duelBody') && ($('duelBody').innerHTML = '<p class="soc-empty">Memuat ruang duel…</p>');
     try { syncD((await api('/api/duels/' + encodeURIComponent(id))).duel); } catch (e) { S.D = null; toast(e.message, true); return openLobby(); }
     renderDuel();
   }
-  async function refreshDuel() {
-    if (!S.D) return;
-    try { syncD((await api('/api/duels/' + encodeURIComponent(S.D.id))).duel); if (activeView() === 'duelPage') renderDuel(); } catch {}
+  async function refreshDuel(boardOnly = false) {
+    if (!S.D || S.answering) return;
+    const seq = S.duelSeq;
+    const id = S.D.id;
+    try {
+      const r = await api('/api/duels/' + encodeURIComponent(id));
+      if (S.answering || seq !== S.duelSeq || !S.D || S.D.id !== id) return;
+      const prevStatus = S.D.status;
+      syncD(r.duel);
+      if (activeView() === 'duelPage') {
+        const statusChanged = S.D?.status !== prevStatus;
+        renderDuel(boardOnly && !statusChanged);
+      }
+    } catch {}
+  }
+  function scheduleDuelBoardRefresh() {
+    if (!S.D || S.answering || S.boardRefreshTimer) return;
+    const wait = (S.D.isMultiplayer || S.D.isSpectator)
+      ? 450 + Math.floor(Math.random() * 220)
+      : 120;
+    S.boardRefreshTimer = setTimeout(() => {
+      S.boardRefreshTimer = null;
+      if (activeView() === 'duelPage' && S.D && !S.answering) refreshDuel(true);
+    }, wait);
   }
 
   /* ───────── aksi ───────── */
@@ -1740,7 +1805,7 @@
     });
     syncD(d.duel);
     if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
-    S.fb = null; S.sentFor = -1; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage'); renderDuel();
+    S.fb = null; S.sentFor = -1; S.answering = false; S.pendingChoice = null; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage'); renderDuel();
     if (friendId) toast('Tantangan terkirim ⚔️');
     else if (d.duel?.isMultiplayer) toast(d.duel.isPublic ? `🌐 Room Multiplayer (${d.duel.maxPlayers} orang) dibuka!` : `🔒 Room Private dibuat! Kode password: ${d.duel.code}`);
   }
@@ -1766,14 +1831,14 @@
     });
     syncD(d.duel);
     if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
-    S.fb = null; S.sentFor = -1; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage'); renderDuel();
+    S.fb = null; S.sentFor = -1; S.answering = false; S.pendingChoice = null; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage'); renderDuel();
     toast(d.matched ? '⚡ Lawan ditemukan! Bersiap bertarung!' : d.joined ? '👥 Berhasil masuk room multiplayer! Menunggu Host memulai.' : '🌐 Room Open Access dibuat! Kamu bisa kerjakan soal dulu sambil menunggu.');
   }
   async function startMultiplayer() {
     const D = S.D; if (!D) return;
     const r = await api(`/api/duels/${encodeURIComponent(D.id)}/start`, { method: 'POST', body: {} });
     syncD(r.duel);
-    S.fb = null; S.sentFor = -1;
+    S.fb = null; S.sentFor = -1; S.answering = false; S.pendingChoice = null;
     renderDuel();
     toast('🚀 Pertarungan dimulai! Bersiap!');
   }
@@ -1803,14 +1868,60 @@
     const d = await api('/api/duels/join', { method: 'POST', body: { code, ...(card ? { card } : {}) } });
     syncD(d.duel);
     if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
-    S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
+    S.fb = null; S.sentFor = -1; S.answering = false; S.pendingChoice = null; window.show('duelPage'); renderDuel();
   }
   async function answer(choice) {
-    const D = S.D; if (!D || D.status !== 'active' || D.isSpectator) return;
+    const D = S.D;
+    if (!D || D.status !== 'active' || D.isSpectator || S.answering) return;
     const idx = D.myAnswers.length;
-    const d = await api(`/api/duels/${encodeURIComponent(D.id)}/answer`, { method: 'POST', body: { idx, choice } });
-    syncD(d.duel); S.fb = idx; renderDuel();
-    if (S.D.perQ > 0 && S.D.status === 'active' && idx + 1 < S.D.total) setTimeout(() => { if (S.fb === idx) { S.fb = null; if (activeView() === 'duelPage') renderDuel(); } }, 1100);
+    if (idx >= D.total || S.fb === idx) return;
+    S.answering = true;
+    S.pendingChoice = choice;
+    const seq = ++S.duelSeq;
+    if (S.boardRefreshTimer) { clearTimeout(S.boardRefreshTimer); S.boardRefreshTimer = null; }
+    const qCard = $('duelBody')?.querySelector('.duel-qcard');
+    if (qCard && choice >= 0) {
+      qCard.querySelectorAll('[data-soc-opt]').forEach(btn => {
+        const optIdx = Number(btn.dataset.socOpt);
+        btn.disabled = true;
+        if (optIdx === choice) {
+          btn.classList.add('picking');
+          if (!btn.querySelector('.soc-opt-sending')) {
+            const tag = document.createElement('em');
+            tag.className = 'soc-opt-sending';
+            tag.textContent = '⏳ Mengunci…';
+            btn.appendChild(tag);
+          }
+        }
+      });
+    }
+    try {
+      const d = await api(`/api/duels/${encodeURIComponent(D.id)}/answer`, { method: 'POST', body: { idx, choice } });
+      S.answering = false;
+      S.pendingChoice = null;
+      syncD(d.duel);
+      S.fb = idx;
+      renderDuel(false);
+      if (S.D.perQ > 0 && S.D.status === 'active' && idx + 1 < S.D.total) {
+        setTimeout(() => {
+          if (S.fb === idx) {
+            S.fb = null;
+            if (activeView() === 'duelPage') renderDuel(false);
+          }
+        }, 1100);
+      }
+    } catch (e) {
+      S.answering = false;
+      S.pendingChoice = null;
+      if (seq === S.duelSeq && qCard) {
+        qCard.querySelectorAll('[data-soc-opt]').forEach(btn => {
+          btn.disabled = false;
+          btn.classList.remove('picking');
+          btn.querySelector('.soc-opt-sending')?.remove();
+        });
+      }
+      if (choice !== -1) toast(e.message || 'Gagal mengirim jawaban, coba tekan lagi.', true);
+    }
   }
   async function sendEmote(key) {
     const D = S.D; if (!D) return;
@@ -2160,23 +2271,28 @@
       if (here && emoji) {
         if (S.D?.isMultiplayer || S.D?.isSpectator) {
           S.oppFlash = { text: `${emoji} ${n}: ${text || ''}`, ok: true, until: Date.now() + 3400 };
-          renderDuel();
+          renderDuel(true);
         } else {
           showEmoteBubble('opp', emoji, text || '');
         }
       }
       return;
     }
-    if (m.kind === 'progress' && here) {
-      S.oppFlash = {
-        text: m.forfeited
-          ? `🏳️ ${n} keluar dari race.`
-          : m.ok
-            ? `⚡ ${n} menjawab BENAR soal #${(m.idx ?? 0) + 1}!`
-            : `💥 ${n} salah di soal #${(m.idx ?? 0) + 1}!`,
-        ok: !!m.ok && !m.forfeited,
-        until: Date.now() + 3400
-      };
+    if (m.kind === 'progress') {
+      if (here) {
+        S.oppFlash = {
+          text: m.forfeited
+            ? `🏳️ ${n} keluar dari race.`
+            : m.ok
+              ? `⚡ ${n} menjawab BENAR soal #${(m.idx ?? 0) + 1}!`
+              : `💥 ${n} salah di soal #${(m.idx ?? 0) + 1}!`,
+          ok: !!m.ok && !m.forfeited,
+          until: Date.now() + 3400
+        };
+        renderDuel(true);
+        scheduleDuelBoardRefresh();
+      }
+      return;
     }
     if (m.kind === 'invite') toast(`⚔️ ${n} menantangmu duel!`);
     else if (m.kind === 'roster') {
@@ -2193,10 +2309,15 @@
       syncWaitingFloat();
     }
     else if (m.kind === 'finished' && !here && isMyRoom) toast('🏁 Pertarungan selesai, lihat hasil di menu Duel');
-    if (here) refreshDuel();
-    loadLobby().then(() => {
-      if (activeView() === 'socialPage' && !document.activeElement?.matches?.(TYPING_SEL)) renderLobby(false);
-    }).catch(() => {});
+    if (here) {
+      if (S.boardRefreshTimer) { clearTimeout(S.boardRefreshTimer); S.boardRefreshTimer = null; }
+      refreshDuel(false);
+    }
+    if (activeView() === 'socialPage' || m.kind === 'invite' || m.kind === 'joined' || m.kind === 'started' || m.kind === 'cancelled' || m.kind === 'finished') {
+      loadLobby().then(() => {
+        if (activeView() === 'socialPage' && !document.activeElement?.matches?.(TYPING_SEL)) renderLobby(false);
+      }).catch(() => {});
+    }
   }
 
   function boot() { ensureShell(); connect(); }
