@@ -69,7 +69,7 @@
     if (me) {
       const idx = list.findIndex(x => x.id === me.id);
       if (idx >= 0) {
-        list[idx] = { ...list[idx], bannerUrl: me.bannerUrl ?? list[idx].bannerUrl, nameColor: me.nameColor ?? list[idx].nameColor, avatarDeco: me.avatarDeco ?? list[idx].avatarDeco, xp100k: typeof me.xp100k === 'boolean' ? me.xp100k : list[idx].xp100k };
+        list[idx] = { ...list[idx], bannerUrl: me.bannerUrl ?? list[idx].bannerUrl, nameColor: me.nameColor ?? list[idx].nameColor, avatarDeco: me.avatarDeco ?? list[idx].avatarDeco, xp100k: typeof me.xp100k === 'boolean' ? me.xp100k : list[idx].xp100k, championBlocks: Array.isArray(me.championBlocks) ? me.championBlocks : list[idx].championBlocks };
       } else {
         list.push({
           id: me.id,
@@ -80,6 +80,7 @@
           nameColor: me.nameColor || '',
           avatarDeco: me.avatarDeco || '',
           xp100k: Boolean(me.xp100k),
+          championBlocks: Array.isArray(me.championBlocks) ? me.championBlocks : [],
           badges: badgesForUser(me),
           online: true,
           isMe: true,
@@ -111,6 +112,7 @@
             ? '<span class="ms-role-tag me">Kamu</span>'
             : '';
     const xpBadge = u.xp100k ? '<span class="ms-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K</span>' : '';
+    const champBadge = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true, short: true, max: 1 }) || '';
     const sub = u.lastText
       ? u.lastText
       : u.isMe
@@ -126,7 +128,7 @@
     return `<button type="button" class="ms-row${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
       <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
       <span class="ms-meta">
-        <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${roleTag}</span>
+        <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${champBadge}${roleTag}</span>
         <span class="ms-sub">${esc(sub)}</span>
       </span>
       ${unread}
@@ -278,6 +280,7 @@
           ? '<span class="ms-role-tag mentor">Mentor</span>'
           : '';
     const xpBadge = u.xp100k ? '<span class="ms-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</span>' : '';
+    const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true }) || '';
 
     const layer = document.createElement('div');
     layer.className = 'ms-pop-layer';
@@ -288,6 +291,7 @@
           <span class="ms-meta">
             <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${roleTag}</span>
             <span class="ms-sub">@${esc(u.username)} • ${u.online ? 'Online' : 'Offline'}</span>
+            ${champBadges ? `<span class="ms-champ-row" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">${champBadges}</span>` : ''}
           </span>
           <button type="button" class="ms-pop-close" data-msp-close aria-label="Tutup">✕</button>
         </div>

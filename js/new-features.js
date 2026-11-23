@@ -110,12 +110,13 @@ window.CLINED_Leaderboard = (function () {
       const bg = r.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${escHtml(r.bannerUrl)}')" aria-hidden="true"></span>` : '';
       const nc = r.nameColor ? ` data-name-color="${escHtml(r.nameColor)}"` : '';
       const xpBadge = r.xp100k ? ' <em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+      const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(r.championBlocks, { compact: true, max: 2 }) || '';
       return `<div class="leaderboard-row${isMe ? ' leaderboard-me' : ''}${r.bannerUrl ? ' has-banner' : ''}">
         ${bg}
         <span class="lb-rank">${medal}</span>
         ${lbAv(r)}
         <div class="lb-user">
-          <b${nc}>${escHtml(r.name)}</b>${xpBadge}
+          <b${nc}>${escHtml(r.name)}</b>${xpBadge}${champBadges ? ' ' + champBadges : ''}
           <small>@${escHtml(r.username)}</small>
         </div>
         <span class="lb-xp">⚡ ${xp.toLocaleString('id')} XP</span>
@@ -154,11 +155,12 @@ window.CLINED_Leaderboard = (function () {
       const bg = r.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${escHtml(r.bannerUrl)}')" aria-hidden="true"></span>` : '';
       const nc = r.nameColor ? ` data-name-color="${escHtml(r.nameColor)}"` : '';
       const xpBadge = r.xp100k ? ' <em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K</em>' : '';
+      const champBadge = window.CLINED_CHAMPIONS?.renderBadges?.(r.championBlocks, { compact: true, short: true, max: 1 }) || '';
       return `<div class="lb-teaser-row${isMe ? ' leaderboard-me' : ''}${r.bannerUrl ? ' has-banner' : ''}">
         ${bg}
         <span>${medal}</span>
         <span class="lb-av lb-av-sm${r.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${r.avatarUrl ? `<img class="lb-av-img" src="${escHtml(r.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}${r.avatarDeco ? `<img class="avatar-deco-img" src="${escHtml(r.avatarDeco)}" alt="" loading="lazy">` : ''}</span>
-        <span class="lb-teaser-name"${nc}>${escHtml(r.name)}</span>${xpBadge}
+        <span class="lb-teaser-name"${nc}>${escHtml(r.name)}</span>${xpBadge}${champBadge ? ' ' + champBadge : ''}
         <span class="lb-teaser-xp">⚡${r.xpWeekly.toLocaleString('id')}</span>
       </div>`;
     }).join('');

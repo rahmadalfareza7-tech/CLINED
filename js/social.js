@@ -878,13 +878,14 @@
       const pCard = p.me ? (getMyShowcaseCard() || p.card) : p.card;
       const bg = p.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(p.bannerUrl)}')" aria-hidden="true"></span>` : '';
       const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
+      const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(p.championBlocks, { compact: true, max: 2 }) || '';
       return `<div class="duel-lb-row${p.me ? ' me' : ''}${p.bannerUrl ? ' has-banner' : ''}">
         ${bg}
         <span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
         ${avatar(p)}
         <div class="duel-lb-main">
           <div class="duel-lb-top">
-            <b class="duel-lb-name"${nc}>${esc(p.name)} ${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
+            <b class="duel-lb-name"${nc}>${esc(p.name)} ${champBadges ? `${champBadges} ` : ''}${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b>
             <span class="duel-lb-wins">🏆 ${p.wins} Menang</span>
           </div>
           <div class="duel-lb-bottom">
@@ -939,7 +940,8 @@
       const reacts = REACTS.map(e => { const n = p.reactions?.[e] || 0; return `<button type="button" class="soc-react${p.mine === e ? ' on' : ''}" data-soc-react="${esc(p.id)}" data-emoji="${e}" aria-pressed="${p.mine === e}" aria-label="Reaksi ${e}">${e}${n ? `<i>${n}</i>` : ''}</button>`; }).join('');
       const canDel = p.own || S.canMod;
       const tag = p.own ? '<em class="soc-tag me">Kamu</em>' : p.friend ? '<em class="soc-tag fr">Teman</em>' : '';
-      return `<article class="soc-post${p.own ? ' own' : ''}"><div class="soc-post-head"><span class="soc-avwrap">${avatar(p)}<span class="soc-mood" title="${esc(m[2])}">${m[1]}</span></span><div class="soc-who"><b${p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : ''}>${esc(p.name)}</b><small>@${esc(p.username || '')} · ${timeAgo(p.createdAt)}</small></div>${tag}</div>
+      const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(p.championBlocks, { compact: true, max: 2 }) || '';
+      return `<article class="soc-post${p.own ? ' own' : ''}"><div class="soc-post-head"><span class="soc-avwrap">${avatar(p)}<span class="soc-mood" title="${esc(m[2])}">${m[1]}</span></span><div class="soc-who"><b${p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : ''}>${esc(p.name)}</b>${champBadges ? ` ${champBadges}` : ''}<small>@${esc(p.username || '')} · ${timeAgo(p.createdAt)}</small></div>${tag}</div>
         ${chips ? `<div class="soc-post-chips">${chips}</div>` : ''}<p class="soc-post-msg">${esc(p.message)}</p>
         <div class="soc-reacts">${reacts}</div>
         <div class="soc-post-foot"><button type="button" class="soc-cbtn${S.openC.has(p.id) ? ' on' : ''}" data-soc-comment="${esc(p.id)}" aria-expanded="${S.openC.has(p.id)}">💬 ${p.comments ? p.comments + ' komentar' : 'Komentar'}</button>${canDel ? `<button type="button" class="soc-del" data-soc-delstatus="${esc(p.id)}" data-own="${p.own ? 1 : 0}" aria-label="${p.own ? 'Hapus statusmu' : 'Hapus status (admin)'}">🗑${p.own ? '' : '<small>Admin</small>'}</button>` : ''}</div>${S.openC.has(p.id) ? commentsHTML(p.id) : ''}</article>`;
@@ -2055,6 +2057,20 @@
     es.addEventListener('announcement', ev => { lastBeatAt = Date.now(); window.CLINED_ANNOUNCEMENT?.onPush?.(JSON.parse(ev.data || '{}')); });
     es.addEventListener('diamonds_grant', ev => { lastBeatAt = Date.now(); window.CLINED_CARDS?.onAdminGrant?.(JSON.parse(ev.data || '{}')); });
     es.addEventListener('xp_100k_unlock', ev => { lastBeatAt = Date.now(); window.CLINED_XP_100K?.onUnlock?.(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('champion_tags', ev => {
+      lastBeatAt = Date.now();
+      try {
+        const d = JSON.parse(ev.data || '{}');
+        const blocks = Array.isArray(d.championBlocks) ? d.championBlocks : [];
+        const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+        if (me) me.championBlocks = blocks;
+        window.dispatchEvent(new CustomEvent('clined:champion-tags-updated', { detail: { championBlocks: blocks } }));
+        if (typeof window.renderHomeProfileCard === 'function') window.renderHomeProfileCard();
+        const byTag = d.byUsername ? `Admin @${d.byUsername}` : (d.by || 'Admin');
+        if (blocks.length) toast(`🏆 ${byTag} memberimu Tag Champion: ${blocks.join(', ')}!`);
+        else toast(`Tag Champion profilmu diperbarui oleh ${byTag}.`);
+      } catch {}
+    });
     es.onerror = () => {
       if (!es || es.readyState === 2) {
         es = null; connId = ''; lastBeatAt = 0;
@@ -2229,6 +2245,7 @@
       const bg = p.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(p.bannerUrl)}')" aria-hidden="true"></span>` : '';
       const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
       const xpBadge = p.xp100k ? ' <em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
-      return `<div class="duel-lb-row${p.me ? ' me' : ''}${p.bannerUrl ? ' has-banner' : ''}">${bg}<span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>${avatar(p)}<div class="duel-lb-main"><div class="duel-lb-top"><b class="duel-lb-name"${nc}>${esc(p.name)} ${xpBadge}${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b><span class="duel-lb-wins">🏆 ${p.wins} Menang</span></div><div class="duel-lb-bottom">${rankPill(pTier, true)}${cardPill(pCard)}<small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small></div></div></div>`;
+      const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(p.championBlocks, { compact: true, max: 2 }) || '';
+      return `<div class="duel-lb-row${p.me ? ' me' : ''}${p.bannerUrl ? ' has-banner' : ''}">${bg}<span class="duel-lb-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>${avatar(p)}<div class="duel-lb-main"><div class="duel-lb-top"><b class="duel-lb-name"${nc}>${esc(p.name)} ${xpBadge}${champBadges ? ` ${champBadges}` : ''}${p.me ? '<em class="soc-tag me">Kamu</em>' : ''}</b><span class="duel-lb-wins">🏆 ${p.wins} Menang</span></div><div class="duel-lb-bottom">${rankPill(pTier, true)}${cardPill(pCard)}<small class="duel-lb-meta">${p.winRate}% WR • ${p.total} laga</small></div></div></div>`;
     }).join(''), isStreamOnline: () => !!es && es.readyState === 1 && navigator.onLine !== false && !isIdle && (!lastBeatAt || (Date.now() - lastBeatAt) <= HEARTBEAT_STALE_MS), openChat: () => openHub('chat'), openStatus: () => openHub('status'), open: openLobby, refresh: () => renderLobby(true) };
 })();

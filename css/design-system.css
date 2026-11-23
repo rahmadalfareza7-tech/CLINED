@@ -1566,6 +1566,66 @@ body.dark .chat-badge.b-xp100k {
   .chat-badge.b-xp100k { animation: none; }
 }
 
+/* ── Block Champion Badges (Admin-assigned per Blok) ─────────────────────── */
+.chat-badge.b-champ {
+  --cb-bg: linear-gradient(135deg, #fef3c7, #fde68a);
+  --cb-bd: rgba(217, 119, 6, 0.5);
+  --cb-fg: #78350f;
+  --cb-dark-bg: linear-gradient(135deg, rgba(180, 83, 9, 0.88), rgba(217, 119, 6, 0.92));
+  --cb-dark-fg: #fef3c7;
+  --cb-dark-bd: rgba(251, 191, 36, 0.65);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+  letter-spacing: 0.015em;
+  color: var(--cb-fg);
+  background: var(--cb-bg);
+  border: 1.25px solid var(--cb-bd);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  vertical-align: middle;
+}
+.chat-badge.b-champ.compact {
+  font-size: 9.5px;
+  padding: 1px 6px;
+}
+.has-banner .chat-badge.b-champ,
+:root.dark .chat-badge.b-champ,
+body.dark .chat-badge.b-champ {
+  color: var(--cb-dark-fg) !important;
+  background: var(--cb-dark-bg) !important;
+  border-color: var(--cb-dark-bd) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+.chat-badge.b-champ.champ-emerald { --cb-bg: linear-gradient(135deg,#d1fae5,#a7f3d0); --cb-bd: rgba(16,185,129,.5); --cb-fg: #065f46; --cb-dark-bg: linear-gradient(135deg,#047857,#059669); --cb-dark-fg: #ecfdf5; --cb-dark-bd: rgba(110,231,183,.65); }
+.chat-badge.b-champ.champ-indigo  { --cb-bg: linear-gradient(135deg,#e0e7ff,#c7d2fe); --cb-bd: rgba(99,102,241,.5); --cb-fg: #312e81; --cb-dark-bg: linear-gradient(135deg,#4338ca,#4f46e5); --cb-dark-fg: #eef2ff; --cb-dark-bd: rgba(165,180,252,.65); }
+.chat-badge.b-champ.champ-sky     { --cb-bg: linear-gradient(135deg,#e0f2fe,#bae6fd); --cb-bd: rgba(14,165,233,.5); --cb-fg: #0c4a6e; --cb-dark-bg: linear-gradient(135deg,#0369a1,#0284c7); --cb-dark-fg: #f0f9ff; --cb-dark-bd: rgba(125,211,252,.65); }
+.chat-badge.b-champ.champ-lime    { --cb-bg: linear-gradient(135deg,#ecfccb,#d9f99d); --cb-bd: rgba(132,204,22,.5); --cb-fg: #365314; --cb-dark-bg: linear-gradient(135deg,#4d7c0f,#65a30d); --cb-dark-fg: #f7fee7; --cb-dark-bd: rgba(190,242,100,.65); }
+.chat-badge.b-champ.champ-teal    { --cb-bg: linear-gradient(135deg,#ccfbf1,#99f6e4); --cb-bd: rgba(20,184,166,.5); --cb-fg: #115e59; --cb-dark-bg: linear-gradient(135deg,#0f766e,#0d9488); --cb-dark-fg: #f0fdfa; --cb-dark-bd: rgba(94,234,212,.65); }
+.chat-badge.b-champ.champ-amber   { --cb-bg: linear-gradient(135deg,#fef3c7,#fcd34d); --cb-bd: rgba(245,158,11,.55); --cb-fg: #78350f; --cb-dark-bg: linear-gradient(135deg,#b45309,#d97706); --cb-dark-fg: #fffbeb; --cb-dark-bd: rgba(252,211,77,.65); }
+.chat-badge.b-champ.champ-slate   { --cb-bg: linear-gradient(135deg,#e2e8f0,#cbd5e1); --cb-bd: rgba(100,116,139,.5); --cb-fg: #1e293b; --cb-dark-bg: linear-gradient(135deg,#334155,#475569); --cb-dark-fg: #f8fafc; --cb-dark-bd: rgba(148,163,184,.65); }
+.chat-badge.b-champ.champ-cyan    { --cb-bg: linear-gradient(135deg,#cffafe,#a5f3fc); --cb-bd: rgba(6,182,212,.5); --cb-fg: #155e75; --cb-dark-bg: linear-gradient(135deg,#0e7490,#0891b2); --cb-dark-fg: #ecfeff; --cb-dark-bd: rgba(103,232,249,.65); }
+.chat-badge.b-champ.champ-crimson { --cb-bg: linear-gradient(135deg,#ffe4e6,#fecdd3); --cb-bd: rgba(225,29,72,.52); --cb-fg: #881337; --cb-dark-bg: linear-gradient(135deg,#be123c,#e11d48); --cb-dark-fg: #fff1f2; --cb-dark-bd: rgba(253,164,175,.7); }
+.chat-badge.b-champ.champ-ruby    { --cb-bg: linear-gradient(135deg,#fee2e2,#fecaca); --cb-bd: rgba(220,38,38,.52); --cb-fg: #7f1d1d; --cb-dark-bg: linear-gradient(135deg,#b91c1c,#dc2626); --cb-dark-fg: #fef2f2; --cb-dark-bd: rgba(252,165,165,.7); }
+.chat-badge.b-champ.champ-jade    { --cb-bg: linear-gradient(135deg,#dcfce7,#bbf7d0); --cb-bd: rgba(22,163,74,.5); --cb-fg: #14532d; --cb-dark-bg: linear-gradient(135deg,#15803d,#16a34a); --cb-dark-fg: #f0fdf4; --cb-dark-bd: rgba(134,239,172,.65); }
+.chat-badge.b-champ.champ-bronze  { --cb-bg: linear-gradient(135deg,#ffedd5,#fed7aa); --cb-bd: rgba(234,88,12,.5); --cb-fg: #7c2d12; --cb-dark-bg: linear-gradient(135deg,#9a3412,#c2410c); --cb-dark-fg: #fff7ed; --cb-dark-bd: rgba(253,186,116,.65); }
+.chat-badge.b-champ.champ-cobalt  { --cb-bg: linear-gradient(135deg,#dbeafe,#bfdbfe); --cb-bd: rgba(37,99,235,.5); --cb-fg: #1e3a8a; --cb-dark-bg: linear-gradient(135deg,#1d4ed8,#2563eb); --cb-dark-fg: #eff6ff; --cb-dark-bd: rgba(147,197,253,.65); }
+.chat-badge.b-champ.champ-sun     { --cb-bg: linear-gradient(135deg,#fef9c3,#fde047); --cb-bd: rgba(202,138,4,.55); --cb-fg: #713f12; --cb-dark-bg: linear-gradient(135deg,#a16207,#ca8a04); --cb-dark-fg: #fefce8; --cb-dark-bd: rgba(253,224,71,.7); }
+.chat-badge.b-champ.champ-rose    { --cb-bg: linear-gradient(135deg,#fce7f3,#fbcfe8); --cb-bd: rgba(219,39,119,.5); --cb-fg: #831843; --cb-dark-bg: linear-gradient(135deg,#be185d,#db2777); --cb-dark-fg: #fdf2f8; --cb-dark-bd: rgba(249,168,212,.68); }
+.chat-badge.b-champ.champ-violet  { --cb-bg: linear-gradient(135deg,#ede9fe,#ddd6fe); --cb-bd: rgba(124,58,237,.52); --cb-fg: #4c1d95; --cb-dark-bg: linear-gradient(135deg,#6d28d9,#7c3aed); --cb-dark-fg: #f5f3ff; --cb-dark-bd: rgba(196,181,253,.7); }
+.chat-badge.b-champ.champ-aqua    { --cb-bg: linear-gradient(135deg,#cffafe,#bae6fd); --cb-bd: rgba(2,132,199,.5); --cb-fg: #0c4a6e; --cb-dark-bg: linear-gradient(135deg,#0284c7,#0891b2); --cb-dark-fg: #f0f9ff; --cb-dark-bd: rgba(125,211,252,.68); }
+.chat-badge.b-champ.champ-forest  { --cb-bg: linear-gradient(135deg,#d1fae5,#bbf7d0); --cb-bd: rgba(5,150,105,.52); --cb-fg: #064e3b; --cb-dark-bg: linear-gradient(135deg,#065f46,#047857); --cb-dark-fg: #ecfdf5; --cb-dark-bd: rgba(110,231,183,.65); }
+.chat-badge.b-champ.champ-warm    { --cb-bg: linear-gradient(135deg,#fef3c7,#a7f3d0); --cb-bd: rgba(13,148,136,.5); --cb-fg: #134e4a; --cb-dark-bg: linear-gradient(135deg,#0f766e,#b45309); --cb-dark-fg: #fefce8; --cb-dark-bd: rgba(253,230,138,.68); }
+.chat-badge.b-champ.champ-gold    { --cb-bg: linear-gradient(135deg,#fef08a,#f59e0b); --cb-bd: rgba(180,83,9,.6); --cb-fg: #451a03; --cb-dark-bg: linear-gradient(135deg,#b45309,#eab308); --cb-dark-fg: #fefce8; --cb-dark-bd: rgba(254,240,138,.78); }
+.chat-badge.b-champ.champ-more    { --cb-bg: linear-gradient(135deg,#f1f5f9,#e2e8f0); --cb-bd: rgba(100,116,139,.45); --cb-fg: #334155; --cb-dark-bg: rgba(51,65,85,.9); --cb-dark-fg: #e2e8f0; --cb-dark-bd: rgba(148,163,184,.55); }
+
+
 /* ── Header Live IV Drip Study Timer Pill ────────────────────────────────── */
 html body .header .hdr-iv-pill {
   flex: 0 0 auto !important;

@@ -691,6 +691,7 @@
     const deco = me?.avatarDeco ? `<img class="avatar-deco-img" src="${esc(me.avatarDeco)}" alt="" aria-hidden="true">` : '';
     const colorAttr = me?.nameColor ? ` data-name-color="${esc(me.nameColor)}"` : '';
     const xpBadge = has100kBadge(me) ? ' <em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+    const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(me?.championBlocks, { compact: true }) || '';
     const bg = me?.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(me.bannerUrl)}')" aria-hidden="true"></span>` : '';
     return `<div class="cosmetic-profile-hero${me?.bannerUrl ? ' has-banner' : ''}">
       ${bg}
@@ -699,7 +700,7 @@
         <span class="cosmetic-hero-cam" aria-hidden="true">📷</span>
       </button>
       <div class="cosmetic-hero-info">
-        <b${colorAttr}>${esc(myName)}</b>${xpBadge}
+        <b${colorAttr}>${esc(myName)}</b>${xpBadge}${champBadges ? ' ' + champBadges : ''}
         <small>${esc(myUser)}</small>
         <button type="button" class="cosmetic-hero-photo-btn" data-pick-avatar-photo>📷 Ganti Foto Profil</button>
       </div>

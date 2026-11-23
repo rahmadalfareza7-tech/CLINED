@@ -3764,9 +3764,10 @@ function renderHomeProfileShowcase(){
   const roleBadge=user.role==='admin'?'<em class="chat-badge b-admin">👑 Admin</em>':user.role==='helper'?'<em class="chat-badge b-helper">🛠️ Helper</em>':'';
   const show100k=typeof user.xp100k==='boolean'?user.xp100k:(Number(get(KEY.xp,0))||0)>=100000;
   const xp100Badge=show100k?'<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>':'';
+  const champBadges=window.CLINED_CHAMPIONS?.renderBadges?.(user.championBlocks,{compact:true})||'';
   const nextHtml=`${bg}<span class="soc-av on${user.avatarDeco?' has-deco':''} home-profile-av-btn" id="homeProfileAvatarBtn" role="button" tabindex="0" title="Buka halaman hias & ganti foto profil">${avInner}${deco}</span>
     <div class="home-profile-info">
-      <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${xp100Badge}${roleBadge}</div>
+      <div class="home-profile-name-row"><b${nc}>${esc(user.name)}</b>${xp100Badge}${champBadges}${roleBadge}</div>
       <small>@${esc(user.username)}</small>
     </div>
     <button type="button" class="home-profile-edit" id="homeProfileEditBtn">✨ Hias</button>`;

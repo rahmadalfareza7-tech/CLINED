@@ -18,7 +18,18 @@
   const dayKey = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? 'Hari ini' : new Date(n - 864e5).toDateString() === d.toDateString() ? 'Kemarin' : d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' }); };
 
   function mount(host, { request, confirm, selfId }) {
-    const S = { tab: 'users', users: null, acts: null, q: '', aq: '', role: 'all', sort: 'role', filter: 'all', open: null, timer: null, busy: new Set(), refreshing: false, lastBodyHtml: '', lastStatsHtml: '', resetCodes: {} };
+    const S = { tab: 'users', users: null, acts: null, q: '', aq: '', role: 'all', sort: 'role', filter: 'all', open: null, timer: null, busy: new Set(), refreshing: false, lastBodyHtml: '', lastStatsHtml: '', resetCodes: {}, champDrafts: {} };
+    const champList = () => window.CLINED_CHAMPIONS?.LIST || [];
+    const renderChampBadges = (blocks, opts) => window.CLINED_CHAMPIONS?.renderBadges?.(blocks, opts) || '';
+    const getDraft = u => {
+      if (S.champDrafts[u.id]) return S.champDrafts[u.id];
+      return Array.isArray(u.championBlocks) ? u.championBlocks.slice() : [];
+    };
+    const sameBlocks = (a, b) => {
+      const A = (a || []).slice().sort().join('|');
+      const B = (b || []).slice().sort().join('|');
+      return A === B;
+    };
     host.classList.add('ap');
     host.innerHTML = `<div class="ap-hero"><div class="ap-hero-top"><div class="ap-hero-t"><span class="ap-kick">ADMIN</span><h3>Pengguna &amp; aktivitas</h3></div><button type="button" class="ap-refresh" data-ap-refresh aria-label="Segarkan data" title="Segarkan data">↻</button></div><div class="ap-stats" data-ap-stats></div></div>
       <div class="ap-tabs" role="tablist"><button type="button" role="tab" data-ap-tab="users" class="on">👥 Pengguna</button><button type="button" role="tab" data-ap-tab="acts">🕘 Aktivitas</button></div>
@@ -31,7 +42,8 @@
       const u = S.users || [], c = r => u.filter(x => x.role === r).length;
       const onlineNow = u.filter(x => x.online).length;
       const activeToday = u.filter(x => x.online || (x.lastLoginAt && (Date.now() - new Date(x.lastLoginAt).getTime()) < 864e5)).length;
-      const nextStats = S.users ? `<span><b>${onlineNow}</b>Online</span><span><b>${u.length}</b>Pengguna</span><span><b>${activeToday}</b>Aktif 24j</span><span><b>${c('admin')}</b>Admin</span><span><b>${c('helper')}</b>Helper</span><span><b>${u.filter(x => x.isMentor).length}</b>Mentor</span>` : '';
+      const champCount = u.filter(x => Array.isArray(x.championBlocks) && x.championBlocks.length > 0).length;
+      const nextStats = S.users ? `<span><b>${onlineNow}</b>Online</span><span><b>${u.length}</b>Pengguna</span><span><b>${activeToday}</b>Aktif 24j</span><span><b>${c('admin')}</b>Admin</span><span><b>${c('helper')}</b>Helper</span><span><b>${u.filter(x => x.isMentor).length}</b>Mentor</span><span><b>${champCount}</b>Champion</span>` : '';
       if (nextStats !== S.lastStatsHtml) { S.lastStatsHtml = nextStats; $('[data-ap-stats]').innerHTML = nextStats; }
     };
 
@@ -41,8 +53,12 @@
       const q = S.q.trim().toLowerCase();
       const rows = S.users
         .filter(u => {
-          const roleOk = S.role === 'all' || (S.role === 'online' ? !!u.online : S.role === 'mentor' ? u.isMentor : u.role === S.role);
-          const textOk = !q || u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q);
+          const roleOk = S.role === 'all'
+            || (S.role === 'online' ? !!u.online
+              : S.role === 'mentor' ? u.isMentor
+                : S.role === 'champion' ? (Array.isArray(u.championBlocks) && u.championBlocks.length > 0)
+                  : u.role === S.role);
+          const textOk = !q || u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q) || (Array.isArray(u.championBlocks) && u.championBlocks.join(' ').toLowerCase().includes(q));
           return roleOk && textOk;
         })
         .slice()
@@ -52,9 +68,9 @@
           if (S.sort === 'login') return (new Date(b.lastLoginAt || 0).getTime() - new Date(a.lastLoginAt || 0).getTime()) || a.name.localeCompare(b.name, 'id');
           return 0;
         });
-      const chips = [['all', 'Semua'], ['online', '🟢 Online'], ['admin', '👑 Admin'], ['helper', '🛠️ Helper'], ['mentor', '🙋 Mentor'], ['student', '🎓 Student']];
+      const chips = [['all', 'Semua'], ['online', '🟢 Online'], ['champion', '🏆 Champion'], ['admin', '👑 Admin'], ['helper', '🛠️ Helper'], ['mentor', '🙋 Mentor'], ['student', '🎓 Student']];
       const sorts = [['role', 'Default'], ['online', '🟢 Online dulu'], ['xp', '⚡ XP Tertinggi'], ['login', '🕒 Login Terbaru']];
-      return `<div class="ap-searchbox"><input type="search" data-ap-q placeholder="Cari nama atau username…" value="${esc(S.q)}" autocomplete="off" aria-label="Cari pengguna"></div>
+      return `<div class="ap-searchbox"><input type="search" data-ap-q placeholder="Cari nama, username, atau blok champion…" value="${esc(S.q)}" autocomplete="off" aria-label="Cari pengguna"></div>
         <div class="ap-chips" role="group" aria-label="Filter role">${chips.map(([k, l]) => `<button type="button" data-ap-role="${k}" class="${S.role === k ? 'on' : ''}">${l}</button>`).join('')}</div>
         <div class="ap-chips" role="group" aria-label="Urutkan pengguna" style="margin-top:4px">${sorts.map(([k, l]) => `<button type="button" data-ap-sort="${k}" class="${S.sort === k ? 'on' : ''}">${l}</button>`).join('')}</div>
         <div class="ap-count">${rows.length} pengguna</div>
@@ -67,7 +83,28 @@
       const xpBadge = xpNum > 0 ? `<em class="ap-tag">⚡ ${xpNum.toLocaleString('id-ID')} XP</em>` : '';
       const onlineTag = u.online ? ' • <span class="ap-on">● online</span>' : '';
       const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
-      const tags = `<em class="ap-tag r-${esc(u.role)}">${ROLES[u.role]?.[0] || ''} ${ROLES[u.role]?.[1] || esc(u.role)}</em>${u.isMentor ? '<em class="ap-tag r-mentor">🙋 Tempat bertanya</em>' : ''}${xpBadge}`;
+      const savedChamps = Array.isArray(u.championBlocks) ? u.championBlocks : [];
+      const champBadgesHtml = renderChampBadges(savedChamps, { compact: true, max: 3 });
+      const tags = `<em class="ap-tag r-${esc(u.role)}">${ROLES[u.role]?.[0] || ''} ${ROLES[u.role]?.[1] || esc(u.role)}</em>${u.isMentor ? '<em class="ap-tag r-mentor">🙋 Tempat bertanya</em>' : ''}${xpBadge}${champBadgesHtml}`;
+      const draft = open ? getDraft(u) : savedChamps;
+      const dirty = open && !sameBlocks(draft, savedChamps);
+      const champPickerHtml = open ? `<div class="ap-champ-box">
+        <div class="ap-champ-head">
+          <div class="ap-lbl">🏆 Tag Champion Blok (${draft.length} dipilih)</div>
+          ${draft.length ? `<button type="button" class="ap-champ-clear" data-ap-champ-clear="${esc(u.id)}" ${busy ? 'disabled' : ''}>Hapus semua</button>` : ''}
+        </div>
+        <small class="ap-champ-sub">Pilih satu atau lebih blok. Tag Champion akan tampil otomatis di profil, chat, sidebar member, dan leaderboard pengguna ini.</small>
+        <div class="ap-champ-grid">
+          ${champList().map(c => {
+            const on = draft.includes(c.block);
+            return `<button type="button" class="ap-champ-pill champ-${esc(c.tone)}${on ? ' on' : ''}" data-ap-champ-toggle="${esc(c.block)}" data-uid="${esc(u.id)}" aria-pressed="${on}" ${busy ? 'disabled' : ''} title="${esc(c.title)}">${c.icon} ${esc(c.short)}</button>`;
+          }).join('')}
+        </div>
+        ${dirty ? `<div class="ap-champ-actions">
+          <button type="button" class="ap-copy-btn primary" data-ap-champ-save="${esc(u.id)}" ${busy ? 'disabled' : ''}>💾 Simpan Tag Champion (${draft.length})</button>
+          <button type="button" class="ap-copy-btn" data-ap-champ-cancel="${esc(u.id)}" ${busy ? 'disabled' : ''}>Batal</button>
+        </div>` : ''}
+      </div>` : '';
       return `<article class="ap-user${open ? ' open' : ''}${busy ? ' busy' : ''}">
         <button type="button" class="ap-user-head" data-ap-open="${esc(u.id)}" aria-expanded="${open}">
           <span class="ap-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${u.avatarUrl ? `<img class="ap-av-img" src="${esc(u.avatarUrl)}" alt="">` : esc(ini(u.name))}${u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : ''}</span>
@@ -78,6 +115,7 @@
           <div class="ap-lbl">Role</div>
           <div class="ap-seg" role="group" aria-label="Ubah role">${Object.entries(ROLES).map(([k, [i, l]]) => `<button type="button" data-ap-setrole="${k}" data-uid="${esc(u.id)}" class="${u.role === k ? 'on' : ''}" ${u.role === k || busy || (me && k !== 'admin') ? 'disabled' : ''}>${i} ${l}</button>`).join('')}</div>
           <label class="ap-switch"><span><b>🙋 Tempat bertanya</b><small>Bisa dichat siapa saja tanpa berteman. Boleh dobel dengan role lain.</small></span><input type="checkbox" data-ap-mentor="${esc(u.id)}" ${u.isMentor ? 'checked' : ''} ${busy ? 'disabled' : ''}><i aria-hidden="true"></i></label>
+          ${champPickerHtml}
           ${me ? '<p class="ap-note">Akun yang sedang dipakai tidak bisa diturunkan atau dihapus.</p>' : `
             <button type="button" class="ap-reset-btn" data-ap-resetcode="${esc(u.id)}" data-name="${esc(u.name)}" data-user="${esc(u.username)}" ${busy ? 'disabled' : ''}>🔑 Buat Kode Reset Password</button>
             ${rc ? `<div class="ap-reset-box">
@@ -93,7 +131,7 @@
     };
 
     /* ───── Aktivitas ───── */
-    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'], question_edited: ['✏️', 'Edit soal', 'edit'], admin_reset_code: ['🔑', 'Kode reset dibuat', 'role'], password_reset: ['🔐', 'Password direset', 'login'], admin_give_diamond: ['💎', 'Tambah diamond', 'role'], admin_give_diamond_all: ['💎', 'Bagi diamond semua', 'role'] };
+    const LBL = { login: ['↪', 'Login', 'login'], logout: ['↩', 'Logout', 'logout'], role_changed: ['⚙️', 'Role diubah', 'role'], champion_tags_changed: ['🏆', 'Tag Champion diubah', 'role'], question_edited: ['✏️', 'Edit soal', 'edit'], admin_reset_code: ['🔑', 'Kode reset dibuat', 'role'], password_reset: ['🔐', 'Password direset', 'login'], admin_give_diamond: ['💎', 'Tambah diamond', 'role'], admin_give_diamond_all: ['💎', 'Bagi diamond semua', 'role'] };
     const actExtra = a => {
       if (a.action === 'role_changed') {
         const m = a.metadata || {};
@@ -102,6 +140,12 @@
         if (m.from && m.to && m.from !== m.to) parts.push(`${m.from} → ${m.to}`);
         if (typeof m.mentorTo === 'boolean' && m.mentorFrom !== m.mentorTo) parts.push(`Tempat bertanya: ${m.mentorTo ? 'aktif' : 'nonaktif'}`);
         return parts.length ? `<span class="ap-chg">${esc(parts.join(' • '))}</span>` : '';
+      }
+      if (a.action === 'champion_tags_changed') {
+        const m = a.metadata || {};
+        const list = Array.isArray(m.to) ? m.to : [];
+        const label = list.length ? list.join(', ') : 'Dihapus semua';
+        return `<span class="ap-chg">@${esc(m.targetUsername || '-')} • 🏆 ${esc(label)}</span>`;
       }
       if (a.action === 'admin_give_diamond' && a.metadata?.targetUsername) {
         return `<span class="ap-chg">@${esc(a.metadata.targetUsername)} • +${Number(a.metadata.amount || 0).toLocaleString('id-ID')} 💎</span>`;
@@ -192,6 +236,45 @@
       if (t.dataset.apSort) { S.sort = t.dataset.apSort; draw(); return; }
       if (t.dataset.apFilter) { S.filter = t.dataset.apFilter; draw(); return; }
       if (t.dataset.apOpen) { S.open = S.open === t.dataset.apOpen ? null : t.dataset.apOpen; draw(); return; }
+      if (t.dataset.apChampToggle) {
+        const id = t.dataset.uid, blk = t.dataset.apChampToggle, u = S.users?.find(x => x.id === id); if (!u) return;
+        const cur = getDraft(u).slice();
+        const idx = cur.indexOf(blk);
+        if (idx >= 0) cur.splice(idx, 1); else cur.push(blk);
+        S.champDrafts[id] = cur;
+        draw();
+        return;
+      }
+      if (t.dataset.apChampClear) {
+        const id = t.dataset.apChampClear;
+        S.champDrafts[id] = [];
+        draw();
+        return;
+      }
+      if (t.dataset.apChampCancel) {
+        delete S.champDrafts[t.dataset.apChampCancel];
+        draw();
+        return;
+      }
+      if (t.dataset.apChampSave) {
+        const id = t.dataset.apChampSave, u = S.users?.find(x => x.id === id); if (!u) return;
+        const nextBlocks = getDraft(u);
+        S.busy.add(id); draw();
+        try {
+          const d = await request(`/api/admin/users/${encodeURIComponent(id)}/champions`, { method: 'PATCH', body: JSON.stringify({ championBlocks: nextBlocks }) });
+          u.championBlocks = Array.isArray(d.championBlocks) ? d.championBlocks : nextBlocks;
+          delete S.champDrafts[id];
+          msg(d.message || 'Tag Champion diperbarui.');
+          if (id === selfId && typeof authCurrentUser === 'function') {
+            const me = authCurrentUser();
+            if (me) me.championBlocks = u.championBlocks;
+            window.dispatchEvent(new CustomEvent('clined:champion-tags-updated', { detail: { championBlocks: u.championBlocks } }));
+          }
+          await loadActs();
+        } catch (err) { msg(err.message || 'Gagal menyimpan Tag Champion.', true); }
+        finally { S.busy.delete(id); draw(); }
+        return;
+      }
       if (t.dataset.apSetrole) {
         const id = t.dataset.uid, role = t.dataset.apSetrole, u = S.users.find(x => x.id === id); if (!u) return;
         if (role === 'admin' && !(await confirm({ title: `Jadikan ${u.name} sebagai Admin?`, text: 'Admin punya akses penuh ke pengelolaan konten dan pengguna.', ok: 'Ya, jadikan admin' }))) return;

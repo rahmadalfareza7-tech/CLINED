@@ -129,8 +129,9 @@
     const banner = u.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(u.bannerUrl)}')" aria-hidden="true"></span>` : '';
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
     const xp100 = u.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+    const champs = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true, max: 2 }) || '';
     return `<div class="chat-row${u.canChat ? ' open' : ''}${u.unread ? ' has-unread' : ''}${u.bannerUrl ? ' has-banner' : ''}" ${u.canChat ? `data-chat-open="${esc(u.id)}" role="button" tabindex="0"` : ''}>${banner}${av(u)}
-      <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${badges(u)}</div><small>${sub}</small></div>
+      <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${champs}${badges(u)}</div><small>${sub}</small></div>
       <div class="chat-meta">${meta}</div></div>`;
   }
   function selfCardHTML() {
@@ -149,8 +150,9 @@
     const banner = u.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(u.bannerUrl)}')" aria-hidden="true"></span>` : '';
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
     const xp100 = u.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+    const champs = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true, max: 3 }) || '';
     return `<div class="chat-grp"><h4>Profil Kamu</h4><div class="chat-row chat-self${u.bannerUrl ? ' has-banner' : ''}">${banner}${av(u)}
-      <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${badges(u)}</div><small>@${esc(u.username)} • tampil di chat</small></div>
+      <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${champs}${badges(u)}</div><small>@${esc(u.username)} • tampil di chat</small></div>
       <div class="chat-meta"><button type="button" class="secondary chat-mini" data-chat-shop>🎨 Atur</button></div></div></div>`;
   }
   function listHTML() {
@@ -185,7 +187,8 @@
     const headBg = p.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${esc(p.bannerUrl)}')" aria-hidden="true"></span>` : '';
     const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
     const xp100 = p.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
-    return `<div class="card soc-card chat-card chat-thread"><div class="chat-head${p.bannerUrl ? ' has-banner' : ''}">${headBg}<button type="button" class="chat-back" data-chat-back aria-label="Kembali">‹</button>${av(p)}<div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(p.name)}</b>${xp100}${badges(p)}</div><small>@${esc(p.username)}${p.online ? ' • online' : ''}</small></div></div>
+    const champs = window.CLINED_CHAMPIONS?.renderBadges?.(p.championBlocks, { compact: true, max: 3 }) || '';
+    return `<div class="card soc-card chat-card chat-thread"><div class="chat-head${p.bannerUrl ? ' has-banner' : ''}">${headBg}<button type="button" class="chat-back" data-chat-back aria-label="Kembali">‹</button>${av(p)}<div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(p.name)}</b>${xp100}${champs}${badges(p)}</div><small>@${esc(p.username)}${p.online ? ' • online' : ''}</small></div></div>
       <div class="chat-ttl">🕒 Pesan hilang otomatis setelah 48 jam</div>
       <div class="chat-msgs" id="chatMsgs">${T ? (msgs || '<div class="chat-empty"><span>👋</span><b>Belum ada pesan</b><small>Sapa duluan!</small></div>') : '<p class="soc-empty">Memuat…</p>'}</div>
       ${can ? `<div class="chat-compose"><textarea id="chatInput" rows="1" maxlength="1000" placeholder="Tulis pesan…" aria-label="Pesan"></textarea><button type="button" class="chat-send" data-chat-send aria-label="Kirim" disabled>➤</button></div>` : '<p class="chat-locked">Tambahkan sebagai teman dulu untuk membalas.</p>'}</div>`;

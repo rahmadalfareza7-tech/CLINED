@@ -44,8 +44,8 @@
       scripts: ['js/kedkel-summary-data.js?v=4', 'js/kedkel-summary.js?v=7']
     },
     admin: {
-      styles: ['css/admin-people.css?v=4'],
-      scripts: ['js/admin-people.js?v=9', 'js/question-editor.js?v=1']
+      styles: ['css/admin-people.css?v=5'],
+      scripts: ['js/admin-people.js?v=10', 'js/question-editor.js?v=1']
     }
   };
 
