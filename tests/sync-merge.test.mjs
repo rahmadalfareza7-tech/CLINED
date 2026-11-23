@@ -141,3 +141,33 @@ test('mergeJsonKey merges Latihan Materi flags, best scores, last results, and r
   assert.equal(rVal['KEDKEL|m1'].deleted, true);
   assert.equal(rVal['KEDKEL|m2'].pos, 2);
 });
+
+test('mergeJsonKey merges counts-based gaster_daily_streak_v1 across devices without injecting legacy fields', () => {
+  const res = mergeJsonKey(
+    'gaster_daily_streak_v1',
+    JSON.stringify({ counts: { '2026-11-22': 6 }, streak: 1 }),
+    JSON.stringify({ counts: { '2026-11-22': 3, '2026-11-23': 5 }, streak: 2 })
+  );
+  assert.equal(res.dirty, true);
+  const parsed = JSON.parse(res.value);
+  assert.deepEqual(parsed, {
+    counts: { '2026-11-22': 6, '2026-11-23': 5 },
+    streak: 2
+  });
+  assert.equal('days' in parsed, false);
+  assert.equal('lastDate' in parsed, false);
+  assert.equal('best' in parsed, false);
+
+  // When server already has strictly newer/higher counts and streak, dirty should be false (no ping-pong)
+  const clean = mergeJsonKey(
+    'gaster_daily_streak_v1',
+    JSON.stringify({ counts: {}, streak: 0 }),
+    JSON.stringify({ counts: { '2026-11-23': 5 }, streak: 1 })
+  );
+  assert.equal(clean.dirty, false);
+  assert.deepEqual(JSON.parse(clean.value), {
+    counts: { '2026-11-23': 5 },
+    streak: 1
+  });
+});
+

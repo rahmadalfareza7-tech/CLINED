@@ -509,7 +509,9 @@
     }
   });
 
-  window.addEventListener('clined:sync-applied', () => {
+  window.addEventListener('clined:sync-applied', e => {
+    const keys = e?.detail?.keys;
+    if (Array.isArray(keys) && !e?.detail?.full && !keys.includes(DONE_KEY) && !keys.includes(STAR_KEY)) return;
     S.done = readIdSet(DONE_KEY, LEGACY_DONE_KEY);
     S.star = readIdSet(STAR_KEY, LEGACY_STAR_KEY);
     if (document.getElementById('kedkelSummaryPage')?.classList.contains('active')) render();

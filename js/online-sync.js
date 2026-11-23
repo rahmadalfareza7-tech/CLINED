@@ -3,7 +3,7 @@
   'use strict';
   const QUEUE='clined_online_sync_queue_v3', ACTIVE_USER='clined_active_user_id_v3', CURSOR='clined_sync_cursor_v2';
   const LEGACY_QUEUE='clined_online_sync_queue_v2', LEGACY_CURSOR='clined_sync_cursor_v1';
-  const safe=key=>/^(gaster_|clined_(?!account_profile|google_form_url|schema_version|migrated_at|menu|active_user_id|sync_cursor|xp_queue)|medicalRpg|medical_rpg|current_block|last_worked|dashboard_block|alpha5_)/.test(key)&&!/auth|password|session|token|sync_queue|last_activity|xp_queue/i.test(key);
+  const safe=key=>/^(gaster_|clined_(?!account_profile|google_form_url|schema_version|migrated_at|menu|active_user_id|sync_cursor|xp_queue|glossary_v1)|medicalRpg|medical_rpg|current_block|last_worked|dashboard_block|alpha5_)/.test(key)&&!/auth|password|session|token|sync_queue|last_activity|xp_queue/i.test(key);
   const learningKeys=()=>Array.from({length:localStorage.length},(_,i)=>localStorage.key(i)).filter(k=>k&&safe(k));
   const uuid=()=>crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2,10)}`;
   const CLIENT_ID=uuid();
@@ -65,7 +65,7 @@
   }
   function markSet(key,value,autoSchedule=true){if(safe(key))enqueue({id:uuid(),type:'set',key,value,updatedAt:new Date().toISOString()},autoSchedule);}
   function markDelete(key,autoSchedule=true){if(safe(key))enqueue({id:uuid(),type:'delete',key,updatedAt:new Date().toISOString()},autoSchedule);}
-  localStorage.setItem=(key,value)=>{nativeSet(key,String(value));if(!suppress&&safe(key))markSet(key,String(value),true);};
+  localStorage.setItem=(key,value)=>{const str=String(value),prev=localStorage.getItem(key);nativeSet(key,str);if(!suppress&&safe(key)&&prev!==str)markSet(key,str,true);};
   localStorage.removeItem=key=>{const was=safe(key)&&localStorage.getItem(key)!==null;nativeRemove(key);if(was&&!suppress)markDelete(key,true);};
   async function request(path,options={}){const r=await fetch(path,{credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'Sinkronisasi gagal.');return d;}
   function maxMergeDeep(a,b){
@@ -112,13 +112,36 @@
         return{value:JSON.stringify([...byId.values()]),dirty:changed};
       }
       if(key==='gaster_daily_streak_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'){
-        const days=[...new Set([...(Array.isArray(srv.days)?srv.days:[]),...(Array.isArray(loc.days)?loc.days:[])])].sort();
-        const lLast=String(loc.lastDate||''),sLast=String(srv.lastDate||'');
-        const lastDate=lLast>=sLast?lLast:sLast;
-        const streak=Math.max(Number(loc.streak)||0,Number(srv.streak)||0);
-        const best=Math.max(Number(loc.best)||0,Number(srv.best)||0,streak);
-        const merged={...srv,...loc,days,lastDate,streak,best};
-        return{value:JSON.stringify(merged),dirty:JSON.stringify(merged)!==JSON.stringify(srv)};
+        const hasCounts=(loc.counts&&typeof loc.counts==='object'&&!Array.isArray(loc.counts))||(srv.counts&&typeof srv.counts==='object'&&!Array.isArray(srv.counts));
+        const hasLegacy=Array.isArray(loc.days)||Array.isArray(srv.days)||'lastDate' in loc||'lastDate' in srv||'best' in loc||'best' in srv;
+        const merged={...srv,...loc};
+        let dirty=false;
+        if(hasCounts){
+          const lc=(loc.counts&&typeof loc.counts==='object'&&!Array.isArray(loc.counts))?loc.counts:{};
+          const sc=(srv.counts&&typeof srv.counts==='object'&&!Array.isArray(srv.counts))?srv.counts:{};
+          const counts={};
+          const allDays=[...new Set([...Object.keys(sc),...Object.keys(lc)])].sort();
+          for(const d of allDays){
+            const lv=Math.max(0,Number(lc[d])||0), sv=Math.max(0,Number(sc[d])||0), mx=Math.max(lv,sv);
+            counts[d]=mx;
+            if(mx>sv||!(d in sc))dirty=true;
+          }
+          merged.counts=counts;
+        }
+        if(hasLegacy){
+          const days=[...new Set([...(Array.isArray(srv.days)?srv.days:[]),...(Array.isArray(loc.days)?loc.days:[])])].sort();
+          const lLast=String(loc.lastDate||''),sLast=String(srv.lastDate||'');
+          const lastDate=lLast>=sLast?lLast:sLast;
+          const streak=Math.max(Number(loc.streak)||0,Number(srv.streak)||0);
+          const best=Math.max(Number(loc.best)||0,Number(srv.best)||0,streak);
+          merged.days=days;merged.lastDate=lastDate;merged.streak=streak;merged.best=best;
+          if(!dirty&&JSON.stringify(merged)!==JSON.stringify(srv))dirty=true;
+        }else{
+          const streak=Math.max(Number(loc.streak)||0,Number(srv.streak)||0);
+          merged.streak=streak;
+          if(streak>(Number(srv.streak)||0))dirty=true;
+        }
+        return{value:JSON.stringify(merged),dirty};
       }
       if(key==='gaster_v8_history'&&Array.isArray(loc)&&Array.isArray(srv)){
         const sig=x=>`${x?.at||x?.ts||x?.date||''}|${x?.bank||x?.bankId||''}|${x?.score??''}|${x?.total??''}`;
@@ -261,10 +284,28 @@
       return Number.isFinite(n)&&n>=0?Math.round(n):null;
     }
   }
+  function sameVal(a,b){
+    if(a===b)return true;
+    if(typeof a!=='string'||typeof b!=='string')return false;
+    const tA=a.trim(), tB=b.trim();
+    if(!tA||!tB||(tA[0]!=='{'&&tA[0]!=='[')||tA[0]!==tB[0])return false;
+    try{
+      const deepEq=(x,y)=>{
+        if(x===y)return true;
+        if(!x||!y||typeof x!=='object'||typeof y!=='object')return false;
+        if(Array.isArray(x)!==Array.isArray(y))return false;
+        if(Array.isArray(x))return x.length===y.length&&x.every((v,i)=>deepEq(v,y[i]));
+        const kx=Object.keys(x), ky=Object.keys(y);
+        return kx.length===ky.length&&kx.every(k=>Object.prototype.hasOwnProperty.call(y,k)&&deepEq(x[k],y[k]));
+      };
+      return deepEq(JSON.parse(tA),JSON.parse(tB));
+    }catch{return false;}
+  }
   function apply(state, opts={}){
     let restoreXP=null;
     const rePush=[];
     const cleanQueued=[];
+    const changedKeys=[];
     const xpKey='gaster_v11_xp';
     let changed=Boolean(opts&&opts.forceNotify);
     suppress=true;
@@ -281,13 +322,13 @@
           }
           if(serverXP!==null){
             const sVal=String(serverXP);
-            if(localRaw!==sVal){nativeSet(xpKey,sVal);changed=true;}
+            if(localRaw!==sVal){nativeSet(xpKey,sVal);changed=true;changedKeys.push(xpKey);}
             cleanQueued.push(xpKey);
           }
           continue;
         }
         if(item.deleted){
-          if(localStorage.getItem(key)!==null){nativeRemove(key);changed=true;}
+          if(localStorage.getItem(key)!==null){nativeRemove(key);changed=true;changedKeys.push(key);}
           cleanQueued.push(key);
           continue;
         }
@@ -295,11 +336,17 @@
           const prevVal=localStorage.getItem(key);
           const merged=mergeJsonKey(key,prevVal,item.value);
           if(merged){
-            if(prevVal!==merged.value){nativeSet(key,merged.value);changed=true;}
+            if(prevVal!==merged.value){
+              nativeSet(key,merged.value);
+              if(!sameVal(prevVal,merged.value)){changed=true;changedKeys.push(key);}
+            }
             if(merged.dirty)rePush.push([key,merged.value]);
             else cleanQueued.push(key);
           }else{
-            if(prevVal!==item.value){nativeSet(key,item.value);changed=true;}
+            if(prevVal!==item.value){
+              nativeSet(key,item.value);
+              if(!sameVal(prevVal,item.value)){changed=true;changedKeys.push(key);}
+            }
             cleanQueued.push(key);
           }
         }
@@ -308,7 +355,9 @@
     for(const k of cleanQueued)dropQueuedKey(k);
     if(restoreXP!==null)markSet(xpKey,restoreXP,false);
     for(const [k,v] of rePush)markSet(k,v,false);
-    if(changed&&Object.keys(state||{}).length)window.dispatchEvent(new CustomEvent('clined:sync-applied'));
+    if(changed&&Object.keys(state||{}).length){
+      window.dispatchEvent(new CustomEvent('clined:sync-applied',{detail:{keys:changedKeys,full:Boolean(opts&&opts.forceNotify)}}));
+    }
   }
   function snapshot(serverState){
     for(const key of learningKeys()){

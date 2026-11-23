@@ -189,12 +189,29 @@
     S.flagPack = qs.length ? { id: '__flagged', title: 'Soal Ditandai', questions: qs } : null;
   }
 
-  function renderList() {
+  function listStateSig() {
+    const packs = S.packs;
+    const parts = [S.block, packs.length, S.offline ? 1 : 0, S.flagPack ? S.flagPack.questions.length : 0];
+    for (let i = 0; i < packs.length; i++) {
+      const key = stateKey(S.block, packKey(packs[i]));
+      const st = getResume(key), best = getBest(key), lastRes = getLast(key);
+      parts.push(`${i}:${st ? `${st.pos}/${st.seq?.length || 0}/${st.updated || 0}` : ''}:${best ? `${best.pct}/${best.at || 0}` : ''}:${lastRes ? `${lastRes.pct}/${lastRes.at || 0}` : ''}`);
+    }
+    return parts.join('|');
+  }
+
+  function renderList(opts = {}) {
     const packs = S.packs;
     if (!packs.length) {
+      S.lastListSig = '';
       body().innerHTML = '<div class="ml-empty"><span class="ml-empty-icon">📝</span><b>Belum ada latihan materi</b><small>Latihan untuk blok ini belum ditambahkan.</small></div>';
       return;
     }
+    const sig = listStateSig();
+    const existingSearch = $('mlSearch');
+    const existingList = $('mlList');
+    if (opts.inPlace && existingSearch && existingList && sig === S.lastListSig) return;
+
     const totalQ = packs.reduce((n, p) => n + validQuestions(p).length, 0);
     const cnt = { all: packs.length, new: 0, prog: 0, done: 0 };
     const rows = packs.map((p, i) => {
@@ -224,18 +241,53 @@
     }).join('');
     const showLf = [cnt.new, cnt.prog, cnt.done].filter(Boolean).length >= 2;
     if (!showLf) S.lf = 'all';
+    const lfHtml = showLf
+      ? `<div class="ml-chips ml-lf" role="tablist" aria-label="Filter status">${[['all', 'Semua'], ['new', 'Belum'], ['prog', 'Berjalan'], ['done', 'Selesai']].filter(([k]) => k === 'all' || cnt[k]).map(([k, l]) => `<button type="button" class="ml-chip${S.lf === k ? ' on' : ''}" data-ml-lf="${k}">${l} <i>${cnt[k]}</i></button>`).join('')}</div>`
+      : '';
+    const flagHtml = S.flagPack
+      ? `<button type="button" class="ml-item ml-flagrow" data-ml-start="flag"><span class="ml-item-num">⭐</span><span class="ml-item-main"><b>Soal Ditandai</b><small>${S.flagPack.questions.length} soal yang kamu tandai</small></span><span class="ml-item-cta">Latih ›</span></button>`
+      : '';
+
+    // Perbarui daftar di tempat tanpa menyentuh #mlSearch agar fokus/ketikan PC tidak pernah ter-cancel
+    if (opts.inPlace && existingSearch && existingList) {
+      const lfSlot = $('mlLfSlot');
+      const flagSlot = $('mlFlagSlot');
+      if (lfSlot) { lfSlot.innerHTML = lfHtml; lfSlot.hidden = !lfHtml; }
+      if (flagSlot) { flagSlot.innerHTML = flagHtml; flagSlot.hidden = !flagHtml; }
+      existingList.innerHTML = rows;
+      S.lastListSig = sig;
+      applySearch();
+      return;
+    }
+
+    const activeSearch = document.activeElement?.id === 'mlSearch' ? document.activeElement : null;
+    const selStart = activeSearch ? activeSearch.selectionStart : null;
+    const selEnd = activeSearch ? activeSearch.selectionEnd : null;
+    const selDir = activeSearch ? activeSearch.selectionDirection : undefined;
+    if (activeSearch) S.q = activeSearch.value;
+
     body().innerHTML = `${S.offline ? '<div class="ml-note">📡 Mode offline • menampilkan data terakhir yang tersimpan.</div>' : ''}
       <div class="ml-hero"><span class="ml-hero-icon">📝</span><div><b>${packs.length} materi • ${totalQ} soal</b><small>Jawab, lihat pembahasan tiap pilihan, kumpulkan XP.</small></div></div>
       <div class="ml-toolbar">
         <div class="ml-search"><span class="ml-search-ico" aria-hidden="true">🔍</span><input type="search" id="mlSearch" class="ml-search-input" placeholder="Cari materi…" value="${esc(S.q)}" autocomplete="off" enterkeyhint="search" aria-label="Cari materi"><button type="button" class="ml-search-clear" data-ml-clear aria-label="Hapus pencarian" hidden>✕</button></div>
-        ${showLf ? `<div class="ml-chips ml-lf" role="tablist" aria-label="Filter status">${[['all', 'Semua'], ['new', 'Belum'], ['prog', 'Berjalan'], ['done', 'Selesai']].filter(([k]) => k === 'all' || cnt[k]).map(([k, l]) => `<button type="button" class="ml-chip${S.lf === k ? ' on' : ''}" data-ml-lf="${k}">${l} <i>${cnt[k]}</i></button>`).join('')}</div>` : ''}
+        <div id="mlLfSlot"${lfHtml ? '' : ' hidden'}>${lfHtml}</div>
       </div>
       <div class="ml-search-info" id="mlSearchInfo" hidden></div>
-      ${S.flagPack ? `<button type="button" class="ml-item ml-flagrow" data-ml-start="flag"><span class="ml-item-num">⭐</span><span class="ml-item-main"><b>Soal Ditandai</b><small>${S.flagPack.questions.length} soal yang kamu tandai</small></span><span class="ml-item-cta">Latih ›</span></button>` : ''}
+      <div id="mlFlagSlot"${flagHtml ? '' : ' hidden'}>${flagHtml}</div>
       <div class="ml-list" id="mlList">${rows}</div>
       <button type="button" class="secondary ml-more" id="mlMore" data-ml-more hidden></button>
       <div class="ml-empty" id="mlNoMatch" hidden><span class="ml-empty-icon">🔎</span><b>Materi tidak ditemukan</b><small>Coba kata kunci lain.</small></div>`;
+    S.lastListSig = sig;
     applySearch();
+    if (activeSearch) {
+      const inp = $('mlSearch');
+      if (inp) {
+        inp.focus({ preventScroll: true });
+        if (selStart != null && selEnd != null) {
+          try { inp.setSelectionRange(selStart, selEnd, selDir); } catch {}
+        }
+      }
+    }
   }
 
   /* filter tanpa render ulang agar fokus keyboard tidak hilang */
@@ -649,7 +701,7 @@
     if (t.matches('[data-ml-more]')) { S.lim += 12; return applySearch(); }
     if (t.dataset.mlStart != null) return startRun(t.dataset.mlStart === 'flag' ? 'flag' : +t.dataset.mlStart);
     if (t.dataset.mlRestart != null) return startRun(+t.dataset.mlRestart, { fresh: true });
-    if (t.matches('[data-ml-clear]')) { S.q = ''; const i = $('mlSearch'); if (i) { i.value = ''; i.focus(); } return applySearch(); }
+    if (t.matches('[data-ml-clear]')) { S.q = ''; const i = $('mlSearch'); if (i) { i.value = ''; i.focus({ preventScroll: true }); } return applySearch(); }
     if (t.dataset.mlGoto != null) return go(+t.dataset.mlGoto);
     if (t.matches('[data-ml-prev]')) return go(S.run.pos - 1);
     if (t.matches('[data-ml-skip]')) return skip();
@@ -683,7 +735,10 @@
   document.addEventListener('keydown', e => {
     if (e.target.id !== 'mlSearch') return;
     if (e.key === 'Escape' && S.q) { e.preventDefault(); S.q = ''; e.target.value = ''; applySearch(); }
-    if (e.key === 'Enter') e.target.blur();   // tutup keyboard HP
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (window.matchMedia?.('(pointer: coarse)').matches) e.target.blur(); // tutup keyboard HP saja
+    }
   });
 
   // Pintasan keyboard: A–E / 1–5 untuk memilih, Enter untuk lanjut.
@@ -749,12 +804,15 @@
     if (e.detail === 'materiLatihanPage' && !S.block) window.show?.('home');
     if (e.detail !== 'materiLatihanPage') page()?.classList.remove('ml-running');
   });
-  window.addEventListener('clined:sync-applied', () => {
+  const MATERI_SYNC_KEYS = new Set([KEY_RESUME, KEY_BEST, KEY_FLAGS, KEY_LAST, KEY_QTIME]);
+  window.addEventListener('clined:sync-applied', e => {
+    const keys = e?.detail?.keys;
+    if (Array.isArray(keys) && !e?.detail?.full && !keys.some(k => MATERI_SYNC_KEYS.has(k))) return;
     renderHomeResume();
     if (!page()?.classList.contains('active')) return;
     if (!S.run && S.packs.length) {
       buildFlagPack();
-      renderList();
+      renderList({ inPlace: true });
       return;
     }
     if (S.run && !S.run.reviewing && !S.run.done) {

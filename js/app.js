@@ -2039,10 +2039,10 @@ function calculateDailyStreak(counts){
   }
   return n;
 }
-function renderDailyStreak(){
+function renderDailyStreak(opts){
   const data=streakData(),today=localDayKey(),count=Math.min(5,Number(data.counts[today]||0));
   const streakDays=calculateDailyStreak(data.counts);
-  if(Number(data.streak||0)!==streakDays){data.streak=streakDays;set(KEY.dailyStreak,data);}
+  if(!opts?.silent&&Number(data.streak||0)!==streakDays){data.streak=streakDays;set(KEY.dailyStreak,data);}
   const bar=$("dailyStreakBar"), title=$("dailyStreakTitle"), sub=$("dailyStreakSub"), countEl=$("dailyStreakCount"), flame=$("streakFlame");
   if(!bar||!title||!sub||!countEl)return;
   setProgress(bar,count/5*100);
@@ -3615,7 +3615,7 @@ window.addEventListener('clined:sync-applied',()=>{
   try{initTheme();}catch{}
   try{renderXP();}catch{}
   try{if(typeof renderCounts==='function')renderCounts();}catch{}
-  try{if(typeof renderDailyStreak==='function')renderDailyStreak();}catch{}
+  try{if(typeof renderDailyStreak==='function')renderDailyStreak({silent:true});}catch{}
   try{if(typeof renderDailyMission==='function')renderDailyMission();}catch{}
   try{if(typeof syncUabStats==='function')syncUabStats();}catch{}
   try{if(typeof renderAllVisibleBankUI==='function')renderAllVisibleBankUI();}catch{}

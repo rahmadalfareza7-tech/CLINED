@@ -167,11 +167,12 @@
 
 /* ── Cari materi ── */
 .ml-search{position:relative;display:flex;align-items:center}
-.ml-search-ico{position:absolute;left:14px;font-size:15px;opacity:.7;pointer-events:none}
-.ml-search-input{width:100%;padding:13px 40px 13px 40px;border-radius:16px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);font:inherit;font-size:14.5px;font-weight:800;outline:none;-webkit-appearance:none;appearance:none}
+.ml-search-ico{position:absolute;left:14px;font-size:15px;opacity:.7;pointer-events:none;z-index:1}
+.ml-search-input{box-sizing:border-box;width:100%;padding:13px 40px 13px 40px;border-radius:16px;border:2px solid var(--line);border-bottom-width:4px;background:var(--card);color:var(--text);font:inherit;font-size:14.5px;font-weight:800;outline:none;-webkit-appearance:none;appearance:none}
 .ml-search-input::placeholder{color:var(--muted);font-weight:700}
 .ml-search-input:focus{border-color:#1cb0f6;border-bottom-color:#1899d6;box-shadow:0 0 0 3px rgba(28,176,246,.18)}
 .ml-search-input::-webkit-search-cancel-button{display:none}
-.ml-search-clear{position:absolute;right:8px;width:30px;height:30px;border:0;border-radius:50%;background:var(--surface);color:var(--muted);font:inherit;font-size:13px;font-weight:900;cursor:pointer}
-.ml-search-clear[hidden],.ml-search-info[hidden],.ml-row[hidden],#mlNoMatch[hidden]{display:none!important}
+.ml-search-clear{position:absolute;right:8px;width:30px;height:30px;padding:0;display:grid;place-items:center;border:0;border-radius:50%;background:var(--surface);color:var(--muted);font:inherit;font-size:13px;font-weight:900;cursor:pointer;z-index:2}
+.ml-search-clear:hover,.ml-search-clear:active{transform:none!important}
+.ml-search-clear[hidden],.ml-search-info[hidden],.ml-row[hidden],#mlNoMatch[hidden],#mlLfSlot[hidden],#mlFlagSlot[hidden]{display:none!important}
 .ml-search-info{margin:-4px 2px 0;font-size:12px;font-weight:800;color:var(--muted)}
