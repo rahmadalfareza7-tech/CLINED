@@ -1,0 +1,125 @@
+/* Duel — native CLINED look (clinical tactile). Loaded after design-system.css. Uses only design tokens → light & dark. */
+html body #socialPage .duel-hero {
+  background: var(--card) !important; color: var(--text) !important;
+  border: 2px solid var(--line) !important; border-bottom-width: 4px !important;
+  border-radius: var(--r-xl) !important; box-shadow: var(--depth) !important;
+  position: relative; overflow: hidden;
+}
+html body #socialPage .duel-hero::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 5px;
+  background: linear-gradient(90deg, var(--med), var(--sky)); pointer-events: none;
+}
+html body #socialPage .duel-hero-glow { display: none !important; }
+html body #socialPage .duel-hero *:not(button):not(.duel-quick-go) { color: inherit; }
+html body #socialPage .duel-hero .duel-hero-badge,
+html body #socialPage .duel-hero .duel-tag,
+html body #socialPage .duel-hero .duel-rank-pill,
+html body #socialPage .duel-hero .duel-dia-pill,
+html body #socialPage .duel-hero .duel-streak-pill {
+  background: var(--surface) !important; color: var(--text) !important;
+  border: 2px solid var(--line) !important; border-radius: var(--r-pill) !important;
+  box-shadow: none !important; text-shadow: none !important;
+}
+html body #socialPage .duel-rp-track, html body #duelPage .duel-rp-track {
+  background: var(--surface) !important; border: 2px solid var(--line) !important; border-radius: var(--r-pill) !important; overflow: hidden;
+}
+html body .duel-rp-track > * { background: linear-gradient(90deg, var(--med), var(--sky)) !important; }
+html body #socialPage .duel-hero-card-strip, html body #socialPage .duel-stat-box {
+  background: var(--surface) !important; border: 2px solid var(--line) !important; border-radius: var(--r-md) !important; box-shadow: none !important; color: var(--text) !important;
+}
+
+/* Quick match = primary tactile button */
+html body #socialPage .duel-quick-btn {
+  background: var(--green) !important; color: #fff !important;
+  border: 2px solid var(--green-dark) !important; border-bottom-width: 4px !important;
+  border-radius: var(--r-lg) !important; box-shadow: none !important; text-shadow: none !important;
+}
+html body #socialPage .duel-quick-btn:active { transform: translateY(2px); border-bottom-width: 2px !important; }
+html body #socialPage .duel-quick-btn * { color: #fff !important; }
+
+/* Cards */
+html body #socialPage .duel-arena-card, html body #socialPage .soc-setup, html body #socialPage .duel-lb-card,
+html body #duelPage .duel-wait-card, html body #duelPage .duel-countdown-card, html body #duelPage .soc-result,
+html body #duelPage .duel-qcard, html body #duelPage .duel-board, html body #duelPage .duel-arena-board {
+  background: var(--card) !important; color: var(--text) !important;
+  border: 2px solid var(--line) !important; border-bottom-width: 4px !important;
+  border-radius: var(--r-xl) !important; box-shadow: var(--depth) !important;
+}
+html body #socialPage .duel-open-room, html body #socialPage .soc-live-row, html body #socialPage .duel-lb-row,
+html body #socialPage .duel-mode-card, html body #socialPage .duel-study-wait-box {
+  background: var(--surface) !important; color: var(--text) !important;
+  border: 2px solid var(--line) !important; border-radius: var(--r-md) !important; box-shadow: none !important;
+}
+html body #socialPage .duel-lb-row.me { border-color: var(--sky) !important; background: var(--sky-soft) !important; }
+html body #socialPage .duel-field-label, html body #socialPage .duel-mode-head {
+  color: var(--muted) !important; text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 900;
+}
+
+/* Selectors (mode / wager) */
+html body #socialPage .duel-mode-card, html body #socialPage .duel-wager-btn {
+  background: var(--card) !important; border: 2px solid var(--line) !important; border-bottom-width: 4px !important;
+  border-radius: var(--r-md) !important; color: var(--text) !important; box-shadow: none !important;
+}
+html body #socialPage .duel-mode-card.on, html body #socialPage .duel-wager-btn.on, html body #socialPage .duel-wager-btn.sel,
+html body #socialPage .duel-mode-card.sel {
+  border-color: var(--sky) !important; background: var(--sky-soft) !important; color: var(--sky-text) !important;
+}
+html body #socialPage .duel-create-btn, html body #socialPage .duel-join-now, html body #socialPage .duel-matched-go,
+html body .duel-wf-go, html body .duel-matched-go {
+  background: var(--green) !important; color: #fff !important; border: 2px solid var(--green-dark) !important;
+  border-bottom-width: 4px !important; border-radius: var(--r-md) !important; box-shadow: none !important;
+}
+html body #socialPage .duel-mini-btn, html body .duel-wf-open, html body .duel-wf-cancel {
+  background: var(--card) !important; color: var(--text) !important; border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important; border-radius: var(--r-md) !important; box-shadow: none !important;
+}
+html body #socialPage .duel-live-pill { background: var(--med-soft) !important; color: var(--med-dark) !important; border: 0 !important; }
+:root.dark body #socialPage .duel-live-pill { color: var(--med2) !important; }
+
+/* In-duel: question + options like Latihan */
+html body #duelPage .soc-q { color: var(--text) !important; line-height: 1.6; font-weight: 700; }
+html body #duelPage .soc-opt {
+  background: var(--card) !important; color: var(--text) !important; border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important; border-radius: var(--r-md) !important; box-shadow: none !important; text-shadow: none !important;
+}
+html body #duelPage .soc-opt:active { transform: translateY(2px); border-bottom-width: 2px !important; }
+html body #duelPage .soc-opt.sel, html body #duelPage .soc-opt.picked {
+  border-color: var(--sky) !important; background: var(--sky-soft) !important; color: var(--sky-text) !important;
+}
+html body #duelPage .soc-opt.ok, html body #duelPage .soc-opt.right {
+  border-color: var(--green-dark) !important; background: rgba(88,204,2,.14) !important;
+}
+html body #duelPage .soc-opt.bad, html body #duelPage .soc-opt.wrong {
+  border-color: var(--red) !important; background: rgba(255,75,75,.12) !important;
+}
+html body #duelPage .soc-l { background: var(--surface) !important; color: var(--muted) !important; border: 2px solid var(--line) !important; border-radius: var(--r-sm) !important; }
+html body #duelPage .soc-qtimer { background: var(--surface) !important; border: 2px solid var(--line) !important; border-radius: var(--r-pill) !important; color: var(--text) !important; }
+html body #duelPage .soc-fb { border-radius: var(--r-md) !important; border: 2px solid var(--line) !important; background: var(--surface) !important; color: var(--text) !important; }
+html body #duelPage .duel-tug-track { background: var(--surface) !important; border: 2px solid var(--line) !important; border-radius: var(--r-pill) !important; }
+html body #duelPage .duel-tug-fill { background: linear-gradient(90deg, var(--med), var(--sky)) !important; }
+html body #duelPage .duel-emote-bar { background: var(--surface) !important; border: 2px solid var(--line) !important; border-radius: var(--r-pill) !important; box-shadow: none !important; }
+html body #duelPage .duel-emote-btn { background: var(--card) !important; border: 2px solid var(--line) !important; border-radius: var(--r-pill) !important; box-shadow: none !important; }
+html body #duelPage .duel-vs, html body #duelPage .duel-vs-badge { background: var(--surface) !important; color: var(--sky-text) !important; border: 2px solid var(--line) !important; box-shadow: none !important; }
+html body #duelPage .duel-reward-banner, html body #duelPage .duel-rank-result-card, html body #duelPage .duel-rp-box {
+  background: var(--surface) !important; color: var(--text) !important; border: 2px solid var(--line) !important; border-radius: var(--r-lg) !important; box-shadow: none !important;
+}
+html body #duelPage .soc-rev { background: var(--surface) !important; border: 2px solid var(--line) !important; border-radius: var(--r-md) !important; color: var(--text) !important; }
+
+/* Floating bar + match found + rank modal */
+html body .duel-wait-float, html body .duel-matched-card, html body .duel-rank-modal {
+  background: var(--card) !important; color: var(--text) !important; border: 2px solid var(--line) !important;
+  border-bottom-width: 4px !important; border-radius: var(--r-xl) !important; box-shadow: var(--depth), 0 12px 32px rgba(0,0,0,.18) !important;
+}
+html body .duel-matched-title { color: var(--text) !important; }
+html body .duel-matched-sub, html body .duel-matched-note { color: var(--muted) !important; opacity: 1; }
+html body .duel-matched-meta { background: var(--surface) !important; border: 2px solid var(--line) !important; color: var(--text) !important; }
+
+@media (max-width: 480px) {
+  html body #socialPage .duel-hero, html body #duelPage .duel-qcard { border-radius: var(--r-lg) !important; }
+  html body #socialPage, html body #duelPage { overflow-x: hidden; }
+}
+
+html body #socialPage .soc-seg { background: var(--surface) !important; border: 2px solid var(--line) !important; border-radius: var(--r-md) !important; box-shadow: none !important; }
+html body #socialPage .soc-seg button { background: transparent !important; color: var(--muted) !important; box-shadow: none !important; border: 0 !important; }
+html body #socialPage .soc-seg button.on { background: var(--sky) !important; color: #fff !important; border-radius: var(--r-sm) !important; }
+html body #socialPage .soc-lab { color: var(--text) !important; }
