@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="css/desktop.css?v=8">
 <link rel="stylesheet" href="css/home-ergonomic.css?v=18">
 <link rel="stylesheet" href="css/top-notify.css?v=7">
-<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=23">
+<link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=24">
 <link rel="stylesheet" href="css/member-sidebar.css?v=5">
 </head>
 <body class="auth-pending">
@@ -989,6 +989,16 @@
     <div><div class="eyebrow">CLINED • KOMPETISI</div><h2>🏆 Papan Peringkat</h2><p>XP mingguan dimulai setiap Senin. Kerjakan soal sebanyak mungkin!</p></div>
   </div>
   <div class="card nested-card leaderboard-tabs-card">
+    <div id="adminLeaderboardToggleBox" class="admin-lb-toggle-box" hidden>
+      <div class="alb-info">
+        <b>👑 Tampil di Leaderboard (Admin)</b>
+        <small id="adminLeaderboardToggleSub">Nonaktif • Akun Admin disembunyikan dari semua papan peringkat</small>
+      </div>
+      <button type="button" id="adminLeaderboardSwitch" class="admin-lb-switch" role="switch" aria-checked="false" aria-label="Tampilkan Admin di Leaderboard">
+        <span class="alb-knob"></span>
+        <span id="adminLeaderboardSwitchLbl">OFF</span>
+      </button>
+    </div>
     <div class="leaderboard-tabs" role="tablist">
       <button class="lb-tab active" data-lb-tab="weekly" role="tab" aria-selected="true">Weekly</button>
       <button class="lb-tab" data-lb-tab="block" role="tab" aria-selected="false">Per BLOK</button>
@@ -1195,7 +1205,7 @@
 <script src="js/content-manager.js?v=26"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>
 <script src="js/inline-boot.js?v=3"></script>
-<script src="js/new-features.js?v=19"></script>
+<script src="js/new-features.js?v=20"></script>
 <script src="js/clinical-quest.js?v=18"></script>
 
 <script id="clined-floating-dashboard-navigation-final">

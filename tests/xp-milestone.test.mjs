@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { XP_100K_THRESHOLD, XP_100K_DIAMOND_BONUS, parseXpValue, maybeUnlock100kBadge, canUse100kBadge, is100kBadgeVisible } from '../lib/xp-milestone.mjs';
+import { XP_100K_THRESHOLD, XP_100K_DIAMOND_BONUS, parseXpValue, maybeUnlock100kBadge, canUse100kBadge, is100kBadgeVisible, isUserShownInLeaderboard } from '../lib/xp-milestone.mjs';
 
 test('xp-milestone constants match 100K requirement and +50 diamond reward', () => {
   assert.equal(XP_100K_THRESHOLD, 100_000);
@@ -32,6 +32,15 @@ test('canUse100kBadge and is100kBadgeVisible support ON/OFF toggle and Admin acc
   assert.equal(is100kBadgeVisible(adminNoXp), false);
   assert.equal(is100kBadgeVisible({ ...adminNoXp, badge_100k_visible: true }), true);
   assert.equal(is100kBadgeVisible({ ...adminNoXp, badge_100k_visible: false }), false);
+});
+
+test('isUserShownInLeaderboard always includes students/helpers and toggles admin ON/OFF', () => {
+  assert.equal(isUserShownInLeaderboard({ role: 'student' }), true);
+  assert.equal(isUserShownInLeaderboard({ role: 'helper' }), true);
+  assert.equal(isUserShownInLeaderboard({ role: 'admin', show_in_leaderboard: false }), false);
+  assert.equal(isUserShownInLeaderboard({ role: 'admin' }), false);
+  assert.equal(isUserShownInLeaderboard({ role: 'admin', show_in_leaderboard: true }), true);
+  assert.equal(isUserShownInLeaderboard(null), false);
 });
 
 test('maybeUnlock100kBadge ignores null pool, empty userId, or sub-threshold XP cleanly', async () => {

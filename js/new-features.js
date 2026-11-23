@@ -179,6 +179,61 @@ window.CLINED_Leaderboard = (function () {
     if (lbTab === 'block') renderBlockLeaderboard(document.getElementById('leaderboardList'));
   });
 
+  function syncAdminLeaderboardToggle() {
+    const box = document.getElementById('adminLeaderboardToggleBox');
+    const btn = document.getElementById('adminLeaderboardSwitch');
+    const lbl = document.getElementById('adminLeaderboardSwitchLbl');
+    const sub = document.getElementById('adminLeaderboardToggleSub');
+    if (!box || !btn) return;
+    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    const isAdminUser = Boolean(me && me.role === 'admin');
+    box.hidden = !isAdminUser;
+    if (!isAdminUser) return;
+    const on = Boolean(me.showInLeaderboard);
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-checked', String(on));
+    if (lbl) lbl.textContent = on ? 'ON' : 'OFF';
+    if (sub) {
+      sub.textContent = on
+        ? 'Aktif • Akun Admin ikut muncul di Weekly, Per BLOK, All Time & Gladiator'
+        : 'Nonaktif • Akun Admin disembunyikan dari semua papan peringkat';
+    }
+  }
+
+  document.getElementById('adminLeaderboardSwitch')?.addEventListener('click', async () => {
+    const btn = document.getElementById('adminLeaderboardSwitch');
+    const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+    if (!btn || !me || me.role !== 'admin' || btn.disabled) return;
+    const nextEnabled = !me.showInLeaderboard;
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/auth/leaderboard-visibility', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled: nextEnabled })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Gagal mengatur tampilan leaderboard.');
+      me.showInLeaderboard = Boolean(d.user ? d.user.showInLeaderboard : nextEnabled);
+      syncAdminLeaderboardToggle();
+      lbLoadedAt = 0;
+      lbData = null;
+      blockCache.clear();
+      if (typeof window.showToast === 'function') {
+        window.showToast(me.showInLeaderboard
+          ? '👑 Admin sekarang tampil di semua Leaderboard!'
+          : 'Admin disembunyikan dari semua Leaderboard.');
+      }
+      await load();
+      refreshTeaser(true);
+    } catch (err) {
+      if (typeof window.showToast === 'function') window.showToast(err.message || 'Gagal mengatur tampilan leaderboard.', true);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
   // Open leaderboard page
   function openPage() {
     const page = document.getElementById('leaderboardPage');
@@ -188,6 +243,7 @@ window.CLINED_Leaderboard = (function () {
       document.querySelectorAll('.view.active').forEach(v => v.classList.remove('active'));
       page.classList.add('active');
     }
+    syncAdminLeaderboardToggle();
     load();
   }
 
@@ -202,16 +258,16 @@ window.CLINED_Leaderboard = (function () {
     refreshTeaser();
   });
 
-  window.addEventListener('clined:auth-ready', () => refreshTeaser(true));
+  window.addEventListener('clined:auth-ready', () => { syncAdminLeaderboardToggle(); refreshTeaser(true); });
   window.addEventListener('clined:xp-gained', () => { lbLoadedAt = 0; blockCache.clear(); });
   window.addEventListener('clined:view-change', e => {
     if (e.detail === 'home') refreshTeaser();
-    if (e.detail === 'leaderboardPage') load();
+    if (e.detail === 'leaderboardPage') { syncAdminLeaderboardToggle(); load(); }
   });
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(() => refreshTeaser(), 300));
-  else setTimeout(() => refreshTeaser(), 300);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(() => { syncAdminLeaderboardToggle(); refreshTeaser(); }, 300));
+  else setTimeout(() => { syncAdminLeaderboardToggle(); refreshTeaser(); }, 300);
 
-  return { load, openPage, refreshTeaser };
+  return { load, openPage, refreshTeaser, syncAdminLeaderboardToggle };
 })();
 
 // ── STUDY TIMER (INFUS BELAJAR — POMODORO & STOPWATCH + HEADER PILL) ──────
