@@ -1573,6 +1573,18 @@
       const validTotal = Number(d.validTotal || 0);
       const score = Number(d.score || 0);
       if (validTotal < 10 || score < 5) return;
+      const sid = String(d.sessionId || '').trim();
+      if (sid) {
+        const CLAIM_KEY = 'clined_claimed_quiz_dia_v1';
+        let claimed = [];
+        try {
+          const raw = JSON.parse(localStorage.getItem(CLAIM_KEY) || '[]');
+          if (Array.isArray(raw)) claimed = raw;
+        } catch {}
+        if (claimed.includes(sid)) return;
+        claimed.push(sid);
+        try { localStorage.setItem(CLAIM_KEY, JSON.stringify(claimed.slice(-120))); } catch {}
+      }
       const bonus = validTotal >= 50 && score >= 25 ? 5 : 3;
       setDia(getDia() + bonus);
       updateDiaBadges();

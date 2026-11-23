@@ -952,6 +952,7 @@ async function resumeBankSession(bankId){
   if(!built.length){clearBankSession(bankId);showToast('Soal sesi sebelumnya tidak ditemukan.',true);return;}
   window.__clinedCustomQuiz=false;
   window.__clinedFinishing=false;
+  quizSessionId=String(sess.sessionId||`bank:${bankId}:${sess.savedAt||''}`);
   quiz=built;selectedBank=bankId;selectedCount=quiz.length;
   pos=Math.max(0,Math.min(quiz.length-1,Number(sess.pos)||0));
   score=Number(sess.score)||0;streak=Number(sess.streak)||0;
@@ -971,8 +972,15 @@ async function resumeBankSession(bankId){
   show("quiz");renderQuestion(true);startTimer();
 }
 
+let quizSessionId='';
+function newQuizSessionId(){
+  try{if(typeof crypto!=='undefined'&&crypto.randomUUID)return crypto.randomUUID();}catch{}
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
+}
+
 function saveSession(){
-  if(!quiz.length || !$("quiz")?.classList.contains("active"))return;
+  if(window.__clinedFinishing || !quiz.length || !$("quiz")?.classList.contains("active"))return;
+  if(!quizSessionId) quizSessionId=newQuizSessionId();
   if(timerDuration && timerDeadline){
     timerSeconds=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));
   }
@@ -989,6 +997,7 @@ function saveSession(){
     }));
     const entries=Object.entries(m).filter(([k])=>k!==selectedBank).slice(-14);
     entries.push([selectedBank,{
+      sessionId:quizSessionId,
       bankId:selectedBank, bankName:bankName(),
       pos, score, streak, sessionXP, playerHP, enemyHP, wrongCombo,
       quizMode, timerSeconds, timerDuration,
@@ -999,12 +1008,14 @@ function saveSession(){
     }]);
     set(KEY.bankSessions,Object.fromEntries(entries));
     set(KEY.session,{
+      sessionId:quizSessionId,
       compact:true,selectedBank,bankName:bankName(),
       pos,score,selectedCount,total:quiz.length,
       isCustom:false,savedAt
     });
   }else{
     set(KEY.session,{
+      sessionId:quizSessionId,
       quiz,pos,score,selectedCount,selectedBank,streak,sessionXP,playerHP,enemyHP,wrongCombo,
       answered,selectedAnswer,quizMode,timerSeconds,timerDuration,timerDeadline,
       isCustom:!!window.__clinedCustomQuiz,
@@ -1027,6 +1038,8 @@ $("resumeBtn").onclick=()=>{
     if(typeof resumeBankSession==="function"){resumeBankSession(s.selectedBank);return;}
   }
   window.__clinedCustomQuiz=!!s.isCustom;
+  window.__clinedFinishing=false;
+  quizSessionId=String(s.sessionId||`legacy:${s.selectedBank||''}:${s.savedAt||''}`);
   quiz=s.quiz;pos=s.pos||0;score=s.score||0;selectedCount=s.selectedCount||quiz.length;
   selectedBank=(s.selectedBank&&BANKS[s.selectedBank])?s.selectedBank:(s.quiz?.[0]?.bank&&BANKS[s.quiz[0].bank])?s.quiz[0].bank:(Object.keys(BANKS)[0]||"utama");streak=s.streak||0;sessionXP=Number(s.sessionXP||0);playerHP=Number.isFinite(Number(s.playerHP))?Math.max(0,Math.min(100,Number(s.playerHP))):100;enemyHP=Number.isFinite(Number(s.enemyHP))?Math.max(0,Math.min(100,Number(s.enemyHP))):100;wrongCombo=Number(s.wrongCombo||0);answered=!!s.answered;selectedAnswer=s.selectedAnswer??null;
   setLastWorkedBlock(blockForBank(selectedBank));
@@ -1039,7 +1052,13 @@ $("resumeBtn").onclick=()=>{
   flagged=new Set(s.flagged||[]);
   show("quiz");renderQuestion(true);startTimer();
 };
-$("discardResumeBtn").onclick=async()=>{if(await clinedConfirm({title:"Hapus kuis tersimpan?",lines:["Progres kuis yang belum selesai akan dihapus dan tidak bisa dilanjutkan."],ok:"Hapus",cancel:"Batal",tone:"danger"}))clearSession()};
+$("discardResumeBtn").onclick=async()=>{
+  if(await clinedConfirm({title:"Hapus kuis tersimpan?",lines:["Progres kuis yang belum selesai akan dihapus dan tidak bisa dilanjutkan."],ok:"Hapus",cancel:"Batal",tone:"danger"})){
+    const s=get(KEY.session,null);
+    if(s?.selectedBank) clearBankSession(s.selectedBank);
+    clearSession();
+  }
+};
 
 
 function blockUiKey(block){return String(block||'').toLowerCase().replace(/[^a-z0-9]+(.)/g,(_,c)=>String(c).toUpperCase());}
@@ -1267,6 +1286,7 @@ async function startQuiz(){
   }
   clearSession();
   clearBankSession(selectedBank);
+  quizSessionId=newQuizSessionId();
   setLastWorkedBlock(blockForBank(selectedBank));
   renderDashboardBlockOptions();
   quiz=buildQuiz(selectedCount);
@@ -1683,6 +1703,8 @@ $("nextBtn").onclick=()=>{
 function finish(reason="complete"){
   if(window.__clinedFinishing)return;
   window.__clinedFinishing=true;
+  const finishedSessionId=quizSessionId||newQuizSessionId();
+  quizSessionId='';
   if(quizMode==="exam")gradeExam();
   window.__examReview=quizMode==="exam";
   stopTimer();
@@ -1693,7 +1715,12 @@ function finish(reason="complete"){
     bank:selectedBank,bankName:bankName(),mode:quizMode,
     duration:timerDuration?timerDuration-timerSeconds:null,reason
   });
-  set(KEY.hist,h.slice(0,50));clearSession();
+  set(KEY.hist,h.slice(0,50));
+  if(!window.__clinedCustomQuiz && selectedBank){
+    clearBankSession(selectedBank);
+    recordBankBest(selectedBank,pct,score,validTotal);
+  }
+  clearSession();
   $("resultScore").textContent=pct+"%";
   if($("resultXP"))$("resultXP").textContent=`+${sessionXP} XP`;
   if($("resultLevel"))$("resultLevel").textContent=`Lv. ${xpLevel(Number(get(KEY.xp,0))||0)}`;
@@ -1706,7 +1733,7 @@ function finish(reason="complete"){
   $("reviewWrongBtn").style.display=quiz.some(q=>q.id && get(KEY.wrong,[]).some(x=>x.id===q.id))?"block":"none";
   $("reviewQuizBtn").style.display=quiz.length?"block":"none";
   show("result");renderCounts();
-  try{window.dispatchEvent(new CustomEvent('clined:quiz-finished',{detail:{score,validTotal,total,pct,bank:selectedBank}}));}catch{}
+  try{window.dispatchEvent(new CustomEvent('clined:quiz-finished',{detail:{sessionId:finishedSessionId,score,validTotal,total,pct,bank:selectedBank}}));}catch{}
   try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
 }
 function formatTime(s){
@@ -1903,7 +1930,7 @@ function renderReview(filter){
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-rv-filter]');if(b&&$('review')?.classList.contains('active')){renderReview(b.dataset.rvFilter);window.scrollTo({top:0,behavior:'auto'});}});
 $("reviewQuizBtn").onclick=()=>{renderReview("all");show("review");window.scrollTo({top:0,behavior:"auto"})};
-$("reviewWrongBtn").onclick=()=>{const w=get(KEY.wrong,[]);const ids=new Set(w.map(x=>x.id));quiz=quiz.filter(q=>ids.has(q.id)).map(q=>({...q,selectedAnswer:null,graded:false}));if(!quiz.length){show("home");return}quizMode="study";window.__clinedFinishing=false;window.__examReview=false;pos=0;score=0;sessionXP=0;lastXPGain=0;answered=false;selectedAnswer=null;streak=0;wrongCombo=0;playerHP=100;enemyHP=100;timerDuration=0;timerSeconds=0;timerDeadline=0;flagged=new Set();show("quiz");renderQuestion();startTimer()};
+$("reviewWrongBtn").onclick=()=>{const w=get(KEY.wrong,[]);const ids=new Set(w.map(x=>x.id));quiz=quiz.filter(q=>ids.has(q.id)).map(q=>({...q,selectedAnswer:null,graded:false}));if(!quiz.length){show("home");return}quizMode="study";window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizSessionId=newQuizSessionId();pos=0;score=0;sessionXP=0;lastXPGain=0;answered=false;selectedAnswer=null;streak=0;wrongCombo=0;playerHP=100;enemyHP=100;timerDuration=0;timerSeconds=0;timerDeadline=0;flagged=new Set();show("quiz");renderQuestion();startTimer()};
 
 const BLOCK_TO_PAGE={
   BM1:"blokBm1Page",BM2:"blokBm2Page",HNC:"blokHncPage",MP1:"blokMp1Page",MP2:"blokMp2Page",MPT:"blokMptPage",
@@ -2084,6 +2111,7 @@ function startCustomQuiz(list,{shuffleList=true,limit=20}={}){
   window.__clinedCustomQuiz=true;
   window.__clinedFinishing=false;
   window.__examReview=false;
+  quizSessionId=newQuizSessionId();
   quizMode="study";
   quiz=(shuffleList?shuffle(base):base).slice(0,limit).map(wrongToQuiz);
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
@@ -2125,6 +2153,7 @@ function startSmartReview(){
   window.__clinedCustomQuiz=true;
   window.__clinedFinishing=false;
   window.__examReview=false;
+  quizSessionId=newQuizSessionId();
   quizMode="study";
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show('quiz');renderQuestion();startTimer();
@@ -2190,7 +2219,7 @@ function resolveQuestionRef(id){
 }
 function startSingleQuestion(bankId,idx){
   const q=rawToQuiz(bankId,idx); if(!q)return;
-  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizMode="study";
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizSessionId=newQuizSessionId();quizMode="study";
   selectedBank=bankId;selectedCount=1;quiz=[q];pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
 }
@@ -2198,7 +2227,7 @@ function startBookmarkDrill(){
   const ids=get(KEY.book,[]),rows=[];
   ids.forEach(id=>{const ref=resolveQuestionRef(id);if(ref)rows.push(rawToQuiz(ref.bankId,ref.idx));});
   if(!rows.length){showToast("Belum ada soal bookmark. Simpan beberapa soal dulu.");return;}
-  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizMode="study";
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizSessionId=newQuizSessionId();quizMode="study";
   quiz=shuffle(rows).slice(0,Math.min(20,rows.length));selectedCount=quiz.length;selectedBank=quiz[0].bank;pos=0;score=0;streak=0;sessionXP=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
 }
@@ -2217,7 +2246,7 @@ function renderBookmarks(){
 function startSmart10(){
   const candidates=[];
   Object.entries(BANKS).forEach(([bankId,b])=>b.data.forEach((q,i)=>{if(q?.opsi?.length>=2)candidates.push(rawToQuiz(bankId,i));}));
-  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizMode="study";
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizSessionId=newQuizSessionId();quizMode="study";
   quiz=shuffle(candidates).slice(0,10);selectedCount=quiz.length;selectedBank=quiz[0]?.bank||"utama";pos=0;score=0;streak=0;sessionXP=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
   clearSession();show("quiz");renderQuestion();startTimer();
 }
