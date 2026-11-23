@@ -2590,6 +2590,10 @@ html body #duelPage .soc-opt {
   -webkit-tap-highlight-color: transparent;
 }
 
+html body #duelPage .soc-opt > * {
+  pointer-events: none;
+}
+
 html body #duelPage .soc-opt.picking,
 html body #duelPage .soc-opt.picking:disabled {
   opacity: 1 !important;

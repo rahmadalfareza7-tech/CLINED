@@ -364,6 +364,17 @@ test('multiplayer room (2–100 orang): clampMaxPlayers, rankPlayers, hadiah dia
   assert.deepEqual(livePriv.players.map(p => p.id), ['P2', 'P3', 'P1', 'P4']);
   assert.equal(livePriv.players.some(p => p.id === 'P5'), false);
 
+  // Live Admin Inspect saat room sedang berjalan (status === 'active', isSpectator: true): bisa memantau seluruh 5 peserta
+  const liveAdminInspect = viewFor(mpDuel, 'ADMIN_1', {}, () => false, { isAdmin: true, isSpectator: true });
+  assert.equal(liveAdminInspect.isSpectator, true);
+  assert.equal(liveAdminInspect.canInspectFull, true);
+  assert.equal(liveAdminInspect.privacyMode, false);
+  assert.deepEqual(liveAdminInspect.players.map(p => p.id), ['P2', 'P3', 'P1', 'P4', 'P5']);
+
+  // omitQuestions saat duel aktif mengurangi payload tanpa menghapus soal ketika selesai
+  const liteActive = viewFor(mpDuel, 'P4', {}, () => false, { omitQuestions: true });
+  assert.deepEqual(liteActive.questions, []);
+
   // P4 selesai dgn 4 benar dalam 10s (at 20000) -> P4 lebih cepat dari P2 (16s), jadi P4 Juara #1 karena speed!
   mpDuel.answers.P4 = A([true, true, true, true], 11_000, 3_000);
   const dec = decide(mpDuel, 30_000);
@@ -384,14 +395,13 @@ test('multiplayer room (2–100 orang): clampMaxPlayers, rankPlayers, hadiah dia
   assert.deepEqual(p1View.result.standings.map(p => p.id), ['P4', 'P2', 'P3']);
   assert.equal(p1View.result.standings.some(p => p.id === 'P5'), false);
 
-  // Hasil untuk Admin Inspect (isAdmin: true, isSpectator: true): melihat seluruh 5 peserta lengkap!
-  const adminView = viewFor(finishedDuel, 'ADMIN_1', {}, () => false, { isAdmin: true, isSpectator: true });
-  assert.equal(adminView.isSpectator, true);
-  assert.equal(adminView.canInspectFull, true);
-  assert.equal(adminView.privacyMode, false);
-  assert.equal(adminView.result.privacyMode, false);
-  assert.deepEqual(adminView.result.standings.map(p => p.id), ['P4', 'P2', 'P3', 'P1', 'P5']);
-  assert.deepEqual(adminView.result.standings.map(p => p.prizeDiamonds), [100, 60, 30, 10, 0]);
+  // Hasil after-match untuk semua orang (termasuk Admin) hanya menampilkan Top 3 Podium di standings!
+  const adminFinishedView = viewFor(finishedDuel, 'ADMIN_1', {}, () => false, { isAdmin: true, isSpectator: true });
+  assert.equal(adminFinishedView.isSpectator, true);
+  assert.equal(adminFinishedView.privacyMode, true);
+  assert.equal(adminFinishedView.result.privacyMode, true);
+  assert.deepEqual(adminFinishedView.result.standings.map(p => p.id), ['P4', 'P2', 'P3']);
+  assert.deepEqual(adminFinishedView.result.top3.map(p => p.prizeDiamonds), [100, 60, 30]);
 });
 
 
