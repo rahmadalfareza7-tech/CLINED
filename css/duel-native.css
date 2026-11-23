@@ -1318,3 +1318,506 @@ html body .duel-tier-row.current {
   html body #socialPage .duel-hero-banner { padding: 12px; }
   html body #duelPage .soc-q { font-size: 16px !important; }
 }
+
+/* ───────── 8. Multiplayer Arena (2–15 Pemain, Open/Private, Live Race & Podium) ───────── */
+html body #socialPage .soc-seg.n4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+html body #socialPage .duel-cap-row {
+  display: grid;
+  gap: 8px;
+}
+
+html body #socialPage .duel-cap-select {
+  min-height: 44px !important;
+  font-size: 14px !important;
+}
+
+html body .duel-tag.mp {
+  background: var(--sky-soft) !important;
+  color: var(--sky-text) !important;
+  border: 1.5px solid rgba(28, 176, 246, .35) !important;
+}
+
+html body .duel-tag.open {
+  background: var(--med-soft) !important;
+  color: var(--med-dark) !important;
+  border: 1.5px solid rgba(13, 148, 136, .34) !important;
+}
+
+:root.dark html body .duel-tag.open {
+  color: var(--med2) !important;
+}
+
+html body .duel-tag.priv {
+  background: var(--warn-soft) !important;
+  color: var(--warn-text) !important;
+  border: 1.5px solid rgba(255, 150, 0, .38) !important;
+}
+
+html body .duel-host-tag {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: var(--warn-soft);
+  color: var(--warn-text);
+  white-space: nowrap;
+}
+
+/* Ruang Tunggu Multiplayer */
+html body #duelPage .duel-mp-wait-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+html body #duelPage .duel-code-panel {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+}
+
+html body #duelPage .duel-code-panel > small {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-code-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+}
+
+html body #duelPage .duel-roster-wrap {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+}
+
+html body #duelPage .duel-roster-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+html body #duelPage .duel-roster-head b {
+  font-size: 13.5px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+html body #duelPage .duel-roster-head small {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-roster-list {
+  display: grid;
+  gap: 7px;
+  max-height: 290px;
+  overflow-y: auto;
+}
+
+html body #duelPage .duel-roster-item {
+  display: grid;
+  grid-template-columns: 24px 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 13px;
+  background: var(--card);
+  border: 2px solid var(--line);
+}
+
+html body #duelPage .duel-roster-item.me {
+  border-color: var(--sky);
+  background: var(--sky-soft);
+}
+
+html body #duelPage .duel-roster-item .soc-av {
+  width: 34px;
+  height: 34px;
+  font-size: 12px;
+}
+
+html body #duelPage .duel-roster-num {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--muted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-roster-info {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+html body #duelPage .duel-roster-info b {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+html body #duelPage .duel-roster-info small {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html body #duelPage .duel-mp-wait-note {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--sky-soft);
+  border: 2px solid rgba(28, 176, 246, .35);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+html body #duelPage .duel-start-mp-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* Live Multiplayer Race Board */
+html body #duelPage .duel-mp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+html body #duelPage .duel-mp-mychip {
+  display: grid;
+  gap: 1px;
+}
+
+html body #duelPage .duel-mp-mychip b {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--sky-text);
+}
+
+html body #duelPage .duel-mp-mychip small {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-mp-head-r {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+html body #duelPage .duel-mp-list {
+  display: grid;
+  gap: 6px;
+}
+
+html body #duelPage .duel-mp-row {
+  display: grid;
+  grid-template-columns: 28px 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+}
+
+html body #duelPage .duel-mp-row.me {
+  border-color: var(--sky);
+  background: var(--sky-soft);
+}
+
+html body #duelPage .duel-mp-row.is-out {
+  opacity: .65;
+}
+
+html body #duelPage .duel-mp-row .soc-av {
+  width: 32px;
+  height: 32px;
+  font-size: 11.5px;
+}
+
+html body #duelPage .duel-mp-pos {
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-mp-pos.top-1,
+html body #duelPage .duel-mp-pos.top-2,
+html body #duelPage .duel-mp-pos.top-3 {
+  font-size: 18px;
+}
+
+html body #duelPage .duel-mp-mid {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+html body #duelPage .duel-mp-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+html body #duelPage .duel-mp-top > b {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+html body #duelPage .duel-mp-score {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-mp-track {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+html body #duelPage .duel-mp-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--sky), var(--brand));
+  transition: width .3s var(--ease-ui);
+}
+
+html body #duelPage .duel-mp-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+html body #duelPage .duel-mp-sub small {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-mp-st {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 1px 7px;
+  border-radius: 99px;
+  margin-left: auto;
+}
+
+html body #duelPage .duel-mp-st.ok { background: var(--brand-soft); color: var(--ok-text); }
+html body #duelPage .duel-mp-st.bad { background: var(--danger-soft); color: var(--danger-text); }
+
+/* Podium & Klasemen Akhir Multiplayer */
+html body #duelPage .duel-podium {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  align-items: end;
+  gap: 8px;
+}
+
+html body #duelPage .duel-podium-slot {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-bottom-width: 4px;
+  min-width: 0;
+}
+
+html body #duelPage .duel-podium-slot.place-1 {
+  background: linear-gradient(180deg, var(--warn-soft), var(--surface) 75%);
+  border-color: var(--warn);
+  padding-top: 14px;
+}
+
+html body #duelPage .duel-podium-slot.me {
+  border-color: var(--sky);
+}
+
+html body #duelPage .duel-podium-medal { font-size: 22px; line-height: 1; }
+html body #duelPage .duel-podium-slot b {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--text);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html body #duelPage .duel-podium-score {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--ok-text);
+  font-variant-numeric: tabular-nums;
+}
+html body #duelPage .duel-podium-slot small {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-standings {
+  width: 100%;
+  display: grid;
+  gap: 7px;
+  text-align: left;
+}
+
+html body #duelPage .duel-standings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+html body #duelPage .duel-stand-row {
+  display: grid;
+  grid-template-columns: 30px 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 11px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+}
+
+html body #duelPage .duel-stand-row.me {
+  border-color: var(--sky);
+  background: var(--sky-soft);
+}
+
+html body #duelPage .duel-stand-row .soc-av {
+  width: 34px;
+  height: 34px;
+  font-size: 12px;
+}
+
+html body #duelPage .duel-stand-rank {
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-stand-rank.top-1,
+html body #duelPage .duel-stand-rank.top-2,
+html body #duelPage .duel-stand-rank.top-3 {
+  font-size: 19px;
+}
+
+html body #duelPage .duel-stand-who {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+html body #duelPage .duel-stand-who b {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html body #duelPage .duel-stand-who small {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-stand-stat {
+  text-align: right;
+  display: grid;
+  gap: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-stand-stat b {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+html body #duelPage .duel-stand-stat b em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-stand-stat small {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--sky-text);
+}

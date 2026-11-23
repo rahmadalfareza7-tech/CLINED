@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeCode, normalizeCode, pickQuestions, pickQuestionsAcrossBanks, canonicalDuelBlock, duelBlockLabel, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
+import { makeCode, normalizeCode, pickQuestions, pickQuestionsAcrossBanks, canonicalDuelBlock, duelBlockLabel, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, clampMaxPlayers, roomCapacity, playerIds, isMultiplayer, rankPlayers, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
 import { push, broadcast, isOnline, onlineStats, openStream, connectionCount, setPresence, dropSession, dropUser, dropConn, heartbeat, HIDDEN_GRACE_MS } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
@@ -272,6 +272,70 @@ test('pickQuestionsAcrossBanks mengambil soal acak merata dari setiap bank, beba
   const small = pickQuestionsAcrossBanks([mkBank('ONLY', 4)], 10, seeded());
   assert.equal(small.length, 4);
 });
+
+test('multiplayer room (2–15 orang): clampMaxPlayers, rankPlayers berdasarkan skor benar & kecepatan, decide, dan viewFor', () => {
+  assert.equal(clampMaxPlayers(1), 2);
+  assert.equal(clampMaxPlayers(10), 10);
+  assert.equal(clampMaxPlayers(99), 15);
+  assert.equal(clampMaxPlayers('abc'), 2);
+
+  const mpDuel = {
+    id: 'mp-1',
+    code: 'RACE99',
+    hostId: 'P1',
+    guestId: 'P2',
+    invitedId: null,
+    maxPlayers: 10,
+    participantIds: ['P1', 'P2', 'P3', 'P4', 'P5'],
+    bankId: 'block:KARDIOLOGI',
+    bankName: 'BLOK KARDIOLOGI (Acak)',
+    status: 'active',
+    questions: Q(4),
+    perQ: 0,
+    startedAt: 10_000,
+    answers: {
+      _meta: { mode: 'classic', wager: 20, isPublic: false, maxPlayers: 10, forfeited: { P5: 15_000 } },
+      // P1: 3 benar dalam 12s (at 22000)
+      P1: A([true, true, true, false], 13_000, 3_000),
+      // P2: 4 benar dalam 16s (at 26000) -> Juara #1 (skor tertinggi!)
+      P2: A([true, true, true, true], 14_000, 4_000),
+      // P3: 3 benar dalam 8s (at 18000) -> Juara #2 (skor sama dgn P1 tapi lebih cepat!)
+      P3: A([true, true, false, true], 12_000, 2_000),
+      // P4: baru jawab 2 soal -> belum selesai
+      P4: A([true, true], 12_000, 2_000),
+      // P5: keluar (forfeited) walau sempat benar 4 -> urutan paling bawah
+      P5: A([true, true, true, true], 11_000, 1_000),
+    },
+    winnerId: null,
+    reason: ''
+  };
+
+  assert.equal(roomCapacity(mpDuel), 10);
+  assert.equal(isMultiplayer(mpDuel), true);
+  assert.deepEqual(playerIds(mpDuel), ['P1', 'P2', 'P3', 'P4', 'P5']);
+
+  // P4 belum selesai & belum expired -> belum berakhir
+  assert.equal(decide(mpDuel, 30_000), null);
+
+  // Live standings sebelum P4 selesai: P2 (4) > P3 (3, cepat) > P1 (3, lebih lambat) > P4 (2) > P5 (forfeited)
+  const live = rankPlayers(mpDuel);
+  assert.deepEqual(live.map(p => p.id), ['P2', 'P3', 'P1', 'P4', 'P5']);
+  assert.deepEqual(live.map(p => p.rank), [1, 2, 3, 4, 5]);
+
+  // P4 selesai dgn 4 benar dalam 10s (at 20000) -> P4 lebih cepat dari P2 (16s), jadi P4 Juara #1 karena speed!
+  mpDuel.answers.P4 = A([true, true, true, true], 11_000, 3_000);
+  const dec = decide(mpDuel, 30_000);
+  assert.deepEqual(dec, { winnerId: 'P4', reason: 'speed' });
+
+  // viewFor saat finished mengekspos standings lengkap tanpa membocorkan kunci di active
+  const finView = viewFor({ ...mpDuel, status: 'finished', winnerId: dec.winnerId, reason: dec.reason }, 'P3');
+  assert.equal(finView.isMultiplayer, true);
+  assert.equal(finView.maxPlayers, 10);
+  assert.equal(finView.playerCount, 5);
+  assert.equal(finView.result.myRank, 3);
+  assert.deepEqual(finView.result.standings.map(p => p.id), ['P4', 'P2', 'P3', 'P1', 'P5']);
+});
+
 
 
 
