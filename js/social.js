@@ -500,29 +500,30 @@
     // 1. Arena Hero Banner + Rank Tier Emblem + RP Progress + Career Stats + Quick Match CTA
     const heroHTML = `
     <div class="card duel-hero">
-      <div class="duel-hero-glow" aria-hidden="true"></div>
-      <div class="duel-hero-top">
-        <button type="button" class="duel-hero-badge tier-${esc(rk.key)}" data-soc-rank-modal title="Klik untuk melihat daftar Tier Rank Duel">
-          <span class="duel-rank-ico">${rk.icon}</span>
-          <div class="duel-hero-rank-txt">
-            <small>RANK ARENA • ${esc(rk.sub.toUpperCase())}</small>
-            <b>${esc(rk.fullName)} ${rankStarsHTML(rk)}</b>
-          </div>
-        </button>
-        <div class="duel-hero-right">
-          <button type="button" class="duel-tier-info-btn" data-soc-rank-modal>🏆 Info Rank</button>
-          <div class="duel-dia-pill" title="Diamond milikmu untuk Gacha Kartu Organ">
-            <span>💎</span><b data-diamond-count>${esc(getDiamonds())}</b>
+      <div class="duel-hero-banner">
+        <div class="duel-hero-top">
+          <button type="button" class="duel-hero-badge tier-${esc(rk.key)}" data-soc-rank-modal title="Klik untuk melihat daftar Tier Rank Duel">
+            <span class="duel-rank-ico">${rk.icon}</span>
+            <div class="duel-hero-rank-txt">
+              <small>RANK ARENA • ${esc(rk.sub.toUpperCase())}</small>
+              <b>${esc(rk.fullName)} ${rankStarsHTML(rk)}</b>
+            </div>
+          </button>
+          <div class="duel-hero-right">
+            <button type="button" class="duel-tier-info-btn" data-soc-rank-modal>🏆 Info Rank</button>
+            <div class="duel-dia-pill" title="Diamond milikmu untuk Gacha Kartu Organ">
+              <span>💎</span><b data-diamond-count>${esc(getDiamonds())}</b>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="duel-rp-box">
-        <div class="duel-rp-head">
-          <span>⚡ <b>${rk.rp} RP</b> (Rank Points)</span>
-          <small>${rk.nextRp ? `Kurang <b>${rk.neededRp} RP</b> ke ${rk.nextTierName}` : '👑 Puncak Mythic Glory!'}</small>
+        <div class="duel-rp-box">
+          <div class="duel-rp-head">
+            <span>⚡ <b>${rk.rp} RP</b> (Rank Points)</span>
+            <small>${rk.nextRp ? `Kurang <b>${rk.neededRp} RP</b> ke ${rk.nextTierName}` : '👑 Puncak Mythic Glory!'}</small>
+          </div>
+          <div class="duel-rp-track"><i style="width:${rk.progressPct}%"></i></div>
         </div>
-        <div class="duel-rp-track"><i style="width:${rk.progressPct}%"></i></div>
       </div>
 
       <div class="duel-stat-grid">
