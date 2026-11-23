@@ -1209,15 +1209,397 @@
 }
 
 
-/* Fix: konten Arena Duel terpotong di layar sempit */
-.duel-hero { grid-template-columns: minmax(0, 1fr); max-width: 100%; box-sizing: border-box; }
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPREHENSIVE DUEL LAYOUT POLISH (v4 — Mobile 360px+ & Desktop Responsive)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Anti-overflow & clean container discipline */
+#socialPage, #duelPage, #socialBody, #duelBody { min-width: 0; max-width: 100%; box-sizing: border-box; }
+#socialBody > *, #duelBody > * { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.soc-card > * { min-width: 0; }
+.soc-title > div, .duel-title-left > div { min-width: 0; flex: 1 1 auto; }
+
+/* 2. Hero Arena Banner — clean alignment on all viewports */
+.duel-hero { grid-template-columns: minmax(0, 1fr); max-width: 100%; box-sizing: border-box; padding: 16px !important; gap: 12px; }
 .duel-hero > * { min-width: 0; max-width: 100%; }
-.duel-hero-card-strip { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.duel-hero-card-txt { flex: 1 1 0; min-width: 0; }
-.duel-hero-card-txt small, .duel-hero-card-txt b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.duel-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.duel-hero-badge { flex: 1 1 210px; min-width: 0; padding: 7px 12px 7px 8px !important; }
+.duel-hero-badge b { font-size: 14.5px; flex-wrap: wrap; row-gap: 2px; }
+.duel-hero-right { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
+html body #socialPage .duel-tier-info-btn {
+  width: auto !important;
+  min-height: 36px !important;
+  padding: 6px 11px !important;
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+  border-radius: 99px !important;
+  white-space: nowrap !important;
+}
+.duel-dia-pill { padding: 6px 11px; font-size: 13px; }
+.duel-stat-box { min-width: 0; padding: 9px 6px; }
+.duel-stat-box b { font-size: clamp(18px, 5vw, 22px); }
+.duel-stat-box span { font-size: 10.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Hero card strip — never clip multi-word prompts */
+.duel-hero-card-strip { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 9px 11px; }
+.duel-hero-card-txt { flex: 1 1 0; min-width: 0; display: grid; gap: 2px; }
+.duel-hero-card-txt small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.duel-hero-card-txt b {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; white-space: normal; font-size: 12px; line-height: 1.32;
+}
 .duel-hero-card-strip .duel-tier-info-btn { flex: none; }
-.duel-quick-btn { max-width: 100%; box-sizing: border-box; }
-.duel-quick-txt { flex: 1 1 0; }
-.duel-quick-txt small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.duel-quick-go { flex: none; }
-.duel-stat-box { min-width: 0; }
+
+/* Quick Match CTA — readable block label on narrow phones */
+.duel-quick-btn {
+  width: 100% !important; max-width: 100%; box-sizing: border-box;
+  padding: 11px 13px !important; min-height: 62px !important;
+  grid-template-columns: 40px minmax(0, 1fr) auto !important; gap: 10px !important;
+}
+.duel-quick-ico { width: 40px; height: 40px; font-size: 21px; }
+.duel-quick-txt { min-width: 0; }
+.duel-quick-txt b { font-size: 14.5px; line-height: 1.22; }
+.duel-quick-txt small {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; white-space: normal; line-height: 1.3;
+}
+.duel-quick-go { flex: none; padding: 6px 10px; font-size: 12px; }
+
+/* 3. Active & Waiting Duel Rows in Lobby */
+.soc-live-row {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  border: 2px solid #ff9600;
+  border-bottom-width: 4px;
+  background: linear-gradient(90deg, rgba(255, 150, 0, .15), rgba(255, 150, 0, .05)), var(--card, #fff);
+}
+.soc-live-row .soc-live {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 2px 0 !important;
+  border-radius: 10px !important;
+  min-height: 40px !important;
+  box-shadow: none !important;
+}
+.soc-live-subactions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+  border-top: 1.5px dashed rgba(255, 150, 0, .35);
+}
+html body #socialPage .soc-live-subactions button {
+  min-height: 36px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 11px !important;
+}
+
+/* 4. Tantangan Terbuka (Open Arena Rooms) — FIX broken 3-col outer grid! */
+.duel-arena-head-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.duel-live-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 8px; border-radius: 99px;
+  font-size: 10.5px; font-weight: 900; letter-spacing: .03em; text-transform: uppercase;
+  background: rgba(16, 185, 129, .16); color: #047857;
+  border: 1px solid rgba(16, 185, 129, .4);
+  white-space: nowrap;
+}
+:root.dark .duel-live-pill { color: #6ee7b7; background: rgba(16, 185, 129, .2); }
+.duel-live-pill i {
+  width: 7px; height: 7px; border-radius: 50%; background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, .7);
+  animation: duelLivePulse 1.8s ease-out infinite;
+}
+@keyframes duelLivePulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, .7); }
+  70% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.duel-open-room {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  gap: 9px !important;
+  padding: 12px 13px !important;
+  border-radius: 18px;
+  border: 2px solid rgba(16, 185, 129, .42);
+  border-bottom-width: 4px;
+  background: linear-gradient(180deg, rgba(16, 185, 129, .08), transparent 70%), var(--card, #fff);
+}
+.duel-open-top {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.duel-open-top > * { min-width: 0; }
+.duel-open-top .soc-who { min-width: 0; gap: 3px; }
+.duel-open-top .soc-who > b { font-size: 13.5px; line-height: 1.25; }
+.duel-open-top .soc-who > small { white-space: normal; overflow: visible; line-height: 1.35; font-size: 11.5px; }
+.duel-open-room .duel-tags-row { margin-top: 0; padding-top: 6px; border-top: 1px solid rgba(148, 163, 184, .18); }
+
+html body #socialPage .duel-join-now,
+html body #socialPage .soc-fight {
+  width: auto !important;
+  min-height: 40px !important;
+  padding: 7px 13px !important;
+  font-size: 12.5px !important;
+  font-weight: 900 !important;
+  border-radius: 12px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+}
+html body #socialPage .duel-mini-btn {
+  width: auto !important;
+  min-height: 36px !important;
+  padding: 6px 11px !important;
+  font-size: 12px !important;
+  border-radius: 11px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+}
+html body #socialPage .soc-invite .soc-btns button {
+  min-height: 40px !important;
+  padding: 7px 12px !important;
+  font-size: 12.5px !important;
+}
+html body #socialPage .soc-join button {
+  min-height: 48px !important;
+  padding: 8px 14px !important;
+  font-size: 13px !important;
+}
+
+@media (max-width: 420px) {
+  .duel-open-top { grid-template-columns: 40px minmax(0, 1fr); }
+  .duel-open-top .duel-join-now { grid-column: 1 / -1; width: 100% !important; }
+  .soc-friend.quick { grid-template-columns: 40px minmax(0, 1fr); }
+  .soc-friend.quick .soc-fight { grid-column: 1 / -1; width: 100% !important; }
+}
+
+/* 5. Atur Arena Duel — clean segmented rows, zero overflow on 360px screens */
+.soc-opt-row { grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: center; }
+.soc-opt-row > * { min-width: 0; }
+.soc-seg { min-width: 0; width: 100%; box-sizing: border-box; }
+.soc-seg button {
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 40px !important;
+  padding: 0 6px !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 460px) {
+  .soc-opt-row { grid-template-columns: 1fr; gap: 6px; }
+  .soc-lab { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .soc-lab small { display: inline; font-size: 11px; }
+}
+.duel-mode-grid { gap: 8px; }
+.duel-wager-row { gap: 8px; }
+.duel-wager-btn { min-width: 0; }
+.duel-wager-btn b { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px; line-height: 1.25; }
+
+/* 6. Leaderboard Rank Gladiator — FIX missing inner classes & 4-col grid mismatch! */
+.duel-lb-row {
+  display: grid !important;
+  grid-template-columns: 32px 42px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 11px 12px !important;
+}
+.duel-lb-main {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+.duel-lb-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 10px;
+  flex-wrap: wrap;
+}
+.duel-lb-name {
+  font-size: 13.5px;
+  font-weight: 900;
+  line-height: 1.25;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.duel-lb-wins {
+  font-size: 12px;
+  font-weight: 950;
+  color: #0284c7;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+:root.dark .duel-lb-wins { color: #38bdf8; }
+.duel-lb-bottom {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 6px;
+}
+.duel-lb-meta {
+  font-size: 11px;
+  font-weight: 800;
+  opacity: .72;
+  white-space: nowrap;
+}
+
+/* 7. Waiting Room + "Nunggu Sambil Ngerjain Soal Dulu" Card */
+.duel-wait-card { gap: 12px; }
+.duel-study-wait-box {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 2px solid rgba(28, 176, 246, .42);
+  background: linear-gradient(135deg, rgba(28, 176, 246, .12), rgba(16, 185, 129, .10));
+  display: grid;
+  gap: 10px;
+  text-align: left;
+}
+.duel-study-wait-txt { display: grid; gap: 3px; }
+.duel-study-wait-txt b { font-size: 13.5px; font-weight: 900; }
+.duel-study-wait-txt small { font-size: 12px; font-weight: 700; opacity: .82; line-height: 1.4; }
+.soc-code {
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: clamp(24px, 7vw, 34px);
+  letter-spacing: .2em;
+  padding: 10px 14px 10px 20px;
+}
+
+/* 8. Active Duel Arena Board — compact & crisp on mobile screens */
+.duel-arena-board { overflow: visible; }
+@media (max-width: 520px) {
+  .duel-arena-board { padding: 10px; gap: 8px; }
+  .duel-board { gap: 6px; }
+  .duel-side {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    gap: 5px;
+    padding: 8px 8px 14px;
+  }
+  .duel-side .soc-av { width: 30px; height: 30px; font-size: 11px; }
+  .duel-side b { font-size: 12.5px; }
+  .duel-side span { font-size: 11px; }
+  .duel-vs-badge { width: 28px; height: 28px; font-size: 10.5px !important; }
+  .duel-tug-head { flex-wrap: wrap; justify-content: center; text-align: center; gap: 3px 8px; font-size: 10.5px; }
+  .soc-scores { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .soc-score { padding: 10px 8px; min-width: 0; }
+  .duel-score-rank { flex-wrap: wrap; gap: 4px; }
+}
+
+/* 9. Persistent Floating Waiting Bar (visible on Quiz/UAB/Home while waiting!) */
+body.has-duel-wait-float main.app {
+  padding-top: calc(68px + env(safe-area-inset-top)) !important;
+}
+.duel-wait-float {
+  position: fixed;
+  top: calc(8px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147482990;
+  width: min(460px, calc(100vw - 20px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px 8px 12px;
+  border-radius: 16px;
+  border: 2px solid #10b981;
+  border-bottom-width: 4px;
+  background: rgba(15, 23, 42, .94);
+  color: #f8fafc;
+  box-shadow: 0 12px 28px rgba(2, 6, 23, .34);
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  animation: duelPop .24s ease-out;
+}
+.duel-wait-float.is-active {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(124, 45, 18, .96), rgba(15, 23, 42, .96));
+}
+.duel-wf-left { display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1; }
+.duel-wf-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex: none;
+  background: #10b981;
+  animation: duelLivePulse 1.6s ease-out infinite;
+}
+.duel-wf-dot.hot { background: #f59e0b; }
+.duel-wf-txt { display: grid; gap: 1px; min-width: 0; }
+.duel-wf-txt b {
+  font-size: 12.5px; font-weight: 900; color: #fff;
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.duel-wf-txt b em {
+  font-style: normal; font-size: 11px; font-weight: 900;
+  padding: 1px 6px; border-radius: 99px;
+  background: rgba(16, 185, 129, .24); color: #6ee7b7;
+  font-variant-numeric: tabular-nums;
+}
+.duel-wf-txt small {
+  font-size: 11px; font-weight: 700; color: #cbd5e1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.duel-wf-btns { display: flex; align-items: center; gap: 6px; flex: none; }
+html body .duel-wait-float button {
+  width: auto !important;
+  min-height: 34px !important;
+  padding: 5px 10px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+html body .duel-wait-float .duel-wf-open {
+  background: rgba(255, 255, 255, .14) !important;
+  border-color: rgba(255, 255, 255, .28) !important;
+  color: #fff !important;
+}
+html body .duel-wait-float .duel-wf-cancel {
+  background: rgba(239, 68, 68, .22) !important;
+  border-color: rgba(248, 113, 113, .45) !important;
+  color: #fecaca !important;
+  padding: 5px 9px !important;
+}
+
+/* 10. Instant "Lawan Ditemukan!" Modal */
+.duel-matched-layer { z-index: 2147483006 !important; align-items: center !important; }
+.duel-matched-card {
+  max-width: 400px; width: 92vw;
+  padding: 20px 18px !important;
+  display: grid; gap: 12px; justify-items: center; text-align: center;
+  border: 2px solid #f59e0b !important; border-bottom-width: 5px !important;
+}
+.duel-matched-ico {
+  width: 60px; height: 60px; border-radius: 18px;
+  display: grid; place-items: center; font-size: 32px;
+  background: linear-gradient(135deg, #facc15, #f97316);
+  box-shadow: 0 8px 20px rgba(249, 115, 22, .35);
+}
+.duel-matched-title { margin: 0; font-size: 20px; font-weight: 950; }
+.duel-matched-sub { margin: 0; font-size: 14px; font-weight: 700; line-height: 1.45; }
+.duel-matched-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.duel-matched-meta span {
+  font-size: 11.5px; font-weight: 800; padding: 4px 10px; border-radius: 99px;
+  background: var(--surface, #f1f5f9); border: 1.5px solid var(--line, #e2e8f0);
+}
+.duel-matched-note { margin: 0; font-size: 12px; font-weight: 700; opacity: .75; line-height: 1.4; }
+.duel-matched-actions { width: 100%; display: grid; gap: 8px; margin-top: 2px; }
+

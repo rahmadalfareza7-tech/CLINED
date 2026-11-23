@@ -29,12 +29,22 @@
   ];
   const DUEL_EMOTES = [
     ['fire', '🔥', 'Gas terus!'],
-    ['shock', '😱', 'Soal sulit!'],
-    ['bolt', '⚡', 'Kejar kalau bisa!'],
+    ['hard', '😱', 'Soal sulit!'],
+    ['fast', '⚡', 'Kejar kalau bisa!'],
     ['brain', '🧠', 'Hafal nih!'],
     ['skull', '💀', 'Awas nyawa!'],
-    ['pray', '🙏', 'GGWP!']
+    ['gg', '🙏', 'GGWP!']
   ];
+  const BLOCK_BTN_MAP = {
+    BM1: 'openBlokBm1', BM2: 'openBlokBm2', HNC: 'openBlokHnc',
+    MP1: 'openBlokMp1', MP2: 'openBlokMp2', MPT: 'openBlokMpt',
+    MUSKULOSKELETAL: 'openBlokMuskuloskeletal', RESPIRATORY: 'openBlokRespiratory',
+    KARDIOLOGI: 'openBlokKardiologi', HEMATOLOGI: 'openBlokHematologi',
+    GIT: 'openBlokGit', FORENSIK: 'openBlokForensik', GINJAL: 'openBlokGinjal',
+    ENDOKRINE: 'openBlokEndokrine', REPRODUKSI: 'openBlokReproduksi',
+    SSP: 'openBlokSsp', 'PANCA INDRA': 'openBlokPancaIndra',
+    KEDKOM: 'openBlokKedkom', KEDKEL: 'openBlokKedkel', MULSIS: 'openBlokMulsis'
+  };
   const RANK_TIERS = [
     { key: 'bronze',   name: 'Bronze',   sub: 'Koas Muda',         icon: '🥉', minRp: 0,    maxRp: 199,      color: '#cd7f32', divisions: 3 },
     { key: 'silver',   name: 'Silver',   sub: 'Residen Tangguh',   icon: '🥈', minRp: 200,  maxRp: 449,      color: '#94a3b8', divisions: 3 },
@@ -254,6 +264,144 @@
       if (!S.blocks.some(b => b.block === S.block)) S.block = S.blocks[0]?.block || '';
     }
     dot();
+    syncWaitingFloat();
+  }
+
+  let waitFloatTimer = null;
+  function playMatchChime() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const now = ctx.currentTime;
+      [[587.33, 0], [880, 0.12]].forEach(([freq, offset]) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + offset);
+        gain.gain.setValueAtTime(0.001, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.14, now + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.28);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now + offset); osc.stop(now + offset + 0.3);
+      });
+      setTimeout(() => { try { ctx.close(); } catch {} }, 600);
+    } catch {}
+  }
+
+  function getBackgroundDuel() {
+    const list = Array.isArray(S.mine) ? S.mine : [];
+    const active = list.find(d => d && d.status === 'active');
+    if (active) return active;
+    const waiting = list.find(d => d && d.status === 'waiting' && d.isHost !== false);
+    if (waiting) return waiting;
+    if (S.D && (S.D.status === 'active' || (S.D.status === 'waiting' && S.D.isHost !== false))) return S.D;
+    return null;
+  }
+
+  function syncWaitingFloat() {
+    const existing = $('duelWaitFloat');
+    const view = activeView();
+    const d = loggedIn() ? getBackgroundDuel() : null;
+    if (!d || view === 'duelPage') {
+      existing?.remove();
+      document.body.classList.remove('has-duel-wait-float');
+      if (view === 'duelPage') $('duelMatchedLayer')?.remove();
+      if (waitFloatTimer) { clearInterval(waitFloatTimer); waitFloatTimer = null; }
+      return;
+    }
+    const isAct = d.status === 'active';
+    const since = Number(d.createdAt) || Date.now();
+    const key = `${d.id}:${d.status}:${d.bank?.name || ''}:${d.opponent?.name || ''}`;
+    let el = existing;
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'duelWaitFloat';
+      el.className = 'duel-wait-float';
+      el.setAttribute('role', 'status');
+      document.body.appendChild(el);
+    }
+    document.body.classList.add('has-duel-wait-float');
+    el.classList.toggle('is-active', isAct);
+    if (el.dataset.key !== key) {
+      el.dataset.key = key;
+      el.dataset.duelId = d.id;
+      el.dataset.since = String(since);
+      const blk = esc(d.bank?.name || 'Arena Duel');
+      el.innerHTML = isAct
+        ? `<div class="duel-wf-left"><span class="duel-wf-dot hot"></span><div class="duel-wf-txt"><b>⚔️ Duel Sedang Berlangsung!</b><small>vs ${esc(d.opponent?.name || 'Lawan')} • ${blk}</small></div></div>
+           <div class="duel-wf-btns"><button type="button" class="primary duel-wf-go" data-soc-open="${esc(d.id)}">⚡ Masuk</button></div>`
+        : `<div class="duel-wf-left"><span class="duel-wf-dot"></span><div class="duel-wf-txt"><b>⏳ Menunggu Lawan <em id="duelWfClock">0:00</em></b><small>${blk} • ${esc(d.code)}</small></div></div>
+           <div class="duel-wf-btns"><button type="button" class="secondary duel-wf-open" data-soc-open="${esc(d.id)}">Buka</button><button type="button" class="secondary duel-wf-cancel" data-soc-cancel-wait="${esc(d.id)}" aria-label="Batalkan ruang duel">✕</button></div>`;
+    }
+    const updateClock = () => {
+      const clk = $('duelWfClock');
+      if (!clk) return;
+      const base = Number(el.dataset.since) || Date.now();
+      clk.textContent = fmtMs(Math.max(0, Date.now() - base));
+    };
+    updateClock();
+    if (!isAct && !waitFloatTimer) {
+      waitFloatTimer = setInterval(() => {
+        if (!$('duelWaitFloat') || !$('duelWfClock')) { clearInterval(waitFloatTimer); waitFloatTimer = null; return; }
+        updateClock();
+      }, 1000);
+    } else if (isAct && waitFloatTimer) {
+      clearInterval(waitFloatTimer); waitFloatTimer = null;
+    }
+  }
+
+  function openStudyWhileWaiting(duel) {
+    const d = duel || S.D || getBackgroundDuel();
+    if (d && !S.mine.some(x => x.id === d.id)) S.mine = [d, ...S.mine];
+    const rawId = String(d?.bank?.id || '');
+    const blk = rawId.startsWith('block:') ? rawId.slice(6).toUpperCase() : String(S.block || '').toUpperCase();
+    const btnId = BLOCK_BTN_MAP[blk];
+    const btn = btnId ? $(btnId) : null;
+    if (btn && !btn.classList.contains('locked-node')) {
+      btn.click();
+    } else if ($('uabPage')) {
+      window.show?.('uabPage');
+    } else {
+      window.show?.('home');
+    }
+    syncWaitingFloat();
+    toast('📚 Ruang duel tetap aktif! Kerjakan soal dulu — kamu otomatis dipanggil saat lawan masuk.');
+  }
+
+  function showDuelMatchedModal(m) {
+    if (!m || !m.id) return;
+    $('duelMatchedLayer')?.remove();
+    playMatchChime();
+    const oppName = esc(m.from?.name || 'Lawan');
+    const oppUser = m.from?.username ? ` (@${esc(m.from.username)})` : '';
+    const bankLabel = esc(m.bankName || 'Arena Duel');
+    const modeLabel = m.mode === 'sudden_death' ? '💀 Sudden Death 3❤️' : '🏆 Mode Klasik';
+    const layer = document.createElement('div');
+    layer.id = 'duelMatchedLayer';
+    layer.className = 'cdlg-layer duel-matched-layer';
+    layer.innerHTML = `<div class="cdlg-card duel-matched-card" role="dialog" aria-modal="true" aria-labelledby="dmTitle">
+      <div class="duel-matched-ico">⚔️</div>
+      <h3 class="duel-matched-title" id="dmTitle">Lawan Ditemukan!</h3>
+      <p class="duel-matched-sub"><b>${oppName}</b>${oppUser} bergabung ke ruang duelmu!</p>
+      <div class="duel-matched-meta">
+        <span>📚 ${bankLabel}</span>
+        ${m.total ? `<span>📝 ${Number(m.total)} soal</span>` : ''}
+        <span>${modeLabel}</span>
+      </div>
+      <p class="duel-matched-note">💡 Progress soal yang sedang kamu kerjakan tetap tersimpan otomatis.</p>
+      <div class="duel-matched-actions">
+        <button type="button" class="primary soc-big duel-matched-go" data-dm-enter="${esc(m.id)}">⚡ Masuk Arena Duel Sekarang!</button>
+        <button type="button" class="secondary soc-big" data-dm-later>Nanti dulu</button>
+      </div>
+    </div>`;
+    const close = () => { layer.classList.remove('show'); setTimeout(() => layer.remove(), 220); };
+    layer.addEventListener('click', e => {
+      if (e.target.closest('[data-dm-enter]')) { close(); openDuel(m.id); return; }
+      if (e.target === layer || e.target.closest('[data-dm-later]')) { close(); syncWaitingFloat(); }
+    });
+    document.body.appendChild(layer);
+    requestAnimationFrame(() => layer.classList.add('show'));
   }
   async function loadBlocks() {
     if (S.blocks.length) {
@@ -430,15 +578,22 @@
 
     // 2. Active duels & incoming friend invites
     const mine = S.mine.map(d => {
-      const opp = d.opponent, title = d.status === 'waiting' ? `Ruang ${esc(d.code)}` : `vs ${esc(opp?.name || 'Lawan')}`;
-      return `<button type="button" class="soc-live" data-soc-open="${esc(d.id)}">
-        <span class="soc-live-ico">${d.status === 'waiting' ? '⏳' : '🔥'}</span>
-        <span class="soc-who">
-          <b>${title}</b>
-          <small>${d.status === 'waiting' ? 'Menunggu penantang masuk…' : `Berlangsung • ${d.me.answered}/${d.total} soal`} • ${d.mode === 'sudden_death' ? '💀 3❤️' : '🏆 Klasik'}</small>
-        </span>
-        <span class="soc-go">Masuk ›</span>
-      </button>`;
+      const opp = d.opponent, isWait = d.status === 'waiting';
+      const title = isWait ? `Ruang ${esc(d.code)} • ${esc(d.bank?.name || 'Duel')}` : `vs ${esc(opp?.name || 'Lawan')}`;
+      return `<div class="soc-live-row${isWait ? ' is-waiting' : ''}">
+        <button type="button" class="soc-live" data-soc-open="${esc(d.id)}">
+          <span class="soc-live-ico">${isWait ? '⏳' : '🔥'}</span>
+          <span class="soc-who">
+            <b>${title}</b>
+            <small>${isWait ? 'Menunggu penantang masuk…' : `Berlangsung • ${d.me.answered}/${d.total} soal • ${esc(d.bank?.name || '')}`} • ${d.mode === 'sudden_death' ? '💀 3❤️' : '🏆 Klasik'}</small>
+          </span>
+          <span class="soc-go">Masuk ›</span>
+        </button>
+        ${isWait ? `<div class="soc-live-subactions">
+          <button type="button" class="secondary duel-mini-btn" data-soc-study-wait="${esc(d.id)}">📚 Kerjakan Soal Dulu</button>
+          <button type="button" class="secondary duel-mini-btn soc-danger" data-soc-cancel-wait="${esc(d.id)}">✕ Batal</button>
+        </div>` : ''}
+      </div>`;
     }).join('');
 
     const inv = S.invites.map(i => `<div class="soc-invite">
@@ -453,15 +608,21 @@
       </div>
     </div>`).join('');
 
-    // 3. Open Arena Rooms (Poin 1: Lobi Tantangan Terbuka)
+    // 3. Open Arena Rooms (Poin 1: Lobi Tantangan Terbuka — Realtime Sync)
+    const waitAge = t => {
+      if (!t) return '';
+      const s = Math.max(0, Math.floor((Date.now() - Number(t)) / 1000));
+      return s < 45 ? 'baru saja' : s < 3600 ? `${Math.floor(s / 60)} mnt lalu` : `${Math.floor(s / 3600)} jam lalu`;
+    };
     const openRows = (S.openRooms || []).map(r => {
       const host = r.host || r.from || {};
+      const age = waitAge(r.createdAt);
       return `<div class="duel-open-room">
         <div class="duel-open-top">
           ${avatar(host)}
           <div class="soc-who">
-            <b>${esc(host.name || 'Petarung')} <small class="duel-open-user">@${esc(host.username || '')}</small></b>
-            <small>📚 ${esc(r.bank?.name || 'Bank Soal')} • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}</small>
+            <b>${esc(host.name || 'Petarung')} <small class="duel-open-user">@${esc(host.username || '')}${age ? ` • ${age}` : ''}</small></b>
+            <small>📚 ${esc(r.bank?.name || 'BLOK Ujian')} • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}</small>
           </div>
           <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">⚡ Lawan!</button>
         </div>
@@ -469,15 +630,22 @@
       </div>`;
     }).join('');
 
+    const openCount = (S.openRooms || []).length;
     const openArenaHTML = `
     <div class="card soc-card duel-arena-card">
       <div class="soc-title between">
-        <div class="duel-title-left"><span>🌐</span><div><h3>Tantangan Terbuka</h3><small class="soc-hint">Masuk langsung 1-klik tanpa ketik kode</small></div></div>
-        <button type="button" class="secondary duel-mini-btn" data-soc-refresh-lobby aria-label="Segarkan lobi">🔄 Segarkan</button>
+        <div class="duel-title-left">
+          <span>🌐</span>
+          <div>
+            <div class="duel-arena-head-row"><h3>Tantangan Terbuka</h3><span class="duel-live-pill" title="Tersinkronisasi otomatis secara realtime"><i></i> Live${openCount ? ` • ${openCount}` : ''}</span></div>
+            <small class="soc-hint">Sinkron realtime • masuk langsung 1-klik tanpa ketik kode</small>
+          </div>
+        </div>
+        <button type="button" class="secondary duel-mini-btn" data-soc-refresh-lobby aria-label="Segarkan lobi">🔄</button>
       </div>
       ${openRows ? `<div class="duel-open-list">${openRows}</div>` : `<div class="duel-open-empty">
         <span>🏟️</span>
-        <div><b>Belum ada ruang terbuka yang menunggu lawan</b><small>Klik <b>⚡ Cari Lawan Cepat</b> di atas atau buat ruang publik agar teman/mahasiswa lain yang online bisa langsung melawanmu!</small></div>
+        <div><b>Belum ada ruang terbuka yang menunggu lawan</b><small>Klik <b>⚡ Cari Lawan Cepat</b> di atas atau buat ruang publik — kamu tetap bisa <b>mengerjakan soal dulu</b> sambil menunggu lawan masuk!</small></div>
       </div>`}
     </div>`;
 
@@ -806,6 +974,13 @@
         <h3>${D.invited ? `Menunggu ${oppName}…` : (D.isPublic ? '🌐 Menunggu Penantang di Lobi Publik…' : '🔒 Menunggu Lawan via Kode…')}</h3>
         <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
         <div class="duel-tags-row center">${rankPill(myRk)}${cardPill(D.me?.card || getMyShowcaseCard())}${modePill(D.mode)}${wagerPill(D.wager)}</div>
+        <div class="duel-study-wait-box">
+          <div class="duel-study-wait-txt">
+            <b>📚 Nunggu sambil ngerjain soal dulu?</b>
+            <small>Ruang duelmu tetap aktif di antrean publik. Begitu ada lawan masuk, notifikasi langsung muncul di layar!</small>
+          </div>
+          <button type="button" class="primary soc-big duel-study-wait-btn" data-soc-study-wait="${esc(D.id)}">📚 Kerjakan Soal Dulu Sambil Menunggu</button>
+        </div>
         <div class="soc-code" aria-label="Kode duel">${esc(D.code)}</div>
         <div class="soc-btns2"><button type="button" class="secondary" data-soc-copy="${esc(D.code)}">📋 Salin Kode</button><button type="button" class="primary" data-soc-share="${esc(D.code)}">📤 Bagikan</button></div>
         <button type="button" class="secondary soc-big soc-danger" data-soc-leave>Batalkan Ruang Duel</button>
@@ -977,6 +1152,7 @@
     $('duelTitle').textContent = D?.status === 'finished' ? '🏁 Hasil Arena Duel' : (D?.mode === 'sudden_death' ? '💀 Duel Sudden Death' : '⚔️ Arena Duel');
     b.innerHTML = duelHTML();
     if (D?.status === 'active') startTick(); else stopTick();
+    syncWaitingFloat();
   }
   async function openDuel(id) {
     S.fb = null; window.show('duelPage');
@@ -1009,7 +1185,9 @@
         ...(friendId ? { friendId } : {})
       }
     });
-    syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
+    syncD(d.duel);
+    if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
+    S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
     if (friendId) toast('Tantangan terkirim ⚔️');
   }
   async function quickMatch() {
@@ -1020,13 +1198,17 @@
       method: 'POST',
       body: { block: S.block, bankId: `block:${S.block}`, count: S.count, seconds: S.sec, mode: S.mode, wager: S.wager, ...(card ? { card } : {}) }
     });
-    syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
-    toast(d.matched ? '⚡ Lawan ditemukan! Bersiap bertarung!' : '🌐 Ruang publik dibuat! Menunggu lawan masuk…');
+    syncD(d.duel);
+    if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
+    S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
+    toast(d.matched ? '⚡ Lawan ditemukan! Bersiap bertarung!' : '🌐 Ruang publik dibuat! Kamu bisa kerjakan soal dulu sambil menunggu.');
   }
   async function joinByCode(code) {
     const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
     const d = await api('/api/duels/join', { method: 'POST', body: { code, ...(card ? { card } : {}) } });
-    syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
+    syncD(d.duel);
+    if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
+    S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
   }
   async function answer(choice) {
     const D = S.D; if (!D || D.status !== 'active') return;
@@ -1040,7 +1222,7 @@
     const item = DUEL_EMOTES.find(e => e[0] === key);
     if (!item) return;
     showEmoteBubble('me', item[1], item[2]);
-    try { await api(`/api/duels/${encodeURIComponent(D.id)}/emote`, { method: 'POST', body: { emote: key } }); } catch {}
+    try { await api(`/api/duels/${encodeURIComponent(D.id)}/emote`, { method: 'POST', body: { emoteId: key } }); } catch {}
   }
 
   window.addEventListener('clined:card-equipped', () => {
@@ -1058,6 +1240,21 @@
     if ('socShareDuel' in ds) return openComposer(duelResultContext());
     if ('socRankModal' in ds) return openRankModal();
     if ('socOpenCards' in ds) { window.CLINED_CARD_SHOP?.show?.(); return; }
+    if ('socStudyWait' in ds) {
+      const target = S.mine.find(x => x.id === ds.socStudyWait) || S.D;
+      return openStudyWhileWaiting(target);
+    }
+    if ('socCancelWait' in ds) return guard(async () => {
+      const id = ds.socCancelWait;
+      if (!(await clinedConfirm({ title: 'Batalkan ruang duel?', lines: ['Ruang publikmu akan dihapus dari daftar Tantangan Terbuka.'], ok: 'Ya, batalkan', cancel: 'Tetap menunggu', tone: 'danger' }))) return;
+      await api(`/api/duels/${encodeURIComponent(id)}/leave`, { method: 'POST', body: {} });
+      S.mine = S.mine.filter(x => x.id !== id);
+      if (S.D?.id === id) { S.D = null; stopTick(); }
+      syncWaitingFloat();
+      toast('Ruang duel dibatalkan.');
+      await loadLobby();
+      if (activeView() === 'socialPage') renderLobby(false);
+    });
     if ('socTab' in ds) { S.hubTab = ds.socTab; if (S.hubTab === 'status') S.feed = null; return renderHub(); }
     if ('socHub' in ds) return openHub(ds.socHub);
     if ('socRefreshLobby' in ds) return guard(() => renderLobby(true));
@@ -1116,7 +1313,8 @@
       const D = S.D, act = D?.status === 'active';
       if (act && !(await clinedConfirm({ title: 'Menyerah dari duel?', lines: ['Kamu dianggap **kalah** dan lawan langsung menang.'], ok: 'Menyerah', cancel: 'Lanjut main', tone: 'danger' }))) return;
       await api(`/api/duels/${encodeURIComponent(D.id)}/leave`, { method: 'POST', body: {} });
-      S.D = null; stopTick(); openLobby();
+      S.mine = S.mine.filter(x => x.id !== D.id);
+      S.D = null; stopTick(); syncWaitingFloat(); openLobby();
     });
     if ('socRematch' in ds) return guard(async () => {
       const D = S.D, opp = D?.opponent;
@@ -1207,6 +1405,7 @@
     es.addEventListener('ping', () => { lastBeatAt = Date.now(); });
     es.addEventListener('friend', ev => { lastBeatAt = Date.now(); onFriend(JSON.parse(ev.data || '{}')); });
     es.addEventListener('duel', ev => { lastBeatAt = Date.now(); onDuel(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('duel_lobby', () => { lastBeatAt = Date.now(); scheduleLobbyRealtimeSync(); });
     es.addEventListener('status', ev => { lastBeatAt = Date.now(); onStatus(JSON.parse(ev.data || '{}')); });
     es.addEventListener('chat', ev => { lastBeatAt = Date.now(); window.CLINED_CHAT?.onPush(JSON.parse(ev.data || '{}')); });
     es.addEventListener('announcement', ev => { lastBeatAt = Date.now(); window.CLINED_ANNOUNCEMENT?.onPush?.(JSON.parse(ev.data || '{}')); });
@@ -1220,11 +1419,25 @@
     };
   }
 
+  let lobbySyncTimer = null;
+  function scheduleLobbyRealtimeSync() {
+    clearTimeout(lobbySyncTimer);
+    lobbySyncTimer = setTimeout(() => {
+      lobbySyncTimer = null;
+      if (!loggedIn()) return;
+      refreshSocialViews();
+    }, 180);
+  }
+
   function refreshSocialViews() {
     lastLobbyPoll = Date.now();
     loadLobby().then(() => {
-      if (activeView() === 'socialPage') renderLobby(false);
-      else if (activeView() === 'hubPage' && S.hubTab === 'teman') renderHub(false);
+      if (activeView() === 'socialPage') {
+        const typingCode = document.activeElement?.matches?.('[data-soc-code]');
+        if (!typingCode) renderLobby(false);
+      } else if (activeView() === 'hubPage' && S.hubTab === 'teman') {
+        renderHub(false);
+      }
     }).catch(() => {});
   }
 
@@ -1263,8 +1476,16 @@
       };
     }
     if (m.kind === 'invite') toast(`⚔️ ${n} menantangmu duel!`);
-    else if (m.kind === 'joined' && !here) toast(`⚔️ ${n} bergabung ke duelmu!`);
+    else if (m.kind === 'joined' && !here) {
+      toast(`⚔️ ${n} bergabung ke duelmu! Bersiap bertarung!`);
+      showDuelMatchedModal(m);
+    }
     else if (m.kind === 'declined') toast(`${n} menolak tantanganmu`);
+    else if (m.kind === 'cancelled' && !here) {
+      S.mine = S.mine.filter(x => x.id !== m.id);
+      if (S.D?.id === m.id) S.D = null;
+      syncWaitingFloat();
+    }
     else if (m.kind === 'finished' && !here) toast('🏁 Duel selesai, lihat hasilnya di menu Duel');
     if (here) refreshDuel();
     loadLobby().then(() => { if (activeView() === 'socialPage') renderLobby(false); }).catch(() => {});
@@ -1275,6 +1496,7 @@
     ensureShell();
     if (!loggedIn()) {
       if (es) closeStream(true);
+      syncWaitingFloat();
       return;
     }
     const now = Date.now();
@@ -1313,8 +1535,9 @@
   ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(ev =>
     window.addEventListener(ev, markActive, { passive: true, capture: true })
   );
+  window.addEventListener('clined:view-change', () => { syncWaitingFloat(); });
   window.addEventListener('clined:auth-ready', () => { lastInteract = Date.now(); isIdle = false; reconnectStream(); });
-  window.addEventListener('clined:auth-logout', () => { closeStream(true); });
+  window.addEventListener('clined:auth-logout', () => { S.mine = []; S.D = null; syncWaitingFloat(); $('duelMatchedLayer')?.remove(); closeStream(true); });
   window.addEventListener('offline', () => { closeStream(false); });
   window.addEventListener('online', () => { lastInteract = Date.now(); isIdle = false; reconnectStream(); if (activeView() === 'duelPage' && S.D) refreshDuel(); });
   window.addEventListener('pagehide', () => { closeStream(true); });
