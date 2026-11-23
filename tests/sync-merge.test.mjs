@@ -87,3 +87,57 @@ test('mergeJsonKey merges clined_xp_daily_refs_v1 v2 XP upgrades and v1 legacy e
   assert.equal(lv.refs['quiz|q1'], 9999);
   assert.equal(lv.refs['quiz|q2'], 20);
 });
+
+test('mergeJsonKey merges Latihan Materi flags, best scores, last results, and resume tombstones across devices', () => {
+  const flags = mergeJsonKey(
+    'clined_materi_flags_v1',
+    JSON.stringify({
+      'KEDKEL|m1|q1': { block: 'KEDKEL', pk: 'm1', rid: 'q1', at: 1000 },
+      'KEDKEL|m2|q2': { deleted: true, at: 3000 },
+      'KEDKEL|m3|q3': { block: 'KEDKEL', pk: 'm3', rid: 'q3', at: 2500 },
+    }),
+    JSON.stringify({
+      'KEDKEL|m1|q1': { block: 'KEDKEL', pk: 'm1', rid: 'q1', at: 1000 },
+      'KEDKEL|m2|q2': { block: 'KEDKEL', pk: 'm2', rid: 'q2', at: 2000 },
+      'KEDKEL|m4|q4': { block: 'KEDKEL', pk: 'm4', rid: 'q4', at: 1500 },
+    })
+  );
+  assert.equal(flags.dirty, true);
+  const fVal = JSON.parse(flags.value);
+  assert.equal(fVal['KEDKEL|m1|q1'].rid, 'q1');
+  assert.equal(fVal['KEDKEL|m2|q2'].deleted, true);
+  assert.equal(fVal['KEDKEL|m3|q3'].rid, 'q3');
+  assert.equal(fVal['KEDKEL|m4|q4'].rid, 'q4');
+
+  const best = mergeJsonKey(
+    'clined_materi_best_v1',
+    JSON.stringify({
+      'KEDKEL|m1': { pct: 80, score: 12, total: 15, at: 1000 },
+      'KEDKEL|m2': { pct: 93, score: 14, total: 15, at: 2000 },
+    }),
+    JSON.stringify({
+      'KEDKEL|m1': { pct: 90, score: 13, total: 15, at: 1500 },
+      'KEDKEL|m3': { pct: 100, score: 15, total: 15, at: 2500 },
+    })
+  );
+  assert.equal(best.dirty, true);
+  const bVal = JSON.parse(best.value);
+  assert.equal(bVal['KEDKEL|m1'].pct, 90);
+  assert.equal(bVal['KEDKEL|m2'].pct, 93);
+  assert.equal(bVal['KEDKEL|m3'].pct, 100);
+
+  const resume = mergeJsonKey(
+    'clined_materi_resume_v2',
+    JSON.stringify({
+      'KEDKEL|m1': { deleted: true, updated: 5000 },
+    }),
+    JSON.stringify({
+      'KEDKEL|m1': { pos: 4, seq: [1, 2, 3], updated: 4000 },
+      'KEDKEL|m2': { pos: 2, seq: [1, 2, 3], updated: 3000 },
+    })
+  );
+  assert.equal(resume.dirty, true);
+  const rVal = JSON.parse(resume.value);
+  assert.equal(rVal['KEDKEL|m1'].deleted, true);
+  assert.equal(rVal['KEDKEL|m2'].pos, 2);
+});

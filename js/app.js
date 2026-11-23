@@ -3614,6 +3614,12 @@ async function authRestoreSession(){
 window.addEventListener('clined:sync-applied',()=>{
   try{initTheme();}catch{}
   try{renderXP();}catch{}
+  try{if(typeof renderCounts==='function')renderCounts();}catch{}
+  try{if(typeof renderDailyStreak==='function')renderDailyStreak();}catch{}
+  try{if(typeof renderDailyMission==='function')renderDailyMission();}catch{}
+  try{if(typeof syncUabStats==='function')syncUabStats();}catch{}
+  try{if(typeof renderAllVisibleBankUI==='function')renderAllVisibleBankUI();}catch{}
+  try{if(typeof renderHomeProfileCard==='function')renderHomeProfileCard();}catch{}
   try{if(typeof renderHomeClinicalDashboard==='function'&&$('home')?.classList.contains('active'))renderHomeClinicalDashboard();}catch{}
   try{if(typeof renderAchievements==='function'&&$('achievementsPage')?.classList.contains('active'))renderAchievements();}catch{}
   try{if(typeof renderWrong==='function'&&$('wrong')?.classList.contains('active'))renderWrong();}catch{}

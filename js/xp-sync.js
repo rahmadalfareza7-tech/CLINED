@@ -29,10 +29,21 @@
     busy = true;
     try {
       const batch = q.slice(0, 50);
-      const r = await fetch('/api/xp', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ events: batch }) });
+      const clientId = window.CLINED_ONLINE_SYNC?.clientId || '';
+      const r = await fetch('/api/xp', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ clientId, events: batch }) });
       if (r.ok) {
         const d = await r.json().catch(() => ({}));
         if (d?.unlocked100k?.unlocked) window.CLINED_XP_100K?.onUnlock?.(d.unlocked100k);
+        const srvXp = Math.round(Number(d?.xpAllTime) || 0);
+        if (srvXp > 0) {
+          try {
+            const locXp = Math.round(Number(JSON.parse(localStorage.getItem('gaster_v11_xp') || '0')) || 0);
+            if (srvXp > locXp) {
+              localStorage.setItem('gaster_v11_xp', String(srvXp));
+              window.renderXP?.();
+            }
+          } catch {}
+        }
         const rest = rd().slice(batch.length);
         wr(rest);
         if (rest.length) { busy = false; return flush(); }
@@ -48,12 +59,13 @@
       if (!navigator.onLine || !loggedIn()) return;
       const batch = rd().slice(0, 50);
       if (!batch.length) return;
+      const clientId = window.CLINED_ONLINE_SYNC?.clientId || '';
       fetch('/api/xp', {
         method: 'POST',
         credentials: 'same-origin',
         keepalive: true,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ events: batch })
+        body: JSON.stringify({ clientId, events: batch })
       }).catch(() => {});
     } catch {}
   }

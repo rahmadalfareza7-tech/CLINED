@@ -33,10 +33,17 @@
   /* ---------- storage ---------- */
   const packKey = p => String(p.id ?? p.title ?? '');
   const stateKey = (block, pk) => `${block}|${pk}`;
-  const allResume = () => { const r = readJSON(KEY_RESUME, {}); return r && typeof r === 'object' && !Array.isArray(r) ? r : {}; };
+  const allResumeRaw = () => { const r = readJSON(KEY_RESUME, {}); return r && typeof r === 'object' && !Array.isArray(r) ? r : {}; };
+  const allResume = () => {
+    const raw = allResumeRaw(), out = {};
+    for (const [k, v] of Object.entries(raw)) {
+      if (v && typeof v === 'object' && !v.deleted) out[k] = v;
+    }
+    return out;
+  };
   const getResume = key => allResume()[key] || null;
-  const putResume = (key, st) => { const r = allResume(); r[key] = st; writeJSON(KEY_RESUME, r); };
-  const dropResume = key => { const r = allResume(); if (key in r) { delete r[key]; writeJSON(KEY_RESUME, r); } };
+  const putResume = (key, st) => { const r = allResumeRaw(); r[key] = st; writeJSON(KEY_RESUME, r); };
+  const dropResume = key => { const r = allResumeRaw(); if (key in r && !r[key]?.deleted) { r[key] = { deleted: true, updated: Date.now() }; writeJSON(KEY_RESUME, r); } };
   const allLast = () => { const r = readJSON(KEY_LAST, {}); return r && typeof r === 'object' && !Array.isArray(r) ? r : {}; };
   const getLast = key => allLast()[key] || null;
   const putLast = (key, v) => { const r = allLast(); r[key] = v; writeJSON(KEY_LAST, r); };
@@ -44,13 +51,22 @@
   const putBest = (key, v) => { const b = readJSON(KEY_BEST, {}) || {}; b[key] = v; writeJSON(KEY_BEST, b); };
   try { localStorage.removeItem(KEY_LEGACY); localStorage.removeItem('clined_materi_packs_cache_v1'); } catch {} // format lama tidak bisa dipetakan dengan aman
 
-  const allFlags = () => { const f = readJSON(KEY_FLAGS, {}); return f && typeof f === 'object' && !Array.isArray(f) ? f : {}; };
+  const allFlagsRaw = () => { const f = readJSON(KEY_FLAGS, {}); return f && typeof f === 'object' && !Array.isArray(f) ? f : {}; };
+  const allFlags = () => {
+    const raw = allFlagsRaw(), out = {};
+    for (const [k, v] of Object.entries(raw)) {
+      if (v && typeof v === 'object' && !v.deleted) out[k] = v;
+    }
+    return out;
+  };
   const flagId = (pk, rid) => `${S.block}|${pk}|${rid}`;
   function toggleFlag(q) {
-    const f = allFlags(), id = flagId(q.pk, q.rid);
-    if (f[id]) delete f[id]; else f[id] = { block: S.block, pk: q.pk, rid: q.rid, at: Date.now() };
+    const f = allFlagsRaw(), id = flagId(q.pk, q.rid);
+    const wasOn = Boolean(f[id] && !f[id].deleted);
+    if (wasOn) f[id] = { deleted: true, at: Date.now() };
+    else f[id] = { block: S.block, pk: q.pk, rid: q.rid, at: Date.now() };
     writeJSON(KEY_FLAGS, f);
-    return !!f[id];
+    return !wasOn;
   }
   const isFlagged = q => !!allFlags()[flagId(q.pk, q.rid)];
   function recordTime(q, secs, good) {
@@ -732,6 +748,25 @@
     // reload di #materiLatihanPage tanpa konteks -> kembali ke beranda, bukan halaman kosong
     if (e.detail === 'materiLatihanPage' && !S.block) window.show?.('home');
     if (e.detail !== 'materiLatihanPage') page()?.classList.remove('ml-running');
+  });
+  window.addEventListener('clined:sync-applied', () => {
+    renderHomeResume();
+    if (!page()?.classList.contains('active')) return;
+    if (!S.run && S.packs.length) {
+      buildFlagPack();
+      renderList();
+      return;
+    }
+    if (S.run && !S.run.reviewing && !S.run.done) {
+      const q = S.run.qs?.[S.run.pos];
+      const btn = q ? body()?.querySelector('[data-ml-flag]') : null;
+      if (btn) {
+        const on = isFlagged(q);
+        btn.classList.toggle('on', on);
+        btn.setAttribute('aria-pressed', String(on));
+        btn.textContent = on ? '★' : '☆';
+      }
+    }
   });
 
   window.CLINED_LATIHAN_MATERI = {

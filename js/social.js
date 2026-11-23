@@ -2278,6 +2278,7 @@
     es.addEventListener('duel_lobby', () => { lastBeatAt = Date.now(); scheduleLobbyRealtimeSync(); });
     es.addEventListener('status', ev => { lastBeatAt = Date.now(); onStatus(JSON.parse(ev.data || '{}')); });
     es.addEventListener('chat', ev => { lastBeatAt = Date.now(); window.CLINED_CHAT?.onPush(JSON.parse(ev.data || '{}')); });
+    es.addEventListener('sync_updated', ev => { lastBeatAt = Date.now(); try { window.CLINED_ONLINE_SYNC?.onRemoteUpdate?.(JSON.parse(ev.data || '{}')); } catch {} });
     es.addEventListener('announcement', ev => { lastBeatAt = Date.now(); window.CLINED_ANNOUNCEMENT?.onPush?.(JSON.parse(ev.data || '{}')); });
     es.addEventListener('diamonds_grant', ev => { lastBeatAt = Date.now(); window.CLINED_CARDS?.onAdminGrant?.(JSON.parse(ev.data || '{}')); });
     es.addEventListener('xp_100k_unlock', ev => { lastBeatAt = Date.now(); window.CLINED_XP_100K?.onUnlock?.(JSON.parse(ev.data || '{}')); });
