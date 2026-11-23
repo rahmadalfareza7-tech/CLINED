@@ -104,3 +104,20 @@ test('personal exclusive banner luuk-helix-nameplate is restricted strictly to @
   assert.equal(explicitSave.equippedBanner, '');
   assert.ok(explicitSave.ownedBanners.includes('luuk-helix-nameplate'));
 });
+
+test('mergeCardStates allows admin to equip any valid card while restricting non-admin to owned cards', () => {
+  const existing = { cards: [{ id: 'pulmo', at: 100 }], equippedId: 'pulmo' };
+
+  // Admin can equip an unowned card (all catalog cards are unlocked for admin)
+  const adminSaved = mergeCardStates(existing, { cards: [{ id: 'pulmo', at: 100 }], equippedId: 'skull' }, 'save', { isAdmin: true });
+  assert.equal(adminSaved.equippedId, 'skull');
+
+  // Admin equipped card persists across subsequent saves without equippedId override
+  const adminKept = mergeCardStates(adminSaved, { diamonds: 0 }, 'save', { isAdmin: true });
+  assert.equal(adminKept.equippedId, 'skull');
+
+  // Regular user cannot equip an unowned card
+  const userBlocked = mergeCardStates(existing, { cards: [{ id: 'pulmo', at: 100 }], equippedId: 'skull' }, 'save', { isAdmin: false });
+  assert.equal(userBlocked.equippedId, 'pulmo');
+});
+

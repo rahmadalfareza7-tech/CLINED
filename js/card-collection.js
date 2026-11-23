@@ -225,11 +225,14 @@
       cosmeticTutorialDone: isCosmeticTutorialDone()
     };
   }
+  let saveSeq = 0;
   async function pushServerCardState(mode = 'save', useKeepalive = false) {
+    const mySeq = ++saveSeq;
     try {
       if (!navigator.onLine) return;
       const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
       if (!u || !u.id) return;
+      cardDirty = false;
       const body = JSON.stringify({ ...localCardPayload(), mode });
       const r = await fetch('/api/cards', {
         method: 'PUT',
@@ -238,27 +241,33 @@
         headers: { 'Content-Type': 'application/json' },
         body
       });
-      if (!r.ok) return;
-      cardDirty = false;
+      if (!r.ok) { cardDirty = true; return; }
       const d = await r.json().catch(() => null);
+      if (mySeq !== saveSeq || cardDirty) return;
       if (d && d.exists) applyServerCardState(d);
-    } catch {}
+    } catch { cardDirty = true; }
   }
   function scheduleServerSave() {
     if (applyingServer) return;
     cardDirty = true;
+    saveSeq++;
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => pushServerCardState('save'), 250);
   }
   function applyServerCardState(d) {
     if (!d || !d.exists) return;
     let bannerChanged = false;
+    let equipChanged = false;
+    const prevEquip = localStorage.getItem(KEY_EQUIP) || '';
     applyingServer = true;
     try {
       if (!isAdmin() && Number.isFinite(Number(d.diamonds))) localStorage.setItem(KEY_DIA, String(Math.max(0, Number(d.diamonds))));
       if (Array.isArray(d.cards)) localStorage.setItem(KEY_CARDS, JSON.stringify(d.cards));
       if (d.stars && typeof d.stars === 'object') localStorage.setItem(KEY_STARS, JSON.stringify(d.stars));
-      if (typeof d.equippedId === 'string' && d.equippedId) localStorage.setItem(KEY_EQUIP, d.equippedId);
+      if (typeof d.equippedId === 'string' && d.equippedId) {
+        if (d.equippedId !== prevEquip) equipChanged = true;
+        localStorage.setItem(KEY_EQUIP, d.equippedId);
+      }
       if (Array.isArray(d.ownedBanners)) localStorage.setItem(KEY_BANNERS, JSON.stringify(d.ownedBanners));
       if (typeof d.equippedBanner === 'string') {
         localStorage.setItem(KEY_EQ_BANNER, d.equippedBanner);
@@ -279,6 +288,7 @@
       if (d.cosmeticTutorialDone) localStorage.setItem(KEY_COSMETIC_TUT, '1');
     } finally { applyingServer = false; }
     if (bannerChanged) window.dispatchEvent(new Event('clined:profile-style'));
+    if (equipChanged) window.dispatchEvent(new CustomEvent('clined:card-equipped', { detail: getEquippedCard() }));
     onExternalSync();
   }
   let serverHydrated = false;
