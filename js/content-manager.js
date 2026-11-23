@@ -135,13 +135,14 @@
         </div>
 
         <div class="acm-panel" data-content-panel="manage" hidden>
-          <div class="admin-content-intro"><b>Kelola soal UAB</b><span>Pilih blok, cari soal, lalu edit atau hapus soal yang salah maupun duplikat.</span></div>
+          <div class="admin-content-intro"><b>Kelola semua bank soal UAB</b><span>Kelola bank soal bawaan server maupun hasil import web: ganti nama bank, pindah blok, sembunyikan/publikasikan, serta edit atau hapus soal.</span></div>
           <div class="admin-uab-manage acm-form" data-uab-manage>
             <div class="acm-grid">
               <div class="acm-field"><label>Blok soal</label><select data-uab-delete-block>${blockOptions(UAB_BLOCKS)}</select></div>
-              <div class="acm-field"><label>Cari soal / ID</label><input type="search" data-uab-search placeholder="Ketik kata kunci atau ID soal…"></div>
+              <div class="acm-field"><label>Sumber / status</label><select data-uab-source-filter><option value="all">Semua bank (Global + Import)</option><option value="global">🌐 Bank Global (Server)</option><option value="package">📥 Import Website</option><option value="hidden">🙈 Tersembunyi saja</option></select></div>
             </div>
-            <div data-uab-packages class="admin-uab-packages"><p class="muted">Memuat bank UAB…</p></div>
+            <div class="acm-field"><label>Cari nama bank / soal / ID</label><input type="search" data-uab-search placeholder="Ketik nama bank, blok, potongan soal, atau ID…"></div>
+            <div data-uab-packages class="admin-uab-packages"><p class="muted">Memuat semua bank soal UAB…</p></div>
           </div>
         </div>
 
@@ -237,80 +238,358 @@
 
       const uabPackagesHost=box.querySelector('[data-uab-packages]');
       const uabDeleteBlock=box.querySelector('[data-uab-delete-block]');
+      const uabSourceFilter=box.querySelector('[data-uab-source-filter]');
       const uabSearchInput=box.querySelector('[data-uab-search]');
       const normalizeBlock = value => {
-        const k=String(value||'').trim().toUpperCase().replace(/^BLOK\s+/,'').replace(/_/g,' ');
-        if(k==='ENDOKRIN')return 'ENDOKRINE';
+        const k=String(value||'').trim().toUpperCase().replace(/^BLOK\s+/,'').replace(/_/g,' ').replace(/\s+/g,' ');
+        if(k==='ENDO'||k==='ENDOKRIN')return 'ENDOKRINE';
         if(k==='PANCAINDRA')return 'PANCA INDRA';
-        if(k==='KEDOKTERAN KOMUNITAS')return 'KEDKOM';
+        if(k==='KEDOKTERAN KOMUNITAS'||k==='KEDOKOM')return 'KEDKOM';
         if(k==='KEDOKTERAN KELUARGA')return 'KEDKEL';
-        if(k==='GASTROINTESTINAL')return 'GIT';
+        if(k==='GASTRO'||k==='GASTROINTESTINAL')return 'GIT';
         if(k==='MUSKULO')return 'MUSKULOSKELETAL';
+        if(k==='RESPIRASI')return 'RESPIRATORY';
+        if(k==='KARDIO'||k==='KARDIOVASKULAR')return 'KARDIOLOGI';
         return k;
       };
-      const refreshUabDeleteOptions = allPackages => {
+      const syncAllBanksAfterChange = async () => {
+        try { await window.CLINED_BANKS_READY?.({ force: true }); } catch {}
+        try { await hydrateGlobalBanks(); } catch {}
+        try { await hydrateUab({ full: false, force: true }); } catch {}
+        scheduleSyncUabNodeStates();
+      };
+      const openBankMetaModal = (item, { onSaved } = {}) => {
+        document.querySelector('.acm-meta-layer')?.remove();
+        const normBlk = normalizeBlock(item.block);
+        const hasBlk = UAB_BLOCKS.some(([v]) => normalizeBlock(v) === normBlk);
+        const extraOpt = (!hasBlk && normBlk) ? `<option value="${esc(normBlk)}" selected>${esc(normBlk)}</option>` : '';
+        const blkOpts = extraOpt + UAB_BLOCKS.map(([v, label]) => `<option value="${esc(v)}"${normalizeBlock(v) === normBlk ? ' selected' : ''}>${esc(label)}</option>`).join('');
+        const isGlobal = item.kind === 'global';
+        const isMat = item.kind === 'mat';
+        const layer = document.createElement('div');
+        layer.className = 'cdlg-layer acm-meta-layer';
+        layer.innerHTML = `<div class="cdlg-card acm-meta-modal" role="dialog" aria-modal="true" aria-labelledby="acmMetaT">
+          <div class="cdlg-head"><span class="cdlg-ico" aria-hidden="true">✏️</span><h3 class="cdlg-title" id="acmMetaT">Kelola Info ${isMat ? 'Latihan Materi' : 'Bank Soal'}</h3></div>
+          <div class="cdlg-body">
+            <div class="acm-bank-badges">
+              <span class="acm-bank-badge ${isGlobal ? 'global' : 'pkg'}">${isGlobal ? '🌐 Bank Global (Server)' : isMat ? '📘 Latihan Materi' : '📥 Import Website'}</span>
+              <span class="acm-bank-badge">${esc(item.questionCount)} soal</span>
+            </div>
+            <div class="acm-field">
+              <label for="acmMetaName">Nama ${isMat ? 'Paket Materi' : 'Bank Soal'}</label>
+              <input id="acmMetaName" type="text" maxlength="160" value="${esc(item.title)}" placeholder="Masukkan nama bank soal…">
+            </div>
+            <div class="acm-field">
+              <label for="acmMetaBlock">Blok Tujuan</label>
+              <select id="acmMetaBlock">${blkOpts}</select>
+            </div>
+            <label class="acm-meta-toggle">
+              <div>
+                <b>Publikasikan ke semua mahasiswa</b>
+                <small>Matikan untuk menyembunyikan sementara tanpa menghapus soal.</small>
+              </div>
+              <input id="acmMetaPub" type="checkbox" ${item.published ? 'checked' : ''}>
+            </label>
+          </div>
+          <div class="cdlg-actions">
+            <button type="button" class="secondary" data-meta-cancel>Batal</button>
+            <button type="button" class="primary" data-meta-save>💾 Simpan Perubahan</button>
+          </div>
+        </div>`;
+        const close = () => { layer.classList.remove('show'); setTimeout(() => layer.remove(), 220); };
+        const nameInp = layer.querySelector('#acmMetaName');
+        const blockSel = layer.querySelector('#acmMetaBlock');
+        const pubChk = layer.querySelector('#acmMetaPub');
+        const saveBtn = layer.querySelector('[data-meta-save]');
+        layer.addEventListener('click', async e => {
+          if (e.target === layer || e.target.closest('[data-meta-cancel]')) return close();
+          if (!e.target.closest('[data-meta-save]')) return;
+          const nextName = String(nameInp.value || '').trim();
+          const nextBlock = String(blockSel.value || '').trim();
+          const nextPub = !!pubChk.checked;
+          if (!nextName) { if (typeof showToast === 'function') showToast('Nama bank soal tidak boleh kosong.', true); nameInp.focus(); return; }
+          saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan…';
+          try {
+            let d;
+            if (isGlobal) {
+              d = await request(`/api/admin/banks/${encodeURIComponent(item.id)}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ name: nextName, block: nextBlock, published: nextPub })
+              });
+            } else {
+              d = await request(`/api/content/packages/${encodeURIComponent(item.id)}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ title: nextName, block: nextBlock, visibility: nextPub ? 'public' : 'private' })
+              });
+            }
+            close();
+            if (typeof showToast === 'function') showToast(d.message || 'Info bank soal diperbarui ✅', false);
+            await syncAllBanksAfterChange();
+            if (onSaved) await onSaved();
+          } catch (err) {
+            saveBtn.disabled = false; saveBtn.textContent = '💾 Simpan Perubahan';
+            if (typeof showToast === 'function') showToast(err.message || 'Gagal menyimpan perubahan.', true);
+          }
+        });
+        document.body.appendChild(layer);
+        requestAnimationFrame(() => { layer.classList.add('show'); nameInp.focus(); nameInp.select(); });
+      };
+
+      const refreshUabDeleteOptions = allItems => {
         if(!uabDeleteBlock)return;
-        const current=String(uabDeleteBlock.value||'').toUpperCase();
+        const current=String(uabDeleteBlock.value||'*').toUpperCase();
         const counts=new Map();
-        (allPackages||[]).forEach(p=>{const b=normalizeBlock(p.block);if(b)counts.set(b,(counts.get(b)||0)+1);});
-        uabDeleteBlock.innerHTML=`<option value="*">Semua blok UAB</option>`+UAB_BLOCKS.map(([value,label])=>{const n=counts.get(normalizeBlock(value))||0;return `<option value="${esc(value)}">${esc(label)}${n?` • ${n} bank`:''}</option>`;}).join('');
+        (allItems||[]).forEach(p=>{const b=normalizeBlock(p.block);if(b)counts.set(b,(counts.get(b)||0)+1);});
+        uabDeleteBlock.innerHTML=`<option value="*">Semua blok UAB (${(allItems||[]).length} bank)</option>`+UAB_BLOCKS.map(([value,label])=>{const n=counts.get(normalizeBlock(value))||0;return `<option value="${esc(value)}">${esc(label)}${n?` • ${n} bank`:''}</option>`;}).join('');
         if(current==='*'||UAB_BLOCKS.some(([v])=>String(v).toUpperCase()===current))uabDeleteBlock.value=current;
       };
-      let cachedUabPackages=[];
+      let cachedUabItems=[];
+      const globalQuestionsCache=new Map();
+      const bankPageLimits=new Map();
+      const bankInlineFilter=new Map();
+
+      const renderBankQuestionsInto = (detailsEl, item) => {
+        const listHost = detailsEl.querySelector('[data-bank-qlist]');
+        if (!listHost) return;
+        const isGlobal = item.kind === 'global';
+        const allQs = isGlobal ? globalQuestionsCache.get(item.id) : item.questions;
+        if (!Array.isArray(allQs)) {
+          listHost.innerHTML = '<p class="muted" style="padding:10px">Memuat daftar soal…</p>';
+          return;
+        }
+        const globalSearch = String(uabSearchInput?.value || '').trim().toLowerCase();
+        const localSearch = String(bankInlineFilter.get(item.id) || '').trim().toLowerCase();
+        const term = localSearch || globalSearch;
+        const filtered = term ? allQs.filter(q => `${q.id || ''} ${q.soal || ''}`.toLowerCase().includes(term)) : allQs;
+        const limit = bankPageLimits.get(item.id) || 60;
+        const shown = filtered.slice(0, limit);
+        const filterBar = `<div class="acm-q-filter-bar"><input type="search" data-bank-qfilter="${esc(item.id)}" value="${esc(bankInlineFilter.get(item.id) || '')}" placeholder="Filter soal di dalam ${esc(item.title)} (${allQs.length} soal)…"></div>`;
+        const rowsHtml = shown.length ? shown.map((q, i) => `<div class="admin-uab-question-row">
+          <div><b>${i + 1}. ${esc(q.soal || 'Soal tanpa teks')}</b><small>${esc(q.id || 'ID tidak tersedia')}</small></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button type="button" class="secondary clined-compact-action" data-edit-uab-question="${esc(item.id)}" data-bank-kind="${esc(item.kind)}" data-question-id="${esc(q.id)}">✏️ Edit</button>
+            <button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-question="${esc(item.id)}" data-bank-kind="${esc(item.kind)}" data-question-id="${esc(q.id)}">Hapus</button>
+          </div>
+        </div>`).join('') : `<p class="muted" style="padding:10px">${term ? 'Tidak ada soal yang cocok di bank ini.' : 'Bank ini belum memiliki soal.'}</p>`;
+        const moreHtml = filtered.length > shown.length ? `<button type="button" class="secondary acm-q-more-btn" data-bank-qmore="${esc(item.id)}">Muat lebih banyak (${filtered.length - shown.length} soal tersisa)</button>` : '';
+        listHost.innerHTML = filterBar + rowsHtml + moreHtml;
+
+        const qf = listHost.querySelector('[data-bank-qfilter]');
+        if (qf) {
+          qf.addEventListener('input', () => {
+            bankInlineFilter.set(item.id, qf.value);
+            renderBankQuestionsInto(detailsEl, item);
+            const nextInp = detailsEl.querySelector('[data-bank-qfilter]');
+            if (nextInp) { nextInp.focus(); nextInp.setSelectionRange(nextInp.value.length, nextInp.value.length); }
+          });
+        }
+        listHost.querySelector('[data-bank-qmore]')?.addEventListener('click', () => {
+          bankPageLimits.set(item.id, limit + 100);
+          renderBankQuestionsInto(detailsEl, item);
+        });
+        listHost.querySelectorAll('[data-edit-uab-question]').forEach(btn => btn.addEventListener('click', e => {
+          e.preventDefault(); e.stopPropagation();
+          const kind = btn.dataset.bankKind;
+          const targetId = btn.dataset.editUabQuestion;
+          const qid = btn.dataset.questionId;
+          const payload = kind === 'global'
+            ? { bankId: targetId, qid, onSaved: async () => { globalQuestionsCache.delete(targetId); await syncAllBanksAfterChange(); await renderUabPackages(); } }
+            : { packageId: targetId, qid, onSaved: async () => { await syncAllBanksAfterChange(); await renderUabPackages(); } };
+          window.clinedEditQuestion?.(payload);
+        }));
+        listHost.querySelectorAll('[data-delete-uab-question]').forEach(btn => btn.addEventListener('click', async e => {
+          e.preventDefault(); e.stopPropagation();
+          const kind = btn.dataset.bankKind;
+          const targetId = btn.dataset.deleteUabQuestion;
+          const qid = btn.dataset.questionId;
+          if (!(await clinedConfirm({ title: 'Hapus soal ini?', lines: ['Soal akan dihapus permanen dari bank soal untuk semua pengguna.'], ok: 'Ya, hapus', tone: 'danger' }))) return;
+          btn.disabled = true;
+          try {
+            const url = kind === 'global'
+              ? `/api/admin/banks/${encodeURIComponent(targetId)}/questions/${encodeURIComponent(qid)}`
+              : `/api/content/packages?packageId=${encodeURIComponent(targetId)}&questionId=${encodeURIComponent(qid)}`;
+            const d = await request(url, { method: 'DELETE' });
+            if (kind === 'global') globalQuestionsCache.delete(targetId);
+            if (typeof showToast === 'function') showToast(d.message || 'Soal dihapus.', false);
+            await syncAllBanksAfterChange();
+            await renderUabPackages();
+          } catch (err) {
+            if (typeof showToast === 'function') showToast(err.message || 'Gagal menghapus soal.', true);
+            btn.disabled = false;
+          }
+        }));
+      };
+
       const renderUabPackagesList=()=>{
         if(!uabPackagesHost)return;
         const rawSelected=String(uabDeleteBlock?.value||'*');
         const selectedBlock=normalizeBlock(rawSelected);
         const showAll=rawSelected==='*';
+        const srcMode=String(uabSourceFilter?.value||'all');
         const qTerm=String(uabSearchInput?.value||'').trim().toLowerCase();
-        const packages=(showAll?cachedUabPackages:cachedUabPackages.filter(p=>normalizeBlock(p.block)===selectedBlock))
-          .map(p=>{
-            const allQs=Array.isArray(p.questions)?p.questions:[];
-            const qs=qTerm?allQs.filter(q=>`${q.id||''} ${q.soal||''}`.toLowerCase().includes(qTerm)):allQs;
-            return {...p,_allCount:allQs.length,_filteredQs:qs};
+        const items=cachedUabItems
+          .filter(p=>showAll||normalizeBlock(p.block)===selectedBlock)
+          .filter(p=>{
+            if(srcMode==='global') return p.kind==='global';
+            if(srcMode==='package') return p.kind==='package';
+            if(srcMode==='hidden') return !p.published;
+            return true;
           })
-          .filter(p=>!qTerm||p._filteredQs.length>0||String(p.title||'').toLowerCase().includes(qTerm));
-        if(!packages.length){
-          uabPackagesHost.innerHTML=`<div class="admin-uab-empty"><b>${qTerm?'Tidak ada soal UAB yang cocok dengan pencarian.':'Belum ada bank UAB di blok ini.'}</b><span>Kalau kamu baru selesai import, tekan refresh untuk memuat data terbaru.</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Refresh bank UAB</button></div>`;
+          .filter(p=>{
+            if(!qTerm) return true;
+            if(`${p.title||''} ${p.block||''} ${p.id||''}`.toLowerCase().includes(qTerm)) return true;
+            const qs = p.kind==='global' ? globalQuestionsCache.get(p.id) : p.questions;
+            if(Array.isArray(qs)) return qs.some(q=>`${q.id||''} ${q.soal||''}`.toLowerCase().includes(qTerm));
+            return false;
+          });
+        if(!items.length){
+          uabPackagesHost.innerHTML=`<div class="admin-uab-empty"><b>${qTerm?'Tidak ada bank atau soal yang cocok dengan pencarian.':'Belum ada bank soal di filter ini.'}</b><span>Ganti filter blok/sumber atau tekan refresh untuk memuat data terbaru.</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Refresh semua bank</button></div>`;
           uabPackagesHost.querySelector('[data-refresh-uab-delete]')?.addEventListener('click',renderUabPackages);
           return;
         }
-        uabPackagesHost.innerHTML=`<div class="admin-uab-result-count">${packages.length} bank ditemukan</div>`+packages.map(p=>{
-          const qs=p._filteredQs||[];
-          return `<details class="admin-uab-package"${qTerm?' open':''}><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'—')} • ${qTerm?`${qs.length}/${p._allCount}`:p._allCount} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-package="${esc(p.id)}">Hapus bank</button></summary><div class="admin-uab-question-list">${qs.length?qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id||'ID tidak tersedia')}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="secondary clined-compact-action" data-edit-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">✏️ Edit</button><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-uab-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus</button></div></div>`).join(''):`<p class="muted">Bank ini belum memiliki soal.</p>`}</div></details>`;
+        const globalN = items.filter(x => x.kind === 'global').length;
+        const pkgN = items.filter(x => x.kind === 'package').length;
+        uabPackagesHost.innerHTML=`<div class="admin-uab-result-count">${items.length} bank ditemukan (${globalN} global • ${pkgN} import web)</div>`+items.map(p=>{
+          const isGlobal = p.kind === 'global';
+          return `<details class="admin-uab-package${p.published ? '' : ' is-hidden'}" data-bank-key="${esc(p.kind)}:${esc(p.id)}">
+            <summary>
+              <span>
+                <div class="acm-bank-badges">
+                  <span class="acm-bank-badge ${isGlobal ? 'global' : 'pkg'}">${isGlobal ? '🌐 Bank Global' : '📥 Import Web'}</span>
+                  ${p.published ? '' : '<span class="acm-bank-badge hidden-flag">🙈 Tersembunyi</span>'}
+                </div>
+                <b>${esc(p.title)}</b>
+                <small>${esc(p.block||'—')} • ${p.questionCount} soal • <code>${esc(p.id)}</code></small>
+              </span>
+              <div class="acm-bank-actions">
+                <button type="button" class="acm-bank-act edit" data-edit-bank-meta="${esc(p.id)}" data-bank-kind="${esc(p.kind)}" title="Ganti nama bank, pindah blok, atau ubah status">✏️ Ubah Nama / Blok</button>
+                <button type="button" class="acm-bank-act vis${p.published ? '' : ' is-off'}" data-toggle-bank-vis="${esc(p.id)}" data-bank-kind="${esc(p.kind)}" title="${p.published ? 'Sembunyikan sementara dari mahasiswa' : 'Publikasikan kembali ke mahasiswa'}">${p.published ? '👁️ Publik' : '🙈 Sembunyi'}</button>
+                <button type="button" class="acm-bank-act danger" data-delete-uab-package="${esc(p.id)}" data-bank-kind="${esc(p.kind)}" title="Hapus permanen bank soal ini">🗑️ Hapus</button>
+              </div>
+            </summary>
+            <div class="admin-uab-question-list" data-bank-qlist><p class="muted" style="padding:10px">Klik untuk memuat soal…</p></div>
+          </details>`;
         }).join('');
-        uabPackagesHost.querySelectorAll('[data-edit-uab-question]').forEach(btn=>btn.addEventListener('click',e=>{
-          e.preventDefault();e.stopPropagation();
-          window.clinedEditQuestion?.({packageId:btn.dataset.editUabQuestion,qid:btn.dataset.questionId,onSaved:async()=>{await hydrateUab();await renderUabPackages();}});
+
+        const byKey = new Map(items.map(x => [`${x.kind}:${x.id}`, x]));
+        uabPackagesHost.querySelectorAll('details[data-bank-key]').forEach(det => {
+          const item = byKey.get(det.dataset.bankKey);
+          if (!item) return;
+          det.addEventListener('toggle', async () => {
+            if (!det.open) return;
+            if (item.kind === 'global' && !globalQuestionsCache.has(item.id)) {
+              const listHost = det.querySelector('[data-bank-qlist]');
+              if (listHost) listHost.innerHTML = '<p class="muted" style="padding:10px">Memuat soal dari server…</p>';
+              try {
+                const res = await request(`/api/admin/banks/${encodeURIComponent(item.id)}`);
+                globalQuestionsCache.set(item.id, Array.isArray(res.bank?.questions) ? res.bank.questions : []);
+              } catch (err) {
+                if (listHost) listHost.innerHTML = `<p class="muted" style="padding:10px">${esc(err.message || 'Gagal memuat soal.')}</p>`;
+                return;
+              }
+            }
+            renderBankQuestionsInto(det, item);
+          });
+        });
+
+        uabPackagesHost.querySelectorAll('[data-edit-bank-meta]').forEach(btn => btn.addEventListener('click', e => {
+          e.preventDefault(); e.stopPropagation();
+          const item = byKey.get(`${btn.dataset.bankKind}:${btn.dataset.editBankMeta}`);
+          if (item) openBankMetaModal(item, { onSaved: renderUabPackages });
         }));
-        uabPackagesHost.querySelectorAll('[data-delete-uab-question]').forEach(btn=>btn.addEventListener('click',async e=>{
-          e.preventDefault();e.stopPropagation();
-          if(!(await clinedConfirm({title:'Hapus soal UAB ini? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
-          btn.disabled=true;
-          try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabQuestion)}&questionId=${encodeURIComponent(btn.dataset.questionId)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Soal UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
-          catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus soal.',true);btn.disabled=false;}
+
+        uabPackagesHost.querySelectorAll('[data-toggle-bank-vis]').forEach(btn => btn.addEventListener('click', async e => {
+          e.preventDefault(); e.stopPropagation();
+          const item = byKey.get(`${btn.dataset.bankKind}:${btn.dataset.toggleBankVis}`);
+          if (!item) return;
+          const nextPub = !item.published;
+          btn.disabled = true;
+          try {
+            let d;
+            if (item.kind === 'global') {
+              d = await request(`/api/admin/banks/${encodeURIComponent(item.id)}`, { method: 'PATCH', body: JSON.stringify({ published: nextPub }) });
+            } else {
+              d = await request(`/api/content/packages/${encodeURIComponent(item.id)}`, { method: 'PATCH', body: JSON.stringify({ visibility: nextPub ? 'public' : 'private' }) });
+            }
+            if (typeof showToast === 'function') showToast(nextPub ? `"${item.title}" dipublikasikan 👁️` : `"${item.title}" disembunyikan 🙈`, false);
+            await syncAllBanksAfterChange();
+            await renderUabPackages();
+          } catch (err) {
+            if (typeof showToast === 'function') showToast(err.message || 'Gagal mengubah visibilitas.', true);
+            btn.disabled = false;
+          }
         }));
-        uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn=>btn.addEventListener('click',async e=>{
-          e.preventDefault();e.stopPropagation();
-          if(!(await clinedConfirm({title:'Hapus seluruh bank UAB beserta semua soalnya? Tindakan ini tidak dapat dibatalkan.',ok:'Ya, lanjut',tone:'danger'})))return;
-          btn.disabled=true;
-          try{const d=await request(`/api/content/packages?packageId=${encodeURIComponent(btn.dataset.deleteUabPackage)}`,{method:'DELETE'});if(typeof showToast==='function')showToast(d.message||'Bank UAB dihapus.',false);await hydrateUab();await renderUabPackages();}
-          catch(e){if(typeof showToast==='function')showToast(e.message||'Gagal menghapus bank.',true);btn.disabled=false;}
+
+        uabPackagesHost.querySelectorAll('[data-delete-uab-package]').forEach(btn => btn.addEventListener('click', async e => {
+          e.preventDefault(); e.stopPropagation();
+          const kind = btn.dataset.bankKind;
+          const id = btn.dataset.deleteUabPackage;
+          const item = byKey.get(`${kind}:${id}`);
+          const label = item?.title || id;
+          if (!(await clinedConfirm({
+            title: `Hapus bank "${label}"?`,
+            lines: [kind === 'global' ? 'Bank global beserta seluruh soalnya akan dihapus permanen dari server.' : 'Seluruh paket import beserta semua soalnya akan dihapus permanen.'],
+            ok: 'Ya, hapus bank',
+            tone: 'danger'
+          }))) return;
+          btn.disabled = true;
+          try {
+            const url = kind === 'global'
+              ? `/api/admin/banks/${encodeURIComponent(id)}`
+              : `/api/content/packages?packageId=${encodeURIComponent(id)}`;
+            const d = await request(url, { method: 'DELETE' });
+            if (kind === 'global') globalQuestionsCache.delete(id);
+            if (typeof showToast === 'function') showToast(d.message || 'Bank soal dihapus.', false);
+            await syncAllBanksAfterChange();
+            await renderUabPackages();
+          } catch (err) {
+            if (typeof showToast === 'function') showToast(err.message || 'Gagal menghapus bank.', true);
+            btn.disabled = false;
+          }
         }));
       };
       const renderUabPackages=async()=>{
         if(!uabPackagesHost)return;
         try{
-          const d=await request('/api/content/packages?module=UAB');
-          cachedUabPackages=Array.isArray(d.packages)?d.packages:[];
-          refreshUabDeleteOptions(cachedUabPackages);
+          const [globalRes, pkgRes] = await Promise.all([
+            request('/api/admin/banks?meta=1').catch(() => ({ banks: [] })),
+            request('/api/content/packages?module=UAB&includeHidden=1').catch(() => ({ packages: [] }))
+          ]);
+          const globals = (globalRes.banks || []).map(b => ({
+            kind: 'global',
+            id: String(b.id),
+            title: String(b.name || b.id),
+            block: String(b.block || 'OTHER'),
+            published: b.published !== false,
+            questionCount: Number(b.question_count || 0),
+            updatedAt: b.updated_at
+          }));
+          const pkgs = (pkgRes.packages || []).map(p => {
+            const qs = Array.isArray(p.questions) ? p.questions : [];
+            return {
+              kind: 'package',
+              id: String(p.id),
+              title: String(p.title || p.id),
+              block: String(p.block || 'OTHER'),
+              published: p.visibility === 'public',
+              questionCount: qs.length,
+              questions: qs,
+              updatedAt: p.updated_at
+            };
+          });
+          cachedUabItems = [...globals, ...pkgs].sort((a, b) =>
+            normalizeBlock(a.block).localeCompare(normalizeBlock(b.block), 'id') ||
+            a.title.localeCompare(b.title, 'id')
+          );
+          refreshUabDeleteOptions(cachedUabItems);
           renderUabPackagesList();
         }catch(e){
-          uabPackagesHost.innerHTML=`<div class="admin-uab-empty is-error"><b>Gagal memuat bank UAB.</b><span>${esc(e.message||'Terjadi kesalahan.')}</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Coba lagi</button></div>`;
+          uabPackagesHost.innerHTML=`<div class="admin-uab-empty is-error"><b>Gagal memuat daftar bank soal.</b><span>${esc(e.message||'Terjadi kesalahan.')}</span><button type="button" class="account-action" data-refresh-uab-delete>↻ Coba lagi</button></div>`;
           uabPackagesHost.querySelector('[data-refresh-uab-delete]')?.addEventListener('click',renderUabPackages);
         }
       };
       uabDeleteBlock?.addEventListener('change',renderUabPackagesList);
+      uabSourceFilter?.addEventListener('change',renderUabPackagesList);
       uabSearchInput?.addEventListener('input',renderUabPackagesList);
       renderUabPackages();
 
@@ -333,12 +612,34 @@
       const latihanForm=box.querySelector('[data-admin-latihan-form]'),latihanMeta=box.querySelector('[data-latihan-file-meta]'),latihanList=box.querySelector('[data-latihan-list]'),latihanFilter=box.querySelector('[data-latihan-filter]');
       const renderLatihanList=async()=>{
         try{
-          const d=await request('/api/content/packages?module=MAT');
+          const d=await request('/api/content/packages?module=MAT&includeHidden=1');
           const f=latihanFilter.value; const rows=(d.packages||[]).filter(p=>f==='*'||normalizeBlock(p.block)===normalizeBlock(f));
           latihanList.innerHTML=rows.length?rows.map(p=>{
             const qs=Array.isArray(p.questions)?p.questions:[];
-            return `<details class="admin-uab-package"><summary><span><b>${esc(p.title)}</b><small>${esc(p.block||'-')} • ${qs.length} soal</small></span><button type="button" class="admin-delete-btn danger clined-compact-action" data-del-latihan="${esc(p.id)}">Hapus paket</button></summary><div class="admin-uab-question-list">${qs.length?qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id||'ID tidak tersedia')}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="secondary clined-compact-action" data-edit-mat-question="${esc(p.id)}" data-question-id="${esc(q.id)}">✏️ Edit</button><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-mat-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus</button></div></div>`).join(''):'<p class="muted">Paket ini belum memiliki soal.</p>'}</div></details>`;
+            const pub=p.visibility==='public';
+            return `<details class="admin-uab-package${pub?'':' is-hidden'}"><summary><span><div class="acm-bank-badges"><span class="acm-bank-badge pkg">📘 Latihan Materi</span>${pub?'':'<span class="acm-bank-badge hidden-flag">🙈 Tersembunyi</span>'}</div><b>${esc(p.title)}</b><small>${esc(p.block||'-')} • ${qs.length} soal</small></span><div class="acm-bank-actions"><button type="button" class="acm-bank-act edit" data-edit-latihan-meta="${esc(p.id)}">✏️ Ubah Nama / Blok</button><button type="button" class="acm-bank-act vis${pub?'':' is-off'}" data-toggle-latihan-vis="${esc(p.id)}">${pub?'👁️ Publik':'🙈 Sembunyi'}</button><button type="button" class="acm-bank-act danger" data-del-latihan="${esc(p.id)}">🗑️ Hapus</button></div></summary><div class="admin-uab-question-list">${qs.length?qs.map((q,i)=>`<div class="admin-uab-question-row"><div><b>${i+1}. ${esc(q.soal||'Soal tanpa teks')}</b><small>${esc(q.id||'ID tidak tersedia')}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="secondary clined-compact-action" data-edit-mat-question="${esc(p.id)}" data-question-id="${esc(q.id)}">✏️ Edit</button><button type="button" class="admin-delete-btn danger clined-compact-action" data-delete-mat-question="${esc(p.id)}" data-question-id="${esc(q.id)}">Hapus</button></div></div>`).join(''):'<p class="muted">Paket ini belum memiliki soal.</p>'}</div></details>`;
           }).join(''):'<p class="muted">Belum ada latihan materi.</p>';
+          const matMap = new Map(rows.map(p => [String(p.id), { kind: 'mat', id: String(p.id), title: String(p.title || p.id), block: String(p.block || 'OTHER'), published: p.visibility === 'public', questionCount: Array.isArray(p.questions) ? p.questions.length : 0 }]));
+          latihanList.querySelectorAll('[data-edit-latihan-meta]').forEach(b => b.addEventListener('click', e => {
+            e.preventDefault(); e.stopPropagation();
+            const item = matMap.get(b.dataset.editLatihanMeta);
+            if (item) openBankMetaModal(item, { onSaved: renderLatihanList });
+          }));
+          latihanList.querySelectorAll('[data-toggle-latihan-vis]').forEach(b => b.addEventListener('click', async e => {
+            e.preventDefault(); e.stopPropagation();
+            const item = matMap.get(b.dataset.toggleLatihanVis);
+            if (!item) return;
+            const nextPub = !item.published;
+            b.disabled = true;
+            try {
+              await request(`/api/content/packages/${encodeURIComponent(item.id)}`, { method: 'PATCH', body: JSON.stringify({ visibility: nextPub ? 'public' : 'private' }) });
+              if (typeof showToast === 'function') showToast(nextPub ? `"${item.title}" dipublikasikan 👁️` : `"${item.title}" disembunyikan 🙈`, false);
+              await renderLatihanList(); scheduleSyncUabNodeStates();
+            } catch (err) {
+              if (typeof showToast === 'function') showToast(err.message || 'Gagal mengubah visibilitas.', true);
+              b.disabled = false;
+            }
+          }));
           latihanList.querySelectorAll('[data-edit-mat-question]').forEach(b=>b.addEventListener('click',e=>{
             e.preventDefault();e.stopPropagation();
             window.clinedEditQuestion?.({packageId:b.dataset.editMatQuestion,qid:b.dataset.questionId,onSaved:renderLatihanList});
@@ -351,7 +652,7 @@
           latihanList.querySelectorAll('[data-del-latihan]').forEach(b=>b.addEventListener('click',async e=>{
             e.preventDefault();e.stopPropagation();
             if(!(await clinedConfirm({title:'Hapus paket latihan ini?',ok:'Ya, lanjut',tone:'danger'})))return;
-            try{await request('/api/content/packages/'+encodeURIComponent(b.dataset.delLatihan),{method:'DELETE'});message(box,'Paket latihan dihapus.');await renderLatihanList();}catch(err){message(box,err.message||'Gagal menghapus.',true);}
+            try{await request('/api/content/packages/'+encodeURIComponent(b.dataset.delLatihan),{method:'DELETE'});message(box,'Paket latihan dihapus.');await renderLatihanList();scheduleSyncUabNodeStates();}catch(err){message(box,err.message||'Gagal menghapus.',true);}
           }));
         }catch(err){latihanList.innerHTML=`<p class="muted">${esc(err.message||'Gagal memuat daftar.')}</p>`;}
       };
@@ -645,8 +946,10 @@
   };
   async function hydrateGlobalBanks(){try{
     const catalog=await request('/api/banks');
+    const liveIds=new Set();
     for(const item of catalog.banks||[]){
       const id=String(item.id);
+      liveIds.add(id);
       const block=canonicalBlockName(item.block||'OTHER');
       const serverVersion=Number(item.version||1);
       const serverCount=Number(item.count||0);
@@ -661,10 +964,24 @@
         }else{
           existing.count=Math.max(Number(existing.count||0),serverCount);
         }
-        continue;
+      } else if(window.BANKS) {
+        // Metadata only: the question payload is fetched on demand by the quiz engine.
+        window.BANKS[id]={name:String(item.name||id),count:serverCount,block,data:[],loaded:false,version:serverVersion,serverVersion,source:'server'};
       }
-      // Metadata only: the question payload is fetched on demand by the quiz engine.
-      if(window.BANKS) window.BANKS[id]={name:String(item.name||id),count:serverCount,block,data:[],loaded:false,version:serverVersion,serverVersion,source:'server'};
+      if(window.CLINED_BANK_ENGINE?.banks?.[id]){
+        window.CLINED_BANK_ENGINE.banks[id].name=String(item.name||id);
+        window.CLINED_BANK_ENGINE.banks[id].block=block;
+        window.CLINED_BANK_ENGINE.banks[id].count=window.BANKS?.[id]?.count ?? serverCount;
+      }
+    }
+    if(window.BANKS && Array.isArray(catalog.banks)){
+      for(const existingId of Object.keys(window.BANKS)){
+        if(existingId.startsWith('server-uab-') || existingId.startsWith('user-')) continue;
+        if(!liveIds.has(existingId)){
+          delete window.BANKS[existingId];
+          if(window.CLINED_BANK_ENGINE?.banks?.[existingId]) delete window.CLINED_BANK_ENGINE.banks[existingId];
+        }
+      }
     }
     refreshBankUI();
   }catch(e){console.warn('Global bank catalog unavailable',e);}}

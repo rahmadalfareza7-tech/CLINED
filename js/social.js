@@ -11,7 +11,7 @@
   const S = {
     tab: 'status', hubTab: 'chat', openC: new Set(), comments: {}, feed: null, F: null,
     mine: [], invites: [], openRooms: [], myStats: null, h2h: {}, leaderboard: [],
-    banks: [], bank: '', count: 10, sec: 30, mode: 'classic', wager: 0, isPublic: true,
+    blocks: [], block: '', count: 10, sec: 30, mode: 'classic', wager: 0, isPublic: true,
     D: null, fb: null, busy: false, tick: null, skew: 0, sentFor: -1,
     emotes: {}, oppFlash: null
   };
@@ -134,7 +134,8 @@
   try {
     const saved = JSON.parse(localStorage.getItem(PREF) || '{}');
     if (saved && typeof saved === 'object') {
-      if (saved.bank) S.bank = saved.bank;
+      if (saved.block) S.block = String(saved.block);
+      else if (typeof saved.bank === 'string' && saved.bank.startsWith('block:')) S.block = saved.bank.slice(6);
       if ([5, 10, 15].includes(Number(saved.count))) S.count = Number(saved.count);
       if ([0, 15, 30, 45, 60].includes(Number(saved.sec))) S.sec = Number(saved.sec);
       if (['classic', 'sudden_death'].includes(saved.mode)) S.mode = saved.mode;
@@ -248,14 +249,35 @@
     S.myStats = a.myStats || { wins: 0, losses: 0, draws: 0, total: 0, rp: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' }, rank: rankFromRp(0) };
     S.h2h = a.h2h || {};
     S.leaderboard = a.leaderboard || [];
+    if (Array.isArray(a.duelBlocks) && a.duelBlocks.length) {
+      S.blocks = a.duelBlocks;
+      if (!S.blocks.some(b => b.block === S.block)) S.block = S.blocks[0]?.block || '';
+    }
     dot();
   }
-  async function loadBanks() {
-    if (S.banks.length) return;
-    try { const d = await api('/api/banks'); S.banks = (d.banks || []).filter(b => Number(b.count) >= 5).sort((a, b) => String(a.name).localeCompare(String(b.name), 'id')); } catch {}
-    if (!S.banks.some(b => b.id === S.bank)) S.bank = S.banks[0]?.id || '';
+  async function loadBlocks() {
+    if (S.blocks.length) {
+      if (!S.blocks.some(b => b.block === S.block)) S.block = S.blocks[0]?.block || '';
+      return;
+    }
+    try {
+      const d = await api('/api/banks');
+      const map = new Map();
+      for (const b of (d.banks || [])) {
+        const cnt = Number(b.count) || 0;
+        if (cnt <= 0) continue;
+        const blk = String(b.block || '').trim().replace(/^BLOK\s+/i, '').toUpperCase();
+        if (!blk || blk === 'OTHER') continue;
+        const cur = map.get(blk) || { block: blk, label: `BLOK ${blk}`, bankCount: 0, questionCount: 0 };
+        cur.bankCount += 1;
+        cur.questionCount += cnt;
+        map.set(blk, cur);
+      }
+      S.blocks = [...map.values()].filter(x => x.questionCount >= 5).sort((a, b) => a.block.localeCompare(b.block, 'id'));
+    } catch {}
+    if (!S.blocks.some(b => b.block === S.block)) S.block = S.blocks[0]?.block || '';
   }
-  const savePref = () => { try { localStorage.setItem(PREF, JSON.stringify({ bank: S.bank, count: S.count, sec: S.sec, mode: S.mode, wager: S.wager, isPublic: S.isPublic })); } catch {} };
+  const savePref = () => { try { localStorage.setItem(PREF, JSON.stringify({ block: S.block, count: S.count, sec: S.sec, mode: S.mode, wager: S.wager, isPublic: S.isPublic })); } catch {} };
 
   /* ───────── LOBI & ARENA VISUAL ───────── */
   const initials = n => esc(String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase());
@@ -323,8 +345,9 @@
     const F = S.F || { friends: [], incoming: [], outgoing: [], blocked: [] };
     const st = S.myStats || { wins: 0, losses: 0, draws: 0, total: 0, rp: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' } };
     const rk = getRank(st.rank || { rp: st.rp || 0 });
-    const bankOpts = S.banks.map(b => `<option value="${esc(b.id)}"${b.id === S.bank ? ' selected' : ''}>${esc(b.name)} (${b.count} soal)</option>`).join('');
-    const curBankName = S.banks.find(b => b.id === S.bank)?.name || 'Bank Soal Pilihan';
+    const blockOpts = S.blocks.map(b => `<option value="${esc(b.block)}"${b.block === S.block ? ' selected' : ''}>${esc(b.label || `BLOK ${b.block}`)} (${b.bankCount} bank • ${b.questionCount} soal acak)</option>`).join('');
+    const curBlockObj = S.blocks.find(b => b.block === S.block);
+    const curBankName = curBlockObj ? `${curBlockObj.label || `BLOK ${curBlockObj.block}`} (Acak)` : 'Pilih Blok Ujian';
 
     // 1. Arena Hero Banner + Rank Tier Emblem + RP Progress + Career Stats + Quick Match CTA
     const heroHTML = `
@@ -461,9 +484,9 @@
     // 4. Custom Duel Setup (with Mode, Wager, Visibility)
     const setupHTML = `
     <div class="card soc-card soc-setup">
-      <div class="soc-title"><span>⚙️</span><div><h3>Atur Arena Duel</h3><small class="soc-hint">Pilih bank soal, mode permainan, dan taruhan EXP</small></div></div>
-      <label class="duel-field-label" for="socBank">📚 Bank Soal Ujian</label>
-      <select id="socBank" data-soc-bank aria-label="Bank soal">${bankOpts || '<option value="">Memuat…</option>'}</select>
+      <div class="soc-title"><span>⚙️</span><div><h3>Atur Arena Duel</h3><small class="soc-hint">Pilih BLOK (soal acak dari semua bank di blok tersebut), mode, dan taruhan EXP</small></div></div>
+      <label class="duel-field-label" for="socBlock">📚 Pilih BLOK Ujian (Acak Semua Bank)</label>
+      <select id="socBlock" data-soc-block aria-label="Pilih blok ujian">${blockOpts || '<option value="">Memuat daftar blok…</option>'}</select>
 
       <div class="duel-field-label">🎮 Mode Pertarungan</div>
       <div class="duel-mode-grid" role="radiogroup" aria-label="Mode duel">
@@ -663,7 +686,7 @@
   async function renderLobby(reload = true) {
     ensureShell();
     const body = $('socialBody'); if (!body) return;
-    if (reload) { if (!S.F) { body.dataset.lastHtml = ''; body.innerHTML = '<p class="soc-empty">Memuat Arena Duel…</p>'; } try { await Promise.all([loadLobby(), loadBanks()]); } catch (e) { body.dataset.lastHtml = ''; body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; } }
+    if (reload) { if (!S.F) { body.dataset.lastHtml = ''; body.innerHTML = '<p class="soc-empty">Memuat Arena Duel…</p>'; } try { await loadLobby(); await loadBlocks(); } catch (e) { body.dataset.lastHtml = ''; body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; } }
     const nextHtml = lobbyHTML().duel;
     if (body.dataset.lastHtml === nextHtml) return;
     const keep = { code: $('socCode')?.value };
@@ -969,12 +992,14 @@
   /* ───────── aksi ───────── */
   const guard = async fn => { if (S.busy) return; S.busy = true; try { await fn(); } catch (e) { toast(e.message || 'Terjadi kesalahan.', true); } finally { S.busy = false; } };
   async function createDuel(friendId) {
-    if (!S.bank) return toast('Pilih bank soal dulu.', true);
+    if (!S.block && S.blocks.length) S.block = S.blocks[0].block;
+    if (!S.block) return toast('Pilih blok ujian dulu.', true);
     const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
     const d = await api('/api/duels', {
       method: 'POST',
       body: {
-        bankId: S.bank,
+        block: S.block,
+        bankId: `block:${S.block}`,
         count: S.count,
         seconds: S.sec,
         mode: S.mode,
@@ -988,12 +1013,12 @@
     if (friendId) toast('Tantangan terkirim ⚔️');
   }
   async function quickMatch() {
-    if (!S.bank && S.banks.length) S.bank = S.banks[0].id;
-    if (!S.bank) return toast('Pilih bank soal dulu.', true);
+    if (!S.block && S.blocks.length) S.block = S.blocks[0].block;
+    if (!S.block) return toast('Pilih blok ujian dulu.', true);
     const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
     const d = await api('/api/duels/quick', {
       method: 'POST',
-      body: { bankId: S.bank, count: S.count, seconds: S.sec, mode: S.mode, wager: S.wager, ...(card ? { card } : {}) }
+      body: { block: S.block, bankId: `block:${S.block}`, count: S.count, seconds: S.sec, mode: S.mode, wager: S.wager, ...(card ? { card } : {}) }
     });
     syncD(d.duel); S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
     toast(d.matched ? '⚡ Lawan ditemukan! Bersiap bertarung!' : '🌐 Ruang publik dibuat! Menunggu lawan masuk…');
@@ -1095,7 +1120,8 @@
     });
     if ('socRematch' in ds) return guard(async () => {
       const D = S.D, opp = D?.opponent;
-      S.bank = D.bank.id; S.count = D.total; S.sec = (D.perQ || 0) / 1000;
+      if (typeof D?.bank?.id === 'string' && D.bank.id.startsWith('block:')) S.block = D.bank.id.slice(6);
+      S.count = D.total; S.sec = (D.perQ || 0) / 1000;
       if (D.mode) S.mode = D.mode;
       if (D.wager != null) S.wager = D.wager;
       const friend = opp && S.F?.friends?.some(f => f.id === opp.id);
@@ -1117,7 +1143,7 @@
       await api('/api/friends/block', { method: 'POST', body: { userId: ds.socBlock } }); await refreshActive();
     });
   });
-  document.addEventListener('change', e => { if (e.target.matches('[data-soc-bank]')) { S.bank = e.target.value; savePref(); renderLobby(false); } });
+  document.addEventListener('change', e => { if (e.target.matches('[data-soc-block]')) { S.block = e.target.value; savePref(); renderLobby(false); } });
   document.addEventListener('input', e => { if (e.target.matches('[data-soc-code]')) e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); });
   document.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeCode, normalizeCode, pickQuestions, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
+import { makeCode, normalizeCode, pickQuestions, pickQuestionsAcrossBanks, canonicalDuelBlock, duelBlockLabel, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
 import { push, broadcast, isOnline, onlineStats, openStream, connectionCount, setPresence, dropSession, dropUser, dropConn, heartbeat, HIDDEN_GRACE_MS } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
@@ -218,6 +218,61 @@ test('cleanShowcaseCard & Kartu Andalan pada duelMeta dan viewFor', () => {
   assert.deepEqual(vG.me.card, { id: 'cerebrum', star: 5 });
   assert.deepEqual(vG.opponent.card, { id: 'cor', star: 4 });
 });
+
+test('canonicalDuelBlock & duelBlockLabel menormalkan alias blok dengan konsisten', () => {
+  assert.equal(canonicalDuelBlock('block:kedkel'), 'KEDKEL');
+  assert.equal(canonicalDuelBlock('BLOK Kedokteran Keluarga'), 'KEDKEL');
+  assert.equal(canonicalDuelBlock('Endokrin'), 'ENDOKRINE');
+  assert.equal(canonicalDuelBlock('PancaIndra'), 'PANCA INDRA');
+  assert.equal(canonicalDuelBlock('Gastrointestinal'), 'GIT');
+  assert.equal(canonicalDuelBlock('Kedokteran_Komunitas'), 'KEDKOM');
+  assert.equal(duelBlockLabel('ginjal'), 'BLOK GINJAL');
+  assert.equal(duelBlockLabel('block:kardio'), 'BLOK KARDIOLOGI');
+});
+
+test('pickQuestionsAcrossBanks mengambil soal acak merata dari setiap bank, bebas duplikat, & menyaring soal rusak', () => {
+  const mkBank = (prefix, count) => Array.from({ length: count }, (_, i) => ({
+    id: `q${i}`, // ID sengaja sama antar-bank untuk uji disambiguasi ID
+    soal: `${prefix} pertanyaan nomor ${i}`,
+    opsi: ['A', 'B', 'C', 'D'],
+    jawabanBenar: i % 4,
+    pembahasan: `Pembahasan ${prefix} ${i}`
+  }));
+  const bankA = mkBank('BANK_A', 50);
+  const bankB = mkBank('BANK_B', 3);
+  const bankC = [
+    ...mkBank('BANK_C', 4),
+    // Soal rusak harus disaring
+    { id: 'bad', soal: 'rusak', opsi: ['A'], jawabanBenar: 0 }
+  ];
+
+  const picked = pickQuestionsAcrossBanks([bankA, bankB, bankC], 9, seeded());
+  assert.equal(picked.length, 9);
+  assert.ok(picked.every(validQuestion));
+
+  // Pastikan setiap bank berkontribusi merata (round-robin 3 bank -> 3 soal per bank)
+  const fromA = picked.filter(q => q.soal.startsWith('BANK_A')).length;
+  const fromB = picked.filter(q => q.soal.startsWith('BANK_B')).length;
+  const fromC = picked.filter(q => q.soal.startsWith('BANK_C')).length;
+  assert.equal(fromA, 3);
+  assert.equal(fromB, 3);
+  assert.equal(fromC, 3);
+
+  // Semua teks soal dan ID soal unik
+  assert.equal(new Set(picked.map(q => q.soal)).size, 9);
+  assert.equal(new Set(picked.map(q => q.id)).size, 9);
+
+  // Uji deduplikasi soal kembar antar-bank (2 bank berisi teks soal identik)
+  const dupPool = pickQuestionsAcrossBanks([mkBank('SAMA', 5), mkBank('SAMA', 5)], 10, seeded());
+  assert.equal(dupPool.length, 5);
+  assert.equal(new Set(dupPool.map(q => q.soal)).size, 5);
+
+  // Pool kosong / lebih kecil dari target
+  assert.deepEqual(pickQuestionsAcrossBanks([], 10), []);
+  const small = pickQuestionsAcrossBanks([mkBank('ONLY', 4)], 10, seeded());
+  assert.equal(small.length, 4);
+});
+
 
 
 

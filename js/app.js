@@ -255,8 +255,10 @@ async function loadServerBanks(options={}){
       serverBanksLoadedOk=false;
       console.warn('Server bank catalog unavailable; using static banks.',e);
     }
+    const liveGlobalIds=new Set();
     for(const b of (meta.banks||[])){
       const id=String(b.id);
+      liveGlobalIds.add(id);
       const block=canonicalBlockName(b.block||BANKS[id]?.block||'OTHER');
       const serverVersion=Number(b.version||1);
       const serverCount=Number(b.count||0);
@@ -273,6 +275,21 @@ async function loadServerBanks(options={}){
         }
       }
       if(!BANKS[id].staticUrl) BANKS[id].source='server';
+      if(window.CLINED_BANK_ENGINE?.banks?.[id]){
+        window.CLINED_BANK_ENGINE.banks[id].name=BANKS[id].name;
+        window.CLINED_BANK_ENGINE.banks[id].block=block;
+        window.CLINED_BANK_ENGINE.banks[id].count=BANKS[id].count;
+      }
+    }
+    if(serverBanksLoadedOk){
+      for(const existingId of Object.keys(BANKS)){
+        if(existingId.startsWith('server-uab-') || existingId.startsWith('user-')) continue;
+        if(!liveGlobalIds.has(existingId)){
+          delete BANKS[existingId];
+          if(window.CLINED_BANK_ENGINE?.banks?.[existingId]) delete window.CLINED_BANK_ENGINE.banks[existingId];
+        }
+      }
+      if(selectedBank && !BANKS[selectedBank]) selectedBank=Object.keys(BANKS)[0]||'';
     }
     if(typeof window.CLINED_HYDRATE_UAB==='function' && typeof authCurrentUser==='function' && authCurrentUser()){
       try{await window.CLINED_HYDRATE_UAB({full:false,force});}catch{}

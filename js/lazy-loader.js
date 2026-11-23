@@ -153,7 +153,7 @@
     'css/chat.css?v=2',
     'css/qcomments.css?v=2',
     'css/insights.css?v=7',
-    'css/content-ergonomic.css?v=8'
+    'css/content-ergonomic.css?v=9'
   ];
 
   function boot() {

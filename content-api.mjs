@@ -12,6 +12,7 @@ export async function contentApi({ request, response, url, user, pool, body, jso
   if (request.method === 'GET' && path === '/packages') {
     const module = url.searchParams.get('module');
     const metaOnly = url.searchParams.get('meta') === '1';
+    const includeHidden = url.searchParams.get('includeHidden') === '1' && ['admin', 'helper'].includes(user.role);
     if (module && !['UAB', 'UPI', 'MAT'].includes(module)) return fail(response, 400, 'Modul tidak valid.');
     if (metaOnly) {
       // Node-state/catalog checks must never download the full question payload.
@@ -20,14 +21,62 @@ export async function contentApi({ request, response, url, user, pool, body, jso
         jsonb_array_length(CASE WHEN jsonb_typeof(questions)='array' THEN questions ELSE '[]'::jsonb END) AS question_count,
         schema_version,published_at,updated_at
         FROM content_packages
-        WHERE (visibility = 'public' OR owner_user_id = $1) AND ($2::text IS NULL OR module = $2)
-        ORDER BY visibility DESC, updated_at DESC`, [user.id, module]);
+        WHERE ($3::boolean = true OR visibility = 'public' OR owner_user_id = $1) AND ($2::text IS NULL OR module = $2)
+        ORDER BY visibility DESC, updated_at DESC`, [user.id, module, includeHidden]);
       return json(response, 200, { packages: result.rows });
     }
     const result = await pool.query(`SELECT id,module,title,block,visibility,questions,schema_version,published_at,updated_at
-      FROM content_packages WHERE (visibility = 'public' OR owner_user_id = $1) AND ($2::text IS NULL OR module = $2)
-      ORDER BY visibility DESC, updated_at DESC`, [user.id, module]);
+      FROM content_packages WHERE ($3::boolean = true OR visibility = 'public' OR owner_user_id = $1) AND ($2::text IS NULL OR module = $2)
+      ORDER BY visibility DESC, updated_at DESC`, [user.id, module, includeHidden]);
     return json(response, 200, { packages: result.rows });
+  }
+  // Admin/helper dapat mengubah metadata paket (ganti nama, pindah blok, publik/sembunyikan).
+  const pkgMetaMatch = path.match(/^\/packages\/([^/]+)$/);
+  if (pkgMetaMatch && request.method === 'PATCH') {
+    origin(request);
+    if (!['admin', 'helper'].includes(user.role)) return fail(response, 403, 'Hanya admin/helper yang dapat mengubah metadata paket.');
+    const packageId = decodeURIComponent(pkgMetaMatch[1]);
+    if (!/^[0-9a-f-]{36}$/i.test(packageId)) return fail(response, 400, 'Paket tidak valid.');
+    const curRes = await pool.query(`SELECT id,module,title,block,visibility FROM content_packages WHERE id=$1 AND module IN ('UAB','MAT')`, [packageId]);
+    if (!curRes.rows.length) return fail(response, 404, 'Paket soal tidak ditemukan.');
+    const cur = curRes.rows[0];
+    const input = await body(request, 20_000);
+    const hasTitle = Object.prototype.hasOwnProperty.call(input, 'title') || Object.prototype.hasOwnProperty.call(input, 'name');
+    const hasBlock = Object.prototype.hasOwnProperty.call(input, 'block');
+    const hasVisibility = Object.prototype.hasOwnProperty.call(input, 'visibility') || Object.prototype.hasOwnProperty.call(input, 'published');
+    if (!hasTitle && !hasBlock && !hasVisibility) return fail(response, 400, 'Tidak ada perubahan yang dikirim.');
+
+    let nextTitle = cur.title;
+    if (hasTitle) {
+      nextTitle = String(input.title ?? input.name ?? '').trim();
+      if (!nextTitle || nextTitle.length > 160) return fail(response, 400, 'Nama bank/paket harus 1–160 karakter.');
+    }
+    let nextBlock = cur.block;
+    if (hasBlock) {
+      nextBlock = String(input.block || '').trim().toUpperCase().slice(0, 80);
+      if (!nextBlock) return fail(response, 400, 'Blok tujuan tidak valid.');
+    }
+    let nextVisibility = cur.visibility;
+    if (hasVisibility) {
+      if (typeof input.published === 'boolean') nextVisibility = input.published ? 'public' : 'private';
+      else {
+        const v = String(input.visibility || '').trim().toLowerCase();
+        if (!['public', 'private'].includes(v)) return fail(response, 400, 'Visibilitas harus public atau private.');
+        nextVisibility = v;
+      }
+    }
+    const upd = await pool.query(
+      `UPDATE content_packages SET title=$1, block=$2, visibility=$3::text,
+        published_at=CASE WHEN $3::text='public' AND published_at IS NULL THEN now() ELSE published_at END,
+        updated_at=now()
+       WHERE id=$4 AND module IN ('UAB','MAT')
+       RETURNING id,module,title,block,visibility,jsonb_array_length(CASE WHEN jsonb_typeof(questions)='array' THEN questions ELSE '[]'::jsonb END) AS question_count,updated_at`,
+      [nextTitle, nextBlock, nextVisibility, packageId]
+    );
+    await pool.query('INSERT INTO activity_logs (id,user_id,action,metadata) VALUES ($1,$2,$3,$4::jsonb)', [
+      randomUUID(), user.id, 'package_updated', JSON.stringify({ packageId, module: cur.module, title: nextTitle, block: nextBlock, visibility: nextVisibility })
+    ]).catch(() => {});
+    return json(response, 200, { ok: true, package: upd.rows[0], message: `Paket "${nextTitle}" berhasil diperbarui.` });
   }
   // Edit jawaban & pembahasan satu soal paket (UAB / Latihan Materi). Admin/helper.
   const editMatch = path.match(/^\/packages\/([^/]+)\/questions\/([^/]+)$/);
