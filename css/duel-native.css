@@ -1821,3 +1821,641 @@ html body #duelPage .duel-stand-stat small {
   font-weight: 800;
   color: var(--sky-text);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   11. REVISI 100 PEMAIN, PILIH BANK SOAL, HADIAH DIAMOND, ADMIN INSPECT & PRIVASI
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Kapasitas 2–100 Orang (Preset + Input Angka Bebas) */
+html body #socialPage .duel-cap-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+html body #socialPage .duel-cap-input-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-bottom-width: 3px;
+  min-height: 44px;
+}
+
+html body #socialPage .duel-cap-input {
+  width: 52px;
+  min-height: 36px;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  padding: 0 !important;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+
+html body #socialPage .duel-cap-input-wrap span {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+/* Multi-Bank Random Pick Selector */
+html body #socialPage .duel-bank-picker {
+  display: grid;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+html body #socialPage .duel-bank-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 2px dashed var(--line);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+html body #socialPage .duel-bank-toggle em {
+  font-style: normal;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+html body #socialPage .duel-bank-toggle i {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--muted);
+  flex: none;
+}
+
+html body #socialPage .duel-bank-picker.open .duel-bank-toggle {
+  border-style: solid;
+  border-color: var(--sky);
+  background: var(--sky-soft);
+}
+
+html body #socialPage .duel-bank-panel {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 15px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+}
+
+html body #socialPage .duel-bank-tools {
+  display: grid;
+  gap: 7px;
+}
+
+html body #socialPage .duel-bank-search {
+  width: 100%;
+  min-height: 38px;
+  padding: 7px 11px;
+  border-radius: 11px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+html body #socialPage .duel-bank-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+html body #socialPage .duel-bank-btns .duel-mini-btn.on {
+  background: var(--sky-soft) !important;
+  border-color: var(--sky) !important;
+  color: var(--sky-text) !important;
+}
+
+html body #socialPage .duel-bank-list {
+  display: grid;
+  gap: 5px;
+  max-height: 210px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+html body #socialPage .duel-bank-opt {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 11px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  cursor: pointer;
+}
+
+html body #socialPage .duel-bank-opt.checked {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+html body #socialPage .duel-bank-opt input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand);
+  margin: 0;
+}
+
+html body #socialPage .duel-bank-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html body #socialPage .duel-bank-blk {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 99px;
+  background: var(--sky-soft);
+  color: var(--sky-text);
+  margin-left: 4px;
+}
+
+html body #socialPage .duel-bank-opt small {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Custom Hadiah Diamond (Admin-Only) */
+html body #socialPage .duel-prize-box {
+  display: grid;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--sky-soft), var(--warn-soft));
+  border: 2px solid var(--sky);
+}
+
+html body #socialPage .duel-prize-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+html body #socialPage .duel-prize-head em {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--sky-text);
+}
+
+html body #socialPage .duel-prize-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+html body #socialPage .duel-prize-field {
+  display: grid;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+}
+
+html body #socialPage .duel-prize-field span {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+html body #socialPage .duel-prize-field input {
+  width: 100%;
+  min-height: 32px;
+  border: 1.5px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 900;
+  padding: 4px 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+html body #socialPage .duel-prize-hint {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+html body #socialPage .duel-tag.prize,
+html body #duelPage .duel-tag.prize {
+  background: linear-gradient(135deg, rgba(28, 176, 246, .16), rgba(250, 204, 21, .22)) !important;
+  border-color: rgba(28, 176, 246, .45) !important;
+  color: var(--sky-text) !important;
+}
+
+html body #duelPage .duel-mp-dia {
+  font-style: normal;
+  font-weight: 900;
+  color: var(--sky-text);
+}
+
+html body #duelPage .duel-podium-dia {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: var(--sky-soft);
+  color: var(--sky-text);
+  font-size: 10.5px;
+  font-weight: 900;
+  margin-top: 2px;
+}
+
+/* Admin Live Inspect Panel di Lobi */
+html body #socialPage .duel-admin-inspect-card {
+  border-color: var(--sky) !important;
+}
+
+html body #socialPage .duel-admin-room-list {
+  display: grid;
+  gap: 8px;
+}
+
+html body #socialPage .duel-admin-room-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 15px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+}
+
+html body #socialPage .duel-admin-room-row.is-live {
+  border-color: rgba(255, 75, 75, .45);
+  background: linear-gradient(135deg, var(--surface), var(--danger-soft));
+}
+
+html body #socialPage .duel-admin-room-info {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+html body #socialPage .duel-admin-room-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+html body #socialPage .duel-admin-room-top b {
+  font-size: 13.5px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+html body #socialPage .duel-admin-room-info > small {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+html body #socialPage .duel-admin-code,
+html body #duelPage .duel-admin-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  color: var(--text);
+}
+
+html body #socialPage .duel-inspect-status,
+html body #duelPage .duel-inspect-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 99px;
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+html body #socialPage .duel-inspect-status.live,
+html body #duelPage .duel-inspect-status.live {
+  background: var(--danger-soft);
+  color: var(--danger-text);
+  border: 1.5px solid rgba(255, 75, 75, .45);
+}
+
+html body #socialPage .duel-inspect-status.wait,
+html body #duelPage .duel-inspect-status.wait {
+  background: var(--warn-soft);
+  color: var(--warn-text);
+  border: 1.5px solid rgba(255, 150, 0, .45);
+}
+
+html body #duelPage .duel-inspect-status.done {
+  background: var(--brand-soft);
+  color: var(--ok-text);
+  border: 1.5px solid rgba(88, 204, 2, .45);
+}
+
+html body #socialPage .duel-inspect-btn {
+  min-height: 38px !important;
+  padding: 0 13px !important;
+  font-size: 12.5px !important;
+  white-space: nowrap;
+}
+
+/* Admin Spectator Live Inspect Page */
+html body #duelPage .duel-inspect-wrap {
+  display: grid;
+  gap: 14px;
+}
+
+html body #duelPage .duel-inspect-banner {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--sky);
+}
+
+html body #duelPage .duel-inspect-banner-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+
+html body #duelPage .duel-inspect-banner h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+html body #duelPage .duel-inspect-banner p {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-inspect-cd {
+  padding: 10px 12px;
+  border-radius: 13px;
+  background: var(--warn-soft);
+  border: 2px solid rgba(255, 150, 0, .45);
+  color: var(--warn-text);
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+}
+
+html body #duelPage .duel-inspect-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 520px) {
+  html body #duelPage .duel-inspect-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+html body #duelPage .duel-inspect-kpi {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  text-align: center;
+}
+
+html body #duelPage .duel-inspect-kpi small {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-inspect-kpi b {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-inspect-kpi b em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-inspect-kpi.ok b { color: var(--ok-text); }
+html body #duelPage .duel-inspect-kpi.play b { color: var(--sky-text); }
+html body #duelPage .duel-inspect-kpi.out b { color: var(--danger-text); }
+
+html body #duelPage .duel-inspect-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+html body #duelPage .duel-inspect-board {
+  display: grid;
+  gap: 9px;
+}
+
+html body #duelPage .duel-inspect-board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+html body #duelPage .duel-inspect-board-head b {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+html body #duelPage .duel-inspect-search {
+  min-width: 180px;
+  flex: 1 1 180px;
+  max-width: 260px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 11px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+html body #duelPage .duel-inspect-search.compact {
+  min-width: 140px;
+  max-width: 200px;
+  min-height: 32px;
+}
+
+html body #duelPage .duel-inspect-list {
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+/* Mode Privasi Top-3 & Kartu Hasil Pribadi */
+html body #duelPage .duel-privacy-note {
+  padding: 7px 10px;
+  border-radius: 11px;
+  background: var(--surface);
+  border: 1.5px dashed var(--line);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+}
+
+html body #duelPage .duel-privacy-sep {
+  margin: 4px 0 2px;
+  padding: 4px 8px;
+  border-radius: 99px;
+  background: var(--sky-soft);
+  color: var(--sky-text);
+  font-size: 10.5px;
+  font-weight: 900;
+  text-align: center;
+}
+
+html body #duelPage .duel-top3-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .07em;
+  color: var(--warn-text);
+  margin-top: 2px;
+}
+
+html body #duelPage .duel-private-card {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--sky);
+  text-align: left;
+}
+
+html body #duelPage .duel-private-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+html body #duelPage .duel-private-head em {
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 99px;
+  background: var(--sky-soft);
+  color: var(--sky-text);
+}
+
+html body #duelPage .duel-private-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+html body #duelPage .duel-private-stat {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  border-radius: 13px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+}
+
+html body #duelPage .duel-private-stat small {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-private-stat b {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+html body #duelPage .duel-private-stat b em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+html body #duelPage .duel-private-dia {
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: var(--brand-soft);
+  border: 1.5px solid rgba(88, 204, 2, .42);
+  color: var(--ok-text);
+  font-size: 12.5px;
+  font-weight: 800;
+  text-align: center;
+}
+
+html body #duelPage .duel-private-note {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  line-height: 1.45;
+}
+

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeCode, normalizeCode, pickQuestions, pickQuestionsAcrossBanks, canonicalDuelBlock, duelBlockLabel, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, clampMaxPlayers, roomCapacity, playerIds, isMultiplayer, rankPlayers, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
+import { makeCode, normalizeCode, pickQuestions, pickQuestionsAcrossBanks, canonicalDuelBlock, duelBlockLabel, gradeAnswer, playerStats, combatStats, duelMeta, cleanShowcaseCard, rankFromRp, calcMatchRpDelta, MAX_PLAYERS, clampMaxPlayers, roomCapacity, playerIds, isMultiplayer, rankPlayers, cleanPrizes, roomPrizes, prizeForRank, decide, viewFor, validQuestion, deadlineOf, questionStart, isLate, DUEL_MAX_MS, GRACE_MS, REVEAL_MS } from '../lib/duel-logic.mjs';
 import { push, broadcast, isOnline, onlineStats, openStream, connectionCount, setPresence, dropSession, dropUser, dropConn, heartbeat, HIDDEN_GRACE_MS } from '../lib/stream.mjs';
 import { EventEmitter } from 'node:events';
 
@@ -273,11 +273,24 @@ test('pickQuestionsAcrossBanks mengambil soal acak merata dari setiap bank, beba
   assert.equal(small.length, 4);
 });
 
-test('multiplayer room (2–15 orang): clampMaxPlayers, rankPlayers berdasarkan skor benar & kecepatan, decide, dan viewFor', () => {
+test('multiplayer room (2–100 orang): clampMaxPlayers, rankPlayers, hadiah diamond kustom, privasi Top 3, dan Admin Inspect', () => {
+  assert.equal(MAX_PLAYERS, 100);
   assert.equal(clampMaxPlayers(1), 2);
   assert.equal(clampMaxPlayers(10), 10);
-  assert.equal(clampMaxPlayers(99), 15);
+  assert.equal(clampMaxPlayers(100), 100);
+  assert.equal(clampMaxPlayers(250), 100);
   assert.equal(clampMaxPlayers('abc'), 2);
+
+  // Uji validasi hadiah diamond kustom (Juara 1, 2, 3, & 4+ pukul rata)
+  assert.equal(cleanPrizes({ first: 0, second: 0, third: 0, others: 0 }), null);
+  const pz = cleanPrizes({ first: 100, second: 60, third: 30, others: 10 });
+  assert.deepEqual(pz, { first: 100, second: 60, third: 30, others: 10 });
+  assert.equal(prizeForRank(pz, 1), 100);
+  assert.equal(prizeForRank(pz, 2), 60);
+  assert.equal(prizeForRank(pz, 3), 30);
+  assert.equal(prizeForRank(pz, 4), 10);
+  assert.equal(prizeForRank(pz, 87), 10);
+  assert.equal(prizeForRank(pz, 4, true), 0); // pemain forfeited tidak mendapat hadiah
 
   const mpDuel = {
     id: 'mp-1',
@@ -285,7 +298,7 @@ test('multiplayer room (2–15 orang): clampMaxPlayers, rankPlayers berdasarkan 
     hostId: 'P1',
     guestId: 'P2',
     invitedId: null,
-    maxPlayers: 10,
+    maxPlayers: 100,
     participantIds: ['P1', 'P2', 'P3', 'P4', 'P5'],
     bankId: 'block:KARDIOLOGI',
     bankName: 'BLOK KARDIOLOGI (Acak)',
@@ -294,7 +307,7 @@ test('multiplayer room (2–15 orang): clampMaxPlayers, rankPlayers berdasarkan 
     perQ: 0,
     startedAt: 10_000,
     answers: {
-      _meta: { mode: 'classic', wager: 20, isPublic: false, maxPlayers: 10, forfeited: { P5: 15_000 } },
+      _meta: { mode: 'classic', wager: 20, isPublic: false, maxPlayers: 100, prizes: pz, forfeited: { P5: 15_000 } },
       // P1: 3 benar dalam 12s (at 22000)
       P1: A([true, true, true, false], 13_000, 3_000),
       // P2: 4 benar dalam 16s (at 26000) -> Juara #1 (skor tertinggi!)
@@ -310,7 +323,8 @@ test('multiplayer room (2–15 orang): clampMaxPlayers, rankPlayers berdasarkan 
     reason: ''
   };
 
-  assert.equal(roomCapacity(mpDuel), 10);
+  assert.equal(roomCapacity(mpDuel), 100);
+  assert.deepEqual(roomPrizes(mpDuel), pz);
   assert.equal(isMultiplayer(mpDuel), true);
   assert.deepEqual(playerIds(mpDuel), ['P1', 'P2', 'P3', 'P4', 'P5']);
 
@@ -322,18 +336,40 @@ test('multiplayer room (2–15 orang): clampMaxPlayers, rankPlayers berdasarkan 
   assert.deepEqual(live.map(p => p.id), ['P2', 'P3', 'P1', 'P4', 'P5']);
   assert.deepEqual(live.map(p => p.rank), [1, 2, 3, 4, 5]);
 
+  // Live view non-admin untuk P4: hanya lihat Top 3 + dirinya sendiri (P5 tidak bocor!)
+  const livePriv = viewFor(mpDuel, 'P4');
+  assert.equal(livePriv.privacyMode, true);
+  assert.deepEqual(livePriv.players.map(p => p.id), ['P2', 'P3', 'P1', 'P4']);
+  assert.equal(livePriv.players.some(p => p.id === 'P5'), false);
+
   // P4 selesai dgn 4 benar dalam 10s (at 20000) -> P4 lebih cepat dari P2 (16s), jadi P4 Juara #1 karena speed!
   mpDuel.answers.P4 = A([true, true, true, true], 11_000, 3_000);
   const dec = decide(mpDuel, 30_000);
   assert.deepEqual(dec, { winnerId: 'P4', reason: 'speed' });
+  const finishedDuel = { ...mpDuel, status: 'finished', winnerId: dec.winnerId, reason: dec.reason };
 
-  // viewFor saat finished mengekspos standings lengkap tanpa membocorkan kunci di active
-  const finView = viewFor({ ...mpDuel, status: 'finished', winnerId: dec.winnerId, reason: dec.reason }, 'P3');
-  assert.equal(finView.isMultiplayer, true);
-  assert.equal(finView.maxPlayers, 10);
-  assert.equal(finView.playerCount, 5);
-  assert.equal(finView.result.myRank, 3);
-  assert.deepEqual(finView.result.standings.map(p => p.id), ['P4', 'P2', 'P3', 'P1', 'P5']);
+  // Hasil untuk peserta biasa P1 (peringkat #4): publik hanya Top 3 ['P4','P2','P3'], P5 TIDAK BOCOR, tapi P1 tahu peringkat & hadiahnya sendiri!
+  const p1View = viewFor(finishedDuel, 'P1');
+  assert.equal(p1View.isMultiplayer, true);
+  assert.equal(p1View.maxPlayers, 100);
+  assert.equal(p1View.playerCount, 5);
+  assert.equal(p1View.result.privacyMode, true);
+  assert.equal(p1View.result.totalPlayers, 5);
+  assert.equal(p1View.result.myRank, 4);
+  assert.equal(p1View.result.myStanding.id, 'P1');
+  assert.equal(p1View.result.myStanding.score, 3);
+  assert.equal(p1View.result.myPrizeDiamonds, 10);
+  assert.deepEqual(p1View.result.standings.map(p => p.id), ['P4', 'P2', 'P3']);
+  assert.equal(p1View.result.standings.some(p => p.id === 'P5'), false);
+
+  // Hasil untuk Admin Inspect (isAdmin: true, isSpectator: true): melihat seluruh 5 peserta lengkap!
+  const adminView = viewFor(finishedDuel, 'ADMIN_1', {}, () => false, { isAdmin: true, isSpectator: true });
+  assert.equal(adminView.isSpectator, true);
+  assert.equal(adminView.canInspectFull, true);
+  assert.equal(adminView.privacyMode, false);
+  assert.equal(adminView.result.privacyMode, false);
+  assert.deepEqual(adminView.result.standings.map(p => p.id), ['P4', 'P2', 'P3', 'P1', 'P5']);
+  assert.deepEqual(adminView.result.standings.map(p => p.prizeDiamonds), [100, 60, 30, 10, 0]);
 });
 
 

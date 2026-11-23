@@ -10,10 +10,32 @@
   const DIA_KEY = 'clined_diamonds_v1';
   const S = {
     tab: 'status', hubTab: 'chat', openC: new Set(), comments: {}, feed: null, F: null,
-    mine: [], invites: [], openRooms: [], myStats: null, h2h: {}, leaderboard: [],
-    blocks: [], block: '', count: 10, sec: 30, mode: 'classic', wager: 0, isPublic: true, maxPlayers: 2,
+    mine: [], invites: [], openRooms: [], adminRooms: [], myStats: null, h2h: {}, leaderboard: [],
+    blocks: [], duelBanks: [], block: '', selectedBankIds: [], bankPickerOpen: false, bankSearch: '', bankAllBlocks: false,
+    count: 10, sec: 30, mode: 'classic', wager: 0, isPublic: true, maxPlayers: 2,
+    prizes: { first: 0, second: 0, third: 0, others: 0 },
     D: null, fb: null, busy: false, tick: null, skew: 0, sentFor: -1,
-    emotes: {}, oppFlash: null, mpExpandAll: false
+    emotes: {}, oppFlash: null, mpExpandAll: false, inspectSearch: ''
+  };
+  const isAdmin = () => { try { return typeof authCurrentUser === 'function' && authCurrentUser()?.role === 'admin'; } catch { return false; } };
+  const cleanPrizeNum = v => Math.max(0, Math.min(10000, Math.floor(Number(v) || 0)));
+  const activePrizes = () => {
+    const p = S.prizes || {};
+    const first = cleanPrizeNum(p.first), second = cleanPrizeNum(p.second), third = cleanPrizeNum(p.third), others = cleanPrizeNum(p.others);
+    return (first || second || third || others) ? { first, second, third, others } : null;
+  };
+  const prizeSummaryText = p => {
+    if (!p) return '';
+    const parts = [];
+    if (p.first) parts.push(`🥇${p.first}`);
+    if (p.second) parts.push(`🥈${p.second}`);
+    if (p.third) parts.push(`🥉${p.third}`);
+    if (p.others) parts.push(`4+:${p.others}`);
+    return parts.join(' ');
+  };
+  const prizePill = p => {
+    const txt = prizeSummaryText(p);
+    return txt ? `<span class="duel-tag prize" title="Hadiah Diamond Otomatis">💎 ${txt}</span>` : '';
   };
   const MOODS = [['mantap', '😎', 'Mantap'], ['lumayan', '🙂', 'Lumayan'], ['berat', '😵', 'Berat'], ['semangat', '🔥', 'Semangat'], ['doa', '🙏', 'Doa']];
   const REACTS = ['🔥', '👏', '💪', '😂', '❤️'];
@@ -146,13 +168,21 @@
     if (saved && typeof saved === 'object') {
       if (saved.block) S.block = String(saved.block);
       else if (typeof saved.bank === 'string' && saved.bank.startsWith('block:')) S.block = saved.bank.slice(6);
-      if ([5, 10, 15].includes(Number(saved.count))) S.count = Number(saved.count);
+      if ([5, 10, 15, 20, 30].includes(Number(saved.count))) S.count = Number(saved.count);
       if ([0, 15, 30, 45, 60].includes(Number(saved.sec))) S.sec = Number(saved.sec);
       if (['classic', 'sudden_death'].includes(saved.mode)) S.mode = saved.mode;
       if ([0, 20, 50].includes(Number(saved.wager))) S.wager = Number(saved.wager);
       if (typeof saved.isPublic === 'boolean') S.isPublic = saved.isPublic;
       const mp = Math.floor(Number(saved.maxPlayers));
-      if (Number.isFinite(mp) && mp >= 2 && mp <= 15) S.maxPlayers = mp;
+      if (Number.isFinite(mp) && mp >= 2 && mp <= 100) S.maxPlayers = mp;
+      if (saved.prizes && typeof saved.prizes === 'object') {
+        S.prizes = {
+          first: cleanPrizeNum(saved.prizes.first),
+          second: cleanPrizeNum(saved.prizes.second),
+          third: cleanPrizeNum(saved.prizes.third),
+          others: cleanPrizeNum(saved.prizes.others)
+        };
+      }
     }
   } catch {}
 
@@ -174,17 +204,18 @@
     } catch {}
   };
   const claimDuelReward = D => {
-    if (!D || D.status !== 'finished' || !D.result) return null;
+    if (!D || D.status !== 'finished' || !D.result || D.isSpectator) return null;
     const R = D.result, win = R.winnerId === D.me.id, draw = !R.winnerId;
     const wager = Number(D.wager) || 0;
     const mode = D.mode || 'classic';
     const cardBonusXp = win ? (window.CLINED_CARDS?.getBonusDuelXp?.() || 0) : 0;
     const xpGain = win ? (30 + wager + cardBonusXp) : draw ? 10 : 0;
-    const diaGain = win ? (1 + (wager >= 50 ? 2 : wager >= 20 ? 1 : 0) + (mode === 'sudden_death' ? 1 : 0)) : 0;
+    const customPrizeDia = Math.max(0, Math.floor(Number(R.myPrizeDiamonds) || 0));
+    const diaGain = D.prizes ? 0 : (win ? (1 + (wager >= 50 ? 2 : wager >= 20 ? 1 : 0) + (mode === 'sudden_death' ? 1 : 0)) : 0);
     try {
       const claims = JSON.parse(localStorage.getItem(CLAIM_KEY) || '{}') || {};
       if (!claims[D.id]) {
-        claims[D.id] = { at: Date.now(), xpGain, cardBonusXp, diaGain, win, draw };
+        claims[D.id] = { at: Date.now(), xpGain, cardBonusXp, diaGain, customPrizeDia, win, draw };
         localStorage.setItem(CLAIM_KEY, JSON.stringify(claims));
         if (diaGain > 0) addDiamonds(diaGain);
         if (xpGain > 0 && typeof window.addXP === 'function') {
@@ -202,7 +233,7 @@
         }
       }
     } catch {}
-    return { xpGain, cardBonusXp, diaGain, wager };
+    return { xpGain, cardBonusXp, diaGain, customPrizeDia, wager };
   };
 
   async function api(path, opt = {}) {
@@ -258,12 +289,18 @@
     S.mine = a.mine || [];
     S.invites = a.invites || [];
     S.openRooms = a.openRooms || [];
+    S.adminRooms = Array.isArray(a.adminRooms) ? a.adminRooms : [];
     S.myStats = a.myStats || { wins: 0, losses: 0, draws: 0, total: 0, rp: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' }, rank: rankFromRp(0) };
     S.h2h = a.h2h || {};
     S.leaderboard = a.leaderboard || [];
     if (Array.isArray(a.duelBlocks) && a.duelBlocks.length) {
       S.blocks = a.duelBlocks;
       if (!S.blocks.some(b => b.block === S.block)) S.block = S.blocks[0]?.block || '';
+    }
+    if (Array.isArray(a.duelBanks)) {
+      S.duelBanks = a.duelBanks;
+      const validIds = new Set(S.duelBanks.map(b => b.id));
+      S.selectedBankIds = S.selectedBankIds.filter(id => validIds.has(id));
     }
     dot();
     syncWaitingFloat();
@@ -431,7 +468,7 @@
     } catch {}
     if (!S.blocks.some(b => b.block === S.block)) S.block = S.blocks[0]?.block || '';
   }
-  const savePref = () => { try { localStorage.setItem(PREF, JSON.stringify({ block: S.block, count: S.count, sec: S.sec, mode: S.mode, wager: S.wager, isPublic: S.isPublic, maxPlayers: S.maxPlayers })); } catch {} };
+  const savePref = () => { try { localStorage.setItem(PREF, JSON.stringify({ block: S.block, count: S.count, sec: S.sec, mode: S.mode, wager: S.wager, isPublic: S.isPublic, maxPlayers: S.maxPlayers, prizes: S.prizes })); } catch {} };
 
   /* ───────── LOBI & ARENA VISUAL ───────── */
   const initials = n => esc(String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase());
@@ -499,9 +536,14 @@
     const F = S.F || { friends: [], incoming: [], outgoing: [], blocked: [] };
     const st = S.myStats || { wins: 0, losses: 0, draws: 0, total: 0, rp: 0, winRate: 0, streak: 0, bestStreak: 0, title: { icon: '🗡️', name: 'Petarung Baru' } };
     const rk = getRank(st.rank || { rp: st.rp || 0 });
+    const adminUser = isAdmin();
     const blockOpts = S.blocks.map(b => `<option value="${esc(b.block)}"${b.block === S.block ? ' selected' : ''}>${esc(b.label || `BLOK ${b.block}`)} (${b.bankCount} bank • ${b.questionCount} soal acak)</option>`).join('');
     const curBlockObj = S.blocks.find(b => b.block === S.block);
-    const curBankName = curBlockObj ? `${curBlockObj.label || `BLOK ${curBlockObj.block}`} (Acak)` : 'Pilih Blok Ujian';
+    const selBanks = (S.duelBanks || []).filter(b => S.selectedBankIds.includes(b.id));
+    const selQTotal = selBanks.reduce((sum, b) => sum + (Number(b.questionCount) || 0), 0);
+    const curBankName = selBanks.length
+      ? (selBanks.length === 1 ? selBanks[0].name : `${selBanks.length} Bank Pilihan (${selQTotal} soal acak)`)
+      : (curBlockObj ? `${curBlockObj.label || `BLOK ${curBlockObj.block}`} (Acak)` : 'Pilih Blok Ujian');
 
     // 1. Arena Hero Banner + Rank Tier Emblem + RP Progress + Career Stats + Quick Match CTA
     const heroHTML = `
@@ -576,7 +618,7 @@
           <span class="duel-quick-ico">⚡</span>
           <span class="duel-quick-txt">
             <b>Cari Lawan Cepat (${S.maxPlayers > 2 ? `Multiplayer ${S.maxPlayers} Orang` : 'Ranked Match 1v1'})</b>
-            <small>${esc(curBankName)} • ${S.count} soal • ${S.maxPlayers > 2 ? `👥 2–${S.maxPlayers} org` : '⚔️ 1v1'} • ${S.mode === 'sudden_death' ? '💀 Sudden Death' : '🏆 Klasik'}${S.wager ? ` • 💰 ${S.wager} EXP` : ''}</small>
+            <small>${esc(curBankName)} • ${S.count} soal • ${S.maxPlayers > 2 ? `👥 2–${S.maxPlayers} org` : '⚔️ 1v1'} • ${S.mode === 'sudden_death' ? '💀 Sudden Death' : '🏆 Klasik'}${S.wager ? ` • 💰 ${S.wager} EXP` : ''}${adminUser && activePrizes() ? ` • 💎 ${prizeSummaryText(activePrizes())}` : ''}</small>
           </span>
           <span class="duel-quick-go">GAS ›</span>
         </button>
@@ -597,7 +639,7 @@
           <span class="soc-live-ico">${isWait ? '⏳' : (mp ? '🏁' : '🔥')}</span>
           <span class="soc-who">
             <b>${title}</b>
-            <small>${subLine} • ${d.mode === 'sudden_death' ? '💀 3❤️' : '🏆 Klasik'}</small>
+            <small>${subLine} • ${d.mode === 'sudden_death' ? '💀 3❤️' : '🏆 Klasik'}${d.prizes ? ` • 💎 ${prizeSummaryText(d.prizes)}` : ''}</small>
           </span>
           <span class="soc-go">Masuk ›</span>
         </button>
@@ -612,7 +654,7 @@
       <div class="soc-who">
         <b>⚔️ ${esc(i.from?.name || 'Teman')} menantangmu!</b>
         <small>${esc(i.bank.name)} • ${i.total} soal</small>
-        <div class="duel-tags-row">${modePill(i.mode)}${wagerPill(i.wager)}</div>
+        <div class="duel-tags-row">${modePill(i.mode)}${wagerPill(i.wager)}${prizePill(i.prizes)}</div>
       </div>
       <div class="soc-btns">
         <button type="button" class="primary" data-soc-accept="${esc(i.code)}">⚡ Terima</button>
@@ -620,7 +662,51 @@
       </div>
     </div>`).join('');
 
-    // 3. Open Arena Rooms (Lobi Tantangan Terbuka — Realtime Sync, 1v1 & Multiplayer 2–15)
+    // 2.5. Admin Live Inspect Panel (semua room waiting & active, termasuk Private)
+    const adminRooms = adminUser ? (S.adminRooms || []) : [];
+    const adminLiveCount = adminRooms.filter(r => r.status === 'active').length;
+    const adminInspectHTML = adminUser ? `
+    <div class="card soc-card duel-admin-inspect-card">
+      <div class="soc-title between">
+        <div class="duel-title-left">
+          <span>👁️</span>
+          <div>
+            <div class="duel-arena-head-row">
+              <h3>Admin Live Inspect</h3>
+              <span class="duel-live-pill"><i></i> ${adminLiveCount} Berlangsung • ${adminRooms.length} Total</span>
+            </div>
+            <small class="soc-hint">Pantau langsung semua room (Open Access &amp; Private) secara realtime tanpa ikut bermain</small>
+          </div>
+        </div>
+        <button type="button" class="secondary duel-mini-btn" data-soc-refresh-lobby aria-label="Segarkan daftar inspect">🔄</button>
+      </div>
+      ${adminRooms.length ? `<div class="duel-admin-room-list">${adminRooms.map(r => {
+        const isLive = r.status === 'active';
+        const host = r.host || {};
+        return `<div class="duel-admin-room-row${isLive ? ' is-live' : ''}">
+          <div class="duel-admin-room-info">
+            <div class="duel-admin-room-top">
+              <span class="duel-inspect-status ${isLive ? 'live' : 'wait'}">${isLive ? '🔴 LIVE' : '⏳ MENUNGGU'}</span>
+              <b>${esc(r.bank?.name || 'Arena Duel')}</b>
+              <code class="duel-admin-code">${esc(r.code)}</code>
+            </div>
+            <small>Host: <b>${esc(host.name || 'Pemain')}</b> (@${esc(host.username || '-')}) • ${r.total} soal • ${r.perQ ? `${r.perQ / 1000}d/soal` : '∞'}${isLive ? ` • ✅ ${r.finishedCount}/${r.playerCount} selesai` : ''}</small>
+            <div class="duel-tags-row">
+              <span class="duel-tag mp">👥 ${r.playerCount}/${r.maxPlayers}</span>
+              <span class="duel-tag ${r.isPublic ? 'open' : 'priv'}">${r.isPublic ? '🌐 Open' : '🔒 Private'}</span>
+              ${modePill(r.mode)}
+              ${prizePill(r.prizes)}
+            </div>
+          </div>
+          <button type="button" class="primary duel-inspect-btn" data-soc-inspect="${esc(r.id)}">${r.isMember ? '⚡ Buka' : '👁️ Inspect'}</button>
+        </div>`;
+      }).join('')}</div>` : `<div class="duel-open-empty">
+        <span>🛰️</span>
+        <div><b>Belum ada room yang sedang berjalan atau menunggu</b><small>Begitu ada pengguna membuat room (Open atau Private), daftar room otomatis muncul di sini untuk di-inspect secara realtime.</small></div>
+      </div>`}
+    </div>` : '';
+
+    // 3. Open Arena Rooms (Lobi Tantangan Terbuka — Realtime Sync, 1v1 & Multiplayer 2–100)
     const waitAge = t => {
       if (!t) return '';
       const s = Math.max(0, Math.floor((Date.now() - Number(t)) / 1000));
@@ -642,7 +728,7 @@
           </div>
           <button type="button" class="primary duel-join-now" data-soc-accept="${esc(r.code)}">${mp ? '⚡ Gabung!' : '⚡ Lawan!'}</button>
         </div>
-        <div class="duel-tags-row">${capPill}<span class="duel-tag open">🌐 Open Access</span>${rankPill(host.rank, false)}${cardPill(host.card)}${modePill(r.mode)}${wagerPill(r.wager)}${mp ? '' : h2hBadge(host.id)}</div>
+        <div class="duel-tags-row">${capPill}<span class="duel-tag open">🌐 Open Access</span>${prizePill(r.prizes)}${rankPill(host.rank, false)}${cardPill(host.card)}${modePill(r.mode)}${wagerPill(r.wager)}${mp ? '' : h2hBadge(host.id)}</div>
       </div>`;
     }).join('');
 
@@ -654,32 +740,83 @@
           <span>🌐</span>
           <div>
             <div class="duel-arena-head-row"><h3>Tantangan Terbuka</h3><span class="duel-live-pill" title="Tersinkronisasi otomatis secara realtime"><i></i> Live${openCount ? ` • ${openCount}` : ''}</span></div>
-            <small class="soc-hint">Room Open Access (1v1 &amp; Multiplayer 2–15 orang) • masuk langsung 1-klik</small>
+            <small class="soc-hint">Room Open Access (1v1 &amp; Multiplayer 2–100 orang) • masuk langsung 1-klik</small>
           </div>
         </div>
         <button type="button" class="secondary duel-mini-btn" data-soc-refresh-lobby aria-label="Segarkan lobi">🔄</button>
       </div>
       ${openRows ? `<div class="duel-open-list">${openRows}</div>` : `<div class="duel-open-empty">
         <span>🏟️</span>
-        <div><b>Belum ada ruang Open Access yang menunggu pemain</b><small>Klik <b>⚡ Cari Lawan Cepat</b> di atas atau buat room baru (1v1 / Multiplayer 2–15 orang) — kamu tetap bisa <b>mengerjakan soal dulu</b> sambil menunggu pemain masuk!</small></div>
+        <div><b>Belum ada ruang Open Access yang menunggu pemain</b><small>Klik <b>⚡ Cari Lawan Cepat</b> di atas atau buat room baru (1v1 / Multiplayer hingga 100 orang) — kamu tetap bisa <b>mengerjakan soal dulu</b> sambil menunggu pemain masuk!</small></div>
       </div>`}
     </div>`;
 
-    // 4. Custom Duel Setup (Kapasitas 2–15 Orang, Open Access vs Private Password Code, Mode, Wager)
-    const capOpts = Array.from({ length: 14 }, (_, idx) => idx + 2)
-      .map(n => `<option value="${n}"${S.maxPlayers === n ? ' selected' : ''}>${n === 2 ? '2 Orang (Duel 1v1)' : `${n} Orang (Multiplayer Race)`}</option>`).join('');
+    // 4. Custom Duel Setup (Kapasitas 2–100 Orang, Multi-Bank Picker, Admin Diamond Prizes, Open vs Private)
+    const bankSearchQ = String(S.bankSearch || '').trim().toLowerCase();
+    const visibleBanks = (S.duelBanks || []).filter(b => {
+      if (!S.bankAllBlocks && S.block && b.block !== S.block) return false;
+      if (bankSearchQ && !`${b.name} ${b.block}`.toLowerCase().includes(bankSearchQ)) return false;
+      return true;
+    });
+    const bankPickerHTML = (S.duelBanks || []).length ? `
+      <div class="duel-bank-picker${S.bankPickerOpen ? ' open' : ''}">
+        <button type="button" class="duel-bank-toggle" data-soc-bank-toggle aria-expanded="${S.bankPickerOpen}">
+          <span>🎯 ${selBanks.length ? `<b>${selBanks.length} Bank Soal Dipilih</b> (${selQTotal} soal acak)` : `Pilih Bank Soal Spesifik <em>(opsional — default acak semua di blok)</em>`}</span>
+          <i>${S.bankPickerOpen ? '▲' : '▼'}</i>
+        </button>
+        ${S.bankPickerOpen ? `<div class="duel-bank-panel">
+          <div class="duel-bank-tools">
+            <input type="text" class="duel-bank-search" data-soc-bank-search value="${esc(S.bankSearch)}" placeholder="Cari nama bank soal…" aria-label="Cari bank soal">
+            <div class="duel-bank-btns">
+              <button type="button" class="secondary duel-mini-btn${S.bankAllBlocks ? ' on' : ''}" data-soc-bank-allblocks>${S.bankAllBlocks ? '✓ Semua Blok' : '🌐 Semua Blok'}</button>
+              <button type="button" class="secondary duel-mini-btn" data-soc-bank-all>Pilih Semua</button>
+              ${S.selectedBankIds.length ? `<button type="button" class="secondary duel-mini-btn soc-danger" data-soc-bank-clear>Reset (${S.selectedBankIds.length})</button>` : ''}
+            </div>
+          </div>
+          <div class="duel-bank-list">
+            ${visibleBanks.length ? visibleBanks.map(b => {
+              const checked = S.selectedBankIds.includes(b.id);
+              return `<label class="duel-bank-opt${checked ? ' checked' : ''}">
+                <input type="checkbox" data-soc-bank-chk="${esc(b.id)}" ${checked ? 'checked' : ''}>
+                <span class="duel-bank-name">${esc(b.name)}${S.bankAllBlocks ? ` <em class="duel-bank-blk">${esc(b.block)}</em>` : ''}</span>
+                <small>${b.questionCount} soal</small>
+              </label>`;
+            }).join('') : '<p class="soc-empty">Tidak ada bank soal yang cocok.</p>'}
+          </div>
+        </div>` : ''}
+      </div>` : '';
+
+    const adminPrizeBoxHTML = adminUser ? `
+      <div class="duel-prize-box">
+        <div class="duel-prize-head">
+          <span>💎 <b>Custom Hadiah Diamond</b> <em>(Khusus Admin)</em></span>
+          ${activePrizes() ? '<button type="button" class="secondary duel-mini-btn" data-soc-prize-reset>Reset</button>' : ''}
+        </div>
+        <div class="duel-prize-grid">
+          <label class="duel-prize-field"><span>🥇 Juara 1</span><input type="number" min="0" max="10000" inputmode="numeric" data-soc-prize="first" value="${S.prizes.first || 0}" aria-label="Hadiah diamond Juara 1"></label>
+          <label class="duel-prize-field"><span>🥈 Juara 2</span><input type="number" min="0" max="10000" inputmode="numeric" data-soc-prize="second" value="${S.prizes.second || 0}" aria-label="Hadiah diamond Juara 2"></label>
+          <label class="duel-prize-field"><span>🥉 Juara 3</span><input type="number" min="0" max="10000" inputmode="numeric" data-soc-prize="third" value="${S.prizes.third || 0}" aria-label="Hadiah diamond Juara 3"></label>
+          <label class="duel-prize-field"><span>🎁 Peringkat 4+ (Rata)</span><input type="number" min="0" max="10000" inputmode="numeric" data-soc-prize="others" value="${S.prizes.others || 0}" aria-label="Hadiah diamond peringkat 4 ke atas pukul rata"></label>
+        </div>
+        <small class="duel-prize-hint">Otomatis dikreditkan ke saldo 💎 peserta saat room berakhir (0 = tanpa hadiah tambahan).</small>
+      </div>` : '';
+
     const setupHTML = `
     <div class="card soc-card soc-setup">
-      <div class="soc-title"><span>⚙️</span><div><h3>Atur Arena Duel</h3><small class="soc-hint">Bisa 1v1 atau Multiplayer 2–15 orang (adu cepat &amp; skor benar individual)</small></div></div>
-      <label class="duel-field-label" for="socBlock">📚 Pilih BLOK Ujian (Acak Semua Bank)</label>
+      <div class="soc-title"><span>⚙️</span><div><h3>Atur Arena Duel</h3><small class="soc-hint">Bisa 1v1 atau Multiplayer 2–100 orang (adu cepat &amp; skor benar individual)</small></div></div>
+      <label class="duel-field-label" for="socBlock">📚 Pilih BLOK Ujian (Acak Bank Soal)</label>
       <select id="socBlock" data-soc-block aria-label="Pilih blok ujian">${blockOpts || '<option value="">Memuat daftar blok…</option>'}</select>
+      ${bankPickerHTML}
 
-      <div class="duel-field-label">👥 Kapasitas Room (2–15 Orang)</div>
+      <div class="duel-field-label">👥 Kapasitas Room (2–100 Orang)</div>
       <div class="duel-cap-row">
-        <div class="soc-seg n4" role="radiogroup" aria-label="Preset kapasitas room">
-          ${[2, 5, 10, 15].map(n => `<button type="button" role="radio" aria-checked="${S.maxPlayers === n}" class="${S.maxPlayers === n ? 'on' : ''}" data-soc-maxp="${n}">${n === 2 ? '2 (1v1)' : `${n} Org`}</button>`).join('')}
+        <div class="soc-seg n5" role="radiogroup" aria-label="Preset kapasitas room">
+          ${[2, 10, 30, 50, 100].map(n => `<button type="button" role="radio" aria-checked="${S.maxPlayers === n}" class="${S.maxPlayers === n ? 'on' : ''}" data-soc-maxp="${n}">${n === 2 ? '2' : n}</button>`).join('')}
         </div>
-        <select id="socMaxPlayers" class="duel-cap-select" data-soc-maxp-sel aria-label="Pilih jumlah maksimal pemain">${capOpts}</select>
+        <label class="duel-cap-input-wrap" title="Atur kapasitas bebas antara 2 sampai 100 orang">
+          <input id="socMaxPlayers" type="number" min="2" max="100" inputmode="numeric" class="duel-cap-input" data-soc-maxp-input value="${S.maxPlayers}" aria-label="Jumlah maksimal pemain 2 sampai 100">
+          <span>Org</span>
+        </label>
       </div>
 
       <div class="duel-field-label">🎮 Mode Pertarungan</div>
@@ -692,7 +829,7 @@
         `).join('')}
       </div>
 
-      <div class="soc-opt-row"><span class="soc-lab">Jumlah<small>Soal duel</small></span><div class="soc-seg n3" role="radiogroup" aria-label="Jumlah soal">${[5, 10, 15].map(n => `<button type="button" role="radio" aria-checked="${S.count === n}" class="${S.count === n ? 'on' : ''}" data-soc-count="${n}">${n} Soal</button>`).join('')}</div></div>
+      <div class="soc-opt-row"><span class="soc-lab">Jumlah<small>Soal duel</small></span><div class="soc-seg n5" role="radiogroup" aria-label="Jumlah soal">${[5, 10, 15, 20, 30].map(n => `<button type="button" role="radio" aria-checked="${S.count === n}" class="${S.count === n ? 'on' : ''}" data-soc-count="${n}">${n}</button>`).join('')}</div></div>
       <div class="soc-opt-row"><span class="soc-lab">Waktu<small>Detik / soal</small></span><div class="soc-seg n5" role="radiogroup" aria-label="Batas waktu per soal">${SECS.map(([v, l]) => `<button type="button" role="radio" aria-checked="${S.sec === v}" class="${S.sec === v ? 'on' : ''}" data-soc-sec="${v}">${l}</button>`).join('')}</div></div>
 
       <div class="duel-field-label">💎 Taruhan &amp; Hadiah Pemenang</div>
@@ -705,6 +842,7 @@
           </button>
         `).join('')}
       </div>
+      ${adminPrizeBoxHTML}
 
       <div class="soc-opt-row">
         <span class="soc-lab">Akses Room<small>${S.isPublic ? 'Tampil di lobi' : 'Pakai kode'}</small></span>
@@ -782,7 +920,7 @@
       ${blocked ? `<details class="soc-sec"><summary>Diblokir (${F.blocked.length})</summary>${blocked}</details>` : ''}
     </div>`;
 
-    const duelAll = `${heroHTML}${inv}${mine ? `<div class="soc-lives">${mine}</div>` : ''}<div class="duel-lobby-grid">${openArenaHTML}${setupHTML}${quickHTML}</div>${lbHTML}`;
+    const duelAll = `${heroHTML}${inv}${mine ? `<div class="soc-lives">${mine}</div>` : ''}${adminInspectHTML}<div class="duel-lobby-grid">${openArenaHTML}${setupHTML}${quickHTML}</div>${lbHTML}`;
     return { duel: duelAll, friends: friendsHTML0 };
   }
 
@@ -861,10 +999,12 @@
     if (!D || D.status !== 'finished' || !D.result) return {};
     const R = D.result, win = R.winnerId === D.me.id, draw = !R.winnerId;
     const opp = D.opponent, oppTag = opp?.username ? `@${opp.username}` : (opp?.name || 'lawan');
-    const pct = D.total ? Math.round((R.me.score / D.total) * 100) : null;
+    const mySt = R.myStanding || R.me || {};
+    const totalP = R.totalPlayers || (Array.isArray(R.standings) ? R.standings.length : D.playerCount || 2);
+    const pct = D.total ? Math.round(((mySt.score ?? R.me.score) / D.total) * 100) : null;
     const modeTag = D.mode === 'sudden_death' ? 'Mode Sudden Death 💀' : 'Mode Klasik 🏆';
-    const msg = D.isMultiplayer && Array.isArray(R.standings)
-      ? `Meraih Peringkat #${R.myRank || 1} dari ${R.standings.length} pemain di Arena Multiplayer CLINED (${R.me.score}/${D.total} • ⏱ ${fmtMs(R.me.timeMs || 0)})! 🏁🔥 Siapa mau ikut race berikutnya?`
+    const msg = D.isMultiplayer
+      ? `Meraih Peringkat #${R.myRank || 1} dari ${totalP} pemain di Arena Multiplayer CLINED (${mySt.score ?? R.me.score}/${D.total} • ⏱ ${fmtMs(mySt.timeMs || R.me.timeMs || 0)})! 🏁🔥 Siapa mau ikut race berikutnya?`
       : draw
         ? `Duel sengit ${modeTag} lawan ${oppTag} berakhir SERI (${R.me.score}/${D.total})! 🤝⚡ Siapa berani tantang berikutnya?`
         : win
@@ -885,10 +1025,24 @@
     if (reload) { if (!S.F) { body.dataset.lastHtml = ''; body.innerHTML = '<p class="soc-empty">Memuat Arena Duel…</p>'; } try { await loadLobby(); await loadBlocks(); } catch (e) { body.dataset.lastHtml = ''; body.innerHTML = `<p class="soc-empty">${esc(e.message)}</p>`; return; } }
     const nextHtml = lobbyHTML().duel;
     if (body.dataset.lastHtml === nextHtml) return;
+    const activeEl = document.activeElement;
+    const focusSel = activeEl?.matches?.('[data-soc-bank-search]') ? '[data-soc-bank-search]'
+      : activeEl?.matches?.('[data-soc-code]') ? '[data-soc-code]'
+        : null;
+    const selPos = focusSel && typeof activeEl.selectionStart === 'number' ? activeEl.selectionStart : null;
     const keep = { code: $('socCode')?.value };
     body.dataset.lastHtml = nextHtml;
     body.innerHTML = nextHtml;
     if (keep.code && $('socCode')) $('socCode').value = keep.code;
+    if (focusSel) {
+      const nextEl = body.querySelector(focusSel);
+      if (nextEl) {
+        nextEl.focus({ preventScroll: true });
+        if (selPos != null && typeof nextEl.setSelectionRange === 'function') {
+          try { nextEl.setSelectionRange(selPos, selPos); } catch {}
+        }
+      }
+    }
   }
   const hubTabs = () => { const tab = (k, label, extra = '') => `<button type="button" role="tab" aria-selected="${S.hubTab === k}" class="${S.hubTab === k ? 'on' : ''}" data-soc-tab="${k}">${label}${extra}</button>`;
     return `<div class="soc-tabs three" role="tablist">${tab('status', '📣 Status')}${tab('chat', '💬 Chat', `<i class="soc-dot inline" data-chat-dot ${window.CLINED_CHAT?.unread ? '' : 'hidden'}>${window.CLINED_CHAT?.unread > 9 ? '9+' : window.CLINED_CHAT?.unread || 0}</i>`)}${tab('teman', '👥 Teman', S.F?.incoming?.length ? ` <i class="soc-dot inline">${S.F.incoming.length}</i>` : '')}</div>`; };
@@ -930,7 +1084,7 @@
     if (now < D.startedAt) { const el = $('duelGo'); if (el) el.textContent = Math.max(1, Math.ceil((D.startedAt - now) / 1000)); return; }
     if ($('duelGo')) { renderDuel(); return; }
     const clock = $('duelClock'); if (clock && !D.perQ) clock.textContent = fmtMs(D.deadlineAt - now);
-    if (!D.perQ) return;
+    if (!D.perQ || D.isSpectator) return;
     const qi = D.myAnswers.length; if (qi >= D.total || S.fb != null) return;
     const left = D.perQ - (now - D.qStartAt), bar = $('duelQBar'), sec = $('duelQSec');
     if (bar) { bar.style.width = Math.max(0, Math.min(100, (left / D.perQ) * 100)) + '%'; bar.dataset.low = left < 5000 ? '1' : ''; }
@@ -944,7 +1098,8 @@
       score: 'Skor jawaban benar lebih tinggi.',
       speed: 'Skor seri, tetapi diselesaikan lebih cepat!',
       forfeit: win ? '🏳️ Lawan menyerah dari arena.' : '🏳️ Kamu memilih menyerah.',
-      finished: '⏰ Waktu habis, diselesaikan lebih unggul.'
+      finished: '⏰ Waktu habis, diselesaikan lebih unggul.',
+      admin_finish: '🏁 Room diakhiri langsung oleh Admin.'
     }[r] || '');
   const secText = ms => ms ? `${ms / 1000} dtk/soal` : 'tanpa batas waktu';
 
@@ -982,6 +1137,39 @@
     return `${(n / 1000).toFixed(1)}d/soal`;
   };
 
+  function mpRowHTML(p, D, pctFn, showPrize = false) {
+    const isSD = D.mode === 'sudden_death';
+    const total = D.total || 1;
+    const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
+    const statusTag = p.forfeited
+      ? '<em class="duel-mp-st bad">Keluar</em>'
+      : p.eliminated
+        ? '<em class="duel-mp-st bad">KO</em>'
+        : p.done
+          ? '<em class="duel-mp-st ok">Selesai</em>'
+          : '';
+    const estPrize = showPrize && D.prizes && !p.forfeited
+      ? (p.prizeDiamonds || (p.rank === 1 ? D.prizes.first : p.rank === 2 ? D.prizes.second : p.rank === 3 ? D.prizes.third : D.prizes.others) || 0)
+      : 0;
+    return `<div class="duel-mp-row${p.isMe ? ' me' : ''}${p.done ? ' is-done' : ''}${p.forfeited || p.eliminated ? ' is-out' : ''}">
+      <span class="duel-mp-pos ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
+      ${avatar(p, p.isMe ? '' : 'opp')}
+      <div class="duel-mp-mid">
+        <div class="duel-mp-top">
+          <b>${esc(p.name)}${p.isMe ? ' <em class="soc-tag me">Kamu</em>' : ''}${p.isHost ? ' <em class="duel-host-tag">👑 Host</em>' : ''}</b>
+          <span class="duel-mp-score">✅ <b>${p.score}</b>/${total} • ⏱ ${p.answered ? fmtMs(p.timeMs) : '0:00'}${estPrize > 0 ? ` • <em class="duel-mp-dia">💎+${estPrize}</em>` : ''}</span>
+        </div>
+        <div class="duel-mp-track"><i style="width:${pctFn(p.answered)}%"></i></div>
+        <div class="duel-mp-sub">
+          <small>${p.answered}/${total} soal${p.avgMs ? ` • ${fmtSpeedSec(p.avgMs)}` : ''}${p.username ? ` • @${esc(p.username)}` : ''}</small>
+          ${isSD ? renderHearts(p.hearts ?? 3, D.maxHearts || 3) : ''}
+          ${(p.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${p.streak}x</span>` : ''}
+          ${statusTag}
+        </div>
+      </div>
+    </div>`;
+  }
+
   function mpBoardHTML(D, flash) {
     const isSD = D.mode === 'sudden_death';
     const all = Array.isArray(D.players) ? D.players : [];
@@ -989,39 +1177,19 @@
     const pct = n => Math.round((n / total) * 100);
     const myRank = D.myRank || (all.find(p => p.isMe)?.rank) || 1;
     const myElapsed = D.me?.timeMs || (D.startedAt ? Math.max(0, nowS() - D.startedAt) : 0);
+    const privacy = !!D.privacyMode && !D.canInspectFull;
     let visible = all;
-    const canToggle = all.length > 5;
+    const canToggle = !privacy && all.length > 5;
     if (canToggle && !S.mpExpandAll) {
       visible = all.slice(0, 5);
       const meRow = all.find(p => p.isMe);
       if (meRow && !visible.some(p => p.id === meRow.id)) visible = [...all.slice(0, 4), meRow];
     }
-    const rows = visible.map(p => {
-      const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
-      const statusTag = p.forfeited
-        ? '<em class="duel-mp-st bad">Keluar</em>'
-        : p.eliminated
-          ? '<em class="duel-mp-st bad">KO</em>'
-          : p.done
-            ? '<em class="duel-mp-st ok">Selesai</em>'
-            : '';
-      return `<div class="duel-mp-row${p.isMe ? ' me' : ''}${p.done ? ' is-done' : ''}${p.forfeited || p.eliminated ? ' is-out' : ''}">
-        <span class="duel-mp-pos ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
-        ${avatar(p, p.isMe ? '' : 'opp')}
-        <div class="duel-mp-mid">
-          <div class="duel-mp-top">
-            <b>${esc(p.name)}${p.isMe ? ' <em class="soc-tag me">Kamu</em>' : ''}${p.isHost ? ' <em class="duel-host-tag">👑 Host</em>' : ''}</b>
-            <span class="duel-mp-score">✅ <b>${p.score}</b>/${total} • ⏱ ${p.answered ? fmtMs(p.timeMs) : '0:00'}</span>
-          </div>
-          <div class="duel-mp-track"><i style="width:${pct(p.answered)}%"></i></div>
-          <div class="duel-mp-sub">
-            <small>${p.answered}/${total} soal${p.avgMs ? ` • ${fmtSpeedSec(p.avgMs)}` : ''}</small>
-            ${isSD ? renderHearts(p.hearts ?? 3, D.maxHearts || 3) : ''}
-            ${(p.streak || 0) >= 2 ? `<span class="duel-streak-pill">🔥 ${p.streak}x</span>` : ''}
-            ${statusTag}
-          </div>
-        </div>
-      </div>`;
+    const rows = visible.map((p, idx) => {
+      const divider = privacy && idx === 3 && p.isMe && p.rank > 3
+        ? '<div class="duel-privacy-sep">🔒 Posisi Pribadimu (hanya terlihat olehmu)</div>'
+        : '';
+      return divider + mpRowHTML(p, D, pct, !!D.prizes);
     }).join('');
     return `<div class="duel-arena-board duel-mp-board">
       <div class="duel-mp-head">
@@ -1032,10 +1200,91 @@
         <div class="duel-mp-head-r">
           ${D.perQ ? `<span class="duel-tag cls">${isSD ? '💀 3❤️' : '🏆 Klasik'}</span>` : `<span class="duel-tag cls" id="duelClock">⏱ ${fmtMs(D.deadlineAt - nowS())}</span>`}
           ${canToggle ? `<button type="button" class="secondary duel-mini-btn" data-soc-mp-expand>${S.mpExpandAll ? 'Ringkas ▲' : `Semua (${all.length}) ▼`}</button>` : ''}
+          ${D.canInspectFull && D.status === 'active' ? '<button type="button" class="secondary duel-mini-btn soc-danger" data-soc-admin-finish>🏁 Akhiri</button>' : ''}
         </div>
       </div>
+      ${privacy ? '<div class="duel-privacy-note">🔒 Mode Privasi: hanya <b>Top 3</b> &amp; posisi pribadimu yang ditampilkan.</div>' : ''}
       <div class="duel-mp-list">${rows}</div>
       ${flash ? `<div class="duel-opp-flash ${flash.ok ? 'ok' : 'bad'}">${esc(flash.text)}</div>` : ''}
+    </div>`;
+  }
+
+  function adminInspectHTML(D, flash) {
+    const all = Array.isArray(D.players) ? D.players : [];
+    const total = D.total || 1;
+    const pct = n => Math.round((n / total) * 100);
+    const doneCnt = all.filter(p => p.done && !p.forfeited).length;
+    const outCnt = all.filter(p => p.forfeited || p.eliminated).length;
+    const playingCnt = Math.max(0, all.length - doneCnt - outCnt);
+    const q = String(S.inspectSearch || '').trim().toLowerCase();
+    const filtered = q
+      ? all.filter(p => `${p.name || ''} ${p.username || ''} #${p.rank}`.toLowerCase().includes(q))
+      : all;
+    const statusBadge = D.status === 'active'
+      ? '<span class="duel-inspect-status live">🔴 LIVE INSPECT</span>'
+      : D.status === 'waiting'
+        ? '<span class="duel-inspect-status wait">⏳ MENUNGGU MULAI</span>'
+        : '<span class="duel-inspect-status done">🏁 SELESAI</span>';
+    const top3 = (D.result?.top3 || D.top3 || all.slice(0, 3)).slice(0, 3);
+    const podiumOrder = top3.length === 3 ? [top3[1], top3[0], top3[2]] : top3;
+    const podiumHtml = D.status === 'finished' && top3.length ? `<div class="duel-podium">${podiumOrder.map(p => {
+      const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : '🥉';
+      return `<div class="duel-podium-slot place-${p.rank}">
+        <span class="duel-podium-medal">${medal}</span>
+        ${avatar(p, 'opp')}
+        <b>${esc(p.name)}</b>
+        <span class="duel-podium-score">${p.score}/${total}</span>
+        <small>⏱ ${p.answered ? fmtMs(p.timeMs) : '-'}${p.prizeDiamonds ? ` • 💎+${p.prizeDiamonds}` : ''}</small>
+      </div>`;
+    }).join('')}</div>` : '';
+    const countdownBar = D.status === 'active' && nowS() < D.startedAt
+      ? `<div class="duel-inspect-cd">⏳ Hitungan mundur dimulai dalam <b id="duelGo">${Math.max(1, Math.ceil((D.startedAt - nowS()) / 1000))}</b> detik…</div>`
+      : '';
+    return `<div class="card soc-card duel-inspect-wrap">
+      <div class="duel-inspect-banner">
+        <div class="duel-inspect-banner-top">
+          ${statusBadge}
+          <code class="duel-admin-code">${esc(D.code)}</code>
+          ${D.status === 'active' && !D.perQ ? `<span class="duel-tag cls" id="duelClock">⏱ ${fmtMs(D.deadlineAt - nowS())}</span>` : ''}
+        </div>
+        <h3>👁️ Admin Live Inspect • ${esc(D.bank?.name || 'Arena Duel')}</h3>
+        <p>${D.total} soal • ${secText(D.perQ)} • Kapasitas ${D.playerCount || all.length}/${D.maxPlayers} pemain • Mode Spectator (tidak ikut bermain)</p>
+        <div class="duel-tags-row">
+          <span class="duel-tag ${D.isPublic ? 'open' : 'priv'}">${D.isPublic ? '🌐 Open Access' : '🔒 Private'}</span>
+          ${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}
+        </div>
+      </div>
+
+      ${countdownBar}
+
+      <div class="duel-inspect-kpis">
+        <div class="duel-inspect-kpi"><small>👥 PESERTA</small><b>${all.length}<em>/${D.maxPlayers}</em></b></div>
+        <div class="duel-inspect-kpi ok"><small>✅ SELESAI</small><b>${doneCnt}</b></div>
+        <div class="duel-inspect-kpi play"><small>⚡ MAIN</small><b>${D.status === 'active' ? playingCnt : 0}</b></div>
+        <div class="duel-inspect-kpi out"><small>🏳️ KO/KELUAR</small><b>${outCnt}</b></div>
+      </div>
+
+      <div class="duel-inspect-actions">
+        <button type="button" class="secondary duel-mini-btn" data-soc-inspect-refresh>🔄 Segarkan Live</button>
+        <button type="button" class="secondary duel-mini-btn" data-soc-copy="${esc(D.code)}">📋 Salin Kode</button>
+        ${D.status === 'waiting' ? `<button type="button" class="primary duel-mini-btn" data-soc-start-mp ${all.length >= 2 ? '' : 'disabled'}>🚀 Mulai Room (${all.length})</button>` : ''}
+        ${D.status === 'active' ? '<button type="button" class="secondary duel-mini-btn soc-danger" data-soc-admin-finish>🏁 Akhiri Room Sekarang</button>' : ''}
+      </div>
+
+      ${flash ? `<div class="duel-opp-flash ${flash.ok ? 'ok' : 'bad'}">${esc(flash.text)}</div>` : ''}
+      ${podiumHtml}
+
+      <div class="duel-inspect-board">
+        <div class="duel-inspect-board-head">
+          <b>📊 Klasemen Lengkap Admin (${filtered.length}${q ? `/${all.length}` : ''} Peserta)</b>
+          <input type="text" class="duel-inspect-search" data-soc-inspect-search value="${esc(S.inspectSearch)}" placeholder="Cari nama / @username…" aria-label="Cari peserta">
+        </div>
+        <div class="duel-mp-list duel-inspect-list">
+          ${filtered.length ? filtered.map(p => mpRowHTML(p, D, pct, !!D.prizes)).join('') : '<p class="soc-empty">Tidak ada peserta yang cocok dengan pencarian.</p>'}
+        </div>
+      </div>
+
+      <button type="button" class="secondary soc-big" data-soc-lobby>‹ Kembali ke Lobi Arena</button>
     </div>`;
   }
 
@@ -1046,9 +1295,13 @@
     const isMP = !!D.isMultiplayer;
     const myRk = getRank(D.me?.rank || S.myStats?.rank || { rp: S.myStats?.rp || 0 });
     const oppRk = opp ? getRank(opp.rank || { rp: 0 }) : null;
+    const flash = S.oppFlash && Date.now() < S.oppFlash.until ? S.oppFlash : null;
 
     if (D.status === 'cancelled') {
       return `<div class="card soc-card soc-center"><div class="soc-emoji">🚫</div><h3>Room dibatalkan</h3><button type="button" class="primary soc-big" data-soc-lobby>Kembali ke Arena</button></div>`;
+    }
+    if (D.isSpectator) {
+      return adminInspectHTML(D, flash);
     }
     if (D.status === 'waiting') {
       if (isMP) {
@@ -1056,7 +1309,8 @@
         const pCount = D.playerCount || players.length || 1;
         const maxP = D.maxPlayers || 2;
         const slotsLeft = Math.max(0, maxP - pCount);
-        const canStart = D.isHost && pCount >= 2;
+        const canControlStart = D.isHost || D.canInspectFull;
+        const canStart = canControlStart && pCount >= 2;
         const rosterHtml = players.map((p, idx) => `
           <div class="duel-roster-item${p.isMe ? ' me' : ''}">
             <span class="duel-roster-num">${idx + 1}</span>
@@ -1072,7 +1326,7 @@
           <div class="duel-mp-wait-top">
             <span class="duel-tag mp">👥 ${pCount} / ${maxP} Pemain</span>
             <span class="duel-tag ${D.isPublic ? 'open' : 'priv'}">${D.isPublic ? '🌐 Open Access' : '🔒 Private (Kode Password)'}</span>
-            ${modePill(D.mode)}${wagerPill(D.wager)}
+            ${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}
           </div>
           <h3>${D.isHost ? '🏟️ Ruang Tunggu Multiplayer' : '⏳ Menunggu Host Memulai Pertarungan…'}</h3>
           <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)} • Peringkat berdasarkan <b>Skor Benar &amp; Kecepatan</b></p>
@@ -1095,7 +1349,7 @@
             <div class="duel-roster-list">${rosterHtml}</div>
           </div>
 
-          ${D.isHost
+          ${canControlStart
             ? `<button type="button" class="primary soc-big duel-start-mp-btn" data-soc-start-mp ${canStart ? '' : 'disabled'}>${canStart ? `🚀 Mulai Pertarungan (${pCount} Pemain)` : '⏳ Menunggu Minimal 2 Pemain untuk Mulai…'}</button>`
             : `<div class="duel-mp-wait-note">✅ Kamu sudah masuk room! Pertarungan dimulai saat Host menekan <b>Mulai</b> atau saat kuota ${maxP} pemain terpenuhi.</div>`}
 
@@ -1116,7 +1370,7 @@
           ${vsCardShowcaseHTML('Kamu', D.me?.card, opp?.name || 'Penantang', opp?.card)}
           <h3>⚔️ ${oppName} menantangmu!</h3>
           <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
-          <div class="duel-tags-row center">${oppRk ? rankPill(oppRk) : ''}${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
+          <div class="duel-tags-row center">${oppRk ? rankPill(oppRk) : ''}${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}${h2hBadge(opp?.id)}</div>
           <button type="button" class="primary soc-big" data-soc-accept="${esc(D.code)}">⚔️ Terima Tantangan</button>
           <button type="button" class="secondary soc-big" data-soc-decline="${esc(D.id)}">Tolak</button>
         </div>`;
@@ -1125,7 +1379,7 @@
         <div class="soc-emoji soc-pulse">⏳</div>
         <h3>${D.invited ? `Menunggu ${oppName}…` : (D.isPublic ? '🌐 Menunggu Penantang di Open Access…' : '🔒 Menunggu Lawan via Kode Password…')}</h3>
         <p>${esc(D.bank.name)} • ${D.total} soal • ${secText(D.perQ)}</p>
-        <div class="duel-tags-row center">${rankPill(myRk)}${cardPill(D.me?.card || getMyShowcaseCard())}${modePill(D.mode)}${wagerPill(D.wager)}</div>
+        <div class="duel-tags-row center">${rankPill(myRk)}${cardPill(D.me?.card || getMyShowcaseCard())}${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}</div>
         <div class="duel-study-wait-box">
           <div class="duel-study-wait-txt">
             <b>📚 Nunggu sambil ngerjain soal dulu?</b>
@@ -1171,21 +1425,28 @@
           <small class="duel-rp-sub">${newRk.nextRp ? `Kurang ${newRk.neededRp} RP menuju ${newRk.nextTierName}` : '👑 Kamu berada di puncak Mythic Glory!'}</small>
         </div>`;
 
-      const rewardBanner = (win || draw || (isMP && (R.myRank || 99) <= 3)) && rw ? `
-        <div class="duel-reward-banner ${win ? 'win' : 'draw'}">
-          <div class="duel-reward-title">${win ? '🎁 HADIAH JUARA #1 ARENA' : isMP ? `🏅 BONUS PODIUM #${R.myRank}` : '🤝 BONUS PARTISIPASI DUEL'}</div>
+      const customDia = Number(R.myPrizeDiamonds) || 0;
+      const showReward = rw && (win || draw || customDia > 0 || (isMP && (R.myRank || 99) <= 3));
+      const rewardBanner = showReward ? `
+        <div class="duel-reward-banner ${win || customDia > 0 ? 'win' : 'draw'}">
+          <div class="duel-reward-title">${win ? '🎁 HADIAH JUARA #1 ARENA' : isMP && (R.myRank || 99) <= 3 ? `🏅 HADIAH PODIUM #${R.myRank}` : customDia > 0 ? `💎 HADIAH PERINGKAT #${R.myRank || '-'}` : '🤝 BONUS PARTISIPASI DUEL'}</div>
           <div class="duel-reward-pills">
             ${rw.xpGain ? `<span class="duel-rw-pill xp">⚡ +${rw.xpGain} EXP</span>` : ''}
             ${win && rw.cardBonusXp ? `<span class="duel-rw-pill xp">🃏 Kartu Andalan +${rw.cardBonusXp} EXP</span>` : ''}
-            ${rw.diaGain ? `<span class="duel-rw-pill dia">💎 +${rw.diaGain} Diamond</span>` : ''}
+            ${customDia > 0 ? `<span class="duel-rw-pill dia">💎 +${customDia} Diamond (Masuk Saldo)</span>` : ''}
+            ${!customDia && rw.diaGain ? `<span class="duel-rw-pill dia">💎 +${rw.diaGain} Diamond</span>` : ''}
             ${win && rw.wager ? `<span class="duel-rw-pill wager">💰 Menang Taruhan ${rw.wager} EXP</span>` : ''}
           </div>
         </div>` : '';
 
-      if (isMP && Array.isArray(R.standings) && R.standings.length) {
-        const myRank = R.myRank || (R.standings.find(p => p.isMe)?.rank) || 1;
-        const myP = R.standings.find(p => p.isMe);
-        const top3 = R.standings.slice(0, 3);
+      if (isMP) {
+        const totalPlayers = R.totalPlayers || D.playerCount || (R.standings?.length || 0);
+        const top3 = (Array.isArray(R.top3) && R.top3.length ? R.top3 : (R.standings || []).slice(0, 3)).slice(0, 3);
+        const myP = R.myStanding || (R.standings || []).find(p => p.isMe) || null;
+        const myRank = R.myRank || myP?.rank || 1;
+        const myScore = myP?.score ?? D.me.score ?? 0;
+        const myTimeMs = myP?.timeMs ?? D.me.timeMs ?? 0;
+        const myAvgMs = myP?.avgMs || 0;
         const podiumOrder = top3.length === 3 ? [top3[1], top3[0], top3[2]] : top3;
         const podiumHtml = `<div class="duel-podium">${podiumOrder.map(p => {
           const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : '🥉';
@@ -1195,37 +1456,69 @@
             <b>${esc(p.name)}</b>
             <span class="duel-podium-score">${p.score}/${D.total}</span>
             <small>⏱ ${p.answered ? fmtMs(p.timeMs) : '-'}</small>
+            ${p.prizeDiamonds > 0 ? `<span class="duel-podium-dia">💎 +${p.prizeDiamonds}</span>` : ''}
           </div>`;
         }).join('')}</div>`;
-        const rowsHtml = R.standings.map(p => {
-          const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
-          const stText = p.forfeited ? 'Keluar' : p.eliminated ? 'KO' : p.done ? 'Selesai' : `${p.answered}/${D.total}`;
-          return `<div class="duel-stand-row${p.isMe ? ' me' : ''}">
-            <span class="duel-stand-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
-            ${avatar(p, p.isMe ? '' : 'opp')}
-            <div class="duel-stand-who">
-              <b>${esc(p.name)}${p.isMe ? ' <em class="soc-tag me">Kamu</em>' : ''}</b>
-              <small>${p.tierRank ? `${p.tierRank.icon} ${esc(p.tierRank.fullName)} • ` : ''}${stText}${p.avgMs ? ` • ${fmtSpeedSec(p.avgMs)}` : ''}</small>
+
+        const privateCardHtml = `
+          <div class="duel-private-card">
+            <div class="duel-private-head">
+              <span>🔒 <b>Hasil Pribadimu</b></span>
+              <em>Hanya terlihat olehmu</em>
             </div>
-            <div class="duel-stand-stat">
-              <b>${p.score}<em>/${D.total}</em></b>
-              <small>⏱ ${p.answered ? fmtMs(p.timeMs) : '-'}</small>
+            <div class="duel-private-grid">
+              <div class="duel-private-stat"><small>PERINGKAT</small><b>#${myRank}<em> / ${totalPlayers}</em></b></div>
+              <div class="duel-private-stat"><small>SKOR BENAR</small><b>${myScore}<em> / ${D.total}</em></b></div>
+              <div class="duel-private-stat"><small>TOTAL WAKTU</small><b>⏱ ${myP?.answered || D.me.answered ? fmtMs(myTimeMs) : '-'}</b></div>
+              <div class="duel-private-stat"><small>KECEPATAN</small><b>${myAvgMs ? fmtSpeedSec(myAvgMs) : '-'}</b></div>
             </div>
+            ${customDia > 0 ? `<div class="duel-private-dia">💎 Kamu mendapatkan <b>+${customDia} Diamond</b> dari room ini!</div>` : ''}
+            <small class="duel-private-note">Demi menjaga privasi setiap peserta, papan publik hanya menampilkan <b>Top 3</b>. Peringkat &amp; skormu di luar Top 3 hanya kamu yang tahu.</small>
           </div>`;
-        }).join('');
-        const headline = myRank === 1 ? 'Juara #1 Arena Multiplayer!' : myRank <= 3 ? `Podium Peringkat #${myRank}!` : `Peringkat #${myRank} dari ${R.standings.length}`;
+
+        let standingsSectionHtml = '';
+        if (D.canInspectFull && !R.privacyMode) {
+          const allStand = Array.isArray(R.standings) ? R.standings : top3;
+          const q = String(S.inspectSearch || '').trim().toLowerCase();
+          const filtered = q ? allStand.filter(p => `${p.name || ''} ${p.username || ''} #${p.rank}`.toLowerCase().includes(q)) : allStand;
+          const rowsHtml = filtered.map(p => {
+            const medal = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : `#${p.rank}`;
+            const stText = p.forfeited ? 'Keluar' : p.eliminated ? 'KO' : p.done ? 'Selesai' : `${p.answered}/${D.total}`;
+            return `<div class="duel-stand-row${p.isMe ? ' me' : ''}">
+              <span class="duel-stand-rank ${p.rank <= 3 ? `top-${p.rank}` : ''}">${medal}</span>
+              ${avatar(p, p.isMe ? '' : 'opp')}
+              <div class="duel-stand-who">
+                <b>${esc(p.name)}${p.isMe ? ' <em class="soc-tag me">Kamu</em>' : ''}</b>
+                <small>${p.tierRank ? `${p.tierRank.icon} ${esc(p.tierRank.fullName)} • ` : ''}${stText}${p.avgMs ? ` • ${fmtSpeedSec(p.avgMs)}` : ''}${p.prizeDiamonds > 0 ? ` • 💎+${p.prizeDiamonds}` : ''}</small>
+              </div>
+              <div class="duel-stand-stat">
+                <b>${p.score}<em>/${D.total}</em></b>
+                <small>⏱ ${p.answered ? fmtMs(p.timeMs) : '-'}</small>
+              </div>
+            </div>`;
+          }).join('');
+          standingsSectionHtml = `<div class="duel-standings">
+            <div class="duel-standings-head">
+              <span>👁️ Klasemen Lengkap Admin (${filtered.length}/${allStand.length})</span>
+              <input type="text" class="duel-inspect-search compact" data-soc-inspect-search value="${esc(S.inspectSearch)}" placeholder="Cari peserta…" aria-label="Cari peserta">
+            </div>
+            ${rowsHtml || '<p class="soc-empty">Tidak ada peserta cocok.</p>'}
+          </div>`;
+        } else {
+          standingsSectionHtml = privateCardHtml;
+        }
+
+        const headline = myRank === 1 ? 'Juara #1 Arena Multiplayer!' : myRank <= 3 ? `Podium Peringkat #${myRank}!` : `Peringkat #${myRank} dari ${totalPlayers}`;
         return `<div class="card soc-card soc-center soc-result ${myRank === 1 ? 'win' : myRank <= 3 ? 'draw' : 'lose'}">
           <div class="soc-emoji">${myRank === 1 ? '🏆' : myRank === 2 ? '🥈' : myRank === 3 ? '🥉' : '🏁'}</div>
-          <div class="duel-tags-row center"><span class="duel-tag mp">👥 ${R.standings.length} Pemain</span>${modePill(D.mode)}${wagerPill(D.wager)}</div>
+          <div class="duel-tags-row center"><span class="duel-tag mp">👥 ${totalPlayers} Pemain</span>${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}</div>
           <h3>${headline}</h3>
-          <p>Skormu <b>${myP?.score ?? D.me.score}/${D.total}</b> dalam <b>⏱ ${myP?.answered ? fmtMs(myP.timeMs) : '-'}</b> • Dinilai dari total benar &amp; kecepatan</p>
+          <p>Skormu <b>${myScore}/${D.total}</b> dalam <b>⏱ ${myP?.answered || D.me.answered ? fmtMs(myTimeMs) : '-'}</b> • Dinilai dari total benar &amp; kecepatan</p>
+          <div class="duel-top3-label">🏆 TOP 3 PODIUM PUBLIK</div>
           ${podiumHtml}
+          ${standingsSectionHtml}
           ${rankResultCard}
           ${rewardBanner}
-          <div class="duel-standings">
-            <div class="duel-standings-head"><span>Peringkat Akhir</span><small>Skor Benar • Waktu</small></div>
-            ${rowsHtml}
-          </div>
           <button type="button" class="duel-share-win-btn" data-soc-share-duel>📣 Pamerkan Peringkat ke Status</button>
           <div class="soc-btns2"><button type="button" class="secondary" data-soc-lobby>Ke Lobi Arena</button><button type="button" class="primary" data-soc-rematch>🚀 Buat Room Lagi</button></div>
         </div>
@@ -1245,7 +1538,7 @@
 
       return `<div class="card soc-card soc-center soc-result ${draw ? 'draw' : win ? 'win' : 'lose'}">
         <div class="soc-emoji">${draw ? '🤝' : R.reason === 'knockout' && win ? '💀🏆' : win ? '🏆' : '💪'}</div>
-        <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${h2hBadge(opp?.id)}</div>
+        <div class="duel-tags-row center">${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}${h2hBadge(opp?.id)}</div>
         <h3>${draw ? 'Pertarungan Seri!' : win ? 'Kamu Menang!' : `${oppName} Menang`}</h3>
         <p>${reasonText(R.reason, win, draw)}</p>
         ${rankResultCard}
@@ -1263,7 +1556,6 @@
     const oppLiveScore = opp?.liveScore ?? 0;
     const lead = myLiveScore - oppLiveScore;
     const tugPct = Math.max(12, Math.min(88, 50 + lead * Math.round(36 / Math.max(3, D.total / 2))));
-    const flash = S.oppFlash && Date.now() < S.oppFlash.until ? S.oppFlash : null;
 
     const board = isMP ? mpBoardHTML(D, flash) : `
     <div class="duel-arena-board">
@@ -1321,7 +1613,7 @@
 
     if (nowS() < D.startedAt) {
       return board + `<div class="card soc-card soc-center duel-countdown-card">
-        <div class="duel-tags-row center">${isMP ? `<span class="duel-tag mp">👥 ${D.playerCount} Pemain</span>` : ''}${modePill(D.mode)}${wagerPill(D.wager)}${isMP ? '' : h2hBadge(opp?.id)}</div>
+        <div class="duel-tags-row center">${isMP ? `<span class="duel-tag mp">👥 ${D.playerCount} Pemain</span>` : ''}${modePill(D.mode)}${wagerPill(D.wager)}${prizePill(D.prizes)}${isMP ? '' : h2hBadge(opp?.id)}</div>
         ${isMP ? '' : vsCardShowcaseHTML('Kamu', D.me?.card, opp?.name || 'Lawan', opp?.card)}
         <p>${isMP ? 'Siapkan dirimu! Adu cepat &amp; skor benar dimulai dalam…' : 'Siapkan dirimu! Pertarungan dimulai dalam…'}</p>
         <div class="soc-count" id="duelGo">${Math.max(1, Math.ceil((D.startedAt - nowS()) / 1000))}</div>
@@ -1355,17 +1647,31 @@
     ensureShell();
     const b = $('duelBody'); if (!b) return;
     const D = S.D;
-    $('duelTitle').textContent = D?.status === 'finished'
-      ? (D?.isMultiplayer ? '🏁 Klasemen Akhir Multiplayer' : '🏁 Hasil Arena Duel')
-      : D?.isMultiplayer
-        ? `👥 Arena Multiplayer (${D.playerCount || 1}/${D.maxPlayers || 2})`
-        : (D?.mode === 'sudden_death' ? '💀 Duel Sudden Death' : '⚔️ Arena Duel');
+    $('duelTitle').textContent = D?.isSpectator
+      ? `👁️ Admin Inspect (${D.playerCount || 0}/${D.maxPlayers || 2})`
+      : D?.status === 'finished'
+        ? (D?.isMultiplayer ? '🏁 Hasil Arena Multiplayer' : '🏁 Hasil Arena Duel')
+        : D?.isMultiplayer
+          ? `👥 Arena Multiplayer (${D.playerCount || 1}/${D.maxPlayers || 2})`
+          : (D?.mode === 'sudden_death' ? '💀 Duel Sudden Death' : '⚔️ Arena Duel');
+    const activeEl = document.activeElement;
+    const keepInspectFocus = activeEl?.matches?.('[data-soc-inspect-search]');
+    const selPos = keepInspectFocus && typeof activeEl.selectionStart === 'number' ? activeEl.selectionStart : null;
     b.innerHTML = duelHTML();
+    if (keepInspectFocus) {
+      const inp = b.querySelector('[data-soc-inspect-search]');
+      if (inp) {
+        inp.focus({ preventScroll: true });
+        if (selPos != null && typeof inp.setSelectionRange === 'function') {
+          try { inp.setSelectionRange(selPos, selPos); } catch {}
+        }
+      }
+    }
     if (D?.status === 'active') startTick(); else stopTick();
     syncWaitingFloat();
   }
   async function openDuel(id) {
-    S.fb = null; S.mpExpandAll = false; window.show('duelPage');
+    S.fb = null; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage');
     $('duelBody') && ($('duelBody').innerHTML = '<p class="soc-empty">Memuat ruang duel…</p>');
     try { syncD((await api('/api/duels/' + encodeURIComponent(id))).duel); } catch (e) { S.D = null; toast(e.message, true); return openLobby(); }
     renderDuel();
@@ -1379,40 +1685,55 @@
   const guard = async fn => { if (S.busy) return; S.busy = true; try { await fn(); } catch (e) { toast(e.message || 'Terjadi kesalahan.', true); } finally { S.busy = false; } };
   async function createDuel(friendId) {
     if (!S.block && S.blocks.length) S.block = S.blocks[0].block;
-    if (!S.block) return toast('Pilih blok ujian dulu.', true);
+    if (!S.block && !S.selectedBankIds.length) return toast('Pilih blok atau bank soal dulu.', true);
     const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
+    const prizes = isAdmin() ? activePrizes() : null;
     const d = await api('/api/duels', {
       method: 'POST',
       body: {
         block: S.block,
         bankId: `block:${S.block}`,
+        ...(S.selectedBankIds.length ? { bankIds: S.selectedBankIds } : {}),
         count: S.count,
         seconds: S.sec,
         mode: S.mode,
         wager: S.wager,
         maxPlayers: friendId ? 2 : S.maxPlayers,
         isPublic: friendId ? false : S.isPublic,
+        ...(prizes ? { prizes } : {}),
         ...(card ? { card } : {}),
         ...(friendId ? { friendId } : {})
       }
     });
     syncD(d.duel);
     if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
-    S.fb = null; S.sentFor = -1; S.mpExpandAll = false; window.show('duelPage'); renderDuel();
+    S.fb = null; S.sentFor = -1; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage'); renderDuel();
     if (friendId) toast('Tantangan terkirim ⚔️');
     else if (d.duel?.isMultiplayer) toast(d.duel.isPublic ? `🌐 Room Multiplayer (${d.duel.maxPlayers} orang) dibuka!` : `🔒 Room Private dibuat! Kode password: ${d.duel.code}`);
   }
   async function quickMatch() {
     if (!S.block && S.blocks.length) S.block = S.blocks[0].block;
-    if (!S.block) return toast('Pilih blok ujian dulu.', true);
+    if (!S.block && !S.selectedBankIds.length) return toast('Pilih blok atau bank soal dulu.', true);
     const card = window.CLINED_CARDS?.getEquippedPayload?.() || null;
+    const prizes = isAdmin() ? activePrizes() : null;
     const d = await api('/api/duels/quick', {
       method: 'POST',
-      body: { block: S.block, bankId: `block:${S.block}`, count: S.count, seconds: S.sec, mode: S.mode, wager: S.wager, maxPlayers: S.maxPlayers, ...(card ? { card } : {}) }
+      body: {
+        block: S.block,
+        bankId: `block:${S.block}`,
+        ...(S.selectedBankIds.length ? { bankIds: S.selectedBankIds } : {}),
+        count: S.count,
+        seconds: S.sec,
+        mode: S.mode,
+        wager: S.wager,
+        maxPlayers: S.maxPlayers,
+        ...(prizes ? { prizes } : {}),
+        ...(card ? { card } : {})
+      }
     });
     syncD(d.duel);
     if (d.duel) S.mine = [d.duel, ...S.mine.filter(x => x.id !== d.duel.id && x.status !== 'waiting')];
-    S.fb = null; S.sentFor = -1; S.mpExpandAll = false; window.show('duelPage'); renderDuel();
+    S.fb = null; S.sentFor = -1; S.mpExpandAll = false; S.inspectSearch = ''; window.show('duelPage'); renderDuel();
     toast(d.matched ? '⚡ Lawan ditemukan! Bersiap bertarung!' : d.joined ? '👥 Berhasil masuk room multiplayer! Menunggu Host memulai.' : '🌐 Room Open Access dibuat! Kamu bisa kerjakan soal dulu sambil menunggu.');
   }
   async function startMultiplayer() {
@@ -1422,6 +1743,20 @@
     S.fb = null; S.sentFor = -1;
     renderDuel();
     toast('🚀 Pertarungan dimulai! Bersiap!');
+  }
+  async function finishRoomByAdmin() {
+    const D = S.D; if (!D) return;
+    if (!(await clinedConfirm({
+      title: 'Akhiri room sekarang?',
+      lines: ['Pertarungan akan langsung diselesaikan menggunakan skor saat ini, dan hadiah diamond (jika ada) langsung dibagikan ke semua peserta.'],
+      ok: 'Ya, akhiri sekarang',
+      cancel: 'Lanjutkan',
+      tone: 'danger'
+    }))) return;
+    const r = await api(`/api/duels/${encodeURIComponent(D.id)}/finish`, { method: 'POST', body: {} });
+    syncD(r.duel);
+    renderDuel();
+    toast('🏁 Room telah diakhiri & klasemen akhir dikunci.');
   }
   async function regenCode() {
     const D = S.D; if (!D) return;
@@ -1438,7 +1773,7 @@
     S.fb = null; S.sentFor = -1; window.show('duelPage'); renderDuel();
   }
   async function answer(choice) {
-    const D = S.D; if (!D || D.status !== 'active') return;
+    const D = S.D; if (!D || D.status !== 'active' || D.isSpectator) return;
     const idx = D.myAnswers.length;
     const d = await api(`/api/duels/${encodeURIComponent(D.id)}/answer`, { method: 'POST', body: { idx, choice } });
     syncD(d.duel); S.fb = idx; renderDuel();
@@ -1485,11 +1820,26 @@
     if ('socTab' in ds) { S.hubTab = ds.socTab; if (S.hubTab === 'status') S.feed = null; return renderHub(); }
     if ('socHub' in ds) return openHub(ds.socHub);
     if ('socRefreshLobby' in ds) return guard(() => renderLobby(true));
+    if ('socInspect' in ds) return openDuel(ds.socInspect);
+    if ('socInspectRefresh' in ds) return guard(() => refreshDuel());
+    if ('socAdminFinish' in ds) return guard(() => finishRoomByAdmin());
     if ('socQuick' in ds) return guard(() => quickMatch());
     if ('socMode' in ds) { S.mode = ds.socMode; savePref(); return renderLobby(false); }
     if ('socWager' in ds) { S.wager = Number(ds.socWager); savePref(); return renderLobby(false); }
     if ('socVis' in ds) { S.isPublic = ds.socVis === '1'; savePref(); return renderLobby(false); }
-    if ('socMaxp' in ds) { const n = Math.max(2, Math.min(15, Math.floor(Number(ds.socMaxp) || 2))); S.maxPlayers = n; savePref(); return renderLobby(false); }
+    if ('socMaxp' in ds) { const n = Math.max(2, Math.min(100, Math.floor(Number(ds.socMaxp) || 2))); S.maxPlayers = n; savePref(); return renderLobby(false); }
+    if ('socBankToggle' in ds) { S.bankPickerOpen = !S.bankPickerOpen; return renderLobby(false); }
+    if ('socBankAllblocks' in ds) { S.bankAllBlocks = !S.bankAllBlocks; return renderLobby(false); }
+    if ('socBankAll' in ds) {
+      const q = String(S.bankSearch || '').trim().toLowerCase();
+      const vis = (S.duelBanks || []).filter(b => (S.bankAllBlocks || !S.block || b.block === S.block) && (!q || `${b.name} ${b.block}`.toLowerCase().includes(q)));
+      const set = new Set(S.selectedBankIds);
+      vis.forEach(b => set.add(b.id));
+      S.selectedBankIds = [...set].slice(0, 60);
+      return renderLobby(false);
+    }
+    if ('socBankClear' in ds) { S.selectedBankIds = []; return renderLobby(false); }
+    if ('socPrizeReset' in ds) { S.prizes = { first: 0, second: 0, third: 0, others: 0 }; savePref(); return renderLobby(false); }
     if ('socStartMp' in ds) return guard(() => startMultiplayer());
     if ('socRegenCode' in ds) return guard(() => regenCode());
     if ('socMpExpand' in ds) { S.mpExpandAll = !S.mpExpandAll; return renderDuel(); }
@@ -1578,13 +1928,64 @@
     });
   });
   document.addEventListener('change', e => {
-    if (e.target.matches('[data-soc-block]')) { S.block = e.target.value; savePref(); renderLobby(false); }
-    if (e.target.matches('[data-soc-maxp-sel]')) {
-      const n = Math.max(2, Math.min(15, Math.floor(Number(e.target.value) || 2)));
-      S.maxPlayers = n; savePref(); renderLobby(false);
+    if (e.target.matches('[data-soc-block]')) {
+      S.block = e.target.value;
+      if (!S.bankAllBlocks) S.selectedBankIds = [];
+      savePref();
+      renderLobby(false);
+    }
+    if (e.target.matches('[data-soc-bank-chk]')) {
+      const id = e.target.dataset.socBankChk;
+      if (e.target.checked) {
+        if (!S.selectedBankIds.includes(id)) S.selectedBankIds = [...S.selectedBankIds, id].slice(0, 60);
+      } else {
+        S.selectedBankIds = S.selectedBankIds.filter(x => x !== id);
+      }
+      renderLobby(false);
+    }
+    if (e.target.matches('[data-soc-maxp-input]')) {
+      const n = Math.max(2, Math.min(100, Math.floor(Number(e.target.value) || 2)));
+      S.maxPlayers = n;
+      e.target.value = String(n);
+      savePref();
+      renderLobby(false);
+    }
+    if (e.target.matches('[data-soc-prize]')) {
+      const k = e.target.dataset.socPrize;
+      if (k && ['first', 'second', 'third', 'others'].includes(k)) {
+        const v = cleanPrizeNum(e.target.value);
+        S.prizes[k] = v;
+        e.target.value = String(v);
+        savePref();
+        renderLobby(false);
+      }
     }
   });
-  document.addEventListener('input', e => { if (e.target.matches('[data-soc-code]')) e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); });
+  document.addEventListener('input', e => {
+    if (e.target.matches('[data-soc-code]')) e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (e.target.matches('[data-soc-bank-search]')) {
+      S.bankSearch = e.target.value;
+      renderLobby(false);
+    }
+    if (e.target.matches('[data-soc-inspect-search]')) {
+      S.inspectSearch = e.target.value;
+      renderDuel();
+    }
+    if (e.target.matches('[data-soc-prize]')) {
+      const k = e.target.dataset.socPrize;
+      if (k && ['first', 'second', 'third', 'others'].includes(k)) {
+        S.prizes[k] = cleanPrizeNum(e.target.value);
+        savePref();
+      }
+    }
+    if (e.target.matches('[data-soc-maxp-input]')) {
+      const raw = Number(e.target.value);
+      if (Number.isFinite(raw) && raw >= 2 && raw <= 100) {
+        S.maxPlayers = Math.floor(raw);
+        savePref();
+      }
+    }
+  });
   document.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
     if (e.target.matches?.('[data-soc-user]')) $('hubBody')?.querySelector('[data-soc-add]')?.click();
@@ -1594,6 +1995,7 @@
 
   /* ───────── realtime ───────── */
   const HEARTBEAT_STALE_MS = 40_000, IDLE_MS = 5 * 60_000, LOBBY_POLL_MS = 12_000;
+  const TYPING_SEL = '[data-soc-code],[data-soc-user],[data-soc-cinput],[data-soc-bank-search],[data-soc-maxp-input],[data-soc-prize],[data-soc-inspect-search]';
   let es = null, nextTry = 0, delay = 3000, connId = '', lastBeatAt = 0, lastInteract = Date.now(), isIdle = false, lastLobbyPoll = 0;
 
   function sendPresence(state, useBeacon = false) {
@@ -1675,8 +2077,8 @@
     lastLobbyPoll = Date.now();
     loadLobby().then(() => {
       if (activeView() === 'socialPage') {
-        const typingCode = document.activeElement?.matches?.('[data-soc-code]');
-        if (!typingCode) renderLobby(false);
+        const typing = document.activeElement?.matches?.(TYPING_SEL);
+        if (!typing) renderLobby(false);
       } else if (activeView() === 'hubPage' && S.hubTab === 'teman') {
         renderHub(false);
       }
@@ -1704,11 +2106,12 @@
   function onDuel(m) {
     const n = m.from?.name || 'Pemain';
     const here = S.D && S.D.id === m.id && activeView() === 'duelPage';
+    const isMyRoom = S.mine.some(x => x.id === m.id) || (S.D && S.D.id === m.id && !S.D.isSpectator);
     if (m.kind === 'emote') {
       const emoji = m.emote?.emoji || m.emoji;
       const text = m.emote?.text || m.text;
       if (here && emoji) {
-        if (S.D?.isMultiplayer) {
+        if (S.D?.isMultiplayer || S.D?.isSpectator) {
           S.oppFlash = { text: `${emoji} ${n}: ${text || ''}`, ok: true, until: Date.now() + 3400 };
           renderDuel();
         } else {
@@ -1730,9 +2133,9 @@
     }
     if (m.kind === 'invite') toast(`⚔️ ${n} menantangmu duel!`);
     else if (m.kind === 'roster') {
-      if (m.from?.name && m.playerCount) toast(`👥 ${n} di room (${m.playerCount}/${m.maxPlayers || 2} pemain)`);
+      if (here && m.from?.name && m.playerCount) toast(`👥 ${n} di room (${m.playerCount}/${m.maxPlayers || 2} pemain)`);
     }
-    else if ((m.kind === 'joined' || m.kind === 'started') && !here) {
+    else if ((m.kind === 'joined' || m.kind === 'started') && !here && isMyRoom) {
       toast(m.kind === 'started' ? `🚀 ${n} memulai race multiplayer!` : `⚔️ ${n} bergabung ke duelmu! Bersiap bertarung!`);
       showDuelMatchedModal(m);
     }
@@ -1742,9 +2145,11 @@
       if (S.D?.id === m.id) S.D = null;
       syncWaitingFloat();
     }
-    else if (m.kind === 'finished' && !here) toast('🏁 Pertarungan selesai, lihat klasemen di menu Duel');
+    else if (m.kind === 'finished' && !here && isMyRoom) toast('🏁 Pertarungan selesai, lihat hasil di menu Duel');
     if (here) refreshDuel();
-    loadLobby().then(() => { if (activeView() === 'socialPage') renderLobby(false); }).catch(() => {});
+    loadLobby().then(() => {
+      if (activeView() === 'socialPage' && !document.activeElement?.matches?.(TYPING_SEL)) renderLobby(false);
+    }).catch(() => {});
   }
 
   function boot() { ensureShell(); connect(); }
@@ -1770,7 +2175,7 @@
     }
     if (document.visibilityState === 'visible' && (now - lastLobbyPoll) >= LOBBY_POLL_MS) {
       const v = activeView();
-      const typing = document.activeElement?.matches?.('[data-soc-code],[data-soc-user],[data-soc-cinput]');
+      const typing = document.activeElement?.matches?.(TYPING_SEL);
       if (!typing && (v === 'socialPage' || (v === 'hubPage' && S.hubTab === 'teman'))) {
         refreshSocialViews();
       }
