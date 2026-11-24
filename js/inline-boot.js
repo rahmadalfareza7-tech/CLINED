@@ -145,6 +145,18 @@
     root.addEventListener('mouseenter', function () { paused = true; });
     root.addEventListener('mouseleave', function () { paused = false; });
 
+    var suppressClick = false;
+    function armClickSuppress() {
+      suppressClick = true;
+      setTimeout(function () { suppressClick = false; }, 60);
+    }
+    track.addEventListener('click', function (e) {
+      if (suppressClick) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
     // Live horizontal touch swipe (mobile)
     var tActive = false, tStartX = 0, tStartY = 0, tDx = 0, tLocked = null;
     track.addEventListener('touchstart', function (e) {
@@ -174,6 +186,7 @@
       tActive = false;
       paused = false;
       var w = root.clientWidth || 300;
+      if (tLocked === 'x') armClickSuppress();
       if (tLocked === 'x' && Math.abs(tDx) > Math.min(48, w * 0.14)) {
         goTo(idx + (tDx < 0 ? 1 : -1), false);
       } else {
@@ -205,6 +218,7 @@
       if (!mDragging) return;
       mDragging = false;
       paused = false;
+      if (Math.abs(mDx) > 8) armClickSuppress();
       var w = root.clientWidth || 300;
       if (Math.abs(mDx) > Math.min(50, w * 0.12)) {
         goTo(idx + (mDx < 0 ? 1 : -1), false);

@@ -73,6 +73,7 @@ html body #home .duo-learning-map.home-banner-slider::after { display: none !imp
   flex: 0 0 100%;
   width: 100%;
   min-width: 100%;
+  position: relative;
 }
 .hbs-slide picture,
 .hbs-slide img {
@@ -80,6 +81,45 @@ html body #home .duo-learning-map.home-banner-slider::after { display: none !imp
   width: 100%;
   height: auto;
   pointer-events: none;
+}
+.hbs-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-drag: none;
+}
+.hbs-track.dragging .hbs-link,
+.hbs-track.dragging .hbs-overlay-click {
+  cursor: grabbing;
+}
+.hbs-slide-overlay {
+  background: #ffffff;
+}
+.hbs-overlay-frame {
+  position: absolute;
+  inset: 6px 8px;
+  border-radius: 12px;
+  border: 2.5px dashed #cbd5e1;
+  background: #ffffff;
+  overflow: hidden;
+}
+.hbs-overlay-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+.hbs-overlay-click {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  cursor: pointer;
+  -webkit-user-drag: none;
 }
 .hbs-dots {
   position: absolute;
