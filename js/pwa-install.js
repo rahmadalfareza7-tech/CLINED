@@ -33,9 +33,7 @@
   // Register SW if not yet registered (ensures beforeinstallprompt works on index.html too)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.getRegistration().then(reg => {
-        if (!reg) navigator.serviceWorker.register('./sw.js').catch(() => {});
-      }).catch(() => {});
+      navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(r => r && r.update()).catch(() => {});
     }, { once: true });
   }
 

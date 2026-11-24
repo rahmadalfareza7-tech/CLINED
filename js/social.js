@@ -2263,15 +2263,25 @@
     if (es || Date.now() < nextTry || !loggedIn() || navigator.onLine === false || typeof EventSource === 'undefined') return;
     const vis = document.visibilityState === 'visible' && !isIdle ? '1' : '0';
     es = new EventSource('/api/stream?vis=' + vis);
-    es.onopen = () => { lastBeatAt = Date.now(); };
-    es.addEventListener('ready', ev => {
+    es.onopen = () => {
+      lastBeatAt = Date.now();
+      try { window.CLINED_ONLINE_SYNC?.sync?.({ force: true }); } catch {}
+      try { window.dispatchEvent(new Event('clined:stream-open')); } catch {}
+    };
+    const onStreamHello = ev => {
       delay = 3000;
       lastBeatAt = Date.now();
       try { connId = JSON.parse(ev.data || '{}').connId || ''; } catch { connId = ''; }
       if (document.visibilityState !== 'visible' || isIdle) sendPresence('hidden');
       refreshSocialViews(!S.F);
       window.CLINED_CHAT?.refreshDot();
-    });
+      try { window.CLINED_ONLINE_SYNC?.sync?.({ force: true }); } catch {}
+      try { window.CLINED_XP?.flush?.(); } catch {}
+      try { window.CLINED_CARDS?.onRemoteUpdate?.({}); } catch {}
+      try { window.dispatchEvent(new Event('clined:stream-open')); } catch {}
+    };
+    es.addEventListener('ready', onStreamHello);
+    es.addEventListener('hello', onStreamHello);
     es.addEventListener('ping', () => { lastBeatAt = Date.now(); });
     es.addEventListener('friend', ev => { lastBeatAt = Date.now(); onFriend(JSON.parse(ev.data || '{}')); });
     es.addEventListener('duel', ev => { lastBeatAt = Date.now(); onDuel(JSON.parse(ev.data || '{}')); });

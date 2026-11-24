@@ -696,14 +696,19 @@ function questionAbilityProfile(q){
 }
 function syncAbilityCatalog(){
   const old=get(KEY.abilityMap,{});
-  const next={};
+  const next={...(old&&typeof old==='object'?old:{})};
+  let mapChanged=false;
   for(const [bankId,bankObj] of Object.entries(BANKS||{})){
     (bankObj.data||[]).forEach((q,i)=>{
       const id=qid(bankId,i,q), p=questionAbilityProfile(q);
-      next[id]={bank:bankId,no:q.no||i+1,primary:p.primary,weights:p.weights,analyzedAt:new Date().toISOString()};
+      const prev=next[id];
+      if(!prev || prev.primary!==p.primary || JSON.stringify(prev.weights)!==JSON.stringify(p.weights)){
+        next[id]={bank:bankId,no:q.no||i+1,primary:p.primary,weights:p.weights};
+        mapChanged=true;
+      }
     });
   }
-  set(KEY.abilityMap,{...old,...next});
+  if(mapChanged) set(KEY.abilityMap,next);
   // Migrasikan statistik lama ke komponen audit terbaru supaya histori
   // yang sudah pernah dikerjakan ikut masuk ke komponen yang benar.
   const qstats=get(KEY.qstats,{});
@@ -713,9 +718,11 @@ function syncAbilityCatalog(){
       const id=qid(bankId,i,q);
       if(qstats[id]){
         const p=questionAbilityProfile(q);
-        qstats[id].primary=p.primary;
-        qstats[id].weights=p.weights;
-        changed=true;
+        if(qstats[id].primary!==p.primary || JSON.stringify(qstats[id].weights)!==JSON.stringify(p.weights)){
+          qstats[id].primary=p.primary;
+          qstats[id].weights=p.weights;
+          changed=true;
+        }
       }
     });
   }
@@ -851,12 +858,26 @@ function getBankSessionMap(){
   const m=get(KEY.bankSessions,{});
   return m && typeof m==='object' && !Array.isArray(m) ? m : {};
 }
+function bankDoneTimestamp(bankId){
+  if(!bankId)return 0;
+  const best=getBankBest(bankId);
+  return Date.parse(best?.lastAt||'')||Number(best?.at)||0;
+}
 function getBankSession(bankId){
   if(!bankId)return null;
   const s=getBankSessionMap()[bankId];
-  if(s && Array.isArray(s.items) && s.items.length) return s;
+  const doneMs=bankDoneTimestamp(bankId);
+  if(s && !s.deleted && Array.isArray(s.items) && s.items.length){
+    const sUpd=Math.max(Number(s.updated)||0,Date.parse(s.savedAt||'')||0);
+    const sStart=Number(s.startedAt)||0;
+    if(doneMs>0 && !(sStart>0 ? sStart>doneMs : sUpd>doneMs)) return null;
+    return s;
+  }
   const legacy=get(KEY.session,null);
-  if(legacy && !legacy.isCustom && legacy.selectedBank===bankId && Array.isArray(legacy.quiz) && legacy.quiz.length){
+  if(legacy && !legacy.deleted && !legacy.isCustom && legacy.selectedBank===bankId && Array.isArray(legacy.quiz) && legacy.quiz.length){
+    const lUpd=Math.max(Number(legacy.updated)||0,Date.parse(legacy.savedAt||'')||0);
+    const lStart=Number(legacy.startedAt)||0;
+    if(doneMs>0 && !(lStart>0 ? lStart>doneMs : lUpd>doneMs)) return null;
     return {
       bankId, bankName:BANKS[bankId]?.name||bankId,
       pos:legacy.pos||0, score:legacy.score||0,
@@ -866,10 +887,23 @@ function getBankSession(bankId){
   }
   return null;
 }
-function clearBankSession(bankId){
+function clearBankSession(bankId, explicitAt=0, explicitSid=''){
   if(!bankId)return;
-  const m=getBankSessionMap();
-  if(m[bankId]){delete m[bankId];set(KEY.bankSessions,m);}
+  const m={...getBankSessionMap()};
+  const prev=m[bankId];
+  if(explicitAt>0 || (prev && !prev.deleted)){
+    const prevMs=Math.max(Number(prev?.updated)||0,Date.parse(prev?.savedAt||'')||0);
+    const ts=Math.max(Date.now(),Number(explicitAt)||0,prevMs+1);
+    const sid=explicitSid||prev?.sessionId||'';
+    m[bankId]={
+      deleted:true,
+      bankId,
+      updated:ts,
+      savedAt:new Date(ts).toISOString(),
+      ...(sid?{sessionId:sid}:{})
+    };
+    set(KEY.bankSessions,m);
+  }
 }
 function getBankBestMap(){
   const raw=get(KEY.bankBest,{});
@@ -898,7 +932,7 @@ function getBankBestMap(){
 function getBankBest(bankId){
   return bankId ? (getBankBestMap()[bankId] || null) : null;
 }
-function recordBankBest(bankId, pct, sc, total){
+function recordBankBest(bankId, pct, sc, total, atIso=''){
   if(!bankId)return;
   const raw=get(KEY.bankBest,{});
   const map=(raw && typeof raw==='object' && !Array.isArray(raw))?{...raw}:{};
@@ -910,7 +944,7 @@ function recordBankBest(bankId, pct, sc, total){
     bestTotal:nextBest?total:Number(prev.bestTotal||0),
     lastPct:pct,
     attempts:(Number(prev?.attempts)||0)+1,
-    lastAt:new Date().toISOString()
+    lastAt:atIso||new Date().toISOString()
   };
   set(KEY.bankBest,map);
 }
@@ -970,6 +1004,7 @@ async function resumeBankSession(bankId){
   window.__clinedCustomQuiz=false;
   window.__clinedFinishing=false;
   quizSessionId=String(sess.sessionId||`bank:${bankId}:${sess.savedAt||''}`);
+  quizStartedAt=Number(sess.startedAt)||Number(sess.updated)||Date.parse(sess.savedAt||'')||Date.now();
   quiz=built;selectedBank=bankId;selectedCount=quiz.length;
   pos=Math.max(0,Math.min(quiz.length-1,Number(sess.pos)||0));
   score=Number(sess.score)||0;streak=Number(sess.streak)||0;
@@ -990,21 +1025,39 @@ async function resumeBankSession(bankId){
 }
 
 let quizSessionId='';
+let quizStartedAt=0;
 function newQuizSessionId(){
   try{if(typeof crypto!=='undefined'&&crypto.randomUUID)return crypto.randomUUID();}catch{}
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
+}
+function nextQuizStartMs(bankId){
+  const prevBank=bankId?getBankSessionMap()[bankId]:null;
+  const prevQuiz=get(KEY.session,null);
+  const doneMs=bankId?bankDoneTimestamp(bankId):0;
+  const anchor=Math.max(
+    doneMs,
+    Number(prevBank?.updated)||Date.parse(prevBank?.savedAt||'')||0,
+    Number(prevQuiz?.updated)||Date.parse(prevQuiz?.savedAt||'')||0
+  );
+  return Math.max(Date.now(),anchor+1);
 }
 
 function saveSession(){
   if(window.__clinedFinishing || !quiz.length || !$("quiz")?.classList.contains("active"))return;
   if(!quizSessionId) quizSessionId=newQuizSessionId();
+  if(!quizStartedAt) quizStartedAt=nextQuizStartMs(window.__clinedCustomQuiz?'':selectedBank);
   if(timerDuration && timerDeadline){
     timerSeconds=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));
   }
-  const savedAt=new Date().toISOString();
+  const prevMap=getBankSessionMap();
+  const prevBankMs=selectedBank?(Math.max(Number(prevMap[selectedBank]?.updated)||0,Date.parse(prevMap[selectedBank]?.savedAt||'')||0)):0;
+  const prevQuiz=get(KEY.session,null);
+  const prevQuizMs=Math.max(Number(prevQuiz?.updated)||0,Date.parse(prevQuiz?.savedAt||'')||0);
+  const updated=Math.max(Date.now(),Number(quizStartedAt)||0,prevBankMs+1,prevQuizMs+1);
+  const savedAt=new Date(updated).toISOString();
+  const doneCount=quiz.filter(q=>q.selectedAnswer!=null).length;
   const isBankBacked=!window.__clinedCustomQuiz && selectedBank && BANKS[selectedBank];
   if(isBankBacked){
-    const m=getBankSessionMap();
     const bankArr=BANKS[selectedBank]?.data||[];
     const items=quiz.map(q=>({
       i:Number.isInteger(q.origIndex)?q.origIndex:bankArr.findIndex((raw,idx)=>qid(selectedBank,idx,raw)===q.id),
@@ -1012,27 +1065,34 @@ function saveSession(){
       o:Array.isArray(q.order)?q.order:q.opsi.map((_,k)=>k),
       a:q.selectedAnswer??null
     }));
-    const entries=Object.entries(m).filter(([k])=>k!==selectedBank).slice(-14);
+    const entries=Object.entries(prevMap).filter(([k])=>k!==selectedBank).slice(-24);
     entries.push([selectedBank,{
       sessionId:quizSessionId,
+      startedAt:quizStartedAt,
+      updated,
       bankId:selectedBank, bankName:bankName(),
       pos, score, streak, sessionXP, playerHP, enemyHP, wrongCombo,
       quizMode, timerSeconds, timerDuration,
       flagged:[...flagged],
       total:quiz.length,
-      doneCount:quiz.filter(q=>q.selectedAnswer!=null).length,
+      doneCount,
       items, savedAt
     }]);
     set(KEY.bankSessions,Object.fromEntries(entries));
     set(KEY.session,{
       sessionId:quizSessionId,
+      startedAt:quizStartedAt,
+      updated,
       compact:true,selectedBank,bankName:bankName(),
-      pos,score,selectedCount,total:quiz.length,
+      pos,score,doneCount,selectedCount,total:quiz.length,
       isCustom:false,savedAt
     });
   }else{
     set(KEY.session,{
       sessionId:quizSessionId,
+      startedAt:quizStartedAt,
+      updated,
+      doneCount,
       quiz,pos,score,selectedCount,selectedBank,streak,sessionXP,playerHP,enemyHP,wrongCombo,
       answered,selectedAnswer,quizMode,timerSeconds,timerDuration,timerDeadline,
       isCustom:!!window.__clinedCustomQuiz,
@@ -1041,22 +1101,41 @@ function saveSession(){
   }
   renderResume();
 }
-function clearSession(){stopTimer();del(KEY.session);renderResume()}
+function clearSession(explicitAt=0, explicitSid=''){
+  stopTimer();
+  const prev=get(KEY.session,null);
+  if(explicitAt>0 || (prev && !prev.deleted)){
+    const prevMs=Math.max(Number(prev?.updated)||0,Date.parse(prev?.savedAt||'')||0);
+    const ts=Math.max(Date.now(),Number(explicitAt)||0,prevMs+1);
+    const sid=explicitSid||prev?.sessionId||'';
+    set(KEY.session,{
+      deleted:true,
+      updated:ts,
+      savedAt:new Date(ts).toISOString(),
+      ...(sid?{sessionId:sid}:{})
+    });
+  }
+  renderResume();
+}
 function renderResume(){
   const s=get(KEY.session,null);
-  const total=s?.compact?Number(s.total||0):(s?.quiz?.length||0);
-  if(!s||!total){$("resumeCard").hidden=true;return}
+  if(!s||s.deleted){$("resumeCard").hidden=true;return}
+  if(s.compact && s.selectedBank && !getBankSession(s.selectedBank)){$("resumeCard").hidden=true;return}
+  const total=s.compact?Number(s.total||0):(s.quiz?.length||0);
+  if(!total){$("resumeCard").hidden=true;return}
   $("resumeCard").hidden=false;
   $("resumeText").textContent=`${BANKS[s.selectedBank||"utama"]?.name||s.bankName||"Kuis"} • Soal ${Math.min((s.pos||0)+1,total)} dari ${total} • ${s.score||0} benar`;
 }
 $("resumeBtn").onclick=()=>{
-  const s=get(KEY.session,null);if(!s)return;
+  const s=get(KEY.session,null);if(!s||s.deleted)return;
   if(s.compact && s.selectedBank){
     if(typeof resumeBankSession==="function"){resumeBankSession(s.selectedBank);return;}
   }
+  if(!Array.isArray(s.quiz)||!s.quiz.length)return;
   window.__clinedCustomQuiz=!!s.isCustom;
   window.__clinedFinishing=false;
   quizSessionId=String(s.sessionId||`legacy:${s.selectedBank||''}:${s.savedAt||''}`);
+  quizStartedAt=Number(s.startedAt)||Number(s.updated)||Date.parse(s.savedAt||'')||Date.now();
   quiz=s.quiz;pos=s.pos||0;score=s.score||0;selectedCount=s.selectedCount||quiz.length;
   selectedBank=(s.selectedBank&&BANKS[s.selectedBank])?s.selectedBank:(s.quiz?.[0]?.bank&&BANKS[s.quiz[0].bank])?s.quiz[0].bank:(Object.keys(BANKS)[0]||"utama");streak=s.streak||0;sessionXP=Number(s.sessionXP||0);playerHP=Number.isFinite(Number(s.playerHP))?Math.max(0,Math.min(100,Number(s.playerHP))):100;enemyHP=Number.isFinite(Number(s.enemyHP))?Math.max(0,Math.min(100,Number(s.enemyHP))):100;wrongCombo=Number(s.wrongCombo||0);answered=!!s.answered;selectedAnswer=s.selectedAnswer??null;
   setLastWorkedBlock(blockForBank(selectedBank));
@@ -1074,6 +1153,7 @@ $("discardResumeBtn").onclick=async()=>{
     const s=get(KEY.session,null);
     if(s?.selectedBank) clearBankSession(s.selectedBank);
     clearSession();
+    renderAllVisibleBankUI();
   }
 };
 
@@ -1304,6 +1384,7 @@ async function startQuiz(){
   clearSession();
   clearBankSession(selectedBank);
   quizSessionId=newQuizSessionId();
+  quizStartedAt=nextQuizStartMs(selectedBank);
   setLastWorkedBlock(blockForBank(selectedBank));
   renderDashboardBlockOptions();
   quiz=buildQuiz(selectedCount);
@@ -1314,7 +1395,7 @@ async function startQuiz(){
   pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;
   flagged=new Set();sessionStart=Date.now();
   timerDuration=getTimeSeconds();timerSeconds=timerDuration;timerDeadline=timerDuration?Date.now()+timerDuration*1000:0;
-  show("quiz");renderQuestion();startTimer();
+  show("quiz");renderQuestion();startTimer();saveSession();
 }
 
 function updateFlagUI(){
@@ -1721,23 +1802,35 @@ function finish(reason="complete"){
   if(window.__clinedFinishing)return;
   window.__clinedFinishing=true;
   const finishedSessionId=quizSessionId||newQuizSessionId();
+  const prevBankSess=selectedBank?getBankSessionMap()[selectedBank]:null;
+  const prevQuizSess=get(KEY.session,null);
+  const prevBest=selectedBank?getBankBest(selectedBank):null;
+  const finishedMs=Math.max(
+    Date.now(),
+    Number(quizStartedAt)||0,
+    (Number(prevBankSess?.updated)||Date.parse(prevBankSess?.savedAt||'')||0)+1,
+    (Number(prevQuizSess?.updated)||Date.parse(prevQuizSess?.savedAt||'')||0)+1,
+    (Date.parse(prevBest?.lastAt||'')||0)+1
+  );
+  const finishedIso=new Date(finishedMs).toISOString();
   quizSessionId='';
+  quizStartedAt=0;
   if(quizMode==="exam")gradeExam();
   window.__examReview=quizMode==="exam";
   stopTimer();
   const validTotal=quiz.filter(q=>q.jawabanBenar!=null&&!q.incomplete).length;
   const total=quiz.length,pct=validTotal?Math.round(score/validTotal*100):0,h=get(KEY.hist,[]);
   h.unshift({
-    date:new Date().toISOString(),score,total,pct,validTotal,
+    date:finishedIso,score,total,pct,validTotal,
     bank:selectedBank,bankName:bankName(),mode:quizMode,
     duration:timerDuration?timerDuration-timerSeconds:null,reason
   });
   set(KEY.hist,h.slice(0,50));
   if(!window.__clinedCustomQuiz && selectedBank){
-    clearBankSession(selectedBank);
-    recordBankBest(selectedBank,pct,score,validTotal);
+    clearBankSession(selectedBank,finishedMs,finishedSessionId);
+    recordBankBest(selectedBank,pct,score,validTotal,finishedIso);
   }
-  clearSession();
+  clearSession(finishedMs,finishedSessionId);
   $("resultScore").textContent=pct+"%";
   if($("resultXP"))$("resultXP").textContent=`+${sessionXP} XP`;
   if($("resultLevel"))$("resultLevel").textContent=`Lv. ${xpLevel(Number(get(KEY.xp,0))||0)}`;
@@ -1974,10 +2067,19 @@ $("resultHome").onclick=()=>{show("home");renderCounts()};
 
 function toggleBookmark(id){
   let b=get(KEY.book,[]);
-  b=b.includes(id)?b.filter(x=>x!==id):[...b,id];set(KEY.book,b);
+  if(!Array.isArray(b))b=[];
+  const removing=b.includes(id);
+  b=removing?b.filter(x=>x!==id):[...b,id];
+  const rawMeta=get('clined_bookmarks_meta_v1',{});
+  const meta=(rawMeta&&typeof rawMeta==='object'&&!Array.isArray(rawMeta))?{...rawMeta}:{};
+  const prevAt=Number(meta[id]?.at)||0;
+  const at=Math.max(Date.now(),prevAt+1);
+  meta[id]=removing?{deleted:true,at}:{at};
+  set('clined_bookmarks_meta_v1',meta);
+  set(KEY.book,b);
   try{if(typeof checkNewAchievements==='function')checkNewAchievements();}catch{}
-  $("bookmarkStat").textContent=b.length;
-  if(quiz[pos])$("bookmarkBtn").textContent=b.includes(quiz[pos].id)?"★Tersimpan":"☆Simpan";
+  if($("bookmarkStat"))$("bookmarkStat").textContent=b.length;
+  if(quiz[pos]&&$("bookmarkBtn"))$("bookmarkBtn").textContent=b.includes(quiz[pos].id)?"★Tersimpan":"☆Simpan";
 }
 function renderBookmarksLegacy(){
   const b=get(KEY.book,[]),w=$("bookmarkList");
@@ -2043,6 +2145,7 @@ function renderDailyStreak(opts){
   const data=streakData(),today=localDayKey(),count=Math.min(5,Number(data.counts[today]||0));
   const streakDays=calculateDailyStreak(data.counts);
   if(!opts?.silent&&Number(data.streak||0)!==streakDays){data.streak=streakDays;set(KEY.dailyStreak,data);}
+  if($("duoStreakValue"))$("duoStreakValue").textContent=String(count);
   const bar=$("dailyStreakBar"), title=$("dailyStreakTitle"), sub=$("dailyStreakSub"), countEl=$("dailyStreakCount"), flame=$("streakFlame");
   if(!bar||!title||!sub||!countEl)return;
   setProgress(bar,count/5*100);
@@ -2128,11 +2231,13 @@ function startCustomQuiz(list,{shuffleList=true,limit=20}={}){
   window.__clinedCustomQuiz=true;
   window.__clinedFinishing=false;
   window.__examReview=false;
+  clearSession();
   quizSessionId=newQuizSessionId();
+  quizStartedAt=nextQuizStartMs('');
   quizMode="study";
   quiz=(shuffleList?shuffle(base):base).slice(0,limit).map(wrongToQuiz);
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
-  clearSession();show("quiz");renderQuestion();startTimer();
+  show("quiz");renderQuestion();startTimer();
   return true;
 }
 window.CLINED_startCustomQuiz=startCustomQuiz;
@@ -2170,10 +2275,12 @@ function startSmartReview(){
   window.__clinedCustomQuiz=true;
   window.__clinedFinishing=false;
   window.__examReview=false;
+  clearSession();
   quizSessionId=newQuizSessionId();
+  quizStartedAt=nextQuizStartMs('');
   quizMode="study";
   selectedBank=quiz[0]?.bank||selectedBank;selectedCount=quiz.length;pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
-  clearSession();show('quiz');renderQuestion();startTimer();
+  show('quiz');renderQuestion();startTimer();
 }
 function renderSmartReview(){
   const rows=getSmartReviewRows(6), box=$('smartReviewList'), summary=$('smartReviewSummary');
@@ -2192,7 +2299,9 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Enter" && answered){e.preventDefault();$("nextBtn").click();}
 });
 
-window.addEventListener("beforeunload",saveSession);
+window.addEventListener("beforeunload",saveSession,{capture:true});
+window.addEventListener("pagehide",saveSession,{capture:true});
+window.addEventListener("clined:before-sync-flush",()=>{try{saveSession();}catch{}});
 document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState==="hidden"){
     saveSession();
@@ -2201,7 +2310,7 @@ document.addEventListener("visibilitychange",()=>{
     updateTimerUI();
     startTimer();
   }
-});
+},{capture:true});
 
 /* ===== v17 additive study upgrades ===== */
 const ENH={flash:[],flashPos:0,flashShown:false};
@@ -2236,17 +2345,17 @@ function resolveQuestionRef(id){
 }
 function startSingleQuestion(bankId,idx){
   const q=rawToQuiz(bankId,idx); if(!q)return;
-  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizSessionId=newQuizSessionId();quizMode="study";
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;clearSession();quizSessionId=newQuizSessionId();quizStartedAt=nextQuizStartMs('');quizMode="study";
   selectedBank=bankId;selectedCount=1;quiz=[q];pos=0;score=0;streak=0;sessionXP=0;lastXPGain=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
-  clearSession();show("quiz");renderQuestion();startTimer();
+  show("quiz");renderQuestion();startTimer();
 }
 function startBookmarkDrill(){
   const ids=get(KEY.book,[]),rows=[];
   ids.forEach(id=>{const ref=resolveQuestionRef(id);if(ref)rows.push(rawToQuiz(ref.bankId,ref.idx));});
   if(!rows.length){showToast("Belum ada soal bookmark. Simpan beberapa soal dulu.");return;}
-  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizSessionId=newQuizSessionId();quizMode="study";
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;clearSession();quizSessionId=newQuizSessionId();quizStartedAt=nextQuizStartMs('');quizMode="study";
   quiz=shuffle(rows).slice(0,Math.min(20,rows.length));selectedCount=quiz.length;selectedBank=quiz[0].bank;pos=0;score=0;streak=0;sessionXP=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
-  clearSession();show("quiz");renderQuestion();startTimer();
+  show("quiz");renderQuestion();startTimer();
 }
 
 function renderBookmarks(){
@@ -2263,9 +2372,9 @@ function renderBookmarks(){
 function startSmart10(){
   const candidates=[];
   Object.entries(BANKS).forEach(([bankId,b])=>b.data.forEach((q,i)=>{if(q?.opsi?.length>=2)candidates.push(rawToQuiz(bankId,i));}));
-  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;quizSessionId=newQuizSessionId();quizMode="study";
+  window.__clinedCustomQuiz=true;window.__clinedFinishing=false;window.__examReview=false;clearSession();quizSessionId=newQuizSessionId();quizStartedAt=nextQuizStartMs('');quizMode="study";
   quiz=shuffle(candidates).slice(0,10);selectedCount=quiz.length;selectedBank=quiz[0]?.bank||"utama";pos=0;score=0;streak=0;sessionXP=0;playerHP=100;enemyHP=100;wrongCombo=0;answered=false;selectedAnswer=null;flagged=new Set();timerDuration=0;timerSeconds=0;timerDeadline=0;
-  clearSession();show("quiz");renderQuestion();startTimer();
+  show("quiz");renderQuestion();startTimer();
 }
 function initFlashcards(){
   const source=(BANKS[selectedBank]?.data||[]).filter(q=>q?.soal&&q?.opsi?.length);
@@ -3234,7 +3343,7 @@ renderDailyStreak();
 renderDailyMission();
 renderHomeClinicalDashboard();
 
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(r=>r&&r.update()).catch(()=>{}));
 
 syncNavVisibility();
 
@@ -3497,6 +3606,7 @@ async function authRestoreMissingLearningState(){
 
     for(const [key,item] of Object.entries(state)){
       if(!item||item.deleted||typeof item.value!=='string')continue;
+      if(window.CLINED_ONLINE_SYNC?.isSafeKey&&!window.CLINED_ONLINE_SYNC.isSafeKey(key))continue;
       if(localStorage.getItem(key)!==null)continue;
 
       nativeSet.call(localStorage,key,item.value);
@@ -3510,6 +3620,7 @@ async function authRestoreMissingLearningState(){
 
     if(restored){
       nativeSet.call(localStorage,'clined_sync_meta_v1',JSON.stringify(meta));
+      try{window.CLINED_ONLINE_SYNC?.reconcileLocal?.(false);}catch{}
       try{renderXP();}catch{}
       try{if(typeof checkNewAchievements==='function')checkNewAchievements({silent:true});}catch{}
       console.log('[CLINED] restored missing learning state:',restored);
@@ -3531,8 +3642,8 @@ function restoreLastView(){
   const wanted=hashId&&document.getElementById(hashId)?hashId:(savedId&&document.getElementById(savedId)?savedId:'home');
   if(wanted==='quiz'){
     const s=get(KEY.session,null);
-    const total=s?.compact?Number(s.total||0):(s?.quiz?.length||0);
-    if(s&&total&&$('resumeBtn')){$('resumeBtn').click();return;}
+    const total=(s&&!s.deleted)?(s.compact?Number(s.total||0):(s.quiz?.length||0)):0;
+    if(s&&!s.deleted&&total&&$('resumeBtn')){$('resumeBtn').click();return;}
   }
   if((wanted==='result'||wanted==='review')&&!quiz.length){show('home',{force:true,fromHistory:true});return;}
   show(wanted,{force:true,fromHistory:true});
@@ -3625,9 +3736,38 @@ window.addEventListener('clined:sync-applied',()=>{
   try{if(typeof renderClinicalDashboard==='function'&&$('clinicalDashboard')?.classList.contains('active'))renderClinicalDashboard({preserveScope:true});}catch{}
   try{if(typeof renderSmartReview==='function'&&$('smartReviewPage')?.classList.contains('active'))renderSmartReview();}catch{}
   try{if(typeof renderBookmarks==='function'&&$('bookmarks')?.classList.contains('active'))renderBookmarks();}catch{}
+  try{if(typeof renderHistory==='function'&&$('history')?.classList.contains('active'))renderHistory();}catch{}
+  try{if(typeof renderAnalytics==='function'&&$('analytics')?.classList.contains('active'))renderAnalytics();}catch{}
   try{if(typeof renderAchievements==='function'&&$('achievementsPage')?.classList.contains('active'))renderAchievements();}catch{}
   try{if(typeof renderWrong==='function'&&$('wrong')?.classList.contains('active'))renderWrong();}catch{}
   try{if(typeof window.renderClinicalQuest==='function'&&$('clinicalQuestPage')?.classList.contains('active'))window.renderClinicalQuest();}catch{}
+  try{
+    if($('quiz')?.classList.contains('active')&&quiz.length&&quiz[pos]){
+      const bk=get(KEY.book,[]);
+      if($('bookmarkBtn'))$('bookmarkBtn').textContent=Array.isArray(bk)&&bk.includes(quiz[pos].id)?'★Tersimpan':'☆Simpan';
+      if(!window.__clinedCustomQuiz&&!window.__clinedFinishing&&selectedBank){
+        const rs=getBankSession(selectedBank);
+        if(rs&&!rs.legacyOnly&&Array.isArray(rs.items)&&rs.items.length===quiz.length&&(!rs.sessionId||!quizSessionId||String(rs.sessionId)===String(quizSessionId))){
+          let mergedQuizChange=false;
+          for(let i=0;i<quiz.length;i++){
+            const ra=rs.items[i]?.a;
+            if(quiz[i].selectedAnswer==null&&ra!=null){quiz[i].selectedAnswer=Number(ra);mergedQuizChange=true;}
+          }
+          if(Array.isArray(rs.flagged)){
+            for(const fid of rs.flagged){if(!flagged.has(fid)){flagged.add(fid);mergedQuizChange=true;}}
+          }
+          const rPos=Math.max(0,Math.min(quiz.length-1,Number(rs.pos)||0));
+          if(rPos>pos){pos=rPos;mergedQuizChange=true;}
+          if(mergedQuizChange){
+            score=Math.max(score,Number(rs.score)||0);
+            selectedAnswer=quiz[pos].selectedAnswer??null;
+            answered=selectedAnswer!==null;
+            renderQuestion(true);
+          }
+        }
+      }
+    }
+  }catch{}
   try{scheduleAchievementCheck(true);}catch{}
 });
 function authSetError(id,message){const el=$(id);if(!el)return;el.textContent=message;el.hidden=!message;}
@@ -4249,7 +4389,7 @@ document.addEventListener('click',e=>{
 /* CLINED stability refresh: preserve UI, refresh persisted streak/stat widgets after resume. */
 (function(){
   let day=typeof localDayKey==='function'?localDayKey():'';
-  const refresh=()=>{try{if(typeof renderDailyStreak==='function')renderDailyStreak();if(typeof renderDailyMission==='function')renderDailyMission();if(typeof renderHomeClinicalDashboard==='function')renderHomeClinicalDashboard();}catch(e){console.warn('CLINED refresh',e)}};
+  const refresh=()=>{try{if(typeof renderDailyStreak==='function')renderDailyStreak({silent:true});if(typeof renderDailyMission==='function')renderDailyMission();if(typeof renderHomeClinicalDashboard==='function')renderHomeClinicalDashboard();}catch(e){console.warn('CLINED refresh',e)}};
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){const now=typeof localDayKey==='function'?localDayKey():'';if(now!==day)day=now;refresh();}});
   window.addEventListener('pageshow',refresh);
   window.addEventListener('storage',e=>{if(e.key==='gaster_daily_streak_v1')refresh();});

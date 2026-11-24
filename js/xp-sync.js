@@ -42,6 +42,7 @@
               localStorage.setItem('gaster_v11_xp', String(srvXp));
               window.renderXP?.();
               window.syncUabStats?.();
+              window.renderHomeProfileCard?.();
             }
           } catch {}
         }
@@ -61,18 +62,26 @@
       const batch = rd().slice(0, 50);
       if (!batch.length) return;
       const clientId = window.CLINED_ONLINE_SYNC?.clientId || '';
-      fetch('/api/xp', {
-        method: 'POST',
-        credentials: 'same-origin',
-        keepalive: true,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientId, events: batch })
-      }).catch(() => {});
+      const payload = JSON.stringify({ clientId, events: batch });
+      let sent = false;
+      if (typeof navigator.sendBeacon === 'function') {
+        try { sent = navigator.sendBeacon('/api/xp', new Blob([payload], { type: 'application/json' })); } catch { sent = false; }
+      }
+      if (!sent) {
+        fetch('/api/xp', {
+          method: 'POST',
+          credentials: 'same-origin',
+          keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: payload
+        }).catch(() => {});
+      }
     } catch {}
   }
   setInterval(flush, 30000);
   window.addEventListener('online', flush);
   window.addEventListener('clined:auth-ready', flush);
+  window.addEventListener('clined:stream-open', flush);
   window.addEventListener('pagehide', flushBeacon);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') flushBeacon();

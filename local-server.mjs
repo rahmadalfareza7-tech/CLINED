@@ -18,7 +18,7 @@ async function staticFile(req,res){
   if(!file.startsWith(root+sep))return res.writeHead(404).end();
   const ext=extname(file).toLowerCase();
   const noCache=['.html','.js','.mjs','.css','.webmanifest'].includes(ext);
-  try{const content=await readFile(file);res.writeHead(200,{'Content-Type':mime[ext]||'application/octet-stream','Cache-Control':noCache?'no-cache, must-revalidate':'public, max-age=3600'});res.end(req.method==='GET'?content:undefined);}
+  try{const content=await readFile(file);res.writeHead(200,{'Content-Type':mime[ext]||'application/octet-stream','Cache-Control':noCache?'no-store, no-cache, must-revalidate':'public, max-age=3600'});res.end(req.method==='GET'?content:undefined);}
   catch{res.writeHead(404).end();}
 }
 

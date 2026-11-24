@@ -31,11 +31,47 @@
   const fold = t => String(t ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
 
   /* ---------- storage ---------- */
+  const newSessionId = () => (typeof crypto !== 'undefined' && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
   const packKey = p => String(p.id ?? p.title ?? '');
   const stateKey = (block, pk) => `${block}|${pk}`;
   const allResumeRaw = () => { const r = readJSON(KEY_RESUME, {}); return r && typeof r === 'object' && !Array.isArray(r) ? r : {}; };
+  const allLast = () => { const r = readJSON(KEY_LAST, {}); return r && typeof r === 'object' && !Array.isArray(r) ? r : {}; };
+  const getLast = key => allLast()[key] || null;
+  const putLast = (key, v) => { const r = allLast(); r[key] = v; writeJSON(KEY_LAST, r); };
+  const allBest = () => { const b = readJSON(KEY_BEST, {}); return b && typeof b === 'object' && !Array.isArray(b) ? b : {}; };
+  const getBest = key => allBest()[key] || null;
+  const putBest = (key, v) => { const b = allBest(); b[key] = v; writeJSON(KEY_BEST, b); };
+
+  function reconcileLocalMateri() {
+    const raw = allResumeRaw();
+    const best = allBest();
+    const last = allLast();
+    let changed = false;
+    for (const [k, rv] of Object.entries(raw)) {
+      if (!rv || typeof rv !== 'object' || rv.deleted) continue;
+      const doneAt = Math.max(Number(best[k]?.at) || 0, Number(last[k]?.at) || 0);
+      if (doneAt <= 0) continue;
+      const resUpd = Number(rv.updated) || 0;
+      const resStart = Number(rv.startedAt) || 0;
+      const sameFinishedSid = Boolean(rv.sessionId && last[k]?.sessionId && String(rv.sessionId) === String(last[k].sessionId));
+      const isNewAfterDone = !sameFinishedSid && (resStart > 0 ? resStart > doneAt : resUpd > doneAt);
+      if (!isNewAfterDone) {
+        raw[k] = {
+          deleted: true,
+          updated: Math.max(doneAt, resUpd),
+          ...(last[k]?.sessionId || rv.sessionId ? { sessionId: last[k]?.sessionId || rv.sessionId } : {})
+        };
+        changed = true;
+      }
+    }
+    if (changed) writeJSON(KEY_RESUME, raw);
+    return raw;
+  }
+
   const allResume = () => {
-    const raw = allResumeRaw(), out = {};
+    const raw = reconcileLocalMateri(), out = {};
     for (const [k, v] of Object.entries(raw)) {
       if (v && typeof v === 'object' && !v.deleted) out[k] = v;
     }
@@ -43,12 +79,16 @@
   };
   const getResume = key => allResume()[key] || null;
   const putResume = (key, st) => { const r = allResumeRaw(); r[key] = st; writeJSON(KEY_RESUME, r); };
-  const dropResume = key => { const r = allResumeRaw(); if (key in r && !r[key]?.deleted) { r[key] = { deleted: true, updated: Date.now() }; writeJSON(KEY_RESUME, r); } };
-  const allLast = () => { const r = readJSON(KEY_LAST, {}); return r && typeof r === 'object' && !Array.isArray(r) ? r : {}; };
-  const getLast = key => allLast()[key] || null;
-  const putLast = (key, v) => { const r = allLast(); r[key] = v; writeJSON(KEY_LAST, r); };
-  const getBest = key => (readJSON(KEY_BEST, {}) || {})[key] || null;
-  const putBest = (key, v) => { const b = readJSON(KEY_BEST, {}) || {}; b[key] = v; writeJSON(KEY_BEST, b); };
+  const dropResume = (key, explicitAt = 0, explicitSid = '') => {
+    const r = allResumeRaw();
+    const prev = r[key];
+    if (explicitAt > 0 || (key in r && !prev?.deleted)) {
+      const at = Math.max(Date.now(), Number(explicitAt) || 0, (Number(prev?.updated) || 0) + 1);
+      const sid = explicitSid || prev?.sessionId || '';
+      r[key] = { deleted: true, updated: at, ...(sid ? { sessionId: sid } : {}) };
+      writeJSON(KEY_RESUME, r);
+    }
+  };
   try { localStorage.removeItem(KEY_LEGACY); localStorage.removeItem('clined_materi_packs_cache_v1'); } catch {} // format lama tidak bisa dipetakan dengan aman
 
   const allFlagsRaw = () => { const f = readJSON(KEY_FLAGS, {}); return f && typeof f === 'object' && !Array.isArray(f) ? f : {}; };
@@ -62,9 +102,11 @@
   const flagId = (pk, rid) => `${S.block}|${pk}|${rid}`;
   function toggleFlag(q) {
     const f = allFlagsRaw(), id = flagId(q.pk, q.rid);
-    const wasOn = Boolean(f[id] && !f[id].deleted);
-    if (wasOn) f[id] = { deleted: true, at: Date.now() };
-    else f[id] = { block: S.block, pk: q.pk, rid: q.rid, at: Date.now() };
+    const prev = f[id];
+    const wasOn = Boolean(prev && !prev.deleted);
+    const at = Math.max(Date.now(), (Number(prev?.at) || 0) + 1);
+    if (wasOn) f[id] = { deleted: true, at };
+    else f[id] = { block: S.block, pk: q.pk, rid: q.rid, at };
     writeJSON(KEY_FLAGS, f);
     return !wasOn;
   }
@@ -156,7 +198,7 @@
 
   /* ---------- list ---------- */
   async function openList(block, label, pageId, startMateriNo = null) {
-    flushPendingPick();
+    flushRunStateNow();
     if (block) { if (block !== S.block) { S.q = ''; S.lf = 'all'; S.lim = 12; } S.block = block; S.label = label; S.pageId = pageId; }
     if (!S.block) { window.show?.('home'); return; }
     S.run = null;
@@ -165,9 +207,12 @@
     setHead('UAB • BLOK ' + S.label, 'Latihan Materi', '‹ BLOK ' + S.label);
     window.show?.('materiLatihanPage');
     body().innerHTML = '<div class="ml-skeleton"></div><div class="ml-skeleton"></div><div class="ml-skeleton"></div>';
+    const syncPromise = Promise.resolve(window.CLINED_ONLINE_SYNC?.sync?.({ force: true })).catch(() => {});
     try {
       const packs = (await fetchPacks(S.block)).filter(p => norm(p.block) === S.block);
+      await Promise.race([syncPromise, new Promise(res => setTimeout(res, 1200))]);
       if (token !== S.token) return;
+      reconcileLocalMateri();
       S.packs = packs;
       buildFlagPack();
       if (startMateriNo != null) {
@@ -317,7 +362,7 @@
     const key = stateKey(S.block, packKey(pack));
     const valid = validQuestions(pack);
     const byId = new Map(valid.map(q => [String(q.id), q]));
-    let qs, ans, pos;
+    let qs, ans, pos, sessionId = '', startedAt = 0;
     const saved = opts.saved || (opts.fresh || opts.subset ? null : getResume(key));
     if (saved && Array.isArray(saved.seq)) {
       qs = []; ans = [];
@@ -329,13 +374,24 @@
         ans.push(Number.isInteger(a) && a >= 0 && a < q.opsi.length ? a : null);
       });
       pos = Math.max(0, Math.min(Number(saved.pos) || 0, qs.length - 1));
+      if (qs.length) {
+        sessionId = String(saved.sessionId || newSessionId());
+        startedAt = Number(saved.startedAt) || Number(saved.updated) || Date.now();
+      }
     }
     if (!qs || !qs.length) {
       const source = opts.subset ? opts.subset : shuffle(valid);
       qs = source.map(q => buildQ(pack, q, shuffle(q.opsi.map((_, k) => k))));
       ans = qs.map(() => null); pos = 0;
+      const prevAnchor = Math.max(
+        Number(getBest(key)?.at) || 0,
+        Number(getLast(key)?.at) || 0,
+        Number(allResumeRaw()[key]?.updated) || 0
+      );
+      startedAt = Math.max(Date.now(), prevAnchor + 1);
+      sessionId = newSessionId();
     }
-    return { key, pack, title: pack.title, qs, ans, pos, xp: 0, persist: !opts.subset && !opts.saved, resumed: !!saved && qs.length > 0 };
+    return { key, pack, title: pack.title, qs, ans, pos, xp: 0, sessionId, startedAt, persist: !opts.subset && !opts.saved, resumed: !!saved && qs.length > 0 };
   }
 
   function startRun(i, opts = {}) {
@@ -356,10 +412,14 @@
   const streakOf = (R, upto) => { let s = 0; for (let i = upto; i >= 0; i--) { if (R.ans[i] != null && R.ans[i] === R.qs[i].benar) s++; else break; } return s; };
 
   function save(R) {
-    if (!R.persist) return;
+    if (!R || !R.persist || R.done || R.reviewing) return;
+    const prevUpd = Number(allResumeRaw()[R.key]?.updated) || 0;
+    const updated = Math.max(Date.now(), Number(R.startedAt) || 0, prevUpd + 1);
     putResume(R.key, {
+      sessionId: R.sessionId || newSessionId(),
+      startedAt: Number(R.startedAt) || updated,
       block: S.block, label: S.label, pageId: S.pageId, packKey: packKey(R.pack), title: R.title,
-      pos: R.pos, ans: R.ans, updated: Date.now(),
+      pos: R.pos, ans: R.ans, updated,
       seq: R.qs.map(q => ({ id: q.rid, order: q.orig }))
     });
   }
@@ -372,6 +432,13 @@
     const tasks = pendingPostPick.splice(0);
     for (const fn of tasks) { try { fn(); } catch {} }
   }
+  function flushRunStateNow() {
+    flushPendingPick();
+    const R = S.run;
+    if (R && R.persist && !R.done && !R.reviewing) {
+      try { save(R); } catch {}
+    }
+  }
   function schedulePostPick(fn) {
     pendingPostPick.push(fn);
     if (!postPickTimer) {
@@ -381,8 +448,14 @@
       }, 32);
     }
   }
-  window.addEventListener('pagehide', flushPendingPick);
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushPendingPick(); });
+  // Capture phase + clined:before-sync-flush memastikan save(R) selesai sebelum online-sync flushBeacon() berjalan.
+  window.addEventListener('pagehide', flushRunStateNow, { capture: true });
+  window.addEventListener('beforeunload', flushRunStateNow, { capture: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') flushRunStateNow();
+  }, { capture: true });
+  window.addEventListener('clined:before-sync-flush', flushRunStateNow);
+  window.addEventListener('clined:before-reload', flushRunStateNow);
 
   function renderDockHTML(R, done, left, others) {
     return `${R.pos > 0 ? '<button type="button" class="secondary ml-prev" data-ml-prev>Sebelumnya</button>' : ''}${done ? `<button type="button" class="primary ml-next" data-ml-next>${left > 0 ? 'Lanjut' : 'Lihat hasil 🏁'}</button>` : `<button type="button" class="secondary ml-skip" data-ml-skip ${others > 0 ? '' : 'disabled'}>Lewati</button>`}`;
@@ -598,21 +671,42 @@
   function finish() {
     flushPendingPick();
     const R = S.run, score = scoreOf(R), total = R.qs.length, pct = Math.round(score / total * 100);
+    const skipped = R.ans.filter(x => x == null).length;
     let record = false;
+    const finishedAt = Math.max(
+      Date.now(),
+      Number(R.startedAt) || 0,
+      (Number(allResumeRaw()[R.key]?.updated) || 0) + 1,
+      (Number(getBest(R.key)?.at) || 0) + 1,
+      (Number(getLast(R.key)?.at) || 0) + 1
+    );
+    R.done = { score, total, pct, record: false, skipped };
     if (R.persist) {
-      dropResume(R.key);
+      dropResume(R.key, finishedAt, R.sessionId);
       const prev = getBest(R.key);
-      if (!prev || pct > prev.pct) { putBest(R.key, { pct, score, total, at: Date.now() }); record = !!prev; }
+      if (!prev || pct > prev.pct || (pct === prev.pct && score >= (Number(prev.score) || 0))) {
+        putBest(R.key, { pct, score, total, at: finishedAt });
+        record = Boolean(prev && pct > prev.pct);
+      } else {
+        putBest(R.key, { ...prev, at: Math.max(Number(prev.at) || 0, finishedAt) });
+      }
+      putLast(R.key, {
+        sessionId: R.sessionId || '',
+        ans: R.ans,
+        seq: R.qs.map(q => ({ id: q.rid, order: q.orig })),
+        pct,
+        score,
+        total,
+        at: finishedAt
+      });
     }
+    R.done.record = record;
     const h = readJSON(KEY_HIST, []);
     if (Array.isArray(h)) {
-      h.unshift({ date: new Date().toISOString(), score, correct: score, total, pct, validTotal: total, block: S.block, bank: 'MAT', bankName: `Latihan Materi • ${R.title}`, mode: 'study', duration: null, reason: 'complete' });
+      h.unshift({ date: new Date(finishedAt).toISOString(), score, correct: score, total, pct, validTotal: total, block: S.block, bank: 'MAT', bankName: `Latihan Materi • ${R.title}`, mode: 'study', duration: null, reason: 'complete' });
       writeJSON(KEY_HIST, h.slice(0, 50));
       try { window.renderCounts?.(); } catch {}
     }
-    const skipped = R.ans.filter(x => x == null).length;
-    if (R.persist) putLast(R.key, { ans: R.ans, seq: R.qs.map(q => ({ id: q.rid, order: q.orig })), pct, score, total, at: Date.now() });
-    R.done = { score, total, pct, record, skipped };
     renderResult();
   }
 
@@ -808,6 +902,7 @@
   window.addEventListener('clined:sync-applied', e => {
     const keys = e?.detail?.keys;
     if (Array.isArray(keys) && !e?.detail?.full && !keys.some(k => MATERI_SYNC_KEYS.has(k))) return;
+    reconcileLocalMateri();
     renderHomeResume();
     if (!page()?.classList.contains('active')) return;
     if (!S.run && S.packs.length) {
@@ -816,7 +911,47 @@
       return;
     }
     if (S.run && !S.run.reviewing && !S.run.done) {
-      const q = S.run.qs?.[S.run.pos];
+      const R = S.run;
+      if (R.persist) {
+        const remote = getResume(R.key);
+        const doneAt = Math.max(Number(getBest(R.key)?.at) || 0, Number(getLast(R.key)?.at) || 0);
+        if (!remote && doneAt > 0 && doneAt >= (Number(R.startedAt) || 0)) {
+          S.run = null;
+          setRunning(false);
+          setHead('UAB • BLOK ' + S.label, 'Latihan Materi', '‹ BLOK ' + S.label);
+          buildFlagPack();
+          renderList();
+          return;
+        }
+        if (
+          remote &&
+          Array.isArray(remote.seq) &&
+          remote.seq.length === R.qs.length &&
+          (!remote.sessionId || !R.sessionId || String(remote.sessionId) === String(R.sessionId)) &&
+          remote.seq.every((x, idx) => String(x?.id ?? x) === String(R.qs[idx]?.rid))
+        ) {
+          let mergedAny = false;
+          if (Array.isArray(remote.ans)) {
+            for (let i = 0; i < R.qs.length; i++) {
+              const ra = remote.ans[i];
+              if (R.ans[i] == null && Number.isInteger(ra) && ra >= 0 && ra < R.qs[i].opsi.length) {
+                R.ans[i] = ra;
+                mergedAny = true;
+              }
+            }
+          }
+          const remotePos = Math.max(0, Math.min(R.qs.length - 1, Number(remote.pos) || 0));
+          if (remotePos > R.pos) {
+            R.pos = remotePos;
+            mergedAny = true;
+          }
+          if (mergedAny) {
+            renderQ();
+            return;
+          }
+        }
+      }
+      const q = R.qs?.[R.pos];
       const btn = q ? body()?.querySelector('[data-ml-flag]') : null;
       if (btn) {
         const on = isFlagged(q);
