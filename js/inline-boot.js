@@ -229,6 +229,34 @@
       resetAuto();
     });
 
+    var overlayFrame = root.querySelector('.hbs-overlay-frame');
+    var overlayIframe = root.querySelector('.hbs-overlay-iframe');
+    function fitOverlay() {
+      if (!overlayFrame || !overlayIframe) return;
+      var fw = overlayFrame.clientWidth;
+      var fh = overlayFrame.clientHeight;
+      if (fw < 40 || fh < 40) return;
+      var isMobile = fw < 660;
+      var vw = isMobile ? 680 : Math.max(820, fw);
+      var vh = isMobile ? 138 : 108;
+      var padBottom = isMobile ? 14 : 12;
+      var availW = Math.max(40, fw - 4);
+      var availH = Math.max(40, fh - padBottom);
+      var scale = Math.min(availW / vw, availH / vh, 1);
+      var scaledW = vw * scale;
+      var scaledH = vh * scale;
+      overlayIframe.style.width = vw + 'px';
+      overlayIframe.style.height = vh + 'px';
+      overlayIframe.style.left = Math.round((fw - scaledW) / 2) + 'px';
+      overlayIframe.style.top = Math.round((availH - scaledH) / 2) + 'px';
+      overlayIframe.style.transform = 'scale(' + scale.toFixed(4) + ')';
+    }
+    if (overlayFrame && typeof ResizeObserver !== 'undefined') {
+      try { new ResizeObserver(fitOverlay).observe(overlayFrame); } catch (_) {}
+    }
+    window.addEventListener('resize', fitOverlay, { passive: true });
+    fitOverlay();
+
     goTo(0, true);
     startAuto();
   }

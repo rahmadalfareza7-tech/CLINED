@@ -106,11 +106,15 @@ html body #home .duo-learning-map.home-banner-slider::after { display: none !imp
   overflow: hidden;
 }
 .hbs-overlay-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 680px;
+  height: 138px;
   border: 0;
   background: transparent;
+  transform-origin: top left;
   pointer-events: none;
 }
 .hbs-overlay-click {
