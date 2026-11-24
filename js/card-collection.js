@@ -233,7 +233,8 @@
       const u = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
       if (!u || !u.id) return;
       cardDirty = false;
-      const body = JSON.stringify({ ...localCardPayload(), mode });
+      const clientId = window.CLINED_ONLINE_SYNC?.clientId || '';
+      const body = JSON.stringify({ ...localCardPayload(), mode, clientId });
       const r = await fetch('/api/cards', {
         method: 'PUT',
         credentials: 'same-origin',
@@ -1602,7 +1603,13 @@
       popDiamondToast(`💎 +${bonus} Diamond Bonus Selesai Kuis!`);
     });
     window.addEventListener('online', () => { if (cardDirty) pushServerCardState('merge'); else hydrateFromServer(); });
-    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && cardDirty) pushServerCardState('save', true); });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        if (cardDirty) pushServerCardState('save', true);
+      } else if (!cardDirty) {
+        hydrateFromServer();
+      }
+    });
     window.addEventListener('pagehide', () => { if (cardDirty) pushServerCardState('save', true); });
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', boot) : boot();
@@ -1683,6 +1690,11 @@
     getBonusDuelXp: () => getEquippedCard()?.buff?.duelXp || 0,
     openShop: showShop,
     onAdminGrant,
+    onRemoteUpdate: info => {
+      const myId = window.CLINED_ONLINE_SYNC?.clientId || '';
+      if (info && info.clientId && myId && info.clientId === myId) return;
+      if (!cardDirty) hydrateFromServer();
+    },
     onXp100kReward: diamonds => {
       if (!Number.isFinite(Number(diamonds))) return;
       applyingServer = true;

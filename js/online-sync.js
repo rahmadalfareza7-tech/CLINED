@@ -1,16 +1,16 @@
 /* Account-scoped online study data sync with conflict-free bidirectional merge & realtime cross-device updates. */
 (() => {
   'use strict';
-  const QUEUE='clined_online_sync_queue_v3', ACTIVE_USER='clined_active_user_id_v3', CURSOR='clined_sync_cursor_v2';
-  const LEGACY_QUEUE='clined_online_sync_queue_v2', LEGACY_CURSOR='clined_sync_cursor_v1';
+  const QUEUE='clined_online_sync_queue_v3', ACTIVE_USER='clined_active_user_id_v3', CURSOR='clined_sync_cursor_v3';
+  const LEGACY_QUEUE='clined_online_sync_queue_v2', LEGACY_CURSOR='clined_sync_cursor_v1', LEGACY_CURSOR_V2='clined_sync_cursor_v2';
   const safe=key=>/^(gaster_|clined_(?!account_profile|google_form_url|schema_version|migrated_at|menu|active_user_id|sync_cursor|xp_queue|glossary_v1)|medicalRpg|medical_rpg|current_block|last_worked|dashboard_block|alpha5_)/.test(key)&&!/auth|password|session|token|sync_queue|last_activity|xp_queue/i.test(key);
   const learningKeys=()=>Array.from({length:localStorage.length},(_,i)=>localStorage.key(i)).filter(k=>k&&safe(k));
   const uuid=()=>crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2,10)}`;
   const CLIENT_ID=uuid();
-  let suppress=false, sending=false, dirty=true, pendingResync=false, lastPullAt=0;
-  const PERIODIC_PULL_MS=60_000;
+  let suppress=false, sending=false, dirty=true, pendingResync=false, pendingFullPull=true, lastPullAt=0;
+  const PERIODIC_PULL_MS=25_000;
   const nativeSet=localStorage.setItem.bind(localStorage),nativeRemove=localStorage.removeItem.bind(localStorage);
-  try{nativeRemove(LEGACY_CURSOR);}catch{}
+  try{nativeRemove(LEGACY_CURSOR);nativeRemove(LEGACY_CURSOR_V2);}catch{}
   const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||'')??f}catch{return f}};
   let memQueue=null, queueFlushTimer=0, dirtyTimer=0, dirtySince=0, remotePullTimer=0;
   function getQueue(){
@@ -87,7 +87,7 @@
     if(localRaw===null||localRaw===undefined)return{value:serverRaw,dirty:false};
     try{
       const loc=JSON.parse(localRaw), srv=JSON.parse(serverRaw);
-      if((key==='gaster_v8_bookmarks'||key==='clined_unlocked_achievements_v1'||key==='clined_kedkel_summary_done_v2'||key==='clined_kedkel_summary_star_v2'||key==='clined_seen_cosmetics_v1')&&Array.isArray(loc)&&Array.isArray(srv)){
+      if((key==='gaster_v8_bookmarks'||key==='clined_unlocked_achievements_v1'||key==='clined_kedkel_summary_done_v2'||key==='clined_kedkel_summary_star_v2'||key==='clined_seen_cosmetics_v1'||key==='clined_claimed_quiz_dia_v1')&&Array.isArray(loc)&&Array.isArray(srv)){
         const merged=[...new Set([...srv,...loc])];
         return{value:JSON.stringify(merged),dirty:merged.length>srv.length};
       }
@@ -164,17 +164,33 @@
         }
         return{value:JSON.stringify(merged),dirty:changed};
       }
-      if(key==='clined_sm2_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'){
+      if((key==='clined_sm2_v1'||key.startsWith('clined_upi_flashcards_block_v2_'))&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'&&!Array.isArray(loc)&&!Array.isArray(srv)){
         const merged={...srv};let changed=false;
         for(const [k,lv] of Object.entries(loc)){
           const sv=srv[k];
           if(!sv){merged[k]=lv;changed=true;}
-          else{
-            const lt=Date.parse(lv?.lastReview||lv?.updatedAt||0)||0,st=Date.parse(sv?.lastReview||sv?.updatedAt||0)||0;
-            if(lt>st||(Number(lv?.reps)||0)>(Number(sv?.reps)||0)){merged[k]=lv;changed=true;}
+          else if(lv&&typeof lv==='object'&&sv&&typeof sv==='object'){
+            const lt=Date.parse(lv?.lastReview||lv?.updatedAt||0)||Number(lv?.dueAt)||0,st=Date.parse(sv?.lastReview||sv?.updatedAt||0)||Number(sv?.dueAt)||0;
+            const lReps=Number(lv?.reps)||0,sReps=Number(sv?.reps)||0,lLapses=Number(lv?.lapses)||0,sLapses=Number(sv?.lapses)||0;
+            if(lReps>sReps||lLapses>sLapses||lt>st){merged[k]=lv;changed=true;}
           }
         }
         return{value:JSON.stringify(merged),dirty:changed};
+      }
+      if((key==='clined_upi_custom_cards_v1'||key==='clined_userbank_index_v1')&&Array.isArray(loc)&&Array.isArray(srv)){
+        const byId=new Map();let changed=false;
+        for(const item of srv)if(item&&item.id!=null)byId.set(String(item.id),item);
+        for(const item of loc){
+          if(!item||item.id==null)continue;
+          const k=String(item.id),prev=byId.get(k);
+          if(!prev){byId.set(k,item);changed=true;}
+          else{
+            const lt=Date.parse(item.updatedAt||item.createdAt||0)||Number(item.updated||item.at)||0;
+            const pt=Date.parse(prev.updatedAt||prev.createdAt||0)||Number(prev.updated||prev.at)||0;
+            if(lt>pt){byId.set(k,item);changed=true;}
+          }
+        }
+        return{value:JSON.stringify([...byId.values()]),dirty:changed};
       }
       if(key==='clined_materi_flags_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'&&!Array.isArray(loc)&&!Array.isArray(srv)){
         const merged={...srv};let changed=false;
@@ -189,7 +205,7 @@
         }
         return{value:JSON.stringify(merged),dirty:changed};
       }
-      if((key==='clined_materi_best_v1'||key==='clined_bank_best_v1')&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'&&!Array.isArray(loc)&&!Array.isArray(srv)){
+      if(key==='clined_materi_best_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'&&!Array.isArray(loc)&&!Array.isArray(srv)){
         const merged={...srv};let changed=false;
         for(const [k,lv] of Object.entries(loc)){
           if(!lv||typeof lv!=='object')continue;
@@ -201,6 +217,48 @@
               merged[k]={...sv,...lv,pct:Math.max(lp,sp),score:Math.max(ls,ss),at:Math.max(lt,st)};
               changed=true;
             }
+          }
+        }
+        return{value:JSON.stringify(merged),dirty:changed};
+      }
+      if(key==='clined_bank_best_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'&&!Array.isArray(loc)&&!Array.isArray(srv)){
+        const merged={...srv};let changed=false;
+        for(const [k,lv] of Object.entries(loc)){
+          if(!lv||typeof lv!=='object')continue;
+          const sv=srv[k];
+          if(!sv||typeof sv!=='object'){merged[k]=lv;changed=true;}
+          else{
+            const lp=Number(lv.bestPct??lv.pct)||0,sp=Number(sv.bestPct??sv.pct)||0;
+            const ls=Number(lv.bestScore??lv.score)||0,ss=Number(sv.bestScore??sv.score)||0;
+            const lAtt=Number(lv.attempts)||0,sAtt=Number(sv.attempts)||0;
+            const lt=Date.parse(lv.lastAt||'')||Number(lv.at)||0,st=Date.parse(sv.lastAt||'')||Number(sv.at)||0;
+            const winBest=lp>sp||(lp===sp&&ls>ss),winLast=lt>=st;
+            if(winBest||lAtt>sAtt||lt>st){
+              merged[k]={
+                ...sv,...lv,
+                bestPct:Math.max(lp,sp),
+                bestScore:winBest?ls:ss,
+                bestTotal:winBest?(Number(lv.bestTotal??lv.total)||Number(sv.bestTotal??sv.total)||0):(Number(sv.bestTotal??sv.total)||Number(lv.bestTotal??lv.total)||0),
+                lastPct:winLast?(lv.lastPct??lp):(sv.lastPct??sp),
+                attempts:Math.max(lAtt,sAtt),
+                lastAt:winLast?(lv.lastAt||sv.lastAt||''):(sv.lastAt||lv.lastAt||'')
+              };
+              changed=true;
+            }
+          }
+        }
+        return{value:JSON.stringify(merged),dirty:changed};
+      }
+      if(key==='clined_bank_sessions_v1'&&loc&&srv&&typeof loc==='object'&&typeof srv==='object'&&!Array.isArray(loc)&&!Array.isArray(srv)){
+        const merged={...srv};let changed=false;
+        for(const [k,lv] of Object.entries(loc)){
+          if(!lv||typeof lv!=='object')continue;
+          const sv=srv[k];
+          if(!sv||typeof sv!=='object'){merged[k]=lv;changed=true;}
+          else{
+            const lt=Date.parse(lv.savedAt||'')||Number(lv.updated)||0,st=Date.parse(sv.savedAt||'')||Number(sv.updated)||0;
+            const lDone=Number(lv.doneCount)||0,sDone=Number(sv.doneCount)||0;
+            if(lt>st||(lt===st&&lDone>sDone)){merged[k]=lv;changed=true;}
           }
         }
         return{value:JSON.stringify(merged),dirty:changed};
@@ -366,8 +424,9 @@
       }
     }
   }
-  async function pull(){
-    let cursor=localStorage.getItem(CURSOR);
+  async function pull(forceFull=false){
+    if(forceFull){try{nativeRemove(CURSOR);}catch{}}
+    let cursor=forceFull?null:localStorage.getItem(CURSOR);
     let loops=0;
     while(loops++<10){
       const path=cursor?`/api/sync?since=${encodeURIComponent(cursor)}`:'/api/sync';
@@ -391,20 +450,23 @@
       }
     }catch{}
   }
-  async function sync({force=false}={}){
+  async function sync({force=false,full=false}={}){
+    if(full)pendingFullPull=true;
     if(!navigator.onLine)return;
     const id=localStorage.getItem(ACTIVE_USER);
     if(!id)return;
     if(sending){
-      if(force)pendingResync=true;
+      if(force||full)pendingResync=true;
       return;
     }
-    const needs=force||dirty||getQueue().length||(Date.now()-lastPullAt>=PERIODIC_PULL_MS);
+    const needs=force||full||pendingFullPull||dirty||getQueue().length||(Date.now()-lastPullAt>=PERIODIC_PULL_MS);
     if(!needs)return;
     sending=true;
     pendingResync=false;
+    const doFull=pendingFullPull;
+    pendingFullPull=false;
     try{
-      await pull();
+      await pull(doFull);
       const ops=getQueue().slice();
       const batches=[];
       let batch=[], batchEst=32;
@@ -441,10 +503,11 @@
       lastPullAt=Date.now();
     }catch{
       dirty=true;
+      if(doFull)pendingFullPull=true;
     }finally{
       sending=false;
-      if(pendingResync||getQueue().length>0){
-        const again=pendingResync;
+      if(pendingResync||pendingFullPull||getQueue().length>0){
+        const again=pendingResync||pendingFullPull||getQueue().length>0;
         pendingResync=false;
         if(again)setTimeout(()=>sync({force:true}),250);
       }
@@ -465,12 +528,12 @@
     if(document.visibilityState==='hidden')flushBeacon();
     else if(Date.now()-lastPullAt>=1500||dirty||getQueue().length)sync({force:true});
   });
-  window.addEventListener('clined:auth-ready',()=>sync({force:true}));
+  window.addEventListener('clined:auth-ready',()=>sync({force:true,full:true}));
   setInterval(()=>{if(document.visibilityState==='visible')sync();},PERIODIC_PULL_MS);
   window.CLINED_ONLINE_SYNC={
     clientId:CLIENT_ID,
     sync,switchUser,clearLocalLearningData,onRemoteUpdate,
     markDirty:scheduleDirtySync
   };
-  window.addEventListener('load',()=>sync({force:true}),{once:true});
+  window.addEventListener('load',()=>sync({force:true,full:true}),{once:true});
 })();

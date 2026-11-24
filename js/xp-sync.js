@@ -41,6 +41,7 @@
             if (srvXp > locXp) {
               localStorage.setItem('gaster_v11_xp', String(srvXp));
               window.renderXP?.();
+              window.syncUabStats?.();
             }
           } catch {}
         }

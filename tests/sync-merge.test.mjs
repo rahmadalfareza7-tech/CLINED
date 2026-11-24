@@ -171,3 +171,50 @@ test('mergeJsonKey merges counts-based gaster_daily_streak_v1 across devices wit
   });
 });
 
+test('mergeJsonKey merges clined_bank_best_v1, clined_bank_sessions_v1, UPI flashcards, and claimed quiz diamonds across devices', () => {
+  const bankBest = mergeJsonKey(
+    'clined_bank_best_v1',
+    JSON.stringify({
+      'kedkel-2022': { bestPct: 92, bestScore: 46, bestTotal: 50, lastPct: 92, attempts: 3, lastAt: '2026-11-24T10:00:00Z' },
+      'endo-2023': { bestPct: 75, bestScore: 30, bestTotal: 40, lastPct: 75, attempts: 1, lastAt: '2026-11-24T08:00:00Z' }
+    }),
+    JSON.stringify({
+      'kedkel-2022': { bestPct: 84, bestScore: 42, bestTotal: 50, lastPct: 84, attempts: 2, lastAt: '2026-11-23T10:00:00Z' },
+      'ginjal-2023': { bestPct: 88, bestScore: 44, bestTotal: 50, lastPct: 88, attempts: 2, lastAt: '2026-11-24T09:00:00Z' }
+    })
+  );
+  assert.equal(bankBest.dirty, true);
+  const bb = JSON.parse(bankBest.value);
+  assert.equal(bb['kedkel-2022'].bestPct, 92);
+  assert.equal(bb['kedkel-2022'].bestScore, 46);
+  assert.equal(bb['kedkel-2022'].attempts, 3);
+  assert.equal(bb['endo-2023'].bestPct, 75);
+  assert.equal(bb['ginjal-2023'].bestPct, 88);
+
+  const sessions = mergeJsonKey(
+    'clined_bank_sessions_v1',
+    JSON.stringify({
+      'kedkel-2022': { bankId: 'kedkel-2022', pos: 14, doneCount: 15, total: 50, savedAt: '2026-11-24T12:00:00Z' }
+    }),
+    JSON.stringify({
+      'kedkel-2022': { bankId: 'kedkel-2022', pos: 4, doneCount: 5, total: 50, savedAt: '2026-11-24T11:00:00Z' },
+      'ginjal-2023': { bankId: 'ginjal-2023', pos: 9, doneCount: 10, total: 50, savedAt: '2026-11-24T10:00:00Z' }
+    })
+  );
+  assert.equal(sessions.dirty, true);
+  const ss = JSON.parse(sessions.value);
+  assert.equal(ss['kedkel-2022'].doneCount, 15);
+  assert.equal(ss['ginjal-2023'].doneCount, 10);
+
+  const upi = mergeJsonKey(
+    'clined_upi_flashcards_block_v2_KARDIOLOGI',
+    JSON.stringify({ c1: { reps: 3, dueAt: 5000, lapses: 0 }, c2: { reps: 1, dueAt: 2000, lapses: 0 } }),
+    JSON.stringify({ c1: { reps: 1, dueAt: 1000, lapses: 0 }, c3: { reps: 2, dueAt: 3000, lapses: 0 } })
+  );
+  assert.equal(upi.dirty, true);
+  const upiVal = JSON.parse(upi.value);
+  assert.equal(upiVal.c1.reps, 3);
+  assert.equal(upiVal.c2.reps, 1);
+  assert.equal(upiVal.c3.reps, 2);
+});
+
