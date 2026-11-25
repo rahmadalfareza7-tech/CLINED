@@ -98,6 +98,7 @@
     <div class="hud-item"><span class="lbl">Nyawa pasien</span><b class="lives" id="igd-lives"><span class="cross">&#10010;</span><span class="cross">&#10010;</span><span class="cross">&#10010;</span></b></div>
     <div class="hud-btns">
       <button class="mini-btn igd-exit" data-act="exit">‹ Beranda</button>
+      <button class="mini-btn igd-exit" data-act="menu">Menu</button>
       <button class="mini-btn" data-act="book">Panduan <kbd>B</kbd></button>
       <button class="mini-btn btn-calc" data-act="calc">Kalkulator <kbd>K</kbd></button>
       <button class="mini-btn" data-act="mute" id="igd-mute">Suara: nyala</button>
@@ -186,13 +187,16 @@
 
   <section class="screen" id="igd-title">
     <div class="folder">
+      <div class="igd-screen-nav">
+        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Kembali ke Beranda</button>
+      </div>
       <div class="cast" id="igd-cast"></div>
       <h1>MEJA JAGA <em>IGD</em></h1>
       <p class="byline">by <b>CLINED</b></p>
       <p class="igd-lead">Lima malam jaga + Mode Sulit dengan generator kasus acak SKDI dokter umum (5 menit/berkas). Pasien, wajah, dan jenis kesalahannya diacak tiap shift — dari dosis ×10, satuan mg/g, alergi segolongan, kontraindikasi, interaksi obat, rute salah, hingga KTP keluarga.</p>
       <div class="nights" id="igd-nights"></div>
       <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa timer)</label>
-      <button class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda</button>
+      <button type="button" class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda</button>
       <p class="fine">Game edukasi dengan kasus klinis terverifikasi yang disederhanakan. Bukan pengganti pedoman klinis resmi atau keputusan tenaga medis. Pintasan: P periksa identitas · T tolak · A ACC · B panduan · K kalkulator · Enter lanjut.</p>
     </div>
   </section>
@@ -832,6 +836,10 @@
     const N = NIGHTS[n];
     const docs = ['Kartu pasien','Berkas', ...N.feats.filter(f => FEAT_DOCS[f]).map(f => FEAT_DOCS[f])];
     E.memo.innerHTML = `<div class="memo">
+      <div class="igd-screen-nav">
+        <button type="button" class="mini-btn igd-back-home" data-act="menu">‹ Pilih Malam</button>
+        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Beranda</button>
+      </div>
       <div class="memo-from">${portrait(BOSS,'happy')}<div><small>Memo dari</small><b>dr. Maria, Sp.EM</b><span>Kepala IGD</span></div></div>
       <h2>${n === HARD ? 'Mode Sulit: semua diacak' : `Malam ${n}: ${N.title}`}</h2>
       <ul class="memo-list">${N.memo.map((t, i) => `<li>${i === 0 && n > 1 && n !== HARD ? '<span class="new">BARU</span>' : ''}${t}</li>`).join('')}</ul>
@@ -1203,6 +1211,10 @@
     const nextBtn = alive && n < 5 ? `<button class="igd-btn" data-act="memo" data-n="${n+1}">Lanjut ke Malam ${n+1}</button>` : '';
     const again = `<button class="igd-btn${nextBtn ? ' igd-btn-ghost' : ''}" data-act="memo" data-n="${n}">Ulangi ${nightName(n)}</button>`;
     E.end.innerHTML = `<div class="folder">
+      <div class="igd-screen-nav">
+        <button type="button" class="mini-btn igd-back-home" data-act="menu">‹ Pilih Malam</button>
+        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Beranda</button>
+      </div>
       <div class="cast">${['Ny. Sari Wulandari','Tn. Agus Wibowo','An. Nadia Putri'].map(x => portrait(APPEAR[x].look, castMood)).join('')}</div>
       <h1>${n === HARD ? 'MODE <em>SULIT</em>' : `MALAM ${n} <em>SELESAI</em>`}</h1>
       <div class="grade${alive ? '' : ' bad'}">${grade}</div>
@@ -1296,7 +1308,7 @@
   }
   function exitToHome(){
     onLeave();
-    try { window.show?.('home'); window.renderCounts?.(); } catch (e) {}
+    try { window.show?.('home', { force:true }); window.renderCounts?.(); } catch (e) {}
   }
   function awardXP(rec, night, ok){
     let totalGained = 0, leveledUp = false;

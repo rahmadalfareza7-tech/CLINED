@@ -1,4 +1,4 @@
-const SW_VERSION = 'v242-meja-jaga-igd-zfix';
+const SW_VERSION = 'v243-meja-jaga-igd-backnav';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

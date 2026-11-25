@@ -436,16 +436,17 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, exi
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=5/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=6/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=6/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=7/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);
   assert.match(serverJs, /'\.woff2':'font\/woff2'/);
   assert.match(igdJs, /id="igd-timer"/);
   assert.match(igdJs, /data-act="exit"/);
+  assert.match(igdJs, /igd-back-home/);
   assert.match(igdJs, /FIT\.disable\(\)/);
 
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
