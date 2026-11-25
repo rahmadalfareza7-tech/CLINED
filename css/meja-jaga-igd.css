@@ -644,3 +644,5 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .igd-opt input{min-height:0!important;border-radius:4px!important}
 #mejaJagaIgdPage .igd .igd-title-exit{margin-top:10px}
 #mejaJagaIgdPage .igd .igd-xp-note{margin:8px 0 0;text-align:center;font-size:.84rem;font-weight:800;color:var(--green-d)}
+#mejaJagaIgdPage .igd #igd-timer.low{color:var(--red)!important}
+#mejaJagaIgdPage .igd .drug dt.int{color:var(--yellow-d)}

@@ -3,7 +3,7 @@
   'use strict';
   if (!('serviceWorker' in navigator)) return;
 
-  const APP_SW_VERSION = 'v238-meja-jaga-igd-v2';
+  const APP_SW_VERSION = 'v239-meja-jaga-igd-v3';
   const BUSY_VIEWS = new Set(['quiz', 'duelPage', 'flashcards', 'clinicalQuestPage', 'mejaJagaIgdPage', 'studyTimerPage', 'userBankPage']);
   let seenController = !!navigator.serviceWorker.controller;
   let pending = false, dismissed = false, reloading = false, banner = null, poll = null, lastCheck = 0;

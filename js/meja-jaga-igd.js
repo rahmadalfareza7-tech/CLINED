@@ -92,6 +92,7 @@
   <header class="hud">
     <div class="hud-brand"><span>Meja Jaga IGD<small>SHIFT MALAM</small></span></div>
     <div class="hud-item"><span class="lbl">Jam</span><b id="igd-clock">22:00</b></div>
+    <div class="hud-item"><span class="lbl">Sisa</span><b id="igd-timer">05:00</b></div>
     <div class="hud-item"><span class="lbl">Berkas</span><b id="igd-count">1/8</b></div>
     <div class="hud-item"><span class="lbl">Skor</span><b id="igd-score">0</b></div>
     <div class="hud-item"><span class="lbl">Nyawa pasien</span><b class="lives" id="igd-lives"><span class="cross">&#10010;</span><span class="cross">&#10010;</span><span class="cross">&#10010;</span></b></div>
@@ -177,7 +178,7 @@
       <button class="close" data-act="closebook">Tutup</button>
       <h2>Panduan Lengkap</h2>
       <span class="warn">Waktu tetap berjalan saat kamu membaca!</span>
-      <input type="search" id="igd-search" placeholder="Cari obat, identitas, nilai lab, cairan…" autocomplete="off" aria-label="Cari di panduan">
+      <input type="search" id="igd-search" placeholder="Cari obat, kontraindikasi, interaksi, lab, cairan…" autocomplete="off" aria-label="Cari di panduan">
       <nav class="tabs" id="igd-tabs"></nav>
     </div>
     <div class="book-body" id="igd-book-body"></div>
@@ -188,11 +189,11 @@
       <div class="cast" id="igd-cast"></div>
       <h1>MEJA JAGA <em>IGD</em></h1>
       <p class="byline">by <b>CLINED</b></p>
-      <p class="igd-lead">Lima malam jaga, aturannya bertambah tiap malam. Boleh mulai dari malam mana saja. Tiap berkas terlihat 95% normal. Tapi kadang, satu kesalahan fatal terselip di dalamnya. Kamu dokter jaga malam ini. Jangan sampai ada yang lolos.</p>
+      <p class="igd-lead">Lima malam jaga + Mode Sulit dengan 56 kasus bervariasi (5 menit/berkas). Tiap berkas terlihat 95% normal, tapi kadang satu kesalahan fatal terselip di dalamnya. Kamu dokter jaga malam ini. Jangan sampai ada yang lolos.</p>
       <div class="nights" id="igd-nights"></div>
       <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa timer)</label>
       <button class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda</button>
-      <p class="fine">Game edukasi dengan kasus yang disederhanakan. Bukan pengganti pedoman klinis atau keputusan tenaga medis. Pintasan: P periksa identitas · T tolak · A ACC · B panduan · K kalkulator · Enter lanjut.</p>
+      <p class="fine">Game edukasi dengan kasus klinis terverifikasi yang disederhanakan. Bukan pengganti pedoman klinis resmi atau keputusan tenaga medis. Pintasan: P periksa identitas · T tolak · A ACC · B panduan · K kalkulator · Enter lanjut.</p>
     </div>
   </section>
 
@@ -209,7 +210,7 @@
   const root = host.querySelector('#igd');
   const q = s => root.querySelector(s);
   const E = {
-    clock:q('#igd-clock'), count:q('#igd-count'), score:q('#igd-score'), lives:q('#igd-lives'),
+    clock:q('#igd-clock'), timer:q('#igd-timer'), count:q('#igd-count'), score:q('#igd-score'), lives:q('#igd-lives'),
     fill:q('#igd-timefill'), bar:q('.timebar'), chart:q('#igd-chart'), paper:q('#igd-paper'), idcard:q('#igd-idcard'),
     con:q('#igd-console'), title:q('#igd-title'), end:q('#igd-end'), book:q('#igd-book'),
     gelang:q('#igd-gelang'), lab:q('#igd-lab'), jkn:q('#igd-jkn'), memo:q('#igd-memo'), nights:q('#igd-nights'),
@@ -274,196 +275,20 @@
     };
   })();
 
-  /* ================= DATA ================= */
-  const TYPES = {
-    resep:    { title:'RESEP', prefix:'RSP', cls:'t-resep', signLabel:'Paraf dokter' },
-    soap:     { title:'CATATAN KOAS · SOAP', prefix:'SOAP', cls:'t-soap', signLabel:'Koas jaga' },
-    instruksi:{ title:'LEMBAR INSTRUKSI OBAT', prefix:'INS', cls:'t-ins', signLabel:'DPJP' }
-  };
+  /* ================= DATA (dari js/meja-jaga-igd-data.js) ================= */
+  const DATA = window.CLINED_IGD_DATA;
+  if (!DATA) throw new Error('Data Meja Jaga IGD belum dimuat');
+  const {
+    TYPES, GAME, GAME_DATE, WIL, FASKES, DOCS, APPEAR,
+    TOPICS, TOPIC_ORDER, NIGHTS,
+    DRUGS_A, DRUGS_B, LABS, FLUIDS, PEDIA, FORMULAS, QUICK, IDENT
+  } = DATA;
 
-  /* ---------- Identitas: tanggal game, umur, NIK ---------- */
-  const GAME = {y:2026, m:11, d:25};
-  const GAME_DATE = '25/11/2026';
   const age = iso => { const [y,m,d] = iso.split('-').map(Number); let a = GAME.y - y; if (GAME.m < m || (GAME.m === m && GAME.d < d)) a--; return a; };
   const dmy = iso => iso.split('-').reverse().join('-');
   /* NIK: 2 provinsi + 2 kab/kota + 2 kecamatan + DDMMYY (perempuan: tanggal + 40) + 4 nomor urut */
   const NIK = (wil, kec, lahir, jk, sn) => { const [y,m,d] = lahir.split('-');
     return wil + kec + String(+d + (jk === 'P' ? 40 : 0)).padStart(2,'0') + m + y.slice(2) + sn; };
-  const WIL = {'3273':'KOTA BANDUNG','3204':'KABUPATEN BANDUNG','3277':'KOTA CIMAHI','3275':'KOTA BEKASI','3201':'KABUPATEN BOGOR','3205':'KABUPATEN GARUT'};
-
-  /* pt  = data rekam medis (kartu pasien, selalu benar)
-     ktp = isi dokumen yang dibawa pasien (KTP dewasa / KIA anak < 17 th)
-     idx = penimpaan isi KTP/KIA untuk kasus identitas salah
-     berkas = penimpaan identitas di berkas (nama, umur, jk, rm)
-     kind:'id' = kesalahan identitas; flaw boleh berupa array (semua dianggap benar) */
-  const DOCS = [
-    { type:'resep', sign:'dr. Anindya', flaw:'l2',
-      pt:{nama:'Tn. Budi Santoso', lahir:'1992-03-12', jk:'L', rm:'02-41-17', bb:'68 kg', dx:'Asma persisten sedang, keluhan berdebar', alergi:'Tidak ada', cat:'Asma sejak SMA, sering kambuh malam hari'},
-      ktp:{wil:'3273', kec:'05', sn:'0002', tl:'BANDUNG', alamat:'JL. CIHAMPELAS NO. 41', agama:'ISLAM', kawin:'KAWIN', kerja:'KARYAWAN SWASTA', goldar:'O'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Salbutamol inhaler 100 mcg', s:'S prn 2 puff bila sesak'},
-        {id:'l2', t:'R/ Propranolol tab 40 mg', s:'S 2 dd tab I (untuk berdebar)'},
-        {id:'l3', t:'R/ Budesonid inhaler 200 mcg', s:'S 2 dd 1 puff, kumur setelah pakai'}]}],
-      why:'Propranolol adalah beta-blocker non-selektif. Pada pasien asma obat ini bisa memicu bronkospasme berat. Perlu alternatif lain atau konsul dulu.' },
-
-    { type:'resep', sign:'dr. Rahmat', flaw:'l1',
-      pt:{nama:'An. Raka Pratama', lahir:'2021-07-19', jk:'L', rm:'03-18-52', bb:'15 kg', dx:'Demam 2 hari, ISPA', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3204', kec:'12', sn:'0001', tl:'BANDUNG', alamat:'KP. CILEUNYI RT 03/07', agama:'ISLAM', kk:'3204120908150004', kepala:'HENDRA PRATAMA'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Paracetamol tab 500 mg', s:'S 4 dd tab I'},
-        {id:'l2', t:'R/ Ambroksol sirup 15 mg/5 mL', s:'S 3 dd 1/2 sdt'},
-        {id:'l3', t:'R/ NaCl 0,9% tetes hidung', s:'S 3 dd 2 tetes tiap lubang'}]}],
-      why:'Dosis wajar paracetamol anak 10–15 mg/kgBB per kali, jadi kira-kira 150–225 mg untuk 15 kg. Tablet 500 mg adalah dosis dewasa (±33 mg/kgBB per kali) dan berisiko merusak hati.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l2',
-      pt:{nama:'Ny. Rukmini', lahir:'1959-04-02', jk:'P', rm:'00-87-33', bb:'60 kg', dx:'Gagal jantung dekompensasi, edema paru', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3277', kec:'02', sn:'0004', tl:'CIMAHI', alamat:'JL. AMIR MAHMUD GG. MELATI 3', agama:'ISLAM', kawin:'CERAI MATI', kerja:'MENGURUS RUMAH TANGGA', goldar:'A'},
-      sections:[{lines:[
-        {id:'l1', cols:['O₂ nasal kanul','3 L/menit','Inhalasi','Kontinu']},
-        {id:'l2', cols:['Furosemid','40 gram','IV','Bolus, sekali']},
-        {id:'l3', cols:['Monitor urin','> 0,5 mL/kgBB/jam','—','Tiap 1 jam']}]}],
-      why:'Kesalahan satuan. 40 gram sama dengan 40.000 mg, yaitu 1.000 kali dosis normal. Seharusnya furosemid 40 mg IV.' },
-
-    { type:'soap', sign:'c. Dimas', flaw:null,
-      pt:{nama:'Ny. Sari Wulandari', lahir:'1968-01-23', jk:'P', rm:'01-56-09', bb:'62 kg', dx:'Nyeri dada akut', alergi:'Tidak ada', cat:'Hipertensi, tidak rutin minum obat'},
-      ktp:{wil:'3273', kec:'14', sn:'0007', tl:'GARUT', alamat:'JL. SOEKARNO-HATTA NO. 220', agama:'ISLAM', kawin:'KAWIN', kerja:'PEDAGANG', goldar:'B'},
-      sections:[
-        {h:'S · Subjective', lines:[
-          {id:'s1', t:'Nyeri dada kiri menjalar ke lengan kiri selama 40 menit, keringat dingin.'},
-          {id:'s2', t:'Riwayat hipertensi 5 tahun, tidak rutin berobat. Tidak ada alergi obat.'}]},
-        {h:'O · Objective', lines:[
-          {id:'o1', t:'TD 150/90, N 96, RR 20, SpO₂ 97% udara ruang.'},
-          {id:'o2', t:'EKG: elevasi segmen ST di V1–V4.'}]},
-        {h:'A · Assessment', lines:[{id:'a1', t:'STEMI anterior.'}]},
-        {h:'P · Plan', lines:[
-          {id:'p1', t:'Aspirin 320 mg kunyah dan clopidogrel 300 mg loading.'},
-          {id:'p2', t:'O₂ tidak diperlukan (SpO₂ 97%). Pasang IV line, konsul Sp.JP untuk reperfusi.'}]}],
-      why:'Aman. Identitas cocok di ketiga sumber. Antiplatelet ganda dengan dosis loading dan rencana reperfusi sesuai untuk STEMI. Oksigen tidak perlu bila saturasi normal.' },
-
-    { type:'resep', sign:'dr. Anindya', flaw:'l1',
-      pt:{nama:'Tn. Dimas Aditya', lahir:'1999-09-30', jk:'L', rm:'04-02-71', bb:'72 kg', dx:'Tonsilofaringitis bakterial', alergi:'PENISILIN (anafilaksis, 2019)', cat:''},
-      ktp:{wil:'3275', kec:'03', sn:'0003', tl:'JAKARTA', alamat:'PERUM GRIYA ASRI BLOK C2/14', agama:'KRISTEN', kawin:'BELUM KAWIN', kerja:'KARYAWAN SWASTA', goldar:'AB'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Amoksisilin tab 500 mg', s:'S 3 dd tab I'},
-        {id:'l2', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p demam'},
-        {id:'l3', t:'R/ Klorheksidin 0,2% obat kumur', s:'S 2 dd kumur'}]}],
-      why:'Amoksisilin termasuk golongan penisilin. Pasien punya riwayat anafilaksis penisilin, jadi obat ini kontraindikasi.' },
-
-    { type:'soap', sign:'c. Nadia', flaw:'p1',
-      pt:{nama:'Ny. Dewi Lestari', lahir:'1997-02-11', jk:'P', rm:'03-77-40', bb:'66 kg', dx:'Hipertensi dalam kehamilan, G2P1A0 hamil 20 minggu', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3204', kec:'07', sn:'0005', tl:'SUMEDANG', alamat:'KP. CIBODAS RT 02/05', agama:'ISLAM', kawin:'KAWIN', kerja:'GURU', goldar:'O'},
-      sections:[
-        {h:'S · Subjective', lines:[{id:'s1', t:'Sakit kepala 3 hari. Hamil 20 minggu, ANC teratur.'}]},
-        {h:'O · Objective', lines:[
-          {id:'o1', t:'TD 156/98, ulang 15 menit: 160/100. Proteinuria negatif.'},
-          {id:'o2', t:'DJJ 148 x/menit, TFU sesuai usia kehamilan.'}]},
-        {h:'A · Assessment', lines:[{id:'a1', t:'Hipertensi dalam kehamilan tanpa proteinuria.'}]},
-        {h:'P · Plan', lines:[
-          {id:'p1', t:'Kaptopril 12,5 mg, 3 dd tab I.'},
-          {id:'p2', t:'Edukasi tanda bahaya, kontrol ANC 1 minggu lagi.'}]}],
-      why:'ACE inhibitor (kaptopril) kontraindikasi pada kehamilan karena bisa merusak ginjal janin. Pilihan yang lazim adalah metildopa, nifedipin, atau labetalol.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l3',
-      pt:{nama:'Tn. Hartono', lahir:'1971-06-08', jk:'L', rm:'00-34-95', bb:'70 kg', dx:'DM tipe 2 dengan AKI', alergi:'Tidak ada', cat:'Kreatinin 4,2 mg/dL, eGFR ±15'},
-      ktp:{wil:'3273', kec:'21', sn:'0001', tl:'SURAKARTA', alamat:'JL. PASIRKALIKI NO. 88', agama:'KATOLIK', kawin:'KAWIN', kerja:'WIRASWASTA', goldar:'-'},
-      sections:[{lines:[
-        {id:'l1', cols:['NaCl 0,9%','500 mL','IV','Habis dalam 4 jam']},
-        {id:'l2', cols:['Insulin reguler','4 unit','SC','Bila GDS > 250']},
-        {id:'l3', cols:['Metformin','500 mg','PO','3 × sehari']}]}],
-      why:'Metformin tidak boleh diberikan bila eGFR < 30 karena risiko asidosis laktat. Pasien ini eGFR-nya sekitar 15.' },
-
-    { type:'soap', sign:'c. Bayu', flaw:null,
-      pt:{nama:'An. Nadia Putri', lahir:'2024-05-15', jk:'P', rm:'05-10-28', bb:'12 kg', dx:'Diare akut', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3277', kec:'01', sn:'0002', tl:'CIMAHI', alamat:'JL. KOLONEL MASTURI NO. 12', agama:'ISLAM', kk:'3277011203190006', kepala:'RUDI HERMAWAN'},
-      sections:[
-        {h:'S · Subjective', lines:[{id:'s1', t:'Diare cair 6 kali sejak kemarin, muntah 1 kali, masih mau minum.'}]},
-        {h:'O · Objective', lines:[{id:'o1', t:'Suhu 37,8, mata sedikit cekung, turgor kembali lambat, CRT 2 detik.'}]},
-        {h:'A · Assessment', lines:[{id:'a1', t:'Diare akut dehidrasi ringan–sedang, tanpa tanda disentri.'}]},
-        {h:'P · Plan', lines:[
-          {id:'p1', t:'Oralit 75 mL/kgBB dalam 3 jam (±900 mL).'},
-          {id:'p2', t:'Zinc 20 mg 1 kali sehari selama 10 hari.'},
-          {id:'p3', t:'Antibiotik tidak diindikasikan. Edukasi tanda bahaya.'}]}],
-      why:'Aman. KIA anak di bawah 5 tahun memang tanpa foto. Oralit 75 × 12 kg = 900 mL, zinc 20 mg untuk usia ≥ 6 bulan, dan antibiotik memang tidak perlu pada diare cair tanpa tanda disentri.' },
-
-    { type:'resep', sign:'dr. Rahmat', flaw:null,
-      pt:{nama:'Tn. Agus Wibowo', lahir:'1985-10-03', jk:'L', rm:'02-90-63', bb:'75 kg', dx:'Dispepsia', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3201', kec:'10', sn:'0006', tl:'BOGOR', alamat:'JL. RAYA PUNCAK KM 7', agama:'ISLAM', kawin:'KAWIN', kerja:'PEGAWAI NEGERI SIPIL', goldar:'A'},
-      idx:{berlaku:'03-10-2017', terbit:'03-10-2012'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Omeprazol cap 20 mg', s:'S 1 dd cap I sebelum makan pagi'},
-        {id:'l2', t:'R/ Antasida DOEN tab', s:'S 3 dd tab I kunyah, 1 jam sesudah makan'},
-        {id:'l3', t:'R/ Domperidon tab 10 mg', s:'S 3 dd tab I sebelum makan'}]}],
-      why:'Aman. Foto KTP-nya foto lama tanpa kacamata, tapi wajahnya orang yang sama. KTP-el cetakan lama yang masih mencantumkan masa berlaku (03-10-2017) tetap sah seumur hidup, jadi bukan alasan menolak. Obat dan dosisnya lazim untuk dispepsia dewasa.' },
-
-    { type:'resep', sign:'dr. Anindya', flaw:'l2',
-      pt:{nama:'Tn. Slamet Riyadi', lahir:'1964-02-27', jk:'L', rm:'01-11-84', bb:'65 kg', dx:'Hematemesis melena e.c. tukak lambung', alergi:'Tidak ada', cat:'Hb 8,1 g/dL, sering minum obat nyeri sendiri'},
-      ktp:{wil:'3205', kec:'04', sn:'0003', tl:'GARUT', alamat:'DS. SUKAMULYA RT 01/03', agama:'ISLAM', kawin:'KAWIN', kerja:'PETANI/PEKEBUN', goldar:'O'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Pantoprazol inj 40 mg', s:'S 2 dd 1 vial IV'},
-        {id:'l2', t:'R/ Natrium diklofenak tab 50 mg', s:'S 3 dd tab I (nyeri lutut)'},
-        {id:'l3', t:'R/ Sukralfat sirup', s:'S 3 dd C I sebelum makan'}]}],
-      why:'Diklofenak adalah NSAID. Obat ini memperburuk perdarahan saluran cerna dan harus dihindari pada pasien yang sedang berdarah dari tukak lambung.' },
-
-    { type:'instruksi', sign:'dr. Wulan, Sp.OT', flaw:null,
-      pt:{nama:'Ny. Lina Marlina', lahir:'1981-08-19', jk:'P', rm:'03-05-92', bb:'55 kg', dx:'Fraktur radius distal, nyeri sedang–berat', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3273', kec:'09', sn:'0004', tl:'BANDUNG', alamat:'JL. DAGO ATAS NO. 5', agama:'ISLAM', kawin:'KAWIN', kerja:'KARYAWAN SWASTA', goldar:'B'},
-      sections:[{lines:[
-        {id:'l1', cols:['Paracetamol infus','1 gram','IV drip 15 menit','Tiap 6 jam, maks 4 g/hari']},
-        {id:'l2', cols:['Ondansetron','4 mg','IV','Bila mual, maks 3×/hari']},
-        {id:'l3', cols:['Imobilisasi bidai','Posisi netral','—','Sampai konsul Sp.OT']}]}],
-      why:'Aman. Identitas cocok. Paracetamol 1 gram untuk BB > 50 kg dengan batas harian jelas, ondansetron dosis lazim, dan tidak ada alergi.' },
-
-    /* ---------- Kasus identitas ---------- */
-    { type:'resep', sign:'dr. Rahmat', flaw:'id', kind:'id',
-      pt:{nama:'Ny. Maya Kusuma', lahir:'1995-04-06', jk:'P', rm:'04-28-60', bb:'58 kg', dx:'ISK tanpa komplikasi, tidak hamil', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3275', kec:'08', sn:'0005', tl:'BEKASI', alamat:'JL. KALIMALANG NO. 17', agama:'ISLAM', kawin:'BELUM KAWIN', kerja:'KARYAWAN SWASTA', goldar:'A'},
-      berkas:{lahir:'2013-04-06'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Siprofloksasin tab 500 mg', s:'S 2 dd tab I, 3 hari'},
-        {id:'l2', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p nyeri'},
-        {id:'l3', t:'R/ Edukasi: banyak minum air putih', s:''}]}],
-      why:'Tanggal lahir di berkas 06-04-2013 (13 th), padahal KTP dan kartu pasien menunjukkan 06-04-1995 (31 th). Berkas harus ditolak dan diverifikasi ulang karena berisiko salah pasien atau salah dosis.' },
-
-    { type:'resep', sign:'dr. Anindya', flaw:['ktp-ttl','ktp-foto'], kind:'id',
-      pt:{nama:'Tn. Joko Susilo', lahir:'1988-08-14', jk:'L', rm:'04-63-21', bb:'70 kg', dx:'Myalgia pascaolahraga', alergi:'Tidak ada', cat:'Datang diantar istri'},
-      ktp:{wil:'3204', kec:'15', sn:'0002', tl:'BANDUNG', alamat:'JL. RAYA BANJARAN NO. 102', agama:'ISLAM', kawin:'KAWIN', kerja:'KARYAWAN SWASTA', goldar:'O'},
-      idx:{lahir:'1958-08-14', sn:'0001', kerja:'PENSIUNAN'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p nyeri'},
-        {id:'l2', t:'R/ Ibuprofen tab 400 mg', s:'S 3 dd tab I sesudah makan, 3 hari'},
-        {id:'l3', t:'R/ Edukasi: istirahat, kompres hangat', s:''}]}],
-      why:'KTP yang dibawa bukan milik pasien. Namanya sama, tetapi tanggal lahirnya 14-08-1958 (68 th), sedangkan kartu pasien 14-08-1988 (38 th). Fotonya juga jelas orang yang lebih tua. Alamatnya sama karena serumah, jadi kemungkinan KTP ayahnya. Nama, tanggal lahir, dan alamat harus cocok semua sebelum berkas di-ACC.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'id', kind:'id',
-      pt:{nama:'Ny. Siti Rahmawati', lahir:'1982-10-30', jk:'P', rm:'01-23-45', bb:'54 kg', dx:'Perdarahan uterus abnormal, anemia', alergi:'Tidak ada', cat:'Hb 6,8 g/dL. Di IGD ada pasien lain bernama sama.'},
-      ktp:{wil:'3273', kec:'11', sn:'0008', tl:'CIANJUR', alamat:'JL. ANTAPANI LAMA NO. 9', agama:'ISLAM', kawin:'KAWIN', kerja:'MENGURUS RUMAH TANGGA', goldar:'B'},
-      berkas:{lahir:'1979-02-14'},
-      sections:[{lines:[
-        {id:'l1', cols:['Transfusi PRC','2 kolf','IV','Sesuai hasil crossmatch']},
-        {id:'l2', cols:['Asam traneksamat','500 mg','IV pelan','Tiap 8 jam']},
-        {id:'l3', cols:['Monitor tanda vital','—','—','Tiap 15 menit saat transfusi']}]}],
-      why:'Tanggal lahir di berkas (14-02-1979, 47 th) beda dengan kartu pasien dan KTP (30-10-1982, 44 th). Namanya sama, jadi berkas ini kemungkinan milik pasien lain bernama sama. Salah pasien pada transfusi bisa fatal. Jangan cocokkan nama saja.' },
-
-    { type:'resep', sign:'dr. Rahmat', flaw:['ktp-nama','ktp-ttl','ktp-foto'], kind:'id',
-      pt:{nama:'An. Bima Saputra', lahir:'2019-03-04', jk:'L', rm:'05-44-16', bb:'22 kg', dx:'Otitis media akut', alergi:'Tidak ada', cat:'Diantar ibu'},
-      ktp:{wil:'3275', kec:'05', sn:'0003', tl:'BEKASI', alamat:'JL. HARAPAN INDAH BLOK F/8', agama:'ISLAM', kk:'3275051107140002', kepala:'AHMAD SAPUTRA'},
-      idx:{nama:'BIMO SAPUTRA', lahir:'2016-01-21', sn:'0001'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Amoksisilin sirup 250 mg/5 mL', s:'S 2 dd 3½ cth (17,5 mL), 7 hari'},
-        {id:'l2', t:'R/ Paracetamol sirup 120 mg/5 mL', s:'S 3 dd 2 cth k/p demam'},
-        {id:'l3', t:'R/ Edukasi: kontrol bila 3 hari tidak membaik', s:''}]}],
-      why:'KIA yang dibawa milik anak lain: nama BIMO (bukan Bima), lahir 21-01-2016 (10 th), dan wajah di fotonya bukan anak yang dibawa. Kemungkinan KIA kakaknya. Verifikasi identitas dulu, karena dosis anak dihitung dari umur dan berat badan pasien yang benar.' },
-
-    { type:'resep', sign:'dr. Anindya', flaw:['ktp-alamat','ktp-foto'], kind:'id',
-      pt:{nama:'Ny. Ratna Kurniasih', lahir:'1985-05-07', jk:'P', rm:'02-15-58', bb:'60 kg', dx:'Gastroenteritis akut, dehidrasi ringan', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3273', kec:'06', sn:'0003', tl:'TASIKMALAYA', alamat:'JL. GATOT SUBROTO NO. 63', agama:'ISLAM', kawin:'KAWIN', kerja:'WIRASWASTA', goldar:'AB'},
-      idx:{alamat:'KP. SUKAHAJI RT 04/02', wil:'3205', kec:'09', sn:'0001', tl:'GARUT', kerja:'PETANI/PEKEBUN', goldar:'-'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Oralit', s:'S 200 mL tiap BAB cair'},
-        {id:'l2', t:'R/ Ondansetron tab 4 mg', s:'S 3 dd tab I k/p mual'},
-        {id:'l3', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p demam'}]}],
-      why:'Nama dan tanggal lahir di KTP sama, tetapi alamatnya (Kp. Sukahaji, Kab. Garut) beda dengan data rekam medis (Jl. Gatot Subroto, Kota Bandung). Foto di KTP juga wajah orang lain. Ternyata ada dua orang bernama Ratna Kurniasih dengan tanggal lahir sama, jadi alamat dan foto yang jadi pembeda. Verifikasi dulu ke pasien sebelum berkas di-ACC.' }
-  ];
 
   /* Bangun isi KTP/KIA dari data pasien + penimpaan */
   function idDoc(d){
@@ -491,545 +316,23 @@
     return doc;
   }
   const flawsOf = d => [].concat(d.flaw || []);
-
-  /* ---------- Kasus tambahan: gelang, lab, JKN ---------- */
-  DOCS.push(
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'gelang-lahir', kind:'gelang', topic:'identitas',
-      pt:{nama:'Tn. Andi Firmansyah', lahir:'1981-09-12', jk:'L', rm:'05-61-07', bb:'78 kg', dx:'Selulitis tungkai kanan', alergi:'Tidak ada', cat:'Di triase ada dua pasien bernama Andi.'},
-      ktp:{wil:'3273', kec:'17', sn:'0004', tl:'BANDUNG', alamat:'JL. MOH. TOHA NO. 77', agama:'ISLAM', kawin:'KAWIN', kerja:'SOPIR', goldar:'B'},
-      gelang:{lahir:'1972-09-12'},
-      sections:[{lines:[
-        {id:'l1', cols:['Seftriakson','2 gram','IV','Tiap 24 jam']},
-        {id:'l2', cols:['Paracetamol','1 gram','PO','Tiap 8 jam bila demam']},
-        {id:'l3', cols:['Elevasi tungkai','—','—','Saat berbaring']}]}],
-      why:'Tanggal lahir di gelang (12-09-1972) beda dengan kartu pasien (12-09-1981). Gelangnya tertukar dengan pasien Andi yang lain di triase. Gelang yang salah bisa membuat obat diberikan ke orang yang salah, jadi pasang ulang gelang yang benar dulu.' },
-
-    { type:'soap', sign:'c. Dimas', flaw:'gelang-nama', kind:'gelang', topic:'identitas',
-      pt:{nama:'Ny. Wati Susanti', lahir:'1974-03-18', jk:'P', rm:'02-77-31', bb:'64 kg', dx:'Hipertensi urgensi', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3277', kec:'03', sn:'0006', tl:'CIMAHI', alamat:'JL. SANGKURIANG NO. 15', agama:'ISLAM', kawin:'KAWIN', kerja:'PEDAGANG', goldar:'O'},
-      gelang:{nama:'Ny. Wati Suryani'},
-      sections:[
-        {h:'S · Subjective', lines:[{id:'s1', t:'Pusing dan tengkuk berat sejak sore. Obat darah tinggi habis 1 minggu.'}]},
-        {h:'O · Objective', lines:[{id:'o1', t:'TD 190/110, ulang 30 menit 186/108. Tidak ada defisit neurologis, tidak nyeri dada.'}]},
-        {h:'A · Assessment', lines:[{id:'a1', t:'Hipertensi urgensi tanpa kerusakan organ target.'}]},
-        {h:'P · Plan', lines:[
-          {id:'p1', t:'Amlodipin 10 mg PO 1 kali sehari, mulai sekarang.'},
-          {id:'p2', t:'Observasi TD tiap 30 menit selama 2 jam, edukasi minum obat rutin.'}]}],
-      why:'Nama di gelang "Wati Suryani", padahal pasiennya Wati Susanti. Tanggal lahirnya kebetulan sama, jadi lup untuk tanggal lahir akan bilang cocok. Namanya beda, berarti gelang ini milik pasien lain. Pasang gelang yang benar sebelum obat diberikan.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l2', kind:'lab', topic:'lab',
-      pt:{nama:'Tn. Darmawan', lahir:'1960-12-02', jk:'L', rm:'00-45-82', bb:'60 kg', dx:'CKD stadium 5, lemas', alergi:'Tidak ada', cat:'Jadwal cuci darah terlewat 1 minggu'},
-      ktp:{wil:'3204', kec:'20', sn:'0002', tl:'MAJALENGKA', alamat:'KP. CIPARAY RT 05/01', agama:'ISLAM', kawin:'KAWIN', kerja:'PENSIUNAN', goldar:'A'},
-      lab:{rows:[['Kalium','6,9','mmol/L','3,5–5,0','H'],['Natrium','136','mmol/L','135–145',''],['Ureum','168','mg/dL','10–50','H'],['Kreatinin','9,4','mg/dL','0,7–1,3','H'],['Hemoglobin','8,9','g/dL','13–17','L']]},
-      sections:[{lines:[
-        {id:'l1', cols:['Monitor EKG','—','—','Kontinu']},
-        {id:'l2', cols:['KCl dalam NaCl 0,9% 500 mL','25 mEq','IV drip','Habis 4 jam']},
-        {id:'l3', cols:['Konsul Sp.PD-KGH','—','—','Hemodialisis cito']}]}],
-      why:'Kalium sudah 6,9 mmol/L (hiperkalemia). Menambah KCl bisa memicu aritmia fatal. Yang dibutuhkan justru kalsium glukonas, insulin + dekstrosa, dan hemodialisis.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l1', kind:'lab', topic:'lab',
-      pt:{nama:'Ny. Ningsih', lahir:'1955-07-21', jk:'P', rm:'01-98-04', bb:'52 kg', dx:'Penurunan kesadaran, DM tipe 2', alergi:'Tidak ada', cat:'Minum glibenklamid, makan sedikit sejak kemarin'},
-      ktp:{wil:'3273', kec:'02', sn:'0009', tl:'CIREBON', alamat:'JL. PAJAJARAN NO. 140', agama:'ISLAM', kawin:'CERAI MATI', kerja:'MENGURUS RUMAH TANGGA', goldar:'O'},
-      lab:{rows:[['GDS','42','mg/dL','< 200','L'],['Kalium','3,9','mmol/L','3,5–5,0',''],['Natrium','138','mmol/L','135–145',''],['Kreatinin','1,1','mg/dL','0,6–1,1','']]},
-      sections:[{lines:[
-        {id:'l1', cols:['Insulin reguler','6 unit','SC','Sekarang']},
-        {id:'l2', cols:['NaCl 0,9%','500 mL','IV','Habis 8 jam']},
-        {id:'l3', cols:['Cek GDS ulang','—','—','Tiap 1 jam']}]}],
-      why:'GDS 42 mg/dL berarti hipoglikemia berat, dan itulah penyebab penurunan kesadarannya. Insulin akan menurunkan gula lebih jauh dan bisa fatal. Yang benar: dekstrosa 40% bolus IV lalu pantau GDS.' },
-
-    { type:'resep', sign:'dr. Rahmat', flaw:'l2', kind:'lab', topic:'lab',
-      pt:{nama:'Nn. Putri Anggraini', lahir:'2007-06-09', jk:'P', rm:'05-23-66', bb:'50 kg', dx:'Demam dengue hari ke-4', alergi:'Tidak ada', cat:'Nyeri otot dan sendi'},
-      ktp:{wil:'3273', kec:'08', sn:'0001', tl:'BANDUNG', alamat:'JL. SUKAJADI NO. 210', agama:'ISLAM', kawin:'BELUM KAWIN', kerja:'PELAJAR/MAHASISWA', goldar:'A'},
-      lab:{rows:[['Trombosit','38.000','/µL','150.000–400.000','L'],['Hematokrit','46','%','36–46',''],['Leukosit','3.100','/µL','4.000–11.000','L'],['Hemoglobin','15,1','g/dL','12–15','H']]},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p demam'},
-        {id:'l2', t:'R/ Ibuprofen tab 400 mg', s:'S 3 dd tab I k/p nyeri sendi'},
-        {id:'l3', t:'R/ Edukasi: minum 2–3 L/hari, cek trombosit besok', s:''}]}],
-      why:'Trombosit tinggal 38.000/µL pada demam dengue. Ibuprofen (NSAID) mengganggu fungsi trombosit dan menambah risiko perdarahan. Untuk demam dan nyeri cukup paracetamol.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'lab-id', kind:'lab', topic:'identitas',
-      pt:{nama:'Tn. Yusuf Hidayat', lahir:'1976-04-25', jk:'L', rm:'03-41-19', bb:'67 kg', dx:'Melena, lemas', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3275', kec:'02', sn:'0005', tl:'BEKASI', alamat:'JL. AHMAD YANI NO. 31', agama:'ISLAM', kawin:'KAWIN', kerja:'WIRASWASTA', goldar:'B'},
-      lab:{ident:{nama:'Tn. Yusuf Hidayat', lahir:'1958-11-02'}, rows:[['Hemoglobin','6,4','g/dL','13–17','L'],['Hematokrit','20','%','40–50','L'],['Trombosit','210.000','/µL','150.000–400.000',''],['Ureum','64','mg/dL','10–50','H']]},
-      sections:[{lines:[
-        {id:'l1', cols:['Transfusi PRC','2 kolf','IV','Sesuai Hb 6,4, crossmatch']},
-        {id:'l2', cols:['Pantoprazol','80 mg','IV bolus','Lalu 40 mg tiap 12 jam']},
-        {id:'l3', cols:['Puasa sementara','—','—','Sampai endoskopi']}]}],
-      why:'Hasil lab ini milik Yusuf Hidayat yang lain: tanggal lahirnya 02-11-1958, sedangkan pasien lahir 25-04-1976. Keputusan transfusi diambil dari lab orang lain. Periksa ulang Hb pasien yang benar sebelum transfusi.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:null, needs:'lab', topic:'aman',
-      pt:{nama:'Tn. Rudi Hartanto', lahir:'1990-02-17', jk:'L', rm:'04-90-12', bb:'65 kg', dx:'Hipokalemia e.c. diare akut', alergi:'Tidak ada', cat:'Lemas, kram otot'},
-      ktp:{wil:'3201', kec:'14', sn:'0007', tl:'BOGOR', alamat:'PERUM CITRA INDAH BLOK D/3', agama:'ISLAM', kawin:'KAWIN', kerja:'KARYAWAN SWASTA', goldar:'O'},
-      lab:{rows:[['Kalium','2,9','mmol/L','3,5–5,0','L'],['Natrium','134','mmol/L','135–145','L'],['Kreatinin','0,9','mg/dL','0,7–1,3',''],['GDS','104','mg/dL','< 200','']]},
-      sections:[{lines:[
-        {id:'l1', cols:['KCl dalam NaCl 0,9% 500 mL','20 mEq','IV drip','Habis 4 jam']},
-        {id:'l2', cols:['Oralit','200 mL','PO','Tiap BAB cair']},
-        {id:'l3', cols:['Cek ulang kalium','—','—','6 jam lagi']}]}],
-      why:'Aman. Kalium 2,9 (rendah) memang perlu dikoreksi. KCl 20 mEq dalam 500 mL (40 mEq/L) habis 4 jam = 5 mEq/jam, masih dalam batas aman jalur perifer, dan fungsi ginjalnya normal.' },
-
-    { type:'resep', sign:'dr. Anindya', flaw:null, needs:'jkn', topic:'aman',
-      pt:{nama:'Ny. Endang Sulastri', lahir:'1966-08-30', jk:'P', rm:'02-56-48', bb:'61 kg', dx:'Hipertensi, nyeri kepala', alergi:'Tidak ada', cat:''},
-      ktp:{wil:'3204', kec:'11', sn:'0004', tl:'GARUT', alamat:'KP. SUKAMAJU RT 01/04', agama:'ISLAM', kawin:'KAWIN', kerja:'PEDAGANG', goldar:'A'},
-      jkn:{nama:'ENDAH SULASTRI', lahir:'1969-01-14'},
-      sections:[{lines:[
-        {id:'l1', t:'R/ Amlodipin tab 5 mg', s:'S 1 dd tab I pagi'},
-        {id:'l2', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p nyeri kepala'},
-        {id:'l3', t:'R/ Edukasi: kontrol tekanan darah ke puskesmas', s:''}]}],
-      why:'Aman. Kartu JKN-nya memang milik adiknya, tetapi kartu pasien, KTP, dan gelang semuanya cocok. Kartu JKN hanya untuk penjaminan. Urusan administrasi diselesaikan terpisah dan tidak boleh menunda pelayanan.' },
-
-    { type:'instruksi', sign:'dr. Wulan, Sp.OT', flaw:null, needs:'jkn', topic:'aman',
-      pt:{nama:'Tn. Bambang Sutrisno', lahir:'1979-05-05', jk:'L', rm:'04-17-83', bb:'80 kg', dx:'Vulnus laceratum lengan bawah kiri', alergi:'Tidak ada', cat:'Luka terkena seng, perdarahan sudah terkontrol'},
-      ktp:{wil:'3275', kec:'06', sn:'0002', tl:'KARAWANG', alamat:'JL. BOULEVARD HIJAU NO. 4', agama:'KRISTEN', kawin:'KAWIN', kerja:'BURUH HARIAN LEPAS', goldar:'O'},
-      jkn:{status:'TIDAK AKTIF'},
-      sections:[{lines:[
-        {id:'l1', cols:['Jahit luka (hecting)','6 jahitan','—','Dengan anestesi lokal']},
-        {id:'l2', cols:['Paracetamol','500 mg','PO','Tiap 8 jam bila nyeri']},
-        {id:'l3', cols:['Profilaksis tetanus','—','IM','Sesuai status imunisasi']}]}],
-      why:'Aman. Status JKN tidak aktif adalah urusan administrasi. Dalam keadaan gawat darurat, rumah sakit dilarang menolak pasien atau mendahulukan urusan administrasi (UU 17/2023 Pasal 174). Tindakannya sendiri sudah sesuai.' }
-  );
-  // hasil lab untuk kasus lama (muncul mulai malam 4)
-  DOCS.find(d => d.pt.nama === 'Tn. Hartono').lab = {rows:[['GDS','286','mg/dL','< 200','H'],['Ureum','124','mg/dL','10–50','H'],['Kreatinin','4,2','mg/dL','0,7–1,3','H'],['Kalium','4,8','mmol/L','3,5–5,0','']]};
-  DOCS.find(d => d.pt.nama === 'Tn. Slamet Riyadi').lab = {rows:[['Hemoglobin','8,1','g/dL','13–17','L'],['Trombosit','250.000','/µL','150.000–400.000',''],['Ureum','58','mg/dL','10–50','H']]};
-
-  const TOPIC = {'Tn. Budi Santoso':'kontra','An. Raka Pratama':'dosis','Ny. Rukmini':'dosis','Tn. Dimas Aditya':'alergi',
-    'Ny. Dewi Lestari':'kontra','Tn. Hartono':'kontra','Tn. Slamet Riyadi':'kontra'};
-  DOCS.forEach(d => { if (!d.topic) d.topic = !flawsOf(d).length ? 'aman' : d.kind ? 'identitas' : (TOPIC[d.pt.nama] || 'kontra'); });
   const minNight = d => d.kind === 'id' ? 2 : d.kind === 'gelang' ? 3 : (d.kind === 'lab' || d.needs === 'lab') ? 4 : d.needs === 'jkn' ? 5 : 1;
 
-  const TOPICS = {
-    dosis:{label:'Dosis & satuan', tip:'Hitung dosis anak dengan mg/kgBB × berat badan, dan cek satuan (gram vs mg). Tab Kalkulator di Panduan bisa membantu.'},
-    alergi:{label:'Alergi obat', tip:'Cocokkan kotak alergi di kartu pasien dengan golongan obatnya, bukan hanya nama obatnya.'},
-    kontra:{label:'Kontraindikasi', tip:'Lihat kondisi pasien (asma, hamil, ginjal, perdarahan), lalu cek baris Kontraindikasi obat itu di tab Obat.'},
-    identitas:{label:'Identitas pasien', tip:'Pakai lup (P) untuk mencocokkan nama, tanggal lahir, alamat, dan wajah di setiap dokumen, termasuk gelang dan lembar lab.'},
-    lab:{label:'Interpretasi lab', tip:'Perhatikan nilai bertanda H/L, lalu tanyakan: apakah obat di berkas memperburuk nilai itu?'},
-    aman:{label:'Berkas aman', tip:'Jangan asal tolak. KTP lama, foto lama, atau status JKN tidak aktif bukan alasan menolak berkas.'}
-  };
-  const TOPIC_ORDER = ['dosis','alergi','kontra','identitas','lab','aman'];
-
-  /* ---------- Malam bertahap ---------- */
-  const NIGHTS = [null,
-    {title:'Resep dulu', limit:60, mix:[['clin',4],['safe',2]], feats:[],
-      memo:['Cocokkan isi berkas dengan <b>kartu pasien</b>: alergi obat, berat badan untuk dosis anak, dan kondisi seperti hamil, asma, gangguan ginjal, atau perdarahan.',
-        'Cek <b>satuan</b>. 1 gram = 1.000 mg.',
-        'Ada yang salah? Sorot barisnya dengan <b>stabilo</b>, lalu cap <b>TOLAK</b>. Aman? Cap <b>ACC</b>. Menolak berkas yang benar juga merugikan pasien.',
-        'Ragu soal dosis? Buka <b>Kalkulator</b> (K): berat badan pasien sudah terisi, tinggal masukkan dosis di berkas. Data obat ada di <b>Panduan</b> (B). Waktu tetap berjalan.']},
-    {title:'Kartu identitas', limit:55, mix:[['id',2],['clin',2],['safe',2]], feats:['ktp','lup'],
-      memo:['Pasien dewasa membawa <b>KTP</b>, anak membawa <b>KIA</b>. Nama, tanggal lahir, dan alamat harus sama dengan kartu pasien.',
-        'Nama dan tanggal lahir di <b>berkas</b> juga harus cocok dengan kartu pasien.',
-        'Pakai <b>lup</b> (P): klik dua data, garis hijau berarti cocok, merah berarti tidak cocok.',
-        'Wajar, jangan ditolak: sapaan Tn./Ny. tidak tercantum di KTP, dan KTP-el lama yang tanggal berlakunya lewat tetap sah.']},
-    {title:'Wajah & gelang', limit:60, mix:[['gelang',2],['id',1],['clin',1],['safe',2]], feats:['ktp','lup','wajah','gelang'],
-      memo:['Bandingkan <b>wajah</b> orang di loket dengan foto KTP/KIA. Foto lama boleh beda kacamata atau kumis.',
-        'Setiap pasien memakai <b>gelang identitas</b> dari triase: biru untuk laki-laki, merah muda untuk perempuan, dan stiker merah berarti alergi.',
-        'Nama dan tanggal lahir di gelang harus cocok. Gelang yang tertukar berarti risiko salah pasien.']},
-    {title:'Hasil lab', limit:65, mix:[['lab',3],['id|gelang',1],['clin',1],['safe',2]], feats:['ktp','lup','wajah','gelang','lab'],
-      memo:['Sebagian pasien datang dengan <b>hasil lab</b>. Nilai bertanda <b>H</b> berarti tinggi, <b>L</b> berarti rendah.',
-        'Tanyakan: apakah obat di berkas memperburuk nilai itu? Misalnya kalium tinggi lalu diberi KCl, atau gula darah rendah lalu diberi insulin.',
-        'Lembar lab juga punya identitas. Lab milik pasien lain tidak boleh jadi dasar tindakan.']},
-    {title:'Jaminan (JKN)', limit:70, mix:[['lab',2],['gelang',1],['id',1],['clin',1],['safe',3]], feats:['ktp','lup','wajah','gelang','lab','jkn'],
-      memo:['Pasien membawa <b>kartu JKN</b>. Kartu ini hanya untuk penjaminan, bukan penanda keselamatan pasien.',
-        '<b>Jangan menolak</b> berkas karena masalah JKN, misalnya kartu tidak aktif atau kartu milik keluarga. Dalam keadaan gawat darurat, rumah sakit dilarang menolak pasien atau mendahulukan urusan administrasi.',
-        'Semua aturan malam 1–4 tetap berlaku. Ini malam terpanjang: 8 berkas.']}
-  ];
-  NIGHTS.push({title:'Mode Sulit', hard:true, limit:45, mix:[['flaw',7],['safe',3]], feats:['ktp','lup','wajah','gelang','lab','jkn'],
-    memo:['Semua jenis berkas dan dokumen <b>diacak</b> dalam satu malam: resep, SOAP, instruksi, KTP/KIA, wajah, gelang, hasil lab, dan kartu JKN.',
-      'Jumlah berkas yang salah juga acak. Waktu per berkas lebih singkat: <b>45 detik</b>.',
-      'Semua aturan malam 1–5 berlaku, dan tidak ada petunjuk di bawah meja.']});
   const HARD = 6;
-  const isPhone = () => !FIT.on && window.matchMedia('(max-width: 980px)').matches;
+  const fmtLimit = sec => sec % 60 === 0 ? `${sec / 60} menit` : `${sec} detik`;
   const nightName = n => n === HARD ? 'Mode Sulit' : `Malam ${n}`;
   const FEAT_DOCS = {ktp:'KTP/KIA', gelang:'Gelang', lab:'Hasil lab', jkn:'Kartu JKN'};
 
   const loadP = () => Progress.read();
   const saveP = p => Progress.write(p);
   let PROG = loadP();
-
-
-/* Data obat bagian A: analgesik, antibiotik, saluran cerna */
-const DRUGS_A = [
- {n:'Paracetamol', alt:'Asetaminofen', cls:'Analgesik-antipiretik', ind:'Nyeri ringan–sedang, demam.',
-  d:'500–1.000 mg PO/IV tiap 6 jam. Maks 4 g/hari (maks 3 g/hari bila alkoholik kronik, gangguan hati, atau malnutrisi).',
-  a:'10–15 mg/kgBB/kali tiap 4–6 jam. Maks 60 mg/kgBB/hari. IV: 15 mg/kgBB/kali (BB < 33 kg), tiap 6 jam.',
-  ki:'Gangguan hati berat, hipersensitivitas.', es:'Jarang pada dosis terapi. Overdosis: hepatotoksik (antidot N-asetilsistein).'},
- {n:'Ibuprofen', cls:'NSAID', ind:'Nyeri, demam, inflamasi.',
-  d:'200–400 mg PO tiap 6–8 jam sesudah makan. Maks 1.200 mg/hari tanpa pengawasan.',
-  a:'5–10 mg/kgBB/kali tiap 6–8 jam (usia ≥ 6 bulan). Maks 40 mg/kgBB/hari.',
-  ki:'Ulkus/perdarahan saluran cerna aktif, gagal ginjal berat, gagal jantung berat, trimester 3 kehamilan, dehidrasi berat, asma sensitif aspirin.',
-  es:'Dispepsia, perdarahan lambung, gangguan ginjal, retensi cairan.'},
- {n:'Natrium diklofenak', cls:'NSAID', ind:'Nyeri sedang, artritis, kolik ginjal.',
-  d:'50 mg PO 2–3 kali/hari sesudah makan. Maks 150 mg/hari.',
-  a:'1–3 mg/kgBB/hari terbagi 2–3 dosis (hanya bila perlu, usia > 1 tahun).',
-  ki:'Ulkus/perdarahan saluran cerna, gagal ginjal berat, gagal jantung berat, penyakit jantung iskemik, trimester 3.',
-  es:'Nyeri lambung, perdarahan GI, peningkatan risiko kardiovaskular, gangguan ginjal.'},
- {n:'Ketorolak', cls:'NSAID injeksi', ind:'Nyeri akut sedang–berat jangka pendek (maks 5 hari).',
-  d:'10–30 mg IV/IM tiap 6–8 jam. Maks 90 mg/hari (60 mg/hari pada usia > 65 th atau BB < 50 kg).',
-  a:'0,5 mg/kgBB IV/IM per kali (maks 15 mg), tiap 6–8 jam.',
-  ki:'Perdarahan GI, gangguan ginjal sedang–berat, risiko perdarahan, hamil/menyusui, asma sensitif NSAID.',
-  es:'Perdarahan GI, gangguan ginjal, nyeri lambung.'},
- {n:'Tramadol', cls:'Opioid lemah', ind:'Nyeri sedang–berat.',
-  d:'50–100 mg PO/IV tiap 6–8 jam. Maks 400 mg/hari.',
-  a:'1–2 mg/kgBB/kali tiap 6–8 jam (usia > 12 tahun; hindari pada anak lebih kecil).',
-  ki:'Epilepsi tidak terkontrol, intoksikasi alkohol/opioid/psikotropik, pemakai MAOI, gagal napas.',
-  es:'Mual, pusing, mengantuk, konstipasi, kejang pada dosis tinggi, sindrom serotonin.'},
- {n:'Morfin', cls:'Opioid kuat', ind:'Nyeri berat, nyeri dada iskemik, edema paru (sesuai protokol).',
-  d:'2–4 mg IV pelan, ulang tiap 5–15 menit sesuai respons (titrasi). IM/SC 5–10 mg tiap 4 jam.',
-  a:'0,05–0,1 mg/kgBB IV tiap 4 jam (titrasi).',
-  ki:'Depresi napas, cedera kepala dengan peningkatan TIK, abdomen akut tanpa diagnosis, asma akut, obstruksi usus.',
-  es:'Depresi napas, mual, konstipasi, hipotensi, bradikardia. Antidot: nalokson.'},
- {n:'Amoksisilin', cls:'Antibiotik penisilin', ind:'ISPA bakterial, faringitis, otitis media, ISK ringan, pneumonia komunitas ringan.',
-  d:'500 mg PO tiap 8 jam (atau 875 mg tiap 12 jam).',
-  a:'25–50 mg/kgBB/hari terbagi 3 dosis; dosis tinggi 80–90 mg/kgBB/hari terbagi 2 untuk otitis media.',
-  ki:'Alergi penisilin/beta-laktam (terutama riwayat anafilaksis), mononukleosis infeksiosa.',
-  es:'Diare, mual, ruam, reaksi alergi hingga anafilaksis.'},
- {n:'Ampisilin–sulbaktam', cls:'Antibiotik penisilin + penghambat beta-laktamase', ind:'Infeksi intra-abdomen, kulit/jaringan lunak, pneumonia aspirasi.',
-  d:'1,5–3 g IV tiap 6 jam.',
-  a:'100–200 mg/kgBB/hari (komponen ampisilin) terbagi 4 dosis.',
-  ki:'Alergi penisilin, riwayat ikterus kolestatik akibat obat ini.',
-  es:'Diare, ruam, flebitis, peningkatan enzim hati.'},
- {n:'Seftriakson', cls:'Sefalosporin generasi 3', ind:'Meningitis, pneumonia berat, sepsis, demam tifoid, infeksi intra-abdomen.',
-  d:'1–2 g IV tiap 12–24 jam. Meningitis: 2 g tiap 12 jam.',
-  a:'50–100 mg/kgBB/hari 1–2 dosis (maks 4 g/hari). Meningitis: 100 mg/kgBB/hari.',
-  ki:'Alergi sefalosporin/anafilaksis penisilin berat; hindari pada neonatus hiperbilirubinemia dan jangan dicampur kalsium IV pada neonatus.',
-  es:'Diare, ruam, flebitis, eosinofilia, biliary sludge.'},
- {n:'Sefotaksim', cls:'Sefalosporin generasi 3', ind:'Sepsis, meningitis, pneumonia berat.',
-  d:'1–2 g IV tiap 8 jam.',
-  a:'100–200 mg/kgBB/hari terbagi 3–4 dosis.',
-  ki:'Alergi sefalosporin.', es:'Diare, ruam, flebitis.'},
- {n:'Siprofloksasin', cls:'Fluorokuinolon', ind:'ISK, diare infeksius, infeksi tulang/sendi.',
-  d:'500 mg PO tiap 12 jam (IV 400 mg tiap 8–12 jam). ISK tanpa komplikasi 3 hari.',
-  a:'Umumnya dihindari pada anak < 18 tahun; bila perlu 10–20 mg/kgBB/dosis tiap 12 jam.',
-  ki:'Hamil, menyusui, riwayat tendinopati akibat kuinolon, usia < 18 tahun (relatif), miastenia gravis.',
-  es:'Mual, pusing, ruptur tendon, perpanjangan QT, fotosensitivitas.'},
- {n:'Levofloksasin', cls:'Fluorokuinolon', ind:'Pneumonia komunitas, ISK komplikata, sinusitis.',
-  d:'500–750 mg PO/IV tiap 24 jam.',
-  a:'Hindari rutin pada anak; keputusan oleh dokter spesialis.',
-  ki:'Hamil/menyusui, riwayat tendinopati, perpanjangan QT, epilepsi.', es:'Mual, ruam, tendinitis, QT memanjang, gangguan glukosa darah.'},
- {n:'Metronidazol', cls:'Antiprotozoa/anaerob', ind:'Infeksi anaerob, amebiasis, giardiasis, infeksi intra-abdomen.',
-  d:'500 mg PO/IV tiap 8 jam.',
-  a:'7,5–10 mg/kgBB/kali tiap 8 jam (maks 500 mg/kali).',
-  ki:'Hipersensitivitas; hindari alkohol selama dan 48 jam sesudah pengobatan; hati-hati pada penyakit SSP.',
-  es:'Rasa logam, mual, neuropati, urine gelap.'},
- {n:'Gentamisin', cls:'Aminoglikosida', ind:'Sepsis gram negatif, infeksi berat (kombinasi).',
-  d:'3–5 mg/kgBB IV/IM tiap 24 jam (sesuaikan fungsi ginjal).',
-  a:'5–7,5 mg/kgBB/hari 1–3 dosis (sesuaikan fungsi ginjal).',
-  ki:'Gangguan ginjal berat tanpa penyesuaian, miastenia gravis, hamil.',
-  es:'Nefrotoksik, ototoksik; perlu pantau kreatinin.'},
- {n:'Azitromisin', cls:'Makrolida', ind:'Pneumonia atipikal, infeksi saluran napas, tifoid ringan, IMS tertentu.',
-  d:'500 mg PO 1 kali/hari selama 3 hari.',
-  a:'10 mg/kgBB 1 kali/hari selama 3 hari (maks 500 mg).',
-  ki:'Alergi makrolida, gangguan hati berat, riwayat QT panjang.', es:'Mual, diare, nyeri perut, perpanjangan QT.'},
- {n:'Omeprazol', cls:'Penghambat pompa proton', ind:'Dispepsia, GERD, tukak lambung, profilaksis ulkus stres.',
-  d:'20–40 mg PO 1 kali/hari sebelum makan pagi.',
-  a:'0,7–1 mg/kgBB/hari 1 dosis (maks 20–40 mg).',
-  ki:'Hipersensitivitas PPI.', es:'Sakit kepala, diare, hipomagnesemia (pemakaian lama), risiko fraktur dan infeksi C. difficile.'},
- {n:'Pantoprazol', cls:'Penghambat pompa proton', ind:'Perdarahan saluran cerna atas, tukak lambung, GERD.',
-  d:'40 mg PO/IV 1–2 kali/hari. Perdarahan GI akut: 80 mg IV bolus lalu 40 mg tiap 12 jam.',
-  a:'1 mg/kgBB/hari (maks 40 mg) IV/PO, bila ada indikasi.',
-  ki:'Hipersensitivitas PPI.', es:'Sakit kepala, diare, nyeri perut.'},
- {n:'Ondansetron', cls:'Antiemetik (antagonis 5-HT3)', ind:'Mual muntah (gastroenteritis, kemoterapi, pascaoperasi).',
-  d:'4–8 mg IV/PO tiap 8 jam. Maks 24 mg/hari.',
-  a:'0,1–0,15 mg/kgBB/dosis (maks 4 mg) tiap 8 jam.',
-  ki:'Sindrom QT panjang, pemakai apomorfin.', es:'Sakit kepala, konstipasi, perpanjangan QT.'},
- {n:'Domperidon', cls:'Antiemetik prokinetik', ind:'Mual muntah, dispepsia akibat gangguan pengosongan lambung.',
-  d:'10 mg PO tiap 8 jam sebelum makan. Maks 30 mg/hari.',
-  a:'0,25–0,5 mg/kgBB/dosis tiap 8 jam, bila diperlukan.',
-  ki:'Perdarahan GI, obstruksi mekanik, prolaktinoma, perpanjangan QT, gangguan hati sedang–berat.', es:'Mulut kering, sakit kepala, QT memanjang, peningkatan prolaktin.'},
- {n:'Oralit (WHO/ORS)', cls:'Rehidrasi oral', ind:'Dehidrasi pada diare akut.',
-  d:'Dewasa: 200–400 mL tiap BAB cair atau sesuai derajat dehidrasi.',
-  a:'Tanpa dehidrasi: 50–100 mL (< 2 th) atau 100–200 mL (2–10 th) tiap BAB. Dehidrasi ringan–sedang: 75 mL/kgBB dalam 3 jam.',
-  ki:'Dehidrasi berat dengan syok (butuh IV), ileus, muntah tak terkendali.', es:'Muntah (ulang pelan-pelan sedikit demi sedikit).'},
- {n:'Zinc', cls:'Suplemen mineral', ind:'Diare akut anak.',
-  d:'—',
-  a:'< 6 bulan: 10 mg/hari; ≥ 6 bulan: 20 mg/hari, selama 10 hari.',
-  ki:'Hipersensitivitas.', es:'Mual, muntah ringan.'}
-];
-
-/* Data obat bagian B: kardiovaskular, napas, endokrin, emergensi, neuro */
-const DRUGS_B = [
- {n:'Aspirin', cls:'Antiplatelet', ind:'Sindrom koroner akut, pencegahan sekunder kardiovaskular, stroke iskemik.',
-  d:'SKA: 160–320 mg kunyah (loading), lanjut 80–100 mg/hari.',
-  a:'Tidak dianjurkan rutin pada anak (risiko sindrom Reye).',
-  ki:'Perdarahan aktif, ulkus peptikum aktif, alergi aspirin/asma sensitif NSAID, anak dengan infeksi virus.',
-  es:'Dispepsia, perdarahan GI, tinnitus pada dosis tinggi.'},
- {n:'Klopidogrel', cls:'Antiplatelet', ind:'SKA, pasca-PCI/stent, stroke iskemik.',
-  d:'Loading 300–600 mg PO, lanjut 75 mg/hari.',
-  a:'Tidak untuk penggunaan rutin anak.',
-  ki:'Perdarahan aktif, gangguan hati berat.', es:'Perdarahan, memar, diare.'},
- {n:'Nitrogliserin (ISDN/GTN)', cls:'Nitrat', ind:'Angina, nyeri dada iskemik, edema paru kardiogenik.',
-  d:'GTN SL 0,4–0,6 mg tiap 5 menit (maks 3 dosis). ISDN SL 5 mg. Infus GTN 5–200 mcg/menit titrasi.',
-  a:'Penggunaan pada anak oleh spesialis.',
-  ki:'Hipotensi (TDS < 90), infark ventrikel kanan, pemakai PDE-5 inhibitor (sildenafil, tadalafil) dalam 24–48 jam, stenosis aorta berat.',
-  es:'Sakit kepala, pusing, hipotensi, takikardia refleks.'},
- {n:'Furosemid', cls:'Diuretik loop', ind:'Edema paru, gagal jantung dekompensasi, edema nefrotik/sirosis.',
-  d:'20–80 mg IV bolus (dosis awal 40 mg), ulang sesuai respons. PO 20–80 mg/hari.',
-  a:'0,5–2 mg/kgBB/dosis IV/PO tiap 6–12 jam.',
-  ki:'Anuria, hipovolemia berat, hipokalemia berat, hiponatremia berat.', es:'Hipokalemia, hiponatremia, dehidrasi, ototoksik dosis tinggi cepat, hiperurisemia.'},
- {n:'Kaptopril', cls:'ACE inhibitor', ind:'Hipertensi, gagal jantung.',
-  d:'12,5–50 mg PO 2–3 kali/hari. Krisis hipertensi: 12,5–25 mg SL/PO.',
-  a:'0,3–0,5 mg/kgBB/dosis tiap 8 jam.',
-  ki:'Hamil, riwayat angioedema, stenosis arteri renalis bilateral, hiperkalemia.', es:'Batuk kering, hiperkalemia, hipotensi, angioedema.'},
- {n:'Amlodipin', cls:'Penghambat kanal kalsium', ind:'Hipertensi, angina.',
-  d:'5–10 mg PO 1 kali/hari.', a:'0,06–0,3 mg/kgBB/hari 1 dosis (maks 10 mg).',
-  ki:'Syok kardiogenik, stenosis aorta berat.', es:'Edema tungkai, sakit kepala, flushing.'},
- {n:'Nifedipin', cls:'Penghambat kanal kalsium', ind:'Hipertensi dalam kehamilan, tokolitik, hipertensi.',
-  d:'10 mg PO (lepas cepat) bila perlu; dosis rumatan 10–20 mg tiap 8–12 jam. Hindari SL pada hipertensi biasa.',
-  a:'0,25–0,5 mg/kgBB/dosis, pada hipertensi anak oleh dokter.',
-  ki:'Syok kardiogenik, stenosis aorta berat, infark miokard akut (lepas cepat).', es:'Sakit kepala, flushing, takikardia refleks, edema.'},
- {n:'Metildopa', cls:'Antihipertensi sentral', ind:'Hipertensi dalam kehamilan.',
-  d:'250–500 mg PO 2–3 kali/hari (maks 3 g/hari).', a:'10–40 mg/kgBB/hari terbagi 2–4 dosis.',
-  ki:'Penyakit hati aktif, depresi berat, feokromositoma.', es:'Mengantuk, mulut kering, anemia hemolitik (Coombs positif), gangguan hati.'},
- {n:'Propranolol', cls:'Beta-blocker non-selektif', ind:'Hipertensi, takikardia supraventrikular, tirotoksikosis, profilaksis migrain.',
-  d:'10–40 mg PO 2–3 kali/hari.', a:'0,5–1 mg/kgBB/hari terbagi 2–3 dosis.',
-  ki:'Asma/PPOK bronkospastik, blok AV derajat 2–3, bradikardia berat, syok kardiogenik, gagal jantung akut.',
-  es:'Bradikardia, bronkospasme, hipoglikemia tersamar, lelah.'},
- {n:'Bisoprolol', cls:'Beta-blocker selektif β1', ind:'Hipertensi, gagal jantung kronik, angina.',
-  d:'1,25–10 mg PO 1 kali/hari.', a:'Tidak rutin untuk anak.',
-  ki:'Blok AV derajat 2–3, bradikardia berat, syok kardiogenik, asma berat.', es:'Bradikardia, lelah, pusing, ekstremitas dingin.'},
- {n:'Amiodaron', cls:'Antiaritmia', ind:'VT/VF refrakter, takiaritmia (oleh dokter terlatih).',
-  d:'VF/VT tanpa nadi: 300 mg IV bolus, ulang 150 mg. VT stabil: 150 mg IV dalam 10 menit, lanjut 1 mg/menit 6 jam.',
-  a:'5 mg/kgBB IV bolus (maks 300 mg) pada henti jantung.',
-  ki:'Bradikardia sinus, blok AV tanpa pacu, syok kardiogenik, gangguan tiroid, hipersensitivitas iodium.', es:'Hipotensi, bradikardia, flebitis, toksisitas paru/tiroid/hati (jangka panjang).'},
- {n:'Epinefrin (adrenalin)', cls:'Simpatomimetik', ind:'Anafilaksis, henti jantung, syok refrakter.',
-  d:'Anafilaksis: 0,3–0,5 mg IM (1 mg/mL) paha lateral, ulang tiap 5–15 menit. Henti jantung: 1 mg IV tiap 3–5 menit.',
-  a:'Anafilaksis: 0,01 mg/kgBB IM (maks 0,3 mg), larutan 1:1.000. Henti jantung: 0,01 mg/kgBB IV/IO.',
-  ki:'Tidak ada kontraindikasi absolut pada anafilaksis/henti jantung.', es:'Takikardia, tremor, cemas, hipertensi, aritmia.'},
- {n:'Atropin', cls:'Antikolinergik', ind:'Bradikardia simtomatik, keracunan organofosfat.',
-  d:'Bradikardia: 0,5–1 mg IV, ulang tiap 3–5 menit (maks 3 mg). Organofosfat: 1–2 mg IV, ulang sampai atropinisasi.',
-  a:'0,02 mg/kgBB IV (minimal 0,1 mg, maks 0,5 mg/dosis anak).',
-  ki:'Glaukoma sudut sempit, obstruksi usus/ileus paralitik.', es:'Mulut kering, takikardia, retensi urine, pupil melebar.'},
- {n:'Salbutamol', cls:'Agonis β2 kerja pendek', ind:'Asma akut, bronkospasme, PPOK eksaserbasi, hiperkalemia (adjuvan).',
-  d:'Inhaler 100 mcg: 2–4 puff tiap 20 menit (3 kali), lalu sesuai respons. Nebulisasi 2,5–5 mg tiap 20 menit.',
-  a:'Nebulisasi 0,15 mg/kgBB (minimal 2,5 mg, maks 5 mg). Inhaler 4–8 puff dengan spacer.',
-  ki:'Hipersensitivitas.', es:'Tremor, palpitasi, hipokalemia, takikardia.'},
- {n:'Ipratropium bromida', cls:'Antikolinergik inhalasi', ind:'Asma akut sedang–berat (kombinasi), PPOK.',
-  d:'Nebulisasi 0,5 mg tiap 20 menit (3 dosis awal), lalu tiap 4–6 jam.',
-  a:'0,25–0,5 mg nebulisasi tiap 20 menit (3 dosis awal).',
-  ki:'Alergi atropin dan turunannya.', es:'Mulut kering, rasa pahit, glaukoma bila terkena mata.'},
- {n:'Budesonid inhalasi', cls:'Kortikosteroid inhalasi', ind:'Rumatan asma persisten.',
-  d:'200–400 mcg 2 kali/hari; kumur setelah pakai.', a:'100–200 mcg 2 kali/hari.',
-  ki:'Hipersensitivitas.', es:'Kandidiasis oral, suara serak.'},
- {n:'Deksametason', cls:'Kortikosteroid', ind:'Anafilaksis (adjuvan), croup, asma akut, edema otak, reaksi alergi berat.',
-  d:'4–10 mg IV/IM, dapat diulang tiap 6–8 jam.', a:'0,15–0,6 mg/kgBB/dosis (croup: 0,6 mg/kgBB dosis tunggal).',
-  ki:'Infeksi sistemik berat tanpa antibiotik, ulkus peptik aktif (relatif).', es:'Hiperglikemia, hipertensi, retensi cairan, gangguan lambung.'},
- {n:'Metilprednisolon', cls:'Kortikosteroid', ind:'Asma/PPOK berat, reaksi alergi berat, anafilaksis (adjuvan).',
-  d:'40–125 mg IV tiap 6–12 jam.', a:'1–2 mg/kgBB/dosis IV.',
-  ki:'Infeksi sistemik tidak terkontrol, hipersensitivitas.', es:'Hiperglikemia, hipertensi, euforia, gangguan lambung.'},
- {n:'Difenhidramin', cls:'Antihistamin H1 generasi 1', ind:'Reaksi alergi, urtikaria, anafilaksis (adjuvan).',
-  d:'25–50 mg IV/IM/PO tiap 6–8 jam.', a:'1 mg/kgBB/dosis IV/IM/PO (maks 50 mg).',
-  ki:'Serangan asma akut, glaukoma, retensi urine, neonatus.', es:'Mengantuk, mulut kering, retensi urine.'},
- {n:'Insulin reguler', cls:'Antidiabetik', ind:'Hiperglikemia, KAD, hiperkalemia (bersama glukosa).',
-  d:'SC 4–10 unit sesuai glukosa darah. KAD: infus 0,1 unit/kgBB/jam. Hiperkalemia: 10 unit IV + dekstrosa 40% 50 mL.',
-  a:'KAD: 0,05–0,1 unit/kgBB/jam. Hiperkalemia: 0,1 unit/kgBB + dekstrosa 0,5 g/kgBB.',
-  ki:'Hipoglikemia.', es:'Hipoglikemia, hipokalemia, lipodistrofi.'},
- {n:'Dekstrosa 40%', cls:'Larutan glukosa hipertonik', ind:'Hipoglikemia berat, hiperkalemia (adjuvan insulin).',
-  d:'25–50 mL (10–20 g) IV bolus, ulang sesuai GDS.', a:'Dekstrosa 10%: 2–5 mL/kgBB IV (hindari D40 pada anak kecil).',
-  ki:'Hiperglikemia, perdarahan intrakranial, delirium tremens.', es:'Flebitis, hiperglikemia, ekstravasasi dapat nekrosis.'},
- {n:'Metformin', cls:'Biguanid', ind:'DM tipe 2.',
-  d:'500–850 mg PO 2–3 kali/hari sesudah makan (maks 2.550 mg/hari).', a:'≥ 10 tahun: 500 mg 2 kali/hari, oleh dokter.',
-  ki:'eGFR < 30, asidosis metabolik, gagal hati/jantung/napas berat, dehidrasi, kontras iodium (tunda).', es:'Mual, diare, asidosis laktat (jarang).'},
- {n:'Diazepam', cls:'Benzodiazepin', ind:'Kejang akut, status epileptikus, ansietas akut.',
-  d:'5–10 mg IV pelan (maks 10 mg per dosis, ulang sekali). Rektal 10 mg.',
-  a:'IV 0,2–0,5 mg/kgBB (maks 10 mg). Rektal: BB < 10 kg 5 mg; ≥ 10 kg 10 mg.',
-  ki:'Depresi napas berat, miastenia gravis, gagal hati berat.', es:'Depresi napas, mengantuk, hipotensi, ketergantungan.'},
- {n:'Fenitoin', cls:'Antikonvulsan', ind:'Status epileptikus (setelah benzodiazepin), kejang fokal/umum.',
-  d:'Loading 15–20 mg/kgBB IV, kecepatan maks 50 mg/menit (dengan monitor EKG). Rumatan 5 mg/kgBB/hari.',
-  a:'Loading 15–20 mg/kgBB IV, maks 1 mg/kgBB/menit.',
-  ki:'Blok AV derajat 2–3, bradikardia sinus, sindrom Adams-Stokes.', es:'Hipotensi dan aritmia pada pemberian cepat, ruam, hiperplasia gingiva, nistagmus.'},
- {n:'Magnesium sulfat', cls:'Antikonvulsan (preeklamsia)', ind:'Preeklamsia berat/eklamsia, torsades de pointes, asma berat refrakter.',
-  d:'Eklamsia: loading 4–6 g IV dalam 15–20 menit, lanjut 1–2 g/jam. Pantau refleks patela, laju napas > 12/menit, urine > 30 mL/jam.',
-  a:'25–50 mg/kgBB IV dalam 20 menit (asma berat refrakter).',
-  ki:'Gagal ginjal berat (hati-hati), blok jantung, miastenia gravis.', es:'Hilang refleks patela, depresi napas, flushing, hipotensi. Antidot: kalsium glukonas 1 g IV.'},
- {n:'Nalokson', cls:'Antidot opioid', ind:'Overdosis opioid dengan depresi napas.',
-  d:'0,04–0,4 mg IV titrasi, ulang tiap 2–3 menit. Maks 10 mg bila tidak ada respons.', a:'0,01–0,1 mg/kgBB IV/IM/SC.',
-  ki:'Hipersensitivitas.', es:'Sindrom putus opioid, agitasi, edema paru jarang. Masa kerja pendek, pantau ulang.'},
- {n:'Kalsium glukonas 10%', cls:'Elektrolit', ind:'Hiperkalemia dengan perubahan EKG, hipokalsemia simtomatik, keracunan magnesium.',
-  d:'10 mL (1 g) IV pelan dalam 5–10 menit, ulang bila perlu.', a:'0,5 mL/kgBB (maks 10 mL) IV pelan.',
-  ki:'Hiperkalsemia, pemakai digoksin (hati-hati).', es:'Bradikardia bila terlalu cepat, nekrosis jaringan bila ekstravasasi.'}
-];
-
-/* Data lab, cairan, anak, panduan cepat */
-const LABS = [
- {g:'Hematologi', rows:[
-  ['Hemoglobin','Pria 13–17 g/dL · Wanita 12–15 g/dL · Anak 11–14 g/dL · Neonatus 14–20 g/dL'],
-  ['Hematokrit','Pria 40–50% · Wanita 36–46%'],
-  ['Leukosit','4.000–11.000 /µL (anak lebih tinggi: 5.000–15.000)'],
-  ['Trombosit','150.000–400.000 /µL'],
-  ['Eritrosit','Pria 4,5–5,9 · Wanita 4,0–5,2 juta/µL'],
-  ['LED','Pria < 15 · Wanita < 20 mm/jam'],
-  ['Retikulosit','0,5–2,5%']]},
- {g:'Koagulasi', rows:[
-  ['PT','11–14 detik (INR 0,8–1,2)'],
-  ['aPTT','25–35 detik'],
-  ['D-dimer','< 500 ng/mL FEU']]},
- {g:'Kimia darah dan ginjal', rows:[
-  ['Ureum','10–50 mg/dL (BUN 7–20 mg/dL)'],
-  ['Kreatinin','Pria 0,7–1,3 · Wanita 0,6–1,1 mg/dL · Anak 0,3–0,7 mg/dL'],
-  ['eGFR','≥ 90 mL/menit/1,73 m² normal; < 60 penyakit ginjal kronik; < 30 berat'],
-  ['Asam urat','Pria 3,5–7,2 · Wanita 2,6–6,0 mg/dL']]},
- {g:'Elektrolit', rows:[
-  ['Natrium','135–145 mmol/L'],
-  ['Kalium','3,5–5,0 mmol/L'],
-  ['Klorida','98–107 mmol/L'],
-  ['Kalsium total','8,5–10,5 mg/dL (ion 1,1–1,3 mmol/L)'],
-  ['Magnesium','1,7–2,4 mg/dL'],
-  ['Fosfat','2,5–4,5 mg/dL']]},
- {g:'Fungsi hati dan pankreas', rows:[
-  ['SGOT (AST)','< 35–40 U/L'],
-  ['SGPT (ALT)','< 40 U/L'],
-  ['Bilirubin total','0,2–1,2 mg/dL (direk < 0,3)'],
-  ['Albumin','3,5–5,0 g/dL'],
-  ['ALP','40–130 U/L'],
-  ['Amilase','< 100 U/L'],
-  ['Lipase','< 60 U/L']]},
- {g:'Glukosa dan metabolik', rows:[
-  ['GDS','< 200 mg/dL'],
-  ['GDP','70–100 mg/dL'],
-  ['GD 2 jam PP','< 140 mg/dL'],
-  ['HbA1c','< 5,7% normal; 5,7–6,4% prediabetes; ≥ 6,5% diabetes'],
-  ['Hipoglikemia','< 70 mg/dL (berat < 54 mg/dL)'],
-  ['Laktat','0,5–2,0 mmol/L']]},
- {g:'Lipid', rows:[
-  ['Kolesterol total','< 200 mg/dL'],
-  ['LDL','< 100 mg/dL (risiko tinggi < 70)'],
-  ['HDL','> 40 (pria) · > 50 (wanita) mg/dL'],
-  ['Trigliserida','< 150 mg/dL']]},
- {g:'Jantung dan inflamasi', rows:[
-  ['Troponin I/T','Di bawah batas persentil 99 laboratorium (hs-troponin biasanya < 14 ng/L); naik = cedera miokard'],
-  ['CK-MB','< 25 U/L'],
-  ['CRP','< 5 mg/L'],
-  ['Prokalsitonin','< 0,1 ng/mL (> 2 ng/mL curiga sepsis berat)']]},
- {g:'Analisis gas darah (arteri)', rows:[
-  ['pH','7,35–7,45'],
-  ['PaCO₂','35–45 mmHg'],
-  ['PaO₂','80–100 mmHg'],
-  ['HCO₃⁻','22–26 mmol/L'],
-  ['Base excess','−2 sampai +2'],
-  ['SaO₂','95–100%']]},
- {g:'Urinalisis', rows:[
-  ['pH urine','4,5–8'],
-  ['Berat jenis','1,003–1,030'],
-  ['Protein, glukosa, keton, nitrit','Negatif'],
-  ['Leukosit esterase','Negatif (leukosit < 5/LPB)'],
-  ['Eritrosit','< 3/LPB'],
-  ['Produksi urine normal','≥ 0,5 mL/kgBB/jam (anak 1 mL/kgBB/jam; bayi 2 mL/kgBB/jam)']]},
- {g:'Tanda vital', rows:[
-  ['Dewasa','Nadi 60–100 · RR 12–20 · TD < 120/80 · Suhu 36,5–37,5 °C · SpO₂ ≥ 95%'],
-  ['Bayi (< 1 th)','Nadi 100–160 · RR 30–60 · TDS ≥ 70 mmHg'],
-  ['Balita (1–3 th)','Nadi 90–150 · RR 24–40 · TDS ≥ 72–90'],
-  ['Anak 3–12 th','Nadi 70–120 · RR 18–30 · TDS ≥ 76–100'],
-  ['Remaja','Nadi 60–100 · RR 12–20 · TDS ≥ 90–110']]}
-];
-
-const FLUIDS = [
- {n:'NaCl 0,9% (NS)', c:'Na 154, Cl 154 mmol/L; 308 mOsm/L (isotonik)', u:'Resusitasi, dehidrasi, hiponatremia ringan, pengencer obat. Hati-hati bila berlebihan: asidosis hiperkloremik.'},
- {n:'Ringer Laktat (RL)', c:'Na 130, K 4, Ca 3, Cl 109, laktat 28 mmol/L; 273 mOsm/L', u:'Resusitasi cairan, syok hipovolemik, luka bakar, dehidrasi. Hati-hati pada gagal hati berat dan hiperkalemia berat.'},
- {n:'Dekstrosa 5% (D5)', c:'50 g glukosa/L; 252 mOsm/L (hipotonik setelah metabolisme)', u:'Sumber air bebas, hipernatremia. Bukan cairan resusitasi.'},
- {n:'D5 ¼ NS / D5 ½ NS', c:'Dekstrosa 5% dengan natrium rendah', u:'Rumatan pediatri (sesuai protokol), dengan KCl sesuai kebutuhan.'},
- {n:'Dekstrosa 10%', c:'100 g glukosa/L', u:'Hipoglikemia anak/neonatus (2–5 mL/kgBB bolus), rumatan neonatus.'},
- {n:'KA-EN 1B / 3A / 3B', c:'Cairan rumatan dengan elektrolit dan glukosa', u:'Rumatan anak/bayi dengan produk khusus pediatri (1B untuk awal, 3A/3B rumatan).'},
- {n:'NaCl 3%', c:'513 mmol/L Na', u:'Hiponatremia berat simtomatik: bolus 2–5 mL/kgBB atau 100–150 mL IV dalam 10–20 menit. Naikkan Na maks 8–10 mmol/L per 24 jam.'},
- {n:'Koloid (albumin 5–25%)', c:'Plasma expander', u:'Hipoalbuminemia berat, paracentesis volume besar, sirosis dengan SBP.'},
- {n:'NaHCO₃ 8,4%', c:'1 mEq/mL', u:'Asidosis metabolik berat (pH < 7,1), hiperkalemia berat, intoksikasi tertentu. Koreksi bertahap sesuai AGD.'},
- {n:'KCl (koreksi kalium)', c:'Larutan pekat 7,46% (1 mEq/mL)', u:'Hipokalemia. Jangan bolus. Maks 10–20 mEq/jam (di IGD dengan monitor), konsentrasi perifer ≤ 40 mEq/L. Selalu encerkan.'}
-];
-
-const PEDIA = {
- resus:[
-  ['Bolus cairan syok anak','NS atau RL 10–20 mL/kgBB dalam 5–20 menit, nilai ulang. Syok kardiogenik/malnutrisi berat: 5–10 mL/kgBB lebih pelan.'],
-  ['Bolus cairan neonatus','10 mL/kgBB dalam 10–30 menit.'],
-  ['Hipoglikemia anak','Dekstrosa 10% 2–5 mL/kgBB IV (D10); neonatus 2 mL/kgBB.'],
-  ['Henti jantung (epinefrin)','0,01 mg/kgBB IV/IO (0,1 mL/kgBB larutan 1:10.000) tiap 3–5 menit.'],
-  ['Defibrilasi anak','Awal 2 J/kgBB, lanjut 4 J/kgBB (maks 10 J/kgBB atau dosis dewasa).'],
-  ['Kardioversi anak','0,5–1 J/kgBB, naikkan menjadi 2 J/kgBB.'],
-  ['Kejang anak','Diazepam rektal 0,5 mg/kgBB (< 10 kg: 5 mg; > 10 kg: 10 mg) atau diazepam IV 0,2–0,5 mg/kgBB pelan.']],
- est:[
-  ['Perkiraan BB anak 1–10 tahun','(Umur dalam tahun × 2) + 8 kg'],
-  ['Perkiraan BB bayi 3–12 bulan','(Umur bulan + 9) ÷ 2 kg'],
-  ['Ukuran pipa endotrakeal (cuffed)','(Umur ÷ 4) + 3,5 mm'],
-  ['Ukuran pipa endotrakeal (uncuffed)','(Umur ÷ 4) + 4 mm'],
-  ['Kedalaman pipa (oral)','Umur ÷ 2 + 12 cm di gigi'],
-  ['Tekanan darah sistolik minimal','70 + (2 × umur tahun) mmHg']],
- maint:[
-  ['Cairan rumatan (Holliday–Segar)','10 kg pertama: 100 mL/kg/hari. 10–20 kg: 1.000 mL + 50 mL/kg untuk tiap kg di atas 10 kg. > 20 kg: 1.500 mL + 20 mL/kg untuk tiap kg di atas 20 kg.'],
-  ['Aturan 4-2-1 (mL/jam)','4 mL/kg/jam untuk 10 kg pertama + 2 mL/kg/jam untuk 10 kg berikutnya + 1 mL/kg/jam untuk sisanya.'],
-  ['Dehidrasi ringan–sedang','Terapi A/B WHO: oralit 75 mL/kgBB dalam 3 jam.'],
-  ['Dehidrasi berat','Terapi C: RL/NS 100 mL/kgBB. < 12 bulan: 30 mL/kg dalam 1 jam lalu 70 mL/kg dalam 5 jam. ≥ 12 bulan: 30 mL/kg dalam 30 menit lalu 70 mL/kg dalam 2,5 jam.']]
-};
-
-const FORMULAS = [
- ['Dosis anak dari mg/kgBB','Dosis (mg) = BB (kg) × dosis (mg/kgBB). Selalu bandingkan dengan dosis maksimum dewasa.'],
- ['Volume obat','Volume (mL) = dosis (mg) ÷ konsentrasi (mg/mL).'],
- ['Tetesan infus (tpm)','Tetes/menit = (volume mL × faktor tetes) ÷ waktu (menit). Faktor tetes: makro 20 (kadang 15), mikro 60.'],
- ['Kecepatan infus (mL/jam)','Volume (mL) ÷ waktu (jam).'],
- ['Cockcroft–Gault (kreatinin klirens)','((140 − umur) × BB kg) ÷ (72 × kreatinin mg/dL); × 0,85 untuk wanita.'],
- ['Kebutuhan cairan luka bakar (Parkland)','4 mL × BB (kg) × % luas luka bakar dalam 24 jam; setengah dalam 8 jam pertama.'],
- ['Kalsium terkoreksi','Ca total + 0,8 × (4 − albumin g/dL).'],
- ['Osmolaritas serum','2 × Na + glukosa ÷ 18 + ureum ÷ 2,8 (mOsm/L).'],
- ['Anion gap','Na − (Cl + HCO₃⁻); normal 8–12 mmol/L.'],
- ['MAP','(TDS + 2 × TDD) ÷ 3; target ≥ 65 mmHg.'],
- ['Defisit natrium','0,6 × BB (kg) × (Na target − Na aktual).'],
- ['IMT/BMI','BB (kg) ÷ TB (m)²; normal Asia 18,5–22,9.']
-];
-
-const QUICK = [
- {h:'Dosis pantas tiap cek berkas', items:[
-  'Cek 5 BENAR: pasien, obat, dosis, rute, waktu.',
-  'Benar pasien: cocokkan nama, tanggal lahir, dan alamat di kartu pasien, KTP/KIA, dan berkas.',
-  'Cocokkan alergi di kartu pasien dengan setiap obat dan golongannya.',
-  'Cek satuan: 1 g = 1.000 mg, 1 mg = 1.000 mcg.',
-  'Dosis anak = mg/kgBB × BB, jangan melebihi dosis dewasa.',
-  'Cek fungsi ginjal/hati sebelum obat yang dieliminasi di sana.',
-  'Cek kehamilan dan menyusui sebelum obat teratogenik.']},
- {h:'Obat yang berbahaya pada kondisi tertentu', items:[
-  'Asma/PPOK: beta-blocker non-selektif, aspirin/NSAID (bila sensitif).',
-  'Hamil: ACE inhibitor/ARB, warfarin, tetrasiklin, fluorokuinolon, statin, metotreksat.',
-  'Gagal ginjal: NSAID, metformin (eGFR < 30), aminoglikosida tanpa penyesuaian, kontras.',
-  'Perdarahan saluran cerna: NSAID, aspirin, antikoagulan.',
-  'Alergi penisilin: semua penisilin; hati-hati sefalosporin (reaksi silang rendah, tetapi pertimbangkan bila anafilaksis).',
-  'Bradikardia/blok AV: beta-blocker, diltiazem/verapamil, digoksin, amiodaron.',
-  'Kombinasi nitrat + sildenafil/tadalafil: hipotensi berat.',
-  'Anak < 12 tahun: aspirin (Reye), kodein, tramadol, fluorokuinolon (relatif).']},
- {h:'Tanda bahaya yang tidak boleh terlewat', items:[
-  'Hiperkalemia > 6 atau perubahan EKG: kalsium glukonas, insulin + dekstrosa, salbutamol, evaluasi dialisis.',
-  'Hipoglikemia < 70 mg/dL simtomatik: dekstrosa, jangan tunda.',
-  'Syok anafilaksis: epinefrin IM sebagai lini pertama.',
-  'Nyeri dada + ST elevasi: STEMI, aspirin + antiplatelet, reperfusi segera.',
-  'Eklamsia: magnesium sulfat dan kontrol tekanan darah.']}
-];
-
-const IDENT = [
- {h:'Yang dicek: nama, tanggal lahir, alamat, wajah', items:[
-  'Kartu pasien adalah data rekam medis (acuan). KTP/KIA adalah dokumen yang dibawa pasien atau keluarga. Berkas adalah yang perlu kamu cap.',
-  'KTP/KIA ↔ kartu pasien: nama, tanggal lahir, dan alamat harus sama.',
-  'Berkas ↔ kartu pasien: nama dan tanggal lahir (beserta umurnya) harus sama.',
-  'Orang di loket ↔ foto KTP/KIA: wajahnya harus orang yang sama. Foto KTP bisa foto lama, jadi kacamata, kumis, atau model rambut boleh berbeda.',
-  'Nama sama belum tentu orang yang sama. Di IGD sering ada pasien bernama mirip, dan keluarga kadang membawa KTP/KIA orang lain.',
-  'Bila nama dan tanggal lahir sama tapi alamat beda, bisa jadi itu orang lain. Alamat jadi pembeda ketiga.',
-  'Bila tidak cocok: tolak dulu, verifikasi ulang ke pasien/keluarga dan bagian pendaftaran.']},
- {h:'Gelang identitas (mulai malam 3)', items:[
-  'Gelang dipasang di triase. Warnanya biru untuk laki-laki dan merah muda untuk perempuan.',
-  'Stiker merah bertuliskan ALERGI berarti pasien punya alergi. Cocokkan dengan kotak alergi di kartu pasien.',
-  'Nama dan tanggal lahir di gelang harus sama dengan kartu pasien. Gelang yang tertukar berarti risiko salah pasien.']},
- {h:'Hasil lab & kartu JKN (malam 4–5)', items:[
-  'Lembar lab punya identitas sendiri. Lab milik pasien lain tidak boleh jadi dasar tindakan.',
-  'H = di atas nilai rujukan, L = di bawah. Tolak obat yang memperburuk nilai abnormal itu.',
-  'Kartu JKN hanya untuk penjaminan. Dalam keadaan gawat darurat, rumah sakit dilarang menolak pasien atau mendahulukan urusan administrasi (UU 17/2023 Pasal 174). Masalah JKN bukan alasan menolak berkas.']},
- {h:'KTP vs KIA', items:[
-  'KTP-el untuk penduduk berusia 17 tahun ke atas (atau yang sudah menikah).',
-  'KIA (Kartu Identitas Anak) untuk anak di bawah 17 tahun. KIA anak di bawah 5 tahun memang tanpa foto dan berlaku sampai usia 5 tahun; KIA 5–17 tahun memakai foto.']},
- {h:'Hal yang wajar (jangan ditolak karena ini)', items:[
-  'Sapaan Tn./Ny./An. tidak tercantum di KTP/KIA, dan nama di KTP ditulis huruf kapital.',
-  'KTP-el cetakan lama yang masih mencantumkan tanggal berlaku (misalnya 2017) tetap sah seumur hidup.',
-  'Golongan darah "-" (tidak diisi) itu biasa.',
-  'NIK, agama, pekerjaan, dan status perkawinan tidak perlu dicek di game ini.',
-  'Golongan darah di KTP tidak dipakai untuk transfusi. Transfusi selalu berdasarkan golongan darah dan crossmatch dari laboratorium.']}
-];
+  const recentSet = new Set();
 
   /* ================= PANDUAN LENGKAP ================= */
   const GUIDE = (() => {
     const body = q('#igd-book-body'), tabsEl = q('#igd-tabs'), search = q('#igd-search');
     const DRUGS = [...DRUGS_A, ...DRUGS_B].sort((a,b) => a.n.localeCompare(b.n,'id'));
-    const DISCLAIMER = '<p class="note">Ringkasan rujukan untuk belajar di dalam game. Dosis lazim dan bisa berbeda menurut kondisi pasien, pedoman rumah sakit, dan sumber resmi (Fornas, PNPK, label obat). Bukan pengganti keputusan klinis.</p>';
+    const DISCLAIMER = `<p class="note">Ringkasan rujukan klinis terverifikasi (${DRUGS.length} obat) untuk belajar di dalam game (mengacu PNPK, Fornas, IDAI, PERKI, POGI, AHA/ACLS, WHO). Dosis lazim dapat berbeda menurut kondisi pasien dan pedoman lokal — bukan pengganti keputusan klinis resmi.</p>`;
     let tab = 'obat';
     const TABS = [['obat','Obat'],['identitas','Identitas'],['lab','Nilai lab'],['cairan','Cairan & infus'],['anak','Anak'],['kalk','Kalkulator'],['panduan','Panduan']];
     const has = (txt, f) => !f || txt.toLowerCase().includes(f);
@@ -1037,12 +340,15 @@ const IDENT = [
     const fmt = (n, d=1) => Number(n).toLocaleString('id-ID', {maximumFractionDigits:d});
 
     function drugCard(d, open){
-      const rows = [['Indikasi',d.ind],['Dosis dewasa',d.d],['Dosis anak',d.a]].map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')
-        + `<dt class="ki">Kontraindikasi</dt><dd>${esc(d.ki)}</dd><dt>Efek samping</dt><dd>${esc(d.es)}</dd>`;
+      let rows = [['Indikasi',d.ind],['Dosis dewasa',d.d],['Dosis anak',d.a]].map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+      if (d.kh) rows += `<dt>Kehamilan &amp; ginjal/hati</dt><dd>${esc(d.kh)}</dd>`;
+      rows += `<dt class="ki">Kontraindikasi</dt><dd>${esc(d.ki)}</dd>`;
+      if (d.int) rows += `<dt class="int">Interaksi penting</dt><dd>${esc(d.int)}</dd>`;
+      rows += `<dt>Efek samping &amp; pantauan</dt><dd>${esc(d.es)}</dd>`;
       return `<details class="drug"${open ? ' open' : ''}><summary><b>${esc(d.n)}</b><small>${esc(d.cls)}</small></summary><dl>${rows}</dl></details>`;
     }
     const vObat = f => {
-      const list = DRUGS.filter(d => has([d.n,d.alt||'',d.cls,d.ind].join(' '), f));
+      const list = DRUGS.filter(d => has([d.n, d.alt||'', d.cls, d.ind, d.kh||'', d.ki, d.int||'', d.es].join(' '), f));
       return DISCLAIMER + (list.length ? list.map(d => drugCard(d, f && list.length <= 2)).join('') : '<div class="igd-empty">Tidak ada obat yang cocok.</div>');
     };
     const vLab = f => {
@@ -1191,7 +497,7 @@ const IDENT = [
     Sfx.unlock();
     n = Math.min(Math.max(+n || 1, 1), HARD);
     const N = NIGHTS[n];
-    S = { night:n, feats:new Set(N.feats), limit:Math.round(N.limit * (isPhone() ? 1.5 : 1)), queue:buildQueue(n), i:0, score:0, lives:3, log:[], hl:null, solvedIds:[], pausedAt:0,
+    S = { night:n, feats:new Set(N.feats), limit:N.limit, queue:buildQueue(n), i:0, score:0, lives:3, log:[], hl:null, solvedIds:[], pausedAt:0,
           locked:true, resolved:false, advancing:false, frac:1, t0:0, relax:q('#igd-relax').checked };
     E.title.hidden = true; E.end.hidden = true; E.memo.hidden = true;
     setPlaying(true);
@@ -1298,38 +604,7 @@ const IDENT = [
     setIdle(S.hl ? 'Baris tersorot. Cap <b>TOLAK</b> untuk menolak berkas, atau klik baris itu lagi untuk membatalkan.' : idleText());
   }
 
-  /* ================= PENAMPILAN PASIEN (piksel) ================= */
-  /* look: sk (0-3 warna kulit), hair (short|spiky|kid|bald|side|long|bob|pig), hc warna rambut,
-     hijab warna, shirt warna, old, kid, glasses, must (kumis), blush */
-  const APPEAR = {
-    'Tn. Budi Santoso':   {look:{sk:1, hair:'short', shirt:'#3b6ea8'}, say:'Dok, dada saya berdebar-debar dari sore. Sesak juga.'},
-    'An. Raka Pratama':   {look:{kid:1, sk:1, hair:'kid', shirt:'#e0a82e', blush:1}, comp:{sk:1, hair:'short', must:1, shirt:'#556b2f'}, say:'Anak saya panas dua hari, Dok. Batuk pilek juga.'},
-    'Ny. Rukmini':        {look:{sk:2, hijab:'#7a4b8c', old:1, glasses:1, shirt:'#7a4b8c'}, say:'Sesak, Dok... nggak bisa tidur telentang.'},
-    'Ny. Sari Wulandari': {look:{sk:1, hijab:'#2f6f6a', old:1, shirt:'#2f6f6a'}, say:'Dada kiri saya sakit sekali, Dok, sampai ke lengan.'},
-    'Tn. Dimas Aditya':   {look:{sk:2, hair:'spiky', shirt:'#b33a3a'}, say:'Tenggorokan sakit banget buat nelan, Dok.'},
-    'Ny. Dewi Lestari':   {look:{sk:1, hijab:'#d98aa6', shirt:'#d98aa6'}, say:'Kepala saya pusing terus, Dok. Saya lagi hamil.'},
-    'Tn. Hartono':        {look:{sk:0, hair:'side', hc:'#5d5853', glasses:1, shirt:'#cfc7b2'}, say:'Gula saya tinggi lagi, Dok. Kencing juga sedikit.'},
-    'An. Nadia Putri':    {look:{kid:1, small:1, sk:1, hair:'pig', shirt:'#e86f8a', blush:1}, comp:{sk:1, hijab:'#3f5fa8', shirt:'#3f5fa8'}, say:'Mencret terus dari kemarin, Dok. Ini KIA-nya.'},
-    'Tn. Agus Wibowo':    {look:{sk:2, hair:'short', must:1, glasses:1, shirt:'#6b7b8c'}, fotoStyle:{glasses:0}, say:'Ulu hati perih, Dok. Ini KTP saya, memang KTP lama.'},
-    'Tn. Slamet Riyadi':  {look:{sk:3, hair:'bald', hc:'#a29f99', old:1, must:1, shirt:'#8a6a3a'}, say:'Saya muntah darah tadi pagi, Dok. BAB-nya hitam.'},
-    'Ny. Lina Marlina':   {look:{sk:0, hair:'long', hc:'#2a1d16', shirt:'#4f8a5a'}, say:'Jatuh di tangga, tangan saya nggak bisa digerakkan.'},
-    'Ny. Maya Kusuma':    {look:{sk:0, hair:'bob', hc:'#3a2418', shirt:'#c47a3a'}, say:'Perih kalau pipis, Dok. Anyang-anyangan.'},
-    'Tn. Joko Susilo':    {look:{sk:2, hair:'short', shirt:'#2f4f6f'}, foto:{sk:2, hair:'bald', hc:'#c4c1bb', old:1, must:1, glasses:1, shirt:'#5a4a3a'}, say:'Pegal semua habis futsal, Dok. Ini KTP-nya.'},
-    'Ny. Siti Rahmawati': {look:{sk:1, hijab:'#a33b3b', shirt:'#a33b3b'}, say:'Perdarahan saya belum berhenti, Dok. Lemas sekali.'},
-    'An. Bima Saputra':   {look:{kid:1, sk:2, hair:'kid', shirt:'#3a8ac4', blush:1}, foto:{kid:1, sk:2, hair:'spiky', glasses:1, shirt:'#f2f2f2'}, comp:{sk:2, hijab:'#4a7a3a', shirt:'#4a7a3a'}, say:'Telinganya sakit, Dok, rewel terus. Ini kartu anaknya.'},
-    'Ny. Ratna Kurniasih':{look:{sk:1, hijab:'#c9a23a', shirt:'#c9a23a'}, foto:{sk:3, hijab:'#2a2a4a', glasses:1, shirt:'#2a2a4a'}, say:'Diare sama mual dari semalam, Dok.'}
-  };
-  Object.assign(APPEAR, {
-    'Tn. Andi Firmansyah': {look:{sk:2, hair:'short', must:1, shirt:'#e07b39'}, say:'Kaki kanan saya bengkak merah, Dok, panas sekali.'},
-    'Ny. Wati Susanti':    {look:{sk:1, hijab:'#5aa9e6', shirt:'#5aa9e6'}, say:'Kepala saya berat, Dok. Obat tensi saya habis.'},
-    'Tn. Darmawan':        {look:{sk:3, hair:'bald', hc:'#c9c6c0', old:1, shirt:'#7d8b99'}, say:'Lemas sekali, Dok... jadwal cuci darah saya terlewat.'},
-    'Ny. Ningsih':         {look:{sk:1, hijab:'#9b6bd6', old:1, glasses:1, shirt:'#9b6bd6'}, comp:{sk:1, hair:'long', hc:'#2a1d16', shirt:'#4fb0a5'}, say:'Ibu saya susah dibangunkan dari tadi, Dok!'},
-    'Nn. Putri Anggraini': {look:{sk:0, hair:'long', hc:'#2a1d16', shirt:'#ff8fb1'}, say:'Demam empat hari, Dok. Badan pegal semua.'},
-    'Tn. Yusuf Hidayat':   {look:{sk:2, hair:'side', hc:'#3b2a22', must:1, shirt:'#3a6ea5'}, say:'BAB saya hitam, Dok. Lemas, mau pingsan.'},
-    'Tn. Rudi Hartanto':   {look:{sk:1, hair:'spiky', shirt:'#4caf50'}, say:'Kaki kram terus, Dok, habis diare dua hari.'},
-    'Ny. Endang Sulastri': {look:{sk:2, hijab:'#e5734f', shirt:'#e5734f'}, say:'Kepala nyut-nyutan, Dok. Kartu JKN saya ketinggalan, ini punya adik saya.'},
-    'Tn. Bambang Sutrisno':{look:{sk:3, hair:'short', shirt:'#f2b632'}, say:'Tangan saya kena seng, Dok. Kata petugas JKN saya nunggak...'}
-  });
+  /* ================= PENAMPILAN PASIEN (piksel, APPEAR dari CLINED_IGD_DATA) ================= */
   const SKIN = [['#ffd7b5','#f2b98f'],['#f5bf8e','#e09f6c'],['#d99a66','#bf7f4c'],['#a8693f','#8a5330']];
   const shade = (hex, f) => { const n = parseInt(hex.slice(1),16); const ch = s => Math.max(0,Math.min(255,Math.round(((n>>s)&255)*(1+f))));
     return '#' + [16,8,0].map(s => ch(s).toString(16).padStart(2,'0')).join(''); };
@@ -1503,7 +778,6 @@ const IDENT = [
   window.addEventListener('resize', () => { if (isOpen()) redrawLink(); });
 
   /* ================= DOKUMEN TAMBAHAN ================= */
-  const FASKES = {'3273':'PUSKESMAS SUKAJADI','3204':'PUSKESMAS BALEENDAH','3277':'PUSKESMAS CIMAHI TENGAH','3275':'PUSKESMAS BEKASI JAYA','3201':'PUSKESMAS CIBINONG','3205':'PUSKESMAS TAROGONG'};
   function renderGelang(d){
     const g = Object.assign({nama:d.pt.nama, lahir:d.pt.lahir}, d.gelang || {});
     const alg = !/^tidak/i.test(d.pt.alergi);
@@ -1550,7 +824,7 @@ const IDENT = [
       return `<button class="night${lock ? ' locked' : ''}${done ? ' done' : ''}" ${lock ? 'disabled' : `data-act="memo" data-n="${n}"`}>
         <small>Malam</small><b>${n}</b><span>${N.title}</span><em>${lock ? 'Terkunci' : best ? 'Rekor ' + best : 'Belum dimainkan'}</em></button>`;
     }).join('') + `<button class="night hard${PROG.done[HARD] ? ' done' : ''}" data-act="memo" data-n="${HARD}">
-        <b>MODE SULIT</b><span>Semua dokumen diacak · 10 berkas · 45 detik</span><em>${PROG.best[HARD] ? 'Rekor ' + PROG.best[HARD] : 'Belum dimainkan'}</em></button>`;
+        <b>MODE SULIT</b><span>Semua dokumen dari ${DOCS.length} kasus diacak · 10 berkas · ${fmtLimit(NIGHTS[HARD].limit)}</span><em>${PROG.best[HARD] ? 'Rekor ' + PROG.best[HARD] : 'Belum dimainkan'}</em></button>`;
   }
   function showMemo(n){
     const N = NIGHTS[n];
@@ -1560,7 +834,7 @@ const IDENT = [
       <h2>${n === HARD ? 'Mode Sulit: semua diacak' : `Malam ${n}: ${N.title}`}</h2>
       <ul class="memo-list">${N.memo.map((t, i) => `<li>${i === 0 && n > 1 && n !== HARD ? '<span class="new">BARU</span>' : ''}${t}</li>`).join('')}</ul>
       <div class="memo-docs"><small>Di meja malam ini</small>${docs.map(x => `<span>${x}</span>`).join('')}</div>
-      <div class="memo-meta">${N.mix.reduce((s,[,c]) => s + c, 0)} berkas · ${isPhone() ? Math.round(N.limit * 1.5) + ' detik per berkas (layar HP: waktu +50%)' : N.limit + ' detik per berkas'}${q('#igd-relax').checked ? ' (mode santai: tanpa timer)' : ''}</div>
+      <div class="memo-meta">${N.mix.reduce((s,[,c]) => s + c, 0)} berkas · ${fmtLimit(N.limit)} per berkas${q('#igd-relax').checked ? ' (mode santai: tanpa timer)' : ''}</div>
       <button class="igd-btn${n === HARD ? ' btn-hard' : ''}" data-act="go" data-n="${n}">Mulai ${nightName(n).toLowerCase()} <kbd>Enter</kbd></button>
       <button class="igd-btn igd-btn-ghost" data-act="menu">Pilih malam lain</button></div>`;
     E.title.hidden = true; E.end.hidden = true; E.memo.hidden = false;
@@ -1577,14 +851,21 @@ const IDENT = [
       : key === 'flaw' ? flawsOf(d).length
       : key === 'clin' ? flawsOf(d).length && !d.kind
       : flawsOf(d).length && key.split('|').includes(d.kind)));
+    const preferFresh = arr => {
+      const fresh = shuffle(arr.filter(d => !recentSet.has(d.pt.nama)));
+      const stale = shuffle(arr.filter(d => recentSet.has(d.pt.nama)));
+      return [...fresh, ...stale];
+    };
     const mix = N.hard ? (f => [['flaw', f], ['safe', 10 - f]])(6 + Math.floor(Math.random() * 3)) : N.mix;
     mix.forEach(([key, cnt]) => {
-      const p = shuffle(pool(key));
-      if (key === 'safe') p.sort((a, b) => (minNight(b) === n) - (minNight(a) === n));
+      const p = preferFresh(pool(key));
+      if (key === 'safe') p.sort((a, b) => (minNight(b) === n) - (minNight(a) === n) || Number(recentSet.has(a.pt.nama)) - Number(recentSet.has(b.pt.nama)));
       p.slice(0, cnt).forEach(d => { used.add(d); out.push(d); });
     });
     const want = mix.reduce((s,[,c]) => s + c, 0);
-    while (out.length < want){ const x = shuffle(DOCS.filter(ok))[0]; if (!x) break; used.add(x); out.push(x); }
+    while (out.length < want){ const x = preferFresh(DOCS.filter(ok))[0]; if (!x) break; used.add(x); out.push(x); }
+    if (recentSet.size > 32) recentSet.clear();
+    out.forEach(d => recentSet.add(d.pt.nama));
     return shuffle(out);
   }
   function idleText(){
@@ -1740,17 +1021,28 @@ const IDENT = [
     if (S.i > 0 && !FIT.on){ const bt = q('.booth').getBoundingClientRect().top; if (bt < -40 || bt > window.innerHeight * .6) q('.booth').scrollIntoView({behavior:'smooth', block:'start'}); }
   }
 
-  /* ================= TIMER ================= */
+  /* ================= TIMER (5 menit / berkas) ================= */
+  function renderTimer(secLeft){
+    if (!E.timer) return;
+    if (!S || S.relax){ E.timer.textContent = 'Santai'; E.timer.classList.remove('low'); return; }
+    const s = Math.max(0, Math.ceil(secLeft));
+    E.timer.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    E.timer.classList.toggle('low', s <= 60);
+  }
+  function tickTimer(){
+    const leftMs = Math.max(0, S.limit * 1000 - (Date.now() - S.t0));
+    S.frac = leftMs / (S.limit * 1000);
+    E.fill.style.width = (S.frac * 100) + '%';
+    E.bar.classList.toggle('low', leftMs <= 60000);
+    renderTimer(leftMs / 1000);
+    if (leftMs <= 0) timeUp();
+  }
   function startTimer(){
     clearInterval(tid);
     S.t0 = Date.now(); E.fill.style.width = '100%'; E.bar.classList.remove('low');
+    renderTimer(S.limit);
     if (S.relax) return;
-    tid = setInterval(() => {
-      S.frac = Math.max(0, 1 - (Date.now() - S.t0) / (S.limit*1000));
-      E.fill.style.width = (S.frac*100) + '%';
-      E.bar.classList.toggle('low', S.frac < .25);
-      if (S.frac <= 0) timeUp();
-    }, 100);
+    tid = setInterval(tickTimer, 100);
   }
   function pauseTimer(){
     if (!S || S.relax || S.locked || S.resolved || S.pausedAt) return;
@@ -1761,12 +1053,8 @@ const IDENT = [
     S.t0 += Date.now() - S.pausedAt; S.pausedAt = 0;
     if (S.relax || S.locked || S.resolved) return;
     clearInterval(tid);
-    tid = setInterval(() => {
-      S.frac = Math.max(0, 1 - (Date.now() - S.t0) / (S.limit*1000));
-      E.fill.style.width = (S.frac*100) + '%';
-      E.bar.classList.toggle('low', S.frac < .25);
-      if (S.frac <= 0) timeUp();
-    }, 100);
+    tickTimer();
+    tid = setInterval(tickTimer, 100);
   }
   function timeUp(){
     clearInterval(tid);
