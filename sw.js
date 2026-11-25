@@ -1,4 +1,4 @@
-const SW_VERSION = 'v247-meja-jaga-igd-papers-please';
+const SW_VERSION = 'v248-meja-jaga-igd-contrast-stamps';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

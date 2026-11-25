@@ -163,19 +163,43 @@
 
   <div class="play">
   <section class="booth" aria-label="Loket triase">
-    <div class="b-wait"><span class="b-lbl">Ruang tunggu triase</span><div class="b-bench"></div><div class="queue" id="igd-queue"></div></div>
+    <div class="b-wait">
+      <div class="b-fl-lamp"></div>
+      <div class="b-corridor-sign"><span>ZONA RESUSITASI &amp; TRIASE</span></div>
+      <span class="b-lbl">Ruang tunggu triase</span>
+      <div class="b-iv-stand"></div>
+      <div class="b-bench"><div class="b-seats"><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="queue" id="igd-queue"></div>
+    </div>
     <div class="b-window">
+      <div class="b-room-bg">
+        <div class="b-curtain"></div>
+        <div class="b-doors"><i></i></div>
+        <div class="b-medgas"><span class="o2">O₂</span><span class="vac">VAC</span></div>
+      </div>
       <div class="b-amb-sign"><i></i><span>AMBULANS · UGD 24 JAM</span></div>
       <div class="b-poster"><b>CUCI</b><b>TANGAN</b><i></i></div>
+      <div class="b-badge"><b>DR. JAGA IGD</b><small>TRIASE &amp; SKDI</small></div>
+      <div class="b-intercom"><div class="b-mic-slits"></div></div>
       <div class="b-people" id="igd-people"></div>
       <div class="bubble" id="igd-bubble" hidden></div>
       <div class="b-glass"></div>
       <div class="b-ledge">
-        <i></i>
+        <div class="b-slot"><span>⮟ CELAH DOKUMEN ⮟</span></div>
         <span class="b-coffee" title="Kopi Dokter Jaga Malam: hangat di jam rawan 03.00 pagi">☕ <small>KOPI JAGA</small></span>
       </div>
     </div>
-    <div class="b-info"><div class="b-sign">TRIASE<small>IGD 24 JAM</small></div><div class="b-clock" id="igd-bclock">22:00</div><div class="b-q">Antrean <b id="igd-qn">0</b></div></div>
+    <div class="b-info">
+      <div class="b-info-head"><span>RSUD MELATI HUSADA</span><small>MONITOR TRIASE</small></div>
+      <div class="b-sign">TRIASE<small>IGD 24 JAM</small></div>
+      <div class="b-triage-leds">
+        <span class="tled red"><i></i><b>P1</b></span>
+        <span class="tled yel"><i></i><b>P2</b></span>
+        <span class="tled grn"><i></i><b>P3</b></span>
+      </div>
+      <div class="b-clock" id="igd-bclock">22:00</div>
+      <div class="b-q">Antrean <b id="igd-qn">0</b></div>
+    </div>
   </section>
 
   <main class="desk">
@@ -224,14 +248,43 @@
         </div>
         <button class="mini-btn tidy" data-act="tidy">Rapikan meja <kbd>R</kbd></button>
         <span class="tray-gap"></span>
-        <button class="stamp stamp-tolak" id="igd-tolak" data-act="tolak" title="Stempel TOLAK (T)">
-          <span class="knob"><i class="knob-wood"></i><i class="knob-ring"></i></span>
-          <span class="base"><b>TOLAK</b><kbd>T</kbd></span>
-        </button>
-        <button class="stamp stamp-acc" id="igd-acc" data-act="acc" title="Stempel ACC (A)">
-          <span class="knob"><i class="knob-wood"></i><i class="knob-ring"></i></span>
-          <span class="base"><b>ACC</b><kbd>A</kbd></span>
-        </button>
+        <div class="stamp-caddy" aria-label="Baki Stempel Triase">
+          <div class="caddy-pad caddy-pad-tolak">
+            <button type="button" class="stamp stamp-tolak" id="igd-tolak" data-act="tolak" title="Stempel TOLAK (T)">
+              <div class="stamp-tool">
+                <span class="stamp-handle">
+                  <i class="stamp-knob"></i>
+                  <i class="stamp-stem"></i>
+                  <i class="stamp-brass"></i>
+                </span>
+                <span class="stamp-plate">
+                  <span class="plate-metal"></span>
+                  <span class="plate-face"><b>TOLAK</b><kbd>T</kbd></span>
+                  <span class="plate-rubber"></span>
+                </span>
+              </div>
+            </button>
+            <span class="pad-rim"><small>BANTALAN MERAH</small></span>
+          </div>
+
+          <div class="caddy-pad caddy-pad-acc">
+            <button type="button" class="stamp stamp-acc" id="igd-acc" data-act="acc" title="Stempel ACC (A)">
+              <div class="stamp-tool">
+                <span class="stamp-handle">
+                  <i class="stamp-knob"></i>
+                  <i class="stamp-stem"></i>
+                  <i class="stamp-brass"></i>
+                </span>
+                <span class="stamp-plate">
+                  <span class="plate-metal"></span>
+                  <span class="plate-face"><b>ACC</b><kbd>A</kbd></span>
+                  <span class="plate-rubber"></span>
+                </span>
+              </div>
+            </button>
+            <span class="pad-rim"><small>BANTALAN HIJAU</small></span>
+          </div>
+        </div>
       </div>
   </div>
 
@@ -1406,7 +1459,7 @@
     const rot = (Math.random()*14 - 7).toFixed(1) + 'deg';
     const hd = document.createElement('div');
     hd.className = 'handle ' + action; hd.style.setProperty('--x', x+'%'); hd.style.setProperty('--y', y+'%');
-    hd.innerHTML = '<span class="h-knob"></span><span class="h-neck"></span><span class="h-head"></span>';
+    hd.innerHTML = '<div class="h-tool"><span class="h-knob"></span><span class="h-stem"></span><span class="h-brass"></span><span class="h-body"></span><span class="h-rubber"></span></div>';
     const mk = document.createElement('div');
     mk.className = 'mark ' + action; mk.style.setProperty('--x', x+'%'); mk.style.setProperty('--y', y+'%'); mk.style.setProperty('--rot', rot);
     mk.innerHTML = action === 'acc'
