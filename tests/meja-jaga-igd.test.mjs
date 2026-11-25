@@ -406,7 +406,7 @@ test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS wit
   assert.doesNotMatch(css, /(^|\s)&[.:#\[]/, 'CSS must be flat (no nesting) for older Safari compatibility');
   assert.match(css, /\.mark\{[^}]*white-space:nowrap/, 'Stamp .mark must use white-space:nowrap so ACC/TOLAK never wraps');
   assert.match(css, /\.surface\{[^}]*isolation:isolate/, 'Desk .surface must isolate stacking context so cards never overlap Panduan Lengkap');
-  assert.match(css, /\.book\{[^}]*z-index:120\b/, 'Panduan Lengkap drawer (.book) must sit cleanly above desk and dock');
+  assert.match(css, /\.book\{[^}]*z-index:160\b/, 'Panduan Lengkap drawer (.book) must sit cleanly above desk, dock, and Game Beranda screen');
 
   let depth = 0;
   for (const ch of css) {
@@ -473,7 +473,7 @@ test('Session persistence and clined_igd_session_v1 multi-device sync merge pres
   assert.equal(CLINED_IGD.Session.read(), null);
 });
 
-test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, top-left Beranda, session sync, BUSY_VIEWS, SW parity, and font MIME', () => {
+test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Game Beranda lobby, stats, session sync, BUSY_VIEWS, SW parity, and font MIME', () => {
   const appHtml = readRel('app.html');
   const lazyJs = readRel('js/lazy-loader.js');
   const swJs = readRel('sw.js');
@@ -481,27 +481,42 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, top
   const serverJs = readRel('local-server.mjs');
   const syncJs = readRel('js/online-sync.js');
   const igdJs = readRel('js/meja-jaga-igd.js');
+  const igdCss = readRel('css/meja-jaga-igd.css');
 
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=7/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=12/);
+  assert.match(appHtml, /js\/lazy-loader\.js\?v=34/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=8/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=8/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=9/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);
   assert.match(syncJs, /'clined_igd_session_v1'/);
   assert.match(serverJs, /'\.woff2':'font\/woff2'/);
+
+  // Dedicated Game Beranda / Lobby elements & HUD navigation
   assert.match(igdJs, /id="igd-timer"/);
   assert.match(igdJs, /id="igd-resume"/);
+  assert.match(igdJs, /id="igd-stats"/);
+  assert.match(igdJs, /igd-lobby-top/);
+  assert.match(igdJs, /igd-guide-box/);
   assert.match(igdJs, /igd-hud-back/);
   assert.match(igdJs, /data-act="exit"/);
+  assert.match(igdJs, /data-act="menu"/);
   assert.match(igdJs, /igd-back-home/);
+  assert.match(igdJs, /showMenu\(\)/);
   assert.match(igdJs, /FIT\.disable\(\)/);
+
+  // Panduan Lengkap / Calculator drawer opens cleanly above Game Beranda screen
+  assert.match(igdCss, /\.book\{position:absolute;z-index:160/);
+  assert.match(igdCss, /\.screen\{position:absolute;inset:0;z-index:150/);
 
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
+  assert.equal(swVer, 'v245-meja-jaga-igd-lobby');
 });

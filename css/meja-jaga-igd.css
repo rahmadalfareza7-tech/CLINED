@@ -288,7 +288,7 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .btn-next{background:var(--c);color:#fff;border:0;border-radius:16px;padding:13px 20px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.88rem;box-shadow:0 5px 0 var(--cd);transition:transform .08s}
 #mejaJagaIgdPage .igd .btn-next:hover{filter:brightness(1.05)}
 #mejaJagaIgdPage .igd .btn-next:active{transform:translateY(4px);box-shadow:0 1px 0 var(--cd)}
-#mejaJagaIgdPage .igd .book{position:absolute;z-index:120;top:0;right:0;bottom:0;width:min(580px,100%);overflow:auto;background:#fff;color:var(--ink);border-left:2px solid var(--line);box-shadow:-10px 0 0 rgba(0,0,0,.04);transform:translateX(104%);transition:transform .3s cubic-bezier(.3,1.2,.5,1)}
+#mejaJagaIgdPage .igd .book{position:absolute;z-index:160;top:0;right:0;bottom:0;width:min(580px,100%);overflow:auto;background:#fff;color:var(--ink);border-left:2px solid var(--line);box-shadow:-10px 0 0 rgba(0,0,0,.04);transform:translateX(104%);transition:transform .3s cubic-bezier(.3,1.2,.5,1)}
 #mejaJagaIgdPage .igd .book.open{transform:none;box-shadow:-16px 0 36px rgba(0,0,0,.14)}
 #mejaJagaIgdPage .igd .book-top{position:sticky;top:0;z-index:2;padding:16px 18px 10px;background:#fff;border-bottom:2px solid var(--line)}
 #mejaJagaIgdPage .igd .book h2{margin:0;font-size:1.3rem;font-weight:900}
@@ -651,12 +651,64 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .drug dt.int{color:var(--yellow-d)}
 #mejaJagaIgdPage .igd .mini-btn.igd-hud-back{color:#fff!important;background:var(--blue)!important;border-color:var(--blue-d)!important;padding:7px 14px;font-size:.8rem;font-weight:900;letter-spacing:.03em;text-transform:none;flex:none}
 #mejaJagaIgdPage .igd .mini-btn.igd-hud-back:hover{filter:brightness(1.06)}
-#mejaJagaIgdPage .igd .igd-resume-slot{margin:0 0 12px}
-#mejaJagaIgdPage .igd .igd-resume-card{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;border-radius:18px;background:var(--green-l);border:2px solid var(--green);border-bottom-width:5px}
-#mejaJagaIgdPage .igd .igd-resume-info{display:flex;flex-direction:column;gap:2px;text-align:left}
-#mejaJagaIgdPage .igd .igd-resume-tag{display:inline-block;align-self:flex-start;padding:1px 8px;border-radius:99px;background:var(--green);color:#fff;font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
-#mejaJagaIgdPage .igd .igd-resume-info b{font-size:.96rem;font-weight:900;color:var(--ink)}
-#mejaJagaIgdPage .igd .igd-resume-info small{font-size:.76rem;font-weight:800;color:var(--green-d)}
+
+/* ---------- Beranda Game (Lobby) Meja Jaga IGD ---------- */
+#mejaJagaIgdPage .igd .screen.igd-screen-lobby{padding:16px 12px 28px}
+#mejaJagaIgdPage .igd .folder.igd-lobby{width:min(860px,100%);padding:20px 24px 26px}
+#mejaJagaIgdPage .igd .igd-lobby-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:12px;border-bottom:2px dashed var(--line)}
+#mejaJagaIgdPage .igd .igd-lobby-tag{display:inline-flex;align-items:center;padding:4px 12px;border-radius:99px;background:var(--blue-l);color:var(--blue-d);font-size:.66rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+#mejaJagaIgdPage .igd .igd-lobby-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#mejaJagaIgdPage .igd .mini-btn.igd-tool-btn{color:var(--ink)!important;background:var(--soft);border-color:#d4d8df;padding:6px 12px;font-size:.76rem;font-weight:900;text-transform:none}
+#mejaJagaIgdPage .igd .mini-btn.igd-tool-btn:hover{background:var(--blue-l);border-color:var(--blue);color:var(--blue-d)!important}
+
+#mejaJagaIgdPage .igd .igd-lobby-hero{text-align:center;margin:4px 0 12px}
+#mejaJagaIgdPage .igd .igd-lobby-title{margin:0;font-size:clamp(2.1rem,6vw,3.2rem);line-height:1;font-weight:900;color:var(--ink)}
+#mejaJagaIgdPage .igd .igd-lobby-title em{display:inline-block;font-style:normal;color:#fff;background:var(--red);padding:2px 14px 4px;border-radius:16px;transform:rotate(-4deg);margin-left:6px;box-shadow:0 5px 0 var(--red-d)}
+
+#mejaJagaIgdPage .igd .igd-stats-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0}
+#mejaJagaIgdPage .igd .igd-stat-item{padding:10px 8px;border-radius:16px;background:var(--soft);border:2px solid var(--line);text-align:center;display:flex;flex-direction:column;gap:2px}
+#mejaJagaIgdPage .igd .igd-stat-item .stat-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900}
+#mejaJagaIgdPage .igd .igd-stat-item .stat-val{font-size:1.25rem;line-height:1.2;font-weight:900;color:var(--blue)}
+#mejaJagaIgdPage .igd .igd-stat-item .stat-val.stat-done{color:var(--green-d)}
+#mejaJagaIgdPage .igd .igd-stat-item .stat-sub{font-size:.64rem;color:var(--muted);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){
+  #mejaJagaIgdPage .igd .igd-stats-bar{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+#mejaJagaIgdPage .igd .igd-resume-slot{margin:0 0 14px}
+#mejaJagaIgdPage .igd .igd-resume-card{display:flex;flex-direction:column;gap:8px;padding:12px 16px;border-radius:20px;background:var(--green-l);border:2px solid var(--green);border-bottom-width:5px;text-align:left}
+#mejaJagaIgdPage .igd .igd-resume-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#mejaJagaIgdPage .igd .igd-resume-tag{display:inline-block;padding:2px 10px;border-radius:99px;background:var(--green);color:#fff;font-size:.6rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+#mejaJagaIgdPage .igd .igd-resume-badge{font-size:.66rem;font-weight:900;color:var(--green-d);letter-spacing:.06em}
+#mejaJagaIgdPage .igd .igd-resume-body{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;width:100%}
+#mejaJagaIgdPage .igd .igd-resume-info{display:flex;flex-direction:column;gap:2px;min-width:200px}
+#mejaJagaIgdPage .igd .igd-resume-info b{font-size:1rem;font-weight:900;color:var(--ink)}
+#mejaJagaIgdPage .igd .igd-resume-pills{display:flex;gap:10px;margin-top:2px;font-size:.76rem;color:var(--ink);flex-wrap:wrap}
+#mejaJagaIgdPage .igd .igd-resume-pills b{color:var(--green-d)}
 #mejaJagaIgdPage .igd .igd-resume-actions{display:flex;align-items:center;gap:8px;flex:none}
-#mejaJagaIgdPage .igd .igd-btn.igd-btn-sm{display:inline-flex!important;width:auto!important;padding:9px 18px;font-size:.82rem;border-radius:14px;box-shadow:0 4px 0 var(--green-d)}
-#mejaJagaIgdPage .igd .igd-btn.igd-btn-sm:active{transform:translateY(3px);box-shadow:0 1px 0 var(--green-d)}
+#mejaJagaIgdPage .igd .igd-btn.igd-btn-resume{display:inline-flex!important;width:auto!important;padding:10px 22px;font-size:.88rem;border-radius:14px;box-shadow:0 4px 0 var(--green-d)}
+#mejaJagaIgdPage .igd .mini-btn.igd-btn-discard{color:var(--red-d)!important;border-color:#ffc4c4;padding:8px 14px;font-size:.78rem;font-weight:900}
+#mejaJagaIgdPage .igd .mini-btn.igd-btn-discard:hover{background:var(--red-l);border-color:var(--red)}
+
+#mejaJagaIgdPage .igd .igd-quick-start{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 18px;border-radius:20px;background:var(--blue-l);border:2px solid var(--blue);border-bottom-width:5px;margin:0 0 14px;text-align:left}
+#mejaJagaIgdPage .igd .igd-quick-text{flex:1;min-width:200px}
+#mejaJagaIgdPage .igd .igd-quick-text b{display:block;font-size:.95rem;color:var(--blue-d);font-weight:900}
+#mejaJagaIgdPage .igd .igd-quick-text small{font-size:.76rem;color:#2c5b78;font-weight:800}
+#mejaJagaIgdPage .igd .igd-btn.igd-btn-start{display:inline-flex!important;width:auto!important;padding:10px 22px;font-size:.88rem;border-radius:14px;box-shadow:0 4px 0 var(--green-d);flex:none}
+
+#mejaJagaIgdPage .igd .igd-section-head{margin:16px 0 8px;text-align:left}
+#mejaJagaIgdPage .igd .igd-section-head h3{margin:0;font-size:1.02rem;font-weight:900;color:var(--ink)}
+#mejaJagaIgdPage .igd .igd-section-sub{font-size:.76rem;color:var(--muted);font-weight:800}
+
+#mejaJagaIgdPage .igd .igd-options-bar{display:flex;align-items:center;justify-content:center;margin:4px 0 14px}
+#mejaJagaIgdPage .igd .igd-guide-box{margin:16px 0 12px;padding:14px 16px;background:#fbfdfe;border:2px dashed #d5dde6;border-radius:20px;text-align:left}
+#mejaJagaIgdPage .igd .igd-guide-box h4{margin:0 0 10px;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-d);font-weight:900}
+#mejaJagaIgdPage .igd .igd-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#mejaJagaIgdPage .igd .igd-guide-step{background:var(--soft);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+#mejaJagaIgdPage .igd .igd-guide-step .step-num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:.72rem;font-weight:900;margin-bottom:2px}
+#mejaJagaIgdPage .igd .igd-guide-step b{font-size:.82rem;font-weight:900;color:var(--ink)}
+#mejaJagaIgdPage .igd .igd-guide-step p{margin:0;font-size:.74rem;line-height:1.4;color:#555}
+@media (max-width:720px){
+  #mejaJagaIgdPage .igd .igd-guide-grid{grid-template-columns:1fr}
+}
+#mejaJagaIgdPage .igd .igd-lobby-foot{display:flex;justify-content:center;margin-top:10px}

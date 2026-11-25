@@ -1,4 +1,4 @@
-const SW_VERSION = 'v244-meja-jaga-igd-resume';
+const SW_VERSION = 'v245-meja-jaga-igd-lobby';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

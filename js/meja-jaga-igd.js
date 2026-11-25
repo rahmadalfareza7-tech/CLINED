@@ -145,7 +145,7 @@
   </svg>
 
   <header class="hud">
-    <button type="button" class="mini-btn igd-hud-back" data-act="exit" title="Simpan progres shift &amp; kembali ke Beranda">‹ Beranda</button>
+    <button type="button" class="mini-btn igd-hud-back" data-act="exit" title="Simpan progres shift &amp; kembali ke Beranda CLINED">‹ Beranda CLINED</button>
     <div class="hud-brand"><span>Meja Jaga IGD<small>SHIFT MALAM</small></span></div>
     <div class="hud-item"><span class="lbl">Jam</span><b id="igd-clock">22:00</b></div>
     <div class="hud-item"><span class="lbl">Sisa</span><b id="igd-timer">05:00</b></div>
@@ -153,7 +153,7 @@
     <div class="hud-item"><span class="lbl">Skor</span><b id="igd-score">0</b></div>
     <div class="hud-item"><span class="lbl">Nyawa pasien</span><b class="lives" id="igd-lives"><span class="cross">&#10010;</span><span class="cross">&#10010;</span><span class="cross">&#10010;</span></b></div>
     <div class="hud-btns">
-      <button type="button" class="mini-btn igd-exit" data-act="menu" title="Simpan progres &amp; kembali ke Pilih Malam">Pilih Malam</button>
+      <button type="button" class="mini-btn igd-exit" data-act="menu" title="Simpan progres &amp; kembali ke Beranda Game">Beranda Game</button>
       <button type="button" class="mini-btn" data-act="book">Panduan <kbd>B</kbd></button>
       <button type="button" class="mini-btn btn-calc" data-act="calc">Kalkulator <kbd>K</kbd></button>
       <button type="button" class="mini-btn" data-act="mute" id="igd-mute">Suara: nyala</button>
@@ -240,20 +240,59 @@
     <div class="book-body" id="igd-book-body"></div>
   </aside>
 
-  <section class="screen" id="igd-title">
-    <div class="folder">
-      <div class="igd-screen-nav">
-        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Kembali ke Beranda</button>
+  <section class="screen igd-screen-lobby" id="igd-title">
+    <div class="folder igd-lobby">
+      <header class="igd-lobby-top">
+        <div class="igd-lobby-left">
+          <button type="button" class="mini-btn igd-back-home" data-act="exit" title="Kembali ke Beranda CLINED">‹ Beranda CLINED</button>
+        </div>
+        <span class="igd-lobby-tag">SKDI DOKTER UMUM · IGD 24 JAM</span>
+        <div class="igd-lobby-tools">
+          <button type="button" class="mini-btn igd-tool-btn" data-act="book" title="Buka Panduan Obat &amp; Pedoman Klinis">Panduan (85 Obat) <kbd>B</kbd></button>
+          <button type="button" class="mini-btn igd-tool-btn btn-calc" data-act="calc" title="Buka Kalkulator GFR, IMT, &amp; Pediatrik">Kalkulator <kbd>K</kbd></button>
+          <button type="button" class="mini-btn igd-tool-btn" data-act="mute" id="igd-lobby-mute" title="Nyalakan atau matikan efek suara">Suara: nyala</button>
+        </div>
+      </header>
+      <div class="igd-lobby-hero">
+        <div class="cast" id="igd-cast"></div>
+        <h1 class="igd-lobby-title">MEJA JAGA <em>IGD</em></h1>
+        <p class="byline">by <b>CLINED</b></p>
+        <p class="igd-lead">Simulasi dokter jaga IGD berbasis SKDI Dokter Umum (5 menit/berkas). Teliti berkas klinis &amp; resep, verifikasi identitas pasien di loket triase, periksa indikasi, kontraindikasi, dosis &times;10, satuan mg/g, alergi segolongan, hingga interaksi obat acak &mdash; lalu tetapkan putusan: <b>TOLAK</b> atau <b>ACC</b>.</p>
       </div>
-      <div class="cast" id="igd-cast"></div>
-      <h1>MEJA JAGA <em>IGD</em></h1>
-      <p class="byline">by <b>CLINED</b></p>
-      <p class="igd-lead">Lima malam jaga + Mode Sulit dengan generator kasus acak SKDI dokter umum (5 menit/berkas). Pasien, wajah, dan jenis kesalahannya diacak tiap shift — dari dosis ×10, satuan mg/g, alergi segolongan, kontraindikasi, interaksi obat, rute salah, hingga KTP keluarga.</p>
+      <div class="igd-stats-bar" id="igd-stats"></div>
       <div class="igd-resume-slot" id="igd-resume" hidden></div>
+      <div class="igd-section-head">
+        <h3>Pilih Shift Malam Jaga</h3>
+        <span class="igd-section-sub">Tiap malam menghadirkan jenis dokumen &amp; tantangan klinis baru</span>
+      </div>
       <div class="nights" id="igd-nights"></div>
-      <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa timer)</label>
-      <button type="button" class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda</button>
-      <p class="fine">Game edukasi dengan kasus klinis terverifikasi yang disederhanakan. Bukan pengganti pedoman klinis resmi atau keputusan tenaga medis. Pintasan: P periksa identitas · T tolak · A ACC · B panduan · K kalkulator · Enter lanjut.</p>
+      <div class="igd-options-bar">
+        <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa batas timer per berkas)</label>
+      </div>
+      <div class="igd-guide-box">
+        <h4>Cara Bermain Singkat</h4>
+        <div class="igd-guide-grid">
+          <div class="igd-guide-step">
+            <span class="step-num">1</span>
+            <b>Periksa Identitas Pasien</b>
+            <p>Bandingkan foto wajah di loket triase, nama, tanggal lahir, dan alamat di KTP / KIA / Gelang dengan berkas.</p>
+          </div>
+          <div class="igd-guide-step">
+            <span class="step-num">2</span>
+            <b>Cek Klinis &amp; Pedoman</b>
+            <p>Buka Panduan Obat (85 obat SKDI) atau Kalkulator. Waspadai dosis &times;10, satuan tertukar, alergi, &amp; interaksi obat.</p>
+          </div>
+          <div class="igd-guide-step">
+            <span class="step-num">3</span>
+            <b>Sorot &amp; Putuskan Berkas</b>
+            <p>Gunakan stabilo merah jika ada kesalahan. Beri cap <b>TOLAK</b> (T) jika ada kekeliruan, atau <b>ACC</b> (A) jika aman.</p>
+          </div>
+        </div>
+      </div>
+      <p class="fine">Game edukasi dengan kasus klinis SKDI terverifikasi yang disederhanakan. Bukan pengganti pedoman klinis resmi atau keputusan tenaga medis.<br>Pintasan: <b>P</b> periksa identitas &middot; <b>T</b> tolak &middot; <b>A</b> ACC &middot; <b>B</b> panduan obat &middot; <b>K</b> kalkulator &middot; <b>R</b> rapikan meja &middot; <b>Enter</b> lanjut.</p>
+      <div class="igd-lobby-foot">
+        <button type="button" class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda CLINED</button>
+      </div>
     </div>
   </section>
 
@@ -273,6 +312,7 @@
     clock:q('#igd-clock'), timer:q('#igd-timer'), count:q('#igd-count'), score:q('#igd-score'), lives:q('#igd-lives'),
     fill:q('#igd-timefill'), bar:q('.timebar'), chart:q('#igd-chart'), paper:q('#igd-paper'), idcard:q('#igd-idcard'),
     con:q('#igd-console'), title:q('#igd-title'), end:q('#igd-end'), book:q('#igd-book'), resume:q('#igd-resume'),
+    stats:q('#igd-stats'),
     gelang:q('#igd-gelang'), lab:q('#igd-lab'), jkn:q('#igd-jkn'), memo:q('#igd-memo'), nights:q('#igd-nights'),
     people:q('#igd-people'), bubble:q('#igd-bubble'), queue:q('#igd-queue'), qn:q('#igd-qn'), bclock:q('#igd-bclock'),
     link:q('#igd-link'), linkTag:q('#igd-link-tag'), lens:q('#igd-lens'),
@@ -940,24 +980,80 @@
 
   /* ================= MALAM: PILIH, MEMO, MULAI ================= */
   const BOSS = {sk:1, hair:'bob', hc:'#4a3a32', glasses:1, shirt:'#f4f4f4'};
+  function renderStats(){
+    if (!E.stats) return;
+    const cleared = [1,2,3,4,5].filter(n => PROG.done[n]).length;
+    const solved = Object.keys(PROG.solved || {}).length;
+    const bestVals = Object.values(PROG.best || {}).filter(Boolean);
+    const topScore = bestVals.length ? Math.max(...bestVals) : 0;
+    const hardBest = PROG.best[HARD];
+    const hardDone = PROG.done[HARD];
+    const hardLabel = hardDone ? 'Tuntas ✓' : (hardBest ? 'Rekor ' + hardBest : 'Siap diuji');
+
+    E.stats.innerHTML = `
+      <div class="igd-stat-item">
+        <span class="stat-lbl">Malam Tuntas</span>
+        <b class="stat-val${cleared === 5 ? ' stat-done' : ''}">${cleared}/5</b>
+        <small class="stat-sub">${cleared === 5 ? 'Semua shift selesai!' : (5 - cleared) + ' malam tersisa'}</small>
+      </div>
+      <div class="igd-stat-item">
+        <span class="stat-lbl">Kasus Dikuasai</span>
+        <b class="stat-val">${solved}</b>
+        <small class="stat-sub">Kasus SKDI Dokter Umum</small>
+      </div>
+      <div class="igd-stat-item">
+        <span class="stat-lbl">Rekor Poin</span>
+        <b class="stat-val">${topScore}</b>
+        <small class="stat-sub">${topScore > 0 ? 'Skor shift tertinggi' : 'Belum ada rekor'}</small>
+      </div>
+      <div class="igd-stat-item">
+        <span class="stat-lbl">Mode Sulit</span>
+        <b class="stat-val${hardDone ? ' stat-done' : ''}">${hardLabel}</b>
+        <small class="stat-sub">${hardDone ? 'Semua kasus acak' : '10 berkas generator acak'}</small>
+      </div>`;
+  }
   function renderResume(){
     if (!E.resume) return;
     const sv = Session.read();
-    if (!sv) { E.resume.hidden = true; E.resume.innerHTML = ''; return; }
+    if (!sv) {
+      const nextNight = [1,2,3,4,5].find(n => !PROG.done[n]) || 1;
+      E.resume.hidden = false;
+      E.resume.innerHTML = `
+        <div class="igd-quick-start">
+          <div class="igd-quick-text">
+            <b>Siap bertugas di Meja Jaga IGD?</b>
+            <small>Mulai shift jaga berikutnya atau pilih malam jaga di bawah.</small>
+          </div>
+          <button type="button" class="igd-btn igd-btn-start" data-act="memo" data-n="${nextNight}">
+            ▶ Mulai Jaga (${nightName(nextNight)})
+          </button>
+        </div>`;
+      return;
+    }
     E.resume.hidden = false;
     E.resume.innerHTML = `<div class="igd-resume-card">
-      <div class="igd-resume-info">
-        <span class="igd-resume-tag">Shift tersimpan</span>
-        <b>${nightName(sv.night)} · Berkas ${sv.i + 1}/${sv.queue.length}</b>
-        <small>Skor ${sv.score} · Nyawa ${sv.lives}/3 · ${sv.relax ? 'Mode santai' : 'Sisa ' + fmtRemClock(sv.remMs)}</small>
+      <div class="igd-resume-head">
+        <span class="igd-resume-tag">Shift Jaga Aktif Tersimpan</span>
+        <span class="igd-resume-badge">Bisa Dilanjutkan</span>
       </div>
-      <div class="igd-resume-actions">
-        <button type="button" class="igd-btn igd-btn-sm" data-act="resume">Lanjutkan</button>
-        <button type="button" class="mini-btn" data-act="discard">Hapus</button>
+      <div class="igd-resume-body">
+        <div class="igd-resume-info">
+          <b>${nightName(sv.night)} &middot; Berkas ${sv.i + 1} dari ${sv.queue.length}</b>
+          <div class="igd-resume-pills">
+            <span>Skor: <b>${sv.score}</b></span>
+            <span>Nyawa: <b>${sv.lives}/3</b></span>
+            <span>Waktu: <b>${sv.relax ? 'Mode santai' : 'Sisa ' + fmtRemClock(sv.remMs)}</b></span>
+          </div>
+        </div>
+        <div class="igd-resume-actions">
+          <button type="button" class="igd-btn igd-btn-resume" data-act="resume">▶ Lanjutkan Shift</button>
+          <button type="button" class="mini-btn igd-btn-discard" data-act="discard" title="Hapus progres shift ini untuk mulai dari awal">Hapus</button>
+        </div>
       </div>
     </div>`;
   }
   function renderNights(){
+    renderStats();
     renderResume();
     E.nights.innerHTML = NIGHTS.slice(1, HARD).map((N, i) => {
       const n = i + 1, lock = false, best = PROG.best[n], done = PROG.done[n];
@@ -971,8 +1067,8 @@
     const docs = ['Kartu pasien','Berkas', ...N.feats.filter(f => FEAT_DOCS[f]).map(f => FEAT_DOCS[f])];
     E.memo.innerHTML = `<div class="memo">
       <div class="igd-screen-nav">
-        <button type="button" class="mini-btn igd-back-home" data-act="menu">‹ Pilih Malam</button>
-        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Beranda</button>
+        <button type="button" class="mini-btn igd-back-home" data-act="menu">‹ Beranda Game</button>
+        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Beranda CLINED</button>
       </div>
       <div class="memo-from">${portrait(BOSS,'happy')}<div><small>Memo dari</small><b>dr. Maria, Sp.EM</b><span>Kepala IGD</span></div></div>
       <h2>${n === HARD ? 'Mode Sulit: semua diacak' : `Malam ${n}: ${N.title}`}</h2>
@@ -980,7 +1076,7 @@
       <div class="memo-docs"><small>Di meja malam ini</small>${docs.map(x => `<span>${x}</span>`).join('')}</div>
       <div class="memo-meta">${N.mix.reduce((s,[,c]) => s + c, 0)} berkas · ${fmtLimit(N.limit)} per berkas${q('#igd-relax').checked ? ' (mode santai: tanpa timer)' : ''}</div>
       <button class="igd-btn${n === HARD ? ' btn-hard' : ''}" data-act="go" data-n="${n}">Mulai ${nightName(n).toLowerCase()} <kbd>Enter</kbd></button>
-      <button class="igd-btn igd-btn-ghost" data-act="menu">Pilih malam lain</button></div>`;
+      <button class="igd-btn igd-btn-ghost" data-act="menu">‹ Kembali ke Beranda Game</button></div>`;
     E.title.hidden = true; E.end.hidden = true; E.memo.hidden = false;
     E.memo.scrollTop = 0;
   }
@@ -989,6 +1085,7 @@
     if (playing && S) saveActiveSession();
     clearInterval(tid); setPlaying(false); renderNights();
     E.memo.hidden = true; E.end.hidden = true; E.title.hidden = false;
+    E.title.scrollTop = 0;
   }
   function buildQueue(n){
     const N = NIGHTS[n], used = new Set(), usedNames = new Set(), usedScenarios = new Set(), usedErrTypes = new Set(), out = [];
@@ -1362,8 +1459,8 @@
     const again = `<button class="igd-btn${nextBtn ? ' igd-btn-ghost' : ''}" data-act="memo" data-n="${n}">Ulangi ${nightName(n)}</button>`;
     E.end.innerHTML = `<div class="folder">
       <div class="igd-screen-nav">
-        <button type="button" class="mini-btn igd-back-home" data-act="menu">‹ Pilih Malam</button>
-        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Beranda</button>
+        <button type="button" class="mini-btn igd-back-home" data-act="menu">‹ Beranda Game</button>
+        <button type="button" class="mini-btn igd-back-home" data-act="exit">‹ Beranda CLINED</button>
       </div>
       <div class="cast">${['Ny. Sari Wulandari','Tn. Agus Wibowo','An. Nadia Putri'].map(x => portrait(APPEAR[x].look, castMood)).join('')}</div>
       <h1>${n === HARD ? 'MODE <em>SULIT</em>' : `MALAM ${n} <em>SELESAI</em>`}</h1>
@@ -1372,7 +1469,7 @@
       <div class="igd-big">${S.score}${record ? '<span class="record">Rekor baru!</span>' : ''} <small style="font-size:1rem">poin · ${ok}/${total} tepat · nyawa pasien ${Math.max(S.lives,0)}/3${!record && prev ? ` · rekor ${prev}` : ''}</small></div>
       <div class="recap"><h4>Rekap belajar</h4>${rows}${tip}</div>
       <ul class="report">${S.log.map(l => `<li class="${l.cls}"><span>${sym[l.cls]}</span><em>${esc(l.title)}</em><b>${l.pts > 0 ? '+' : ''}${l.pts}</b></li>`).join('')}</ul>
-      <div class="end-actions">${nextBtn}${again}<button class="igd-btn igd-btn-ghost" data-act="menu">Pilih malam</button><button class="igd-btn igd-btn-ghost" data-act="exit">‹ Kembali ke Beranda</button></div>
+      <div class="end-actions">${nextBtn}${again}<button class="igd-btn igd-btn-ghost" data-act="menu">‹ Beranda Game</button><button class="igd-btn igd-btn-ghost" data-act="exit">‹ Kembali ke Beranda CLINED</button></div>
       <p class="fine">Game edukasi dengan kasus yang disederhanakan. Bukan pengganti pedoman klinis.</p></div>`;
     if (xpRes && xpRes.gained > 0) {
       E.end.querySelector('.igd-big')?.insertAdjacentHTML('afterend', `<p class="igd-xp-note">+${xpRes.gained} XP tercatat${rec.newIds.length ? ` · ${rec.newIds.length} kasus baru dikuasai` : ''}</p>`);
@@ -1430,7 +1527,11 @@
     else if (a === 'book') toggleBook();
     else if (a === 'calc') openCalc();
     else if (a === 'closebook') toggleBook(false);
-    else if (a === 'mute') E.mute.textContent = 'Suara: ' + (Sfx.toggle() ? 'mati' : 'nyala');
+    else if (a === 'mute'){
+      const isMuted = Sfx.toggle();
+      const txt = 'Suara: ' + (isMuted ? 'mati' : 'nyala');
+      root.querySelectorAll('[data-act="mute"]').forEach(btn => { btn.textContent = txt; });
+    }
     else if (a === 'clear'){
       if (!S || S.locked) return;
       root.querySelectorAll('.ln.hl').forEach(n => n.classList.remove('hl')); S.hl = null; syncHint(); saveActiveSession();
@@ -1504,16 +1605,12 @@
   }
   function onEnter(){
     PROG = loadP();
-    renderNights();
     FIT.update();
-    try { document.body.classList.toggle('quiz-context', playing || FIT.on); } catch {}
-    if (playing && S) {
-      resumeTimer();
-      requestAnimationFrame(() => { DESK.reset(); DESK.apply(); redrawLink(); });
-    }
+    showMenu();
   }
   function onLeave(){
     persistBeforeLeave();
+    setPlaying(false);
     E.book.classList.remove('open');
     FIT.disable();
     try { document.body.classList.remove('quiz-context'); } catch {}
@@ -1521,8 +1618,12 @@
   let playing = false;
   window.addEventListener('clined:sync-applied', () => { PROG = loadP(); renderNights(); });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { pauseTimer(); if (playing && S) saveActiveSession(); }
-    else if (isOpen() && playing) resumeTimer();
+    if (document.hidden) {
+      pauseTimer();
+      if (playing && S) saveActiveSession();
+    } else if (isOpen() && playing && E.title.hidden && E.memo.hidden && E.end.hidden) {
+      resumeTimer();
+    }
   });
   window.addEventListener('pagehide', () => {
     pauseTimer();
