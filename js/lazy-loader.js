@@ -44,8 +44,8 @@
       scripts: ['js/kedkel-summary-data.js?v=4', 'js/kedkel-summary.js?v=8']
     },
     igd: {
-      styles: ['css/meja-jaga-igd.css?v=1'],
-      scripts: ['js/meja-jaga-igd.js?v=1']
+      styles: ['css/meja-jaga-igd.css?v=2'],
+      scripts: ['js/meja-jaga-igd.js?v=2']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],

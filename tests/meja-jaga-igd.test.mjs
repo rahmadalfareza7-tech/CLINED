@@ -7,8 +7,8 @@ import { isValidSyncKey, mergeJsonKey } from '../lib/sync-merge.mjs';
 const ROOT = new URL('..', import.meta.url);
 const readRel = p => fs.readFileSync(new URL(p, ROOT), 'utf8');
 
-function loadModule() {
-  const store = {};
+function loadModule(initialStore = {}) {
+  const store = { ...initialStore };
   const listeners = {};
   const win = {
     addEventListener: (ev, fn) => { (listeners[ev] ||= []).push(fn); },
@@ -20,6 +20,7 @@ function loadModule() {
     document: {
       getElementById: () => null,
       addEventListener: () => {},
+      documentElement: { classList: { toggle: () => {}, remove: () => {} } },
       body: { classList: { toggle: () => {}, remove: () => {} } }
     },
     localStorage: {
@@ -40,98 +41,119 @@ function loadModule() {
   return { CLINED_IGD: ctx.window.CLINED_IGD, store };
 }
 
-test('Progress.record tracks best score, unique solved cases, runs, and perfect shifts', () => {
+test('Progress.record tracks per-night best scores, completion, unlock, and unique solved cases', () => {
   const { CLINED_IGD, store } = loadModule();
   assert.ok(CLINED_IGD?.Progress);
+  assert.equal(CLINED_IGD.Progress.KEY, 'clined_igd_v2');
 
-  assert.equal(CLINED_IGD.Progress.statsHtml(12), '');
+  const init = CLINED_IGD.Progress.read();
+  assert.equal(init.unlocked, 1);
+  assert.deepEqual({ ...init.best }, {});
+  assert.deepEqual({ ...init.done }, {});
 
+  // First clear of Malam 1
   const r1 = CLINED_IGD.Progress.record({
+    night: 1,
     score: 640,
-    ok: 6,
-    total: 8,
-    lives: 2,
-    solvedIds: ['asma-propranolol', 'furosemid-gram', 'asma-propranolol']
+    ok: 5,
+    total: 6,
+    alive: true,
+    solvedIds: ['tn-budi-santoso', 'an-raka-pratama', 'tn-budi-santoso']
   });
   assert.equal(r1.isBest, true);
-  assert.deepEqual([...r1.newIds], ['asma-propranolol', 'furosemid-gram']);
-  assert.equal(r1.p.best, 640);
-  assert.equal(r1.p.bestOk, 6);
+  assert.equal(r1.newlyClearedNight, true);
+  assert.deepEqual([...r1.newIds], ['tn-budi-santoso', 'an-raka-pratama']);
+  assert.equal(r1.p.best[1], 640);
+  assert.equal(r1.p.done[1], true);
+  assert.equal(r1.p.unlocked, 2);
   assert.equal(r1.p.runs, 1);
-  assert.equal(r1.p.perfect, 0);
-  assert.match(r1.html, /Rekor baru!/);
-  assert.match(r1.html, /\+2 berkas baru dikuasai/);
 
+  // Replay Malam 1 with higher score -> no newlyClearedNight, only new case id counted
   const r2 = CLINED_IGD.Progress.record({
-    score: 980,
-    ok: 8,
-    total: 8,
-    lives: 3,
-    solvedIds: ['asma-propranolol', 'stemi-aman']
+    night: 1,
+    score: 790,
+    ok: 6,
+    total: 6,
+    alive: true,
+    solvedIds: ['tn-budi-santoso', 'ny-sari-wulandari']
   });
   assert.equal(r2.isBest, true);
-  assert.deepEqual([...r2.newIds], ['stemi-aman']);
-  assert.equal(r2.p.best, 980);
-  assert.equal(r2.p.bestOk, 8);
+  assert.equal(r2.newlyClearedNight, false);
+  assert.deepEqual([...r2.newIds], ['ny-sari-wulandari']);
+  assert.equal(r2.p.best[1], 790);
   assert.equal(r2.p.runs, 2);
-  assert.equal(r2.p.perfect, 1);
-  assert.deepEqual(Object.keys(r2.p.solved).sort(), ['asma-propranolol', 'furosemid-gram', 'stemi-aman']);
 
+  // Failed shift on Mode Sulit (night 6): records high score if > 0, does not mark done
   const r3 = CLINED_IGD.Progress.record({
-    score: 400,
-    ok: 4,
-    total: 8,
-    lives: 1,
-    solvedIds: ['stemi-aman']
+    night: 6,
+    score: 320,
+    ok: 3,
+    total: 10,
+    alive: false,
+    solvedIds: ['tn-darmawan']
   });
-  assert.equal(r3.isBest, false);
-  assert.deepEqual([...r3.newIds], []);
-  assert.equal(r3.p.best, 980);
-  assert.equal(r3.p.runs, 3);
-  assert.match(CLINED_IGD.Progress.statsHtml(12), /Rekor <b>980<\/b>/);
-  assert.match(CLINED_IGD.Progress.statsHtml(12), /3\/12/);
+  assert.equal(r3.isBest, true);
+  assert.equal(r3.newlyClearedNight, false);
+  assert.equal(r3.p.best[6], 320);
+  assert.equal(r3.p.done[6], undefined);
+  assert.deepEqual([...r3.newIds], ['tn-darmawan']);
 
   // Corrupt JSON falls back safely
-  store.clined_igd_v1 = '{broken';
-  assert.equal(CLINED_IGD.Progress.read().best, 0);
+  store.clined_igd_v2 = '{broken';
+  assert.equal(CLINED_IGD.Progress.read().unlocked, 1);
 });
 
-test('clined_igd_v1 is sync-eligible and merges cleanly across two devices', () => {
-  assert.equal(isValidSyncKey('clined_igd_v1'), true);
+test('Progress.read migrates legacy standalone igd-meja-jaga-v1 data once', () => {
+  const { CLINED_IGD, store } = loadModule({
+    'igd-meja-jaga-v1': JSON.stringify({
+      unlocked: 4,
+      best: { 1: 710, 2: 650, 3: 590 },
+      done: { 1: true, 2: true, 3: true }
+    })
+  });
+  const migrated = CLINED_IGD.Progress.read();
+  assert.equal(migrated.unlocked, 4);
+  assert.equal(migrated.best[1], 710);
+  assert.equal(migrated.done[3], true);
+  assert.ok(store.clined_igd_v2, 'Expected migrated progress written to clined_igd_v2');
+});
+
+test('clined_igd_v2 is sync-eligible and merges per-night scores, unlocks, and solved cases across devices', () => {
+  assert.equal(isValidSyncKey('clined_igd_v2'), true);
 
   const devA = JSON.stringify({
-    best: 820,
-    bestOk: 7,
-    runs: 3,
-    perfect: 0,
-    solved: { 'asma-propranolol': 1, 'stemi-aman': 1 },
+    unlocked: 3,
+    best: { 1: 820, 2: 610 },
+    done: { 1: true, 2: true },
+    solved: { 'tn-budi-santoso': 1, 'ny-sari-wulandari': 1 },
+    runs: 4,
     at: 1700000100000
   });
   const devB = JSON.stringify({
-    best: 760,
-    bestOk: 8,
-    runs: 2,
-    perfect: 1,
-    solved: { 'stemi-aman': 1, 'metformin-aki': 1 },
+    unlocked: 5,
+    best: { 1: 760, 2: 740, 4: 880, 6: 950 },
+    done: { 1: true, 4: true, 6: true },
+    solved: { 'ny-sari-wulandari': 1, 'tn-darmawan': 1 },
+    runs: 3,
     at: 1700000200000
   });
 
-  const merged = mergeJsonKey('clined_igd_v1', devA, devB);
+  const merged = mergeJsonKey('clined_igd_v2', devA, devB);
   assert.ok(merged);
   const parsed = JSON.parse(merged.value);
-  assert.equal(parsed.best, 820);
-  assert.equal(parsed.bestOk, 8);
-  assert.equal(parsed.runs, 3);
-  assert.equal(parsed.perfect, 1);
+  assert.equal(parsed.unlocked, 5);
+  assert.deepEqual(parsed.best, { 1: 820, 2: 740, 4: 880, 6: 950 });
+  assert.deepEqual(parsed.done, { 1: true, 2: true, 4: true, 6: true });
   assert.deepEqual(parsed.solved, {
-    'asma-propranolol': 1,
-    'stemi-aman': 1,
-    'metformin-aki': 1
+    'tn-budi-santoso': 1,
+    'ny-sari-wulandari': 1,
+    'tn-darmawan': 1
   });
+  assert.equal(parsed.runs, 4);
   assert.equal(merged.dirty, true);
 });
 
-test('CSP & asset integrity: self-hosted fonts exist, no external URLs or nested & CSS', () => {
+test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS with balanced braces, no external URLs', () => {
   const css = readRel('css/meja-jaga-igd.css');
   const js = readRel('js/meja-jaga-igd.js');
 
@@ -140,30 +162,42 @@ test('CSP & asset integrity: self-hosted fonts exist, no external URLs or nested
   assert.doesNotMatch(js, /fonts\.googleapis\.com|fonts\.gstatic\.com/i);
   assert.doesNotMatch(css, /(^|\s)&[.:#\[]/, 'CSS must be flat (no nesting) for older Safari compatibility');
 
+  let depth = 0;
+  for (const ch of css) {
+    if (ch === '{') depth++;
+    else if (ch === '}') depth--;
+    assert.ok(depth >= 0, 'Unbalanced closing brace in CSS');
+  }
+  assert.equal(depth, 0, 'Unclosed brace in CSS');
+
   const fontUrls = [...css.matchAll(/url\(\.\.\/(assets\/fonts\/igd\/[^)]+\.woff2)\)/g)].map(m => m[1]);
-  assert.ok(fontUrls.length >= 4, 'Expected self-hosted woff2 fonts');
+  assert.ok(fontUrls.length >= 2, 'Expected self-hosted woff2 fonts');
   for (const rel of new Set(fontUrls)) {
     const stat = fs.statSync(new URL(rel, ROOT));
     assert.ok(stat.size > 1000, `Font file ${rel} must be non-empty`);
   }
 });
 
-test('App wiring: view, menu, lazy bundle, BUSY_VIEWS, SW version parity, and font MIME', () => {
+test('App wiring: view, menu, lazy v2 bundle, exit controls, BUSY_VIEWS, SW parity, and font MIME', () => {
   const appHtml = readRel('app.html');
   const lazyJs = readRel('js/lazy-loader.js');
   const swJs = readRel('sw.js');
   const updJs = readRel('js/update-notice.js');
   const serverJs = readRel('local-server.mjs');
   const syncJs = readRel('js/online-sync.js');
+  const igdJs = readRel('js/meja-jaga-igd.js');
 
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(lazyJs, /igd:\s*\{/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=2/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=2/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
-  assert.match(syncJs, /'clined_igd_v1'/);
+  assert.match(syncJs, /'clined_igd_v2'/);
   assert.match(serverJs, /'\.woff2':'font\/woff2'/);
+  assert.match(igdJs, /data-act="exit"/);
+  assert.match(igdJs, /FIT\.disable\(\)/);
 
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];

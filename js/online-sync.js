@@ -45,6 +45,7 @@
     'clined_resep_lp_best_v1',
     'clined_clinical_quest_v1',
     'clined_igd_v1',
+    'clined_igd_v2',
     'clined_kedkel_summary_done_v2',
     'clined_kedkel_summary_star_v2',
     'clined_unlocked_achievements_v1',
@@ -997,7 +998,7 @@
         }
         return { value: JSON.stringify(merged), dirty: changed };
       }
-      if ((key === 'clined_notes_v1' || key === 'clined_resep_best_v1' || key === 'clined_resep_lp_best_v1' || key === 'clined_clinical_quest_v1' || key === 'clined_igd_v1' || key === 'clined_duel_claims_v1' || key === 'clined_ann_seen_v1') && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
+      if ((key === 'clined_notes_v1' || key === 'clined_resep_best_v1' || key === 'clined_resep_lp_best_v1' || key === 'clined_clinical_quest_v1' || key === 'clined_igd_v1' || key === 'clined_igd_v2' || key === 'clined_duel_claims_v1' || key === 'clined_ann_seen_v1') && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
         const merged = maxMergeDeep(loc, srv);
         return { value: JSON.stringify(merged), dirty: !jsonDeepEqual(merged, srv) };
       }
