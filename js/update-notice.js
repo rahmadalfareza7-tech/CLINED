@@ -3,8 +3,8 @@
   'use strict';
   if (!('serviceWorker' in navigator)) return;
 
-  const APP_SW_VERSION = 'v236-multi-device-sync-total';
-  const BUSY_VIEWS = new Set(['quiz', 'duelPage', 'flashcards', 'clinicalQuestPage', 'studyTimerPage', 'userBankPage']);
+  const APP_SW_VERSION = 'v237-meja-jaga-igd';
+  const BUSY_VIEWS = new Set(['quiz', 'duelPage', 'flashcards', 'clinicalQuestPage', 'mejaJagaIgdPage', 'studyTimerPage', 'userBankPage']);
   let seenController = !!navigator.serviceWorker.controller;
   let pending = false, dismissed = false, reloading = false, banner = null, poll = null, lastCheck = 0;
   let detectedVersion = '';

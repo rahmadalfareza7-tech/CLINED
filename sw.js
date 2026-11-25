@@ -1,4 +1,4 @@
-const SW_VERSION = 'v236-multi-device-sync-total';
+const SW_VERSION = 'v237-meja-jaga-igd';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

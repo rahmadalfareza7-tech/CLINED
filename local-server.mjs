@@ -7,7 +7,7 @@ import { extname, resolve, sep } from 'node:path';
 import { handleRequest } from './lib/app.mjs';
 
 const root = resolve(process.env.PUBLIC_DIR || '.'), port = Number(process.env.PORT || 3000), host = process.env.HOST || '0.0.0.0';
-const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.webmanifest':'application/manifest+json'};
+const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2','.woff':'font/woff','.webmanifest':'application/manifest+json'};
 const privateFiles = new Set(['server.mjs','package.json','package-lock.json','dockerfile','readme.md','.env','.env.example']);
 
 async function staticFile(req,res){

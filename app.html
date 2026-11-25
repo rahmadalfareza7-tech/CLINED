@@ -227,6 +227,7 @@
       <button class="secondary menu-item" id="achievementBtn"><span class="menu-icon">🏅</span><span>Achievements</span></button>
       <button class="secondary menu-item" id="leaderboardMenuBtn"><span class="menu-icon">🏆</span><span>Papan Peringkat</span></button>
       <button class="secondary menu-item" id="questMenuBtn" type="button"><span class="menu-icon">🩺</span><span>Clinical Quest</span></button>
+      <button class="secondary menu-item" id="igdMenuBtn" type="button"><span class="menu-icon">🚑</span><span>Meja Jaga IGD</span></button>
       <button class="secondary menu-item" id="studyTimerMenuBtn"><span class="menu-icon">⏱</span><span>Study Timer</span></button>
     </div>
   </div>
@@ -1007,6 +1008,19 @@
   <div id="clinicalQuestHost"></div>
 </section>
 
+<!-- MEJA JAGA IGD (game, dimuat lazy: css/meja-jaga-igd.css + js/meja-jaga-igd.js) -->
+<section id="mejaJagaIgdPage" class="view exam-page-view meja-jaga-igd-page">
+  <div class="exam-page-header igd-page-head">
+    <button class="back-link" type="button" data-home>‹ Beranda</button>
+    <div>
+      <div class="eyebrow">CLINED • GAME KESELAMATAN PASIEN</div>
+      <h2>Meja Jaga IGD</h2>
+      <p>Periksa resep, SOAP, dan instruksi obat. Sorot kesalahan fatal, lalu cap ACC atau TOLAK.</p>
+    </div>
+  </div>
+  <div id="mejaJagaIgdHost"></div>
+</section>
+
 <!-- LEADERBOARD PAGE -->
 <section id="leaderboardPage" class="view exam-page-view">
   <div class="exam-page-header">
@@ -1218,11 +1232,11 @@
   </section>
 </div>
 <script src="js/ui-dialogs.js?v=1"></script>
-<script src="js/update-notice.js?v=3"></script>
+<script src="js/update-notice.js?v=4"></script>
 <script src="js/report-question.js?v=1"></script>
 <script src="js/photo-store.js?v=1"></script>
 <script src="js/photo-compress.js?v=2"></script>
-<script src="js/online-sync.js?v=17"></script>
+<script src="js/online-sync.js?v=18"></script>
 <script src="js/ability-classifier.js?v=1"></script>
 <script src="js/champion-tags.js?v=1"></script>
 <script src="js/kedkel-2026-materi.js?v=3"></script>
@@ -1332,8 +1346,8 @@
 <script src="js/insights.js?v=3"></script>
 <script src="js/glossary-match.js?v=1"></script>
 <script src="js/glossary.js?v=5"></script>
-<script src="js/usage.js?v=2"></script>
-<script src="js/lazy-loader.js?v=25"></script>
+<script src="js/usage.js?v=3"></script>
+<script src="js/lazy-loader.js?v=26"></script>
 <script src="js/pwa-install.js?v=2"></script>
 </body>
 </html>

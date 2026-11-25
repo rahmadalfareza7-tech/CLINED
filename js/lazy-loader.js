@@ -43,6 +43,10 @@
       styles: ['css/kedkel-summary.css?v=5'],
       scripts: ['js/kedkel-summary-data.js?v=4', 'js/kedkel-summary.js?v=8']
     },
+    igd: {
+      styles: ['css/meja-jaga-igd.css?v=1'],
+      scripts: ['js/meja-jaga-igd.js?v=1']
+    },
     admin: {
       styles: ['css/admin-people.css?v=5'],
       scripts: ['js/admin-people.js?v=10', 'js/question-editor.js?v=1']
@@ -89,7 +93,24 @@
     }
   }
 
+  function injectIgdPlaceholders() {
+    const grid = document.querySelector('#studyTools .study-tool-grid');
+    if (grid && !document.getElementById('igdStudyToolBtn')) {
+      const tile = document.createElement('button');
+      tile.type = 'button';
+      tile.className = 'study-tool';
+      tile.id = 'igdStudyToolBtn';
+      tile.innerHTML = '<span>🚑</span><b>Meja Jaga IGD</b><small>Game: temukan kesalahan fatal di resep</small>';
+      grid.insertBefore(tile, grid.firstChild);
+    }
+  }
+
   // Stubs so callers work seamlessly before or after bundle loads
+  if (!window.CLINED_IGD) {
+    window.CLINED_IGD = {
+      open: () => load('igd').then(() => window.CLINED_IGD?.open?.()).catch(e => window.showToast?.(e.message, true))
+    };
+  }
   if (!window.CLINED_MEDCALC) {
     window.CLINED_MEDCALC = {
       open: (tab = 'peds') => load('medcalc').then(() => window.CLINED_MEDCALC?.open?.(tab)).catch(e => window.showToast?.(e.message, true)),
@@ -121,8 +142,14 @@
   }
 
   document.addEventListener('click', e => {
-    const btn = e.target.closest?.('button, [data-open-medcalc]');
+    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd]');
     if (!btn) return;
+    if (btn.id === 'igdMenuBtn' || btn.id === 'igdStudyToolBtn' || btn.dataset.openIgd != null) {
+      e.preventDefault();
+      if (!loaded.has('igd')) window.showToast?.('Membuka Meja Jaga IGD…');
+      window.CLINED_IGD.open();
+      return;
+    }
     if ((btn.id === 'medCalcHeaderBtn' || btn.id === 'medCalcStudyToolBtn' || btn.dataset.openMedcalc != null) && !loaded.has('medcalc')) {
       e.preventDefault();
       window.CLINED_MEDCALC.open(btn.dataset.openMedcalc || 'peds');
@@ -158,6 +185,7 @@
 
   function boot() {
     injectMedCalcPlaceholders();
+    injectIgdPlaceholders();
     maybePreloadAdmin();
     requestAnimationFrame(() => { SECONDARY_STYLES.forEach(loadStyle); });
   }
@@ -165,6 +193,9 @@
   else boot();
   window.addEventListener('clined:auth-ready', maybePreloadAdmin);
   window.addEventListener('clined:view-change', e => {
+    if (e.detail === 'mejaJagaIgdPage' && !loaded.has('igd')) {
+      window.CLINED_IGD.open(); // mis. dibuka ulang dari hash/riwayat: muat bundle lalu pasang game
+    }
     if (e.detail === 'blokKedkelPage') {
       load('resep').catch(() => {});
       load('ringkasanKedkel').catch(() => {});
