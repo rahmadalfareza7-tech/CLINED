@@ -424,7 +424,56 @@ test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS wit
   }
 });
 
-test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, exit controls, BUSY_VIEWS, SW parity, and font MIME', () => {
+test('Session persistence and clined_igd_session_v1 multi-device sync merge preserve active shifts and tombstones', () => {
+  const { CLINED_IGD, DATA } = loadModule();
+  assert.ok(CLINED_IGD?.Session);
+  assert.equal(CLINED_IGD.Session.KEY, 'clined_igd_session_v1');
+  assert.equal(isValidSyncKey('clined_igd_session_v1'), true);
+
+  assert.equal(CLINED_IGD.Session.read(), null);
+  const sampleQueue = DATA.DOCS.slice(0, 4);
+  const saved = CLINED_IGD.Session.save({
+    sid: 'shift-abc',
+    night: 6,
+    limit: 300,
+    relax: false,
+    queue: sampleQueue,
+    i: 2,
+    score: 260,
+    lives: 2,
+    log: [{ cls: 'good', pts: 130, topic: 'kontra', title: 'RESEP · Pasien 1' }, { cls: 'good', pts: 130, topic: 'dosis', title: 'RESEP · Pasien 2' }],
+    solvedIds: ['p1', 'p2'],
+    remMs: 185000,
+    hl: 'l2',
+    startedAt: 1700000000000
+  });
+  assert.ok(saved);
+  const readBack = CLINED_IGD.Session.read();
+  assert.equal(readBack.sid, 'shift-abc');
+  assert.equal(readBack.i, 2);
+  assert.equal(readBack.score, 260);
+  assert.equal(readBack.lives, 2);
+  assert.equal(readBack.remMs, 185000);
+  assert.equal(readBack.hl, 'l2');
+
+  // Same shift across devices: furthest case index wins even if clock skewed
+  const devA = JSON.stringify({ ...readBack, i: 3, score: 390, updated: 1700000100000 });
+  const devB = JSON.stringify({ ...readBack, i: 1, score: 120, updated: 1700000200000 });
+  const mergedProgress = mergeJsonKey('clined_igd_session_v1', devA, devB);
+  assert.equal(JSON.parse(mergedProgress.value).i, 3);
+  assert.equal(mergedProgress.dirty, true);
+
+  // Completed shift tombstone beats stale in-progress copy of the same shift
+  const tomb = JSON.stringify({ sid: 'shift-abc', clearedAt: 1700000300000, updated: 1700000300000 });
+  const mergedTomb = mergeJsonKey('clined_igd_session_v1', tomb, devA);
+  assert.ok(JSON.parse(mergedTomb.value).clearedAt);
+
+  // Clear writes tombstone and Session.read() returns null
+  CLINED_IGD.Session.clear('shift-abc');
+  assert.equal(CLINED_IGD.Session.read(), null);
+});
+
+test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, top-left Beranda, session sync, BUSY_VIEWS, SW parity, and font MIME', () => {
   const appHtml = readRel('app.html');
   const lazyJs = readRel('js/lazy-loader.js');
   const swJs = readRel('sw.js');
@@ -436,15 +485,18 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, exi
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=6/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=7/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=7/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=8/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);
+  assert.match(syncJs, /'clined_igd_session_v1'/);
   assert.match(serverJs, /'\.woff2':'font\/woff2'/);
   assert.match(igdJs, /id="igd-timer"/);
+  assert.match(igdJs, /id="igd-resume"/);
+  assert.match(igdJs, /igd-hud-back/);
   assert.match(igdJs, /data-act="exit"/);
   assert.match(igdJs, /igd-back-home/);
   assert.match(igdJs, /FIT\.disable\(\)/);

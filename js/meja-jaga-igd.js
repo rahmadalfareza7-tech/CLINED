@@ -82,6 +82,61 @@
     }
   };
 
+  /* ================= SESI SHIFT AKTIF (simpan otomatis saat ke Beranda / refresh / ganti perangkat) ================= */
+  const SESSION_KEY = 'clined_igd_session_v1';
+  function sanitizeSession(raw) {
+    if (!isObj(raw)) return null;
+    if (raw.clearedAt || !Array.isArray(raw.queue) || !raw.queue.length) return null;
+    const night = Math.min(Math.max(Math.round(Number(raw.night) || 1), 1), 6);
+    const limit = Math.max(60, Math.round(Number(raw.limit) || 300));
+    const queue = raw.queue.filter(d => isObj(d) && isObj(d.pt) && isObj(d.ktp) && Array.isArray(d.sections));
+    if (!queue.length) return null;
+    const i = Math.max(0, Math.round(Number(raw.i) || 0));
+    const lives = Math.max(0, Math.min(3, Math.round(Number(raw.lives) || 0)));
+    if (lives <= 0 || i >= queue.length) return null;
+    const remMs = Math.max(1000, Math.min(limit * 1000, Math.round(Number(raw.remMs) || limit * 1000)));
+    const now = Date.now();
+    return {
+      sid: String(raw.sid || (now.toString(36) + '-' + Math.random().toString(36).slice(2, 7))),
+      night,
+      limit,
+      relax: !!raw.relax,
+      queue,
+      i,
+      score: Math.max(0, Math.round(Number(raw.score) || 0)),
+      lives,
+      log: Array.isArray(raw.log) ? raw.log.slice(0, 20) : [],
+      solvedIds: Array.isArray(raw.solvedIds) ? raw.solvedIds.filter(Boolean).slice(0, 20) : [],
+      remMs,
+      hl: typeof raw.hl === 'string' && raw.hl ? raw.hl : null,
+      startedAt: Math.max(0, Math.round(Number(raw.startedAt) || now)),
+      updated: Math.max(0, Math.round(Number(raw.updated) || now))
+    };
+  }
+  const Session = {
+    KEY: SESSION_KEY,
+    read() {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return null;
+        return sanitizeSession(JSON.parse(raw));
+      } catch (e) { return null; }
+    },
+    save(snap) {
+      const clean = sanitizeSession(snap);
+      if (!clean) return null;
+      clean.updated = Date.now();
+      try { localStorage.setItem(SESSION_KEY, JSON.stringify(clean)); } catch (e) {}
+      return clean;
+    },
+    clear(sid) {
+      const now = Date.now();
+      const tomb = { sid: String(sid || ''), clearedAt: now, updated: now };
+      try { localStorage.setItem(SESSION_KEY, JSON.stringify(tomb)); } catch (e) {}
+      return tomb;
+    }
+  };
+
   const MARKUP = `<div class="igd-stage" id="igd-stage">
 <div class="igd" id="igd">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -90,6 +145,7 @@
   </svg>
 
   <header class="hud">
+    <button type="button" class="mini-btn igd-hud-back" data-act="exit" title="Simpan progres shift &amp; kembali ke Beranda">‹ Beranda</button>
     <div class="hud-brand"><span>Meja Jaga IGD<small>SHIFT MALAM</small></span></div>
     <div class="hud-item"><span class="lbl">Jam</span><b id="igd-clock">22:00</b></div>
     <div class="hud-item"><span class="lbl">Sisa</span><b id="igd-timer">05:00</b></div>
@@ -97,11 +153,10 @@
     <div class="hud-item"><span class="lbl">Skor</span><b id="igd-score">0</b></div>
     <div class="hud-item"><span class="lbl">Nyawa pasien</span><b class="lives" id="igd-lives"><span class="cross">&#10010;</span><span class="cross">&#10010;</span><span class="cross">&#10010;</span></b></div>
     <div class="hud-btns">
-      <button class="mini-btn igd-exit" data-act="exit">‹ Beranda</button>
-      <button class="mini-btn igd-exit" data-act="menu">Menu</button>
-      <button class="mini-btn" data-act="book">Panduan <kbd>B</kbd></button>
-      <button class="mini-btn btn-calc" data-act="calc">Kalkulator <kbd>K</kbd></button>
-      <button class="mini-btn" data-act="mute" id="igd-mute">Suara: nyala</button>
+      <button type="button" class="mini-btn igd-exit" data-act="menu" title="Simpan progres &amp; kembali ke Pilih Malam">Pilih Malam</button>
+      <button type="button" class="mini-btn" data-act="book">Panduan <kbd>B</kbd></button>
+      <button type="button" class="mini-btn btn-calc" data-act="calc">Kalkulator <kbd>K</kbd></button>
+      <button type="button" class="mini-btn" data-act="mute" id="igd-mute">Suara: nyala</button>
     </div>
   </header>
   <div class="timebar"><i id="igd-timefill"></i></div>
@@ -194,6 +249,7 @@
       <h1>MEJA JAGA <em>IGD</em></h1>
       <p class="byline">by <b>CLINED</b></p>
       <p class="igd-lead">Lima malam jaga + Mode Sulit dengan generator kasus acak SKDI dokter umum (5 menit/berkas). Pasien, wajah, dan jenis kesalahannya diacak tiap shift — dari dosis ×10, satuan mg/g, alergi segolongan, kontraindikasi, interaksi obat, rute salah, hingga KTP keluarga.</p>
+      <div class="igd-resume-slot" id="igd-resume" hidden></div>
       <div class="nights" id="igd-nights"></div>
       <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa timer)</label>
       <button type="button" class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda</button>
@@ -216,7 +272,7 @@
   const E = {
     clock:q('#igd-clock'), timer:q('#igd-timer'), count:q('#igd-count'), score:q('#igd-score'), lives:q('#igd-lives'),
     fill:q('#igd-timefill'), bar:q('.timebar'), chart:q('#igd-chart'), paper:q('#igd-paper'), idcard:q('#igd-idcard'),
-    con:q('#igd-console'), title:q('#igd-title'), end:q('#igd-end'), book:q('#igd-book'),
+    con:q('#igd-console'), title:q('#igd-title'), end:q('#igd-end'), book:q('#igd-book'), resume:q('#igd-resume'),
     gelang:q('#igd-gelang'), lab:q('#igd-lab'), jkn:q('#igd-jkn'), memo:q('#igd-memo'), nights:q('#igd-nights'),
     people:q('#igd-people'), bubble:q('#igd-bubble'), queue:q('#igd-queue'), qn:q('#igd-qn'), bclock:q('#igd-bclock'),
     link:q('#igd-link'), linkTag:q('#igd-link-tag'), lens:q('#igd-lens'),
@@ -499,19 +555,79 @@
   /* ================= STATE ================= */
   let S = null, tid = null;
 
-  function start(n){
-    Sfx.unlock();
-    n = Math.min(Math.max(+n || 1, 1), HARD);
+  function fmtRemClock(ms){
+    const s = Math.max(0, Math.ceil((Number(ms) || 0) / 1000));
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  }
+
+  function currentRemMs(){
+    if (!S) return 0;
+    const totalMs = S.limit * 1000;
+    if (S.relax) return totalMs;
+    if (!S.t0) return totalMs;
+    const refNow = S.pausedAt || Date.now();
+    return Math.max(1000, Math.min(totalMs, totalMs - (refNow - S.t0)));
+  }
+
+  function saveActiveSession(){
+    if (!S || !S.queue || !S.queue.length) return;
+    if (S.resolved) {
+      const nextIdx = S.i + 1;
+      if (S.lives <= 0 || nextIdx >= S.queue.length) return;
+      Session.save({
+        sid: S.sid, night: S.night, limit: S.limit, relax: S.relax, queue: S.queue,
+        i: nextIdx, score: S.score, lives: S.lives, log: S.log, solvedIds: S.solvedIds,
+        remMs: S.limit * 1000, hl: null, startedAt: S.startedAt
+      });
+      return;
+    }
+    if (S.lives <= 0 || S.i >= S.queue.length) return;
+    Session.save({
+      sid: S.sid, night: S.night, limit: S.limit, relax: S.relax, queue: S.queue,
+      i: S.i, score: S.score, lives: S.lives, log: S.log, solvedIds: S.solvedIds,
+      remMs: currentRemMs(), hl: S.hl || null, startedAt: S.startedAt
+    });
+  }
+
+  function enterPlayUI(n){
     const N = NIGHTS[n];
-    S = { night:n, feats:new Set(N.feats), limit:N.limit, queue:buildQueue(n), i:0, score:0, lives:3, log:[], hl:null, solvedIds:[], pausedAt:0,
-          locked:true, resolved:false, advancing:false, frac:1, t0:0, relax:q('#igd-relax').checked };
     E.title.hidden = true; E.end.hidden = true; E.memo.hidden = true;
     setPlaying(true);
     q('.hud-brand small').textContent = n === HARD ? 'MODE SULIT · SEMUA DIACAK' : `MALAM ${n} · ${N.title.toUpperCase()}`;
     E.lens.hidden = !S.feats.has('lup');
     E.bar.classList.toggle('off', S.relax);
     DESK.reset();
+  }
+
+  function start(n){
+    Sfx.unlock();
+    n = Math.min(Math.max(+n || 1, 1), HARD);
+    const N = NIGHTS[n];
+    const now = Date.now();
+    S = { sid: now.toString(36) + '-' + Math.random().toString(36).slice(2, 7), startedAt: now,
+          night:n, feats:new Set(N.feats), limit:N.limit, queue:buildQueue(n), i:0, score:0, lives:3, log:[], hl:null, solvedIds:[], pausedAt:0,
+          locked:true, resolved:false, advancing:false, frac:1, t0:0, relax:q('#igd-relax').checked };
+    enterPlayUI(n);
     showDoc();
+    saveActiveSession();
+  }
+
+  function resumeSession(sv){
+    const snap = sv || Session.read();
+    if (!snap) { renderNights(); return false; }
+    Sfx.unlock();
+    const n = Math.min(Math.max(+snap.night || 1, 1), HARD);
+    const N = NIGHTS[n];
+    q('#igd-relax').checked = !!snap.relax;
+    S = { sid: snap.sid, startedAt: snap.startedAt,
+          night: n, feats: new Set(N.feats), limit: snap.limit || N.limit,
+          queue: snap.queue, i: snap.i, score: snap.score, lives: snap.lives,
+          log: [...snap.log], hl: snap.hl || null, solvedIds: [...snap.solvedIds], pausedAt: 0,
+          locked: true, resolved: false, advancing: false, frac: 1, t0: 0, relax: !!snap.relax };
+    enterPlayUI(n);
+    showDoc({ remMs: snap.remMs, hl: snap.hl });
+    saveActiveSession();
+    return true;
   }
 
   function clockText(){
@@ -824,7 +940,25 @@
 
   /* ================= MALAM: PILIH, MEMO, MULAI ================= */
   const BOSS = {sk:1, hair:'bob', hc:'#4a3a32', glasses:1, shirt:'#f4f4f4'};
+  function renderResume(){
+    if (!E.resume) return;
+    const sv = Session.read();
+    if (!sv) { E.resume.hidden = true; E.resume.innerHTML = ''; return; }
+    E.resume.hidden = false;
+    E.resume.innerHTML = `<div class="igd-resume-card">
+      <div class="igd-resume-info">
+        <span class="igd-resume-tag">Shift tersimpan</span>
+        <b>${nightName(sv.night)} · Berkas ${sv.i + 1}/${sv.queue.length}</b>
+        <small>Skor ${sv.score} · Nyawa ${sv.lives}/3 · ${sv.relax ? 'Mode santai' : 'Sisa ' + fmtRemClock(sv.remMs)}</small>
+      </div>
+      <div class="igd-resume-actions">
+        <button type="button" class="igd-btn igd-btn-sm" data-act="resume">Lanjutkan</button>
+        <button type="button" class="mini-btn" data-act="discard">Hapus</button>
+      </div>
+    </div>`;
+  }
   function renderNights(){
+    renderResume();
     E.nights.innerHTML = NIGHTS.slice(1, HARD).map((N, i) => {
       const n = i + 1, lock = false, best = PROG.best[n], done = PROG.done[n];
       return `<button class="night${lock ? ' locked' : ''}${done ? ' done' : ''}" ${lock ? 'disabled' : `data-act="memo" data-n="${n}"`}>
@@ -851,6 +985,8 @@
     E.memo.scrollTop = 0;
   }
   function showMenu(){
+    pauseTimer();
+    if (playing && S) saveActiveSession();
     clearInterval(tid); setPlaying(false); renderNights();
     E.memo.hidden = true; E.end.hidden = true; E.title.hidden = false;
   }
@@ -1046,9 +1182,10 @@
     };
   })();
 
-  function showDoc(){
+  function showDoc(opts){
     const d = S.queue[S.i];
-    S.hl = null; S.locked = false; S.resolved = false; S.frac = 1; S.pausedAt = 0;
+    const restoreHl = opts && typeof opts.hl === 'string' && opts.hl ? opts.hl : null;
+    S.hl = restoreHl; S.locked = false; S.resolved = false; S.frac = 1; S.pausedAt = 0;
     setInspect(false, true);
     root.classList.add('can-mark');
     E.acc.disabled = E.tolak.disabled = false;
@@ -1058,7 +1195,11 @@
     E.gelang.hidden = !f.has('gelang'); if (f.has('gelang')) renderGelang(d);
     E.lab.hidden = !(f.has('lab') && d.lab); if (!E.lab.hidden) renderLab(d);
     E.jkn.hidden = !f.has('jkn'); if (f.has('jkn')) renderJkn(d);
-    DESK.apply(); setIdle(idleText()); hud(); startTimer();
+    if (restoreHl) {
+      const targetLn = root.querySelector(`.ln[data-id="${restoreHl}"]`);
+      if (targetLn) targetLn.classList.add('hl'); else S.hl = null;
+    }
+    DESK.apply(); syncHint(); hud(); startTimer(opts && opts.remMs);
     if (S.i > 0 && !FIT.on){ const bt = q('.booth').getBoundingClientRect().top; if (bt < -40 || bt > window.innerHeight * .6) q('.booth').scrollIntoView({behavior:'smooth', block:'start'}); }
   }
 
@@ -1078,10 +1219,16 @@
     renderTimer(leftMs / 1000);
     if (leftMs <= 0) timeUp();
   }
-  function startTimer(){
+  function startTimer(initialRemMs){
     clearInterval(tid);
-    S.t0 = Date.now(); E.fill.style.width = '100%'; E.bar.classList.remove('low');
-    renderTimer(S.limit);
+    const totalMs = S.limit * 1000;
+    const remMs = (typeof initialRemMs === 'number' && isFinite(initialRemMs) && initialRemMs > 0)
+      ? Math.min(totalMs, Math.max(1000, initialRemMs)) : totalMs;
+    S.t0 = Date.now() - (totalMs - remMs);
+    S.frac = remMs / totalMs;
+    E.fill.style.width = (S.frac * 100) + '%';
+    E.bar.classList.toggle('low', !S.relax && remMs <= 60000);
+    renderTimer(remMs / 1000);
     if (S.relax) return;
     tid = setInterval(tickTimer, 100);
   }
@@ -1168,6 +1315,7 @@
       <div class="verdict"><span class="igd-chip">${ptsTxt}</span><h3>${r.head}</h3><p>${r.sub}</p></div>
       <div class="igd-why"><b>${flawed ? 'Kesalahan yang benar' : 'Kenapa aman'}</b><p>${esc(d.why)}</p></div>
       <button class="btn-next" data-act="next">${last ? 'Lihat laporan shift' : 'Berkas berikutnya'} <kbd>Enter</kbd></button></div>`;
+    if (!last) saveActiveSession();
   }
 
   function next(){
@@ -1177,7 +1325,8 @@
     E.people.classList.remove('in'); E.people.classList.add('out'); E.bubble.hidden = true; clearTimeout(sayT);
     setTimeout(() => {
       S.advancing = false; S.i++;
-      if (S.lives <= 0 || S.i >= S.queue.length) finish(); else showDoc();
+      if (S.lives <= 0 || S.i >= S.queue.length) finish();
+      else { showDoc(); saveActiveSession(); }
     }, 380);
   }
 
@@ -1192,6 +1341,7 @@
     else { grade = 'Perlu Evaluasi Ulang'; note = 'Ulangi malam ini dan perhatikan pola kesalahannya di rekap.'; }
 
     setPlaying(false);
+    Session.clear(S.sid);
     const rec = Progress.record({ night:n, score:S.score, ok, total, alive, solvedIds:S.solvedIds });
     PROG = rec.p;
     const prev = rec.prev, record = rec.isBest;
@@ -1228,6 +1378,7 @@
       E.end.querySelector('.igd-big')?.insertAdjacentHTML('afterend', `<p class="igd-xp-note">+${xpRes.gained} XP tercatat${rec.newIds.length ? ` · ${rec.newIds.length} kasus baru dikuasai` : ''}</p>`);
     }
     E.end.hidden = false; E.end.scrollTop = 0;
+    S = null;
   }
 
   function openCalc(){
@@ -1256,6 +1407,7 @@
     root.querySelectorAll('.ln.hl').forEach(n => n.classList.remove('hl'));
     if (S.hl === id) S.hl = null; else { S.hl = id; ln.classList.add('hl'); Sfx.squeak(); }
     syncHint();
+    saveActiveSession();
   };
   E.mat.addEventListener('click', markLine);
 
@@ -1265,6 +1417,8 @@
     const b = e.target.closest('[data-act]'); if (!b) return;
     const a = b.dataset.act;
     if (a === 'exit'){ exitToHome(); return; }
+    else if (a === 'resume') resumeSession();
+    else if (a === 'discard'){ const sv = Session.read(); Session.clear(sv && sv.sid); S = null; renderNights(); }
     else if (a === 'memo') showMemo(+b.dataset.n);
     else if (a === 'go') start(+b.dataset.n);
     else if (a === 'menu') showMenu();
@@ -1279,7 +1433,7 @@
     else if (a === 'mute') E.mute.textContent = 'Suara: ' + (Sfx.toggle() ? 'mati' : 'nyala');
     else if (a === 'clear'){
       if (!S || S.locked) return;
-      root.querySelectorAll('.ln.hl').forEach(n => n.classList.remove('hl')); S.hl = null; syncHint();
+      root.querySelectorAll('.ln.hl').forEach(n => n.classList.remove('hl')); S.hl = null; syncHint(); saveActiveSession();
     }
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   });
@@ -1305,6 +1459,16 @@
   function setPlaying(on){
     playing = !!on;
     try { document.body.classList.toggle('quiz-context', (playing || FIT.on) && isOpen()); } catch {}
+  }
+  function persistBeforeLeave(){
+    pauseTimer();
+    if (!playing || !S) return;
+    const lastResolved = S.resolved && (S.lives <= 0 || S.i >= S.queue.length - 1);
+    if (lastResolved) {
+      finish();
+    } else {
+      saveActiveSession();
+    }
   }
   function exitToHome(){
     onLeave();
@@ -1343,13 +1507,13 @@
     renderNights();
     FIT.update();
     try { document.body.classList.toggle('quiz-context', playing || FIT.on); } catch {}
-    if (playing) {
+    if (playing && S) {
       resumeTimer();
       requestAnimationFrame(() => { DESK.reset(); DESK.apply(); redrawLink(); });
     }
   }
   function onLeave(){
-    pauseTimer();
+    persistBeforeLeave();
     E.book.classList.remove('open');
     FIT.disable();
     try { document.body.classList.remove('quiz-context'); } catch {}
@@ -1357,8 +1521,12 @@
   let playing = false;
   window.addEventListener('clined:sync-applied', () => { PROG = loadP(); renderNights(); });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) pauseTimer();
+    if (document.hidden) { pauseTimer(); if (playing && S) saveActiveSession(); }
     else if (isOpen() && playing) resumeTimer();
+  });
+  window.addEventListener('pagehide', () => {
+    pauseTimer();
+    if (playing && S) saveActiveSession();
   });
   return { onEnter, onLeave, isPlaying(){ return playing; } };
   }
@@ -1373,5 +1541,5 @@
     if (!game) return;
     if (e.detail === 'mejaJagaIgdPage') game.onEnter(); else game.onLeave();
   });
-  window.CLINED_IGD = { open, Progress, isPlaying: () => !!game?.isPlaying() };
+  window.CLINED_IGD = { open, Progress, Session, isPlaying: () => !!game?.isPlaying() };
 })();

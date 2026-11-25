@@ -46,6 +46,7 @@
     'clined_clinical_quest_v1',
     'clined_igd_v1',
     'clined_igd_v2',
+    'clined_igd_session_v1',
     'clined_kedkel_summary_done_v2',
     'clined_kedkel_summary_star_v2',
     'clined_unlocked_achievements_v1',
@@ -997,6 +998,34 @@
           }
         }
         return { value: JSON.stringify(merged), dirty: changed };
+      }
+      if (key === 'clined_igd_session_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
+        if (jsonDeepEqual(loc, srv)) return { value: JSON.stringify(srv), dirty: false };
+        const lTomb = Boolean(loc.clearedAt || !Array.isArray(loc.queue) || !loc.queue.length);
+        const sTomb = Boolean(srv.clearedAt || !Array.isArray(srv.queue) || !srv.queue.length);
+        const lt = Math.max(Number(loc.updated) || 0, Number(loc.clearedAt) || 0);
+        const st = Math.max(Number(srv.updated) || 0, Number(srv.clearedAt) || 0);
+        const sameSid = Boolean(loc.sid && srv.sid && String(loc.sid) === String(srv.sid));
+        if (lTomb && sTomb) {
+          const win = lt > st ? loc : srv;
+          return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+        }
+        if (lTomb !== sTomb) {
+          const tomb = lTomb ? loc : srv;
+          const active = lTomb ? srv : loc;
+          const tombT = lTomb ? lt : st;
+          const activeStart = Number(active.startedAt) || Number(active.updated) || 0;
+          const win = (sameSid || tombT >= activeStart) ? tomb : active;
+          return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+        }
+        if (sameSid) {
+          const li = Number(loc.i) || 0, si = Number(srv.i) || 0;
+          const ll = Array.isArray(loc.log) ? loc.log.length : 0, sl = Array.isArray(srv.log) ? srv.log.length : 0;
+          const win = (li !== si ? li > si : ll !== sl ? ll > sl : lt >= st) ? loc : srv;
+          return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+        }
+        const win = lt > st ? loc : srv;
+        return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
       }
       if ((key === 'clined_notes_v1' || key === 'clined_resep_best_v1' || key === 'clined_resep_lp_best_v1' || key === 'clined_clinical_quest_v1' || key === 'clined_igd_v1' || key === 'clined_igd_v2' || key === 'clined_duel_claims_v1' || key === 'clined_ann_seen_v1') && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
         const merged = maxMergeDeep(loc, srv);

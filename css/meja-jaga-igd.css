@@ -649,3 +649,14 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .igd-xp-note{margin:8px 0 0;text-align:center;font-size:.84rem;font-weight:800;color:var(--green-d)}
 #mejaJagaIgdPage .igd #igd-timer.low{color:var(--red)!important}
 #mejaJagaIgdPage .igd .drug dt.int{color:var(--yellow-d)}
+#mejaJagaIgdPage .igd .mini-btn.igd-hud-back{color:#fff!important;background:var(--blue)!important;border-color:var(--blue-d)!important;padding:7px 14px;font-size:.8rem;font-weight:900;letter-spacing:.03em;text-transform:none;flex:none}
+#mejaJagaIgdPage .igd .mini-btn.igd-hud-back:hover{filter:brightness(1.06)}
+#mejaJagaIgdPage .igd .igd-resume-slot{margin:0 0 12px}
+#mejaJagaIgdPage .igd .igd-resume-card{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;border-radius:18px;background:var(--green-l);border:2px solid var(--green);border-bottom-width:5px}
+#mejaJagaIgdPage .igd .igd-resume-info{display:flex;flex-direction:column;gap:2px;text-align:left}
+#mejaJagaIgdPage .igd .igd-resume-tag{display:inline-block;align-self:flex-start;padding:1px 8px;border-radius:99px;background:var(--green);color:#fff;font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+#mejaJagaIgdPage .igd .igd-resume-info b{font-size:.96rem;font-weight:900;color:var(--ink)}
+#mejaJagaIgdPage .igd .igd-resume-info small{font-size:.76rem;font-weight:800;color:var(--green-d)}
+#mejaJagaIgdPage .igd .igd-resume-actions{display:flex;align-items:center;gap:8px;flex:none}
+#mejaJagaIgdPage .igd .igd-btn.igd-btn-sm{display:inline-flex!important;width:auto!important;padding:9px 18px;font-size:.82rem;border-radius:14px;box-shadow:0 4px 0 var(--green-d)}
+#mejaJagaIgdPage .igd .igd-btn.igd-btn-sm:active{transform:translateY(3px);box-shadow:0 1px 0 var(--green-d)}
