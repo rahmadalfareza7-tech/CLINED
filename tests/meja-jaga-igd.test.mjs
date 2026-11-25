@@ -40,10 +40,12 @@ function loadModule(initialStore = {}) {
     console
   });
   vm.runInContext(readRel('js/meja-jaga-igd-data.js'), ctx);
+  vm.runInContext(readRel('js/meja-jaga-igd-gen.js'), ctx);
   vm.runInContext(readRel('js/meja-jaga-igd.js'), ctx);
   return {
     CLINED_IGD: ctx.window.CLINED_IGD,
     DATA: ctx.window.CLINED_IGD_DATA,
+    GEN: ctx.window.CLINED_IGD_GEN,
     store
   };
 }
@@ -246,7 +248,7 @@ test('Verified drug & clinical guidelines integrity: >= 65 unique drugs with ful
 
   // Spot-check key clinical guideline verifications
   const byName = n => drugs.find(x => x.n.toLowerCase().includes(n.toLowerCase()));
-  assert.equal(drugs.length, 81, 'Expected 81 verified drugs in handbook');
+  assert.equal(drugs.length, 85, 'Expected 85 verified drugs in handbook');
   assert.match(byName('Atropin').d, /1 mg IV/i, 'Atropin adult ACLS dose should reflect 1 mg IV');
   assert.match(byName('Diazepam').a, /12 kg/i, 'Diazepam pediatric rectal cutoff should match IDAI (12 kg)');
   assert.match(byName('Magnesium sulfat').kh, /RR ≥ 16/i, 'MgSO4 monitoring should require RR >= 16/min (PNPK POGI)');
@@ -254,6 +256,7 @@ test('Verified drug & clinical guidelines integrity: >= 65 unique drugs with ful
   assert.match(byName('Insulin reguler').d, /3,3/i, 'DKA insulin should require K >= 3.3 mmol/L');
   assert.match(byName('Fenitoin').d, /NaCl 0,9%/i, 'Phenytoin should specify NaCl 0.9% dilution only');
   assert.ok(byName('Amoksisilin–klavulanat') && byName('Simvastatin') && byName('Alopurinol') && byName('Kloramfenikol') && byName('Doksisiklin') && byName('Glibenklamid'));
+  assert.ok(byName('Loperamid') && byName('Klorfeniramin') && byName('Kolkisin') && byName('Klorheksidin'));
   assert.ok(byName('Warfarin') && byName('Vitamin K1') && byName('Spironolakton') && byName('Asam traneksamat') && byName('N-asetilsistein') && byName('KCl'));
 });
 
@@ -269,15 +272,139 @@ test('SKDI Dokter Umum case scope: no specialist-only ICU/subspecialty cases rem
   }
 });
 
+test('Procedural SKDI case generator: 600+ randomized cases across nights 1-6 pass all structural, clinical & identity invariants', () => {
+  const { DATA, GEN } = loadModule();
+  assert.ok(GEN && typeof GEN.generate === 'function', 'CLINED_IGD_GEN must be loaded');
+  const st = GEN.stats();
+  assert.ok(st.scenarios >= 12, `Expected >= 12 scenarios, got ${st.scenarios}`);
+  assert.ok(st.nameCombinations >= 2000, `Expected >= 2000 name combinations, got ${st.nameCombinations}`);
+
+  // Deterministic PRNG (Mulberry32) so test is 100% reproducible
+  let seed = 0x20261125;
+  const rng = () => {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
+  const { TYPES, TOPICS, WIL, FASKES, GAME } = DATA;
+  const age = iso => {
+    const [y, m, d] = iso.split('-').map(Number);
+    let a = GAME.y - y;
+    if (GAME.m < m || (GAME.m === m && GAME.d < d)) a--;
+    return a;
+  };
+  const validExtraIds = new Set([
+    'ktp-nama', 'ktp-ttl', 'ktp-jk', 'ktp-alamat', 'ktp-foto', 'ktp-kk', 'ktp-kepala',
+    'ktp-agama', 'ktp-kawin', 'ktp-kerja', 'ktp-wn', 'ktp-berlaku',
+    'gelang-nama', 'gelang-lahir',
+    'lab-id',
+    'jkn-no', 'jkn-nama', 'jkn-lahir', 'jkn-faskes', 'jkn-status'
+  ]);
+  const minNight = d => d.kind === 'id' ? 2 : d.kind === 'gelang' ? 3 : (d.kind === 'lab' || d.needs === 'lab') ? 4 : d.needs === 'jkn' ? 5 : 1;
+
+  const seenErrKinds = new Set();
+  const seenTplIds = new Set();
+  const seenNamesGlobal = new Set();
+  const scenarioErrMap = new Map();
+
+  const casesPerCombo = [
+    { night: 1, buckets: ['clin', 'safe'] },
+    { night: 2, buckets: ['clin', 'id', 'safe'] },
+    { night: 3, buckets: ['clin', 'id', 'gelang', 'safe'] },
+    { night: 4, buckets: ['clin', 'id', 'gelang', 'lab', 'safe'] },
+    { night: 5, buckets: ['clin', 'id', 'gelang', 'lab', 'safe'] },
+    { night: 6, buckets: ['flaw', 'safe', 'clin', 'id', 'gelang', 'lab'] }
+  ];
+
+  let total = 0;
+  for (const { night, buckets } of casesPerCombo) {
+    for (let run = 0; run < 20; run++) {
+      const usedNames = new Set();
+      const usedScenarios = new Set();
+      const usedErrTypes = new Set();
+      for (const bucket of buckets) {
+        const d = GEN.generate({ night, bucket, usedNames, usedScenarios, usedErrTypes, rng });
+        total++;
+        assert.ok(d && d.pt && d.ktp && d.appear, `Generated null/incomplete doc for night ${night} bucket ${bucket}`);
+        assert.ok(TYPES[d.type], `Invalid type ${d.type}`);
+        assert.ok(TOPICS[d.topic], `Invalid topic ${d.topic}`);
+        assert.ok(WIL[d.ktp.wil] && FASKES[d.ktp.wil], `Invalid wil ${d.ktp.wil}`);
+        if (d.idx?.wil) assert.ok(WIL[d.idx.wil], `Invalid idx.wil ${d.idx.wil}`);
+        assert.ok(d.appear.look && typeof d.appear.say === 'string' && d.appear.say.length >= 5);
+        assert.ok(typeof d.why === 'string' && d.why.length >= 30, `Short why on ${d.tplId}`);
+        assert.ok(typeof d.tplId === 'string' && d.tplId.startsWith('gen-'), `Expected bounded tplId, got ${d.tplId}`);
+        assert.ok(minNight(d) <= night, `Case ${d.tplId} (minNight ${minNight(d)}) leaked into night ${night}`);
+
+        const effLahir = d.idx?.lahir || d.pt.lahir;
+        const effAge = age(effLahir);
+        assert.ok(effAge >= 1 && effAge <= 100, `Invalid effAge ${effAge} for ${d.pt.nama} (${d.tplId})`);
+        if (effAge < 17) {
+          assert.ok(d.ktp.kk && d.ktp.kepala, `Child KIA ${d.tplId} must have kk & kepala`);
+        } else {
+          assert.ok((d.idx?.kawin || d.ktp.kawin) && (d.idx?.kerja || d.ktp.kerja), `Adult KTP ${d.tplId} must have kawin & kerja`);
+        }
+
+        const lineIds = new Set(['id']);
+        for (const sec of d.sections) for (const l of sec.lines) lineIds.add(l.id);
+        const flaws = [].concat(d.flaw || []);
+        if (bucket === 'safe') assert.equal(flaws.length, 0, `Safe bucket produced flaw on ${d.tplId}`);
+        else assert.ok(flaws.length >= 1, `Flaw bucket ${bucket} produced safe doc ${d.tplId}`);
+        for (const fid of flaws) {
+          assert.ok(lineIds.has(fid) || validExtraIds.has(fid), `Invalid flaw id "${fid}" in ${d.tplId}`);
+          if (fid === 'ktp-foto') {
+            assert.ok(d.appear.foto, `Missing appear.foto on ${d.tplId}`);
+            assert.ok(effAge >= 5, `ktp-foto flaw requires age >= 5 on ${d.tplId}`);
+            assert.notDeepEqual(d.appear.foto, d.appear.look, `ktp-foto must visually differ from look on ${d.tplId}`);
+          }
+          if (fid === 'lab-id') {
+            assert.ok(d.lab && d.lab.ident, `lab-id flaw requires lab.ident on ${d.tplId}`);
+          }
+        }
+        if (d.kind === 'lab' || d.needs === 'lab') {
+          assert.ok(d.lab && Array.isArray(d.lab.rows) && d.lab.rows.length >= 3, `Lab case ${d.tplId} must have >= 3 lab rows`);
+        }
+
+        seenErrKinds.add(d.errorKind);
+        seenTplIds.add(d.tplId);
+        seenNamesGlobal.add(d.pt.nama);
+        if (!scenarioErrMap.has(d.scenarioId)) scenarioErrMap.set(d.scenarioId, new Set());
+        scenarioErrMap.get(d.scenarioId).add(d.errorKind);
+      }
+      assert.equal(usedNames.size, buckets.length, 'Every patient in a shift must have a unique name');
+    }
+  }
+
+  assert.ok(total >= 500, `Expected >= 500 stress-tested cases, ran ${total}`);
+  assert.ok(seenNamesGlobal.size >= 300, `Expected high patient name diversity, got ${seenNamesGlobal.size}`);
+  // All user-requested error templates must be actively generated
+  for (const required of ['dosis-x10', 'satuan-tertukar', 'alergi-golongan', 'kontra-kehamilan', 'kontra-ginjal', 'interaksi-obat', 'rute-salah', 'ktp-keluarga', 'identitas-dokumen', 'lab-abnormal', 'aman']) {
+    assert.ok(seenErrKinds.has(required), `Missing generated error category: ${required}`);
+  }
+  // Confirm Warfarin + NSAID interaction & KTP keluarga templates were generated
+  assert.ok(seenTplIds.has('gen-interaksi-warfarin-nsaid'), 'Expected Warfarin + NSAID interaction template');
+  assert.ok(
+    seenTplIds.has('gen-ktp-keluarga-orangtua') || seenTplIds.has('gen-ktp-keluarga-saudara') || seenTplIds.has('gen-ktp-keluarga-pasangan'),
+    'Expected KTP keluarga templates'
+  );
+  // Confirm the same clinical scenario produces multiple different error kinds + safe cases
+  assert.ok(scenarioErrMap.get('ispa_faringitis').size >= 4, 'ispa_faringitis should vary across >= 4 error/safe types');
+  assert.ok(scenarioErrMap.get('asma_bronkial').size >= 4, 'asma_bronkial should vary across >= 4 error/safe types');
+  assert.ok(scenarioErrMap.get('lab_ginjal_metabolik').size >= 4, 'lab_ginjal_metabolik should vary across >= 4 error/safe types');
+});
+
 test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS with balanced braces, no external URLs', () => {
   const css = readRel('css/meja-jaga-igd.css');
   const js = readRel('js/meja-jaga-igd.js');
   const dataJs = readRel('js/meja-jaga-igd-data.js');
+  const genJs = readRel('js/meja-jaga-igd-gen.js');
 
   assert.doesNotMatch(css, /url\(\s*['"]?https?:\/\//i, 'CSS must not load external url() (blocked by CSP)');
   assert.doesNotMatch(css, /@import\b/i, 'CSS must not use @import');
-  assert.doesNotMatch(js + dataJs, /fonts\.googleapis\.com|fonts\.gstatic\.com/i);
+  assert.doesNotMatch(js + dataJs + genJs, /fonts\.googleapis\.com|fonts\.gstatic\.com/i);
   assert.doesNotMatch(css, /(^|\s)&[.:#\[]/, 'CSS must be flat (no nesting) for older Safari compatibility');
+  assert.match(css, /\.mark\{[^}]*white-space:nowrap/, 'Stamp .mark must use white-space:nowrap so ACC/TOLAK never wraps');
 
   let depth = 0;
   for (const ch of css) {
@@ -295,7 +422,7 @@ test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS wit
   }
 });
 
-test('App wiring: view, menu, lazy SKDI bundle (data+engine), timer HUD, exit controls, BUSY_VIEWS, SW parity, and font MIME', () => {
+test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, exit controls, BUSY_VIEWS, SW parity, and font MIME', () => {
   const appHtml = readRel('app.html');
   const lazyJs = readRel('js/lazy-loader.js');
   const swJs = readRel('sw.js');
@@ -307,9 +434,10 @@ test('App wiring: view, menu, lazy SKDI bundle (data+engine), timer HUD, exit co
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=3/);
-  assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=2/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=4/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=4/);
+  assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
+  assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=5/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);

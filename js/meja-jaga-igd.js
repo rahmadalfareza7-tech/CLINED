@@ -8,7 +8,7 @@
   const LEGACY_KEY = 'igd-meja-jaga-v1';
 
   const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
-  const docId = d => String(d?.pt?.nama || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const docId = d => String(d?.tplId || d?.pt?.nama || '').toLowerCase().replace(/[^a-z0-9:_-]+/g, '-').replace(/^-|-$/g, '');
 
   function sanitizeProgress(raw) {
     const v = isObj(raw) ? raw : {};
@@ -189,7 +189,7 @@
       <div class="cast" id="igd-cast"></div>
       <h1>MEJA JAGA <em>IGD</em></h1>
       <p class="byline">by <b>CLINED</b></p>
-      <p class="igd-lead">Lima malam jaga + Mode Sulit dengan 56 kasus sesuai SKDI dokter umum (5 menit/berkas). Tiap berkas terlihat 95% normal, tapi kadang satu kesalahan fatal terselip di dalamnya. Kamu dokter jaga malam ini. Jangan sampai ada yang lolos.</p>
+      <p class="igd-lead">Lima malam jaga + Mode Sulit dengan generator kasus acak SKDI dokter umum (5 menit/berkas). Pasien, wajah, dan jenis kesalahannya diacak tiap shift — dari dosis ×10, satuan mg/g, alergi segolongan, kontraindikasi, interaksi obat, rute salah, hingga KTP keluarga.</p>
       <div class="nights" id="igd-nights"></div>
       <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa timer)</label>
       <button class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda</button>
@@ -275,9 +275,10 @@
     };
   })();
 
-  /* ================= DATA (dari js/meja-jaga-igd-data.js) ================= */
+  /* ================= DATA & GENERATOR (js/meja-jaga-igd-data.js & js/meja-jaga-igd-gen.js) ================= */
   const DATA = window.CLINED_IGD_DATA;
   if (!DATA) throw new Error('Data Meja Jaga IGD belum dimuat');
+  const GEN = window.CLINED_IGD_GEN || null;
   const {
     TYPES, GAME, GAME_DATE, WIL, FASKES, DOCS, APPEAR,
     TOPICS, TOPIC_ORDER, NIGHTS,
@@ -302,7 +303,7 @@
       nik: NIK(o.wil || k.wil, o.kec || k.kec, lahir, jk, o.sn || k.sn),
       tl: o.tl || k.tl, alamat: o.alamat || k.alamat, agama: o.agama || k.agama,
       kawin: o.kawin || k.kawin, kerja: o.kerja || k.kerja, goldar: o.goldar || k.goldar,
-      kk: k.kk, kepala: k.kepala, kota: WIL[o.wil || k.wil], wil: o.wil || k.wil, photo: !kia || a >= 5
+      kk: o.kk || k.kk, kepala: o.kepala || k.kepala, kota: WIL[o.wil || k.wil], wil: o.wil || k.wil, photo: !kia || a >= 5
     };
     if (kia){
       const until = a < 5 ? 5 : 17;
@@ -327,6 +328,7 @@
   const saveP = p => Progress.write(p);
   let PROG = loadP();
   const recentSet = new Set();
+  const recentTplSet = new Set();
 
   /* ================= PANDUAN LENGKAP ================= */
   const GUIDE = (() => {
@@ -686,7 +688,7 @@
     }
     return `<svg viewBox="0 0 120 140" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${P.join('')}</svg>`;
   }
-  const appear = d => APPEAR[d.pt.nama] || {look:{sk:1}, say:'Tolong, Dok.'};
+  const appear = d => d.appear || APPEAR[d.pt.nama] || {look:{sk:1}, say:'Tolong, Dok.'};
 
   /* ================= LOKET ================= */
   function renderBooth(d){
@@ -824,7 +826,7 @@
       return `<button class="night${lock ? ' locked' : ''}${done ? ' done' : ''}" ${lock ? 'disabled' : `data-act="memo" data-n="${n}"`}>
         <small>Malam</small><b>${n}</b><span>${N.title}</span><em>${lock ? 'Terkunci' : best ? 'Rekor ' + best : 'Belum dimainkan'}</em></button>`;
     }).join('') + `<button class="night hard${PROG.done[HARD] ? ' done' : ''}" data-act="memo" data-n="${HARD}">
-        <b>MODE SULIT</b><span>Semua dokumen dari ${DOCS.length} kasus diacak · 10 berkas · ${fmtLimit(NIGHTS[HARD].limit)}</span><em>${PROG.best[HARD] ? 'Rekor ' + PROG.best[HARD] : 'Belum dimainkan'}</em></button>`;
+        <b>MODE SULIT</b><span>Generator kasus acak SKDI · 10 berkas · ${fmtLimit(NIGHTS[HARD].limit)}</span><em>${PROG.best[HARD] ? 'Rekor ' + PROG.best[HARD] : 'Belum dimainkan'}</em></button>`;
   }
   function showMemo(n){
     const N = NIGHTS[n];
@@ -845,8 +847,8 @@
     E.memo.hidden = true; E.end.hidden = true; E.title.hidden = false;
   }
   function buildQueue(n){
-    const N = NIGHTS[n], used = new Set(), out = [];
-    const ok = d => minNight(d) <= n && !used.has(d);
+    const N = NIGHTS[n], used = new Set(), usedNames = new Set(), usedScenarios = new Set(), usedErrTypes = new Set(), out = [];
+    const ok = d => minNight(d) <= n && !used.has(d) && !usedNames.has(d.pt.nama);
     const pool = key => DOCS.filter(d => ok(d) && (key === 'safe' ? !flawsOf(d).length
       : key === 'flaw' ? flawsOf(d).length
       : key === 'clin' ? flawsOf(d).length && !d.kind
@@ -857,15 +859,42 @@
       return [...fresh, ...stale];
     };
     const mix = N.hard ? (f => [['flaw', f], ['safe', 10 - f]])(6 + Math.floor(Math.random() * 3)) : N.mix;
+    let staticUsed = 0;
+    const maxStatic = GEN ? (N.hard ? 2 : 1) : 99;
     mix.forEach(([key, cnt]) => {
-      const p = preferFresh(pool(key));
-      if (key === 'safe') p.sort((a, b) => (minNight(b) === n) - (minNight(a) === n) || Number(recentSet.has(a.pt.nama)) - Number(recentSet.has(b.pt.nama)));
-      p.slice(0, cnt).forEach(d => { used.add(d); out.push(d); });
+      for (let i = 0; i < cnt; i++) {
+        // Utamakan generator prosedural (~80%+ per shift) agar pasien, wajah, & jenis kesalahan terus berganti
+        const freshStatic = staticUsed < maxStatic ? pool(key).filter(d => !recentSet.has(d.pt.nama)) : [];
+        const pickStatic = !GEN || (freshStatic.length > 0 && Math.random() < 0.22);
+        if (!pickStatic && GEN) {
+          const gd = GEN.generate({ night: n, bucket: key, usedNames, usedScenarios, usedErrTypes, recentTpls: recentTplSet });
+          if (gd) {
+            usedNames.add(gd.pt.nama);
+            out.push(gd);
+            continue;
+          }
+        }
+        const p = preferFresh(pool(key));
+        if (key === 'safe') p.sort((a, b) => (minNight(b) === n) - (minNight(a) === n) || Number(recentSet.has(a.pt.nama)) - Number(recentSet.has(b.pt.nama)));
+        if (p[0]) {
+          used.add(p[0]); usedNames.add(p[0].pt.nama); out.push(p[0]); staticUsed++;
+        } else if (GEN) {
+          const gd = GEN.generate({ night: n, bucket: key, usedNames, usedScenarios, usedErrTypes, recentTpls: recentTplSet });
+          if (gd) { usedNames.add(gd.pt.nama); out.push(gd); }
+        }
+      }
     });
     const want = mix.reduce((s,[,c]) => s + c, 0);
-    while (out.length < want){ const x = preferFresh(DOCS.filter(ok))[0]; if (!x) break; used.add(x); out.push(x); }
+    while (out.length < want){
+      if (GEN) {
+        const gd = GEN.generate({ night: n, bucket: 'flaw', usedNames, usedScenarios, usedErrTypes, recentTpls: recentTplSet });
+        if (gd) { usedNames.add(gd.pt.nama); out.push(gd); continue; }
+      }
+      const x = preferFresh(DOCS.filter(ok))[0]; if (!x) break; used.add(x); usedNames.add(x.pt.nama); out.push(x);
+    }
     if (recentSet.size > 32) recentSet.clear();
-    out.forEach(d => recentSet.add(d.pt.nama));
+    if (recentTplSet.size > 24) recentTplSet.clear();
+    out.forEach(d => { if (!d.tplId) recentSet.add(d.pt.nama); });
     return shuffle(out);
   }
   function idleText(){

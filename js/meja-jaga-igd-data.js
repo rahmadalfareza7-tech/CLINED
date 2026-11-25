@@ -1,6 +1,6 @@
 /* CLINED · Meja Jaga IGD — Data Kasus (56 kasus SKDI dokter umum), Karakter Loket, Malam (5 menit/berkas),
-   serta Panduan Klinis Terverifikasi (81 obat, Nilai Lab, Cairan, Pediatri, Rumus, Tatalaksana IGD, Identitas).
-   Dimuat lazy sebelum js/meja-jaga-igd.js via js/lazy-loader.js (bundle "igd"). */
+   serta Panduan Klinis Terverifikasi (85 obat, Nilai Lab, Cairan, Pediatri, Rumus, Tatalaksana IGD, Identitas).
+   Dimuat lazy sebelum js/meja-jaga-igd-gen.js & js/meja-jaga-igd.js via js/lazy-loader.js (bundle "igd"). */
 (() => {
   'use strict';
 
@@ -699,12 +699,12 @@
         '<b>Jangan menolak</b> berkas karena masalah JKN, misalnya kartu tidak aktif atau kartu milik keluarga. Dalam keadaan gawat darurat, rumah sakit dilarang menolak pasien atau mendahulukan urusan administrasi (UU 17/2023 Pasal 174).',
         'Semua aturan malam 1–4 tetap berlaku. Total 8 berkas, masing-masing 5 menit.']},
     {title:'Mode Sulit', hard:true, limit:300, mix:[['flaw',7],['safe',3]], feats:['ktp','lup','wajah','gelang','lab','jkn'],
-      memo:['Semua jenis berkas dan dokumen dari <b>56 kasus SKDI dokter umum</b> diacak dalam satu malam: resep, SOAP, instruksi, KTP/KIA, wajah, gelang, hasil lab, dan kartu JKN.',
-        'Jumlah berkas yang salah juga acak. Waktu per berkas <b>5 menit</b>.',
-        'Semua aturan malam 1–5 berlaku tanpa petunjuk daftar cek di bawah meja.']}
+      memo:['Menggunakan <b>generator kasus acak SKDI dokter umum</b>: pasien (wajah, nama, tanggal lahir, alamat) dan jenis kesalahannya diacak dari templat sehingga diagnosis yang sama bisa punya kesalahan berbeda.',
+        'Semua jenis kesalahan bisa muncul: dosis ×10, satuan mg/g tertukar, alergi segolongan, kontraindikasi kehamilan/ginjal, interaksi obat (warfarin + NSAID, ISDN + sildenafil), rute salah, hingga KTP keluarga & hasil lab.',
+        'Jumlah berkas yang salah juga acak. Waktu per berkas <b>5 menit</b>, tanpa petunjuk daftar cek di bawah meja.']}
   ];
 
-  /* ================= PANDUAN OBAT TERVERIFIKASI (81 OBAT) =================
+  /* ================= PANDUAN OBAT TERVERIFIKASI (85 OBAT) =================
      Struktur tiap obat:
      n   = Nama generik
      alt = Sinonim / nama lain (opsional, ikut dicari)
@@ -1053,7 +1053,40 @@
     kh:'Wajib turunkan dosis awal pada gagal ginjal (menurunkan risiko SJS/TEN!).',
     ki:'Memulai terapi saat serangan gout akut (memperburuk nyeri — atasi inflamasi dulu), riwayat hipersensitivitas/SJS/DRESS alopurinol.',
     int:'Azatioprin/6-merkaptopurin (toksisitas sumsum tulang fatal!), ampisilin/amoksisilin (risiko ruam).',
-    es:'Ruam berat (SJS/TEN/DRESS — hentikan segera bila muncul ruam!), pemicu flare gout di awal terapi.'}
+    es:'Ruam berat (SJS/TEN/DRESS — hentikan segera bila muncul ruam!), pemicu flare gout di awal terapi.'},
+
+   {n:'Loperamid', alt:'Antidiare antimotilitas', cls:'Antidiare (agonis opioid perifer saluran cerna)',
+    ind:'Diare akut non-infektif / tanpa demam & darah pada DEWASA (hanya simtomatik sementara).',
+    d:'Dewasa: 4 mg PO awal, lalu 2 mg tiap BAB cair (maks 16 mg/hari, stop bila 48 jam tidak membaik).',
+    a:'KONTRAINDIKASI rutin pada anak balita (< 2 th kontraindikasi absolut; WHO/IDAI melarang antimotilitas pada diare akut anak!).',
+    kh:'Hindari kehamilan trimester 1 & menyusui.',
+    ki:'Anak balita / diare akut anak (risiko ileus paralitik, megakolon toksik, depresi SSP!), disentri (diare berdarah + demam tinggi), kolitis pseudomembran, ileus.',
+    es:'Konstipasi, kram perut, pusing; overdosis memicu aritmia pemanjangan QT & depresi napas.'},
+
+   {n:'Klorfeniramin (CTM)', alt:'Chlorpheniramine maleate antihistamin', cls:'Antihistamin H1 generasi 1',
+    ind:'Rinitis alergi, urtikaria ringan, reaksi alergi kulit.',
+    d:'4 mg PO tiap 4–6 jam (maks 24 mg/hari). Hati-hati satuan: mg bukan g!',
+    a:'2–5 th: 1 mg tiap 4–6 jam (maks 6 mg/hr); 6–12 th: 2 mg tiap 4–6 jam (maks 12 mg/hr).',
+    kh:'Hati-hati lansia (sedasi, delirium, retensi urin — Kriteria Beers!). Relatif aman pada kehamilan bila diperlukan.',
+    ki:'Glaukoma sudut sempit, hipertrofi prostat dengan retensi urin, serangan asma akut, bayi baru lahir/prematur.',
+    es:'Mengantuk berat, mulut kering, pandangan kabur, pusing.'},
+
+   {n:'Kolkisin', alt:'Colchicine gout akut', cls:'Antiinflamasi spesifik gout',
+    ind:'Serangan artritis gout akut (efektif bila diberikan < 24–36 jam sejak awitan), profilaksis flare saat memulai alopurinol.',
+    d:'Gout akut: 1 mg (atau 1,2 mg) PO awal, diikuti 0,5 mg (atau 0,6 mg) 1 jam kemudian (maks 1,5–1,8 mg hari pertama), lalu 0,5 mg 1–2×/hari hingga reda.',
+    a:'Jarang dipakai pada anak (hanya indikasi khusus FMF oleh spesialis).',
+    kh:'Turunkan dosis drastis / hindari pada eGFR < 30 atau gangguan hati berat.',
+    ki:'Gagal ginjal berat (CrCl < 30) atau gagal hati berat bersama inhibitor CYP3A4/P-gp (klaritromisin, ketokonazol), diskrasia darah.',
+    int:'Klaritromisin/eritromisin/antijamur azol (toksisitas fatal!), statin (risiko miopati/rabdomiolisis).',
+    es:'Diare/mual/muntah (tanda awal toksisitas — segera hentikan!), mielosupresi pada overdosis.'},
+
+   {n:'Klorheksidin 0,2% (Obat Kumur)', alt:'Chlorhexidine gargle antiseptik mulut', cls:'Antiseptik topikal rongga mulut',
+    ind:'Gingivitis, stomatitis, adjuvan tonsilofaringitis / kebersihan rongga mulut.',
+    d:'Kumur 10–15 mL selama 30–60 detik 2×/hari lalu BUANG (JANGAN DITELAN!).',
+    a:'Hanya anak ≥ 6–12 tahun yang sudah mampu berkumur tanpa menelan.',
+    kh:'Aman topikal pada kehamilan bila tidak tertelan.',
+    ki:'Ditelan / rute oral (PO), hipersensitivitas klorheksidin.',
+    es:'Pewarnaan gigi kecokelatan sementara, perubahan rasa kecap, iritasi lambung bila tertelan.'}
   ];
 
   /* Bagian B: Kardiovaskular, Antikoagulan, Napas, Endokrin, Emergensi, Neuro, Obstetri, Elektrolit */
@@ -1550,21 +1583,22 @@
 
   const QUICK = [
    {h:'Checklist 5 BENAR tiap memeriksa berkas', items:[
-    'Benar pasien: cocokkan nama, tanggal lahir, alamat, wajah di loket, gelang, dan identitas lembar lab.',
+    'Benar pasien: cocokkan nama, tanggal lahir, alamat, wajah di loket, gelang, dan identitas lembar lab (waspada KTP/KIA milik keluarga!).',
     'Benar obat & golongan: cocokkan kotak alergi (penisilin → amoksisilin / co-amoxiclav / ampisilin; sulfa → kotrimoksazol).',
-    'Benar dosis & satuan: 1 g = 1.000 mg, 1 mg = 1.000 mcg; hitung mg/kgBB anak & batas lansia (ketorolak ≤ 60 mg/hr bila ≥ 65 th atau < 50 kg).',
-    'Benar rute & kecepatan: epinefrin anafilaksis IM paha lateral (bukan IV 1:1.000!), KCl encer ≤ 40 mEq/L perifer & JANGAN bolus.',
-    'Benar kondisi & lab: cek kehamilan, asma, fungsi ginjal/hati, perdarahan/trombosit, darah lengkap, dan nilai lab H/L.']},
+    'Benar dosis & satuan: 1 g = 1.000 mg, 1 mg = 1.000 mcg; waspada dosis ×10, hitung mg/kgBB anak & batas lansia (ketorolak ≤ 60 mg/hr bila ≥ 65 th atau < 50 kg).',
+    'Benar rute & kecepatan: epinefrin anafilaksis IM paha lateral (bukan IV 1:1.000!), KCl encer ≤ 40 mEq/L perifer & JANGAN bolus, nifedipin PO (bukan sublingual!), larutan nebu hanya inhalasi, obat kumur jangan ditelan.',
+    'Benar kondisi & lab: cek kehamilan, asma, obat rutin (warfarin/sildenafil), fungsi ginjal/hati, perdarahan/trombosit, darah lengkap, dan nilai lab H/L.']},
    {h:'Kontraindikasi & interaksi mematikan (SKDI Dokter Umum)', items:[
     'Asma / PPOK: beta-blocker non-selektif (propranolol), labetalol, aspirin/NSAID (bila sensitif).',
     'Kehamilan: ACEi (kaptopril), ARB (candesartan/valsartan), fluorokuinolon (siprofloksasin), doksisiklin, kloramfenikol (trimester 3), statin, warfarin, asam valproat, NSAID trimester 3 (≥ 20 minggu).',
     'Gagal ginjal (eGFR < 30 / AKI) & lansia: metformin (eGFR < 30/AKI), NSAID/ketorolak (eGFR < 30), glibenklamid (lansia / eGFR < 60), spironolakton.',
+    'Interaksi Warfarin: NSAID (ibuprofen, diklofenak, ketorolak), kotrimoksazol, & metronidazol → risiko perdarahan GI/otak berat & lonjakan INR!',
     'Penyakit hati aktif (hepatitis akut, SGOT/SGPT > 3× ULN): statin (simvastatin/atorvastatin) KONTRAINDIKASI absolut; batasi paracetamol.',
     'Perdarahan GI / demam dengue (trombosit rendah): NSAID (ibuprofen, diklofenak, ketorolak), aspirin, antikoagulan.',
     'Depresi sumsum tulang / leukopenia berat: Kloramfenikol KONTRAINDIKASI (risiko pansitopenia & anemia aplastik).',
     'Serangan gout akut (podagra): JANGAN mulai alopurinol saat flare akut (memperberat nyeri — atasi inflamasi dulu).',
     'Nitrat (ISDN/GTN) + sildenafil (24 jam) / tadalafil (48 jam) ATAU hipotensi (TDS < 90): HIPOTENSI FATAL.',
-    'Anak: aspirin pada demam virus (sindrom Reye!), tramadol (< 12 th), doksisiklin (< 8 th), fluorokuinolon (< 18 th).',
+    'Anak: aspirin pada demam virus (sindrom Reye!), loperamid pada diare anak, tramadol (< 12 th), doksisiklin (< 8 th), fluorokuinolon (< 18 th).',
     'Hiperkalemia (K > 5,5): JANGAN beri KCl atau spironolakton! Hipoglikemia (GDS < 70): JANGAN beri insulin!']},
    {h:'Ringkasan tatalaksana IGD & Faskes Primer (SKDI 4A / 3B / 3A)', items:[
     'Anafilaksis (SKDI 4A): Epinefrin 1:1.000 IM paha anterolateral (dewasa 0,3–0,5 mg; anak 0,01 mg/kg maks 0,3 mg) sebagai LINI PERTAMA + O₂ + NaCl 0,9% cepat; steroid/antihistamin hanya adjuvan.',
