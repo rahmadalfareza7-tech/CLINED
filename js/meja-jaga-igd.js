@@ -1031,7 +1031,11 @@
       const W = sf.clientWidth;
       vis().forEach(c => { if (c.offsetLeft > W - 90) place(c, W - 90, c.offsetTop); });
     });
-    return { apply, layout, fit, reset(){ cards.forEach(c => delete c.dataset.placed); }, front(c){ c.style.zIndex = ++z; } };
+    return {
+      apply, layout, fit,
+      reset(){ z = 10; cards.forEach(c => { delete c.dataset.placed; c.style.zIndex = ''; }); },
+      front(c){ if (z > 400){ z = 10; cards.forEach(x => { if (!x.hidden) x.style.zIndex = ZBASE.get(x); }); } c.style.zIndex = ++z; }
+    };
   })();
 
   function showDoc(){

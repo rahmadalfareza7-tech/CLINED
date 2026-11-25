@@ -117,7 +117,7 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .b-q{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:900}
 #mejaJagaIgdPage .igd .b-q b{font-size:1.15rem;margin-left:4px;color:var(--ink)}
 #mejaJagaIgdPage .igd .desk{flex:1;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(12px,2vw,24px);padding:clamp(12px,2vw,24px);align-items:start}
-#mejaJagaIgdPage .igd .surface{position:relative;min-height:720px;border-radius:26px;background:var(--green-l);border:2px solid #c9efb1;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:24px;padding:22px 14px}
+#mejaJagaIgdPage .igd .surface{position:relative;z-index:1;isolation:isolate;min-height:720px;border-radius:26px;background:var(--green-l);border:2px solid #c9efb1;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:24px;padding:22px 14px}
 #mejaJagaIgdPage .igd .surface.bump{animation:igd-bump .18s}
 #mejaJagaIgdPage .igd .surface.free{display:block;padding:0}
 #mejaJagaIgdPage .igd .surface.free .dcard{position:absolute;margin:0;user-select:none;-webkit-user-select:none;touch-action:none;cursor:grab;transition:box-shadow .15s,filter .15s}
@@ -225,7 +225,7 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .handle::after{content:"";position:absolute;left:0;right:0;bottom:0;height:56px;border-radius:16px;background:var(--c);box-shadow:inset 0 -8px 0 rgba(0,0,0,.18)}
 #mejaJagaIgdPage .igd .handle.acc{--c:var(--green)}
 #mejaJagaIgdPage .igd .handle.tolak{--c:var(--red)}
-#mejaJagaIgdPage .igd .dock{position:sticky;bottom:0;z-index:14;background:#fff;border-top:2px solid var(--line);border-radius:0 0 26px 26px;box-shadow:0 -10px 24px rgba(0,0,0,.06)}
+#mejaJagaIgdPage .igd .dock{position:sticky;bottom:0;z-index:50;background:#fff;border-top:2px solid var(--line);border-radius:0 0 26px 26px;box-shadow:0 -10px 24px rgba(0,0,0,.06)}
 #mejaJagaIgdPage .igd .tray{display:flex;align-items:center;gap:12px;padding:10px 20px 14px}
 #mejaJagaIgdPage .igd .tray-gap{flex:1}
 #mejaJagaIgdPage .igd .tray .lens-btn{width:auto;padding:8px 14px}
@@ -288,8 +288,8 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .btn-next{background:var(--c);color:#fff;border:0;border-radius:16px;padding:13px 20px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.88rem;box-shadow:0 5px 0 var(--cd);transition:transform .08s}
 #mejaJagaIgdPage .igd .btn-next:hover{filter:brightness(1.05)}
 #mejaJagaIgdPage .igd .btn-next:active{transform:translateY(4px);box-shadow:0 1px 0 var(--cd)}
-#mejaJagaIgdPage .igd .book{position:absolute;z-index:25;top:0;right:0;bottom:0;width:min(580px,100%);overflow:auto;background:#fff;color:var(--ink);border-left:2px solid var(--line);box-shadow:-10px 0 0 rgba(0,0,0,.04);transform:translateX(104%);transition:transform .3s cubic-bezier(.3,1.2,.5,1)}
-#mejaJagaIgdPage .igd .book.open{transform:none}
+#mejaJagaIgdPage .igd .book{position:absolute;z-index:120;top:0;right:0;bottom:0;width:min(580px,100%);overflow:auto;background:#fff;color:var(--ink);border-left:2px solid var(--line);box-shadow:-10px 0 0 rgba(0,0,0,.04);transform:translateX(104%);transition:transform .3s cubic-bezier(.3,1.2,.5,1)}
+#mejaJagaIgdPage .igd .book.open{transform:none;box-shadow:-16px 0 36px rgba(0,0,0,.14)}
 #mejaJagaIgdPage .igd .book-top{position:sticky;top:0;z-index:2;padding:16px 18px 10px;background:#fff;border-bottom:2px solid var(--line)}
 #mejaJagaIgdPage .igd .book h2{margin:0;font-size:1.3rem;font-weight:900}
 #mejaJagaIgdPage .igd .book .warn{display:block;margin:2px 0 10px;font-size:.7rem;letter-spacing:.06em;color:var(--red-d);font-weight:900}
@@ -331,7 +331,7 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .calc .out{margin-top:10px;padding:9px 12px;background:var(--blue-l);color:var(--blue-d);border-radius:14px;font-size:.86rem;line-height:1.5;min-height:2.2em}
 #mejaJagaIgdPage .igd .calc .out b{color:#0d5f8f;font-weight:900}
 #mejaJagaIgdPage .igd .calc .out .w{color:var(--red-d)}
-#mejaJagaIgdPage .igd .screen{position:absolute;inset:0;z-index:30;display:grid;place-items:center;padding:24px;overflow:auto;background:rgba(233,245,251,.96)}
+#mejaJagaIgdPage .igd .screen{position:absolute;inset:0;z-index:150;display:grid;place-items:center;padding:24px;overflow:auto;background:rgba(233,245,251,.96)}
 #mejaJagaIgdPage .igd .folder{position:relative;width:min(660px,100%);padding:28px 32px 26px;border-radius:28px;background:#fff;border:2px solid var(--line);border-bottom-width:7px}
 #mejaJagaIgdPage .igd .cast{display:flex;justify-content:center;align-items:flex-end;gap:4px;margin:-6px 0 8px}
 #mejaJagaIgdPage .igd .cast svg{width:96px;height:112px}
@@ -372,9 +372,9 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd.inspect .sheet .allergy{opacity:.35}
 #mejaJagaIgdPage .igd.inspect .ln{cursor:default}
 #mejaJagaIgdPage .igd.inspect .ln:hover{background-color:transparent}
-#mejaJagaIgdPage .igd .link{position:absolute;inset:0;width:100%;height:100%;z-index:20;pointer-events:none;overflow:visible}
+#mejaJagaIgdPage .igd .link{position:absolute;inset:0;width:100%;height:100%;z-index:60;pointer-events:none;overflow:visible}
 #mejaJagaIgdPage .igd .link line{stroke-width:5;stroke-dasharray:2 11;stroke-linecap:round;animation:igd-dash .5s linear infinite}
-#mejaJagaIgdPage .igd .link-tag{position:absolute;z-index:21;transform:translate(-50%,-50%);padding:5px 14px;border-radius:99px;pointer-events:none;font-size:.9rem;font-weight:900;letter-spacing:.08em;color:#fff;white-space:nowrap;animation:igd-tag .3s cubic-bezier(.3,1.6,.5,1)}
+#mejaJagaIgdPage .igd .link-tag{position:absolute;z-index:61;transform:translate(-50%,-50%);padding:5px 14px;border-radius:99px;pointer-events:none;font-size:.9rem;font-weight:900;letter-spacing:.08em;color:#fff;white-space:nowrap;animation:igd-tag .3s cubic-bezier(.3,1.6,.5,1)}
 #mejaJagaIgdPage .igd .link-tag.ok{background:var(--green);box-shadow:0 4px 0 var(--green-d)}
 #mejaJagaIgdPage .igd .link-tag.bad{background:var(--red);box-shadow:0 4px 0 var(--red-d)}
 #mejaJagaIgdPage .igd .gelang{position:relative;width:370px;height:82px;display:flex;align-items:center;padding:0 40px 0 66px;transform:rotate(-2deg)}

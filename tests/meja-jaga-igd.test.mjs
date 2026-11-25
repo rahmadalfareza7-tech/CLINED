@@ -405,6 +405,8 @@ test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS wit
   assert.doesNotMatch(js + dataJs + genJs, /fonts\.googleapis\.com|fonts\.gstatic\.com/i);
   assert.doesNotMatch(css, /(^|\s)&[.:#\[]/, 'CSS must be flat (no nesting) for older Safari compatibility');
   assert.match(css, /\.mark\{[^}]*white-space:nowrap/, 'Stamp .mark must use white-space:nowrap so ACC/TOLAK never wraps');
+  assert.match(css, /\.surface\{[^}]*isolation:isolate/, 'Desk .surface must isolate stacking context so cards never overlap Panduan Lengkap');
+  assert.match(css, /\.book\{[^}]*z-index:120\b/, 'Panduan Lengkap drawer (.book) must sit cleanly above desk and dock');
 
   let depth = 0;
   for (const ch of css) {
@@ -434,10 +436,10 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, exi
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=4/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=5/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=5/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=6/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);
