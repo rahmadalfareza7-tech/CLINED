@@ -246,13 +246,27 @@ test('Verified drug & clinical guidelines integrity: >= 65 unique drugs with ful
 
   // Spot-check key clinical guideline verifications
   const byName = n => drugs.find(x => x.n.toLowerCase().includes(n.toLowerCase()));
+  assert.equal(drugs.length, 81, 'Expected 81 verified drugs in handbook');
   assert.match(byName('Atropin').d, /1 mg IV/i, 'Atropin adult ACLS dose should reflect 1 mg IV');
   assert.match(byName('Diazepam').a, /12 kg/i, 'Diazepam pediatric rectal cutoff should match IDAI (12 kg)');
   assert.match(byName('Magnesium sulfat').kh, /RR ≥ 16/i, 'MgSO4 monitoring should require RR >= 16/min (PNPK POGI)');
   assert.match(byName('Tramadol').a, /< 12 tahun/i, 'Tramadol should warn contraindication in children < 12 yo');
   assert.match(byName('Insulin reguler').d, /3,3/i, 'DKA insulin should require K >= 3.3 mmol/L');
   assert.match(byName('Fenitoin').d, /NaCl 0,9%/i, 'Phenytoin should specify NaCl 0.9% dilution only');
+  assert.ok(byName('Amoksisilin–klavulanat') && byName('Simvastatin') && byName('Alopurinol') && byName('Kloramfenikol') && byName('Doksisiklin') && byName('Glibenklamid'));
   assert.ok(byName('Warfarin') && byName('Vitamin K1') && byName('Spironolakton') && byName('Asam traneksamat') && byName('N-asetilsistein') && byName('KCl'));
+});
+
+test('SKDI Dokter Umum case scope: no specialist-only ICU/subspecialty cases remain in DOCS', () => {
+  const { DATA } = loadModule();
+  const docsText = JSON.stringify(DATA.DOCS);
+  // Ensure the 10 removed specialist/advanced scenarios are gone from patient cases
+  assert.doesNotMatch(docsText, /V4R|Mobitz II|osmotic demyelination|INR.*6,8|syringe pump|infark ventrikel kanan|NaCl 3%|Fenitoin.*D5|spironolakton|warfarin|Ketoasidosis diabetikum/i);
+  // Ensure replacement SKDI 4A/3B/3A GP cases are present
+  const names = new Set(DATA.DOCS.map(d => d.pt.nama));
+  for (const expected of ['Tn. Dedi Kurniawan', 'Ny. Melati Kusumaningrum', 'An. Danu Pratama', 'Ny. Ratih Permata', 'Ny. Yuliana', 'Tn. Bahrudin', 'Ny. Hasanah', 'Tn. Gunawan', 'Ny. Mawar Indah', 'Tn. Ridho Saputra']) {
+    assert.ok(names.has(expected), `Expected SKDI GP case ${expected} in DOCS`);
+  }
 });
 
 test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS with balanced braces, no external URLs', () => {
@@ -281,7 +295,7 @@ test('CSP & asset integrity: self-hosted Nunito/Caveat fonts exist, flat CSS wit
   }
 });
 
-test('App wiring: view, menu, lazy v3 bundle (data+engine), timer HUD, exit controls, BUSY_VIEWS, SW parity, and font MIME', () => {
+test('App wiring: view, menu, lazy SKDI bundle (data+engine), timer HUD, exit controls, BUSY_VIEWS, SW parity, and font MIME', () => {
   const appHtml = readRel('app.html');
   const lazyJs = readRel('js/lazy-loader.js');
   const swJs = readRel('sw.js');
@@ -294,8 +308,8 @@ test('App wiring: view, menu, lazy v3 bundle (data+engine), timer HUD, exit cont
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
   assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=3/);
-  assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=3/);
+  assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=2/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=4/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);

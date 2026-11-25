@@ -45,7 +45,7 @@
     },
     igd: {
       styles: ['css/meja-jaga-igd.css?v=3'],
-      scripts: ['js/meja-jaga-igd-data.js?v=1', 'js/meja-jaga-igd.js?v=3']
+      scripts: ['js/meja-jaga-igd-data.js?v=2', 'js/meja-jaga-igd.js?v=4']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],

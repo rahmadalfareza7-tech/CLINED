@@ -189,7 +189,7 @@
       <div class="cast" id="igd-cast"></div>
       <h1>MEJA JAGA <em>IGD</em></h1>
       <p class="byline">by <b>CLINED</b></p>
-      <p class="igd-lead">Lima malam jaga + Mode Sulit dengan 56 kasus bervariasi (5 menit/berkas). Tiap berkas terlihat 95% normal, tapi kadang satu kesalahan fatal terselip di dalamnya. Kamu dokter jaga malam ini. Jangan sampai ada yang lolos.</p>
+      <p class="igd-lead">Lima malam jaga + Mode Sulit dengan 56 kasus sesuai SKDI dokter umum (5 menit/berkas). Tiap berkas terlihat 95% normal, tapi kadang satu kesalahan fatal terselip di dalamnya. Kamu dokter jaga malam ini. Jangan sampai ada yang lolos.</p>
       <div class="nights" id="igd-nights"></div>
       <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa timer)</label>
       <button class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda</button>

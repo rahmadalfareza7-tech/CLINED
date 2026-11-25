@@ -1,5 +1,5 @@
-/* CLINED · Meja Jaga IGD — Data Kasus (56 kasus), Karakter Loket, Malam (5 menit/berkas),
-   serta Panduan Klinis Terverifikasi (80 obat, Nilai Lab, Cairan, Pediatri, Rumus, Tatalaksana IGD, Identitas).
+/* CLINED · Meja Jaga IGD — Data Kasus (56 kasus SKDI dokter umum), Karakter Loket, Malam (5 menit/berkas),
+   serta Panduan Klinis Terverifikasi (81 obat, Nilai Lab, Cairan, Pediatri, Rumus, Tatalaksana IGD, Identitas).
    Dimuat lazy sebelum js/meja-jaga-igd.js via js/lazy-loader.js (bundle "igd"). */
 (() => {
   'use strict';
@@ -161,20 +161,14 @@
         {id:'l3', cols:['EKG 12 sadapan & monitor TD','—','—','Segera']}]}],
       why:'Interaksi obat mematikan! Nitrat (ISDN/nitrogliserin) kontraindikasi dalam 24 jam setelah konsumsi sildenafil (atau 48 jam setelah tadalafil) karena sinergi cGMP memicu vasodilatasi hebat dan hipotensi berat yang fatal.' },
 
-    { type:'soap', sign:'c. Dimas', flaw:'p2', topic:'kontra',
-      pt:{nama:'Tn. Dedi Kurniawan', lahir:'1965-11-04', jk:'L', rm:'01-74-22', bb:'70 kg', dx:'STEMI inferior dengan keterlibatan ventrikel kanan', alergi:'Tidak ada', cat:'TD 86/58 mmHg, JVP meningkat, paru bersih'},
+    { type:'resep', sign:'dr. Anindya', flaw:'l1', topic:'kontra',
+      pt:{nama:'Tn. Dedi Kurniawan', lahir:'1965-11-04', jk:'L', rm:'01-74-22', bb:'70 kg', dx:'Artritis gout akut (podagra ibu jari kaki kanan)', alergi:'Tidak ada', cat:'Jempol kaki kanan bengkak merah sangat nyeri sejak semalam, baru pertama kali kambuh, belum pernah minum alopurinol'},
       ktp:{wil:'3275', kec:'04', sn:'0007', tl:'BEKASI', alamat:'JL. CUT MEUTIA NO. 88', agama:'ISLAM', kawin:'KAWIN', kerja:'KARYAWAN SWASTA', goldar:'O'},
-      sections:[
-        {h:'S · Subjective', lines:[{id:'s1', t:'Nyeri ulu hati menembus ke dada sejak 1 jam lalu, keringat dingin, pusing.'}]},
-        {h:'O · Objective', lines:[
-          {id:'o1', t:'TD 86/58 mmHg, N 62 x/menit, RR 20, SpO₂ 96%, JVP meningkat, ronki negatif.'},
-          {id:'o2', t:'EKG: elevasi segmen ST di II, III, aVF, dan sadapan kanan V4R.'}]},
-        {h:'A · Assessment', lines:[{id:'a1', t:'STEMI inferior dengan infark ventrikel kanan.'}]},
-        {h:'P · Plan', lines:[
-          {id:'p1', t:'Aspirin 320 mg kunyah dan clopidogrel 300 mg loading.'},
-          {id:'p2', t:'Nitrogliserin 0,5 mg sublingual untuk nyeri dada.'},
-          {id:'p3', t:'Loading NaCl 0,9% 250 mL IV hati-hati, konsul Sp.JP cito untuk reperfusi.'}]}],
-      why:'Pada infark ventrikel kanan (ST elevasi V4R) dan hipotensi (TDS < 90 mmHg), nitrat (nitrogliserin/ISDN) kontraindikasi absolut karena menurunkan preload drastis dan memicu syok kardiogenik.' },
+      sections:[{lines:[
+        {id:'l1', t:'R/ Alopurinol tab 300 mg', s:'S 1 dd tab I (mulai hari ini untuk turunkan asam urat)'},
+        {id:'l2', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p nyeri'},
+        {id:'l3', t:'R/ Edukasi: kompres dingin, istirahatkan kaki, hindari jeroan & alkohol', s:''}]}],
+      why:'Alopurinol (penurun asam urat) TIDAK boleh dimulai saat serangan gout akut (SKDI 4A) karena perubahan cepat kadar asam urat justru memperberat radang dan nyeri! Atasi dulu serangan akut dengan NSAID (bila ginjal/lambung aman), kolkisin, atau kortikosteroid jangka pendek.' },
 
     { type:'instruksi', sign:'dr. Rahmat', flaw:'l1', topic:'dosis',
       pt:{nama:'An. Farhan Maulana', lahir:'2023-08-10', jk:'L', rm:'05-88-11', bb:'14 kg', dx:'Syok anafilaksis e.c. sengatan lebah', alergi:'Bisa lebah', cat:'Urtikaria luas, mengi, bibir bengkak, TD 72/44'},
@@ -229,23 +223,23 @@
         {id:'l3', t:'R/ Rawat luka harian, kontrol 2 hari lagi', s:''}]}],
       why:'Kotrimoksazol (trimetoprim-sulfametoksazol) mengandung golongan sulfonamid. Pada pasien dengan riwayat Sindrom Stevens-Johnson (SJS) akibat sulfa, pemberian ulang kontraindikasi absolut karena mengancam jiwa. Pilih klindamisin atau doksisiklin.' },
 
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l1', topic:'alergi',
-      pt:{nama:'Ny. Melati Kusumaningrum', lahir:'1987-01-16', jk:'P', rm:'03-49-71', bb:'59 kg', dx:'Pneumonia aspirasi', alergi:'PENISILIN (anafilaksis, 2020)', cat:'SpO₂ 94%, demam 38,8 °C'},
+    { type:'resep', sign:'dr. Anindya', flaw:'l1', topic:'alergi',
+      pt:{nama:'Ny. Melati Kusumaningrum', lahir:'1987-01-16', jk:'P', rm:'03-49-71', bb:'59 kg', dx:'Rinosinusitis bakterial akut', alergi:'PENISILIN (anafilaksis, 2020)', cat:'Nyeri pipi, ingus kental hijau 10 hari, demam 38,3 °C'},
       ktp:{wil:'3273', kec:'12', sn:'0008', tl:'BANDUNG', alamat:'JL. SUPRATMAN NO. 33', agama:'ISLAM', kawin:'KAWIN', kerja:'PEGAWAI NEGERI SIPIL', goldar:'B'},
       sections:[{lines:[
-        {id:'l1', cols:['Ampisilin–sulbaktam','1,5 gram','IV','Tiap 6 jam']},
-        {id:'l2', cols:['NaCl 0,9%','500 mL','IV','Tiap 8 jam']},
-        {id:'l3', cols:['Paracetamol','1 gram','IV drip 15 menit','Bila demam > 38,5 °C']}]}],
-      why:'Ampisilin–sulbaktam termasuk antibiotik golongan penisilin (sama seperti amoksisilin). Pasien memiliki riwayat anafilaksis penisilin sehingga kontraindikasi absolut. Gunakan alternatif non-penisilin (misalnya klindamisin atau fluorokuinolon + metronidazol sesuai protokol).' },
+        {id:'l1', t:'R/ Amoksisilin–klavulanat (Co-amoxiclav) tab 625 mg', s:'S 3 dd tab I, 7 hari'},
+        {id:'l2', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p nyeri/demam'},
+        {id:'l3', t:'R/ Cuci hidung NaCl 0,9%', s:'S 2 dd semprot tiap lubang hidung'}]}],
+      why:'Co-amoxiclav (amoksisilin–klavulanat) adalah antibiotik golongan penisilin! Pasien memiliki riwayat anafilaksis penisilin sehingga kontraindikasi absolut (SKDI 4A). Pilih doksisiklin atau makrolida.' },
 
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l2', topic:'dosis',
-      pt:{nama:'Tn. Agus Salim', lahir:'1974-09-22', jk:'L', rm:'01-82-64', bb:'70 kg', dx:'Status epileptikus (masih kejang pasca diazepam IV)', alergi:'Tidak ada', cat:'Sudah dapat diazepam 10 mg IV 5 menit lalu'},
-      ktp:{wil:'3204', kec:'06', sn:'0003', tl:'BANDUNG', alamat:'KP. BOJONGSOANG RT 04/02', agama:'ISLAM', kawin:'KAWIN', kerja:'WIRASWASTA', goldar:'O'},
+    { type:'resep', sign:'dr. Rahmat', flaw:'l1', topic:'kontra',
+      pt:{nama:'An. Danu Pratama', lahir:'2020-05-11', jk:'L', rm:'04-82-64', bb:'20 kg', dx:'Infeksi kulit (pioderma / impetigo luas)', alergi:'Tidak ada', cat:'Koreng bernanah di kedua tungkai, tidak demam tinggi'},
+      ktp:{wil:'3204', kec:'06', sn:'0003', tl:'BANDUNG', alamat:'KP. BOJONGSOANG RT 04/02', agama:'ISLAM', kk:'3204061502180004', kepala:'AGUS SALIM'},
       sections:[{lines:[
-        {id:'l1', cols:['O₂ sungkup NRM','10 L/menit','Inhalasi','Kontinu + monitor EKG']},
-        {id:'l2', cols:['Fenitoin (dilarutkan D5%)','1.000 mg','IV bolus cepat 2 menit','Loading sekarang']},
-        {id:'l3', cols:['Cek GDS & elektrolit','—','—','Cito']}]}],
-      why:'Kesalahan pemberian fenitoin yang fatal: (1) kecepatan maksimal adalah 50 mg/menit (1.000 mg minimal 20 menit) — bolus 2 menit memicu hipotensi berat dan aritmia/henti jantung; (2) fenitoin hanya boleh diencerkan dalam NaCl 0,9%, tidak boleh D5% karena mengendap!' },
+        {id:'l1', t:'R/ Doksisiklin cap 100 mg', s:'S 2 dd cap I, 7 hari'},
+        {id:'l2', t:'R/ Kompres NaCl 0,9% hangat pada krusta', s:'S 2 dd kompres 10 menit'},
+        {id:'l3', t:'R/ Edukasi: jaga kebersihan kulit & potong kuku pendek', s:''}]}],
+      why:'Doksisiklin (golongan tetrasiklin) kontraindikasi rutin pada anak usia < 8 tahun (pasien 6 th) karena merusak pertumbuhan tulang dan menyebabkan pewarnaan gigi permanen (SKDI 4A), ditambah 100 mg 2×/hari adalah dosis dewasa! Pilih antibiotik aman anak (mis. sefaleksin/amoksisilin-klavulanat/klindamisin).' },
 
     { type:'instruksi', sign:'dr. Wulan, Sp.OT', flaw:'l1', topic:'dosis',
       pt:{nama:'Ny. Kartini', lahir:'1952-03-08', jk:'P', rm:'00-64-18', bb:'44 kg', dx:'Nyeri akut kolik ureter kanan', alergi:'Tidak ada', cat:'Fungsi ginjal normal, nyeri skala 7/10'},
@@ -256,28 +250,26 @@
         {id:'l3', cols:['NaCl 0,9%','500 mL','IV','Tiap 8 jam']}]}],
       why:'Pasien lansia (74 th ≥ 65 th) dengan BB < 50 kg (44 kg). Batas maksimum ketorolak pada kelompok ini adalah 60 mg/hari (10–15 mg tiap 6–8 jam). Pemberian 120 mg/hari (2× batas aman) berisiko tinggi memicu perdarahan lambung dan gagal ginjal akut.' },
 
-    { type:'soap', sign:'c. Dimas', flaw:'p1', topic:'kontra',
-      pt:{nama:'Tn. Hermawan', lahir:'1960-05-11', jk:'L', rm:'00-93-50', bb:'68 kg', dx:'Bradikardia simtomatik, blok AV derajat 2 Mobitz II', alergi:'Tidak ada', cat:'Pusing seperti mau pingsan sejak pagi'},
-      ktp:{wil:'3273', kec:'18', sn:'0001', tl:'BANDUNG', alamat:'JL. ANTAPANI TENGAH NO. 44', agama:'ISLAM', kawin:'KAWIN', kerja:'PENSIUNAN', goldar:'B'},
-      sections:[
-        {h:'S · Subjective', lines:[{id:'s1', t:'Pusing berputar dan hampir pingsan dua kali sejak pagi, badan lemas.'}]},
-        {h:'O · Objective', lines:[
-          {id:'o1', t:'TD 108/66 mmHg, N 42 x/menit reguler lambat, RR 18, SpO₂ 97%.'},
-          {id:'o2', t:'EKG: blok AV derajat 2 tipe Mobitz II, beberapa gelombang P tidak diikuti QRS.'}]},
-        {h:'A · Assessment', lines:[{id:'a1', t:'Blok AV derajat 2 Mobitz II simtomatik.'}]},
-        {h:'P · Plan', lines:[
-          {id:'p1', t:'Bisoprolol 5 mg PO sekarang, lanjut 1 kali sehari.'},
-          {id:'p2', t:'Pasang monitor EKG kontinu, siapkan pacing transkutan, konsul Sp.JP cito.'}]}],
-      why:'Beta-blocker (bisoprolol) kontraindikasi absolut pada bradikardia berat dan blok AV derajat 2–3 tanpa alat pacu jantung karena memperburuk blok konduksi hingga blok AV total/asistol.' },
-
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l1', topic:'kontra',
-      pt:{nama:'Ny. Yuliana', lahir:'1992-08-04', jk:'P', rm:'04-39-12', bb:'69 kg', dx:'Preeklamsia berat, G2P1A0 hamil 36 minggu (dalam terapi MgSO₄)', alergi:'Tidak ada', cat:'Sudah infus MgSO₄ 4 jam. Refleks patela HILANG, RR 10 x/mnt, urin 15 mL/2 jam'},
-      ktp:{wil:'3201', kec:'09', sn:'0004', tl:'BOGOR', alamat:'JL. SHOLIS ISKANDAR NO. 60', agama:'ISLAM', kawin:'KAWIN', kerja:'MENGURUS RUMAH TANGGA', goldar:'O'},
+    { type:'resep', sign:'dr. Anindya', flaw:'l1', topic:'kontra',
+      pt:{nama:'Ny. Ratih Permata', lahir:'1998-03-14', jk:'P', rm:'04-93-50', bb:'62 kg', dx:'Demam tifoid tanpa komplikasi, G1P0A0 hamil 28 minggu', alergi:'Tidak ada', cat:'Demam 6 hari terutama sore–malam, lidah kotor, masih mau makan-minum'},
+      ktp:{wil:'3273', kec:'18', sn:'0001', tl:'BANDUNG', alamat:'JL. ANTAPANI TENGAH NO. 44', agama:'ISLAM', kawin:'KAWIN', kerja:'KARYAWAN SWASTA', goldar:'B'},
       sections:[{lines:[
-        {id:'l1', cols:['MgSO₄ infus','Naikkan jadi 2 g/jam','IV syringe pump','Kontinu']},
-        {id:'l2', cols:['Nifedipin lepas cepat','10 mg','PO','Bila TD ≥ 160/110 mmHg']},
-        {id:'l3', cols:['Konsul Sp.OG cito','—','—','Evaluasi terminasi kehamilan']}]}],
-      why:'Tanda klinis intoksikasi Magnesium Sulfat jelas: refleks patela menghilang, laju napas 10×/menit (< 16×/menit), dan oliguria (< 30 mL/jam). Infus MgSO₄ harus SEGERA DIHENTIKAN (jangan dinaikkan!) dan berikan antidot Kalsium glukonas 10% 10 mL (1 g) IV pelan.' },
+        {id:'l1', t:'R/ Kloramfenikol cap 500 mg', s:'S 4 dd cap I, 10 hari'},
+        {id:'l2', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p demam'},
+        {id:'l3', t:'R/ Edukasi: tirah baring, diet lunak, banyak minum', s:''}]}],
+      why:'Kloramfenikol kontraindikasi pada kehamilan (terutama trimester 3 — risiko gray baby syndrome dan supresi sumsum tulang janin!). Untuk demam tifoid ibu hamil (SKDI 4A), pilihan aman adalah amoksisilin, sefiksim, atau seftriakson.' },
+
+    { type:'soap', sign:'c. Nadia', flaw:'p1', topic:'kontra',
+      pt:{nama:'Ny. Yuliana', lahir:'1992-08-04', jk:'P', rm:'04-39-12', bb:'69 kg', dx:'Hipertensi kronik dalam kehamilan, G2P1A0 hamil 14 minggu', alergi:'Tidak ada', cat:'Sebelum hamil rutin minum candesartan 16 mg'},
+      ktp:{wil:'3201', kec:'09', sn:'0004', tl:'BOGOR', alamat:'JL. SHOLIS ISKANDAR NO. 60', agama:'ISLAM', kawin:'KAWIN', kerja:'MENGURUS RUMAH TANGGA', goldar:'O'},
+      sections:[
+        {h:'S · Subjective', lines:[{id:'s1', t:'Kontrol kehamilan 14 minggu, keluhan pusing ringan. Punya riwayat hipertensi sejak 2 tahun lalu.'}]},
+        {h:'O · Objective', lines:[{id:'o1', t:'TD 150/94 mmHg, N 84, RR 18, proteinuria negatif, DJJ terdengar baik.'}]},
+        {h:'A · Assessment', lines:[{id:'a1', t:'Hipertensi kronik dalam kehamilan (G2P1A0 hamil 14 minggu).'}]},
+        {h:'P · Plan', lines:[
+          {id:'p1', t:'Lanjutkan Candesartan 16 mg PO 1 kali sehari (obat rutin sebelumnya).'},
+          {id:'p2', t:'Edukasi tanda bahaya kehamilan, kontrol ANC dan rujuk evaluasi Sp.OG.'}]}],
+      why:'ARB (candesartan/valsartan/losartan) kontraindikasi absolut pada kehamilan sama seperti ACE inhibitor karena fetotoksik (gagal ginjal janin, oligohidramnion, anomali tengkorak). Harus segera diganti ke metildopa, nifedipin, atau labetalol (SKDI 3A).' },
 
     { type:'resep', sign:'dr. Wulan, Sp.OT', flaw:'l1', topic:'kontra',
       pt:{nama:'An. Bagas Pratama', lahir:'2018-06-27', jk:'L', rm:'04-95-21', bb:'25 kg', dx:'Vulnus laceratum tungkai kanan (pascajahit)', alergi:'Tidak ada', cat:'Nyeri luka jahitan, sudah dijahit 4 jahitan'},
@@ -286,7 +278,7 @@
         {id:'l1', t:'R/ Tramadol cap 50 mg', s:'S 3 dd cap I bila nyeri'},
         {id:'l2', t:'R/ Rawat luka steril, jaga tetap kering', s:''},
         {id:'l3', t:'R/ Kontrol buka jahitan hari ke-7', s:''}]}],
-      why:'Tramadol kontraindikasi pada anak di bawah 12 tahun (peringatan BPOM/FDA) karena metabolisme CYP2D6 ultra-cepat dapat menyebabkan depresi napas fatal. Gunakan paracetamol (10–15 mg/kg/kali) atau ibuprofen (5–10 mg/kg/kali).' },
+      why:'Tramadol kontraindikasi pada anak di bawah 12 tahun (peringatan BPOM/FDA) karena metabolisme CYP2D6 ultra-cepat dapat menyebabkan depresi napas fatal. Gunakan paracetamol (10–15 mg/kg/kali) atau ibuprofen (5–10 mg/kg/kali) (SKDI 4A).' },
 
     { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:null, topic:'aman',
       pt:{nama:'Tn. Ridwan Hakim', lahir:'1997-04-09', jk:'L', rm:'05-14-77', bb:'68 kg', dx:'Syok anafilaksis e.c. alergi udang', alergi:'UDANG / MAKANAN LAUT', cat:'Biduran seluruh tubuh, suara serak, mengi, TD 84/52 mmHg'},
@@ -295,7 +287,7 @@
         {id:'l1', cols:['Epinefrin (1:1.000)','0,5 mg','IM paha lateral','Ulang tiap 5–15 mnt bila perlu']},
         {id:'l2', cols:['O₂ sungkup + NaCl 0,9%','10 L/mnt + 1.000 mL','Inh / IV cepat','Elevasi tungkai']},
         {id:'l3', cols:['Deksametason + Difenhidramin','8 mg + 25 mg','IV (adjuvan)','Setelah epinefrin diberikan']}]}],
-      why:'Aman! Tatalaksana anafilaksis sesuai pedoman: epinefrin 1:1.000 dosis 0,3–0,5 mg IM di vastus lateralis (paha anterolateral) sebagai lini pertama, oksigen aliran tinggi + cairan kristaloid cepat, lalu kortikosteroid/antihistamin sebagai adjuvan.' },
+      why:'Aman! Tatalaksana anafilaksis (SKDI 4A) sudah tepat: epinefrin 1:1.000 dosis 0,3–0,5 mg IM di paha anterolateral sebagai lini pertama, oksigen aliran tinggi + cairan kristaloid cepat, lalu kortikosteroid/antihistamin sebagai adjuvan.' },
 
     { type:'soap', sign:'c. Nadia', flaw:null, topic:'aman',
       pt:{nama:'Ny. Lestari Handayani', lahir:'1998-07-15', jk:'P', rm:'05-29-04', bb:'64 kg', dx:'Preeklamsia berat, G1P0A0 hamil 34 minggu', alergi:'Tidak ada', cat:'Proteinuria +3, refleks patela +/+, RR 18, urin 50 mL/jam'},
@@ -307,9 +299,9 @@
           {id:'o2', t:'DJJ 144 x/menit, proteinuria dipstick +3.'}]},
         {h:'A · Assessment', lines:[{id:'a1', t:'Preeklamsia berat pada G1P0A0 hamil 34 minggu.'}]},
         {h:'P · Plan', lines:[
-          {id:'p1', t:'MgSO₄ loading 4 g IV pelan 15–20 menit, lanjut 1 g/jam (pantau patela, RR ≥ 16, urin ≥ 30 mL/jam).'},
-          {id:'p2', t:'Nifedipin lepas cepat 10 mg PO (bukan sublingual), konsul Sp.OG, siapkan Ca glukonas 10%.'}]}],
-      why:'Aman! Protokol PNPK POGI untuk preeklamsia berat sudah benar: MgSO₄ 4 g IV loading + 1 g/jam dengan syarat pemantauan terpenuhi, nifedipin lepas cepat 10 mg PO (aman pada kehamilan, tidak sublingual), dan siaga antidot kalsium glukonas.' },
+          {id:'p1', t:'Dosis awal MgSO₄ 4 g IV pelan 15–20 menit (syarat terpenuhi: patela +, RR ≥ 16, urin ≥ 30 mL/jam; siapkan Ca glukonas 10%).'},
+          {id:'p2', t:'Nifedipin lepas cepat 10 mg PO (bukan sublingual), lalu segera rujuk ke Sp.OG / RS rujukan.'}]}],
+      why:'Aman! Tatalaksana awal preeklamsia berat (SKDI 3B / PNPK POGI) sudah benar: dosis loading MgSO₄ 4 g IV pelan setelah syarat terpenuhi, nifedipin lepas cepat 10 mg PO, siaga antidot kalsium glukonas, lalu segera rujuk Sp.OG.' },
 
     { type:'resep', sign:'dr. Rahmat', flaw:null, topic:'aman',
       pt:{nama:'An. Zahra Salsabila', lahir:'2023-09-01', jk:'P', rm:'05-72-33', bb:'14 kg', dx:'Croup (laringotrakeobronkitis) ringan–sedang', alergi:'Tidak ada', cat:'Batuk menggonggong, stridor ringan saat menangis, SpO₂ 97%'},
@@ -506,45 +498,45 @@
         {id:'l3', cols:['Puasa sementara','—','—','Sampai endoskopi']}]}],
       why:'Hasil lab ini milik Yusuf Hidayat yang lain: tanggal lahir di lab 02-11-1958, sedangkan pasien lahir 25-04-1976. Keputusan transfusi diambil dari lab orang lain. Periksa ulang Hb pasien yang benar sebelum transfusi.' },
 
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l1', kind:'lab', topic:'lab',
-      pt:{nama:'Tn. Bahrudin', lahir:'1981-05-03', jk:'L', rm:'03-67-92', bb:'65 kg', dx:'Ketoasidosis diabetik (KAD)', alergi:'Tidak ada', cat:'Napas cepat dalam (Kussmaul), mual muntah, GDS tinggi'},
+    { type:'resep', sign:'dr. Rahmat', flaw:'l1', kind:'lab', topic:'lab',
+      pt:{nama:'Tn. Bahrudin', lahir:'1988-05-03', jk:'L', rm:'03-67-92', bb:'65 kg', dx:'Demam tifoid hari ke-6', alergi:'Tidak ada', cat:'Demam naik sore–malam, lidah kotor, lemas'},
       ktp:{wil:'3204', kec:'14', sn:'0006', tl:'BANDUNG', alamat:'KP. MAJALAYA RT 02/06', agama:'ISLAM', kawin:'KAWIN', kerja:'WIRASWASTA', goldar:'O'},
-      lab:{rows:[['GDS','468','mg/dL','< 200','H'],['pH arteri','7,18','','7,35–7,45','L'],['HCO₃⁻','11','mmol/L','22–26','L'],['Kalium','2,7','mmol/L','3,5–5,0','L'],['Natrium','132','mmol/L','135–145','L']]},
+      lab:{rows:[['Leukosit','2.100','/µL','4.000–11.000','L'],['Trombosit','88.000','/µL','150.000–400.000','L'],['Hemoglobin','9,4','g/dL','13–17','L'],['Tubex TF','+4','','≤ 2','H']]},
       sections:[{lines:[
-        {id:'l1', cols:['Insulin reguler','6,5 unit/jam','IV syringe pump','Mulai sekarang']},
-        {id:'l2', cols:['NaCl 0,9%','1.000 mL','IV','Habis dalam 1 jam']},
-        {id:'l3', cols:['Monitor GDS & kalium','—','—','Tiap 1–2 jam']}]}],
-      why:'Pada KAD dengan kalium serum < 3,3 mmol/L (pasien ini 2,7 mmol/L), INSULIN HARUS DITUNDA! Insulin mendorong kalium masuk ke dalam sel sehingga dapat menyebabkan hipokalemia ekstrem dan henti jantung. Koreksi kalium dulu sampai ≥ 3,3 mmol/L!' },
+        {id:'l1', t:'R/ Kloramfenikol cap 500 mg', s:'S 4 dd cap I, 10 hari'},
+        {id:'l2', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p demam'},
+        {id:'l3', t:'R/ Edukasi: tirah baring, diet lunak, banyak minum', s:''}]}],
+      why:'Lab menunjukkan supresi sumsum tulang / pansitopenia (leukosit 2.100/µL, trombosit 88.000/µL, Hb 9,4). Kloramfenikol kontraindikasi pada leukopenia berat/depresi sumsum tulang karena risiko pansitopenia & anemia aplastik berat! Pilih sefiksim atau azitromisin (SKDI 4A).' },
 
-    { type:'resep', sign:'dr. Hendra, Sp.PD', flaw:'l1', kind:'lab', topic:'lab',
-      pt:{nama:'Ny. Hasanah', lahir:'1958-08-21', jk:'P', rm:'00-71-39', bb:'58 kg', dx:'Fibrilasi atrium (rutin warfarin), mimisan & memar luas', alergi:'Tidak ada', cat:'Mimisan 30 menit, banyak lebam di lengan sejak 2 hari'},
-      ktp:{wil:'3273', kec:'01', sn:'0007', tl:'BANDUNG', alamat:'JL. MERDEKA GG. MELATI 9', agama:'ISLAM', kawin:'CERAI MATI', kerja:'MENGURUS RUMAH TANGGA', goldar:'B'},
-      lab:{rows:[['INR','6,8','','2,0–3,0 (target)','H'],['PT','74','detik','11–14','H'],['Hemoglobin','10,8','g/dL','12–15','L'],['Trombosit','220.000','/µL','150.000–400.000','']]},
+    { type:'resep', sign:'dr. Anindya', flaw:'l1', kind:'lab', topic:'lab',
+      pt:{nama:'Ny. Hasanah', lahir:'1972-08-21', jk:'P', rm:'00-71-39', bb:'58 kg', dx:'Hepatitis A akut (ikterik, mual)', alergi:'Tidak ada', cat:'Sklera kuning 3 hari, urin warna teh, rutin minum obat kolesterol'},
+      ktp:{wil:'3273', kec:'01', sn:'0007', tl:'BANDUNG', alamat:'JL. MERDEKA GG. MELATI 9', agama:'ISLAM', kawin:'KAWIN', kerja:'MENGURUS RUMAH TANGGA', goldar:'B'},
+      lab:{rows:[['SGOT (AST)','680','U/L','< 40','H'],['SGPT (ALT)','790','U/L','< 40','H'],['Bilirubin total','4,8','mg/dL','0,2–1,2','H'],['IgM Anti-HAV','Positif','','Negatif','H']]},
       sections:[{lines:[
-        {id:'l1', t:'R/ Warfarin tab 4 mg (lanjutkan) + Aspirin tab 80 mg', s:'S 1 dd tab I malam hari'},
-        {id:'l2', t:'R/ Tampon hidung anterior & observasi perdarahan', s:''},
-        {id:'l3', t:'R/ Cek ulang INR & Hb serial', s:''}]}],
-      why:'INR 6,8 disertai perdarahan aktif adalah overdosis warfarin! Warfarin wajib SEGERA DIHENTIKAN sementara (jangan dilanjutkan apalagi ditambah aspirin) dan berikan antidot Vitamin K1 (fitomenadion) IV (serta PCC/FFP bila perdarahan berat).' },
+        {id:'l1', t:'R/ Simvastatin tab 20 mg (lanjut rutin)', s:'S 1 dd tab I malam hari'},
+        {id:'l2', t:'R/ Ondansetron tab 4 mg', s:'S 2 dd tab I k/p mual (maks 8 mg/hari)'},
+        {id:'l3', t:'R/ Edukasi: istirahat cukup, diet lunak, hindari alkohol & obat hepatotoksik', s:''}]}],
+      why:'Pada penyakit hati aktif (hepatitis A akut dengan SGOT/SGPT > 15× batas atas normal!), statin (simvastatin/atorvastatin) kontraindikasi absolut karena memperburuk cedera hati (SKDI 4A). Tunda sementara sampai enzim hati kembali normal.' },
 
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l2', kind:'lab', topic:'lab',
-      pt:{nama:'Tn. Gunawan', lahir:'1967-02-09', jk:'L', rm:'01-52-88', bb:'68 kg', dx:'Gagal jantung kronik + CKD stadium 4', alergi:'Tidak ada', cat:'Bengkak tungkai, eGFR 17 mL/menit'},
+    { type:'resep', sign:'dr. Rahmat', flaw:'l1', kind:'lab', topic:'lab',
+      pt:{nama:'Tn. Gunawan', lahir:'1967-02-09', jk:'L', rm:'01-52-88', bb:'68 kg', dx:'Osteoartritis genu kanan (nyeri lutut)', alergi:'Tidak ada', cat:'Riwayat hipertensi lama, sering bengkak kaki'},
       ktp:{wil:'3201', kec:'08', sn:'0004', tl:'BOGOR', alamat:'JL. DRAMAGA RAYA NO. 75', agama:'ISLAM', kawin:'KAWIN', kerja:'KARYAWAN SWASTA', goldar:'A'},
-      lab:{rows:[['Kalium','5,9','mmol/L','3,5–5,0','H'],['Kreatinin','3,8','mg/dL','0,7–1,3','H'],['Ureum','112','mg/dL','10–50','H'],['Natrium','137','mmol/L','135–145','']]},
+      lab:{rows:[['Kreatinin','3,8','mg/dL','0,7–1,3','H'],['Ureum','112','mg/dL','10–50','H'],['eGFR','17','mL/mnt','≥ 90','L'],['Kalium','4,9','mmol/L','3,5–5,0','']]},
       sections:[{lines:[
-        {id:'l1', cols:['Furosemid','40 mg','IV','Bolus sekarang']},
-        {id:'l2', cols:['Spironolakton','50 mg','PO','1 × sehari']},
-        {id:'l3', cols:['Monitor urin & elektrolit','—','—','Tiap 6 jam']}]}],
-      why:'Spironolakton adalah diuretik hemat kalium (antagonis aldosteron). Pada pasien dengan hiperkalemia (K 5,9 mmol/L) dan gagal ginjal berat (eGFR < 30), spironolakton kontraindikasi karena memicu hiperkalemia fatal!' },
+        {id:'l1', t:'R/ Ibuprofen tab 400 mg', s:'S 3 dd tab I sesudah makan'},
+        {id:'l2', t:'R/ Kompres hangat & kurangi beban sendi lutut', s:''},
+        {id:'l3', t:'R/ Rujuk evaluasi fungsi ginjal ke poli Penyakit Dalam', s:''}]}],
+      why:'Lab menunjukkan gagal ginjal berat (Kreatinin 3,8 mg/dL, eGFR 17 mL/menit). NSAID (ibuprofen/diklofenak) kontraindikasi pada eGFR < 30 karena memperburuk perfusi ginjal dan memicu gagal ginjal akut berat (SKDI 4A/3A). Pilih paracetamol atau analgesik topikal.' },
 
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'l1', kind:'lab', topic:'lab',
-      pt:{nama:'Ny. Mawar Indah', lahir:'1963-07-11', jk:'P', rm:'01-33-70', bb:'54 kg', dx:'Hiponatremia kronik (lemas 5 hari, bingung ringan)', alergi:'Tidak ada', cat:'Tidak kejang, sadar penuh tapi lambat menjawab'},
+    { type:'resep', sign:'dr. Anindya', flaw:'l1', kind:'lab', topic:'lab',
+      pt:{nama:'Ny. Mawar Indah', lahir:'1957-07-11', jk:'P', rm:'01-33-70', bb:'54 kg', dx:'DM tipe 2 kontrol rutin', alergi:'Tidak ada', cat:'Sering gemetar dan keringat dingin bila telat makan'},
       ktp:{wil:'3277', kec:'01', sn:'0005', tl:'CIMAHI', alamat:'JL. GATOT SUBROTO NO. 112', agama:'ISLAM', kawin:'KAWIN', kerja:'MENGURUS RUMAH TANGGA', goldar:'O'},
-      lab:{rows:[['Natrium','116','mmol/L','135–145','L'],['Kalium','3,8','mmol/L','3,5–5,0',''],['Kreatinin','0,8','mg/dL','0,6–1,1',''],['GDS','110','mg/dL','< 200','']]},
+      lab:{rows:[['GDS','194','mg/dL','< 200',''],['Kreatinin','2,1','mg/dL','0,6–1,1','H'],['eGFR','26','mL/mnt','≥ 90','L'],['Ureum','76','mg/dL','10–50','H']]},
       sections:[{lines:[
-        {id:'l1', cols:['NaCl 3% (hipertonik)','1.000 mL','IV cepat','Habis dalam 4 jam']},
-        {id:'l2', cols:['Pasang kateter urin','—','—','Pantau diuresis tiap jam']},
-        {id:'l3', cols:['Cek ulang Natrium','—','—','Tiap 4 jam']}]}],
-      why:'Koreksi terlalu agresif dan berbahaya! Pada hiponatremia kronik, kenaikan natrium tidak boleh melebihi 6–8 mmol/L per 24 jam (batas absolut 8–10). Infus 1.000 mL NaCl 3% dalam 4 jam akan melonjakkan Na dan memicu Osmotic Demyelination Syndrome (kerusakan otak permanen). Bila simtomatik berat pun bolus hanya 100–150 mL.' },
+        {id:'l1', t:'R/ Glibenklamid tab 5 mg', s:'S 2 dd tab I sebelum makan'},
+        {id:'l2', t:'R/ Edukasi: makan teratur & kenali tanda hipoglikemia', s:''},
+        {id:'l3', t:'R/ Rujuk evaluasi fungsi ginjal ke Sp.PD', s:''}]}],
+      why:'Glibenklamid adalah sulfonilurea kerja panjang yang metabolit aktifnya dibuang lewat ginjal. Pada lansia (69 th) dan gangguan ginjal (eGFR 26 < 60), glibenklamid kontraindikasi karena risiko tinggi hipoglikemia berat berkepanjangan (SKDI 4A DM tipe 2).' },
 
     { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:'lab-id', kind:'lab', topic:'identitas',
       pt:{nama:'Tn. Ruslan Effendi', lahir:'1975-03-19', jk:'L', rm:'02-88-47', bb:'72 kg', dx:'Nyeri perut kanan atas, dispepsia', alergi:'Tidak ada', cat:'Tidak kuning, nyeri epigastrium ringan'},
@@ -566,15 +558,15 @@
         {id:'l3', cols:['Cek ulang kalium','—','—','6 jam lagi']}]}],
       why:'Aman. Kalium 2,9 mmol/L (hipokalemia) memang perlu dikoreksi. KCl 20 mEq dalam 500 mL (konsentrasi 40 mEq/L, batas maks perifer) habis 4 jam (= 5 mEq/jam, batas aman ≤ 10 mEq/jam), dan fungsi ginjal normal.' },
 
-    { type:'instruksi', sign:'dr. Hendra, Sp.PD', flaw:null, needs:'lab', topic:'aman',
-      pt:{nama:'Tn. Ridho Saputra', lahir:'1968-09-07', jk:'L', rm:'01-65-43', bb:'66 kg', dx:'Hiperkalemia berat dengan gelombang T tinggi di EKG', alergi:'Tidak ada', cat:'CKD stadium 5, EKG tampak peaked T wave'},
-      ktp:{wil:'3273', kec:'16', sn:'0002', tl:'BANDUNG', alamat:'JL. TERUSAN JAKARTA NO. 55', agama:'ISLAM', kawin:'KAWIN', kerja:'WIRASWASTA', goldar:'B'},
-      lab:{rows:[['Kalium','6,7','mmol/L','3,5–5,0','H'],['Kreatinin','4,5','mg/dL','0,7–1,3','H'],['GDS','162','mg/dL','< 200',''],['Natrium','138','mmol/L','135–145','']]},
+    { type:'resep', sign:'dr. Rahmat', flaw:null, needs:'lab', topic:'aman',
+      pt:{nama:'Tn. Ridho Saputra', lahir:'2000-09-07', jk:'L', rm:'01-65-43', bb:'66 kg', dx:'Demam dengue hari ke-3 (tanpa tanda bahaya)', alergi:'Tidak ada', cat:'Demam 3 hari, nyeri belakang mata, mau minum, tidak ada perdarahan/nyeri perut'},
+      ktp:{wil:'3273', kec:'16', sn:'0002', tl:'BANDUNG', alamat:'JL. TERUSAN JAKARTA NO. 55', agama:'ISLAM', kawin:'BELUM KAWIN', kerja:'KARYAWAN SWASTA', goldar:'B'},
+      lab:{rows:[['Trombosit','92.000','/µL','150.000–400.000','L'],['Hematokrit','42','%','40–50',''],['Leukosit','3.400','/µL','4.000–11.000','L'],['Hemoglobin','14,5','g/dL','13–17','']]},
       sections:[{lines:[
-        {id:'l1', cols:['Kalsium glukonas 10%','10 mL (1 g)','IV pelan 5 menit','Monitor EKG kontinu']},
-        {id:'l2', cols:['Insulin reguler + D40%','10 unit + 50 mL','IV','Cek GDS tiap 30–60 menit']},
-        {id:'l3', cols:['Nebulisasi Salbutamol','10 mg','Inhalasi','+ konsul hemodialisis cito']}]}],
-      why:'Aman! Tatalaksana hiperkalemia emergensi 3 langkah sudah tepat: (1) stabilisasi membran jantung dengan kalsium glukonas 10% 10 mL IV pelan, (2) geser kalium intrasel dengan insulin 10 U + D40% 50 mL dan salbutamol dosis tinggi 10 mg, (3) eliminasi via hemodialisis.' },
+        {id:'l1', t:'R/ Paracetamol tab 500 mg', s:'S 3 dd tab I k/p demam/nyeri'},
+        {id:'l2', t:'R/ Oralit / cairan oral 2–2,5 L per hari', s:'S minum bertahap sepanjang hari'},
+        {id:'l3', t:'R/ Edukasi tanda bahaya (mimisan, nyeri perut hebat, muntah terus) & cek lab tiap 24 jam', s:''}]}],
+      why:'Aman! Penanganan demam dengue tanpa tanda bahaya (SKDI 4A) sudah benar: antipiretik hanya paracetamol (tanpa NSAID/aspirin), rehidrasi oral cukup, edukasi tanda bahaya, dan pemantauan trombosit-hematokrit serial.' },
 
     /* ---------- 54–56: Kasus Aman dengan Jebakan JKN (Malam 5+) ---------- */
     { type:'resep', sign:'dr. Anindya', flaw:null, needs:'jkn', topic:'aman',
@@ -626,18 +618,18 @@
     'Tn. Slamet Riyadi':       {look:{sk:3, hair:'bald', hc:'#a29f99', old:1, must:1, shirt:'#8a6a3a'}, say:'Saya muntah darah tadi pagi, Dok. BAB-nya hitam.'},
     'Ny. Lina Marlina':        {look:{sk:0, hair:'long', hc:'#2a1d16', shirt:'#4f8a5a'}, say:'Jatuh di tangga, tangan saya nggak bisa digerakkan.'},
     'Tn. Hendra Wijaya':       {look:{sk:1, hair:'side', hc:'#3c322b', must:1, shirt:'#3a5d7c'}, say:'Dada saya terasa tertekan, Dok. Tadi sore sempat minum obat kuat.'},
-    'Tn. Dedi Kurniawan':      {look:{sk:2, hair:'short', hc:'#7d7a74', old:1, shirt:'#6b4b3e'}, say:'Ulu hati nyeri hebat sampai keringat dingin, Dok, badan lemas.'},
+    'Tn. Dedi Kurniawan':      {look:{sk:2, hair:'short', hc:'#7d7a74', old:1, shirt:'#6b4b3e'}, say:'Jempol kaki kanan saya bengkak merah nyeri banget dari semalam, Dok.'},
     'An. Farhan Maulana':      {look:{kid:1, small:1, sk:1, hair:'kid', shirt:'#3da5d9', blush:1}, comp:{sk:1, hair:'short', shirt:'#4f6d7a'}, say:'Anak saya disengat lebah langsung bengkak dan sesak, Dok!'},
     'An. Aisyah Zahra':        {look:{kid:1, sk:0, hair:'pig', shirt:'#f28482', blush:1}, comp:{sk:0, hijab:'#84a59d', shirt:'#84a59d'}, say:'Badannya penuh lenting cacar air dan panas tinggi, Dok.'},
     'An. Gilang Ramadhan':     {look:{kid:1, small:1, sk:1, hair:'kid', shirt:'#f6bd60', blush:1}, comp:{sk:1, hijab:'#6d597a', shirt:'#6d597a'}, say:'Tolong, Dok! Anak saya barusan kejang pas demam tinggi!'},
     'Ny. Kartika Sari':        {look:{sk:0, hijab:'#e07a5f', shirt:'#e07a5f'}, say:'Perih kalau buang air kecil, Dok. Saya hamil tiga bulan.'},
     'Ny. Rahmawati Dewi':      {look:{sk:1, hijab:'#5c80bc', shirt:'#5c80bc'}, say:'Punggung bawah saya pegal banget, Dok. Hamil sudah delapan bulan.'},
     'Tn. Suryadi':             {look:{sk:2, hair:'short', must:1, shirt:'#6b705c'}, say:'Bisul di lengan saya barusan dibersihkan, Dok. Saya alergi berat obat sulfa.'},
-    'Ny. Melati Kusumaningrum':{look:{sk:1, hair:'bob', hc:'#2f221c', glasses:1, shirt:'#9d8189'}, say:'Batuk sesak dan demam tinggi habis tersedak kemarin, Dok.'},
-    'Tn. Agus Salim':          {look:{sk:2, hair:'side', hc:'#4a4642', must:1, shirt:'#4a5759'}, comp:{sk:2, hijab:'#b5838d', shirt:'#b5838d'}, say:'Suami saya masih kejang terus padahal sudah disuntik, Dok!'},
+    'Ny. Melati Kusumaningrum':{look:{sk:1, hair:'bob', hc:'#2f221c', glasses:1, shirt:'#9d8189'}, say:'Pipi saya nyeri dan pilek kental hijau sepuluh hari, Dok. Saya alergi penisilin.'},
+    'An. Danu Pratama':        {look:{kid:1, sk:2, hair:'kid', shirt:'#4a5759', blush:1}, comp:{sk:2, hijab:'#b5838d', shirt:'#b5838d'}, say:'Koreng bernanah di kaki anak saya makin melebar, Dok.'},
     'Ny. Kartini':             {look:{sk:2, hijab:'#8e9aaf', old:1, glasses:1, shirt:'#8e9aaf'}, say:'Pinggang kanan saya nyeri melilit sampai tembus ke depan, Dok.'},
-    'Tn. Hermawan':            {look:{sk:1, hair:'bald', hc:'#b5b2ac', old:1, glasses:1, shirt:'#577590'}, say:'Kepala saya kunang-kunang seperti mau pingsan, Dok.'},
-    'Ny. Yuliana':             {look:{sk:1, hijab:'#b56576', shirt:'#b56576'}, comp:{sk:1, hair:'short', shirt:'#355070'}, say:'Istri saya lagi diinfus obat tensi hamil, tapi kok jadi lemas dan napasnya pelan, Dok?'},
+    'Ny. Ratih Permata':       {look:{sk:1, hijab:'#577590', shirt:'#577590'}, say:'Demam saya naik tiap sore sudah enam hari, Dok. Saya lagi hamil tujuh bulan.'},
+    'Ny. Yuliana':             {look:{sk:1, hijab:'#b56576', shirt:'#b56576'}, say:'Saya kontrol hamil tiga bulan, Dok. Obat darah tinggi saya masih boleh dilanjut?'},
     'An. Bagas Pratama':       {look:{kid:1, sk:2, hair:'spiky', shirt:'#43aa8b', blush:1}, comp:{sk:2, hair:'short', must:1, shirt:'#277da1'}, say:'Kaki anak saya baru selesai dijahit, sekarang mengeluh nyeri, Dok.'},
     'Tn. Ridwan Hakim':        {look:{sk:1, hair:'spiky', shirt:'#f3722c'}, say:'Habis makan udang badan saya langsung bentol dan tenggorokan seret, Dok!'},
     'Ny. Lestari Handayani':   {look:{sk:0, hijab:'#6a994e', shirt:'#6a994e'}, say:'Kepala saya sakit hebat sama mata berkunang, Dok. Tensi tinggi sekali.'},
@@ -660,33 +652,33 @@
     'Ny. Ningsih':             {look:{sk:1, hijab:'#9b6bd6', old:1, glasses:1, shirt:'#9b6bd6'}, comp:{sk:1, hair:'long', hc:'#2a1d16', shirt:'#4fb0a5'}, say:'Ibu saya susah dibangunkan dari tadi, Dok!'},
     'Nn. Putri Anggraini':     {look:{sk:0, hair:'long', hc:'#2a1d16', shirt:'#ff8fb1'}, say:'Demam empat hari, Dok. Badan pegal semua.'},
     'Tn. Yusuf Hidayat':       {look:{sk:2, hair:'side', hc:'#3b2a22', must:1, shirt:'#3a6ea5'}, say:'BAB saya hitam, Dok. Lemas, mau pingsan.'},
-    'Tn. Bahrudin':            {look:{sk:2, hair:'short', shirt:'#c8553d'}, say:'Napas saya ngos-ngosan dan mual terus, Dok. Saya ada riwayat gula.'},
-    'Ny. Hasanah':             {look:{sk:1, hijab:'#7209b7', old:1, glasses:1, shirt:'#7209b7'}, say:'Hidung saya mimisan terus nggak berhenti, tangan juga banyak lebam, Dok.'},
-    'Tn. Gunawan':             {look:{sk:2, hair:'side', hc:'#8d8a85', old:1, shirt:'#457b9d'}, say:'Kaki bengkak dan agak sesak, Dok. Ginjal saya memang sudah lemah.'},
-    'Ny. Mawar Indah':         {look:{sk:0, hijab:'#e5989b', old:1, shirt:'#e5989b'}, comp:{sk:0, hair:'bob', shirt:'#6d6875'}, say:'Ibu saya lemas lima hari dan bicaranya agak lambat, Dok.'},
+    'Tn. Bahrudin':            {look:{sk:2, hair:'short', shirt:'#c8553d'}, say:'Demam saya naik terus tiap malam sudah enam hari, Dok, badan lemas.'},
+    'Ny. Hasanah':             {look:{sk:1, hijab:'#7209b7', glasses:1, shirt:'#7209b7'}, say:'Mata saya kuning dan mual terus dari tiga hari lalu, Dok.'},
+    'Tn. Gunawan':             {look:{sk:2, hair:'side', hc:'#8d8a85', old:1, shirt:'#457b9d'}, say:'Lutut kanan saya ngilu buat jalan, Dok. Tadi sudah cek lab ginjal.'},
+    'Ny. Mawar Indah':         {look:{sk:0, hijab:'#e5989b', old:1, shirt:'#e5989b'}, say:'Saya kontrol gula, Dok, tapi belakangan sering gemetar kalau telat makan.'},
     'Tn. Ruslan Effendi':      {look:{sk:2, hair:'short', must:1, shirt:'#386641'}, say:'Ulu hati agak perih saja, Dok, tapi kok dibilang harus dirawat hepatitis?'},
     'Tn. Rudi Hartanto':       {look:{sk:1, hair:'spiky', shirt:'#4caf50'}, say:'Kaki kram terus, Dok, habis diare dua hari.'},
-    'Tn. Ridho Saputra':       {look:{sk:3, hair:'bald', hc:'#b9b6b0', old:1, shirt:'#3d405b'}, say:'Badan lemas sekali dan dada terasa berat, Dok. Saya pasien cuci darah.'},
+    'Tn. Ridho Saputra':       {look:{sk:2, hair:'short', shirt:'#3d405b'}, say:'Demam tiga hari dan pegal di belakang mata, Dok. Ini hasil lab darah saya.'},
     'Ny. Endang Sulastri':     {look:{sk:2, hijab:'#e5734f', shirt:'#e5734f'}, say:'Kepala nyut-nyutan, Dok. Kartu JKN saya ketinggalan, ini punya adik saya.'},
     'Tn. Bambang Sutrisno':    {look:{sk:3, hair:'short', shirt:'#f2b632'}, say:'Tangan saya kena seng, Dok. Kata petugas JKN saya nunggak...'},
     'Ny. Sumarni':             {look:{sk:1, hijab:'#4ea8de', old:1, shirt:'#4ea8de'}, comp:{sk:1, hair:'short', shirt:'#5390d9'}, say:'Ibu saya keringat dingin dan ngelantur, Dok. Maaf JKN-nya lagi tidak aktif...'}
   };
 
-  /* ================= TOPIK & 5 MALAM + MODE SULIT (5 MENIT / KASUS) ================= */
+  /* ================= TOPIK & 5 MALAM + MODE SULIT (5 MENIT / KASUS, SKDI DOKTER UMUM) ================= */
   const TOPICS = {
-    dosis:    {label:'Dosis & satuan', tip:'Hitung dosis anak dengan mg/kgBB × BB, cek batas lansia/maks harian, kecepatan infus, dan satuan (1 g = 1.000 mg). Gunakan Kalkulator (K).'},
-    alergi:   {label:'Alergi obat', tip:'Cocokkan kotak alergi di kartu pasien dengan GOLONGAN obat (mis. penisilin → amoksisilin/ampisilin-sulbaktam; sulfa → kotrimoksazol).'},
-    kontra:   {label:'Kontraindikasi & interaksi', tip:'Periksa kondisi khusus (asma, hamil, ginjal, GI bleed, blok AV, infark RV, anak <12 th) dan interaksi obat (nitrat + sildenafil). Cek tab Obat (B).'},
+    dosis:    {label:'Dosis & satuan', tip:'Hitung dosis anak dengan mg/kgBB × BB, cek batas lansia/maks harian, rute IM vs IV, dan satuan (1 g = 1.000 mg). Gunakan Kalkulator (K).'},
+    alergi:   {label:'Alergi obat', tip:'Cocokkan kotak alergi di kartu pasien dengan GOLONGAN obat (mis. penisilin → amoksisilin / co-amoxiclav; sulfa → kotrimoksazol).'},
+    kontra:   {label:'Kontraindikasi & interaksi', tip:'Periksa kondisi khusus SKDI dokter umum (asma, hamil, ginjal, GI bleed, gout akut, anak < 8 / < 12 th) dan interaksi (nitrat + sildenafil). Cek tab Obat (B).'},
     identitas:{label:'Identitas pasien', tip:'Pakai lup (P) untuk mencocokkan nama, tanggal lahir, alamat, dan wajah di setiap dokumen, termasuk gelang dan lembar lab.'},
-    lab:      {label:'Interpretasi lab', tip:'Perhatikan nilai bertanda H/L (K, Na, GDS, trombosit, INR, eGFR), lalu cek apakah obat di berkas memperburuk atau melanggar batas koreksi aman.'},
+    lab:      {label:'Interpretasi lab', tip:'Perhatikan nilai bertanda H/L (K, GDS, trombosit, leukosit, SGOT/SGPT, kreatinin/eGFR), lalu cek apakah obat di berkas memperburuk kondisi itu.'},
     aman:     {label:'Berkas aman', tip:'Jangan asal tolak. KTP lama, foto lama, obat alternatif non-alergi, atau status JKN tidak aktif bukan alasan menolak berkas gawat darurat.'}
   };
   const TOPIC_ORDER = ['dosis','alergi','kontra','identitas','lab','aman'];
 
   const NIGHTS = [null,
     {title:'Resep & klinis', limit:300, mix:[['clin',4],['safe',2]], feats:[],
-      memo:['Cocokkan isi berkas dengan <b>kartu pasien</b>: alergi obat, berat badan untuk dosis anak/lansia, interaksi obat, dan kondisi seperti hamil, asma, ginjal, atau perdarahan.',
-        'Cek <b>satuan & cara pemberian</b> (1 gram = 1.000 mg, IM vs IV, kecepatan infus fenitoin).',
+      memo:['Cocokkan isi berkas (kasus SKDI dokter umum) dengan <b>kartu pasien</b>: alergi obat, berat badan anak/lansia, interaksi obat, dan kondisi seperti hamil, asma, gout akut, ginjal, atau perdarahan.',
+        'Cek <b>satuan & rute</b> (1 gram = 1.000 mg, epinefrin anafilaksis IM bukan IV bolus).',
         'Ada yang salah? Sorot barisnya dengan <b>stabilo</b>, lalu cap <b>TOLAK</b>. Aman? Cap <b>ACC</b>. Menolak berkas yang benar juga merugikan pasien.',
         'Waktu tiap berkas <b>5 menit</b>. Ragu dosis/kontraindikasi? Buka <b>Kalkulator</b> (K) atau <b>Panduan</b> (B).']},
     {title:'Kartu identitas', limit:300, mix:[['id',2],['clin',2],['safe',2]], feats:['ktp','lup'],
@@ -700,19 +692,19 @@
         'Nama dan tanggal lahir di gelang harus cocok. Gelang yang tertukar berarti risiko salah pasien.']},
     {title:'Hasil lab', limit:300, mix:[['lab',3],['id|gelang',1],['clin',1],['safe',2]], feats:['ktp','lup','wajah','gelang','lab'],
       memo:['Sebagian pasien datang dengan <b>hasil lab</b>. Nilai bertanda <b>H</b> berarti tinggi, <b>L</b> berarti rendah.',
-        'Tanyakan: apakah obat di berkas memperburuk nilai lab atau salah urutan? (Mis. K tinggi + KCl/spironolakton, KAD K < 3,3 + insulin, GDS rendah + insulin, INR tinggi + warfarin, Na rendah dikoreksi terlalu cepat).',
+        'Tanyakan: apakah obat di berkas berbahaya untuk hasil lab itu? (Mis. K tinggi + KCl, GDS rendah + insulin, trombosit dengue + ibuprofen, leukopenia tifoid + kloramfenikol, SGOT/SGPT tinggi + simvastatin, kreatinin tinggi + NSAID/glibenklamid).',
         'Lembar lab juga punya identitas. Lab milik pasien lain tidak boleh jadi dasar tindakan.']},
     {title:'Jaminan (JKN)', limit:300, mix:[['lab',2],['gelang',1],['id',1],['clin',1],['safe',3]], feats:['ktp','lup','wajah','gelang','lab','jkn'],
       memo:['Pasien membawa <b>kartu JKN</b>. Kartu ini hanya untuk penjaminan, bukan penanda keselamatan pasien.',
         '<b>Jangan menolak</b> berkas karena masalah JKN, misalnya kartu tidak aktif atau kartu milik keluarga. Dalam keadaan gawat darurat, rumah sakit dilarang menolak pasien atau mendahulukan urusan administrasi (UU 17/2023 Pasal 174).',
         'Semua aturan malam 1–4 tetap berlaku. Total 8 berkas, masing-masing 5 menit.']},
     {title:'Mode Sulit', hard:true, limit:300, mix:[['flaw',7],['safe',3]], feats:['ktp','lup','wajah','gelang','lab','jkn'],
-      memo:['Semua jenis berkas dan dokumen dari <b>56 kasus</b> diacak dalam satu malam: resep, SOAP, instruksi, KTP/KIA, wajah, gelang, hasil lab, dan kartu JKN.',
+      memo:['Semua jenis berkas dan dokumen dari <b>56 kasus SKDI dokter umum</b> diacak dalam satu malam: resep, SOAP, instruksi, KTP/KIA, wajah, gelang, hasil lab, dan kartu JKN.',
         'Jumlah berkas yang salah juga acak. Waktu per berkas <b>5 menit</b>.',
         'Semua aturan malam 1–5 berlaku tanpa petunjuk daftar cek di bawah meja.']}
   ];
 
-  /* ================= PANDUAN OBAT TERVERIFIKASI (80 OBAT) =================
+  /* ================= PANDUAN OBAT TERVERIFIKASI (81 OBAT) =================
      Struktur tiap obat:
      n   = Nama generik
      alt = Sinonim / nama lain (opsional, ikut dicari)
@@ -789,6 +781,14 @@
     ki:'Alergi penisilin/beta-laktam (anafilaksis, SJS/TEN), mononukleosis infeksiosa (ruam berat).',
     int:'Metotreksat (menurunkan klirens), warfarin (dapat menaikkan INR ringan).',
     es:'Diare, mual, ruam kulit, reaksi alergi hingga anafilaksis.'},
+
+   {n:'Amoksisilin–klavulanat (Co-amoxiclav)', alt:'Penisilin Augmentin', cls:'Antibiotik penisilin + penghambat beta-laktamase',
+    ind:'Rinosinusitis bakterial akut, otitis media akut, gigitan hewan/manusia, infeksi kulit/pioderma, ISK hamil.',
+    d:'625 mg (500/125 mg) PO tiap 8 jam atau 1.000 mg (875/125 mg) tiap 12 jam sesudah makan. Sesuaikan interval bila eGFR < 30.',
+    a:'25–45 mg/kgBB/hari (komponen amoksisilin) terbagi 2–3 dosis (OMA: hingga 80–90 mg/kg/hari).',
+    kh:'Aman pada kehamilan & menyusui. Hati-hati gangguan hati.',
+    ki:'Alergi penisilin/beta-laktam (anafilaksis/SJS), riwayat ikterus kolestatik akibat co-amoxiclav.',
+    es:'Diare, mual, ruam alergi, ikterus kolestatik jarang.'},
 
    {n:'Ampisilin–sulbaktam', alt:'Penisilin beta-laktam', cls:'Antibiotik penisilin + penghambat beta-laktamase',
     ind:'Infeksi intra-abdomen, kulit/jaringan lunak berat, pneumonia aspirasi, infeksi ginekologi.',
@@ -1409,13 +1409,13 @@
     int:'Spironolakton, ACEi/ARB, kotrimoksazol (risiko hiperkalemia berat).',
     es:'Flebitis/nyeri vena (konsentrasi tinggi), hiperkalemia, aritmia fatal/henti jantung bila terlalu cepat.'},
 
-   {n:'Atorvastatin', alt:'Simvastatin Statin', cls:'Penghambat HMG-CoA reduktase (statin)',
+   {n:'Atorvastatin / Simvastatin', alt:'Statin kolesterol', cls:'Penghambat HMG-CoA reduktase (statin)',
     ind:'Dislipidemia, pencegahan primer/sekunder kardiovaskular, terapi intensitas tinggi pada SKA (atorvastatin 40–80 mg).',
-    d:'10–80 mg PO 1×/hari (SKA: 40–80 mg 1×/hari).',
+    d:'Atorvastatin 10–80 mg PO 1×/hari (SKA: 40–80 mg). Simvastatin 10–40 mg PO 1×/hari malam hari.',
     a:'Hiperkolesterolemia familial oleh spesialis (≥ 10 th).',
-    kh:'KONTRAINDIKASI kehamilan & menyusui. Aman pada gagal ginjal (tidak perlu penyesuaian dosis).',
-    ki:'Kehamilan, menyusui, penyakit hati aktif atau peningkatan persisten SGOT/SGPT > 3× batas atas normal.',
-    int:'Klaritromisin/eritromisin, siklosporin, gemfibrozil (risiko rabdomiolisis — terutama pada simvastatin).',
+    kh:'KONTRAINDIKASI kehamilan & menyusui. Aman pada gagal ginjal (atorvastatin tidak perlu penyesuaian dosis).',
+    ki:'Kehamilan, menyusui, penyakit hati aktif (hepatitis akut!) atau peningkatan persisten SGOT/SGPT > 3× batas atas normal.',
+    int:'Klaritromisin/eritromisin, amlodipin dosis tinggi (maks simvastatin 20 mg), gemfibrozil (risiko rabdomiolisis).',
     es:'Mialgia, peningkatan enzim hati, jarang rabdomiolisis (nyeri otot hebat + urin gelap kecokelatan).'}
   ];
 
@@ -1551,29 +1551,31 @@
   const QUICK = [
    {h:'Checklist 5 BENAR tiap memeriksa berkas', items:[
     'Benar pasien: cocokkan nama, tanggal lahir, alamat, wajah di loket, gelang, dan identitas lembar lab.',
-    'Benar obat & golongan: cocokkan kotak alergi (penisilin → amoksisilin/ampisilin-sulbaktam; sulfa → kotrimoksazol).',
+    'Benar obat & golongan: cocokkan kotak alergi (penisilin → amoksisilin / co-amoxiclav / ampisilin; sulfa → kotrimoksazol).',
     'Benar dosis & satuan: 1 g = 1.000 mg, 1 mg = 1.000 mcg; hitung mg/kgBB anak & batas lansia (ketorolak ≤ 60 mg/hr bila ≥ 65 th atau < 50 kg).',
-    'Benar rute & kecepatan: epinefrin anafilaksis IM (bukan IV 1:1.000!), fenitoin ≤ 50 mg/mnt dalam NaCl 0,9% (bukan D5%), KCl encer ≤ 40 mEq/L perifer & JANGAN bolus.',
-    'Benar kondisi & lab: cek kehamilan, asma, fungsi ginjal/hati, perdarahan, EKG/nadi, dan nilai lab H/L.']},
-   {h:'Kontraindikasi & interaksi mematikan di IGD', items:[
-    'Asma / PPOK: beta-blocker non-selektif (propranolol), labetalol, adenosin, aspirin/NSAID (bila sensitif).',
-    'Kehamilan: ACEi (kaptopril), ARB (candesartan/valsartan), warfarin, asam valproat, fluorokuinolon, doksisiklin, statin, NSAID trimester 3 (≥ 20 mg).',
-    'Gagal ginjal (eGFR < 30 / AKI): metformin, NSAID/ketorolak, spironolakton, glibenklamid, aminoglikosida tanpa penyesuaian.',
+    'Benar rute & kecepatan: epinefrin anafilaksis IM paha lateral (bukan IV 1:1.000!), KCl encer ≤ 40 mEq/L perifer & JANGAN bolus.',
+    'Benar kondisi & lab: cek kehamilan, asma, fungsi ginjal/hati, perdarahan/trombosit, darah lengkap, dan nilai lab H/L.']},
+   {h:'Kontraindikasi & interaksi mematikan (SKDI Dokter Umum)', items:[
+    'Asma / PPOK: beta-blocker non-selektif (propranolol), labetalol, aspirin/NSAID (bila sensitif).',
+    'Kehamilan: ACEi (kaptopril), ARB (candesartan/valsartan), fluorokuinolon (siprofloksasin), doksisiklin, kloramfenikol (trimester 3), statin, warfarin, asam valproat, NSAID trimester 3 (≥ 20 minggu).',
+    'Gagal ginjal (eGFR < 30 / AKI) & lansia: metformin (eGFR < 30/AKI), NSAID/ketorolak (eGFR < 30), glibenklamid (lansia / eGFR < 60), spironolakton.',
+    'Penyakit hati aktif (hepatitis akut, SGOT/SGPT > 3× ULN): statin (simvastatin/atorvastatin) KONTRAINDIKASI absolut; batasi paracetamol.',
     'Perdarahan GI / demam dengue (trombosit rendah): NSAID (ibuprofen, diklofenak, ketorolak), aspirin, antikoagulan.',
-    'Bradikardia / blok AV der 2–3: beta-blocker (bisoprolol, propranolol), diltiazem/verapamil, digoksin, amiodaron.',
-    'Nitrat (ISDN/GTN) + sildenafil (24 jam) / tadalafil (48 jam) ATAU infark ventrikel kanan / TDS < 90: HIPOTENSI FATAL.',
-    'Anak: aspirin pada demam virus (sindrom Reye!), tramadol (< 12 th), doksisiklin (< 8 th), fluorokuinolon (< 18 th), kloramfenikol & seftriakson+RL (neonatus).',
-    'Hiperkalemia (> 5,5): JANGAN beri KCl atau spironolakton. KAD dengan K < 3,3: TUNDA insulin, koreksi kalium dulu!']},
-   {h:'Ringkasan tatalaksana gawat darurat terverifikasi', items:[
-    'Anafilaksis: Epinefrin 1:1.000 IM paha anterolateral (dewasa 0,3–0,5 mg; anak 0,01 mg/kg maks 0,3 mg) sebagai LINI PERTAMA + O₂ + NaCl 0,9% cepat; steroid/antihistamin hanya adjuvan.',
-    'STEMI: Aspirin 160–320 mg kunyah + P2Y12 inhibitor (clopidogrel 300–600 mg) + reperfusi segera; O₂ hanya bila SpO₂ < 90%; hindari nitrat pada infark RV/TDS < 90/pemakai sildenafil.',
-    'Hiperkalemia berat (> 6,0 atau perubahan EKG): (1) Kalsium glukonas 10% 10 mL IV pelan 2–5 mnt, (2) Insulin reguler 10 U IV + D40% 50 mL & nebu salbutamol 10–20 mg, (3) eliminasi (furosemid/HD).',
-    'Hipoglikemia berat (< 54 mg/dL atau penurunan kesadaran): D40% 25–50 mL IV pelan dewasa (anak D10% 2 mL/kg), cek ulang 15 mnt; tiamin 100 mg IV dulu bila malnutrisi/alkoholik; observasi 24 jam bila glibenklamid.',
-    'KAD: Rehidrasi NaCl 0,9% dulu → CEK KALIUM sebelum insulin! Bila K < 3,3 mmol/L, tunda insulin & koreksi K dulu; baru insulin IV 0,1 U/kg/jam.',
-    'Preeklamsia berat / Eklamsia (POGI): MgSO₄ 4 g IV pelan 15–20 mnt lanjut 1 g/jam (syarat: patela +, RR ≥ 16, urin ≥ 30 mL/jam; bila intoksikasi STOP & beri Ca glukonas 10% 10 mL IV) + nifedipin PO 10 mg / labetalol IV bila TD ≥ 160/110.',
-    'Overdosis warfarin (INR tinggi + perdarahan): STOP warfarin, berikan Vitamin K1 5–10 mg IV pelan + PCC/FFP.',
-    'Hiponatremia kronik (Na < 120): kenaikan Na MAKS 6–8 mmol/L per 24 jam (cegah ODS!). Bolus NaCl 3% hanya 100–150 mL bila kejang/koma.',
-    'Status epileptikus: Diazepam IV/rektal atau Midazolam IM → lini-2 Fenitoin 15–20 mg/kg IV dalam NaCl 0,9% (≤ 50 mg/mnt) atau Asam valproat IV.']}
+    'Depresi sumsum tulang / leukopenia berat: Kloramfenikol KONTRAINDIKASI (risiko pansitopenia & anemia aplastik).',
+    'Serangan gout akut (podagra): JANGAN mulai alopurinol saat flare akut (memperberat nyeri — atasi inflamasi dulu).',
+    'Nitrat (ISDN/GTN) + sildenafil (24 jam) / tadalafil (48 jam) ATAU hipotensi (TDS < 90): HIPOTENSI FATAL.',
+    'Anak: aspirin pada demam virus (sindrom Reye!), tramadol (< 12 th), doksisiklin (< 8 th), fluorokuinolon (< 18 th).',
+    'Hiperkalemia (K > 5,5): JANGAN beri KCl atau spironolakton! Hipoglikemia (GDS < 70): JANGAN beri insulin!']},
+   {h:'Ringkasan tatalaksana IGD & Faskes Primer (SKDI 4A / 3B / 3A)', items:[
+    'Anafilaksis (SKDI 4A): Epinefrin 1:1.000 IM paha anterolateral (dewasa 0,3–0,5 mg; anak 0,01 mg/kg maks 0,3 mg) sebagai LINI PERTAMA + O₂ + NaCl 0,9% cepat; steroid/antihistamin hanya adjuvan.',
+    'STEMI / SKA (SKDI 3B): Aspirin 160–320 mg kunyah + clopidogrel 300 mg loading + pasang IV + rujuk segera untuk reperfusi; O₂ hanya bila SpO₂ < 90%; hindari nitrat pada pemakai sildenafil/TDS < 90.',
+    'Asma eksaserbasi (SKDI 4A/3B): O₂ target SpO₂ 93–95% + nebulisasi SABA (+ ipratropium bila sedang-berat) tiap 20 mnt + kortikosteroid sistemik dini (prednison/metilprednisolon).',
+    'Preeklamsia berat / Eklamsia (SKDI 3B · PNPK POGI): Loading awal MgSO₄ 4 g IV pelan 15–20 mnt (syarat: patela +, RR ≥ 16, urin ≥ 30 mL/jam; siapkan Ca glukonas 10% 10 mL IV) + nifedipin lepas cepat 10 mg PO bila TD ≥ 160/110 → segera rujuk Sp.OG.',
+    'Hipoglikemia berat (SKDI 4A/3B · GDS < 54 atau penurunan kesadaran): D40% 25–50 mL IV pelan dewasa (anak D10% 2 mL/kg), cek GDS ulang 15 mnt; observasi 24 jam bila pemicunya sulfonilurea (glibenklamid).',
+    'Kejang demam / Kejang akut anak (SKDI 4A/3B · IDAI): Diazepam rektal 5 mg (< 12 kg) atau 10 mg (≥ 12 kg), atau Diazepam IV 0,2–0,5 mg/kg pelan (maks 10 mg).',
+    'Demam dengue tanpa tanda bahaya (SKDI 4A): Paracetamol saja (TANPA NSAID/aspirin), rehidrasi oral cukup, edukasi tanda bahaya & cek trombosit/Ht tiap 24 jam.',
+    'Diare akut anak dehidrasi ringan–sedang (SKDI 4A · WHO/IDAI Terapi B): Oralit 75 mL/kg dalam 3 jam + Zinc 10–20 mg/hari selama 10 hari (tanpa loperamid).',
+    'Hiperkalemia berat (SKDI 3B · K > 6,0): Hentikan sumber K, stabilisasi membran dengan Ca glukonas 10% 10 mL IV pelan, geser K dengan insulin reguler 10 U + D40% 50 mL IV & nebu salbutamol → segera rujuk untuk hemodialisis.']}
   ];
 
   const IDENT = [
