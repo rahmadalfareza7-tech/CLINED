@@ -224,11 +224,13 @@
         </div>
         <button class="mini-btn tidy" data-act="tidy">Rapikan meja <kbd>R</kbd></button>
         <span class="tray-gap"></span>
-        <button class="stamp stamp-tolak" id="igd-tolak" data-act="tolak">
-          <span class="knob"></span><span class="base"><b>TOLAK</b><kbd>T</kbd></span>
+        <button class="stamp stamp-tolak" id="igd-tolak" data-act="tolak" title="Stempel TOLAK (T)">
+          <span class="knob"><i class="knob-wood"></i><i class="knob-ring"></i></span>
+          <span class="base"><b>TOLAK</b><kbd>T</kbd></span>
         </button>
-        <button class="stamp stamp-acc" id="igd-acc" data-act="acc">
-          <span class="knob"></span><span class="base"><b>ACC</b><kbd>A</kbd></span>
+        <button class="stamp stamp-acc" id="igd-acc" data-act="acc" title="Stempel ACC (A)">
+          <span class="knob"><i class="knob-wood"></i><i class="knob-ring"></i></span>
+          <span class="base"><b>ACC</b><kbd>A</kbd></span>
         </button>
       </div>
   </div>
@@ -1404,11 +1406,15 @@
     const rot = (Math.random()*14 - 7).toFixed(1) + 'deg';
     const hd = document.createElement('div');
     hd.className = 'handle ' + action; hd.style.setProperty('--x', x+'%'); hd.style.setProperty('--y', y+'%');
+    hd.innerHTML = '<span class="h-knob"></span><span class="h-neck"></span><span class="h-head"></span>';
     const mk = document.createElement('div');
     mk.className = 'mark ' + action; mk.style.setProperty('--x', x+'%'); mk.style.setProperty('--y', y+'%'); mk.style.setProperty('--rot', rot);
-    mk.innerHTML = action === 'acc' ? `<b>ACC</b><small>IGD · ${clockText()}</small>` : `<b>TOLAK</b><small>IGD · ${clockText()}</small>`;
+    mk.innerHTML = action === 'acc'
+      ? `<div class="mark-border"><span class="mark-sub">RSUD MELATI HUSADA · TRIASE</span><b>ACC</b><small>DISETUJUI · ${clockText()} WIB</small></div>`
+      : `<div class="mark-border"><span class="mark-sub">RSUD MELATI HUSADA · TRIASE</span><b>TOLAK</b><small>DITOLAK MEDIS · ${clockText()} WIB</small></div>`;
     zone.appendChild(hd); zone.appendChild(mk);
     setTimeout(() => { Sfx.thud(); E.mat.classList.add('bump'); setTimeout(() => E.mat.classList.remove('bump'), 180); }, 215);
+    setTimeout(() => { try { hd.remove(); } catch(e){} }, 620);
     setTimeout(() => resolve(action, false, frac), 800);
   }
 

@@ -486,12 +486,12 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(appHtml, /js\/update-notice\.js\?v=13/);
-  assert.match(appHtml, /js\/lazy-loader\.js\?v=35/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=9/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=14/);
+  assert.match(appHtml, /js\/lazy-loader\.js\?v=36/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=10/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=10/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=11/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);
@@ -527,5 +527,5 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
-  assert.equal(swVer, 'v246-meja-jaga-igd-night-vibes');
+  assert.equal(swVer, 'v247-meja-jaga-igd-papers-please');
 });
