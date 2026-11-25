@@ -146,7 +146,7 @@
 
   <header class="hud">
     <button type="button" class="mini-btn igd-hud-back" data-act="exit" title="Simpan progres shift &amp; kembali ke Beranda CLINED">‹ Beranda CLINED</button>
-    <div class="hud-brand"><span>Meja Jaga IGD<small>SHIFT MALAM</small></span></div>
+    <div class="hud-brand"><span>Meja Jaga IGD<small class="hud-night-badge">SHIFT MALAM · 21.00 – 07.00 WIB</small></span></div>
     <div class="hud-item"><span class="lbl">Jam</span><b id="igd-clock">22:00</b></div>
     <div class="hud-item"><span class="lbl">Sisa</span><b id="igd-timer">05:00</b></div>
     <div class="hud-item"><span class="lbl">Berkas</span><b id="igd-count">1/8</b></div>
@@ -163,13 +163,17 @@
 
   <div class="play">
   <section class="booth" aria-label="Loket triase">
-    <div class="b-wait"><span class="b-lbl">Ruang tunggu</span><div class="b-bench"></div><div class="queue" id="igd-queue"></div></div>
+    <div class="b-wait"><span class="b-lbl">Ruang tunggu triase</span><div class="b-bench"></div><div class="queue" id="igd-queue"></div></div>
     <div class="b-window">
+      <div class="b-amb-sign"><i></i><span>AMBULANS · UGD 24 JAM</span></div>
       <div class="b-poster"><b>CUCI</b><b>TANGAN</b><i></i></div>
       <div class="b-people" id="igd-people"></div>
       <div class="bubble" id="igd-bubble" hidden></div>
       <div class="b-glass"></div>
-      <div class="b-ledge"><i></i></div>
+      <div class="b-ledge">
+        <i></i>
+        <span class="b-coffee" title="Kopi Dokter Jaga Malam: hangat di jam rawan 03.00 pagi">☕ <small>KOPI JAGA</small></span>
+      </div>
     </div>
     <div class="b-info"><div class="b-sign">TRIASE<small>IGD 24 JAM</small></div><div class="b-clock" id="igd-bclock">22:00</div><div class="b-q">Antrean <b id="igd-qn">0</b></div></div>
   </section>
@@ -246,7 +250,7 @@
         <div class="igd-lobby-left">
           <button type="button" class="mini-btn igd-back-home" data-act="exit" title="Kembali ke Beranda CLINED">‹ Beranda CLINED</button>
         </div>
-        <span class="igd-lobby-tag">SKDI DOKTER UMUM · IGD 24 JAM</span>
+        <span class="igd-lobby-tag"><i class="beacon-dot"></i> RSUD MELATI HUSADA · SHIFT JAGA III (MALAM)</span>
         <div class="igd-lobby-tools">
           <button type="button" class="mini-btn igd-tool-btn" data-act="book" title="Buka Panduan Obat &amp; Pedoman Klinis">Panduan (85 Obat) <kbd>B</kbd></button>
           <button type="button" class="mini-btn igd-tool-btn btn-calc" data-act="calc" title="Buka Kalkulator GFR, IMT, &amp; Pediatrik">Kalkulator <kbd>K</kbd></button>
@@ -256,8 +260,8 @@
       <div class="igd-lobby-hero">
         <div class="cast" id="igd-cast"></div>
         <h1 class="igd-lobby-title">MEJA JAGA <em>IGD</em></h1>
-        <p class="byline">by <b>CLINED</b></p>
-        <p class="igd-lead">Simulasi dokter jaga IGD berbasis SKDI Dokter Umum (5 menit/berkas). Teliti berkas klinis &amp; resep, verifikasi identitas pasien di loket triase, periksa indikasi, kontraindikasi, dosis &times;10, satuan mg/g, alergi segolongan, hingga interaksi obat acak &mdash; lalu tetapkan putusan: <b>TOLAK</b> atau <b>ACC</b>.</p>
+        <p class="byline">RSUD MELATI HUSADA · DOKTER JAGA TRIASE · BY <b>CLINED</b></p>
+        <p class="igd-lead">Lampu IGD menyala benderang di tengah sunyinya malam. Dari loket triase hingga meja periksa, ketelitianmu adalah benteng terakhir keselamatan pasien. Periksa identitas di loket, telaah resep &amp; dosis obat SKDI (5 menit/berkas), waspadai interaksi obat berbahaya di jam-jam rawan kantuk, lalu tetapkan putusan: <b>TOLAK</b> atau <b>ACC</b>.</p>
       </div>
       <div class="igd-stats-bar" id="igd-stats"></div>
       <div class="igd-resume-slot" id="igd-resume" hidden></div>
@@ -360,17 +364,45 @@
       g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+dur); o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+.02); };
     return {
       unlock(){ try{ ac().resume(); }catch(e){} },
-      thud(){ if(muted) return; try{
-        tone('sine',150,40,.22,.9);
-        const c=ac(), n=c.createBufferSource(), f=c.createBiquadFilter(), g=c.createGain();
-        n.buffer=noise(.09); f.type='lowpass'; f.frequency.value=1500; g.gain.value=.5; n.connect(f).connect(g).connect(c.destination); n.start();
-      }catch(e){} },
-      squeak(){ if(muted) return; try{
-        const c=ac(), n=c.createBufferSource(), f=c.createBiquadFilter(), g=c.createGain();
-        n.buffer=noise(.14); f.type='bandpass'; f.frequency.value=2600; f.Q.value=3; g.gain.value=.25; n.connect(f).connect(g).connect(c.destination); n.start();
-      }catch(e){} },
-      good(){ try{ tone('triangle',660,null,.12,.25); setTimeout(()=>tone('triangle',880,null,.18,.25),110); }catch(e){} },
-      bad(){ try{ tone('sawtooth',130,90,.35,.22); }catch(e){} },
+      thud(){
+        if (muted) return;
+        try {
+          // Bunyi stempel triase IGD: klik pegas mekanis + dentuman meja kayu mantap
+          tone('sine', 160, 45, .24, .95);
+          const c = ac(), t = c.currentTime;
+          const n1 = c.createBufferSource(), f1 = c.createBiquadFilter(), g1 = c.createGain();
+          n1.buffer = noise(.035); f1.type = 'highpass'; f1.frequency.value = 1800;
+          g1.gain.setValueAtTime(.35, t); g1.gain.exponentialRampToValueAtTime(.001, t + .035);
+          n1.connect(f1).connect(g1).connect(c.destination); n1.start(t);
+          const n2 = c.createBufferSource(), f2 = c.createBiquadFilter(), g2 = c.createGain();
+          n2.buffer = noise(.1); f2.type = 'lowpass'; f2.frequency.value = 1100;
+          g2.gain.setValueAtTime(.65, t + .012); g2.gain.exponentialRampToValueAtTime(.001, t + .1);
+          n2.connect(f2).connect(g2).connect(c.destination); n2.start(t + .012);
+        } catch (e) {}
+      },
+      squeak(){
+        if (muted) return;
+        try {
+          // Goresan stabilo merah di berkas resep
+          const c = ac(), n = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+          n.buffer = noise(.12); f.type = 'bandpass'; f.frequency.value = 2500; f.Q.value = 3.2;
+          g.gain.value = .3; n.connect(f).connect(g).connect(c.destination); n.start();
+        } catch (e) {}
+      },
+      good(){
+        try {
+          // Telemetri monitor IGD: dual tone konfirmasi harmonis
+          tone('sine', 880, null, .1, .22);
+          setTimeout(() => tone('sine', 1175, null, .16, .22), 80);
+        } catch (e) {}
+      },
+      bad(){
+        try {
+          // Alarm monitor IGD: peringatan bahaya klinis
+          tone('sawtooth', 220, 140, .28, .26);
+          setTimeout(() => tone('sawtooth', 165, 110, .26, .22), 110);
+        } catch (e) {}
+      },
       toggle(){ muted = !muted; return muted; }
     };
   })();
@@ -1052,15 +1084,16 @@
       </div>
     </div>`;
   }
+  const NIGHT_HOURS = [null, '21.00 WIB · Awal Shift', '23.30 WIB · Verifikasi KTP', '01.15 WIB · Gelang Pasien', '03.00 WIB · Jam Rawan & Lab', '04.45 WIB · Jelang Subuh', '02.30 WIB · GRAVEYARD SHIFT'];
   function renderNights(){
     renderStats();
     renderResume();
     E.nights.innerHTML = NIGHTS.slice(1, HARD).map((N, i) => {
       const n = i + 1, lock = false, best = PROG.best[n], done = PROG.done[n];
       return `<button class="night${lock ? ' locked' : ''}${done ? ' done' : ''}" ${lock ? 'disabled' : `data-act="memo" data-n="${n}"`}>
-        <small>Malam</small><b>${n}</b><span>${N.title}</span><em>${lock ? 'Terkunci' : best ? 'Rekor ' + best : 'Belum dimainkan'}</em></button>`;
+        <small class="night-time">${NIGHT_HOURS[n]}</small><b>Malam ${n}</b><span>${N.title}</span><em>${lock ? 'Terkunci' : best ? 'Rekor ' + best : 'Belum dimainkan'}</em></button>`;
     }).join('') + `<button class="night hard${PROG.done[HARD] ? ' done' : ''}" data-act="memo" data-n="${HARD}">
-        <b>MODE SULIT</b><span>Generator kasus acak SKDI · 10 berkas · ${fmtLimit(NIGHTS[HARD].limit)}</span><em>${PROG.best[HARD] ? 'Rekor ' + PROG.best[HARD] : 'Belum dimainkan'}</em></button>`;
+        <small class="night-time">${NIGHT_HOURS[HARD]}</small><b>MODE SULIT</b><span>Generator kasus acak SKDI · 10 berkas · ${fmtLimit(NIGHTS[HARD].limit)}</span><em>${PROG.best[HARD] ? 'Rekor ' + PROG.best[HARD] : 'Belum dimainkan'}</em></button>`;
   }
   function showMemo(n){
     const N = NIGHTS[n];
