@@ -257,9 +257,9 @@ test('App wiring: Mini Games Hub card, view section, lazy bundle, BUSY_VIEWS, us
   assert.match(appHtml, /id="rujukLangkaPage"/);
   assert.match(appHtml, /id="rujukLangkaHost"/);
   assert.match(lazyJs, /rujukLangka:\s*\{/);
-  assert.match(lazyJs, /css\/rujuk-langka\.css\?v=1/);
+  assert.match(lazyJs, /css\/rujuk-langka\.css\?v=2/);
   assert.match(lazyJs, /js\/rujuk-langka-data\.js\?v=1/);
-  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=1/);
+  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=2/);
   assert.match(lazyJs, /showRujukLangkaLoadingUI/);
   assert.match(lazyJs, /data-open-rujuk-langka/);
   assert.match(updJs, /'rujukLangkaPage'/);
@@ -270,4 +270,44 @@ test('App wiring: Mini Games Hub card, view section, lazy bundle, BUSY_VIEWS, us
   assert.match(swJs, /\.\/css\/rujuk-langka\.css/);
   assert.match(swJs, /\.\/js\/rujuk-langka-data\.js/);
   assert.match(swJs, /\.\/js\/rujuk-langka\.js/);
+});
+
+test('RoundGen produces non-patterned daily rounds (0 consecutive-day overlap, no 4-day cycle) and fresh random rounds', () => {
+  const { DATA, RL } = loadRujukLangka();
+  const { RoundGen } = RL;
+  assert.ok(RoundGen, 'Expected CLINED_RUJUK_LANGKA.RoundGen');
+  assert.equal(RoundGen.allPatients(DATA).length, 28);
+
+  // Check 14 consecutive daily rounds: deterministic, 7 unique topics each, 0 overlap with previous day, no 4-day repeat
+  const sigs = [];
+  let prevSet = null;
+  for (let d = 1; d <= 14; d++) {
+    const iso = `2026-12-${String(d).padStart(2, '0')}`;
+    const r = RoundGen.forDate(DATA, iso);
+    const rAgain = RoundGen.forDate(DATA, iso);
+    assert.equal(r.patients.length, 7);
+    const ids = r.patients.map(p => p.id);
+    assert.deepEqual(ids, rAgain.patients.map(p => p.id), 'Daily round must be deterministic for same date');
+    assert.equal(new Set(ids).size, 7, 'No duplicate patients within a round');
+    if (prevSet) {
+      const overlap = ids.filter(id => prevSet.has(id));
+      assert.equal(overlap.length, 0, `Consecutive day ${iso} must not repeat previous day topics (overlap: ${overlap})`);
+    }
+    prevSet = new Set(ids);
+    sigs.push(ids.join(','));
+  }
+  // Ensure day 1 != day 5 (breaks old 4-day fixed modulo cycle!)
+  assert.notEqual(sigs[0], sigs[4], 'Daily rounds must NOT repeat on a 4-day cycle');
+  assert.equal(new Set(sigs).size, 14, 'All 14 consecutive days should have distinct randomized sequences');
+
+  // Fresh random rounds avoid previous round topics and reconstruct via fromIds
+  const rnd1 = RoundGen.random(DATA, null, 12345);
+  const rnd2 = RoundGen.random(DATA, new Set(rnd1.patients.map(p => p.id)), 67890);
+  assert.equal(rnd1.patients.length, 7);
+  assert.equal(rnd2.patients.length, 7);
+  const rndOverlap = rnd2.patients.filter(p => rnd1.patients.some(x => x.id === p.id));
+  assert.equal(rndOverlap.length, 0, 'Consecutive random round should avoid repeating the 7 topics just played');
+
+  const rebuilt = RoundGen.fromIds(DATA, rnd2.patients.map(p => p.id), { roundId: rnd2.roundId, title: rnd2.title });
+  assert.deepEqual(rebuilt.patients.map(p => p.id), rnd2.patients.map(p => p.id));
 });

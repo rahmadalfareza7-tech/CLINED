@@ -1,4 +1,4 @@
-const SW_VERSION = 'v253-rujuk-langka-minigame';
+const SW_VERSION = 'v254-rujuk-langka-random-rounds';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

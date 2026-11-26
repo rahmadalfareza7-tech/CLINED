@@ -60,8 +60,8 @@
     },
     rujukLangka: {
       appendEnd: true,
-      styles: ['css/rujuk-langka.css?v=1'],
-      scripts: ['js/rujuk-langka-data.js?v=1', 'js/rujuk-langka.js?v=1']
+      styles: ['css/rujuk-langka.css?v=2'],
+      scripts: ['js/rujuk-langka-data.js?v=1', 'js/rujuk-langka.js?v=2']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],

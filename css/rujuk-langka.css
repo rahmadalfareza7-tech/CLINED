@@ -58,6 +58,8 @@ html.rl-open #rujukLangkaHost{width:100%!important;min-height:100dvh}
 #rujukLangkaPage .rl .rl-btn:active{transform:translateY(3px);border-bottom-width:2px;margin-bottom:3px}
 #rujukLangkaPage .rl .rl-btn.green{background:var(--g);border-color:var(--gd);color:#fff}
 #rujukLangkaPage .rl .rl-btn.green:hover{background:#52d166}
+#rujukLangkaPage .rl .rl-btn.sky{background:#eef8fd;border-color:#9bd7f5;color:#1d6d96}
+#rujukLangkaPage .rl .rl-btn.sky:hover{background:#dff2fc}
 #rujukLangkaPage .rl .rl-btn.big{min-height:56px;font-size:17px;padding:0 28px}
 #rujukLangkaPage .rl .rl-btn.ghost{color:var(--bd);background:#fff;border-color:var(--line)}
 #rujukLangkaPage .rl .rl-btn.ghost:hover{background:var(--soft)}
@@ -96,7 +98,8 @@ html.rl-open #rujukLangkaHost{width:100%!important;min-height:100dvh}
 #rujukLangkaPage .rl .rl-lede{color:var(--mute);font-size:15.5px;max-width:44ch;margin:10px 0 0;line-height:1.5}
 #rujukLangkaPage .rl .rl-pill-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
 #rujukLangkaPage .rl .rl-pill-stats span{padding:4px 11px;border-radius:999px;background:#eef8fd;border:1.5px solid #cdeafa;color:#1d6d96;font:800 12px var(--f)}
-#rujukLangkaPage .rl .rl-btn.wide{width:100%;max-width:400px;margin-top:18px}
+#rujukLangkaPage .rl .rl-home-ctas{width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px;margin-top:16px}
+#rujukLangkaPage .rl .rl-btn.wide{width:100%;max-width:400px;margin-top:0}
 #rujukLangkaPage .rl .rl-links{display:flex;gap:6px 16px;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:14px}
 #rujukLangkaPage .rl .rl-link{border:0;background:none;padding:8px 2px;font:900 14px var(--f);color:var(--bd);text-transform:uppercase;letter-spacing:.05em}
 #rujukLangkaPage .rl .rl-link:hover{color:#1d6d96}
@@ -200,6 +203,9 @@ html.rl-open #rujukLangkaHost{width:100%!important;min-height:100dvh}
 #rujukLangkaPage .rl .rl-archl{display:flex;flex-direction:column;gap:8px;margin-top:6px}
 #rujukLangkaPage .rl .rl-archl button{display:flex;justify-content:space-between;gap:12px;align-items:center;min-height:52px;padding:10px 14px;border-radius:14px;border:2px solid var(--line);border-bottom-width:4px;background:#fff;font:800 14.5px var(--f);text-align:left;color:var(--ink)}
 #rujukLangkaPage .rl .rl-archl button:hover{border-color:var(--b);background:#f8fcff}
+#rujukLangkaPage .rl .rl-archl button.rl-rand-card{background:linear-gradient(135deg,#ecfdf5 0%,#eef8fd 100%);border-color:#6fd37f}
+#rujukLangkaPage .rl .rl-archl button.rl-rand-card:hover{border-color:var(--g);background:linear-gradient(135deg,#dcfce7 0%,#e0f2fe 100%)}
+#rujukLangkaPage .rl .rl-archl button.rl-rand-card .s{color:var(--gd)}
 #rujukLangkaPage .rl .rl-archl .sub{display:block;font-size:12px;font-weight:700;color:var(--mute);margin-top:2px}
 #rujukLangkaPage .rl .rl-archl .s{color:var(--bd);font-size:13px;white-space:nowrap;font-weight:900}
 

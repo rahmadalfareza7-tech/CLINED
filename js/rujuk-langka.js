@@ -228,6 +228,130 @@
     }
   };
 
+  /* ================= RANDOMIZED ROUND GENERATOR (NON-PATTERNED) ================= */
+  const RoundGen = (() => {
+    function hashStr(str) {
+      let h = 2166136261 >>> 0;
+      const s = String(str || '');
+      for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619) >>> 0;
+      }
+      return h >>> 0;
+    }
+    function mulberry32(seed) {
+      let a = seed >>> 0;
+      return () => {
+        a = (a + 0x6D2B79F5) >>> 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function shuffle(list, rng) {
+      const a = list.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+      }
+      return a;
+    }
+    function allPatients(bank) {
+      const out = [], seen = new Set();
+      for (const r of (bank?.rounds || [])) {
+        for (const p of (r.patients || [])) {
+          if (p && p.id && !seen.has(p.id)) { seen.add(p.id); out.push(p); }
+        }
+      }
+      return out;
+    }
+    function pickBalanced7(pool, rng, avoidIds) {
+      const avoid = avoidIds instanceof Set ? avoidIds : new Set(avoidIds || []);
+      const fresh = shuffle(pool.filter(p => !avoid.has(p.id)), rng);
+      const rest = shuffle(pool.filter(p => avoid.has(p.id)), rng);
+      const picked = [];
+      const usedCat = new Set();
+      const usedId = new Set();
+      const take = (arr, uniqueCat) => {
+        for (const p of arr) {
+          if (picked.length >= 7) break;
+          if (usedId.has(p.id)) continue;
+          if (uniqueCat && usedCat.has(p.category)) continue;
+          picked.push(p);
+          usedId.add(p.id);
+          usedCat.add(p.category);
+        }
+      };
+      take(fresh, true);
+      take(fresh, false);
+      take(rest, true);
+      take(rest, false);
+      return shuffle(picked, rng);
+    }
+    function buildEpochDays(pool, epochIdx) {
+      const rng = mulberry32(hashStr('clined-rl-epoch-v2:' + epochIdx));
+      const rem = shuffle(pool, rng);
+      const days = [[], [], [], []];
+      for (let slot = 0; slot < 4; slot++) {
+        const usedCat = new Set();
+        for (let k = 0; k < 7 && rem.length; k++) {
+          let pickIdx = rem.findIndex(p => !usedCat.has(p.category));
+          if (pickIdx < 0) pickIdx = 0;
+          const [p] = rem.splice(pickIdx, 1);
+          usedCat.add(p.category);
+          days[slot].push(p);
+        }
+        days[slot] = shuffle(days[slot], rng);
+      }
+      return days;
+    }
+    function forDate(bank, dateStr) {
+      const pool = allPatients(bank);
+      const dn = dayNum(dateStr);
+      const epoch = Math.floor(dn / 4);
+      const slot = ((dn % 4) + 4) % 4;
+      const days = buildEpochDays(pool, epoch);
+      // Avoid boundary overlap between slot 0 of this epoch and slot 3 of previous epoch
+      const prevSlot3Ids = new Set(buildEpochDays(pool, epoch - 1)[3].map(p => p.id));
+      for (let i = 0; i < days[0].length; i++) {
+        if (!prevSlot3Ids.has(days[0][i].id)) continue;
+        outer: for (let s = 1; s <= 2; s++) {
+          for (let j = 0; j < days[s].length; j++) {
+            if (!prevSlot3Ids.has(days[s][j].id)) {
+              const tmp = days[0][i]; days[0][i] = days[s][j]; days[s][j] = tmp;
+              break outer;
+            }
+          }
+        }
+      }
+      return { roundId: 'DAY-' + dateStr, date: dateStr, title: 'Ronde Harian Acak', patients: days[slot] };
+    }
+    function random(bank, avoidIds, customSeed) {
+      const pool = allPatients(bank);
+      const seed = (customSeed != null ? (Number(customSeed) >>> 0) : ((Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0));
+      const rng = mulberry32(seed || 1);
+      const patients = pickBalanced7(pool, rng, avoidIds);
+      return { roundId: 'RND-' + seed.toString(36), date: '', title: 'Ronde Acak', patients };
+    }
+    function shuffleRound(round, rng) {
+      const r = rng || Math.random;
+      return Object.assign({}, round, { patients: shuffle(round.patients || [], r) });
+    }
+    function fromIds(bank, ids, meta) {
+      if (!Array.isArray(ids) || !ids.length) return null;
+      const byId = new Map(allPatients(bank).map(p => [p.id, p]));
+      const patients = ids.map(id => byId.get(id)).filter(Boolean);
+      if (patients.length !== ids.length) return null;
+      return {
+        roundId: meta?.roundId || 'CUSTOM',
+        date: meta?.date || '',
+        title: meta?.title || 'Ronde Acak',
+        patients
+      };
+    }
+    return { hashStr, mulberry32, shuffle, allPatients, pickBalanced7, forDate, random, shuffleRound, fromIds };
+  })();
+
   /* ================= MARKUP ================= */
   const MARKUP = `<div class="rl" id="rl-root">
 <header class="rl-top">
@@ -287,12 +411,15 @@
 
       <h1>Rujuk Langka <span id="rl-dRound">#–</span></h1>
       <p class="rl-date" id="rl-dDate">–</p>
-      <p class="rl-lede">Satu jawaban medis per pasien. Makin jarang dicari di Google, makin jauh ambulans merujuk hingga RS Tipe A (+175 poin).</p>
+      <p class="rl-lede">Satu jawaban medis per pasien. 7 topik diacak tanpa pola dari 28 topik klinis — makin jarang dicari di Google, makin jauh dirujuk hingga RS Tipe A (+175 poin).</p>
       <div class="rl-pill-stats" id="rl-bankStats"></div>
-      <button type="button" class="rl-btn green big wide" id="rl-start">Mulai jaga</button>
+      <div class="rl-home-ctas">
+        <button type="button" class="rl-btn green big wide" id="rl-start">Mulai jaga</button>
+        <button type="button" class="rl-btn sky wide" id="rl-randBtn">🎲 Main Ronde Acak (7/28 Topik)</button>
+      </div>
       <div class="rl-links">
         <button class="rl-link" id="rl-resBtn" type="button" hidden>Hasil hari ini</button>
-        <button class="rl-link" id="rl-archBtn" type="button">Pilih Ronde / Arsip</button>
+        <button class="rl-link" id="rl-archBtn" type="button">Pilih Paket / Arsip</button>
         <button class="rl-link" id="rl-howBtn" type="button">Cara bermain</button>
         <label class="rl-chipt"><input type="checkbox" id="rl-ext"> Waktu 45 detik</label>
       </div>
@@ -300,7 +427,7 @@
         <span>Streak <b id="rl-sStreak">0 hari</b></span>
         <span>Ronde baru <b id="rl-sCount">--:--:--</b></span>
       </div>
-      <p class="rl-syncl" id="rl-sync">Progres tersimpan di akun &amp; perangkat · Bobot berbasis pencarian Google</p>
+      <p class="rl-syncl" id="rl-sync">Progres tersimpan di akun &amp; perangkat · Ronde acak tanpa pola · Bobot pencarian Google</p>
     </div>
   </section>
 
@@ -334,8 +461,9 @@
         <p class="rl-sumpct" id="rl-sumPct"></p>
         <div class="rl-grid7" id="rl-sumGrid"></div>
         <div class="rl-ctas">
-          <button type="button" class="rl-btn green" id="rl-replayBtn">Main lagi</button>
-          <button type="button" class="rl-btn" id="rl-pickOtherBtn">Ronde lain</button>
+          <button type="button" class="rl-btn green" id="rl-randNextBtn">🎲 Ronde Acak Baru</button>
+          <button type="button" class="rl-btn" id="rl-replayBtn">Ulangi Ronde Ini</button>
+          <button type="button" class="rl-btn" id="rl-pickOtherBtn">Paket / Arsip</button>
           <button type="button" class="rl-btn" id="rl-shareBtn">Bagikan</button>
           <button type="button" class="rl-btn ghost" id="rl-backBtn">Beranda Game</button>
         </div>
@@ -361,7 +489,7 @@
     <p>Bahasa Indonesia, Inggris, istilah Latin, nama merek obat populer, dan singkatan klinis (seperti <b>SLE, GBS, GERD, CTS, BPPV, HNP, LAD</b>) diterima; salah ketik kecil dikoreksi otomatis.</p>
     <div id="rl-howTiers"></div>
     <p>30 detik per pasien (atau 45 detik bila mode santai diaktifkan). Jawaban salah tidak mengakhiri ronde — cukup coba jawaban lain sebelum waktu habis.</p>
-    <p>Tersedia <b>4 ronde lengkap (28 topik klinis &amp; 3.200+ jawaban)</b> yang bisa dimainkan harian maupun langsung lewat menu <b>Pilih Ronde / Arsip</b>.</p>
+    <p>Tiap hari 7 topik dipilih secara <b>acak tanpa pola</b> dari seluruh <b>28 topik klinis (3.238+ jawaban)</b>. Kamu juga bisa klik <b>🎲 Main Ronde Acak</b> kapan saja untuk mendapatkan 7 pasien acak baru.</p>
     <div class="rl-keys"><span><span class="kbd">ENTER</span> mulai, kirim, lanjut</span><span><span class="kbd">ESC</span> 2× lewati</span></div>
   </div>
 </div>
@@ -369,15 +497,21 @@
 <div class="rl-ov" id="rl-archOv" hidden>
   <div class="rl-modal" role="dialog" aria-modal="true" aria-labelledby="rl-archT">
     <div class="hd"><h2 id="rl-archT">Pilih Ronde &amp; Arsip</h2><button type="button" class="x" data-rl-close aria-label="Tutup">×</button></div>
-    <p>Mainkan salah satu dari 4 paket ronde topik medis lengkap, atau ulangi ronde harian sebelumnya.</p>
-    <div class="rl-arch-sec">Paket Ronde Medis (Langsung Main)</div>
+    <p>Setiap ronde harian &amp; mode acak mengocok 7 topik berbeda dari seluruh 28 topik klinis tanpa pola berulang.</p>
+    <div class="rl-archl">
+      <button type="button" class="rl-rand-card" id="rl-archRandBtn">
+        <span><b>🎲 Mulai Ronde Acak Baru (7 dari 28 Topik)</b><span class="sub">Acak total lintas cabang kedokteran · tidak mengulang ronde terakhir</span></span>
+        <span class="s">Acak ›</span>
+      </button>
+    </div>
+    <div class="rl-arch-sec">Paket Tematik (Urutan Pasien Diacak)</div>
     <div class="rl-archl" id="rl-roundList"></div>
-    <div class="rl-arch-sec">Arsip Harian Sebelumnya</div>
+    <div class="rl-arch-sec">Arsip Harian Sebelumnya (Kombinasi Acak Harian)</div>
     <div class="rl-archl" id="rl-archList"></div>
   </div>
 </div>
 
-<div class="rl-foot"><b>CLINED · Rujuk Langka</b><span>Edukasi kosakata medis berbasis popularitas pencarian Google · Ronde baru tiap 00.00 WIB</span></div>
+<div class="rl-foot"><b>CLINED · Rujuk Langka</b><span>Edukasi kosakata medis berbasis popularitas pencarian Google · Ronde acak harian tiap 00.00 WIB</span></div>
 </div>`;
 
   /* ================= GAME INSTANCE ================= */
@@ -396,17 +530,21 @@
     const T = Engine.TIERS;
     const REDUCE = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches || false;
     const fmtDate = (d, o) => new Date(d + 'T12:00:00Z').toLocaleDateString('id-ID', Object.assign({ timeZone: 'UTC' }, o));
-    const roundFor = key => {
+    let lastPlayedIds = new Set();
+    const roundFor = (key, rec, shufflePack) => {
+      if (rec && Array.isArray(rec.pids) && rec.pids.length) {
+        const saved = RoundGen.fromIds(BANK, rec.pids, { roundId: key, date: /^\d{4}-\d{2}-\d{2}$/.test(key) ? key : '', title: rec.title || 'Ronde Acak' });
+        if (saved) return saved;
+      }
       const byId = BANK.rounds.find(r => r.roundId === key);
-      if (byId) return byId;
-      const byDate = BANK.rounds.find(r => r.date === key);
-      if (byDate) return byDate;
-      return BANK.rounds[((dayNum(key) % BANK.rounds.length) + BANK.rounds.length) % BANK.rounds.length];
+      if (byId) return shufflePack ? RoundGen.shuffleRound(byId) : byId;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(key)) return RoundGen.forDate(BANK, key);
+      return RoundGen.random(BANK, lastPlayedIds);
     };
 
-    const totalPrompts = BANK.rounds.reduce((s, r) => s + r.patients.length, 0);
+    const totalPrompts = RoundGen.allPatients(BANK).length;
     const totalAnswers = BANK.rounds.reduce((s, r) => s + r.patients.reduce((a, p) => a + p.acceptedAnswers.length, 0), 0);
-    q('rl-bankStats').innerHTML = `<span>${BANK.rounds.length} Ronde</span><span>${totalPrompts} Topik Klinis</span><span>${totalAnswers.toLocaleString('id-ID')}+ Jawaban Medis</span>`;
+    q('rl-bankStats').innerHTML = `<span>Ronde Acak 7/${totalPrompts}</span><span>${totalPrompts} Topik Klinis</span><span>${totalAnswers.toLocaleString('id-ID')}+ Jawaban Medis</span>`;
 
     let S = Progress.read();
     const save = () => Progress.write(S);
@@ -622,19 +760,20 @@
       q('rl-hStreak').title = st.buf ? `Streak ${st.n} hari · 1 hari cadangan` : `Streak ${st.n} hari`;
       q('rl-sStreak').textContent = st.n + ' hari';
       q('rl-ext').checked = !!S.ext;
-      q('rl-start').innerHTML = (rec && rec.done ? 'Main lagi (Latihan)' : rec && rec.a.length ? `Lanjut jaga ${Math.min(rec.a.length + 1, 7)}/7` : 'Mulai jaga harian') + ' <span class="kbd">ENTER</span>';
+      q('rl-start').innerHTML = (rec && rec.done ? '🎲 Main Ronde Acak Baru' : rec && rec.a.length ? `Lanjut jaga ${Math.min(rec.a.length + 1, 7)}/7` : 'Mulai jaga harian') + ' <span class="kbd">ENTER</span>';
+      q('rl-randBtn').hidden = !!(rec && rec.done);
       q('rl-resBtn').hidden = !(rec && rec.done);
     }
 
     function openArchive() {
-      // 1. All 4 themed packs playable immediately
+      // 1. All 4 themed packs playable immediately (patient order shuffled each play)
       q('rl-roundList').innerHTML = BANK.rounds.map((r, idx) => {
         const topics = r.patients.map(p => p.category).join(' · ');
         const ar = S.archive?.[r.roundId];
         const st = ar && ar.done ? `Rekor ${ar.score} poin` : `${r.patients.length} pasien`;
-        return `<button type="button" data-rl-round="${r.roundId}"><span><b>Ronde ${idx + 1}: ${esc(r.title || r.roundId)}</b><span class="sub">${esc(topics)}</span></span><span class="s">${st} ›</span></button>`;
+        return `<button type="button" data-rl-round="${r.roundId}"><span><b>Paket ${idx + 1}: ${esc(r.title || r.roundId)}</b><span class="sub">${esc(topics)}</span></span><span class="s">${st} ›</span></button>`;
       }).join('');
-      // 2. Past daily dates
+      // 2. Past daily dates (each date has its own non-patterned 7-of-28 random mix)
       const t = todayWib(), rows = [];
       for (let k = 1; k <= 10; k++) { const x = addDays(t, -k); if (dayNum(x) < 0) break; rows.push(x); }
       q('rl-archList').innerHTML = rows.length ? rows.map(x => {
@@ -645,6 +784,7 @@
       openM('rl-archOv');
     }
 
+    q('rl-archRandBtn').addEventListener('click', () => { closeM(); startRandom(); });
     q('rl-roundList').addEventListener('click', e => {
       const b = e.target.closest('button[data-rl-round]'); if (!b) return;
       closeM(); begin(b.dataset.rlRound, 'archive');
@@ -670,13 +810,22 @@
     tick();
 
     /* ---------- Gameplay ---------- */
-    function begin(key, archive) {
+    function startRandom() {
+      const rndRound = RoundGen.random(BANK, lastPlayedIds);
+      begin(rndRound.roundId, 'practice', rndRound);
+    }
+
+    function begin(key, archive, customRound) {
       if (archive === true) archive = 'archive';
-      const round = roundFor(key), box = boxFor(archive);
-      if (archive) box[key] = { a: [], score: 0, done: false };
-      const rec = box[key] = box[key] || { a: [], score: 0, done: false };
+      const box = boxFor(archive);
+      const existing = archive ? null : box[key];
+      const round = customRound || roundFor(key, existing, !!archive);
+      if (archive) box[key] = { a: [], score: 0, done: false, pids: round.patients.map(p => p.id), title: round.title || '' };
+      const rec = box[key] = box[key] || { a: [], score: 0, done: false, pids: round.patients.map(p => p.id), title: round.title || '' };
+      if (!Array.isArray(rec.pids) || !rec.pids.length) { rec.pids = round.patients.map(p => p.id); rec.title = round.title || ''; }
       if (rec.done) return summary(key, archive);
       if (rec.started === rec.a.length && rec.a.length < round.patients.length) rec.a.push(null);
+      lastPlayedIds = new Set(round.patients.map(p => p.id));
       G = { date: key, round, archive, rec };
       showView('rl-vPlay');
       nextPatient();
@@ -829,18 +978,18 @@
     }
 
     function summary(key, archive, xpRes) {
-      const rec = boxFor(archive)[key], round = roundFor(key);
+      const rec = boxFor(archive)[key], round = roundFor(key, rec, false);
       const isDateKey = /^\d{4}-\d{2}-\d{2}$/.test(key);
       showView('rl-vSum');
       q('rl-sumTag').textContent = isDateKey
         ? `Ronde #${dayNum(key) + 1} · ${fmtDate(key, { day: 'numeric', month: 'long' })}${archive ? ' · ' + MODE_LABEL[archive] : ''}`
-        : `${round.title || round.roundId} · ${MODE_LABEL[archive] || 'latihan'}`;
+        : `${round.title || round.roundId} · ${MODE_LABEL[archive] || 'acak'}`;
       q('rl-sumScore').textContent = rec.score;
       q('rl-xpSlot').innerHTML = xpRes && xpRes.gained > 0 ? `<div class="rl-xp-note">+${xpRes.gained} XP CLINED tercatat</div>` : '';
       const pv = simPercentile(round, rec.score);
       q('rl-sumP').textContent = pv + '%';
       let pct = `Perkiraan: skormu melampaui ${pv}% pemain (simulasi distribusi pencarian Google).`;
-      if (archive) pct += archive === 'practice' ? ' Mode latihan — hasil resmi tetap percobaan pertamamu.' : ' Mode arsip / paket ronde.';
+      if (archive) pct += archive === 'practice' ? ' Mode acak / latihan — hasil harian resmi tetap percobaan pertamamu.' : ' Mode arsip / paket tematik.';
       q('rl-sumPct').textContent = pct;
       const tiers = round.patients.map((p, k) => {
         const x = rec.a[k];
@@ -857,7 +1006,8 @@
         return `<tr><td>${x ? `<span class="dot" style="--c:${T[t - 1].color}">${t}</span>` : '<span class="dot x">–</span>'}</td><td><span style="color:var(--mute);font-size:12.5px">${k + 1}. ${esc(p.category)}</span><br>${x ? `<b>${esc(x.c)}</b><br><span class="t" style="--c:${T[t - 1].color}">${T[t - 1].name}</span>` : '<span style="color:#9ca3af">Tidak terjawab</span>'}</td><td>${x ? '+' + (x.p || T[t - 1].pts) : '0'}</td></tr>`;
       }).join('');
       q('rl-copied').textContent = ''; q('rl-shareFallback').innerHTML = '';
-      q('rl-replayBtn').onclick = () => begin(key, archive || 'practice');
+      q('rl-randNextBtn').onclick = startRandom;
+      q('rl-replayBtn').onclick = () => begin(key, archive || 'practice', round);
       q('rl-pickOtherBtn').onclick = openArchive;
       q('rl-shareBtn').onclick = () => share(key, round, rec.score, tiers, archive);
       Scene.park(Math.max(0, ...tiers));
@@ -899,13 +1049,15 @@
     };
     const startSel = () => {
       const t = todayWib(), r = S.scored?.[t];
-      begin(t, r && r.done ? 'practice' : false);
+      if (r && r.done) startRandom();
+      else begin(t, false);
     };
 
     q('rl-howBtn').onclick = q('rl-helpBtn').onclick = () => openM('rl-howOv');
     q('rl-resBtn').onclick = () => summary(todayWib(), false);
     q('rl-archBtn').onclick = openArchive;
     q('rl-start').onclick = startSel;
+    q('rl-randBtn').onclick = startRandom;
     q('rl-ext').onchange = e => { S.ext = e.target.checked; save(); };
     q('rl-home').onclick = q('rl-backBtn').onclick = goDash;
     q('rl-exit-mg').onclick = exitToMiniGames;
@@ -962,5 +1114,5 @@
     if (e.detail === 'rujukLangkaPage') game.onEnter();
     else game.onLeave();
   });
-  window.CLINED_RUJUK_LANGKA = { open, Engine, Progress, isPlaying: () => !!game?.isPlaying() };
+  window.CLINED_RUJUK_LANGKA = { open, Engine, Progress, RoundGen, isPlaying: () => !!game?.isPlaying() };
 })();
