@@ -1,4 +1,4 @@
-const SW_VERSION = 'v257-blok-lysis-balanced-sfx';
+const SW_VERSION = 'v258-rujuk-langka-42-topics-no-spoiler';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

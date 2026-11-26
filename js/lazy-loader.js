@@ -61,7 +61,7 @@
     rujukLangka: {
       appendEnd: true,
       styles: ['css/rujuk-langka.css?v=3'],
-      scripts: ['js/rujuk-langka-data.js?v=1', 'js/rujuk-langka.js?v=3']
+      scripts: ['js/rujuk-langka-data.js?v=2', 'js/rujuk-langka.js?v=4']
     },
     blokLysis: {
       appendEnd: true,
@@ -143,7 +143,7 @@
         host.innerHTML = `<div style="min-height:360px;border-radius:22px;padding:36px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:radial-gradient(ellipse at 50% 20%,#e9f7f1 0%,#f7faf9 100%);color:#1e293b;border:2px solid #cbe5d8;box-shadow:0 16px 36px rgba(15,23,42,.08)">
           <div style="font-size:2.4rem;line-height:1">🏥</div>
           <div style="font-weight:900;font-size:1.15rem;letter-spacing:.03em;color:#0f5132">MEMBUKA RUJUK LANGKA…</div>
-          <div style="font-size:.86rem;color:#475569;max-width:340px">Menyiapkan 28 topik klinis &amp; 3.200+ kosakata medis berbasis popularitas Google Search.</div>
+          <div style="font-size:.86rem;color:#475569;max-width:340px">Menyiapkan 42 topik klinis &amp; 4.850+ kosakata medis berbasis popularitas Google Search.</div>
         </div>`;
       }
     } catch {}

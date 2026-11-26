@@ -48,10 +48,10 @@ function loadRujukLangka(initialStore = {}) {
   };
 }
 
-test('Dataset integrity: 4 rounds, 28 prompts, 3,200+ medical answers, all 8 Google-popularity tiers per prompt', () => {
+test('Dataset integrity: 6 rounds, 42 prompts, 4,800+ medical answers, all 8 Google-popularity tiers per prompt', () => {
   const { DATA, RL } = loadRujukLangka();
   assert.ok(DATA && Array.isArray(DATA.rounds), 'Expected CLINED_RUJUK_LANGKA_DATA.rounds');
-  assert.equal(DATA.rounds.length, 4, 'Expected 4 clinical rounds');
+  assert.equal(DATA.rounds.length, 6, 'Expected 6 clinical rounds');
   assert.equal(DATA.weightSource, 'google-search-popularity-id');
 
   let totalPrompts = 0;
@@ -88,12 +88,12 @@ test('Dataset integrity: 4 rounds, 28 prompts, 3,200+ medical answers, all 8 Goo
     }
   }
 
-  assert.equal(totalPrompts, 28, 'Expected 28 total clinical prompts');
-  assert.ok(totalAnswers >= 3200, `Expected >= 3,200 answers (got ${totalAnswers})`);
-  assert.ok(totalAliases >= 5500, `Expected >= 5,500 aliases (got ${totalAliases})`);
+  assert.equal(totalPrompts, 42, 'Expected 42 total clinical prompts');
+  assert.ok(totalAnswers >= 4800, `Expected >= 4,800 answers (got ${totalAnswers})`);
+  assert.ok(totalAliases >= 8500, `Expected >= 8,500 aliases (got ${totalAliases})`);
 });
 
-test('Google-Search popularity calibration: mainstream drugs/diseases score low tiers (DPM/PKM), rare specialist terms score high tiers (RS B/A)', () => {
+test('Google-Search popularity calibration: mainstream drugs/diseases/organs/cells score low tiers (DPM/PKM), rare specialist terms score high tiers (RS B/A)', () => {
   const { DATA, RL } = loadRujukLangka();
   const findPrompt = id => DATA.rounds.flatMap(r => r.patients).find(p => p.id === id);
 
@@ -118,6 +118,27 @@ test('Google-Search popularity calibration: mainstream drugs/diseases score low 
   const lupus = checkTier('A6', 'Lupus', 1, 2);
   const insul = checkTier('A7', 'Insulin', 1, 2);
   const covid = checkTier('B3', 'SARS-CoV-2', 1, 2);
+
+  // New expanded topics: Organ, Sel, Paru, Ginjal, Hematologi, Obat, Lab, Nutrisi
+  checkTier('E1', 'Jantung', 1, 2);
+  checkTier('E1', 'Organ Zuckerkandl', 7, 8);
+  checkTier('E2', 'Eritrosit', 1, 2);
+  checkTier('E2', 'Sel Deiters', 7, 8);
+  checkTier('E3', 'Asma', 1, 2);
+  checkTier('E3', 'Sindrom Mounier-Kuhn', 7, 8);
+  checkTier('E4', 'Batu ginjal', 1, 2);
+  checkTier('E4', 'Glomerulopati imunotaktoid', 7, 8);
+  checkTier('E5', 'Anemia', 1, 2);
+  checkTier('E5', 'Sindrom Scott', 7, 8);
+  checkTier('E6', 'Simvastatin', 1, 2);
+  checkTier('E6', 'Mavacamten', 7, 8);
+  checkTier('E7', 'Omeprazol', 1, 2);
+  checkTier('E7', 'Tezepelumab', 7, 8);
+  checkTier('F1', 'Deksametason', 1, 2);
+  checkTier('F2', 'Hemoglobin', 1, 2);
+  checkTier('F2', 'ADAMTS13', 7, 8);
+  checkTier('F5', 'Vitamin C', 1, 2);
+  checkTier('F5', 'Selenosistein', 7, 8);
 
   // Ultra-rare specialist medical terms -> Tier 7-8 (RS Tipe B / RS Tipe A)
   const zoliflodasin = checkTier('A5', 'Zoliflodasin', 7, 8);
@@ -258,8 +279,8 @@ test('App wiring: Mini Games Hub card, view section, lazy bundle, BUSY_VIEWS, us
   assert.match(appHtml, /id="rujukLangkaHost"/);
   assert.match(lazyJs, /rujukLangka:\s*\{/);
   assert.match(lazyJs, /css\/rujuk-langka\.css\?v=3/);
-  assert.match(lazyJs, /js\/rujuk-langka-data\.js\?v=1/);
-  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=3/);
+  assert.match(lazyJs, /js\/rujuk-langka-data\.js\?v=2/);
+  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=4/);
   assert.match(lazyJs, /showRujukLangkaLoadingUI/);
   assert.match(lazyJs, /data-open-rujuk-langka/);
   assert.match(updJs, /'rujukLangkaPage'/);
@@ -270,6 +291,10 @@ test('App wiring: Mini Games Hub card, view section, lazy bundle, BUSY_VIEWS, us
   assert.match(swJs, /\.\/css\/rujuk-langka\.css/);
   assert.match(swJs, /\.\/js\/rujuk-langka-data\.js/);
   assert.match(swJs, /\.\/js\/rujuk-langka\.js/);
+
+  // Anti-spoiler guard: must NOT leak rare RS Tipe B/A answers after a question
+  const rlJs = readRel('js/rujuk-langka.js');
+  assert.doesNotMatch(rlJs, /Jawaban langka \(RS Tipe B\/A\)/i, 'Must not expose rare RS Tipe B/A answer spoiler chips');
 });
 
 test('Smart medical autocorrect handles transpositions, Indo/Eng/Latin phonetics, fuzzy prefixes, multi-word typos, stems, and rejects gibberish', () => {
@@ -318,21 +343,23 @@ test('Smart medical autocorrect handles transpositions, Indo/Eng/Latin phonetics
   assert.ok(sugs.length >= 1 && sugs.some(s => s.canonicalName === 'Amoksisilin'), `Expected Amoksisilin in suggestions, got ${JSON.stringify(sugs)}`);
 });
 
-test('RoundGen produces non-patterned daily rounds (0 consecutive-day overlap, no 4-day cycle) and fresh random rounds', () => {
+test('RoundGen produces non-patterned daily rounds across all 42 topics (0 consecutive-day overlap, no fixed cycle) and fresh random rounds', () => {
   const { DATA, RL } = loadRujukLangka();
   const { RoundGen } = RL;
   assert.ok(RoundGen, 'Expected CLINED_RUJUK_LANGKA.RoundGen');
-  assert.equal(RoundGen.allPatients(DATA).length, 28);
+  assert.equal(RoundGen.allPatients(DATA).length, 42);
 
-  // Check 14 consecutive daily rounds: deterministic, 7 unique topics each, 0 overlap with previous day, no 4-day repeat
+  // Check 18 consecutive daily rounds (3 full 6-day epochs): deterministic, 7 unique topics each, 0 overlap with previous day, covers all 42 topics
   const sigs = [];
+  const seenAll = new Set();
   let prevSet = null;
-  for (let d = 1; d <= 14; d++) {
+  for (let d = 1; d <= 18; d++) {
     const iso = `2026-12-${String(d).padStart(2, '0')}`;
     const r = RoundGen.forDate(DATA, iso);
     const rAgain = RoundGen.forDate(DATA, iso);
     assert.equal(r.patients.length, 7);
     const ids = r.patients.map(p => p.id);
+    ids.forEach(id => seenAll.add(id));
     assert.deepEqual(ids, rAgain.patients.map(p => p.id), 'Daily round must be deterministic for same date');
     assert.equal(new Set(ids).size, 7, 'No duplicate patients within a round');
     if (prevSet) {
@@ -342,9 +369,9 @@ test('RoundGen produces non-patterned daily rounds (0 consecutive-day overlap, n
     prevSet = new Set(ids);
     sigs.push(ids.join(','));
   }
-  // Ensure day 1 != day 5 (breaks old 4-day fixed modulo cycle!)
-  assert.notEqual(sigs[0], sigs[4], 'Daily rounds must NOT repeat on a 4-day cycle');
-  assert.equal(new Set(sigs).size, 14, 'All 14 consecutive days should have distinct randomized sequences');
+  assert.equal(seenAll.size, 42, 'All 42 topics should appear across daily epochs');
+  assert.notEqual(sigs[0], sigs[6], 'Daily rounds must NOT repeat on a fixed 6-day cycle');
+  assert.equal(new Set(sigs).size, 18, 'All 18 consecutive days should have distinct randomized sequences');
 
   // Fresh random rounds avoid previous round topics and reconstruct via fromIds
   const rnd1 = RoundGen.random(DATA, null, 12345);

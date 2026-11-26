@@ -1,4 +1,4 @@
-/* CLINED · Rujuk Langka — Game Rujukan Medis Harian (4 Ronde · 28 Topik · 3.200+ Jawaban)
+/* CLINED · Rujuk Langka — Game Rujukan Medis Harian (6 Ronde · 42 Topik · 4.850+ Jawaban)
    Bobot poin dikalibrasi berbasis popularitas pencarian Google: makin jarang dicari di Google,
    makin tinggi tingkat faskes rujukan (DPM 10 poin → RS Tipe A 175 poin). */
 (() => {
@@ -418,11 +418,11 @@
       take(rest, false);
       return shuffle(picked, rng);
     }
-    function buildEpochDays(pool, epochIdx) {
-      const rng = mulberry32(hashStr('clined-rl-epoch-v2:' + epochIdx));
+    function buildEpochDays(pool, epochIdx, numDays) {
+      const rng = mulberry32(hashStr('clined-rl-epoch-v3:' + numDays + ':' + epochIdx));
       const rem = shuffle(pool, rng);
-      const days = [[], [], [], []];
-      for (let slot = 0; slot < 4; slot++) {
+      const days = Array.from({ length: numDays }, () => []);
+      for (let slot = 0; slot < numDays; slot++) {
         const usedCat = new Set();
         for (let k = 0; k < 7 && rem.length; k++) {
           let pickIdx = rem.findIndex(p => !usedCat.has(p.category));
@@ -437,17 +437,18 @@
     }
     function forDate(bank, dateStr) {
       const pool = allPatients(bank);
+      const numDays = Math.max(4, Math.floor(pool.length / 7));
       const dn = dayNum(dateStr);
-      const epoch = Math.floor(dn / 4);
-      const slot = ((dn % 4) + 4) % 4;
-      const days = buildEpochDays(pool, epoch);
-      // Avoid boundary overlap between slot 0 of this epoch and slot 3 of previous epoch
-      const prevSlot3Ids = new Set(buildEpochDays(pool, epoch - 1)[3].map(p => p.id));
+      const epoch = Math.floor(dn / numDays);
+      const slot = ((dn % numDays) + numDays) % numDays;
+      const days = buildEpochDays(pool, epoch, numDays);
+      // Avoid boundary overlap between slot 0 of this epoch and last slot of previous epoch
+      const prevLastIds = new Set(buildEpochDays(pool, epoch - 1, numDays)[numDays - 1].map(p => p.id));
       for (let i = 0; i < days[0].length; i++) {
-        if (!prevSlot3Ids.has(days[0][i].id)) continue;
-        outer: for (let s = 1; s <= 2; s++) {
+        if (!prevLastIds.has(days[0][i].id)) continue;
+        outer: for (let s = 1; s < numDays - 1; s++) {
           for (let j = 0; j < days[s].length; j++) {
-            if (!prevSlot3Ids.has(days[s][j].id)) {
+            if (!prevLastIds.has(days[s][j].id)) {
               const tmp = days[0][i]; days[0][i] = days[s][j]; days[s][j] = tmp;
               break outer;
             }
@@ -541,11 +542,11 @@
 
       <h1>Rujuk Langka <span id="rl-dRound">#–</span></h1>
       <p class="rl-date" id="rl-dDate">–</p>
-      <p class="rl-lede">Satu jawaban medis per pasien. 7 topik diacak tanpa pola dari 28 topik klinis — makin jarang dicari di Google, makin jauh dirujuk hingga RS Tipe A (+175 poin).</p>
+      <p class="rl-lede">Satu jawaban medis per pasien. 7 topik diacak tanpa pola dari 42 topik klinis (obat, penyakit, organ, sel, lab, dll.) — makin jarang dicari di Google, makin jauh dirujuk hingga RS Tipe A (+175 poin).</p>
       <div class="rl-pill-stats" id="rl-bankStats"></div>
       <div class="rl-home-ctas">
         <button type="button" class="rl-btn green big wide" id="rl-start">Mulai jaga</button>
-        <button type="button" class="rl-btn sky wide" id="rl-randBtn">🎲 Main Ronde Acak (7/28 Topik)</button>
+        <button type="button" class="rl-btn sky wide" id="rl-randBtn">🎲 Main Ronde Acak (7/42 Topik)</button>
       </div>
       <div class="rl-links">
         <button class="rl-link" id="rl-resBtn" type="button" hidden>Hasil hari ini</button>
@@ -620,7 +621,7 @@
     <p>Bahasa Indonesia, Inggris, istilah Latin, nama merek obat populer, dan singkatan klinis (seperti <b>SLE, GBS, GERD, CTS, BPPV, HNP, LAD</b>) diterima; salah ketik kecil dikoreksi otomatis.</p>
     <div id="rl-howTiers"></div>
     <p>30 detik per pasien (atau 45 detik bila mode santai diaktifkan). Jawaban salah tidak mengakhiri ronde — cukup coba jawaban lain sebelum waktu habis.</p>
-    <p>Tiap hari 7 topik dipilih secara <b>acak tanpa pola</b> dari seluruh <b>28 topik klinis (3.238+ jawaban)</b>. Kamu juga bisa klik <b>🎲 Main Ronde Acak</b> kapan saja untuk mendapatkan 7 pasien acak baru.</p>
+    <p>Tiap hari 7 topik dipilih secara <b>acak tanpa pola</b> dari seluruh <b>42 topik klinis (4.850+ jawaban)</b> meliputi obat, penyakit, organ, sel, laboratorium, hingga anatomi. Kamu juga bisa klik <b>🎲 Main Ronde Acak</b> kapan saja untuk mendapatkan 7 pasien acak baru.</p>
     <div class="rl-keys"><span><span class="kbd">ENTER</span> mulai, kirim, lanjut</span><span><span class="kbd">ESC</span> 2× lewati</span></div>
   </div>
 </div>
@@ -628,10 +629,10 @@
 <div class="rl-ov" id="rl-archOv" hidden>
   <div class="rl-modal" role="dialog" aria-modal="true" aria-labelledby="rl-archT">
     <div class="hd"><h2 id="rl-archT">Pilih Ronde &amp; Arsip</h2><button type="button" class="x" data-rl-close aria-label="Tutup">×</button></div>
-    <p>Setiap ronde harian &amp; mode acak mengocok 7 topik berbeda dari seluruh 28 topik klinis tanpa pola berulang.</p>
+    <p>Setiap ronde harian &amp; mode acak mengocok 7 topik berbeda dari seluruh 42 topik klinis tanpa pola berulang.</p>
     <div class="rl-archl">
       <button type="button" class="rl-rand-card" id="rl-archRandBtn">
-        <span><b>🎲 Mulai Ronde Acak Baru (7 dari 28 Topik)</b><span class="sub">Acak total lintas cabang kedokteran · tidak mengulang ronde terakhir</span></span>
+        <span><b>🎲 Mulai Ronde Acak Baru (7 dari 42 Topik)</b><span class="sub">Acak total lintas cabang kedokteran · tidak mengulang ronde terakhir</span></span>
         <span class="s">Acak ›</span>
       </button>
     </div>
@@ -1079,9 +1080,7 @@
         left = `<div class="hd"><span class="rl-badge">${t.n}</span><div><div class="tn">Dirujuk ke ${t.name}</div><div class="pts">+${sc.pts} poin · tingkat ${t.n} dari 8</div></div></div>
           <div class="lab">Diterima sebagai</div><div class="ans">${esc(a.canonicalName)}</div>${typed ? `<div class="fix">✓ Dikoreksi otomatis dari “${esc(typed.slice(0, 40))}”</div>` : ''}<div class="meta">${pct}</div>`;
       }
-      const rarer = dist.rows.filter(r => r.tier >= 7 && r.i !== idx).slice(-4).reverse();
-      let right = `<p class="exp">${esc(p.explanation)}</p>`;
-      if (rarer.length) right += `<div class="lab">Jawaban langka (RS Tipe B/A)</div><div>${rarer.map(r => `<span class="rl-tag" style="--c:${T[r.tier - 1].color}"><i></i>${esc(r.a.canonicalName)}</span>`).join('')}</div>`;
+      const right = `<p class="exp">${esc(p.explanation)}</p>`;
       const isLast = G.i === G.round.patients.length - 1;
       const html = `<div class="in"><div>${left}</div><div>${right}</div><div class="nb"><button type="button" class="rl-btn" id="rl-nextBtn">${isLast ? 'Lihat hasil' : 'Lanjut'} <span class="kbd">ENTER</span></button></div></div>`;
       G.rec.started = -1; save();
