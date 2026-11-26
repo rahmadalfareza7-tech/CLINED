@@ -1,0 +1,243 @@
+/* CLINED · Rujuk Langka — Game Rujukan Medis Harian (4 Ronde · 28 Topik · 3.200+ Jawaban).
+   Semua aturan diratakan & di-scope ke #rujukLangkaPage .rl (tanpa CSS nesting, aman di Safari iOS/iPadOS).
+   Font Nunito di-host lokal (CSP: font-src 'self'). */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../assets/fonts/igd/nunito-600.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../assets/fonts/igd/nunito-600.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(../assets/fonts/igd/nunito-600.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(../assets/fonts/igd/nunito-600.woff2) format('woff2');
+}
+
+/* ---------- Pengaman halaman CLINED & mode layar penuh PWA ---------- */
+#rujukLangkaPage.motion-page-enter,
+#rujukLangkaPage.motion-page-enter > *{animation:none!important;transform:none!important;filter:none!important;opacity:1!important}
+html.rl-open,html.rl-open body{background:#ffffff!important;margin:0!important;padding:0!important;min-height:100dvh;color-scheme:light}
+html.rl-open .floating-dashboard-nav,
+html.rl-open .header,
+html.rl-open .clined-creator-footer{display:none!important}
+html.rl-open .app{max-width:none!important;padding:0!important;margin:0!important;background:#ffffff!important;min-height:100dvh}
+html.rl-open #rujukLangkaPage{position:fixed!important;inset:0!important;width:100vw!important;max-width:none!important;height:100dvh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;z-index:100001!important;padding:0!important;margin:0!important;background:#ffffff!important}
+html.rl-open #rujukLangkaPage .rl-page-head{display:none!important}
+html.rl-open #rujukLangkaHost{width:100%!important;min-height:100dvh}
+
+/* ---------- Root game container ---------- */
+#rujukLangkaPage .rl{--bg:#ffffff;--soft:#f7f8fa;--ink:#3c4048;--mute:#6b7280;--line:#e5e7eb;--g:#46c45a;--gd:#2f9c45;--b:#4fb8e8;--bd:#2b93c7;--r:#ff4b5c;--rd:#d93245;--y:#ffc331;--f:'Nunito',system-ui,-apple-system,sans-serif;font:600 16px/1.5 var(--f)!important;color:var(--ink)!important;background:var(--bg)!important;min-height:100dvh;display:flex;flex-direction:column;overflow-x:clip;position:relative;isolation:isolate;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+#rujukLangkaPage .rl *{box-sizing:border-box;min-width:0}
+#rujukLangkaPage .rl button,
+#rujukLangkaPage .rl input,
+#rujukLangkaPage .rl textarea{font-family:var(--f)!important}
+#rujukLangkaPage .rl button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+#rujukLangkaPage .rl :focus-visible{outline:3px solid var(--b)!important;outline-offset:2px!important}
+#rujukLangkaPage .rl [hidden]{display:none!important}
+#rujukLangkaPage .rl .kbd{font:800 11px var(--f);padding:1px 6px;border-radius:6px;background:rgba(0,0,0,.12);letter-spacing:.04em}
+
+/* ---------- Tombol 3D chunky ---------- */
+#rujukLangkaPage .rl .rl-btn{min-height:50px;padding:0 22px;border-radius:16px;border:2px solid var(--line);border-bottom-width:5px;background:#fff;color:var(--ink);font:900 15px var(--f);text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform .06s;box-shadow:none}
+#rujukLangkaPage .rl .rl-btn:active{transform:translateY(3px);border-bottom-width:2px;margin-bottom:3px}
+#rujukLangkaPage .rl .rl-btn.green{background:var(--g);border-color:var(--gd);color:#fff}
+#rujukLangkaPage .rl .rl-btn.green:hover{background:#52d166}
+#rujukLangkaPage .rl .rl-btn.big{min-height:56px;font-size:17px;padding:0 28px}
+#rujukLangkaPage .rl .rl-btn.ghost{color:var(--bd);background:#fff;border-color:var(--line)}
+#rujukLangkaPage .rl .rl-btn.ghost:hover{background:var(--soft)}
+#rujukLangkaPage .rl .rl-btn[disabled]{background:#e5e7eb;border-color:#d1d5db;color:#9ca3af;cursor:default;transform:none}
+
+/* ---------- Top bar ---------- */
+#rujukLangkaPage .rl .rl-top{display:flex;align-items:center;gap:10px;padding:10px max(3vw,12px);border-bottom:2px solid var(--line);background:#fff;position:relative;z-index:4;flex-wrap:nowrap}
+#rujukLangkaPage .rl .rl-back-clined{min-height:38px;padding:0 12px;border-radius:12px;border:2px solid var(--line);border-bottom-width:4px;background:var(--soft);color:var(--ink);font:900 13px var(--f);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+#rujukLangkaPage .rl .rl-back-clined:hover{border-color:var(--b);color:var(--bd);background:#eef8fd}
+#rujukLangkaPage .rl .rl-brand{display:inline-flex;align-items:center;gap:8px;background:none;border:0;padding:0;font:900 20px var(--f);color:var(--g);letter-spacing:-.01em;flex:none}
+#rujukLangkaPage .rl .rl-brand svg{flex:none}
+#rujukLangkaPage .rl .rl-beds{display:flex;gap:5px;flex:none}
+#rujukLangkaPage .rl .rl-beds i{width:28px;height:28px;border-radius:9px;border:2px solid var(--line);display:grid;place-items:center;font:900 13px var(--f);font-style:normal;color:#fff}
+#rujukLangkaPage .rl .rl-beds i.cur{border-color:var(--b);box-shadow:0 0 0 3px #d8f0fb}
+#rujukLangkaPage .rl .rl-beds i.done{background:var(--c);border-color:var(--c)}
+#rujukLangkaPage .rl .rl-beds i.miss{background:#eef0f3;color:#9ca3af}
+#rujukLangkaPage .rl .rl-tm{display:flex;align-items:center;gap:8px;flex:none}
+#rujukLangkaPage .rl .rl-tm .bar{width:clamp(64px,12vw,160px);height:14px;border-radius:9px;background:var(--line);overflow:hidden}
+#rujukLangkaPage .rl .rl-tm .bar i{display:block;height:100%;width:100%;border-radius:9px;background:var(--g);transform-origin:left;box-shadow:inset 0 4px 0 -1px rgba(255,255,255,.35)}
+#rujukLangkaPage .rl .rl-tm.low .bar i{background:var(--r)}
+#rujukLangkaPage .rl .rl-tm b{font:900 19px var(--f);width:26px;text-align:right;color:var(--ink)}
+#rujukLangkaPage .rl .rl-tm.low b{color:var(--r)}
+#rujukLangkaPage .rl .rl-hstreak{display:inline-flex;align-items:center;gap:4px;font:900 16px var(--f);color:#ff9600;flex:none}
+#rujukLangkaPage .rl .rl-ib{width:38px;height:38px;border-radius:12px;border:2px solid var(--line);border-bottom-width:4px;background:#fff;font:900 17px var(--f);color:var(--mute);display:grid;place-items:center;flex:none}
+#rujukLangkaPage .rl .rl-sp{flex:1}
+
+/* ---------- Body wrapper ---------- */
+#rujukLangkaPage .rl .rl-body{flex:1;display:flex;flex-direction:column;min-height:0}
+#rujukLangkaPage .rl .rl-dash{width:100%;padding:clamp(14px,3vh,32px) max(4vw,14px) 28px;display:flex;justify-content:center}
+#rujukLangkaPage .rl .rl-home{width:100%;max-width:560px;text-align:center;display:flex;flex-direction:column;align-items:center}
+#rujukLangkaPage .rl .rl-desk{width:100%;max-width:420px}
+#rujukLangkaPage .rl .rl-desk svg{width:100%;height:auto;display:block}
+#rujukLangkaPage .rl h1{font:900 clamp(30px,5.5vw,44px)/1.06 var(--f);margin:14px 0 0;letter-spacing:-.02em;color:var(--ink)}
+#rujukLangkaPage .rl h1 span{color:var(--g)}
+#rujukLangkaPage .rl .rl-date{margin:6px 0 0;font:800 14px var(--f);color:var(--mute)}
+#rujukLangkaPage .rl .rl-lede{color:var(--mute);font-size:15.5px;max-width:44ch;margin:10px 0 0;line-height:1.5}
+#rujukLangkaPage .rl .rl-pill-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
+#rujukLangkaPage .rl .rl-pill-stats span{padding:4px 11px;border-radius:999px;background:#eef8fd;border:1.5px solid #cdeafa;color:#1d6d96;font:800 12px var(--f)}
+#rujukLangkaPage .rl .rl-btn.wide{width:100%;max-width:400px;margin-top:18px}
+#rujukLangkaPage .rl .rl-links{display:flex;gap:6px 16px;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:14px}
+#rujukLangkaPage .rl .rl-link{border:0;background:none;padding:8px 2px;font:900 14px var(--f);color:var(--bd);text-transform:uppercase;letter-spacing:.05em}
+#rujukLangkaPage .rl .rl-link:hover{color:#1d6d96}
+#rujukLangkaPage .rl .rl-chipt{display:inline-flex;align-items:center;gap:8px;font:900 13.5px var(--f);color:var(--mute);cursor:pointer;text-transform:uppercase;letter-spacing:.05em;min-height:38px}
+#rujukLangkaPage .rl .rl-chipt input{appearance:none;-webkit-appearance:none;width:40px!important;height:24px!important;padding:0!important;border-radius:12px!important;background:#d1d5db!important;position:relative;margin:0!important;cursor:pointer;flex:none;transition:background .15s;min-height:0!important;border:0!important;box-shadow:none!important}
+#rujukLangkaPage .rl .rl-chipt input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 0 rgba(0,0,0,.14);transition:transform .15s}
+#rujukLangkaPage .rl .rl-chipt input:checked{background:var(--b)!important}
+#rujukLangkaPage .rl .rl-chipt input:checked::after{transform:translateX(16px)}
+#rujukLangkaPage .rl .rl-hmeta{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin-top:18px;padding-top:14px;border-top:2px solid var(--soft);width:100%;font-size:13.5px;color:var(--mute)}
+#rujukLangkaPage .rl .rl-hmeta b{color:var(--ink);font-weight:900;font-variant-numeric:tabular-nums}
+#rujukLangkaPage .rl .rl-syncl{font:700 12px var(--f);color:#94a3b8;margin:8px 0 0}
+#rujukLangkaPage .rl .rl-ecg{stroke-dasharray:420;stroke-dashoffset:420;animation:rl-ecg 2.4s linear infinite}
+@keyframes rl-ecg{to{stroke-dashoffset:-420}}
+#rujukLangkaPage .rl .rl-steam{animation:rl-steam 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:bottom}
+#rujukLangkaPage .rl .rl-steam.s2{animation-delay:1.3s}
+@keyframes rl-steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.8}100%{opacity:0;transform:translateY(-10px)}}
+
+/* ---------- Play view ---------- */
+#rujukLangkaPage .rl .rl-ask{text-align:center;padding:clamp(14px,3vh,32px) max(4vw,14px) clamp(12px,2vh,20px);background:#fff}
+#rujukLangkaPage .rl .rl-eyebrow{display:inline-flex;gap:8px;align-items:center;border-radius:999px;background:#eef8fd;color:var(--bd);font:900 13.5px var(--f);padding:5px 14px}
+#rujukLangkaPage .rl .rl-vig{max-width:720px;margin:10px auto 0;color:var(--mute);font-size:16.5px}
+#rujukLangkaPage .rl .rl-q{font:900 clamp(24px,4vw,42px)/1.14 var(--f);margin:12px auto 0;max-width:820px;text-wrap:balance;letter-spacing:-.015em;color:var(--ink)}
+#rujukLangkaPage .rl .rl-inwrap{max-width:640px;margin:18px auto 0}
+#rujukLangkaPage .rl .rl-inrow{display:flex;gap:10px}
+#rujukLangkaPage .rl .rl-inrow input{flex:1;height:56px;min-height:56px!important;border-radius:16px!important;border:2px solid var(--line)!important;border-bottom-width:4px!important;background:var(--soft)!important;color:var(--ink)!important;padding:0 16px!important;font:800 18px var(--f)!important;outline:none;box-shadow:none!important}
+#rujukLangkaPage .rl .rl-inrow input:focus{border-color:var(--b)!important;background:#fff!important}
+#rujukLangkaPage .rl .rl-inrow input[readonly]{color:var(--mute)!important}
+#rujukLangkaPage .rl .rl-inrow .rl-btn{height:56px}
+#rujukLangkaPage .rl .rl-inmeta{display:flex;justify-content:space-between;gap:10px;min-height:26px;align-items:center;margin-top:8px;text-align:left}
+#rujukLangkaPage .rl .rl-err{font:800 14.5px var(--f);color:var(--r)}
+#rujukLangkaPage .rl .rl-pass{border:0;background:none;padding:0;font:900 13.5px var(--f);color:var(--mute);display:inline-flex;gap:6px;align-items:center;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}
+#rujukLangkaPage .rl .rl-pass.arm{color:var(--r)}
+#rujukLangkaPage .rl .rl-shake{animation:rl-shk .34s}
+@keyframes rl-shk{20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+#rujukLangkaPage .rl.resmode .rl-ask{display:none!important}
+
+/* ---------- Scene canvas & referral flags ---------- */
+#rujukLangkaPage .rl .rl-scene{position:relative;flex:1;min-height:320px;overflow:hidden;background:#dff3ff}
+#rujukLangkaPage .rl .rl-scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#rujukLangkaPage .rl .rl-flag{position:absolute;left:0;top:0;white-space:nowrap;background:#fff;color:var(--ink);font:900 12.5px var(--f);padding:4px 10px 4px 8px;border-radius:999px;border:2px solid var(--line);border-bottom-width:4px;pointer-events:none;will-change:transform;display:flex;align-items:center;gap:6px}
+#rujukLangkaPage .rl .rl-flag i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+#rujukLangkaPage .rl .rl-flag.hit{background:var(--c);border-color:var(--c);color:#fff;animation:rl-pop .45s cubic-bezier(.3,1.6,.5,1)}
+#rujukLangkaPage .rl .rl-flag.hit i{background:#fff}
+@keyframes rl-pop{0%{transform:scale(.6)}100%{transform:scale(1)}}
+#rujukLangkaPage .rl .rl-skiph{position:absolute;left:50%;top:14px;transform:translateX(-50%);font:800 13.5px var(--f);color:var(--ink);background:rgba(255,255,255,.94);border-radius:999px;padding:6px 14px;border:2px solid var(--line);z-index:2;white-space:nowrap;cursor:pointer}
+
+/* ---------- Result bottom sheet ---------- */
+#rujukLangkaPage .rl .rl-sheet{position:absolute;left:0;right:0;bottom:0;z-index:3;max-height:46%;background:#ffffff;border-top:4px solid var(--c,#46c45a);overflow:auto;-webkit-overflow-scrolling:touch;box-shadow:0 -10px 30px rgba(15,23,42,.15)}
+#rujukLangkaPage .rl .rl-sheet .in{max-width:1120px;margin:0 auto;padding:16px max(3vw,16px) 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) auto;gap:10px 26px;align-items:start}
+#rujukLangkaPage .rl .rl-sheet .hd{display:flex;align-items:center;gap:12px}
+#rujukLangkaPage .rl .rl-badge{width:46px;height:46px;flex:none;border-radius:50%;background:var(--c);display:grid;place-items:center;font:900 21px var(--f);color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15)}
+#rujukLangkaPage .rl .rl-sheet .tn{font:900 clamp(20px,2.5vw,27px)/1.08 var(--f);color:#1e293b}
+#rujukLangkaPage .rl .rl-sheet .pts{font:900 16px var(--f);color:var(--c,#2f9c45)}
+#rujukLangkaPage .rl .rl-sheet .lab{font:900 11.5px var(--f);color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-top:10px}
+#rujukLangkaPage .rl .rl-sheet .ans{font:900 19px var(--f);margin-top:2px;color:#0f172a}
+#rujukLangkaPage .rl .rl-sheet .meta{font-size:13.5px;color:#5b6470;margin-top:2px}
+#rujukLangkaPage .rl .rl-sheet .fix{display:inline-block;margin-top:4px;font:800 12.5px var(--f);color:#1d6d96;background:#eef8fd;border-radius:999px;padding:2px 10px}
+#rujukLangkaPage .rl .rl-sheet .exp{margin:0;font-size:14.5px;color:#334155;line-height:1.5}
+#rujukLangkaPage .rl .rl-tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;margin:6px 6px 0 0;font:800 12.5px var(--f);background:#f8fafc;color:#1e293b;border:2px solid var(--c,#cbd5e1)}
+#rujukLangkaPage .rl .rl-tag i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+#rujukLangkaPage .rl .rl-sheet .nb{align-self:center}
+#rujukLangkaPage .rl .rl-sheet .nb .rl-btn{background:var(--c);border-color:rgba(0,0,0,.22);color:#fff;min-width:190px}
+
+/* ---------- Summary ---------- */
+#rujukLangkaPage .rl .rl-sumw{width:100%;max-width:1060px;margin:0 auto;padding:clamp(18px,3.5vw,38px) max(4vw,14px) 24px;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(18px,3.5vw,40px);align-items:start}
+#rujukLangkaPage .rl .rl-sumw h2{font:900 clamp(28px,4vw,42px)/1.06 var(--f);margin:8px 0 0;color:var(--g)}
+#rujukLangkaPage .rl .rl-xp-note{margin:8px 0 0;display:inline-flex;padding:4px 12px;border-radius:999px;background:#ecfdf5;border:1.5px solid #a7f3d0;color:#047857;font:900 13px var(--f)}
+#rujukLangkaPage .rl .rl-cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+#rujukLangkaPage .rl .rl-sc{border-radius:16px;border:2px solid var(--c);overflow:hidden;text-align:center;background:#fff}
+#rujukLangkaPage .rl .rl-sc .h{background:var(--c);color:#fff;font:900 11.5px var(--f);text-transform:uppercase;letter-spacing:.06em;padding:4px}
+#rujukLangkaPage .rl .rl-sc .v{font:900 24px var(--f);padding:8px 4px;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#rujukLangkaPage .rl .rl-sumpct{color:var(--mute);margin:12px 0 0;font-size:14.5px}
+#rujukLangkaPage .rl .rl-grid7{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+#rujukLangkaPage .rl .rl-grid7 i{width:38px;height:38px;border-radius:11px;background:var(--c);display:grid;place-items:center;font:900 16px var(--f);font-style:normal;color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.14)}
+#rujukLangkaPage .rl .rl-grid7 i.x{background:#eef0f3;color:#9ca3af;box-shadow:none}
+#rujukLangkaPage .rl .rl-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+#rujukLangkaPage .rl .rl-br{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:14.5px}
+#rujukLangkaPage .rl .rl-br td{padding:10px 12px;background:var(--soft);vertical-align:middle}
+#rujukLangkaPage .rl .rl-br td:first-child{border-radius:14px 0 0 14px;width:50px}
+#rujukLangkaPage .rl .rl-br td:last-child{border-radius:0 14px 14px 0;text-align:right;white-space:nowrap;font-weight:900}
+#rujukLangkaPage .rl .rl-br .dot{width:34px;height:34px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:900}
+#rujukLangkaPage .rl .rl-br .dot.x{background:#e3e6ea;color:#9ca3af}
+#rujukLangkaPage .rl .rl-br .t{font:900 12px var(--f);color:var(--c,#475569)}
+#rujukLangkaPage .rl .rl-copied{font:800 14px var(--f);color:var(--g);min-height:20px;margin-top:8px}
+#rujukLangkaPage .rl textarea.rl-share{width:100%;height:110px;margin-top:8px;background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:10px;font:13.5px/1.4 ui-monospace,monospace}
+
+/* ---------- Modal (Cara Bermain & Pilih Ronde/Arsip) ---------- */
+#rujukLangkaPage .rl .rl-ov{position:fixed;inset:0;background:rgba(15,23,42,.52);display:grid;place-items:center;padding:14px;z-index:100020}
+#rujukLangkaPage .rl .rl-modal{background:#fff;color:var(--ink);border-radius:24px;max-width:620px;width:100%;max-height:86dvh;overflow:auto;-webkit-overflow-scrolling:touch;padding:22px clamp(16px,3vw,28px);border:2px solid var(--line);border-bottom-width:6px}
+#rujukLangkaPage .rl .rl-modal .hd{display:flex;align-items:center;margin-bottom:8px;gap:10px}
+#rujukLangkaPage .rl .rl-modal h2{font:900 24px var(--f);margin:0;color:var(--ink)}
+#rujukLangkaPage .rl .rl-modal .x{margin-left:auto;width:40px;height:40px;border-radius:12px;border:0;background:var(--soft);font:900 22px var(--f);color:var(--mute);display:grid;place-items:center}
+#rujukLangkaPage .rl .rl-modal p{margin:8px 0;color:#475569;font-size:14.5px;line-height:1.5}
+#rujukLangkaPage .rl .rl-trow{display:grid;grid-template-columns:36px minmax(0,1fr) 56px;gap:4px 12px;align-items:center;padding:7px 0;border-bottom:2px solid var(--soft)}
+#rujukLangkaPage .rl .rl-trow .rl-badge{width:34px;height:34px;font-size:15px}
+#rujukLangkaPage .rl .rl-trow .nm{font:900 15px var(--f);color:var(--ink)}
+#rujukLangkaPage .rl .rl-trow .pt{font:900 15px var(--f);color:var(--gd);text-align:right}
+#rujukLangkaPage .rl .rl-trow .nt{grid-column:2/4;font-size:12.5px;color:var(--mute);margin-top:-4px}
+#rujukLangkaPage .rl .rl-keys{margin-top:12px;font:800 12.5px var(--f);color:var(--mute);display:flex;gap:16px;flex-wrap:wrap}
+#rujukLangkaPage .rl .rl-arch-sec{margin:14px 0 6px;font:900 12px var(--f);text-transform:uppercase;letter-spacing:.08em;color:var(--bd)}
+#rujukLangkaPage .rl .rl-archl{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+#rujukLangkaPage .rl .rl-archl button{display:flex;justify-content:space-between;gap:12px;align-items:center;min-height:52px;padding:10px 14px;border-radius:14px;border:2px solid var(--line);border-bottom-width:4px;background:#fff;font:800 14.5px var(--f);text-align:left;color:var(--ink)}
+#rujukLangkaPage .rl .rl-archl button:hover{border-color:var(--b);background:#f8fcff}
+#rujukLangkaPage .rl .rl-archl .sub{display:block;font-size:12px;font-weight:700;color:var(--mute);margin-top:2px}
+#rujukLangkaPage .rl .rl-archl .s{color:var(--bd);font-size:13px;white-space:nowrap;font-weight:900}
+
+#rujukLangkaPage .rl .rl-foot{display:flex;justify-content:center;gap:6px 16px;flex-wrap:wrap;padding:10px 14px;font-size:12.5px;color:var(--mute);border-top:2px solid var(--line);background:#fff;text-align:center}
+#rujukLangkaPage .rl .rl-foot b{color:var(--ink)}
+
+@media (max-width:880px){
+  #rujukLangkaPage .rl .rl-sumw{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:860px){
+  #rujukLangkaPage .rl .rl-sheet .in{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  #rujukLangkaPage .rl .rl-sheet .nb{grid-column:1/-1;order:-1}
+  #rujukLangkaPage .rl .rl-sheet .nb .rl-btn{width:100%}
+}
+@media (max-width:700px){
+  #rujukLangkaPage .rl .rl-sheet{max-height:54%}
+  #rujukLangkaPage .rl .rl-sheet .in{grid-template-columns:minmax(0,1fr)}
+  #rujukLangkaPage .rl .rl-sheet .in > div:first-child{order:-2}
+}
+@media (max-width:640px){
+  #rujukLangkaPage .rl .rl-brand span{display:none}
+  #rujukLangkaPage .rl .rl-brand svg{width:24px;height:24px}
+  #rujukLangkaPage .rl .rl-top{gap:5px;padding:8px 8px}
+  #rujukLangkaPage .rl .rl-back-clined{min-height:32px;padding:0 7px;font-size:11px;border-radius:10px;border-bottom-width:3px}
+  #rujukLangkaPage .rl .rl-beds{gap:2px}
+  #rujukLangkaPage .rl .rl-beds i{width:18px;height:20px;border-radius:6px;font-size:10px}
+  #rujukLangkaPage .rl .rl-tm{gap:4px}
+  #rujukLangkaPage .rl .rl-tm .bar{width:30px;height:9px}
+  #rujukLangkaPage .rl .rl-tm b{font-size:15px;width:22px}
+  #rujukLangkaPage .rl .rl-ib{width:30px;height:30px;font-size:14px;border-radius:10px;border-bottom-width:3px}
+  #rujukLangkaPage .rl .rl-inrow .rl-btn{padding:0 14px;font-size:14px}
+  #rujukLangkaPage .rl .rl-cards3 .v{font-size:20px}
+  #rujukLangkaPage .rl .rl-grid7 i{width:32px;height:32px;font-size:14px}
+  #rujukLangkaPage .rl .rl-ctas .rl-btn{flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  #rujukLangkaPage .rl .rl-ecg,
+  #rujukLangkaPage .rl .rl-steam,
+  #rujukLangkaPage .rl .rl-flag.hit{animation:none}
+  #rujukLangkaPage .rl .rl-ecg{stroke-dashoffset:0}
+}

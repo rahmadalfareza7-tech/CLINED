@@ -58,6 +58,11 @@
       styles: ['css/meja-jaga-igd.css?v=14'],
       scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=15']
     },
+    rujukLangka: {
+      appendEnd: true,
+      styles: ['css/rujuk-langka.css?v=1'],
+      scripts: ['js/rujuk-langka-data.js?v=1', 'js/rujuk-langka.js?v=1']
+    },
     admin: {
       styles: ['css/admin-people.css?v=5'],
       scripts: ['js/admin-people.js?v=10', 'js/question-editor.js?v=1']
@@ -120,6 +125,45 @@
     } catch {}
   }
 
+  function showRujukLangkaLoadingUI() {
+    try {
+      const page = document.getElementById('rujukLangkaPage');
+      page?.classList.remove('motion-page-enter');
+      if (page && !page.classList.contains('active')) {
+        window.show?.('rujukLangkaPage', { force: true });
+        window.scrollTo(0, 0);
+      }
+      const host = document.getElementById('rujukLangkaHost');
+      if (host && !host.querySelector('#rl-root')) {
+        host.innerHTML = `<div style="min-height:360px;border-radius:22px;padding:36px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:radial-gradient(ellipse at 50% 20%,#e9f7f1 0%,#f7faf9 100%);color:#1e293b;border:2px solid #cbe5d8;box-shadow:0 16px 36px rgba(15,23,42,.08)">
+          <div style="font-size:2.4rem;line-height:1">🏥</div>
+          <div style="font-weight:900;font-size:1.15rem;letter-spacing:.03em;color:#0f5132">MEMBUKA RUJUK LANGKA…</div>
+          <div style="font-size:.86rem;color:#475569;max-width:340px">Menyiapkan 28 topik klinis &amp; 3.200+ kosakata medis berbasis popularitas Google Search.</div>
+        </div>`;
+      }
+    } catch {}
+  }
+
+  function showRujukLangkaErrorUI(err) {
+    try {
+      const host = document.getElementById('rujukLangkaHost');
+      if (host && !host.querySelector('#rl-root')) {
+        const msg = (err && err.message) ? String(err.message) : 'Koneksi terputus saat memuat Rujuk Langka.';
+        host.innerHTML = `<div style="min-height:360px;border-radius:22px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:#fff5f5;color:#1e293b;border:2px solid #fecaca">
+          <div style="font-size:2.2rem;line-height:1">⚠️</div>
+          <div style="font-weight:900;font-size:1.1rem;color:#991b1b">Gagal memuat Rujuk Langka</div>
+          <div style="font-size:.84rem;color:#475569;max-width:360px">${msg.replace(/[<>&]/g, '')}</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
+            <button type="button" id="rlRetryLoadBtn" style="padding:10px 18px;border-radius:12px;border:0;background:#46c45a;color:#fff;font-weight:900;cursor:pointer">Muat Ulang</button>
+            <button type="button" id="rlFailBackBtn" style="padding:10px 18px;border-radius:12px;border:1.5px solid #cbd5e1;background:#fff;color:#334155;font-weight:800;cursor:pointer">‹ Mini Games</button>
+          </div>
+        </div>`;
+        host.querySelector('#rlRetryLoadBtn')?.addEventListener('click', () => window.CLINED_RUJUK_LANGKA.open());
+        host.querySelector('#rlFailBackBtn')?.addEventListener('click', () => window.show?.('miniGamesPage', { force: true }));
+      }
+    } catch {}
+  }
+
   function injectMedCalcPlaceholders() {
     const nvBtn = document.getElementById('normalValuesHeaderBtn');
     if (nvBtn && nvBtn.parentNode && !document.getElementById('medCalcHeaderBtn')) {
@@ -169,6 +213,19 @@
       }
     };
   }
+  if (!window.CLINED_RUJUK_LANGKA) {
+    window.CLINED_RUJUK_LANGKA = {
+      open: () => {
+        showRujukLangkaLoadingUI();
+        return load('rujukLangka')
+          .then(() => window.CLINED_RUJUK_LANGKA?.open?.())
+          .catch(e => {
+            showRujukLangkaErrorUI(e);
+            window.showToast?.(e.message, true);
+          });
+      }
+    };
+  }
   if (!window.CLINED_MEDCALC) {
     window.CLINED_MEDCALC = {
       open: (tab = 'peds') => load('medcalc').then(() => window.CLINED_MEDCALC?.open?.(tab)).catch(e => window.showToast?.(e.message, true)),
@@ -201,37 +258,71 @@
 
   function syncMiniGamesHub() {
     const st = document.getElementById('mgIgdStatus');
-    if (!st) return;
-    try {
-      const svRaw = localStorage.getItem('clined_igd_session_v1');
-      if (svRaw) {
-        const sv = JSON.parse(svRaw);
-        if (sv && !sv.clearedAt && Array.isArray(sv.queue) && sv.queue.length && sv.i < sv.queue.length) {
-          st.textContent = `● Shift aktif · Berkas ${sv.i + 1}/${sv.queue.length}`;
-          st.classList.add('active-shift');
-          return;
+    if (st) {
+      try {
+        const svRaw = localStorage.getItem('clined_igd_session_v1');
+        let setDone = false;
+        if (svRaw) {
+          const sv = JSON.parse(svRaw);
+          if (sv && !sv.clearedAt && Array.isArray(sv.queue) && sv.queue.length && sv.i < sv.queue.length) {
+            st.textContent = `● Shift aktif · Berkas ${sv.i + 1}/${sv.queue.length}`;
+            st.classList.add('active-shift');
+            setDone = true;
+          }
         }
-      }
-      st.classList.remove('active-shift');
-      const pRaw = localStorage.getItem('clined_igd_v2');
-      if (pRaw) {
-        const p = JSON.parse(pRaw);
-        const cleared = [1, 2, 3, 4, 5].filter(n => p?.done?.[n]).length;
-        const bestVals = Object.values(p?.best || {}).filter(Boolean);
-        const top = bestVals.length ? Math.max(...bestVals) : 0;
-        if (cleared > 0 || top > 0) {
-          st.textContent = `${cleared}/5 Malam · Rekor ${top}`;
-          return;
+        if (!setDone) {
+          st.classList.remove('active-shift');
+          const pRaw = localStorage.getItem('clined_igd_v2');
+          if (pRaw) {
+            const p = JSON.parse(pRaw);
+            const cleared = [1, 2, 3, 4, 5].filter(n => p?.done?.[n]).length;
+            const bestVals = Object.values(p?.best || {}).filter(Boolean);
+            const top = bestVals.length ? Math.max(...bestVals) : 0;
+            if (cleared > 0 || top > 0) {
+              st.textContent = `${cleared}/5 Malam · Rekor ${top}`;
+              setDone = true;
+            }
+          }
+          if (!setDone) st.textContent = 'Siap dimainkan';
         }
+      } catch {
+        st.textContent = 'Siap dimainkan';
       }
-      st.textContent = 'Siap dimainkan';
-    } catch {
-      st.textContent = 'Siap dimainkan';
+    }
+
+    const rl = document.getElementById('mgRlStatus');
+    if (rl) {
+      try {
+        const raw = localStorage.getItem('clined_rujuk_langka_v1') || localStorage.getItem('rujuklangka:v2');
+        if (raw) {
+          const d = JSON.parse(raw);
+          const wibToday = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
+          const todayRec = d?.scored?.[wibToday];
+          const allRecs = [...Object.values(d?.scored || {}), ...Object.values(d?.archive || {})].filter(r => r && r.done);
+          if (todayRec && todayRec.done) {
+            rl.textContent = `✓ Hari ini · ${Number(todayRec.score ?? todayRec.total) || 0} poin`;
+            rl.classList.add('active-shift');
+          } else if (allRecs.length) {
+            const best = Math.max(...allRecs.map(r => Number(r.score ?? r.total) || 0));
+            rl.textContent = `${allRecs.length} ronde · Rekor ${best}`;
+            rl.classList.remove('active-shift');
+          } else {
+            rl.textContent = 'Siap dimainkan';
+            rl.classList.remove('active-shift');
+          }
+        } else {
+          rl.textContent = 'Siap dimainkan';
+          rl.classList.remove('active-shift');
+        }
+      } catch {
+        rl.textContent = 'Siap dimainkan';
+        rl.classList.remove('active-shift');
+      }
     }
   }
 
   document.addEventListener('click', e => {
-    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd], [data-open-minigames]');
+    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd], [data-open-rujuk-langka], [data-open-minigames]');
     if (!btn) return;
     if (btn.id === 'miniGamesBtn' || btn.dataset.openMinigames != null) {
       e.preventDefault();
@@ -243,6 +334,12 @@
       e.preventDefault();
       if (!loaded.has('igd')) window.showToast?.('Membuka Meja Jaga IGD…');
       window.CLINED_IGD.open();
+      return;
+    }
+    if (btn.id === 'mgCardRujukLangka' || btn.dataset.openRujukLangka != null) {
+      e.preventDefault();
+      if (!loaded.has('rujukLangka')) window.showToast?.('Membuka Rujuk Langka…');
+      window.CLINED_RUJUK_LANGKA.open();
       return;
     }
     if ((btn.id === 'medCalcHeaderBtn' || btn.id === 'medCalcStudyToolBtn' || btn.dataset.openMedcalc != null) && !loaded.has('medcalc')) {
@@ -292,6 +389,9 @@
     if (e.detail === 'miniGamesPage') syncMiniGamesHub();
     if (e.detail === 'mejaJagaIgdPage' && !loaded.has('igd') && !pending.has('igd')) {
       window.CLINED_IGD.open(); // mis. dibuka ulang dari hash/riwayat: muat bundle lalu pasang game
+    }
+    if (e.detail === 'rujukLangkaPage' && !loaded.has('rujukLangka') && !pending.has('rujukLangka')) {
+      window.CLINED_RUJUK_LANGKA.open();
     }
     if (e.detail === 'blokKedkelPage') {
       load('resep').catch(() => {});

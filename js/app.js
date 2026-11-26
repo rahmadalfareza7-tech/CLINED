@@ -427,7 +427,7 @@ function show(id, options={}){
   // Stable navigation: transform-only on normal pages. Dashboard gets a tiny,
   // bounded blur trail; opacity is never animated, preventing WebView flicker.
   const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  if(!reduced && previous!==id && id!=="mejaJagaIgdPage"){
+  if(!reduced && previous!==id && id!=="mejaJagaIgdPage" && id!=="rujukLangkaPage"){
     requestAnimationFrame(()=>target.classList.add("motion-page-enter"));
   }
   document.querySelectorAll(".view.motion-enter").forEach(v=>v.classList.remove("motion-enter"));

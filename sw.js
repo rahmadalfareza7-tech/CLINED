@@ -1,4 +1,4 @@
-const SW_VERSION = 'v252-mobile-gameplay-landscape-fix';
+const SW_VERSION = 'v253-rujuk-langka-minigame';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
@@ -15,6 +15,7 @@ const CORE = [
   './css/style.css',
   './css/motion.css',
   './css/meja-jaga-igd.css',
+  './css/rujuk-langka.css',
   './js/update-notice.js',
   './js/online-sync.js',
   './js/ability-classifier.js',
@@ -30,6 +31,8 @@ const CORE = [
   './js/meja-jaga-igd-data.js',
   './js/meja-jaga-igd-gen.js',
   './js/meja-jaga-igd.js',
+  './js/rujuk-langka-data.js',
+  './js/rujuk-langka.js',
   './js/latihan-materi.js',
   './js/onboarding.js',
   './js/userbank-parser.js',

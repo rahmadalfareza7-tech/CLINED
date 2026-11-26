@@ -47,6 +47,7 @@
     'clined_igd_v1',
     'clined_igd_v2',
     'clined_igd_session_v1',
+    'clined_rujuk_langka_v1',
     'clined_kedkel_summary_done_v2',
     'clined_kedkel_summary_star_v2',
     'clined_unlocked_achievements_v1',
@@ -1029,6 +1030,30 @@
       }
       if ((key === 'clined_notes_v1' || key === 'clined_resep_best_v1' || key === 'clined_resep_lp_best_v1' || key === 'clined_clinical_quest_v1' || key === 'clined_igd_v1' || key === 'clined_igd_v2' || key === 'clined_duel_claims_v1' || key === 'clined_ann_seen_v1') && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
         const merged = maxMergeDeep(loc, srv);
+        return { value: JSON.stringify(merged), dirty: !jsonDeepEqual(merged, srv) };
+      }
+      if (key === 'clined_rujuk_langka_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
+        if (jsonDeepEqual(loc, srv)) return { value: JSON.stringify(srv), dirty: false };
+        const pickBucket = (lb = {}, sb = {}) => {
+          const out = { ...(sb && typeof sb === 'object' ? sb : {}) };
+          for (const [d, lv] of Object.entries(lb && typeof lb === 'object' ? lb : {})) {
+            const sv = out[d];
+            if (!sv) { out[d] = lv; continue; }
+            const lDone = Boolean(lv?.done), sDone = Boolean(sv?.done);
+            const lTot = Number(lv?.score ?? lv?.total) || 0, sTot = Number(sv?.score ?? sv?.total) || 0;
+            if ((lDone && !sDone) || (lDone === sDone && lTot > sTot)) out[d] = lv;
+          }
+          return out;
+        };
+        const lt = Number(loc.at) || 0, st = Number(srv.at) || 0;
+        const merged = {
+          scored: pickBucket(loc.scored, srv.scored),
+          archive: pickBucket(loc.archive, srv.archive),
+          practice: pickBucket(loc.practice, srv.practice),
+          ext: lt > st ? Boolean(loc.ext) : Boolean(srv.ext),
+          seenHelp: Boolean(loc.seenHelp || srv.seenHelp),
+          at: Math.max(lt, st)
+        };
         return { value: JSON.stringify(merged), dirty: !jsonDeepEqual(merged, srv) };
       }
       if (key === 'clined_xp_daily_refs_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object') {

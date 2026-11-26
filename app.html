@@ -21,7 +21,7 @@
 <title>CLINED — Clinical Education</title>
 <meta name="clined-release" content="v29-unified-design">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="css/motion.css?v=auth-layout-v5">
+<link rel="stylesheet" href="css/motion.css?v=auth-layout-v6">
 <link rel="stylesheet" href="css/latihan-materi.css?v=10">
 <link rel="stylesheet" href="css/study-plus.css?v=11">
 <link rel="stylesheet" href="css/announcement.css?v=1">
@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="css/onboarding.css?v=4">
 <link rel="stylesheet" href="css/social.css?v=17">
 <link rel="stylesheet" href="css/desktop.css?v=10">
-<link rel="stylesheet" href="css/home-ergonomic.css?v=21">
+<link rel="stylesheet" href="css/home-ergonomic.css?v=22">
 <link rel="stylesheet" href="css/top-notify.css?v=7">
 <link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=26">
 <link rel="stylesheet" href="css/duel-native.css?v=8">
@@ -1048,6 +1048,32 @@
       </div>
     </button>
 
+    <button type="button" class="card mg-card mg-card-rl" id="mgCardRujukLangka" data-open-rujuk-langka aria-label="Mainkan Rujuk Langka">
+      <div class="mg-banner mg-banner-rl">
+        <span class="mg-badge mg-badge-rl">BARU • KOSAKATA MEDIS</span>
+        <span class="mg-status" id="mgRlStatus">Siap dimainkan</span>
+        <div class="mg-art" aria-hidden="true">
+          <span class="mg-art-ico">🏥</span>
+          <span class="mg-art-tier">RS TIPE A · +175</span>
+        </div>
+      </div>
+      <div class="mg-body">
+        <div class="mg-title-row">
+          <h3>Rujuk Langka</h3>
+          <span class="mg-tag-rl">Harian · 4 Ronde</span>
+        </div>
+        <p>Tebak 1 istilah medis paling langka untuk 7 pasien tiap ronde. Makin jarang dicari di Google, makin jauh ambulans merujuk hingga <strong>RS Tipe A</strong>.</p>
+        <div class="mg-chips">
+          <span>28 Topik Klinis</span>
+          <span>3.200+ Jawaban</span>
+          <span>Bobot Google Search</span>
+        </div>
+        <div class="mg-cta">
+          <span class="mg-play-btn mg-play-btn-rl">▶ Mainkan Sekarang</span>
+        </div>
+      </div>
+    </button>
+
     <div class="card mg-card mg-card-soon" aria-label="Mini games berikutnya segera hadir">
       <div class="mg-soon-inner">
         <span class="mg-soon-ico" aria-hidden="true">🧩</span>
@@ -1070,6 +1096,19 @@
     </div>
   </div>
   <div id="mejaJagaIgdHost"></div>
+</section>
+
+<!-- RUJUK LANGKA (mini game, dimuat lazy: css/rujuk-langka.css + js/rujuk-langka-data.js + js/rujuk-langka.js) -->
+<section id="rujukLangkaPage" class="view exam-page-view rujuk-langka-page">
+  <div class="exam-page-header rl-page-head">
+    <button class="back-link" type="button" data-open-minigames>‹ Mini Games</button>
+    <div>
+      <div class="eyebrow">CLINED • MINI GAME KOSAKATA MEDIS</div>
+      <h2>Rujuk Langka</h2>
+      <p>Satu jawaban medis per pasien. Makin jarang dicari di Google, makin jauh ambulans merujuk hingga RS Tipe A (+175 poin).</p>
+    </div>
+  </div>
+  <div id="rujukLangkaHost"></div>
 </section>
 
 <!-- LEADERBOARD PAGE -->
@@ -1283,15 +1322,15 @@
   </section>
 </div>
 <script src="js/ui-dialogs.js?v=1"></script>
-<script src="js/update-notice.js?v=19"></script>
+<script src="js/update-notice.js?v=20"></script>
 <script src="js/report-question.js?v=1"></script>
 <script src="js/photo-store.js?v=1"></script>
 <script src="js/photo-compress.js?v=2"></script>
-<script src="js/online-sync.js?v=20"></script>
+<script src="js/online-sync.js?v=21"></script>
 <script src="js/ability-classifier.js?v=1"></script>
 <script src="js/champion-tags.js?v=1"></script>
 <script src="js/kedkel-2026-materi.js?v=3"></script>
-<script src="js/app.js?v=static-banks-v73"></script>
+<script src="js/app.js?v=static-banks-v74"></script>
 <script src="js/auth-gate.js?v=2"></script>
 <script src="js/content-manager.js?v=27"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>
@@ -1397,8 +1436,8 @@
 <script src="js/insights.js?v=3"></script>
 <script src="js/glossary-match.js?v=1"></script>
 <script src="js/glossary.js?v=5"></script>
-<script src="js/usage.js?v=4"></script>
-<script src="js/lazy-loader.js?v=41"></script>
+<script src="js/usage.js?v=5"></script>
+<script src="js/lazy-loader.js?v=42"></script>
 <script src="js/pwa-install.js?v=2"></script>
 </body>
 </html>
