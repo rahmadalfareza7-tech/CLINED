@@ -1,4 +1,4 @@
-const SW_VERSION = 'v255-rujuk-langka-smart-autocorrect';
+const SW_VERSION = 'v256-blok-lysis-synced-leaderboard';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
@@ -16,6 +16,7 @@ const CORE = [
   './css/motion.css',
   './css/meja-jaga-igd.css',
   './css/rujuk-langka.css',
+  './css/blok-lysis.css',
   './js/update-notice.js',
   './js/online-sync.js',
   './js/ability-classifier.js',
@@ -33,6 +34,7 @@ const CORE = [
   './js/meja-jaga-igd.js',
   './js/rujuk-langka-data.js',
   './js/rujuk-langka.js',
+  './js/blok-lysis.js',
   './js/latihan-materi.js',
   './js/onboarding.js',
   './js/userbank-parser.js',

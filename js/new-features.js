@@ -42,7 +42,7 @@ window.CLINED_Leaderboard = (function () {
   async function load() {
     const listEl = document.getElementById('leaderboardList');
     if (!listEl) return;
-    if (lbTab === 'block' || lbTab === 'gladiator') return render(listEl, lbTab);
+    if (lbTab === 'block' || lbTab === 'gladiator' || lbTab === 'blok_lysis') return render(listEl, lbTab);
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat…</div>';
     try {
       const data = await fetchLeaderboard(true);
@@ -97,6 +97,52 @@ window.CLINED_Leaderboard = (function () {
     } catch { if (lbTab === 'gladiator') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat Rank Gladiator. Masuk akun dulu.</div>'; }
   }
 
+  async function renderBlokLysis(listEl) {
+    listEl.innerHTML = '<div class="leaderboard-loading">Memuat Peringkat Blok Lysis…</div>';
+    try {
+      await window.CLINED_ONLINE_SYNC?.sync?.({ force: true })?.catch?.(() => {});
+      const r = await fetch('/api/leaderboard?game=blok_lysis', { credentials: 'same-origin', cache: 'no-store' });
+      if (r.status === 401) {
+        if (lbTab === 'blok_lysis') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Blok Lysis.</div>';
+        return;
+      }
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const d = await r.json();
+      if (lbTab !== 'blok_lysis') return;
+      const rows = Array.isArray(d.rankings) ? d.rankings : [];
+      const meId = d.me;
+      const lbAv = row => {
+        const ini = String(row.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+        return `<span class="lb-av${row.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${row.avatarUrl ? `<img class="lb-av-img" src="${escHtml(row.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}${row.avatarDeco ? `<img class="avatar-deco-img" src="${escHtml(row.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
+      };
+      listEl.innerHTML = rows.map((row, i) => {
+        const rank = row.rank || (i + 1);
+        const best = Number(row.bestScore) || 0;
+        const isMe = row.id === meId;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+        const bg = row.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${escHtml(row.bannerUrl)}')" aria-hidden="true"></span>` : '';
+        const nc = row.nameColor ? ` data-name-color="${escHtml(row.nameColor)}"` : '';
+        const xpBadge = row.xp100k ? ' <em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+        const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(row.championBlocks, { compact: true, max: 2 }) || '';
+        const metaParts = [`@${row.username}`];
+        if (row.bestCombo > 1) metaParts.push(`Kombo ×${row.bestCombo}`);
+        if (row.totalLines > 0) metaParts.push(`${row.totalLines} baris`);
+        return `<div class="leaderboard-row${isMe ? ' leaderboard-me' : ''}${row.bannerUrl ? ' has-banner' : ''}">
+          ${bg}
+          <span class="lb-rank">${medal}</span>
+          ${lbAv(row)}
+          <div class="lb-user">
+            <b${nc}>${escHtml(row.name)}</b>${xpBadge}${champBadges ? ' ' + champBadges : ''}
+            <small>${escHtml(metaParts.join(' · '))}</small>
+          </div>
+          <span class="lb-xp">♛ ${best.toLocaleString('id')}</span>
+        </div>`;
+      }).join('') || '<div class="leaderboard-loading">Belum ada skor Blok Lysis. Mainkan di Mini Games dan jadilah #1!</div>';
+    } catch {
+      if (lbTab === 'blok_lysis') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat Blok Lysis. Masuk akun dulu.</div>';
+    }
+  }
+
   function renderRows(listEl, rows, meId, getXp, emptyMsg) {
     const lbAv = r => {
       const ini = String(r.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
@@ -128,6 +174,7 @@ window.CLINED_Leaderboard = (function () {
     const blockBar = document.getElementById('leaderboardBlockBar');
     if (blockBar) blockBar.hidden = tab !== 'block';
     if (tab === 'gladiator') return renderGladiator(listEl);
+    if (tab === 'blok_lysis') return renderBlokLysis(listEl);
     if (tab === 'block') return renderBlockLeaderboard(listEl);
     if (!lbData) return load();
     const rankings = tab === 'alltime'
@@ -197,7 +244,7 @@ window.CLINED_Leaderboard = (function () {
     if (lbl) lbl.textContent = on ? 'ON' : 'OFF';
     if (sub) {
       sub.textContent = on
-        ? 'Aktif • Akun Admin ikut muncul di Weekly, Per BLOK, All Time & Gladiator'
+        ? 'Aktif • Akun Admin ikut muncul di Weekly, Per BLOK, All Time, Gladiator & Blok Lysis'
         : 'Nonaktif • Akun Admin disembunyikan dari semua papan peringkat';
     }
   }

@@ -3,8 +3,8 @@
   'use strict';
   if (!('serviceWorker' in navigator)) return;
 
-  const APP_SW_VERSION = 'v255-rujuk-langka-smart-autocorrect';
-  const BUSY_VIEWS = new Set(['quiz', 'duelPage', 'flashcards', 'clinicalQuestPage', 'mejaJagaIgdPage', 'rujukLangkaPage', 'studyTimerPage', 'userBankPage']);
+  const APP_SW_VERSION = 'v256-blok-lysis-synced-leaderboard';
+  const BUSY_VIEWS = new Set(['quiz', 'duelPage', 'flashcards', 'clinicalQuestPage', 'mejaJagaIgdPage', 'rujukLangkaPage', 'blokLysisPage', 'studyTimerPage', 'userBankPage']);
   let seenController = !!navigator.serviceWorker.controller;
   let pending = false, dismissed = false, reloading = false, banner = null, poll = null, lastCheck = 0;
   let detectedVersion = '';

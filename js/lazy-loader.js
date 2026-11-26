@@ -63,6 +63,11 @@
       styles: ['css/rujuk-langka.css?v=3'],
       scripts: ['js/rujuk-langka-data.js?v=1', 'js/rujuk-langka.js?v=3']
     },
+    blokLysis: {
+      appendEnd: true,
+      styles: ['css/blok-lysis.css?v=1'],
+      scripts: ['js/blok-lysis.js?v=1']
+    },
     admin: {
       styles: ['css/admin-people.css?v=5'],
       scripts: ['js/admin-people.js?v=10', 'js/question-editor.js?v=1']
@@ -164,6 +169,45 @@
     } catch {}
   }
 
+  function showBlokLysisLoadingUI() {
+    try {
+      const page = document.getElementById('blokLysisPage');
+      page?.classList.remove('motion-page-enter');
+      if (page && !page.classList.contains('active')) {
+        window.show?.('blokLysisPage', { force: true });
+        window.scrollTo(0, 0);
+      }
+      const host = document.getElementById('blokLysisHost');
+      if (host && !host.querySelector('#bl-root')) {
+        host.innerHTML = `<div style="min-height:360px;border-radius:22px;padding:36px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:radial-gradient(ellipse at 50% 20%,#263f8c 0%,#1b285c 100%);color:#f8fafc;border:2px solid rgba(140,180,255,.3);box-shadow:0 16px 40px rgba(10,18,46,.5)">
+          <div style="font-size:2.4rem;line-height:1">🧬</div>
+          <div style="font-weight:900;font-size:1.15rem;letter-spacing:.04em;color:#fde047">MEMBUKA BLOK LYSIS…</div>
+          <div style="font-size:.86rem;color:#cbd5e1;max-width:340px">Menyiapkan preparat Wright-Giemsa 8×8, monitor ECG, dan papan peringkat tersinkron.</div>
+        </div>`;
+      }
+    } catch {}
+  }
+
+  function showBlokLysisErrorUI(err) {
+    try {
+      const host = document.getElementById('blokLysisHost');
+      if (host && !host.querySelector('#bl-root')) {
+        const msg = (err && err.message) ? String(err.message) : 'Koneksi terputus saat memuat Blok Lysis.';
+        host.innerHTML = `<div style="min-height:360px;border-radius:22px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:radial-gradient(ellipse at 50% 25%,#2b1736 0%,#151a36 100%);color:#f8fafc;border:2px solid #991b1b">
+          <div style="font-size:2.2rem;line-height:1">⚠️</div>
+          <div style="font-weight:900;font-size:1.1rem">Gagal memuat Blok Lysis</div>
+          <div style="font-size:.84rem;color:#cbd5e1;max-width:360px">${msg.replace(/[<>&]/g, '')}</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
+            <button type="button" id="blRetryLoadBtn" style="padding:10px 18px;border-radius:12px;border:0;background:#38bdf8;color:#0f172a;font-weight:900;cursor:pointer">Muat Ulang</button>
+            <button type="button" id="blFailBackBtn" style="padding:10px 18px;border-radius:12px;border:1.5px solid #475569;background:#1e293b;color:#e2e8f0;font-weight:800;cursor:pointer">‹ Mini Games</button>
+          </div>
+        </div>`;
+        host.querySelector('#blRetryLoadBtn')?.addEventListener('click', () => window.CLINED_BLOK_LYSIS.open());
+        host.querySelector('#blFailBackBtn')?.addEventListener('click', () => window.show?.('miniGamesPage', { force: true }));
+      }
+    } catch {}
+  }
+
   function injectMedCalcPlaceholders() {
     const nvBtn = document.getElementById('normalValuesHeaderBtn');
     if (nvBtn && nvBtn.parentNode && !document.getElementById('medCalcHeaderBtn')) {
@@ -221,6 +265,19 @@
           .then(() => window.CLINED_RUJUK_LANGKA?.open?.())
           .catch(e => {
             showRujukLangkaErrorUI(e);
+            window.showToast?.(e.message, true);
+          });
+      }
+    };
+  }
+  if (!window.CLINED_BLOK_LYSIS) {
+    window.CLINED_BLOK_LYSIS = {
+      open: () => {
+        showBlokLysisLoadingUI();
+        return load('blokLysis')
+          .then(() => window.CLINED_BLOK_LYSIS?.open?.())
+          .catch(e => {
+            showBlokLysisErrorUI(e);
             window.showToast?.(e.message, true);
           });
       }
@@ -319,10 +376,42 @@
         rl.classList.remove('active-shift');
       }
     }
+
+    const bl = document.getElementById('mgBlStatus');
+    if (bl) {
+      try {
+        let activeText = '';
+        const sessRaw = localStorage.getItem('clined_blok_lysis_session_v1');
+        if (sessRaw) {
+          const sv = JSON.parse(sessRaw);
+          if (sv && !sv.over && !sv.clearedAt && Array.isArray(sv.board) && sv.board.length === 8 && (Number(sv.score) > 0 || Number(sv.moves) > 0)) {
+            activeText = `● Permainan aktif · ${(Number(sv.score) || 0).toLocaleString('id')}`;
+          }
+        }
+        if (activeText) {
+          bl.textContent = activeText;
+          bl.classList.add('active-shift');
+        } else {
+          bl.classList.remove('active-shift');
+          const stRaw = localStorage.getItem('clined_blok_lysis_v1');
+          const stData = stRaw ? JSON.parse(stRaw) : null;
+          const best = Math.max(0, Math.floor(Number(stData?.best) || 0));
+          const games = Math.max(0, Math.floor(Number(stData?.games) || 0));
+          if (best > 0) {
+            bl.textContent = `♛ Rekor ${best.toLocaleString('id')}${games > 0 ? ` · ${games} main` : ''}`;
+          } else {
+            bl.textContent = 'Siap dimainkan';
+          }
+        }
+      } catch {
+        bl.textContent = 'Siap dimainkan';
+        bl.classList.remove('active-shift');
+      }
+    }
   }
 
   document.addEventListener('click', e => {
-    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd], [data-open-rujuk-langka], [data-open-minigames]');
+    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd], [data-open-rujuk-langka], [data-open-blok-lysis], [data-open-minigames]');
     if (!btn) return;
     if (btn.id === 'miniGamesBtn' || btn.dataset.openMinigames != null) {
       e.preventDefault();
@@ -340,6 +429,11 @@
       e.preventDefault();
       if (!loaded.has('rujukLangka')) window.showToast?.('Membuka Rujuk Langka…');
       window.CLINED_RUJUK_LANGKA.open();
+      return;
+    }
+    if (btn.id === 'mgCardBlokLysis' || btn.dataset.openBlokLysis != null) {
+      e.preventDefault();
+      window.CLINED_BLOK_LYSIS.open();
       return;
     }
     if ((btn.id === 'medCalcHeaderBtn' || btn.id === 'medCalcStudyToolBtn' || btn.dataset.openMedcalc != null) && !loaded.has('medcalc')) {
@@ -384,7 +478,8 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
-  window.addEventListener('clined:auth-ready', maybePreloadAdmin);
+  window.addEventListener('clined:auth-ready', () => { maybePreloadAdmin(); syncMiniGamesHub(); });
+  window.addEventListener('clined:sync-applied', syncMiniGamesHub);
   window.addEventListener('clined:view-change', e => {
     if (e.detail === 'miniGamesPage') syncMiniGamesHub();
     if (e.detail === 'mejaJagaIgdPage' && !loaded.has('igd') && !pending.has('igd')) {
@@ -392,6 +487,9 @@
     }
     if (e.detail === 'rujukLangkaPage' && !loaded.has('rujukLangka') && !pending.has('rujukLangka')) {
       window.CLINED_RUJUK_LANGKA.open();
+    }
+    if (e.detail === 'blokLysisPage' && !loaded.has('blokLysis') && !pending.has('blokLysis')) {
+      window.CLINED_BLOK_LYSIS.open();
     }
     if (e.detail === 'blokKedkelPage') {
       load('resep').catch(() => {});

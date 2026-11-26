@@ -21,7 +21,7 @@
 <title>CLINED — Clinical Education</title>
 <meta name="clined-release" content="v29-unified-design">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="css/motion.css?v=auth-layout-v6">
+<link rel="stylesheet" href="css/motion.css?v=auth-layout-v7">
 <link rel="stylesheet" href="css/latihan-materi.css?v=10">
 <link rel="stylesheet" href="css/study-plus.css?v=11">
 <link rel="stylesheet" href="css/announcement.css?v=1">
@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="css/onboarding.css?v=4">
 <link rel="stylesheet" href="css/social.css?v=17">
 <link rel="stylesheet" href="css/desktop.css?v=10">
-<link rel="stylesheet" href="css/home-ergonomic.css?v=22">
+<link rel="stylesheet" href="css/home-ergonomic.css?v=23">
 <link rel="stylesheet" href="css/top-notify.css?v=7">
 <link id="clinedDesignSystemCss" rel="stylesheet" href="css/design-system.css?v=26">
 <link rel="stylesheet" href="css/duel-native.css?v=8">
@@ -1074,6 +1074,32 @@
       </div>
     </button>
 
+    <button type="button" class="card mg-card mg-card-bl" id="mgCardBlokLysis" data-open-blok-lysis aria-label="Mainkan Blok Lysis">
+      <div class="mg-banner mg-banner-bl">
+        <span class="mg-badge mg-badge-bl">BARU • PUZZLE HISTOLOGI</span>
+        <span class="mg-status" id="mgBlStatus">Siap dimainkan</span>
+        <div class="mg-art" aria-hidden="true">
+          <span class="mg-art-ico">🧬</span>
+          <span class="mg-art-bl">ECG COMBO · 8×8</span>
+        </div>
+      </div>
+      <div class="mg-body">
+        <div class="mg-title-row">
+          <h3>Blok Lysis</h3>
+          <span class="mg-tag-bl">Leaderboard Tersinkron</span>
+        </div>
+        <p>Susun blok sel histologi Wright-Giemsa di papan 8×8, picu <strong>Lisis</strong> baris &amp; kolom, dan kejar skor tertinggi di <strong>Papan Peringkat</strong> tersinkron antar perangkat.</p>
+        <div class="mg-chips">
+          <span>Monitor ECG Live</span>
+          <span>Lanjutkan Lintas Perangkat</span>
+          <span>Papan Peringkat</span>
+        </div>
+        <div class="mg-cta">
+          <span class="mg-play-btn mg-play-btn-bl">▶ Mainkan Sekarang</span>
+        </div>
+      </div>
+    </button>
+
     <div class="card mg-card mg-card-soon" aria-label="Mini games berikutnya segera hadir">
       <div class="mg-soon-inner">
         <span class="mg-soon-ico" aria-hidden="true">🧩</span>
@@ -1111,6 +1137,19 @@
   <div id="rujukLangkaHost"></div>
 </section>
 
+<!-- BLOK LYSIS (mini game, dimuat lazy: css/blok-lysis.css + js/blok-lysis.js) -->
+<section id="blokLysisPage" class="view exam-page-view blok-lysis-page">
+  <div class="exam-page-header bl-page-head">
+    <button class="back-link" type="button" data-open-minigames>‹ Mini Games</button>
+    <div>
+      <div class="eyebrow">CLINED • MINI GAME HISTOLOGI</div>
+      <h2>Blok Lysis</h2>
+      <p>Susun blok sel di papan 8×8, lisis baris &amp; kolom, dan kejar skor terbaik di Papan Peringkat tersinkron.</p>
+    </div>
+  </div>
+  <div id="blokLysisHost"></div>
+</section>
+
 <!-- LEADERBOARD PAGE -->
 <section id="leaderboardPage" class="view exam-page-view">
   <div class="exam-page-header">
@@ -1133,6 +1172,7 @@
       <button class="lb-tab" data-lb-tab="block" role="tab" aria-selected="false">Per BLOK</button>
       <button class="lb-tab" data-lb-tab="alltime" role="tab" aria-selected="false">All Time</button>
       <button class="lb-tab" data-lb-tab="gladiator" role="tab" aria-selected="false">⚔️ Gladiator</button>
+      <button class="lb-tab" data-lb-tab="blok_lysis" role="tab" aria-selected="false">🧬 Blok Lysis</button>
     </div>
     <div id="leaderboardBlockBar" class="lb-block-bar" hidden>
       <label for="leaderboardBlockSelect">Pilih Blok:</label>
@@ -1322,20 +1362,20 @@
   </section>
 </div>
 <script src="js/ui-dialogs.js?v=1"></script>
-<script src="js/update-notice.js?v=22"></script>
+<script src="js/update-notice.js?v=23"></script>
 <script src="js/report-question.js?v=1"></script>
 <script src="js/photo-store.js?v=1"></script>
 <script src="js/photo-compress.js?v=2"></script>
-<script src="js/online-sync.js?v=21"></script>
+<script src="js/online-sync.js?v=22"></script>
 <script src="js/ability-classifier.js?v=1"></script>
 <script src="js/champion-tags.js?v=1"></script>
 <script src="js/kedkel-2026-materi.js?v=3"></script>
-<script src="js/app.js?v=static-banks-v74"></script>
+<script src="js/app.js?v=static-banks-v75"></script>
 <script src="js/auth-gate.js?v=2"></script>
 <script src="js/content-manager.js?v=27"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>
 <script src="js/inline-boot.js?v=5"></script>
-<script src="js/new-features.js?v=21"></script>
+<script src="js/new-features.js?v=22"></script>
 <script src="js/clinical-quest.js?v=18"></script>
 
 <script id="clined-floating-dashboard-navigation-final">
@@ -1436,8 +1476,8 @@
 <script src="js/insights.js?v=3"></script>
 <script src="js/glossary-match.js?v=1"></script>
 <script src="js/glossary.js?v=5"></script>
-<script src="js/usage.js?v=5"></script>
-<script src="js/lazy-loader.js?v=44"></script>
+<script src="js/usage.js?v=6"></script>
+<script src="js/lazy-loader.js?v=45"></script>
 <script src="js/pwa-install.js?v=2"></script>
 </body>
 </html>

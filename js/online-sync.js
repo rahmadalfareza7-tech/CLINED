@@ -48,6 +48,8 @@
     'clined_igd_v2',
     'clined_igd_session_v1',
     'clined_rujuk_langka_v1',
+    'clined_blok_lysis_v1',
+    'clined_blok_lysis_session_v1',
     'clined_kedkel_summary_done_v2',
     'clined_kedkel_summary_star_v2',
     'clined_unlocked_achievements_v1',
@@ -1056,6 +1058,73 @@
         };
         return { value: JSON.stringify(merged), dirty: !jsonDeepEqual(merged, srv) };
       }
+      if (key === 'clined_blok_lysis_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
+        if (jsonDeepEqual(loc, srv)) return { value: JSON.stringify(srv), dirty: false };
+        const lBest = Math.max(0, Math.floor(Number(loc.best) || 0));
+        const sBest = Math.max(0, Math.floor(Number(srv.best) || 0));
+        const lGames = Math.max(0, Math.floor(Number(loc.games) || 0));
+        const sGames = Math.max(0, Math.floor(Number(srv.games) || 0));
+        const lLines = Math.max(0, Math.floor(Number(loc.lines) || 0));
+        const sLines = Math.max(0, Math.floor(Number(srv.lines) || 0));
+        const lCombo = Math.max(0, Math.floor(Number(loc.bestCombo) || 0));
+        const sCombo = Math.max(0, Math.floor(Number(srv.bestCombo) || 0));
+        const lLastAt = Math.max(0, Math.floor(Number(loc.lastAt) || 0));
+        const sLastAt = Math.max(0, Math.floor(Number(srv.lastAt) || 0));
+        const hasLLast = loc.last !== undefined && loc.last !== null && Number.isFinite(Number(loc.last));
+        const hasSLast = srv.last !== undefined && srv.last !== null && Number.isFinite(Number(srv.last));
+        let last = null;
+        let lastAt = Math.max(lLastAt, sLastAt);
+        if (hasLLast && hasSLast) {
+          last = lLastAt >= sLastAt ? Math.max(0, Math.floor(Number(loc.last))) : Math.max(0, Math.floor(Number(srv.last)));
+        } else if (hasLLast) {
+          last = Math.max(0, Math.floor(Number(loc.last)));
+          lastAt = lLastAt || Math.max(Number(loc.updatedAt) || 0, 0);
+        } else if (hasSLast) {
+          last = Math.max(0, Math.floor(Number(srv.last)));
+          lastAt = sLastAt || Math.max(Number(srv.updatedAt) || 0, 0);
+        }
+        const merged = {
+          best: Math.max(lBest, sBest),
+          games: Math.max(lGames, sGames),
+          lines: Math.max(lLines, sLines),
+          bestCombo: Math.max(lCombo, sCombo),
+          last,
+          lastAt,
+          updatedAt: Math.max(Number(loc.updatedAt) || 0, Number(srv.updatedAt) || 0)
+        };
+        return { value: JSON.stringify(merged), dirty: !jsonDeepEqual(merged, srv) };
+      }
+      if (key === 'clined_blok_lysis_session_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
+        if (jsonDeepEqual(loc, srv)) return { value: JSON.stringify(srv), dirty: false };
+        const validBoard = b => Array.isArray(b) && b.length === 8 && b.every(row => Array.isArray(row) && row.length === 8);
+        const lTomb = Boolean(loc.over || loc.clearedAt || !validBoard(loc.board));
+        const sTomb = Boolean(srv.over || srv.clearedAt || !validBoard(srv.board));
+        const lt = Math.max(Number(loc.updated) || 0, Number(loc.clearedAt) || 0);
+        const st = Math.max(Number(srv.updated) || 0, Number(srv.clearedAt) || 0);
+        const sameGid = Boolean(loc.gid && srv.gid && String(loc.gid) === String(srv.gid));
+        if (lTomb && sTomb) {
+          const win = lt > st ? loc : srv;
+          return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+        }
+        if (lTomb !== sTomb) {
+          const tomb = lTomb ? loc : srv;
+          const active = lTomb ? srv : loc;
+          const tombT = lTomb ? lt : st;
+          const activeStart = Number(active.startedAt) || Number(active.updated) || 0;
+          const win = (sameGid || tombT >= activeStart) ? tomb : active;
+          return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+        }
+        if (sameGid) {
+          const lm = Number(loc.moves) || 0, sm = Number(srv.moves) || 0;
+          const ls = Number(loc.score) || 0, ss = Number(srv.score) || 0;
+          const win = (lm !== sm ? lm > sm : ls !== ss ? ls > ss : lt >= st) ? loc : srv;
+          return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+        }
+        const lStart = Number(loc.startedAt) || lt;
+        const sStart = Number(srv.startedAt) || st;
+        const win = (lStart !== sStart ? lStart > sStart : lt > st) ? loc : srv;
+        return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+      }
       if (key === 'clined_xp_daily_refs_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object') {
         if (loc.day && loc.day === srv.day) {
           const v = Math.max(Number(loc.v) || 1, Number(srv.v) || 1);
@@ -1144,6 +1213,30 @@
         nativeSet('gaster_v8_bookmarks', bookRes.value);
         healed.push(['gaster_v8_bookmarks', bookRes.value]);
       }
+
+      try {
+        const blSess = parsePlainObj(localStorage.getItem('clined_blok_lysis_session_v1'));
+        const sessScore = blSess ? Math.max(0, Math.floor(Number(blSess.score) || 0)) : 0;
+        const sessCombo = blSess ? Math.max(0, Math.floor(Number(blSess.combo) || 0)) : 0;
+        if (sessScore > 0 || sessCombo > 0) {
+          const blStats = parsePlainObj(localStorage.getItem('clined_blok_lysis_v1')) || { best: 0, games: 0, lines: 0, bestCombo: 0, last: null, lastAt: 0, updatedAt: 0 };
+          const curBest = Math.max(0, Math.floor(Number(blStats.best) || 0));
+          const curCombo = Math.max(0, Math.floor(Number(blStats.bestCombo) || 0));
+          if (sessScore > curBest || sessCombo > curCombo) {
+            const nextBl = JSON.stringify({
+              best: Math.max(curBest, sessScore),
+              games: Math.max(0, Math.floor(Number(blStats.games) || 0)),
+              lines: Math.max(0, Math.floor(Number(blStats.lines) || 0)),
+              bestCombo: Math.max(curCombo, sessCombo),
+              last: blStats.last !== undefined ? blStats.last : null,
+              lastAt: Math.max(0, Math.floor(Number(blStats.lastAt) || 0)),
+              updatedAt: Math.max(Number(blStats.updatedAt) || 0, Number(blSess.updated) || Date.now())
+            });
+            nativeSet('clined_blok_lysis_v1', nextBl);
+            healed.push(['clined_blok_lysis_v1', nextBl]);
+          }
+        }
+      } catch {}
     } finally {
       suppress = false;
     }

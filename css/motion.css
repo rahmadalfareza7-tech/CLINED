@@ -60,7 +60,7 @@
 }
 
 /* Snappy page changes: immediate visibility with a subtle, fast 140ms settle. */
-.view:not(#library):not(#mejaJagaIgdPage):not(#rujukLangkaPage).motion-page-enter > :not(script){
+.view:not(#library):not(#mejaJagaIgdPage):not(#rujukLangkaPage):not(#blokLysisPage).motion-page-enter > :not(script){
   animation:clined-page-reveal var(--motion-page) var(--motion-ease) backwards;
 }
 
