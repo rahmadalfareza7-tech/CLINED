@@ -60,8 +60,8 @@
 }
 
 /* Snappy page changes: immediate visibility with a subtle, fast 140ms settle. */
-.view:not(#library).motion-page-enter > :not(script){
-  animation:clined-page-reveal var(--motion-page) var(--motion-ease) both;
+.view:not(#library):not(#mejaJagaIgdPage).motion-page-enter > :not(script){
+  animation:clined-page-reveal var(--motion-page) var(--motion-ease) backwards;
 }
 
 #achievementsPage.motion-page-enter .achievement-item,

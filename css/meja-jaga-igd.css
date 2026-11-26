@@ -44,8 +44,11 @@
 
 /* ---------- Halaman CLINED ---------- */
 #mejaJagaIgdPage{padding-bottom:96px}
+#mejaJagaIgdPage.motion-page-enter,
+#mejaJagaIgdPage.motion-page-enter > *{animation:none!important;transform:none!important;filter:none!important;opacity:1!important}
 #mejaJagaIgdPage .igd-page-head{max-width:1240px;margin-left:auto;margin-right:auto}
-html.igd-fit #mejaJagaIgdPage .igd-page-head{display:none!important}
+html.igd-fit #mejaJagaIgdPage .igd-page-head,
+#mejaJagaIgdPage.igd-ready .igd-page-head{display:none!important}
 #mejaJagaIgdPage .igd-stage{position:relative}
 
 /* ---------- Pengaman dari gaya global CLINED (termasuk mode gelap & !important) ---------- */
@@ -54,8 +57,15 @@ html.igd-fit #mejaJagaIgdPage .igd-page-head{display:none!important}
 #mejaJagaIgdPage .igd :where(h1,h2,h3,h4,h5,p,dl,dt,dd,ul,ol,li,b,small,em,table,td,label,details,summary,span,kbd){color:inherit;text-shadow:none}
 #mejaJagaIgdPage .igd input[type=checkbox]{all:revert;width:20px;height:20px;accent-color:var(--green)}
 
-html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;padding:0!important}
-#mejaJagaIgdPage .igd-stage.fit{position:fixed;inset:0;z-index:950;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#0f1a2e 0%,#060a12 100%)}
+html.igd-open,html.igd-open body{background:#060a12!important;margin:0!important;color-scheme:dark}
+html.igd-open .floating-dashboard-nav,html.igd-open .header,html.igd-open footer{display:none!important}
+html.igd-open .app{max-width:none!important;padding:0!important;margin:0!important;background:#060a12!important}
+html.igd-open #mejaJagaIgdPage{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0!important;margin:0!important}
+html.igd-open #mejaJagaIgdPage .igd:not(.fit){border-radius:0!important;box-shadow:none!important;max-width:none!important;min-height:100dvh}
+html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;padding:0!important;margin:0!important;background:#060a12!important}
+html.igd-fit .floating-dashboard-nav,html.igd-fit .header,html.igd-fit footer{display:none!important}
+html.igd-fit #mejaJagaIgdPage,html.igd-fit #mejaJagaIgdHost{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;height:100%!important;max-width:none!important;margin:0!important;padding:0!important;z-index:100001!important;transform:none!important;animation:none!important;overflow:hidden!important}
+#mejaJagaIgdPage .igd-stage.fit{position:fixed;top:0;right:0;bottom:0;left:0;inset:0;width:100%;height:100%;z-index:100001;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:radial-gradient(ellipse at 50% 25%,#0f1a2e 0%,#060a12 100%)}
 #mejaJagaIgdPage .igd{--ink:#1e293b;--muted:#64748b;--line:#cbd5e1;--soft:#f8fafc;--green:#10b981;--green-d:#059669;--green-l:#d1fae5;--red:#f43f5e;--red-d:#e11d48;--red-l:#ffe4e6;--blue:#0ea5e9;--blue-d:#0284c7;--blue-l:#e0f2fe;--yellow:#f59e0b;--yellow-d:#d97706;--yellow-l:#fef3c7;--purple:#8b5cf6;--purple-l:#ede9fe;--orange:#f97316;--pen:#0369a1;--hl:rgba(255,79,123,.38);--font:'Nunito','Varela Round','Arial Rounded MT Bold',system-ui,sans-serif;--hand:'Caveat','Comic Sans MS',cursive;position:relative;isolation:isolate;overflow:hidden;overflow:clip;display:flex;flex-direction:column;min-height:780px;max-width:1240px;margin:0 auto;border-radius:26px;font-family:var(--font);font-weight:700;color:#f1f5f9;background:#09101d;box-shadow:0 0 0 2px #192740, 0 16px 40px rgba(0,0,0,.7)}
 #mejaJagaIgdPage .igd *{box-sizing:border-box}
 #mejaJagaIgdPage .igd button{font:inherit;color:inherit;cursor:pointer}
@@ -533,6 +543,9 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
 #mejaJagaIgdPage .igd .end-actions{display:grid;gap:0;margin-top:14px}
 #mejaJagaIgdPage .igd.fit{position:absolute;left:50%;top:50%;width:var(--cw);height:var(--ch);min-height:0;max-width:none;margin:0;transform:translate(-50%,-50%) scale(var(--s));transform-origin:50% 50%}
 #mejaJagaIgdPage .igd.fit .hud{padding:6px 14px;gap:10px 16px;flex-wrap:nowrap}
+#mejaJagaIgdPage .igd.fit.port .hud{flex-wrap:wrap;gap:6px 14px;padding:8px 14px}
+#mejaJagaIgdPage .igd.fit.port .hud-item{white-space:nowrap}
+#mejaJagaIgdPage .igd.fit.port .hud-btns{margin-left:0;width:100%;justify-content:flex-end}
 #mejaJagaIgdPage .igd.fit .hud-brand{font-size:1.04rem;gap:8px;white-space:nowrap}
 #mejaJagaIgdPage .igd.fit .hud-brand::before{width:32px;height:32px;font-size:1rem;border-radius:10px}
 #mejaJagaIgdPage .igd.fit .hud-brand small{font-size:.55rem}
@@ -660,15 +673,36 @@ html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;p
   #mejaJagaIgdPage .igd:not(.fit) .rc-row{grid-template-columns:100px 1fr 36px}
   #mejaJagaIgdPage .igd:not(.fit) .cols-head,
 #mejaJagaIgdPage .igd:not(.fit) .ln-row{grid-template-columns:1.3fr 1fr .6fr 1.1fr;gap:4px;font-size:.78rem}
+  #mejaJagaIgdPage .igd:not(.fit).screen-open{min-height:0;overflow:visible}
+  #mejaJagaIgdPage .igd:not(.fit).screen-open .hud,
+  #mejaJagaIgdPage .igd:not(.fit).screen-open .timebar,
+  #mejaJagaIgdPage .igd:not(.fit).screen-open .play,
+  #mejaJagaIgdPage .igd:not(.fit).screen-open .dock{display:none!important}
+  #mejaJagaIgdPage .igd:not(.fit) .screen:not([hidden]){position:relative;inset:auto;min-height:calc(100dvh - 96px);overflow:visible;padding:12px}
+  #mejaJagaIgdPage .igd:not(.fit) .book.open{position:fixed;top:0;right:0;bottom:0;left:0;inset:0;width:100%;height:100dvh;z-index:100005;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 }
 @media (max-width:600px){
-  #mejaJagaIgdPage .igd:not(.fit) .hud{gap:6px 14px;padding:10px 12px 6px}
+  #mejaJagaIgdPage.igd-ready{padding-bottom:calc(16px + env(safe-area-inset-bottom))!important}
+  #mejaJagaIgdPage .igd:not(.fit){border-radius:18px;min-height:0}
+  #mejaJagaIgdPage .igd:not(.fit) .screen:not([hidden]){padding:10px}
+  #mejaJagaIgdPage .igd:not(.fit) .folder.igd-lobby{padding:12px 12px 16px;border-radius:20px}
+  #mejaJagaIgdPage .igd:not(.fit) .folder,
+  #mejaJagaIgdPage .igd:not(.fit) .memo{padding:16px 14px 18px;border-radius:20px}
+  #mejaJagaIgdPage .igd:not(.fit) .hud{gap:6px 12px;padding:10px 12px 8px}
   #mejaJagaIgdPage .igd:not(.fit) .hud-brand{font-size:.95rem;gap:8px}
   #mejaJagaIgdPage .igd:not(.fit) .hud-brand::before{width:30px;height:30px;font-size:1rem;border-radius:10px}
   #mejaJagaIgdPage .igd:not(.fit) .hud-item b{font-size:1.05rem}
-  #mejaJagaIgdPage .igd:not(.fit) .hud-btns{margin-left:0;width:100%}
-  #mejaJagaIgdPage .igd:not(.fit) .hud-btns .mini-btn{flex:1;padding:5px 8px;font-size:.68rem}
+  #mejaJagaIgdPage .igd:not(.fit) .hud-btns{margin-left:0;width:100%;flex-wrap:wrap;gap:6px}
+  #mejaJagaIgdPage .igd:not(.fit) .hud-btns .mini-btn{flex:1 1 auto;min-width:0;padding:6px 8px;font-size:.66rem;white-space:nowrap}
   #mejaJagaIgdPage .igd:not(.fit) .timebar{margin:2px 12px 0}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .stamp-caddy{flex:1;justify-content:center;gap:8px;padding:4px 8px}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .caddy-pad{flex:1;min-width:0}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .stamp{width:100%;max-width:128px;height:66px}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .stamp-knob{width:28px;height:22px}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .stamp-stem{width:14px;height:7px}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .stamp-brass{width:22px;height:6px}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .plate-face{padding:5px 6px 4px}
+  #mejaJagaIgdPage .igd:not(.fit) .tray .plate-face b{font-size:.95rem}
 }
 @media (max-width:980px) and (orientation:landscape){
   #mejaJagaIgdPage .igd:not(.fit) .b-window{height:132px}

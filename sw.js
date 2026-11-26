@@ -1,4 +1,4 @@
-const SW_VERSION = 'v250-mini-games-home-hub';
+const SW_VERSION = 'v251-pwa-mobile-ipad-fix';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
@@ -6,11 +6,15 @@ const CORE = [
   './css/landing.css',
   './css/polish.css',
   './css/design-system.css',
+  './css/desktop.css',
+  './css/clined-ui-fixes.css',
+  './css/clined-inline-extracted.css',
   './css/duel-native.css',
   './css/home-ergonomic.css',
   './css/latihan-materi.css',
   './css/style.css',
   './css/motion.css',
+  './css/meja-jaga-igd.css',
   './js/update-notice.js',
   './js/online-sync.js',
   './js/ability-classifier.js',
@@ -19,15 +23,25 @@ const CORE = [
   './js/landing.js',
   './js/pwa-install.js',
   './js/app.js',
+  './js/inline-boot.js',
   './js/content-manager.js',
   './js/auth-gate.js',
   './js/lazy-loader.js',
+  './js/meja-jaga-igd-data.js',
+  './js/meja-jaga-igd-gen.js',
+  './js/meja-jaga-igd.js',
   './js/latihan-materi.js',
+  './js/onboarding.js',
+  './js/userbank-parser.js',
+  './js/userbank.js',
+  './js/usage.js',
   './js/social.js',
   './js/xp-sync.js',
   './js/photo-compress.js',
   './js/photo-store.js',
   './js/question-bank-engine.js',
+  './assets/fonts/igd/nunito-600.woff2',
+  './assets/fonts/igd/caveat-700.woff2',
   './apple-touch-icon.png',
   './assets/clined-logo.png',
   './assets/flashcards/brain.svg',
@@ -45,6 +59,13 @@ const CORE = [
   './icon.svg',
   './manifest.webmanifest'
 ];
+
+function fetchWithTimeout(req, opts, timeoutMs = 6000) {
+  if (typeof AbortController === 'undefined') return fetch(req, opts);
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), timeoutMs);
+  return fetch(req, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(id));
+}
 
 self.addEventListener('install', e => {
   e.waitUntil((async () => {
@@ -115,12 +136,12 @@ self.addEventListener('fetch', e => {
   }
 
   // Kode aplikasi, HTML, CSS, dan manifest selalu ambil versi server terbaru tanpa HTTP disk cache.
-  // Cache hanya dipakai sebagai fallback offline agar kode lama di iPad/PC langsung terganti.
+  // Cache hanya dipakai sebagai fallback offline/timeout agar iOS/iPadOS PWA tidak macet di layar putih.
   const isHtmlNav = req.mode === 'navigate' || /\.html$/i.test(url.pathname) || url.pathname === '/';
   const liveAsset = isHtmlNav || /\.(?:css|js|mjs|webmanifest)$/i.test(url.pathname) || url.pathname === '/sw.js';
   if (liveAsset) {
     e.respondWith(
-      fetch(req, { cache: 'no-store' }).then(res => {
+      fetchWithTimeout(req, { cache: 'no-store' }, 6000).then(res => {
         if (res.ok && url.pathname !== '/sw.js') {
           const copy = res.clone();
           caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});

@@ -399,6 +399,7 @@
   const host = document.getElementById('mejaJagaIgdHost');
   if (!host) return null;
   host.innerHTML = MARKUP;
+  document.getElementById('mejaJagaIgdPage')?.classList.add('igd-ready');
   const stage = host.querySelector('#igd-stage');
   const root = host.querySelector('#igd');
   const q = s => root.querySelector(s);
@@ -412,6 +413,10 @@
     link:q('#igd-link'), linkTag:q('#igd-link-tag'), lens:q('#igd-lens'),
     acc:q('#igd-acc'), tolak:q('#igd-tolak'), tray:q('.tray'), mat:q('#igd-surface'), mute:q('#igd-mute')
   };
+  const syncScreenState = () => {
+    const hasScreen = !E.title.hidden || !E.memo.hidden || !E.end.hidden;
+    root.classList.toggle('screen-open', hasScreen);
+  };
   /* atribut untuk data identitas yang bisa diperiksa: jenis, sumber, nilai pembanding, teks tampilan */
   const normName = n => String(n).replace(/^(Tn|Ny|An|Nn|Sdr)\.\s*/i,'').trim().toUpperCase();
   const ia = (kind, src, val, show) => `data-ik="${kind}" data-src="${src}" data-iv="${esc(val)}" data-show="${esc(show)}"`;
@@ -420,13 +425,21 @@
   const FIT = (() => {
     let on = false, s = 1, key = '';
     function update(){
-      const vw = window.innerWidth, vh = window.innerHeight;
+      const vv = window.visualViewport;
+      const vw = Math.max(240, Math.round((vv && vv.width) || window.innerWidth || document.documentElement.clientWidth || 390));
+      const vh = Math.max(320, Math.round((vv && vv.height) || window.innerHeight || document.documentElement.clientHeight || 640));
       on = isOpen() && Math.min(vw, vh) >= 600;
       const land = vw >= vh, cw = land ? 1440 : 900, ch = land ? 960 : 1500;
       stage.classList.toggle('fit', on); document.documentElement.classList.toggle('igd-fit', on);
       root.classList.toggle('fit', on); root.classList.toggle('land', on && land); root.classList.toggle('port', on && !land);
       if (on){
-        s = Math.min(vw / cw, vh / ch);
+        let padX = 0, padY = 0;
+        try {
+          const cs = getComputedStyle(stage);
+          padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+          padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+        } catch {}
+        s = Math.min(Math.max(240, vw - padX) / cw, Math.max(320, vh - padY) / ch);
         root.style.setProperty('--cw', cw + 'px'); root.style.setProperty('--ch', ch + 'px'); root.style.setProperty('--s', s);
       } else { s = 1; ['--cw','--ch','--s'].forEach(v => root.style.removeProperty(v)); }
       const k = on ? (land ? 'L' : 'P') : 'N', changed = k !== key; key = k;
@@ -439,6 +452,10 @@
       root.classList.remove('fit', 'land', 'port');
       ['--cw','--ch','--s'].forEach(v => root.style.removeProperty(v));
     }
+    try {
+      window.addEventListener('orientationchange', () => setTimeout(() => { if (isOpen()) update(); }, 180));
+      window.visualViewport?.addEventListener?.('resize', () => { if (isOpen()) update(); });
+    } catch {}
     return { update, disable, get on(){ return on; }, get s(){ return on ? s : 1; } };
   })();
   const shuffle = a => { for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
@@ -754,11 +771,13 @@
   function enterPlayUI(n){
     const N = NIGHTS[n];
     E.title.hidden = true; E.end.hidden = true; E.memo.hidden = true;
+    syncScreenState();
     setPlaying(true);
     q('.hud-brand small').textContent = n === HARD ? 'MODE SULIT · SEMUA DIACAK' : `MALAM ${n} · ${N.title.toUpperCase()}`;
     E.lens.hidden = !S.feats.has('lup');
     E.bar.classList.toggle('off', S.relax);
     DESK.reset();
+    if (!FIT.on) try { window.scrollTo(0, 0); } catch {}
   }
 
   function start(n){
@@ -1216,14 +1235,18 @@
       <button class="igd-btn${n === HARD ? ' btn-hard' : ''}" data-act="go" data-n="${n}">Mulai ${nightName(n).toLowerCase()} <kbd>Enter</kbd></button>
       <button class="igd-btn igd-btn-ghost" data-act="menu">‹ Kembali ke Beranda Game</button></div>`;
     E.title.hidden = true; E.end.hidden = true; E.memo.hidden = false;
+    syncScreenState();
     E.memo.scrollTop = 0;
+    if (!FIT.on) try { window.scrollTo(0, 0); } catch {}
   }
   function showMenu(){
     pauseTimer();
     if (playing && S) saveActiveSession();
     clearInterval(tid); setPlaying(false); renderNights();
     E.memo.hidden = true; E.end.hidden = true; E.title.hidden = false;
+    syncScreenState();
     E.title.scrollTop = 0;
+    if (!FIT.on) try { window.scrollTo(0, 0); } catch {}
   }
   function buildQueue(n){
     const N = NIGHTS[n], used = new Set(), usedNames = new Set(), usedScenarios = new Set(), usedErrTypes = new Set(), out = [];
@@ -1621,7 +1644,8 @@
     if (xpRes && xpRes.gained > 0) {
       E.end.querySelector('.igd-big')?.insertAdjacentHTML('afterend', `<p class="igd-xp-note">+${xpRes.gained} XP tercatat${rec.newIds.length ? ` · ${rec.newIds.length} kasus baru dikuasai` : ''}</p>`);
     }
-    E.end.hidden = false; E.end.scrollTop = 0;
+    E.end.hidden = false; syncScreenState(); E.end.scrollTop = 0;
+    if (!FIT.on) try { window.scrollTo(0, 0); } catch {}
     S = null;
   }
 
@@ -1710,7 +1734,11 @@
   function isOpen(){ return !!document.getElementById('mejaJagaIgdPage')?.classList.contains('active'); }
   function setPlaying(on){
     playing = !!on;
-    try { document.body.classList.toggle('quiz-context', (playing || FIT.on) && isOpen()); } catch {}
+    const openNow = isOpen();
+    try {
+      document.body.classList.toggle('quiz-context', openNow);
+      document.documentElement.classList.toggle('igd-open', openNow);
+    } catch {}
   }
   function persistBeforeLeave(){
     pauseTimer();
@@ -1756,15 +1784,27 @@
   }
   function onEnter(){
     PROG = loadP();
+    const page = document.getElementById('mejaJagaIgdPage');
+    page?.classList.remove('motion-page-enter');
+    page?.classList.add('igd-ready');
+    const openNow = isOpen();
+    try {
+      document.body.classList.toggle('quiz-context', openNow);
+      document.documentElement.classList.toggle('igd-open', openNow);
+    } catch {}
     FIT.update();
     showMenu();
+    requestAnimationFrame(() => { if (isOpen()) FIT.update(); });
   }
   function onLeave(){
     persistBeforeLeave();
     setPlaying(false);
     E.book.classList.remove('open');
     FIT.disable();
-    try { document.body.classList.remove('quiz-context'); } catch {}
+    try {
+      document.body.classList.remove('quiz-context');
+      document.documentElement.classList.remove('igd-open');
+    } catch {}
   }
   let playing = false;
   window.addEventListener('clined:sync-applied', () => { PROG = loadP(); renderNights(); });

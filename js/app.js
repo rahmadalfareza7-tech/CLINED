@@ -427,7 +427,7 @@ function show(id, options={}){
   // Stable navigation: transform-only on normal pages. Dashboard gets a tiny,
   // bounded blur trail; opacity is never animated, preventing WebView flicker.
   const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  if(!reduced && previous!==id){
+  if(!reduced && previous!==id && id!=="mejaJagaIgdPage"){
     requestAnimationFrame(()=>target.classList.add("motion-page-enter"));
   }
   document.querySelectorAll(".view.motion-enter").forEach(v=>v.classList.remove("motion-enter"));
@@ -440,6 +440,7 @@ function show(id, options={}){
       const delay=id==="clinicalDashboard"?360:300;
       window.setTimeout(()=>{
         target.classList.remove("motion-enter");
+        target.classList.remove("motion-page-enter");
         dashboardPanel?.classList.remove("dashboard-motion");
       },delay);
     });

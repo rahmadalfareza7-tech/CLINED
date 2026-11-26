@@ -4,15 +4,25 @@
   const pending = new Map();
   const loaded = new Set();
 
-  function loadStyle(href) {
+  function loadStyle(href, appendEnd) {
     return new Promise(resolve => {
       if (document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) return resolve();
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        resolve();
+      };
+      // iOS/iPadOS WebKit PWA kadang tidak memicu link.onload saat cache SW aktif;
+      // batas 2,5 detik memastikan loader tidak pernah macet di layar putih.
+      const timer = setTimeout(finish, 2500);
       const l = document.createElement('link');
       l.rel = 'stylesheet';
       l.href = href;
-      l.onload = resolve;
-      l.onerror = resolve;
-      const anchor = document.getElementById('clinedDesignSystemCss');
+      l.onload = finish;
+      l.onerror = finish;
+      const anchor = appendEnd ? null : document.getElementById('clinedDesignSystemCss');
       if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(l, anchor);
       else document.head.appendChild(l);
     });
@@ -44,8 +54,9 @@
       scripts: ['js/kedkel-summary-data.js?v=4', 'js/kedkel-summary.js?v=8']
     },
     igd: {
-      styles: ['css/meja-jaga-igd.css?v=12'],
-      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=13']
+      appendEnd: true,
+      styles: ['css/meja-jaga-igd.css?v=13'],
+      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=14']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],
@@ -59,7 +70,7 @@
     const b = BUNDLES[name];
     if (!b) return Promise.resolve();
     const p = (async () => {
-      await Promise.all((b.styles || []).map(loadStyle));
+      await Promise.all((b.styles || []).map(href => loadStyle(href, !!b.appendEnd)));
       for (const src of (b.scripts || [])) await loadScript(src);
       loaded.add(name);
     })().catch(err => {
@@ -68,6 +79,45 @@
     });
     pending.set(name, p);
     return p;
+  }
+
+  function showIgdLoadingUI() {
+    try {
+      const page = document.getElementById('mejaJagaIgdPage');
+      page?.classList.remove('motion-page-enter');
+      if (page && !page.classList.contains('active')) {
+        window.show?.('mejaJagaIgdPage', { force: true });
+        window.scrollTo(0, 0);
+      }
+      const host = document.getElementById('mejaJagaIgdHost');
+      if (host && !host.querySelector('#igd')) {
+        host.innerHTML = `<div style="min-height:360px;border-radius:22px;padding:36px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:radial-gradient(ellipse at 50% 25%,#0f1d36 0%,#060a12 100%);color:#f1f5f9;border:2px solid #1e3352;box-shadow:0 16px 40px rgba(0,0,0,.55)">
+          <div style="font-size:2.4rem;line-height:1">🚑</div>
+          <div style="font-weight:900;font-size:1.15rem;letter-spacing:.04em">MEMBUKA MEJA JAGA IGD…</div>
+          <div style="font-size:.86rem;color:#94a3b8;max-width:340px">Menyiapkan berkas pasien, loket triase, dan panduan klinis.</div>
+        </div>`;
+      }
+    } catch {}
+  }
+
+  function showIgdErrorUI(err) {
+    try {
+      const host = document.getElementById('mejaJagaIgdHost');
+      if (host && !host.querySelector('#igd')) {
+        const msg = (err && err.message) ? String(err.message) : 'Koneksi terputus saat memuat Meja Jaga IGD.';
+        host.innerHTML = `<div style="min-height:360px;border-radius:22px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;background:radial-gradient(ellipse at 50% 25%,#1a1024 0%,#060a12 100%);color:#f1f5f9;border:2px solid #7f1d1d">
+          <div style="font-size:2.2rem;line-height:1">⚠️</div>
+          <div style="font-weight:900;font-size:1.1rem">Gagal memuat Meja Jaga IGD</div>
+          <div style="font-size:.84rem;color:#cbd5e1;max-width:360px">${msg.replace(/[<>&]/g, '')}</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
+            <button type="button" id="igdRetryLoadBtn" style="padding:10px 18px;border-radius:12px;border:0;background:#10b981;color:#fff;font-weight:900;cursor:pointer">Muat Ulang</button>
+            <button type="button" id="igdFailHomeBtn" style="padding:10px 18px;border-radius:12px;border:1.5px solid #334155;background:#0f172a;color:#e2e8f0;font-weight:800;cursor:pointer">‹ Beranda CLINED</button>
+          </div>
+        </div>`;
+        host.querySelector('#igdRetryLoadBtn')?.addEventListener('click', () => window.CLINED_IGD.open());
+        host.querySelector('#igdFailHomeBtn')?.addEventListener('click', () => window.show?.('home', { force: true }));
+      }
+    } catch {}
   }
 
   function injectMedCalcPlaceholders() {
@@ -108,7 +158,15 @@
   // Stubs so callers work seamlessly before or after bundle loads
   if (!window.CLINED_IGD) {
     window.CLINED_IGD = {
-      open: () => load('igd').then(() => window.CLINED_IGD?.open?.()).catch(e => window.showToast?.(e.message, true))
+      open: () => {
+        showIgdLoadingUI();
+        return load('igd')
+          .then(() => window.CLINED_IGD?.open?.())
+          .catch(e => {
+            showIgdErrorUI(e);
+            window.showToast?.(e.message, true);
+          });
+      }
     };
   }
   if (!window.CLINED_MEDCALC) {
@@ -232,7 +290,7 @@
   window.addEventListener('clined:auth-ready', maybePreloadAdmin);
   window.addEventListener('clined:view-change', e => {
     if (e.detail === 'miniGamesPage') syncMiniGamesHub();
-    if (e.detail === 'mejaJagaIgdPage' && !loaded.has('igd')) {
+    if (e.detail === 'mejaJagaIgdPage' && !loaded.has('igd') && !pending.has('igd')) {
       window.CLINED_IGD.open(); // mis. dibuka ulang dari hash/riwayat: muat bundle lalu pasang game
     }
     if (e.detail === 'blokKedkelPage') {

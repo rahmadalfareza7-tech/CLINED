@@ -495,17 +495,30 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(appHtml, /js\/update-notice\.js\?v=17/);
-  assert.match(appHtml, /js\/lazy-loader\.js\?v=39/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=12/);
+  assert.match(appHtml, /css\/motion\.css\?v=auth-layout-v5/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=18/);
+  assert.match(appHtml, /js\/app\.js\?v=static-banks-v73/);
+  assert.match(appHtml, /js\/lazy-loader\.js\?v=40/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=13/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=13/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=14/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
+  assert.match(lazyJs, /setTimeout\(finish,\s*2500\)/, 'loadStyle must have a safety timeout for iOS/iPadOS WebKit PWA');
+  assert.match(lazyJs, /showIgdLoadingUI/, 'lazy-loader must render dark loading state instead of blank white screen');
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);
   assert.match(syncJs, /'clined_igd_session_v1'/);
   assert.match(serverJs, /'\.woff2':'font\/woff2'/);
+
+  // PWA mobile & iPad blank-white-screen regression guards
+  const motionCss = readRel('css/motion.css');
+  assert.match(motionCss, /:not\(#mejaJagaIgdPage\)/, 'motion.css must not apply persistent transform animation to #mejaJagaIgdPage');
+  assert.match(igdCss, /html\.igd-fit #mejaJagaIgdPage,html\.igd-fit #mejaJagaIgdHost\{[^}]*z-index:100001!important/);
+  assert.match(igdCss, /#mejaJagaIgdPage\.motion-page-enter/);
+  assert.match(swJs, /\.\/css\/meja-jaga-igd\.css/, 'sw.js must precache Meja Jaga IGD CSS');
+  assert.match(swJs, /\.\/js\/meja-jaga-igd\.js/, 'sw.js must precache Meja Jaga IGD JS');
+  assert.match(swJs, /fetchWithTimeout/, 'sw.js must fall back to cache on stalled mobile/iPad PWA network');
 
   // Dedicated Game Beranda / Lobby elements & HUD navigation
   assert.match(igdJs, /id="igd-timer"/);
@@ -541,5 +554,5 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
-  assert.equal(swVer, 'v250-mini-games-home-hub');
+  assert.equal(swVer, 'v251-pwa-mobile-ipad-fix');
 });
