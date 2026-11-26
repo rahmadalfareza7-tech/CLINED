@@ -496,9 +496,9 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
   assert.match(appHtml, /css\/motion\.css\?v=auth-layout-v7/);
-  assert.match(appHtml, /js\/update-notice\.js\?v=23/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=24/);
   assert.match(appHtml, /js\/app\.js\?v=static-banks-v75/);
-  assert.match(appHtml, /js\/lazy-loader\.js\?v=45/);
+  assert.match(appHtml, /js\/lazy-loader\.js\?v=46/);
   assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=14/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
@@ -562,5 +562,5 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
-  assert.equal(swVer, 'v256-blok-lysis-synced-leaderboard');
+  assert.equal(swVer, 'v257-blok-lysis-balanced-sfx');
 });

@@ -1,4 +1,4 @@
-const SW_VERSION = 'v256-blok-lysis-synced-leaderboard';
+const SW_VERSION = 'v257-blok-lysis-balanced-sfx';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

@@ -7,7 +7,348 @@
 
   const STATS_KEY = 'clined_blok_lysis_v1';
   const SESSION_KEY = 'clined_blok_lysis_session_v1';
+  const SFX_KEY = 'clined_blok_lysis_sfx_v1';
   const N = 8;
+
+  /* ================= WEBAUDIO SFX SYNTHESIZER (iOS/Safari PWA safe, zero external files) ================= */
+  const SFX = (() => {
+    let ac = null;
+    let unlocked = false;
+    let muted = false;
+    try { muted = localStorage.getItem(SFX_KEY) === '0'; } catch {}
+
+    function ctx() {
+      if (muted) return null;
+      if (!ac) {
+        const AC = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext);
+        if (!AC) return null;
+        try { ac = new AC(); } catch { return null; }
+      }
+      if (ac && ac.state === 'suspended') {
+        try { ac.resume().catch?.(() => {}); } catch {}
+      }
+      return ac;
+    }
+
+    function unlock() {
+      const c = ctx();
+      if (!c) return false;
+      try {
+        if (c.state === 'suspended') c.resume().catch?.(() => {});
+        if (!unlocked) {
+          const buf = c.createBuffer(1, 1, 22050);
+          const src = c.createBufferSource();
+          src.buffer = buf;
+          src.connect(c.destination);
+          src.start(0);
+          unlocked = true;
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function tone({ type = 'sine', freq = 440, freqEnd = null, dur = 0.09, delay = 0, vol = 0.14, attack = 0.006 }) {
+      const c = ctx();
+      if (!c) return;
+      try {
+        const t0 = c.currentTime + delay;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(Math.max(40, freq), t0);
+        if (freqEnd !== null && freqEnd > 0) {
+          osc.frequency.exponentialRampToValueAtTime(Math.max(40, freqEnd), t0 + dur);
+        }
+        gain.gain.setValueAtTime(0.0001, t0);
+        gain.gain.linearRampToValueAtTime(vol, t0 + Math.min(attack, dur * 0.4));
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        osc.connect(gain);
+        gain.connect(c.destination);
+        osc.start(t0);
+        osc.stop(t0 + dur + 0.015);
+      } catch {}
+    }
+
+    const SCALE = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5, 1174.66, 1318.51, 1567.98];
+
+    return {
+      isMuted: () => muted,
+      setMuted(v) {
+        muted = !!v;
+        try { localStorage.setItem(SFX_KEY, muted ? '0' : '1'); } catch {}
+        if (!muted) { unlock(); this.uiTap(); }
+        return muted;
+      },
+      toggleMute() { return this.setMuted(!muted); },
+      unlock,
+      uiTap() {
+        tone({ type: 'sine', freq: 520, freqEnd: 680, dur: 0.045, vol: 0.08 });
+      },
+      pickup() {
+        tone({ type: 'sine', freq: 340, freqEnd: 530, dur: 0.055, vol: 0.11 });
+      },
+      place(cellsCount = 3) {
+        const boost = Math.min(5, Math.max(0, cellsCount - 1)) * 14;
+        tone({ type: 'triangle', freq: 235 + boost, freqEnd: 118, dur: 0.085, vol: 0.18 });
+        tone({ type: 'sine', freq: 520 + boost * 1.6, freqEnd: 340, dur: 0.05, vol: 0.07 });
+      },
+      invalid() {
+        tone({ type: 'triangle', freq: 185, freqEnd: 135, dur: 0.075, vol: 0.09 });
+        tone({ type: 'triangle', freq: 155, freqEnd: 115, dur: 0.075, delay: 0.06, vol: 0.07 });
+      },
+      deal() {
+        tone({ type: 'sine', freq: 390, freqEnd: 520, dur: 0.045, delay: 0.0, vol: 0.055 });
+        tone({ type: 'sine', freq: 440, freqEnd: 580, dur: 0.045, delay: 0.06, vol: 0.055 });
+        tone({ type: 'sine', freq: 500, freqEnd: 660, dur: 0.055, delay: 0.12, vol: 0.065 });
+      },
+      clear(linesCount = 1, comboCount = 1, boardEmpty = false) {
+        const idx = Math.min(SCALE.length - 3, Math.max(0, (comboCount || 1) - 1));
+        const base = SCALE[idx];
+        const third = SCALE[Math.min(SCALE.length - 1, idx + 2)];
+        const fifth = SCALE[Math.min(SCALE.length - 1, idx + 4)];
+        // Warm rising lysis chime
+        tone({ type: 'sine', freq: base, dur: 0.16, delay: 0.0, vol: 0.15 });
+        tone({ type: 'triangle', freq: third, dur: 0.19, delay: 0.055, vol: 0.13 });
+        if (linesCount >= 2 || comboCount >= 2) {
+          tone({ type: 'sine', freq: fifth, dur: 0.24, delay: 0.11, vol: 0.13 });
+        }
+        if (linesCount >= 3 || boardEmpty) {
+          tone({ type: 'sine', freq: fifth * 1.25, dur: 0.28, delay: 0.165, vol: 0.11 });
+          tone({ type: 'sine', freq: fifth * 1.5, dur: 0.34, delay: 0.22, vol: 0.10 });
+        }
+        // Subtle authentic medical ECG telemetry ping on combo >= 2
+        if (comboCount >= 2) {
+          const ecgHz = 860 + Math.min(8, comboCount - 1) * 42;
+          tone({ type: 'sine', freq: ecgHz, dur: 0.07, delay: 0.14, vol: 0.075 });
+        }
+      },
+      flatline() {
+        tone({ type: 'sine', freq: 440, freqEnd: 392, dur: 0.28, vol: 0.065, attack: 0.015 });
+      },
+      newBest() {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          tone({ type: 'triangle', freq: f, dur: 0.18 + (i === 3 ? 0.14 : 0), delay: i * 0.075, vol: 0.11 });
+        });
+      },
+      gameOver() {
+        [392.0, 329.63, 261.63].forEach((f, i) => {
+          tone({ type: 'triangle', freq: f, freqEnd: f * 0.94, dur: 0.22, delay: i * 0.14, vol: 0.10 });
+        });
+      }
+    };
+  })();
+
+  /* ================= BALANCED ANTI-TRAP DEALER ENGINE ================= */
+  const Dealer = (() => {
+    const parse = s => { const out = []; s.split('/').forEach((row, r) => [...row].forEach((ch, c) => { if (ch === 'X') out.push([r, c]); })); return out; };
+    const norm = cells => { const mr = Math.min(...cells.map(p => p[0])), mc = Math.min(...cells.map(p => p[1])); return cells.map(([r, c]) => [r - mr, c - mc]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); };
+    const rot = cells => norm(cells.map(([r, c]) => [c, -r]));
+    const keyOf = cells => cells.map(p => p.join(',')).join(';');
+    // Balanced weights: lively variety with friendly connectors and less awkward brick spam
+    const BASES = [
+      ['X', .75], ['XX', 1.2], ['XXX', 1.3], ['XXXX', 1.0], ['XXXXX', .52],
+      ['XX/XX', 1.35], ['XXX/XXX/XXX', .40], ['XX/X.', 1.3], ['XXX/X../X..', .52],
+      ['XXX/X..', .95], ['XXX/..X', .95], ['XXX/.X.', .90],
+      ['XX./.XX', .45], ['.XX/XX.', .45], ['XXX/XXX', .52]
+    ];
+    const SHAPES = [];
+    BASES.forEach(([s, w]) => {
+      const seen = new Set(); let c = norm(parse(s)); const rots = [];
+      for (let i = 0; i < 4; i++) { const k = keyOf(c); if (!seen.has(k)) { seen.add(k); rots.push(c); } c = rot(c); }
+      rots.forEach(cells => {
+        const h = Math.max(...cells.map(p => p[0])) + 1;
+        const wd = Math.max(...cells.map(p => p[1])) + 1;
+        SHAPES.push({ cells, w: w / rots.length, h, wd, size: cells.length, heavy: cells.length >= 5 || (h === 3 && wd === 3) });
+      });
+    });
+    const TOTALW = SHAPES.reduce((a, s) => a + s.w, 0);
+    const SIZE = SHAPES.map(sh => sh.size);
+    const HEAVY = SHAPES.map(sh => sh.heavy);
+    const LINES = [];
+    const bitsOf = cells => { let lo = 0, hi = 0; cells.forEach(k => { if (k < 32) lo |= 1 << k; else hi |= 1 << (k - 32); }); return [lo >>> 0, hi >>> 0]; };
+    for (let i = 0; i < N; i++) { LINES.push(bitsOf([...Array(N)].map((_, c) => i * N + c))); LINES.push(bitsOf([...Array(N)].map((_, r) => r * N + i))); }
+    const PLACES = SHAPES.map(sh => { const out = []; for (let r = 0; r <= N - sh.h; r++) for (let c = 0; c <= N - sh.wd; c++) out.push(bitsOf(sh.cells.map(([a, b]) => (r + a) * N + c + b))); return out; });
+    const pop32 = x => { x = x >>> 0; x -= (x >>> 1) & 0x55555555; x = (x & 0x33333333) + ((x >>> 2) & 0x33333333); return (((x + (x >>> 4)) & 0x0f0f0f0f) * 0x01010101) >>> 24; };
+    const pop64 = (lo, hi) => pop32(lo) + pop32(hi);
+
+    function pickShape(maxSize = 9, allowHeavy = true) {
+      let total = 0;
+      for (let i = 0; i < SHAPES.length; i++) {
+        if (SIZE[i] <= maxSize && (allowHeavy || !HEAVY[i])) total += SHAPES[i].w;
+      }
+      if (total <= 0) return 0;
+      let x = Math.random() * total;
+      for (let i = 0; i < SHAPES.length; i++) {
+        if (SIZE[i] > maxSize || (!allowHeavy && HEAVY[i])) continue;
+        x -= SHAPES[i].w;
+        if (x <= 0) return i;
+      }
+      return 0;
+    }
+
+    function boardBitsOf(board) {
+      const ks = [];
+      for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (board[r][c] >= 0) ks.push(r * N + c);
+      return [...bitsOf(ks), ks.length];
+    }
+
+    function applyBits(lo, hi, pl, ph) {
+      lo = (lo | pl) >>> 0; hi = (hi | ph) >>> 0; let cl = 0, ch = 0, n = 0;
+      for (const [ml, mh] of LINES) if (((lo & ml) >>> 0) === ml && ((hi & mh) >>> 0) === mh) { cl |= ml; ch |= mh; n++; }
+      return [(lo & ~cl) >>> 0, (hi & ~ch) >>> 0, n];
+    }
+
+    function solve(lo, hi, shapes, cap) {
+      let count = 0, maxClear = 0, minAfterPop = 64;
+      const dfs = (lo2, hi2, rem, cleared) => {
+        if (!rem.length) {
+          count++;
+          if (cleared > maxClear) maxClear = cleared;
+          const after = pop64(lo2, hi2);
+          if (after < minAfterPop) minAfterPop = after;
+          return;
+        }
+        for (let i = 0; i < rem.length; i++) {
+          if (i && rem[i] === rem[i - 1]) continue;
+          const rest = rem.slice(0, i).concat(rem.slice(i + 1));
+          for (const [pl, ph] of PLACES[rem[i]]) {
+            if ((lo2 & pl) || (hi2 & ph)) continue;
+            const [nl, nh, n] = applyBits(lo2, hi2, pl, ph);
+            dfs(nl, nh, rest, cleared + n);
+            if (count >= cap) return;
+          }
+        }
+      };
+      dfs(lo, hi, shapes.slice().sort((a, b) => a - b), 0);
+      return { count, maxClear, minAfterPop };
+    }
+
+    function scoreCandidate(c, fill, filled, activeCombo) {
+      const cells = c.cells;
+      const heavyCnt = c.shapes.filter(s => HEAVY[s]).length;
+      const tinyCnt = c.shapes.filter(s => SIZE[s] <= 2).length;
+      let sc = 0;
+
+      // 1. Breathable solvability: reward comfortable solution counts, strongly penalize needle-in-a-haystack chokeholds!
+      sc += Math.min(34, Math.log2(c.count + 1) * 5.6);
+      if (c.count < 6) sc -= 28;
+      else if (c.count < 12) sc -= 10;
+
+      // 2. Line-clearing & combo satisfaction
+      if (c.maxClear >= 1) {
+        sc += fill >= 0.50 ? 44 : fill >= 0.30 ? 30 : 16;
+        if (activeCombo >= 1) sc += 18;
+      }
+      if (c.maxClear >= 2) sc += 16;
+      if (c.maxClear >= 3) sc += 8;
+
+      // 3. Anti-trap next-phase breathing room
+      if (c.minAfterPop <= filled) sc += fill >= 0.45 ? 20 : 10;
+      if (c.minAfterPop <= filled - 5) sc += 12;
+
+      // 4. Balanced size curve (fun chunky variety when open, fair tactical mix when mid/tight)
+      const targetLo = fill < 0.35 ? 8 : fill < 0.55 ? 7 : 5;
+      const targetHi = fill < 0.35 ? 12 : fill < 0.55 ? 10 : 9;
+      if (cells >= targetLo && cells <= targetHi) sc += 14;
+      else sc -= Math.min(20, (cells < targetLo ? targetLo - cells : cells - targetHi) * 4.5);
+
+      // 5. Prevent multi-brick chokeholds and boring all-dot trays
+      if (heavyCnt > 1) sc -= 32;
+      if (fill >= 0.45 && c.shapes.some(s => SIZE[s] >= 9)) sc -= 35;
+      if (fill < 0.62 && tinyCnt === 3) sc -= 24;
+      else if (fill < 0.50 && tinyCnt === 2) sc -= 8;
+
+      return sc;
+    }
+
+    function dealShapes(board, activeCombo = 0) {
+      const [lo, hi, filled] = boardBitsOf(board);
+      const fill = filled / (N * N);
+      const CAP = 180;
+      const cands = [];
+      const seenKey = new Set();
+
+      const tryTray = shapes => {
+        const key = shapes.slice().sort((a, b) => a - b).join(',');
+        if (seenKey.has(key)) return;
+        seenKey.add(key);
+        const r = solve(lo, hi, shapes, CAP);
+        if (r.count) {
+          cands.push({
+            shapes,
+            ...r,
+            cells: shapes.reduce((a, s) => a + SIZE[s], 0)
+          });
+        }
+      };
+
+      // Phase A: balanced organic sampling (cap heavy pieces to <= 1)
+      const maxSize = fill >= 0.58 ? 5 : fill >= 0.45 ? 6 : 9;
+      const allowHeavy = fill < 0.58;
+      for (let k = 0; k < 55 && cands.length < 16; k++) {
+        const s1 = pickShape(maxSize, allowHeavy);
+        const s2 = pickShape(HEAVY[s1] ? 4 : maxSize, allowHeavy && !HEAVY[s1]);
+        const s3 = pickShape(HEAVY[s1] || HEAVY[s2] ? 4 : maxSize, allowHeavy && !HEAVY[s1] && !HEAVY[s2]);
+        tryTray([s1, s2, s3]);
+      }
+
+      // Phase B: clear-aware & nimble rescue synergy pool (makes mid/late game satisfying & fair)
+      if (fill >= 0.22 || activeCombo >= 1 || cands.length < 10) {
+        const clearPool = [];
+        const nimblePool = [];
+        const fitPool = [];
+        SHAPES.forEach((sh, s) => {
+          if (SIZE[s] > maxSize) return;
+          let canFit = false, canClear = false;
+          for (const [pl, ph] of PLACES[s]) {
+            if ((lo & pl) || (hi & ph)) continue;
+            canFit = true;
+            if (applyBits(lo, hi, pl, ph)[2] > 0) { canClear = true; break; }
+          }
+          if (!canFit) return;
+          fitPool.push(s);
+          if (canClear) clearPool.push(s);
+          if (SIZE[s] <= 3) nimblePool.push(s);
+        });
+        const pickFrom = arr => arr[Math.floor(Math.random() * arr.length)];
+        const clearTarget = fill >= 0.45 ? 10 : 6;
+        for (let k = 0; k < 120 && fitPool.length && cands.filter(c => c.maxClear > 0).length < clearTarget; k++) {
+          const s1 = clearPool.length ? pickFrom(clearPool) : pickFrom(fitPool);
+          const s2 = nimblePool.length ? pickFrom(nimblePool) : pickFrom(fitPool);
+          const s3 = (k % 3 === 0 && clearPool.length) ? pickFrom(clearPool) : pickFrom(fitPool);
+          if ([s1, s2, s3].filter(s => HEAVY[s]).length > 1) continue;
+          tryTray([s1, s2, s3]);
+        }
+      }
+
+      // Phase C: tight-board safety net (never hand an unplayable brick wall if small pieces still fit)
+      if (!cands.length) {
+        const smallFit = [];
+        SHAPES.forEach((sh, s) => {
+          if (SIZE[s] <= 4 && PLACES[s].some(([pl, ph]) => !(lo & pl) && !(hi & ph))) smallFit.push(s);
+        });
+        for (let k = 0; k < 90 && smallFit.length && cands.length < 6; k++) {
+          tryTray([0, 1, 2].map(() => smallFit[Math.floor(Math.random() * smallFit.length)]));
+        }
+      }
+
+      let pick;
+      if (!cands.length) {
+        pick = { shapes: [pickShape(4, false), pickShape(3, false), pickShape(4, false)] };
+      } else {
+        const ranked = cands
+          .map(c => ({ c, sc: scoreCandidate(c, fill, filled, activeCombo) + (Math.random() - 0.5) * 4 }))
+          .sort((a, b) => b.sc - a.sc);
+        const topK = Math.min(4, ranked.length);
+        pick = ranked[Math.floor(Math.random() * topK)].c;
+      }
+      return pick.shapes.slice().sort(() => Math.random() - 0.5);
+    }
+
+    return { SHAPES, SIZE, HEAVY, PLACES, LINES, bitsOf, boardBitsOf, applyBits, solve, scoreCandidate, dealShapes, pop64 };
+  })();
 
   const newGid = () => {
     try { if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID(); } catch {}
@@ -139,15 +480,19 @@
 <div class="bl-tb l" id="bl-tbL" hidden>
   <button type="button" class="bl-ib" id="bl-homeBtn" aria-label="Ke lobi"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9.5 10 3l7 6.5V17a1 1 0 0 1-1 1h-3.5v-5h-5v5H4a1 1 0 0 1-1-1z" fill="#fff"/></svg></button>
   <button type="button" class="bl-ib" id="bl-restartBtn" aria-label="Mulai ulang">↻</button>
+  <button type="button" class="bl-ib" id="bl-sfxBtn" aria-label="Suara efek" aria-pressed="true">🔊</button>
 </div>
 
 <section id="bl-lobby" aria-label="Lobi Blok Lysis">
   <div class="bl-fl" id="bl-fl" aria-hidden="true"></div>
   <button type="button" class="bl-back-mg" id="bl-exitMgBtn" aria-label="Kembali ke Mini Games">‹ Mini Games</button>
-  <button type="button" class="bl-ib bl-lbtop" id="bl-lbBtn" aria-label="Leaderboard Blok Lysis">
-    <svg width="19" height="19" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h10v3a5 5 0 0 1-4 4.9V12h3v2H6v-2h3V9.9A5 5 0 0 1 5 5z" fill="#ffd23f"/><path d="M5 3H2v1.5A3.5 3.5 0 0 0 5 8M15 3h3v1.5A3.5 3.5 0 0 1 15 8" stroke="#ffd23f" stroke-width="1.6" fill="none"/><rect x="5" y="15" width="10" height="3" rx="1.2" fill="#ffd23f"/></svg>
-    <span>Leaderboard</span>
-  </button>
+  <div class="bl-lobby-r">
+    <button type="button" class="bl-ib bl-sfx-pill" id="bl-lbSfxBtn" aria-label="Suara efek" aria-pressed="true">🔊</button>
+    <button type="button" class="bl-ib bl-lbtop" id="bl-lbBtn" aria-label="Leaderboard Blok Lysis">
+      <svg width="19" height="19" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h10v3a5 5 0 0 1-4 4.9V12h3v2H6v-2h3V9.9A5 5 0 0 1 5 5z" fill="#ffd23f"/><path d="M5 3H2v1.5A3.5 3.5 0 0 0 5 8M15 3h3v1.5A3.5 3.5 0 0 1 15 8" stroke="#ffd23f" stroke-width="1.6" fill="none"/><rect x="5" y="15" width="10" height="3" rx="1.2" fill="#ffd23f"/></svg>
+      <span>Leaderboard</span>
+    </button>
+  </div>
   <div class="bl-lb">
     <canvas class="bl-logo" id="bl-logoCv" width="200" height="190" aria-hidden="true"></canvas>
     <h1>Blok <span>Lysis</span></h1>
@@ -210,54 +555,11 @@
     const currentUid = () => String(currentUser()?.id || '');
     const isOpen = () => !!document.getElementById('blokLysisPage')?.classList.contains('active');
 
-    /* ---------- shapes ---------- */
+    /* ---------- shapes & balanced anti-trap dealer ---------- */
     const COLORS = ['#e5484d', '#ee8a3c', '#e8b931', '#2fb87e', '#38b6e0', '#4a5fd6', '#9a6cf0', '#f2709c'];
-    const parse = s => { const out = []; s.split('/').forEach((row, r) => [...row].forEach((ch, c) => { if (ch === 'X') out.push([r, c]); })); return out; };
-    const norm = cells => { const mr = Math.min(...cells.map(p => p[0])), mc = Math.min(...cells.map(p => p[1])); return cells.map(([r, c]) => [r - mr, c - mc]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); };
-    const rot = cells => norm(cells.map(([r, c]) => [c, -r]));
-    const keyOf = cells => cells.map(p => p.join(',')).join(';');
-    const BASES = [['X', .5], ['XX', 1.1], ['XXX', 1.2], ['XXXX', 1], ['XXXXX', .7], ['XX/XX', 1.2], ['XXX/XXX/XXX', .55], ['XX/X.', 1.2], ['XXX/X../X..', .8], ['XXX/X..', 1], ['XXX/..X', 1], ['XXX/.X.', .9], ['XX./.XX', .6], ['.XX/XX.', .6], ['XXX/XXX', .7]];
-    const SHAPES = [];
-    BASES.forEach(([s, w]) => {
-      const seen = new Set(); let c = norm(parse(s)); const rots = [];
-      for (let i = 0; i < 4; i++) { const k = keyOf(c); if (!seen.has(k)) { seen.add(k); rots.push(c); } c = rot(c); }
-      rots.forEach(cells => SHAPES.push({ cells, w: w / rots.length, h: Math.max(...cells.map(p => p[0])) + 1, wd: Math.max(...cells.map(p => p[1])) + 1 }));
-    });
-    const TOTALW = SHAPES.reduce((a, s) => a + s.w, 0);
-
-    /* ---------- fair solvable dealer ---------- */
-    const LINES = [];
-    const bitsOf = cells => { let lo = 0, hi = 0; cells.forEach(k => { if (k < 32) lo |= 1 << k; else hi |= 1 << (k - 32); }); return [lo >>> 0, hi >>> 0]; };
-    for (let i = 0; i < N; i++) { LINES.push(bitsOf([...Array(N)].map((_, c) => i * N + c))); LINES.push(bitsOf([...Array(N)].map((_, r) => r * N + i))); }
-    const PLACES = SHAPES.map(sh => { const out = []; for (let r = 0; r <= N - sh.h; r++) for (let c = 0; c <= N - sh.wd; c++) out.push(bitsOf(sh.cells.map(([a, b]) => (r + a) * N + c + b))); return out; });
-    const SIZE = SHAPES.map(sh => sh.cells.length);
+    const { SHAPES } = Dealer;
     const fits = (p, r0, c0) => p.cells.every(([r, c]) => { const R = r0 + r, C = c0 + c; return R >= 0 && R < N && C >= 0 && C < N && board[R][C] < 0; });
     const anyFit = p => { for (let r = 0; r <= N - p.h; r++) for (let c = 0; c <= N - p.wd; c++) if (fits(p, r, c)) return true; return false; };
-    function pickShape() { let x = Math.random() * TOTALW; for (let i = 0; i < SHAPES.length; i++) { x -= SHAPES[i].w; if (x <= 0) return i; } return 0; }
-    function boardBits() { const ks = []; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (board[r][c] >= 0) ks.push(r * N + c); return [...bitsOf(ks), ks.length]; }
-    function applyBits(lo, hi, pl, ph) {
-      lo = (lo | pl) >>> 0; hi = (hi | ph) >>> 0; let cl = 0, ch = 0, n = 0;
-      for (const [ml, mh] of LINES) if (((lo & ml) >>> 0) === ml && ((hi & mh) >>> 0) === mh) { cl |= ml; ch |= mh; n++; }
-      return [(lo & ~cl) >>> 0, (hi & ~ch) >>> 0, n];
-    }
-    function solve(lo, hi, shapes, cap) {
-      let count = 0, maxClear = 0;
-      const dfs = (lo2, hi2, rem, cleared) => {
-        if (!rem.length) { count++; if (cleared > maxClear) maxClear = cleared; return; }
-        for (let i = 0; i < rem.length; i++) {
-          if (i && rem[i] === rem[i - 1]) continue;
-          const rest = rem.slice(0, i).concat(rem.slice(i + 1));
-          for (const [pl, ph] of PLACES[rem[i]]) {
-            if ((lo2 & pl) || (hi2 & ph)) continue;
-            const [nl, nh, n] = applyBits(lo2, hi2, pl, ph);
-            dfs(nl, nh, rest, cleared + n);
-            if (count >= cap) return;
-          }
-        }
-      };
-      dfs(lo, hi, shapes.slice().sort((a, b) => a - b), 0);
-      return { count, maxClear };
-    }
 
     /* ---------- state (account-scoped via clined_blok_lysis_v1 + clined_blok_lysis_session_v1) ---------- */
     let boundUid = currentUid();
@@ -265,6 +567,7 @@
     let board = Array.from({ length: N }, () => Array(N).fill(-1));
     let tray = [null, null, null];
     let score = 0, best = stats.best || 0, combo = 0, msc = 0, moves = 0, over = false;
+    let bestBrokenThisRun = false;
     let gid = newGid(), startedAt = Date.now();
     let drag = null, sel = -1, hover = null, kcur = { r: 3, c: 3 };
     let pop = [], parts = [], clearing = [], shake = 0, scoreShown = 0;
@@ -272,30 +575,11 @@
     const wob = new Map();
     let rafId = 0, running = false;
 
-    function dealTray() {
-      const [lo, hi, filled] = boardBits(), fill = filled / (N * N), CAP = 300;
-      const cands = [];
-      const tryTray = shapes => { const r = solve(lo, hi, shapes, CAP); if (r.count) cands.push({ shapes, ...r, cells: shapes.reduce((a, s) => a + SIZE[s], 0) }); };
-      const want = fill < .35 ? 1 : 14;
-      for (let k = 0; k < 60 && cands.length < want; k++) tryTray([pickShape(), pickShape(), pickShape()]);
-      if (fill >= .45 || !cands.length) {
-        const pool = [];
-        SHAPES.forEach((sh, s) => { if (PLACES[s].some(([pl, ph]) => !(lo & pl) && !(hi & ph) && applyBits(lo, hi, pl, ph)[2] > 0)) pool.push(s, s); else if (SIZE[s] <= 3) pool.push(s); });
-        for (let k = 0; k < 160 && pool.length && cands.filter(c => c.maxClear).length < 10; k++) tryTray([0, 1, 2].map(() => pool[Math.floor(Math.random() * pool.length)]));
-      }
-      let pick;
-      if (!cands.length) pick = { shapes: [pickShape(), pickShape(), pickShape()] };
-      else if (fill < .35) pick = cands[0];
-      else {
-        let pool = fill >= .45 && cands.some(c => c.maxClear) ? cands.filter(c => c.maxClear) : cands;
-        const floor = pool.some(c => c.count >= 4) ? 4 : 1;
-        pool = pool.filter(c => c.count >= floor && c.cells >= Math.min(8, Math.max(...pool.map(x => x.cells)))).sort((a, b) => a.count - b.count || b.cells - a.cells);
-        if (!pool.length) pool = cands;
-        pick = pool[Math.floor(Math.random() * Math.min(3, pool.length))];
-      }
-      const order = pick.shapes.slice().sort(() => Math.random() - .5);
+    function dealTray(playSound = false) {
+      const order = Dealer.dealShapes(board, combo);
       tray = order.map(s => ({ s, col: Math.floor(Math.random() * COLORS.length), ...SHAPES[s] }));
       pop.push({ kind: 'deal', t0: performance.now() });
+      if (playSound && isOpen() && lobby && lobby.hidden) SFX.deal();
     }
 
     function saveStatsNow() {
@@ -324,12 +608,12 @@
     function freshGame({ writeTombstone = false } = {}) {
       if (writeTombstone && gid) Storage.clearSession(gid);
       board = Array.from({ length: N }, () => Array(N).fill(-1));
-      score = 0; combo = 0; msc = 0; moves = 0; over = false;
+      score = 0; combo = 0; msc = 0; moves = 0; over = false; bestBrokenThisRun = false;
       gid = newGid(); startedAt = Date.now();
       tray = [null, null, null];
       drag = null; sel = -1; praise = null; comboFx = null; comboLost = null;
       clearing = []; parts = []; pop = []; wob.clear();
-      dealTray();
+      dealTray(false);
     }
 
     function loadFromStorage() {
@@ -342,6 +626,7 @@
       board = d.board.map(row => row.map(v => (typeof v === 'number' ? v : -1)));
       score = Math.max(0, Math.floor(Number(d.score) || 0));
       if (score > best) { best = score; saveStatsNow(); }
+      bestBrokenThisRun = score > 0 && score >= best;
       combo = Math.max(0, Math.floor(Number(d.combo) || 0));
       msc = Math.max(0, Math.floor(Number(d.msc) || 0));
       moves = Math.max(0, Math.floor(Number(d.moves) || 0));
@@ -349,7 +634,7 @@
       tray = Array.isArray(d.tray) && d.tray.length === 3
         ? d.tray.map(p => (p && SHAPES[p.s] ? { s: p.s, col: Math.max(0, Math.min(COLORS.length - 1, Number(p.col) || 0)), ...SHAPES[p.s] } : null))
         : [null, null, null];
-      if (tray.every(p => !p)) dealTray();
+      if (tray.every(p => !p)) dealTray(false);
       return true;
     }
 
@@ -678,10 +963,12 @@
     };
 
     function place(i, r0, c0) {
+      SFX.unlock();
       const p = tray[i], now = performance.now();
       const { rows, cols } = linesFor(p, r0, c0);
       p.cells.forEach(([r, c]) => { board[r0 + r][c0 + c] = p.col; wob.set((r0 + r) * N + c0 + c, now + (r + c) * 25); });
       moves++;
+      SFX.place(p.cells.length);
       let gained = p.cells.length;
       const n = rows.length + cols.length;
       if (n) {
@@ -708,20 +995,31 @@
         praise = { ...P, t0: now + 60 };
         if (combo > 1) comboFx = { n: combo, t0: now };
         shake = Math.min(12, 3 + n * 2 + (empty ? 6 : 0));
+        SFX.clear(n, combo, empty);
       } else if (combo && ++msc >= 3) {
-        if (combo > 1) comboLost = { n: combo, t0: now };
+        if (combo > 1) {
+          comboLost = { n: combo, t0: now };
+          SFX.flatline();
+        }
         combo = 0; msc = 0;
       }
       const prevBest = best;
       score += gained;
-      if (score > best) best = score;
+      if (score > best) {
+        best = score;
+        if (!bestBrokenThisRun && prevBest > 0) {
+          bestBrokenThisRun = true;
+          SFX.newBest();
+        }
+      }
       if (n || best > prevBest) saveStatsNow();
       tray[i] = null; if (sel === i) sel = -1;
-      if (tray.every(t => !t)) dealTray();
+      if (tray.every(t => !t)) dealTray(true);
       saveSessionNow();
       if (best > prevBest && best >= 100) pushBest();
       if (!tray.some(t => t && anyFit(t))) {
         over = true;
+        SFX.gameOver();
         const finishedGid = gid;
         const finalScore = score;
         endGameStats();
@@ -752,15 +1050,18 @@
     }
     cv.addEventListener('pointerdown', e => {
       if (!isOpen() || over || !lobby.hidden) return;
+      SFX.unlock();
       const i = slotHit(e.clientX, e.clientY);
       if (i >= 0) {
         try { cv.setPointerCapture(e.pointerId); } catch {}
         drag = { i, x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, t: performance.now(), lift: e.pointerType === 'touch' ? L.cell * 1.9 : 0, moved: false };
+        SFX.pickup();
         return;
       }
       if (sel >= 0 && tray[sel]) {
         const p = tray[sel], a = anchorFor(p, e.clientX, e.clientY);
         if (fits(p, a.r, a.c)) place(sel, a.r, a.c);
+        else SFX.invalid();
       }
     });
     cv.addEventListener('pointermove', e => {
@@ -776,6 +1077,7 @@
       const p = tray[d.i]; if (!p) return;
       const a = anchorFor(p, d.x, d.y - d.lift);
       if (fits(p, a.r, a.c)) place(d.i, a.r, a.c);
+      else if (d.y - d.lift < L.by + L.bs + 24) SFX.invalid();
     }
     cv.addEventListener('pointerup', endDrag);
     cv.addEventListener('pointercancel', () => { drag = null; });
@@ -783,12 +1085,13 @@
 
     document.addEventListener('keydown', e => {
       if (!isOpen()) return;
+      SFX.unlock();
       if (!q('bl-lbOv').hidden || !q('bl-overOv').hidden) { if (e.key === 'Escape') closeAll(); return; }
       if (!lobby.hidden) {
         if (e.key === 'Enter' && !e.target.closest('button')) { e.preventDefault(); playBtn.click(); }
         return;
       }
-      if (['1', '2', '3'].includes(e.key)) { const i = +e.key - 1; if (tray[i]) { sel = i; hover = null; } }
+      if (['1', '2', '3'].includes(e.key)) { const i = +e.key - 1; if (tray[i]) { sel = i; hover = null; SFX.pickup(); } }
       else if (e.key.startsWith('Arrow')) {
         e.preventDefault();
         if (sel < 0) sel = tray.findIndex(Boolean);
@@ -800,6 +1103,7 @@
         e.preventDefault();
         const p = tray[sel];
         if (fits(p, kcur.r, kcur.c)) place(sel, kcur.r, kcur.c);
+        else SFX.invalid();
       } else if (e.key === 'Escape') sel = -1;
     });
 
@@ -1053,16 +1357,34 @@
       return false;
     }
 
-    q('bl-playBtn').onclick = () => { if (over) { freshGame({ writeTombstone: true }); saveSessionNow(); } hideLobby(); scoreShown = score; };
-    q('bl-newBtn').onclick = () => { endGameStats(); freshGame({ writeTombstone: true }); saveSessionNow(); hideLobby(); scoreShown = 0; };
-    q('bl-againBtn').onclick = () => { closeAll(); freshGame({ writeTombstone: true }); saveSessionNow(); scoreShown = 0; };
-    q('bl-homeBtn').onclick = () => { saveSessionNow(); saveStatsNow(); showLobby(); };
-    q('bl-overLobbyBtn').onclick = () => { freshGame({ writeTombstone: true }); showLobby(); };
-    q('bl-restartBtn').onclick = () => { if (over || score === 0 || confirmRestart()) { if (!over) endGameStats(); closeAll(); freshGame({ writeTombstone: true }); saveSessionNow(); scoreShown = 0; } };
-    q('bl-lbBtn').onclick = () => { openOv('bl-lbOv'); fetchLeaderboard(true); };
-    q('bl-overLbBtn').onclick = () => { closeAll(); openOv('bl-lbOv'); fetchLeaderboard(true); };
-    q('bl-lbRefreshBtn').onclick = () => { fetchLeaderboard(true); };
+    function syncSfxButtons() {
+      const m = SFX.isMuted();
+      [q('bl-sfxBtn'), q('bl-lbSfxBtn')].forEach(b => {
+        if (!b) return;
+        b.textContent = m ? '🔇' : '🔊';
+        b.classList.toggle('muted', m);
+        b.setAttribute('aria-pressed', String(!m));
+        b.setAttribute('aria-label', m ? 'Suara mati (ketuk untuk nyalakan)' : 'Suara aktif (ketuk untuk bisukan)');
+      });
+    }
+    syncSfxButtons();
+    [q('bl-sfxBtn'), q('bl-lbSfxBtn')].forEach(b => {
+      if (b) b.onclick = () => { SFX.toggleMute(); syncSfxButtons(); };
+    });
+    host.addEventListener('pointerdown', () => SFX.unlock(), { capture: true, passive: true });
+    host.addEventListener('touchstart', () => SFX.unlock(), { capture: true, passive: true });
+
+    q('bl-playBtn').onclick = () => { SFX.unlock(); SFX.uiTap(); if (over) { freshGame({ writeTombstone: true }); saveSessionNow(); } hideLobby(); scoreShown = score; };
+    q('bl-newBtn').onclick = () => { SFX.unlock(); SFX.uiTap(); endGameStats(); freshGame({ writeTombstone: true }); saveSessionNow(); hideLobby(); scoreShown = 0; };
+    q('bl-againBtn').onclick = () => { SFX.unlock(); SFX.uiTap(); closeAll(); freshGame({ writeTombstone: true }); saveSessionNow(); scoreShown = 0; };
+    q('bl-homeBtn').onclick = () => { SFX.uiTap(); saveSessionNow(); saveStatsNow(); showLobby(); };
+    q('bl-overLobbyBtn').onclick = () => { SFX.uiTap(); freshGame({ writeTombstone: true }); showLobby(); };
+    q('bl-restartBtn').onclick = () => { SFX.unlock(); if (over || score === 0 || confirmRestart()) { SFX.uiTap(); if (!over) endGameStats(); closeAll(); freshGame({ writeTombstone: true }); saveSessionNow(); scoreShown = 0; } else SFX.invalid(); };
+    q('bl-lbBtn').onclick = () => { SFX.unlock(); SFX.uiTap(); openOv('bl-lbOv'); fetchLeaderboard(true); };
+    q('bl-overLbBtn').onclick = () => { SFX.unlock(); SFX.uiTap(); closeAll(); openOv('bl-lbOv'); fetchLeaderboard(true); };
+    q('bl-lbRefreshBtn').onclick = () => { SFX.uiTap(); fetchLeaderboard(true); };
     q('bl-exitMgBtn').onclick = () => {
+      SFX.uiTap();
       onLeave();
       try { window.show?.('miniGamesPage', { force: true }); window.scrollTo(0, 0); } catch {}
     };
@@ -1119,6 +1441,7 @@
       } catch {}
       layout();
       drawLogo();
+      syncSfxButtons();
       const uid = currentUid();
       if (uid !== boundUid) {
         boundUid = uid;
@@ -1165,5 +1488,5 @@
     else game.onLeave();
   });
 
-  window.CLINED_BLOK_LYSIS = { open, Storage, mergeStatsMonotonic, sanitizeStats, isPlaying: () => !!game?.isPlaying() };
+  window.CLINED_BLOK_LYSIS = { open, Storage, Dealer, SFX, mergeStatsMonotonic, sanitizeStats, isPlaying: () => !!game?.isPlaying() };
 })();

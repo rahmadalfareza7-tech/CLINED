@@ -306,8 +306,8 @@ test('Full CLINED app & server wiring for Blok Lysis + synced leaderboard', () =
   assert.match(newFeatJs, /\/api\/leaderboard\?game=blok_lysis/);
   assert.match(newFeatJs, /tab === 'blok_lysis'/);
   assert.match(lazyJs, /blokLysis:\s*\{/);
-  assert.match(lazyJs, /css\/blok-lysis\.css\?v=1/);
-  assert.match(lazyJs, /js\/blok-lysis\.js\?v=1/);
+  assert.match(lazyJs, /css\/blok-lysis\.css\?v=2/);
+  assert.match(lazyJs, /js\/blok-lysis\.js\?v=2/);
   assert.match(lazyJs, /window\.CLINED_BLOK_LYSIS/);
   assert.match(lazyJs, /data-open-blok-lysis/);
   assert.match(lazyJs, /clined:sync-applied/);
@@ -326,4 +326,94 @@ test('Full CLINED app & server wiring for Blok Lysis + synced leaderboard', () =
   assert.match(libSync, /getAuthoritativeBlokLysisRow/);
   assert.match(libSync, /reconcileBlokLysisWithStats/);
   assert.match(migration, /CREATE TABLE IF NOT EXISTS blok_lysis_scores/);
+});
+
+test('Balanced Anti-Trap Dealer rewards breathable solvability & line clears, avoids chokeholds & multi-heavy brick traps', () => {
+  const { BL } = loadBlokLysisModule();
+  const { Dealer } = BL;
+  assert.ok(Dealer?.dealShapes && Dealer?.scoreCandidate && Dealer?.solve);
+
+  // Chokehold tray (count=3, no clear) must score much lower than breathable clear-enabling tray (count=40, maxClear=1)
+  const choke = Dealer.scoreCandidate({ shapes: [0, 1, 2], count: 3, maxClear: 0, minAfterPop: 42, cells: 9 }, 0.5, 32, 1);
+  const fair = Dealer.scoreCandidate({ shapes: [0, 1, 2], count: 40, maxClear: 1, minAfterPop: 28, cells: 9 }, 0.5, 32, 1);
+  assert.ok(fair > choke + 40, `Expected fair tray (${fair}) to strongly beat chokehold (${choke})`);
+
+  // On a 50% filled board with 7-of-8 row ready to clear, dealShapes must deliver a solvable tray with <=1 heavy piece
+  const midBoard = makeBoard(-1);
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 7; c++) midBoard[r][c] = 1;
+  const [lo, hi] = Dealer.boardBitsOf(midBoard);
+  for (let i = 0; i < 15; i++) {
+    const shapes = Dealer.dealShapes(midBoard, 2);
+    assert.equal(shapes.length, 3);
+    const sol = Dealer.solve(lo, hi, shapes, 60);
+    assert.ok(sol.count >= 6, `Expected breathable solvability (>=6), got ${sol.count}`);
+    const heavyCnt = shapes.filter(s => Dealer.HEAVY[s]).length;
+    assert.ok(heavyCnt <= 1, `Never deal multiple heavy bricks on mid board, got ${heavyCnt}`);
+  }
+});
+
+test('WebAudio SFX synthesizer plays tones when unmuted, respects mute toggle & persists clined_blok_lysis_sfx_v1', () => {
+  let oscStarts = 0;
+  let resumed = 0;
+  const fakeAC = class MockAudioContext {
+    constructor() { this.state = 'suspended'; this.currentTime = 0; this.destination = {}; }
+    resume() { resumed++; this.state = 'running'; return Promise.resolve(); }
+    createBuffer() { return {}; }
+    createBufferSource() { return { buffer: null, connect: () => {}, start: () => {} }; }
+    createOscillator() {
+      return {
+        type: 'sine',
+        frequency: { setValueAtTime: () => {}, exponentialRampToValueAtTime: () => {} },
+        connect: () => {},
+        start: () => { oscStarts++; },
+        stop: () => {}
+      };
+    }
+    createGain() {
+      return {
+        gain: { setValueAtTime: () => {}, linearRampToValueAtTime: () => {}, exponentialRampToValueAtTime: () => {} },
+        connect: () => {}
+      };
+    }
+  };
+  const store = {};
+  const ctx = vm.createContext({
+    window: { addEventListener: () => {}, AudioContext: fakeAC },
+    document: { getElementById: () => null, addEventListener: () => {} },
+    localStorage: {
+      getItem: k => (Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null),
+      setItem: (k, v) => { store[k] = String(v); },
+      removeItem: k => { delete store[k]; }
+    },
+    Date, Math, JSON, Object, Array, Number, String, Set, Map, Promise, console
+  });
+  vm.runInContext(readRel('js/blok-lysis.js'), ctx);
+  const { SFX } = ctx.window.CLINED_BLOK_LYSIS;
+
+  assert.equal(SFX.isMuted(), false, 'Sound defaults to ON');
+  assert.equal(SFX.unlock(), true);
+  assert.ok(resumed >= 1, 'AudioContext should resume on user gesture unlock');
+
+  SFX.pickup();
+  SFX.place(4);
+  SFX.clear(2, 3, false);
+  SFX.flatline();
+  SFX.deal();
+  SFX.newBest();
+  SFX.gameOver();
+  assert.ok(oscStarts >= 14, `Expected rich WebAudio tones scheduled, got ${oscStarts}`);
+
+  // Muting persists '0' and silences all subsequent SFX calls
+  assert.equal(SFX.toggleMute(), true);
+  assert.equal(store.clined_blok_lysis_sfx_v1, '0');
+  const countWhenMuted = oscStarts;
+  SFX.pickup();
+  SFX.place(3);
+  SFX.clear(1, 2, false);
+  assert.equal(oscStarts, countWhenMuted, 'Muted SFX must schedule 0 oscillators');
+
+  // Unmuting persists '1' and plays confirmation tap
+  assert.equal(SFX.toggleMute(), false);
+  assert.equal(store.clined_blok_lysis_sfx_v1, '1');
+  assert.ok(oscStarts > countWhenMuted, 'Unmuting should play confirmation tap');
 });
