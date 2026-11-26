@@ -55,8 +55,8 @@
     },
     igd: {
       appendEnd: true,
-      styles: ['css/meja-jaga-igd.css?v=13'],
-      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=14']
+      styles: ['css/meja-jaga-igd.css?v=14'],
+      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=15']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],

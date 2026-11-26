@@ -3,6 +3,7 @@
   "short_name": "CLINED",
   "start_url": "./app.html",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#f7f7f2",
   "theme_color": "#f7f7f2",
   "icons": [

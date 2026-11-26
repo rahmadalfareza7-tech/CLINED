@@ -496,13 +496,13 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
   assert.match(appHtml, /css\/motion\.css\?v=auth-layout-v5/);
-  assert.match(appHtml, /js\/update-notice\.js\?v=18/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=19/);
   assert.match(appHtml, /js\/app\.js\?v=static-banks-v73/);
-  assert.match(appHtml, /js\/lazy-loader\.js\?v=40/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=13/);
+  assert.match(appHtml, /js\/lazy-loader\.js\?v=41/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=14/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=14/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=15/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(lazyJs, /setTimeout\(finish,\s*2500\)/, 'loadStyle must have a safety timeout for iOS/iPadOS WebKit PWA');
   assert.match(lazyJs, /showIgdLoadingUI/, 'lazy-loader must render dark loading state instead of blank white screen');
@@ -511,11 +511,19 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(syncJs, /'clined_igd_session_v1'/);
   assert.match(serverJs, /'\.woff2':'font\/woff2'/);
 
-  // PWA mobile & iPad blank-white-screen regression guards
+  // PWA mobile & iPad blank-white-screen, verdict visibility & landscape regression guards
   const motionCss = readRel('css/motion.css');
+  const manifest = readRel('manifest.webmanifest');
   assert.match(motionCss, /:not\(#mejaJagaIgdPage\)/, 'motion.css must not apply persistent transform animation to #mejaJagaIgdPage');
   assert.match(igdCss, /html\.igd-fit #mejaJagaIgdPage,html\.igd-fit #mejaJagaIgdHost\{[^}]*z-index:100001!important/);
   assert.match(igdCss, /#mejaJagaIgdPage\.motion-page-enter/);
+  assert.doesNotMatch(igdCss, /html\.igd-(?:open|fit)\s+footer\b/, 'Never hide descendant <footer> inside IGD (that hides #igd-console verdict/next button!)');
+  assert.match(igdCss, /#mejaJagaIgdPage \.igd #igd-console\{display:flex!important\}/);
+  assert.match(igdCss, /\.igd\.fit\.phone-port/);
+  assert.match(igdCss, /\.igd\.fit\.phone-land/);
+  assert.match(igdCss, /\.igd\.fit\.force-land/);
+  assert.match(igdJs, /data-act="rotate"/);
+  assert.match(manifest, /"orientation"\s*:\s*"any"/, 'manifest.webmanifest must allow both portrait and landscape');
   assert.match(swJs, /\.\/css\/meja-jaga-igd\.css/, 'sw.js must precache Meja Jaga IGD CSS');
   assert.match(swJs, /\.\/js\/meja-jaga-igd\.js/, 'sw.js must precache Meja Jaga IGD JS');
   assert.match(swJs, /fetchWithTimeout/, 'sw.js must fall back to cache on stalled mobile/iPad PWA network');
@@ -554,5 +562,5 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
-  assert.equal(swVer, 'v251-pwa-mobile-ipad-fix');
+  assert.equal(swVer, 'v252-mobile-gameplay-landscape-fix');
 });

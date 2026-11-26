@@ -157,6 +157,7 @@
       <button type="button" class="mini-btn" data-act="book">Panduan <kbd>B</kbd></button>
       <button type="button" class="mini-btn btn-calc" data-act="calc">Kalkulator <kbd>K</kbd></button>
       <button type="button" class="mini-btn" data-act="mute" id="igd-mute">Suara: nyala</button>
+      <button type="button" class="mini-btn igd-rotate-btn" data-act="rotate" title="Ganti mode Portrait / Landscape">🔄 Landscape</button>
     </div>
   </header>
   <div class="timebar"><i id="igd-timefill"></i></div>
@@ -317,6 +318,7 @@
           <button type="button" class="mini-btn igd-tool-btn" data-act="book" title="Buka Panduan Obat &amp; Pedoman Klinis">Panduan (85 Obat) <kbd>B</kbd></button>
           <button type="button" class="mini-btn igd-tool-btn btn-calc" data-act="calc" title="Buka Kalkulator GFR, IMT, &amp; Pediatrik">Kalkulator <kbd>K</kbd></button>
           <button type="button" class="mini-btn igd-tool-btn" data-act="mute" id="igd-lobby-mute" title="Nyalakan atau matikan efek suara">Suara: nyala</button>
+          <button type="button" class="mini-btn igd-tool-btn igd-rotate-btn" data-act="rotate" title="Ganti mode Portrait / Landscape">🔄 Landscape</button>
         </div>
       </header>
 
@@ -421,17 +423,31 @@
   const normName = n => String(n).replace(/^(Tn|Ny|An|Nn|Sdr)\.\s*/i,'').trim().toUpperCase();
   const ia = (kind, src, val, show) => `data-ik="${kind}" data-src="${src}" data-iv="${esc(val)}" data-show="${esc(show)}"`;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  /* ================= PAS-LAYAR (laptop & tablet) ================= */
+  /* ================= PAS-LAYAR (HP, tablet & laptop) ================= */
   const FIT = (() => {
-    let on = false, s = 1, key = '';
+    let on = false, s = 1, key = '', forceLand = false, rot = false, phone = false;
+    function syncRotateBtns(){
+      const txt = rot ? '🔄 Portrait' : '🔄 Landscape';
+      root.querySelectorAll('[data-act="rotate"]').forEach(b => { b.textContent = txt; });
+    }
     function update(){
       const vv = window.visualViewport;
       const vw = Math.max(240, Math.round((vv && vv.width) || window.innerWidth || document.documentElement.clientWidth || 390));
-      const vh = Math.max(320, Math.round((vv && vv.height) || window.innerHeight || document.documentElement.clientHeight || 640));
-      on = isOpen() && Math.min(vw, vh) >= 600;
-      const land = vw >= vh, cw = land ? 1440 : 900, ch = land ? 960 : 1500;
+      const vh = Math.max(240, Math.round((vv && vv.height) || window.innerHeight || document.documentElement.clientHeight || 640));
+      on = isOpen();
+      phone = Math.min(vw, vh) < 600;
+      if (!phone || vw > vh) forceLand = false;
+      const land = (vw >= vh) || (phone && forceLand);
+      rot = on && phone && forceLand && vw < vh;
       stage.classList.toggle('fit', on); document.documentElement.classList.toggle('igd-fit', on);
-      root.classList.toggle('fit', on); root.classList.toggle('land', on && land); root.classList.toggle('port', on && !land);
+      root.classList.toggle('fit', on);
+      root.classList.toggle('land', on && land);
+      root.classList.toggle('port', on && !land);
+      root.classList.toggle('phone', on && phone);
+      root.classList.toggle('phone-land', on && phone && land);
+      root.classList.toggle('phone-port', on && phone && !land);
+      root.classList.toggle('force-land', rot);
+      let cw = land ? 1440 : 900, ch = land ? 960 : 1500;
       if (on){
         let padX = 0, padY = 0;
         try {
@@ -439,24 +455,60 @@
           padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
           padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
         } catch {}
-        s = Math.min(Math.max(240, vw - padX) / cw, Math.max(320, vh - padY) / ch);
+        const aw = Math.max(240, vw - padX), ah = Math.max(240, vh - padY);
+        const effW = rot ? ah : aw, effH = rot ? aw : ah;
+        if (phone){
+          if (land){
+            ch = 720;
+            cw = Math.round(Math.min(1560, Math.max(1060, ch * (effW / effH))));
+          } else {
+            cw = 680;
+            ch = Math.round(Math.min(1560, Math.max(1140, cw * (effH / effW))));
+          }
+        }
+        s = Math.min(effW / cw, effH / ch);
         root.style.setProperty('--cw', cw + 'px'); root.style.setProperty('--ch', ch + 'px'); root.style.setProperty('--s', s);
       } else { s = 1; ['--cw','--ch','--s'].forEach(v => root.style.removeProperty(v)); }
-      const k = on ? (land ? 'L' : 'P') : 'N', changed = k !== key; key = k;
+      syncRotateBtns();
+      const k = on ? `${phone ? 'M' : 'D'}-${land ? 'L' : 'P'}-${rot ? 'R' : 'N'}` : 'N', changed = k !== key; key = k;
       return changed;
     }
     update();
     function disable(){
-      on = false; s = 1; key = '';
+      on = false; s = 1; key = ''; forceLand = false; rot = false; phone = false;
       stage.classList.remove('fit'); document.documentElement.classList.remove('igd-fit');
-      root.classList.remove('fit', 'land', 'port');
+      root.classList.remove('fit', 'land', 'port', 'phone', 'phone-land', 'phone-port', 'force-land');
       ['--cw','--ch','--s'].forEach(v => root.style.removeProperty(v));
+      try { screen.orientation?.unlock?.(); } catch {}
     }
+    function toggleRotate(){
+      if (!isOpen()) return false;
+      if (phone && window.innerWidth > window.innerHeight){
+        try { screen.orientation?.unlock?.(); } catch {}
+        try { screen.orientation?.lock?.('portrait').catch(() => {}); } catch {}
+        return update();
+      }
+      forceLand = !forceLand;
+      if (forceLand){
+        try {
+          const pr = screen.orientation?.lock?.('landscape');
+          if (pr && typeof pr.then === 'function') pr.then(() => { forceLand = false; if (isOpen()) { update(); window.dispatchEvent(new Event('resize')); } }).catch(() => {});
+        } catch {}
+      } else {
+        try { screen.orientation?.unlock?.(); } catch {}
+      }
+      return update();
+    }
+    const onViewportChange = () => {
+      if (!isOpen()) return;
+      const changed = update();
+      if (changed) window.dispatchEvent(new Event('resize'));
+    };
     try {
-      window.addEventListener('orientationchange', () => setTimeout(() => { if (isOpen()) update(); }, 180));
-      window.visualViewport?.addEventListener?.('resize', () => { if (isOpen()) update(); });
+      window.addEventListener('orientationchange', () => setTimeout(onViewportChange, 180));
+      window.visualViewport?.addEventListener?.('resize', onViewportChange);
     } catch {}
-    return { update, disable, get on(){ return on; }, get s(){ return on ? s : 1; } };
+    return { update, disable, toggleRotate, get on(){ return on; }, get s(){ return on ? s : 1; }, get rot(){ return rot; }, get phone(){ return phone; } };
   })();
   const shuffle = a => { for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 
@@ -1042,7 +1094,14 @@
   function drawLink(a, b, ok){
     lastLink = [a, b, ok];
     const R0 = root.getBoundingClientRect();
-    const k = FIT.s, box = el => { const r = el.getBoundingClientRect(); return {x:(r.left-R0.left)/k-3, y:(r.top-R0.top)/k-2, w:r.width/k+6, h:r.height/k+4}; };
+    const k = FIT.s;
+    const box = el => {
+      const r = el.getBoundingClientRect();
+      if (FIT.rot){
+        return { x:(r.top - R0.top)/k - 3, y:(R0.right - r.right)/k - 2, w:r.height/k + 6, h:r.width/k + 4 };
+      }
+      return { x:(r.left - R0.left)/k - 3, y:(r.top - R0.top)/k - 2, w:r.width/k + 6, h:r.height/k + 4 };
+    };
     const A = box(a), B = box(b), col = ok ? '#3fd07a' : '#ff4b3e';
     const [x1,y1] = edgePt(A, B.x+B.w/2, B.y+B.h/2), [x2,y2] = edgePt(B, A.x+A.w/2, A.y+A.h/2);
     const rect = r => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="4" fill="${col}" fill-opacity=".18" stroke="${col}" stroke-width="2.5"/>`;
@@ -1398,23 +1457,26 @@
       const c = e.target.closest('.dcard');
       if (!c || e.target.closest('button,input,select,a')) return;
       c.style.zIndex = ++z;
-      drag = {c, x:e.clientX, y:e.clientY, l:c.offsetLeft, t:c.offsetTop, moved:false, id:e.pointerId};
+      drag = {c, x:e.clientX, y:e.clientY, l:c.offsetLeft, t:c.offsetTop, moved:false, id:e.pointerId, touch:e.pointerType === 'touch'};
     });
     window.addEventListener('pointermove', e => {
       if (!drag || e.pointerId !== drag.id) return;
-      const dx = (e.clientX - drag.x) / FIT.s, dy = (e.clientY - drag.y) / FIT.s, c = drag.c;
+      const sx = e.clientX - drag.x, sy = e.clientY - drag.y;
+      const dx = (FIT.rot ? sy : sx) / FIT.s, dy = (FIT.rot ? -sx : sy) / FIT.s, c = drag.c;
       if (!drag.moved){
-        if (Math.hypot(dx, dy) < 6) return;
+        if (Math.hypot(dx, dy) < (drag.touch ? 10 : 6)) return;
         drag.moved = true; c.classList.add('dragging'); root.classList.add('is-dragging');
+        try { c.setPointerCapture(e.pointerId); } catch {}
       }
       e.preventDefault();
       const W = sf.clientWidth, H = Math.max(sf.clientHeight, sf.scrollHeight);
-      place(c, Math.min(Math.max(drag.l + dx, 90 - c.offsetWidth), W - 90), Math.min(Math.max(drag.t + dy, 0), H - 60));
+      place(c, Math.min(Math.max(drag.l + dx, 80 - c.offsetWidth), W - 80), Math.min(Math.max(drag.t + dy, 0), H - 56));
       redrawLink();
     });
     const end = e => {
       if (!drag || (e && e.pointerId !== drag.id)) return;
       if (drag.moved){
+        try { drag.c.releasePointerCapture(drag.id); } catch {}
         suppress = true; setTimeout(() => { suppress = false; }, 0);
         drag.c.classList.remove('dragging'); root.classList.remove('is-dragging'); fit();
         setTimeout(redrawLink, 160);
@@ -1445,6 +1507,7 @@
     const d = S.queue[S.i];
     const restoreHl = opts && typeof opts.hl === 'string' && opts.hl ? opts.hl : null;
     S.hl = restoreHl; S.locked = false; S.resolved = false; S.frac = 1; S.pausedAt = 0;
+    root.classList.remove('has-verdict');
     setInspect(false, true);
     root.classList.add('can-mark');
     E.acc.disabled = E.tolak.disabled = false;
@@ -1577,6 +1640,7 @@
 
     const last = S.lives <= 0 || S.i >= S.queue.length - 1;
     const ptsTxt = r.life ? '−1 nyawa pasien' : (r.pts >= 0 ? '+' + r.pts + ' poin' : r.pts + ' poin');
+    root.classList.add('has-verdict');
     E.con.className = 'console ' + r.cls;
     E.con.innerHTML = `<div class="slip">
       <div class="verdict"><span class="igd-chip">${ptsTxt}</span><h3>${r.head}</h3><p>${r.sub}</p></div>
@@ -1706,6 +1770,12 @@
       const isMuted = Sfx.toggle();
       const txt = 'Suara: ' + (isMuted ? 'mati' : 'nyala');
       root.querySelectorAll('[data-act="mute"]').forEach(btn => { btn.textContent = txt; });
+    }
+    else if (a === 'rotate'){
+      FIT.toggleRotate();
+      DESK.reset();
+      DESK.apply();
+      redrawLink();
     }
     else if (a === 'clear'){
       if (!S || S.locked) return;

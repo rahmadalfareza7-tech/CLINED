@@ -58,14 +58,19 @@ html.igd-fit #mejaJagaIgdPage .igd-page-head,
 #mejaJagaIgdPage .igd input[type=checkbox]{all:revert;width:20px;height:20px;accent-color:var(--green)}
 
 html.igd-open,html.igd-open body{background:#060a12!important;margin:0!important;color-scheme:dark}
-html.igd-open .floating-dashboard-nav,html.igd-open .header,html.igd-open footer{display:none!important}
+html.igd-open .floating-dashboard-nav,html.igd-open .header,html.igd-open .clined-creator-footer{display:none!important}
 html.igd-open .app{max-width:none!important;padding:0!important;margin:0!important;background:#060a12!important}
 html.igd-open #mejaJagaIgdPage{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0!important;margin:0!important}
 html.igd-open #mejaJagaIgdPage .igd:not(.fit){border-radius:0!important;box-shadow:none!important;max-width:none!important;min-height:100dvh}
-html.igd-fit,html.igd-fit body{height:100%!important;overflow:hidden!important;padding:0!important;margin:0!important;background:#060a12!important}
-html.igd-fit .floating-dashboard-nav,html.igd-fit .header,html.igd-fit footer{display:none!important}
+html.igd-fit,html.igd-fit body{height:100%!important;min-height:0!important;overflow:hidden!important;padding:0!important;margin:0!important;background:#060a12!important}
+html.igd-fit .floating-dashboard-nav,html.igd-fit .header,html.igd-fit .clined-creator-footer{display:none!important}
 html.igd-fit #mejaJagaIgdPage,html.igd-fit #mejaJagaIgdHost{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:0!important;width:100%!important;height:100%!important;max-width:none!important;margin:0!important;padding:0!important;z-index:100001!important;transform:none!important;animation:none!important;overflow:hidden!important}
 #mejaJagaIgdPage .igd-stage.fit{position:fixed;top:0;right:0;bottom:0;left:0;inset:0;width:100%;height:100%;z-index:100001;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:radial-gradient(ellipse at 50% 25%,#0f1a2e 0%,#060a12 100%)}
+#mejaJagaIgdPage .igd #igd-console{display:flex!important}
+@media (orientation:landscape) and (max-height:600px){
+  html.igd-fit,html.igd-fit body{height:100%!important;min-height:0!important;overflow:hidden!important;padding:0!important;margin:0!important}
+  html.igd-fit body .app{height:100%!important;min-height:0!important;padding:0!important;margin:0!important}
+}
 #mejaJagaIgdPage .igd{--ink:#1e293b;--muted:#64748b;--line:#cbd5e1;--soft:#f8fafc;--green:#10b981;--green-d:#059669;--green-l:#d1fae5;--red:#f43f5e;--red-d:#e11d48;--red-l:#ffe4e6;--blue:#0ea5e9;--blue-d:#0284c7;--blue-l:#e0f2fe;--yellow:#f59e0b;--yellow-d:#d97706;--yellow-l:#fef3c7;--purple:#8b5cf6;--purple-l:#ede9fe;--orange:#f97316;--pen:#0369a1;--hl:rgba(255,79,123,.38);--font:'Nunito','Varela Round','Arial Rounded MT Bold',system-ui,sans-serif;--hand:'Caveat','Comic Sans MS',cursive;position:relative;isolation:isolate;overflow:hidden;overflow:clip;display:flex;flex-direction:column;min-height:780px;max-width:1240px;margin:0 auto;border-radius:26px;font-family:var(--font);font-weight:700;color:#f1f5f9;background:#09101d;box-shadow:0 0 0 2px #192740, 0 16px 40px rgba(0,0,0,.7)}
 #mejaJagaIgdPage .igd *{box-sizing:border-box}
 #mejaJagaIgdPage .igd button{font:inherit;color:inherit;cursor:pointer}
@@ -609,11 +614,11 @@ html.igd-fit #mejaJagaIgdPage,html.igd-fit #mejaJagaIgdHost{position:fixed!impor
 #mejaJagaIgdPage .igd.fit .console{height:auto;min-height:36px;max-height:92px;overflow:hidden;padding:6px 16px 2px}
 #mejaJagaIgdPage .igd.fit .console.good,
 #mejaJagaIgdPage .igd.fit .console.warn,
-#mejaJagaIgdPage .igd.fit .console.bad{padding:7px 16px}
+#mejaJagaIgdPage .igd.fit .console.bad{max-height:none;overflow:visible;padding:10px 16px}
 #mejaJagaIgdPage .igd.fit .con-idle{font-size:.8rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-#mejaJagaIgdPage .igd.fit .slip{gap:14px}
-#mejaJagaIgdPage .igd.fit .slip h3{font-size:1.05rem;margin:1px 0}
-#mejaJagaIgdPage .igd.fit .slip p{font-size:.78rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#mejaJagaIgdPage .igd.fit .slip{gap:14px;animation:none!important;transform:none!important;opacity:1!important}
+#mejaJagaIgdPage .igd.fit .slip h3{font-size:1.08rem;margin:1px 0}
+#mejaJagaIgdPage .igd.fit .slip p{font-size:.8rem;line-height:1.35}
 #mejaJagaIgdPage .igd.fit .tray{padding:6px 16px 8px}
 #mejaJagaIgdPage .igd.fit .stamp-caddy{padding:4px 10px;gap:10px}
 #mejaJagaIgdPage .igd.fit .stamp{width:116px;height:68px}
@@ -621,7 +626,109 @@ html.igd-fit #mejaJagaIgdPage,html.igd-fit #mejaJagaIgdHost{position:fixed!impor
 #mejaJagaIgdPage .igd.fit .stamp-stem{width:15px;height:8px}
 #mejaJagaIgdPage .igd.fit .stamp-brass{width:24px;height:6px}
 #mejaJagaIgdPage .igd.fit .plate-face{padding:5px 8px 4px}
-#mejaJagaIgdPage .igd.fit .plate-face b{font-size:1.08rem}
+#mejaJagaIgdPage .igd.fit .plate-face b{font-size:1.08rem;white-space:nowrap}
+
+/* ---------- Mobile FIT Mode (Phone Portrait 680px & Phone Landscape ~1500x720) ---------- */
+#mejaJagaIgdPage .igd:not(.phone) .igd-rotate-btn{display:none!important}
+#mejaJagaIgdPage .igd.fit.phone-land:not(.force-land) .igd-rotate-btn{display:none!important}
+#mejaJagaIgdPage .igd.fit.force-land{transform:translate(-50%,-50%) rotate(90deg) scale(var(--s))}
+#mejaJagaIgdPage .igd.fit.phone{border-radius:16px}
+#mejaJagaIgdPage .igd.fit.phone .dock{border-radius:0 0 16px 16px}
+#mejaJagaIgdPage .igd.fit.phone .screen{-webkit-overflow-scrolling:touch}
+#mejaJagaIgdPage .igd.fit.phone .book{width:min(540px,100%);-webkit-overflow-scrolling:touch}
+#mejaJagaIgdPage .igd.fit.phone.has-verdict .tray{display:none!important}
+#mejaJagaIgdPage .igd.fit.phone .btn-next{white-space:nowrap;padding:12px 18px;font-size:.9rem}
+
+/* Phone Portrait (680px wide canvas: full draggable side-by-side desk, zero clipping) */
+#mejaJagaIgdPage .igd.fit.phone-port .hud{padding:8px 12px;gap:6px 10px}
+#mejaJagaIgdPage .igd.fit.phone-port .hud-brand{font-size:.96rem;gap:6px}
+#mejaJagaIgdPage .igd.fit.phone-port .hud-brand::before{width:28px;height:28px;font-size:.92rem;border-radius:8px}
+#mejaJagaIgdPage .igd.fit.phone-port .hud-brand small{font-size:.5rem}
+#mejaJagaIgdPage .igd.fit.phone-port .hud-item b{font-size:1.02rem}
+#mejaJagaIgdPage .igd.fit.phone-port .hud-btns{justify-content:space-between;flex-wrap:wrap;gap:6px}
+#mejaJagaIgdPage .igd.fit.phone-port .hud-btns .mini-btn{padding:5px 9px;font-size:.66rem}
+#mejaJagaIgdPage .igd.fit.phone-port .play{grid-template-rows:162px minmax(0,1fr);gap:8px;padding:6px 10px}
+#mejaJagaIgdPage .igd.fit.phone-port .booth{grid-template-columns:minmax(0,1fr) 152px;gap:10px;height:162px}
+#mejaJagaIgdPage .igd.fit.phone-port .b-window,
+#mejaJagaIgdPage .igd.fit.phone-port .b-info{height:162px}
+#mejaJagaIgdPage .igd.fit.phone-port .b-poster,
+#mejaJagaIgdPage .igd.fit.phone-port .b-intercom,
+#mejaJagaIgdPage .igd.fit.phone-port .b-badge{display:none}
+#mejaJagaIgdPage .igd.fit.phone-port .b-amb-sign{left:10px;top:8px;padding:2px 8px;font-size:.5rem}
+#mejaJagaIgdPage .igd.fit.phone-port .b-people{left:16px;transform:none;bottom:22px}
+#mejaJagaIgdPage .igd.fit.phone-port .person svg{width:102px;height:120px}
+#mejaJagaIgdPage .igd.fit.phone-port .person.kid svg{width:84px;height:98px}
+#mejaJagaIgdPage .igd.fit.phone-port .person.small svg{width:70px;height:82px}
+#mejaJagaIgdPage .igd.fit.phone-port .person.comp svg{width:92px;height:108px}
+#mejaJagaIgdPage .igd.fit.phone-port .person.comp{margin-right:-30px}
+#mejaJagaIgdPage .igd.fit.phone-port .bubble,
+#mejaJagaIgdPage .igd.fit.phone-port .b-people.with-comp ~ .bubble{left:auto;right:10px;top:34px;max-width:56%;font-size:.78rem;padding:8px 10px}
+#mejaJagaIgdPage .igd.fit.phone-port .bubble::before{display:none}
+#mejaJagaIgdPage .igd.fit.phone-port .b-info{gap:4px;padding:6px}
+#mejaJagaIgdPage .igd.fit.phone-port .b-sign{font-size:.82rem;padding:3px 10px}
+#mejaJagaIgdPage .igd.fit.phone-port .b-clock{font-size:1.15rem;padding:2px 8px}
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .chart{width:210px;padding:20px 7px 7px}
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .paper{width:414px;padding:14px 16px 12px;font-size:.83rem}
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .paper .p-head{font-size:.76rem;padding-left:34px}
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .paper .stamp-zone{height:88px}
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .paper .mark{padding:3px 8px}
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .paper .mark b{font-size:1.45rem}
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .paper .mark-sub,
+#mejaJagaIgdPage .igd.fit.phone-port .surface.free .paper .mark small{font-size:.46rem}
+#mejaJagaIgdPage .igd.fit.phone-port .idcard{width:326px;padding:10px 12px 10px}
+#mejaJagaIgdPage .igd.fit.phone-port .idcard .ln .k{width:76px;font-size:.5rem}
+#mejaJagaIgdPage .igd.fit.phone-port .gelang{width:316px;height:74px;padding:0 32px 0 54px}
+#mejaJagaIgdPage .igd.fit.phone-port .labsheet{width:286px;padding:10px 11px 8px}
+#mejaJagaIgdPage .igd.fit.phone-port .jkn{width:310px;padding:10px 12px 9px}
+#mejaJagaIgdPage .igd.fit.phone-port .tray{padding:6px 12px 8px;gap:8px}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .hl-pen,
+#mejaJagaIgdPage .igd.fit.phone-port .tray .mk-txt,
+#mejaJagaIgdPage .igd.fit.phone-port .tray kbd,
+#mejaJagaIgdPage .igd.fit.phone-port .tray-gap{display:none}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .lens-btn{padding:7px 10px;gap:6px}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .lens-btn b{font-size:.76rem}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .marker-card{padding:4px 6px}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .marker-card .mini-btn{padding:6px 8px;font-size:.64rem}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .tidy{padding:6px 10px;font-size:.66rem}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .stamp-caddy{margin-left:auto;padding:4px 8px;gap:8px}
+#mejaJagaIgdPage .igd.fit.phone-port .tray .stamp{width:106px;height:66px}
+#mejaJagaIgdPage .igd.fit.phone-port .slip{grid-template-columns:1fr auto;gap:8px 12px;align-items:center}
+#mejaJagaIgdPage .igd.fit.phone-port .slip .igd-why{grid-column:1 / -1;order:3}
+#mejaJagaIgdPage .igd.fit.phone-port .screen.igd-screen-lobby{padding:12px}
+#mejaJagaIgdPage .igd.fit.phone-port .folder.igd-lobby{padding:14px 16px 16px}
+#mejaJagaIgdPage .igd.fit.phone-port .igd-stats-bar{grid-template-columns:repeat(2,minmax(0,1fr))}
+#mejaJagaIgdPage .igd.fit.phone-port .igd-guide-grid{grid-template-columns:1fr}
+
+/* Phone Landscape (~1500x720 widescreen canvas: full Papers Please desk & booth) */
+#mejaJagaIgdPage .igd.fit.phone-land .hud{padding:4px 12px;gap:6px 12px}
+#mejaJagaIgdPage .igd.fit.phone-land .hud-brand{font-size:.94rem;gap:6px}
+#mejaJagaIgdPage .igd.fit.phone-land .hud-brand::before{width:26px;height:26px;font-size:.9rem;border-radius:8px}
+#mejaJagaIgdPage .igd.fit.phone-land .hud-item b{font-size:1rem}
+#mejaJagaIgdPage .igd.fit.phone-land .play{grid-template-rows:132px minmax(0,1fr);gap:6px;padding:4px 12px}
+#mejaJagaIgdPage .igd.fit.phone-land .booth{grid-template-columns:206px minmax(0,1fr) 182px;gap:10px;height:132px}
+#mejaJagaIgdPage .igd.fit.phone-land .b-poster,
+#mejaJagaIgdPage .igd.fit.phone-land .b-intercom,
+#mejaJagaIgdPage .igd.fit.phone-land .b-info-head{display:none}
+#mejaJagaIgdPage .igd.fit.phone-land .b-amb-sign{left:12px;top:8px;padding:2px 8px;font-size:.5rem}
+#mejaJagaIgdPage .igd.fit.phone-land .b-badge{left:12px;bottom:24px;padding:2px 7px;font-size:.48rem}
+#mejaJagaIgdPage .igd.fit.phone-land .b-people{bottom:18px}
+#mejaJagaIgdPage .igd.fit.phone-land .person svg{width:94px;height:110px}
+#mejaJagaIgdPage .igd.fit.phone-land .person.kid svg{width:78px;height:92px}
+#mejaJagaIgdPage .igd.fit.phone-land .person.small svg{width:66px;height:78px}
+#mejaJagaIgdPage .igd.fit.phone-land .person.comp svg{width:86px;height:100px}
+#mejaJagaIgdPage .igd.fit.phone-land .bubble{left:calc(50% + 66px);top:10px;max-width:340px;font-size:.8rem;padding:7px 10px}
+#mejaJagaIgdPage .igd.fit.phone-land .b-people.with-comp ~ .bubble{left:calc(50% + 114px)}
+#mejaJagaIgdPage .igd.fit.phone-land .b-info{gap:4px;padding:6px}
+#mejaJagaIgdPage .igd.fit.phone-land .b-sign{font-size:.82rem;padding:3px 10px}
+#mejaJagaIgdPage .igd.fit.phone-land .b-clock{font-size:1.1rem;padding:1px 8px}
+#mejaJagaIgdPage .igd.fit.phone-land .surface.free .chart{width:218px}
+#mejaJagaIgdPage .igd.fit.phone-land .surface.free .paper{width:460px;padding:14px 18px 12px}
+#mejaJagaIgdPage .igd.fit.phone-land .surface.free .paper .stamp-zone{height:84px}
+#mejaJagaIgdPage .igd.fit.phone-land .tray{padding:4px 14px 6px}
+#mejaJagaIgdPage .igd.fit.phone-land .stamp{width:110px;height:62px}
+#mejaJagaIgdPage .igd.fit.phone-land .stamp-knob{width:28px;height:21px}
+#mejaJagaIgdPage .igd.fit.phone-land .screen.igd-screen-lobby{padding:10px 14px}
+#mejaJagaIgdPage .igd.fit.phone-land .folder.igd-lobby{padding:12px 16px}
 @media (max-width:980px){
   #mejaJagaIgdPage .igd:not(.fit) .desk{grid-template-columns:1fr}
   #mejaJagaIgdPage .igd:not(.fit) .booth{grid-template-columns:1fr}

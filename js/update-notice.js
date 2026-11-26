@@ -3,7 +3,7 @@
   'use strict';
   if (!('serviceWorker' in navigator)) return;
 
-  const APP_SW_VERSION = 'v251-pwa-mobile-ipad-fix';
+  const APP_SW_VERSION = 'v252-mobile-gameplay-landscape-fix';
   const BUSY_VIEWS = new Set(['quiz', 'duelPage', 'flashcards', 'clinicalQuestPage', 'mejaJagaIgdPage', 'studyTimerPage', 'userBankPage']);
   let seenController = !!navigator.serviceWorker.controller;
   let pending = false, dismissed = false, reloading = false, banner = null, poll = null, lastCheck = 0;

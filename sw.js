@@ -1,4 +1,4 @@
-const SW_VERSION = 'v251-pwa-mobile-ipad-fix';
+const SW_VERSION = 'v252-mobile-gameplay-landscape-fix';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
