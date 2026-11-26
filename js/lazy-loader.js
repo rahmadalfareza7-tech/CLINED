@@ -141,9 +141,46 @@
     };
   }
 
+  function syncMiniGamesHub() {
+    const st = document.getElementById('mgIgdStatus');
+    if (!st) return;
+    try {
+      const svRaw = localStorage.getItem('clined_igd_session_v1');
+      if (svRaw) {
+        const sv = JSON.parse(svRaw);
+        if (sv && !sv.clearedAt && Array.isArray(sv.queue) && sv.queue.length && sv.i < sv.queue.length) {
+          st.textContent = `● Shift aktif · Berkas ${sv.i + 1}/${sv.queue.length}`;
+          st.classList.add('active-shift');
+          return;
+        }
+      }
+      st.classList.remove('active-shift');
+      const pRaw = localStorage.getItem('clined_igd_v2');
+      if (pRaw) {
+        const p = JSON.parse(pRaw);
+        const cleared = [1, 2, 3, 4, 5].filter(n => p?.done?.[n]).length;
+        const bestVals = Object.values(p?.best || {}).filter(Boolean);
+        const top = bestVals.length ? Math.max(...bestVals) : 0;
+        if (cleared > 0 || top > 0) {
+          st.textContent = `${cleared}/5 Malam · Rekor ${top}`;
+          return;
+        }
+      }
+      st.textContent = 'Siap dimainkan';
+    } catch {
+      st.textContent = 'Siap dimainkan';
+    }
+  }
+
   document.addEventListener('click', e => {
-    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd]');
+    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd], [data-open-minigames]');
     if (!btn) return;
+    if (btn.id === 'miniGamesBtn' || btn.dataset.openMinigames != null) {
+      e.preventDefault();
+      syncMiniGamesHub();
+      try { window.show?.('miniGamesPage'); window.scrollTo(0, 0); } catch {}
+      return;
+    }
     if (btn.id === 'igdMenuBtn' || btn.id === 'igdStudyToolBtn' || btn.dataset.openIgd != null) {
       e.preventDefault();
       if (!loaded.has('igd')) window.showToast?.('Membuka Meja Jaga IGD…');
@@ -186,6 +223,7 @@
   function boot() {
     injectMedCalcPlaceholders();
     injectIgdPlaceholders();
+    syncMiniGamesHub();
     maybePreloadAdmin();
     requestAnimationFrame(() => { SECONDARY_STYLES.forEach(loadStyle); });
   }
@@ -193,6 +231,7 @@
   else boot();
   window.addEventListener('clined:auth-ready', maybePreloadAdmin);
   window.addEventListener('clined:view-change', e => {
+    if (e.detail === 'miniGamesPage') syncMiniGamesHub();
     if (e.detail === 'mejaJagaIgdPage' && !loaded.has('igd')) {
       window.CLINED_IGD.open(); // mis. dibuka ulang dari hash/riwayat: muat bundle lalu pasang game
     }

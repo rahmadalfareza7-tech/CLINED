@@ -424,12 +424,47 @@ html body #home .home-quick-tile b { font-size: 13.5px !important; text-align: c
 html body #home .home-quick-tile small { display: none !important; }
 html body #home #socialBtn .home-materials-icon { background: rgba(255,150,0,.18) !important; }
 
-/* v9: baris cepat 4 kolom — Materi, Buat Soal, Duel, Sosial */
+/* v9: baris cepat 4 kolom — Materi, Buat Soal, Duel, Mini Games */
 html body #home .home-quick-row { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 6px !important; }
-html body #home .home-quick-row > .home-quick-tile, html body #home #openMaterialsPage, html body #home #userBankBtn, html body #home #socialBtn, html body #home #hubBtn { min-height: 78px !important; padding: 8px 2px !important; position: relative; }
+html body #home .home-quick-row > .home-quick-tile, html body #home #openMaterialsPage, html body #home #userBankBtn, html body #home #socialBtn, html body #home #miniGamesBtn { min-height: 78px !important; padding: 8px 2px !important; position: relative; }
 html body #home .home-quick-tile b { font-size: 12.5px !important; white-space: nowrap; }
 html body #home .home-quick-tile .home-materials-icon { width: 36px !important; height: 36px !important; flex-basis: 36px !important; font-size: 19px !important; }
-html body #home #hubBtn .home-materials-icon { background: rgba(124,92,255,.18) !important; }
+html body #home #miniGamesBtn .home-materials-icon { background: rgba(16,185,129,.18) !important; }
+
+/* Mini Games Hub (#miniGamesPage) */
+#miniGamesPage { padding-bottom: 100px; }
+#miniGamesPage .mg-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 12px; }
+#miniGamesPage .mg-card { display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: 22px; text-align: left; width: 100%; border: 2px solid var(--border, #e2e8f0); transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+#miniGamesPage .mg-card-igd { cursor: pointer; background: var(--card, #fff); }
+#miniGamesPage .mg-card-igd:hover { transform: translateY(-3px); border-color: #10b981; box-shadow: 0 14px 30px rgba(15, 23, 42, .14); }
+#miniGamesPage .mg-card-igd:active { transform: translateY(1px); }
+#miniGamesPage .mg-banner { position: relative; padding: 14px 16px 16px; min-height: 118px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+#miniGamesPage .mg-banner-igd { background: radial-gradient(circle at 85% 20%, rgba(225,29,72,.38) 0%, transparent 55%), radial-gradient(circle at 18% 85%, rgba(16,185,129,.28) 0%, transparent 60%), linear-gradient(135deg, #070e1d 0%, #0f1f38 60%, #172a4a 100%); color: #f8fafc; }
+#miniGamesPage .mg-badge { align-self: flex-start; padding: 3px 10px; border-radius: 99px; background: rgba(16,185,129,.22); border: 1px solid rgba(52,211,153,.5); color: #6ee7b7; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+#miniGamesPage .mg-status { align-self: flex-start; margin-top: 6px; padding: 3px 10px; border-radius: 99px; background: rgba(2,6,16,.65); border: 1px solid rgba(148,163,184,.3); color: #cbd5e1; font-size: 11px; font-weight: 700; }
+#miniGamesPage .mg-status.active-shift { background: rgba(6,78,59,.85); border-color: #10b981; color: #a7f3d0; }
+#miniGamesPage .mg-art { position: absolute; right: 16px; bottom: 12px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; pointer-events: none; }
+#miniGamesPage .mg-art-ico { font-size: 42px; line-height: 1; filter: drop-shadow(0 6px 12px rgba(0,0,0,.5)); }
+#miniGamesPage .mg-art-stamp { padding: 2px 8px; border: 2px double rgba(248,113,113,.75); border-radius: 5px; font-size: 9px; font-weight: 900; letter-spacing: .12em; color: #fda4af; transform: rotate(-6deg); }
+#miniGamesPage .mg-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+#miniGamesPage .mg-title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+#miniGamesPage .mg-body h3 { margin: 0; font-size: 18px; font-weight: 800; color: var(--text, #0f172a); }
+#miniGamesPage .mg-tag-night { padding: 2px 9px; border-radius: 99px; background: rgba(225,29,72,.12); color: #e11d48; font-size: 11px; font-weight: 800; }
+:root.dark #miniGamesPage .mg-tag-night { background: rgba(244,63,94,.2); color: #fda4af; }
+#miniGamesPage .mg-body p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted, #475569); }
+#miniGamesPage .mg-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+#miniGamesPage .mg-chips span { padding: 3px 9px; border-radius: 99px; background: var(--soft, rgba(14,165,233,.1)); color: var(--text, #334155); font-size: 11px; font-weight: 700; border: 1px solid var(--border, rgba(148,163,184,.25)); }
+#miniGamesPage .mg-cta { margin-top: auto; padding-top: 6px; }
+#miniGamesPage .mg-play-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 11px 16px; border-radius: 14px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .03em; box-shadow: 0 4px 0 #047857; }
+#miniGamesPage .mg-card-soon { border-style: dashed; background: transparent; justify-content: center; min-height: 240px; }
+#miniGamesPage .mg-soon-inner { padding: 24px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+#miniGamesPage .mg-soon-ico { font-size: 38px; line-height: 1; opacity: .85; }
+#miniGamesPage .mg-soon-badge { padding: 3px 10px; border-radius: 99px; background: rgba(148,163,184,.16); color: var(--muted, #64748b); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+#miniGamesPage .mg-soon-inner h3 { margin: 2px 0 0; font-size: 16px; font-weight: 800; color: var(--text, #0f172a); }
+#miniGamesPage .mg-soon-inner p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted, #64748b); max-width: 280px; }
+@media (max-width: 680px) {
+  #miniGamesPage .mg-grid { grid-template-columns: 1fr; }
+}
 
 /* v11: Tombol Latihan Resep khusus di BLOK KEDKEL (#blokKedkelPage) + Layout #resepPage */
 .resep-kedkel-section {

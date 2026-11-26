@@ -757,8 +757,8 @@ html body .floating-dashboard-nav .floating-nav-badge[hidden] {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* Home quick tile Sosial icon: clinical teal instead of violet */
-html body #home #hubBtn .home-materials-icon {
+/* Home quick tile Mini Games icon: clinical emerald/teal accent */
+html body #home #miniGamesBtn .home-materials-icon {
   background: var(--med-soft) !important;
 }
 

@@ -483,11 +483,20 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const igdJs = readRel('js/meja-jaga-igd.js');
   const igdCss = readRel('css/meja-jaga-igd.css');
 
+  const socialJs = readRel('js/social.js');
+
+  assert.match(appHtml, /id="miniGamesBtn"/);
+  assert.match(appHtml, /id="miniGamesPage"/);
+  assert.match(appHtml, /id="mgCardIgd"[^>]*data-open-igd/);
+  assert.doesNotMatch(socialJs, /h\.id\s*=\s*'hubBtn'/, 'Beranda Sosial quick tile (#hubBtn) must be removed in favor of Mini Games');
+  assert.match(lazyJs, /btn\.id === 'miniGamesBtn'/);
+  assert.match(lazyJs, /'miniGamesPage'/);
+
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(appHtml, /js\/update-notice\.js\?v=16/);
-  assert.match(appHtml, /js\/lazy-loader\.js\?v=38/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=17/);
+  assert.match(appHtml, /js\/lazy-loader\.js\?v=39/);
   assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=12/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
@@ -532,5 +541,5 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
-  assert.equal(swVer, 'v249-meja-jaga-igd-lobby-fit');
+  assert.equal(swVer, 'v250-mini-games-home-hub');
 });

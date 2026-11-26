@@ -296,18 +296,13 @@
       b.className = 'card home-materials-card home-materials-link home-quick-tile'; b.id = 'socialBtn'; b.type = 'button';
       b.setAttribute('aria-label', 'Buka Duel');
       b.innerHTML = '<span class="home-materials-leading"><span class="home-materials-icon">⚔️</span><span><b>Duel</b></span></span><i class="soc-dot" id="socDot" hidden>0</i>';
-      row.appendChild(b);
-    }
-    if (row && !$('hubBtn')) {
-      const h = document.createElement('button');
-      h.className = 'card home-materials-card home-materials-link home-quick-tile'; h.id = 'hubBtn'; h.type = 'button';
-      h.setAttribute('aria-label', 'Buka Sosial');
-      h.innerHTML = '<span class="home-materials-leading"><span class="home-materials-icon">👥</span><span><b>Sosial</b></span></span><i class="soc-dot" id="hubDot" hidden>0</i>';
-      row.appendChild(h);
+      const mg = $('miniGamesBtn');
+      if (mg && mg.parentNode === row) row.insertBefore(b, mg);
+      else row.appendChild(b);
     }
   }
   const setDot = (id, n) => { const d = $(id); if (d) { d.textContent = n > 9 ? '9+' : n; d.hidden = !n; } };
-  const dot = () => { setDot('socDot', S.invites.length + (S.openRooms?.length || 0)); setDot('hubDot', (S.F?.incoming?.length || 0) + (window.CLINED_CHAT?.unread || 0)); };
+  const dot = () => { setDot('socDot', S.invites.length + (S.openRooms?.length || 0)); };
   window.addEventListener('clined:chat-unread', dot);
 
   /* ───────── data ───────── */

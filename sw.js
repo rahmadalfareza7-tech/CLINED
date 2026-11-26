@@ -1,4 +1,4 @@
-const SW_VERSION = 'v249-meja-jaga-igd-lobby-fit';
+const SW_VERSION = 'v250-mini-games-home-hub';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
