@@ -304,10 +304,11 @@ test('Full CLINED app & server wiring for Blok Lysis + synced leaderboard', () =
 
   // Leaderboard tab + lazy loader + busy views + usage + SW precache
   assert.match(newFeatJs, /\/api\/leaderboard\?game=blok_lysis/);
+  assert.match(newFeatJs, /\/api\/minigames\/blok-lysis\/score/);
   assert.match(newFeatJs, /tab === 'blok_lysis'/);
   assert.match(lazyJs, /blokLysis:\s*\{/);
-  assert.match(lazyJs, /css\/blok-lysis\.css\?v=2/);
-  assert.match(lazyJs, /js\/blok-lysis\.js\?v=2/);
+  assert.match(lazyJs, /css\/blok-lysis\.css\?v=3/);
+  assert.match(lazyJs, /js\/blok-lysis\.js\?v=3/);
   assert.match(lazyJs, /window\.CLINED_BLOK_LYSIS/);
   assert.match(lazyJs, /data-open-blok-lysis/);
   assert.match(lazyJs, /clined:sync-applied/);
@@ -416,4 +417,94 @@ test('WebAudio SFX synthesizer plays tones when unmuted, respects mute toggle & 
   assert.equal(SFX.toggleMute(), false);
   assert.equal(store.clined_blok_lysis_sfx_v1, '1');
   assert.ok(oscStarts > countWhenMuted, 'Unmuting should play confirmation tap');
+});
+
+test('reconcileLeaderboardRows upgrades stale server score, re-sorts to #1, recomputes ranks cleanly, and detects hidden Admin toggle', () => {
+  const { BL } = loadBlokLysisModule();
+  assert.equal(typeof BL.reconcileLeaderboardRows, 'function');
+
+  const serverRows = [
+    { rank: 1, id: 'u-rii', name: 'Rii', username: 'maurzm', bestScore: 1191, bestCombo: 4, totalLines: 30 },
+    { rank: 2, id: 'u-her', name: 'dr. Herssen', username: 'thelazyraccoon', bestScore: 1171, bestCombo: 3, totalLines: 22 },
+    { rank: 3, id: 'u-reza', name: 'Reza', username: 'reza', bestScore: 389, bestCombo: 5, totalLines: 16 }
+  ];
+
+  // Case 1: Existing student row on server is stale (389) while local best is 3794 -> MUST jump to #1 and recompute ALL ranks
+  const studentRes = BL.reconcileLeaderboardRows(
+    serverRows,
+    { id: 'u-reza', name: 'Reza', username: 'reza', role: 'student', showInLeaderboard: true },
+    { best: 3794, bestCombo: 7, lines: 54 },
+    { serverMyRank: 3, serverMyBest: 389 }
+  );
+  assert.equal(studentRes.myRank, 1, 'Student with 3794 must immediately rank #1 over 1191');
+  assert.equal(studentRes.myBest, 3794);
+  assert.equal(studentRes.needsResync, true);
+  assert.equal(studentRes.isHiddenAdmin, false);
+  assert.deepEqual(
+    studentRes.rows.map(r => [r.rank, r.id, r.bestScore]),
+    [
+      [1, 'u-reza', 3794],
+      [2, 'u-rii', 1191],
+      [3, 'u-her', 1171]
+    ],
+    'Ranks must be strictly sequential 1, 2, 3 with zero duplicate #1'
+  );
+
+  // Case 2: New/missing helper account not yet on server -> inserted at #1, previous #1 shifted to #2
+  const helperRes = BL.reconcileLeaderboardRows(
+    serverRows,
+    { id: 'u-helper', name: 'Dr. Helper', username: 'helper1', role: 'helper', showInLeaderboard: true },
+    { best: 2500, bestCombo: 4, lines: 40 },
+    { serverMyRank: null, serverMyBest: 0 }
+  );
+  assert.equal(helperRes.myRank, 1);
+  assert.equal(helperRes.needsResync, true);
+  assert.deepEqual(helperRes.rows.map(r => r.rank), [1, 2, 3, 4]);
+  assert.equal(helperRes.rows[0].id, 'u-helper');
+  assert.equal(helperRes.rows[1].rank, 2);
+
+  // Case 3: Admin with showInLeaderboard=false -> flagged as hidden admin so UI shows 1-tap toggle banner
+  const hiddenAdminRes = BL.reconcileLeaderboardRows(
+    serverRows,
+    { id: 'u-admin', name: 'Admin', username: 'admin', role: 'admin', showInLeaderboard: false },
+    { best: 3794, bestCombo: 6, lines: 50 },
+    { serverMyRank: null, serverMyBest: 3794, hiddenByAdminToggle: true, showInLeaderboard: false }
+  );
+  assert.equal(hiddenAdminRes.isHiddenAdmin, true);
+  assert.equal(hiddenAdminRes.myRank, null);
+  assert.equal(hiddenAdminRes.myBest, 3794);
+  assert.equal(hiddenAdminRes.rows.some(r => r.id === 'u-admin'), false);
+
+  // Case 4: Admin with showInLeaderboard=true -> ranked #1 normally
+  const visibleAdminRes = BL.reconcileLeaderboardRows(
+    serverRows,
+    { id: 'u-admin', name: 'Admin', username: 'admin', role: 'admin', showInLeaderboard: true },
+    { best: 3794, bestCombo: 6, lines: 50 },
+    { serverMyRank: null, serverMyBest: 0, hiddenByAdminToggle: false, showInLeaderboard: true }
+  );
+  assert.equal(visibleAdminRes.isHiddenAdmin, false);
+  assert.equal(visibleAdminRes.myRank, 1);
+  assert.equal(visibleAdminRes.rows[0].id, 'u-admin');
+});
+
+test('Blok Lysis leaderboard sync safeguards: throttled mid-game push, post-COMMIT mirror, and unified server CTE', () => {
+  const blJs = readRel('js/blok-lysis.js');
+  const libBl = readRel('lib/blok-lysis.mjs');
+  const libSync = readRel('lib/sync.mjs');
+
+  // Client throttles mid-game push (no 60/min spam storm on place()) and supports 1-tap Admin show button
+  assert.match(blJs, /if \(best > prevBest && best >= 100\) schedulePushBest\(\);/);
+  assert.match(blJs, /id="bl-adminShowBtn"/);
+  assert.match(blJs, /\/api\/auth\/leaderboard-visibility/);
+
+  // Server unifies blok_lysis_scores + learning_states + learning_state_entries + active session
+  assert.match(libBl, /LEFT JOIN learning_state_entries e_bl/);
+  assert.match(libBl, /LEFT JOIN learning_state_entries e_sess/);
+  assert.match(libBl, /hiddenByAdminToggle/);
+  assert.match(libBl, /limit\(req, res, 120\)/);
+
+  // lib/sync.mjs mirrors Blok Lysis scores AFTER COMMIT (never inside transaction)
+  const commitIdx = libSync.indexOf("await client.query('COMMIT');");
+  const mirrorIdx = libSync.indexOf('upsertBlokLysisFromState(getPool(), u.id, blValueToMirror)');
+  assert.ok(commitIdx > 0 && mirrorIdx > commitIdx, 'upsertBlokLysisFromState must run AFTER COMMIT in POST /api/sync');
 });

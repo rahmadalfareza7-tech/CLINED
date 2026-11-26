@@ -56,10 +56,11 @@
 }
 .leaderboard-tabs::-webkit-scrollbar { display: none; }
 .lb-tab {
+  flex: 1 0 auto !important;
   font-size: 13px !important;
   font-weight: 900 !important;
   min-height: 48px !important;
-  padding: 12px 10px !important;
+  padding: 12px 12px !important;
   white-space: nowrap !important;
   border-bottom: 3px solid transparent !important;
 }

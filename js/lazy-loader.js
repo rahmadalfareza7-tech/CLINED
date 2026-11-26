@@ -65,8 +65,8 @@
     },
     blokLysis: {
       appendEnd: true,
-      styles: ['css/blok-lysis.css?v=2'],
-      scripts: ['js/blok-lysis.js?v=2']
+      styles: ['css/blok-lysis.css?v=3'],
+      scripts: ['js/blok-lysis.js?v=3']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],

@@ -97,28 +97,129 @@ window.CLINED_Leaderboard = (function () {
     } catch { if (lbTab === 'gladiator') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat Rank Gladiator. Masuk akun dulu.</div>'; }
   }
 
-  async function renderBlokLysis(listEl) {
-    listEl.innerHTML = '<div class="leaderboard-loading">Memuat Peringkat Blok Lysis…</div>';
+  function readLocalBlokLysisPayload() {
     try {
-      await window.CLINED_ONLINE_SYNC?.sync?.({ force: true })?.catch?.(() => {});
-      const r = await fetch('/api/leaderboard?game=blok_lysis', { credentials: 'same-origin', cache: 'no-store' });
-      if (r.status === 401) {
-        if (lbTab === 'blok_lysis') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Blok Lysis.</div>';
-        return;
+      const rawStats = localStorage.getItem('clined_blok_lysis_v1');
+      const rawSess = localStorage.getItem('clined_blok_lysis_session_v1');
+      const st = rawStats ? JSON.parse(rawStats) : {};
+      const se = rawSess ? JSON.parse(rawSess) : {};
+      const sessScore = se && !se.over && !se.clearedAt ? Math.max(0, Math.floor(Number(se.score) || 0)) : 0;
+      const sessCombo = se && !se.over && !se.clearedAt ? Math.max(0, Math.floor(Number(se.combo) || 0)) : 0;
+      const best = Math.max(0, Math.floor(Number(st?.best) || 0), sessScore);
+      const games = Math.max(0, Math.floor(Number(st?.games) || 0));
+      const lines = Math.max(0, Math.floor(Number(st?.lines) || 0));
+      const bestCombo = Math.max(0, Math.floor(Number(st?.bestCombo) || 0), sessCombo);
+      const hasLast = st?.last !== undefined && st?.last !== null && Number.isFinite(Number(st.last));
+      const last = hasLast ? Math.max(0, Math.floor(Number(st.last))) : null;
+      const lastAt = hasLast ? Math.max(0, Math.floor(Number(st?.lastAt) || 0)) : 0;
+      const updatedAt = Math.max(Number(st?.updatedAt) || 0, Number(se?.updated) || 0, Date.now());
+      return { best, games, lines, bestCombo, last, lastAt, updatedAt };
+    } catch {
+      return { best: 0, games: 0, lines: 0, bestCombo: 0, last: null, lastAt: 0, updatedAt: Date.now() };
+    }
+  }
+
+  async function renderBlokLysis(listEl) {
+    listEl.innerHTML = '<div class="leaderboard-loading">Menyinkronkan &amp; memuat Peringkat Blok Lysis…</div>';
+    try {
+      const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      const localStats = readLocalBlokLysisPayload();
+      let d = null;
+
+      // Push local high score sequentially first so DB & leaderboard are guaranteed fresh without lock race
+      if (me && me.id && navigator.onLine && (localStats.best > 0 || localStats.games > 0)) {
+        try {
+          const pr = await fetch('/api/minigames/blok-lysis/score', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ...localStats,
+              clientId: window.CLINED_ONLINE_SYNC?.clientId || ''
+            })
+          });
+          if (pr.status === 401) {
+            if (lbTab === 'blok_lysis') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Blok Lysis.</div>';
+            return;
+          }
+          if (pr.ok) {
+            const pd = await pr.json().catch(() => null);
+            if (pd && Array.isArray(pd.rankings)) d = pd;
+          }
+        } catch {}
       }
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const d = await r.json();
+
+      if (!d) {
+        await window.CLINED_ONLINE_SYNC?.sync?.({ force: true })?.catch?.(() => {});
+        const r = await fetch('/api/leaderboard?game=blok_lysis', { credentials: 'same-origin', cache: 'no-store' });
+        if (r.status === 401) {
+          if (lbTab === 'blok_lysis') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Blok Lysis.</div>';
+          return;
+        }
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        d = await r.json();
+      }
+
       if (lbTab !== 'blok_lysis') return;
-      const rows = Array.isArray(d.rankings) ? d.rankings : [];
-      const meId = d.me;
+      const meId = d.me || me?.id || '';
+      const isAdminLike = Boolean(me && (me.role === 'admin' || me.role === 'developer'));
+      const isHiddenAdmin = Boolean(d.hiddenByAdminToggle || (isAdminLike && d.showInLeaderboard === false) || (isAdminLike && d.showInLeaderboard === undefined && !me.showInLeaderboard));
+      let rows = (Array.isArray(d.rankings) ? d.rankings : []).map(row => ({
+        ...row,
+        bestScore: Number(row.bestScore) || 0,
+        bestCombo: Number(row.bestCombo) || 0,
+        totalLines: Number(row.totalLines) || 0
+      }));
+      if (me && meId && !isHiddenAdmin && localStats.best > 0) {
+        const uidStr = String(meId);
+        const idx = rows.findIndex(row => String(row.id) === uidStr);
+        if (idx >= 0) {
+          if (localStats.best > rows[idx].bestScore || localStats.bestCombo > rows[idx].bestCombo || localStats.lines > rows[idx].totalLines) {
+            rows[idx] = {
+              ...rows[idx],
+              bestScore: Math.max(rows[idx].bestScore, localStats.best),
+              bestCombo: Math.max(rows[idx].bestCombo, localStats.bestCombo),
+              totalLines: Math.max(rows[idx].totalLines, localStats.lines)
+            };
+          }
+        } else if (rows.length < 50 || localStats.best >= (rows[rows.length - 1]?.bestScore || 0)) {
+          rows.push({
+            id: meId,
+            name: me.name || me.username || 'Kamu',
+            username: me.username || '',
+            avatarUrl: me.avatarUrl || '',
+            avatarDeco: me.avatarDeco || '',
+            bannerUrl: me.bannerUrl || '',
+            nameColor: me.nameColor || '',
+            xp100k: Boolean(me.xp100k),
+            championBlocks: me.championBlocks || [],
+            bestScore: localStats.best,
+            bestCombo: localStats.bestCombo,
+            totalLines: localStats.lines
+          });
+        }
+        rows.sort((a, b) =>
+          (b.bestScore - a.bestScore) ||
+          (b.bestCombo - a.bestCombo) ||
+          (b.totalLines - a.totalLines) ||
+          String(a.name || '').localeCompare(String(b.name || ''), 'id')
+        );
+        if (rows.length > 50) rows.length = 50;
+      }
+
       const lbAv = row => {
         const ini = String(row.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
         return `<span class="lb-av${row.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${row.avatarUrl ? `<img class="lb-av-img" src="${escHtml(row.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}${row.avatarDeco ? `<img class="avatar-deco-img" src="${escHtml(row.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
       };
-      listEl.innerHTML = rows.map((row, i) => {
-        const rank = row.rank || (i + 1);
+      const hiddenHint = isHiddenAdmin
+        ? `<div class="leaderboard-loading" style="margin-bottom:8px;padding:10px 12px;border-radius:12px;background:rgba(255,210,63,.12);border:1px solid rgba(255,210,63,.35)">👑 Mode Admin tersembunyi aktif — aktifkan sakelar <b>Tampil di Leaderboard</b> di atas agar skor ♛ ${Math.max(localStats.best, Number(d.myBest) || 0).toLocaleString('id')} ikut masuk peringkat.</div>`
+        : '';
+      const uidStr = String(meId || '');
+      const listHtml = rows.map((row, i) => {
+        const rank = i + 1;
         const best = Number(row.bestScore) || 0;
-        const isMe = row.id === meId;
+        const isMe = uidStr && String(row.id) === uidStr;
         const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
         const bg = row.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${escHtml(row.bannerUrl)}')" aria-hidden="true"></span>` : '';
         const nc = row.nameColor ? ` data-name-color="${escHtml(row.nameColor)}"` : '';
@@ -137,7 +238,8 @@ window.CLINED_Leaderboard = (function () {
           </div>
           <span class="lb-xp">♛ ${best.toLocaleString('id')}</span>
         </div>`;
-      }).join('') || '<div class="leaderboard-loading">Belum ada skor Blok Lysis. Mainkan di Mini Games dan jadilah #1!</div>';
+      }).join('');
+      listEl.innerHTML = hiddenHint + (listHtml || '<div class="leaderboard-loading">Belum ada skor Blok Lysis. Mainkan di Mini Games dan jadilah #1!</div>');
     } catch {
       if (lbTab === 'blok_lysis') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat Blok Lysis. Masuk akun dulu.</div>';
     }
@@ -235,7 +337,7 @@ window.CLINED_Leaderboard = (function () {
     const sub = document.getElementById('adminLeaderboardToggleSub');
     if (!box || !btn) return;
     const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
-    const isAdminUser = Boolean(me && me.role === 'admin');
+    const isAdminUser = Boolean(me && (me.role === 'admin' || me.role === 'developer'));
     box.hidden = !isAdminUser;
     if (!isAdminUser) return;
     const on = Boolean(me.showInLeaderboard);
@@ -252,7 +354,7 @@ window.CLINED_Leaderboard = (function () {
   document.getElementById('adminLeaderboardSwitch')?.addEventListener('click', async () => {
     const btn = document.getElementById('adminLeaderboardSwitch');
     const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
-    if (!btn || !me || me.role !== 'admin' || btn.disabled) return;
+    if (!btn || !me || (me.role !== 'admin' && me.role !== 'developer') || btn.disabled) return;
     const nextEnabled = !me.showInLeaderboard;
     btn.disabled = true;
     try {

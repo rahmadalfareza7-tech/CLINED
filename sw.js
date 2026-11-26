@@ -1,4 +1,4 @@
-const SW_VERSION = 'v258-rujuk-langka-42-topics-no-spoiler';
+const SW_VERSION = 'v259-blok-lysis-leaderboard-sync-fix';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

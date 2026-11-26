@@ -109,6 +109,9 @@ html.bl-open #blokLysisHost{width:100%!important;height:100%!important}
 #blokLysisPage .bl .bl-lb-ref{height:34px;padding:0 12px;border-radius:999px;border:1.5px solid rgba(167,214,218,.35);background:rgba(255,255,255,.1);color:#e2f8f9;font:900 12px var(--f)}
 #blokLysisPage .bl .bl-lb-ref:hover{background:rgba(255,255,255,.2)}
 #blokLysisPage .bl .bl-myrank{margin-top:10px;padding:8px 12px;border-radius:14px;background:rgba(255,210,63,.14);border:1.5px solid rgba(255,210,63,.4);display:flex;justify-content:space-between;align-items:center;font-size:13.5px;font-weight:900;color:#ffe47a}
+#blokLysisPage .bl .bl-admin-vis{margin-top:8px;padding:8px 10px;border-radius:14px;background:rgba(61,220,132,.14);border:1.5px solid rgba(61,220,132,.42);display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;font-size:12px;font-weight:800;color:#d6fced;line-height:1.35}
+#blokLysisPage .bl .bl-admin-vis-btn{flex:none;height:32px;padding:0 12px;border-radius:999px;border:0;background:#3ddc84;color:#0b3a22;font:900 12px var(--f);box-shadow:inset 0 -3px 0 #23a95e;white-space:nowrap}
+#blokLysisPage .bl .bl-admin-vis-btn:disabled{opacity:.65;cursor:default}
 #blokLysisPage .bl .bl-lbl{list-style:none;margin:12px 0 0;padding:0;overflow:auto;-webkit-overflow-scrolling:touch;text-align:left;flex:1;min-height:120px}
 #blokLysisPage .bl .bl-lbl:empty{display:none}
 #blokLysisPage .bl .bl-lbl li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;margin-bottom:6px;background:rgba(255,255,255,.08)}
@@ -126,6 +129,11 @@ html.bl-open #blokLysisHost{width:100%!important;height:100%!important}
 #blokLysisPage .bl .bl-lbl .sc{font-weight:900;font-size:17px;font-variant-numeric:tabular-nums;color:var(--gold);text-align:right;flex:none}
 #blokLysisPage .bl .bl-lbmsg{color:var(--mute);font-weight:800;font-size:14.5px;margin:16px 0 0;line-height:1.45}
 
+@media (max-width:480px){
+  #blokLysisPage .bl .bl-tb{gap:6px}
+  #blokLysisPage .bl .bl-tb .bl-ib{width:36px;height:36px;border-radius:11px;font-size:16px}
+  #blokLysisPage .bl .bl-tb .bl-ib svg{width:17px;height:17px}
+}
 @media (max-width:360px){
   #blokLysisPage .bl .bl-stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:12px}
   #blokLysisPage .bl .bl-st:nth-child(3){border-left:0}

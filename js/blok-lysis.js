@@ -399,6 +399,71 @@
     };
   }
 
+  function reconcileLeaderboardRows(serverRows, user, localStats, opts = {}) {
+    const u = user && user.id ? user : null;
+    const uidStr = u ? String(u.id) : '';
+    const isAdminLike = Boolean(u && (u.role === 'admin' || u.role === 'developer'));
+    const hiddenAdmin = Boolean(
+      opts.hiddenByAdminToggle ||
+      (isAdminLike && opts.showInLeaderboard === false) ||
+      (isAdminLike && opts.showInLeaderboard === undefined && !u.showInLeaderboard)
+    );
+    const localBest = Math.max(0, Math.floor(Number(localStats?.best) || 0));
+    const localCombo = Math.max(0, Math.floor(Number(localStats?.bestCombo) || 0));
+    const localLines = Math.max(0, Math.floor(Number(localStats?.lines) || 0));
+
+    const rows = (Array.isArray(serverRows) ? serverRows : []).map(r => ({
+      ...r,
+      bestScore: Math.max(0, Math.floor(Number(r.bestScore) || 0)),
+      bestCombo: Math.max(0, Math.floor(Number(r.bestCombo) || 0)),
+      totalLines: Math.max(0, Math.floor(Number(r.totalLines) || 0))
+    }));
+
+    let needsResync = false;
+    if (u && !hiddenAdmin && localBest > 0) {
+      const idx = rows.findIndex(r => String(r.id) === uidStr);
+      if (idx >= 0) {
+        const cur = rows[idx];
+        if (localBest > cur.bestScore || localCombo > cur.bestCombo || localLines > cur.totalLines) {
+          needsResync = localBest > cur.bestScore;
+          rows[idx] = {
+            ...cur,
+            bestScore: Math.max(cur.bestScore, localBest),
+            bestCombo: Math.max(cur.bestCombo, localCombo),
+            totalLines: Math.max(cur.totalLines, localLines)
+          };
+        }
+      } else if (rows.length < 50 || localBest >= (rows[rows.length - 1]?.bestScore || 0)) {
+        needsResync = true;
+        rows.push({
+          id: u.id,
+          name: u.name || u.username || 'Kamu',
+          username: u.username || '',
+          avatarUrl: u.avatarUrl || null,
+          bestScore: localBest,
+          bestCombo: localCombo,
+          totalLines: localLines,
+          local: true
+        });
+      }
+      rows.sort((a, b) =>
+        (b.bestScore - a.bestScore) ||
+        (b.bestCombo - a.bestCombo) ||
+        (b.totalLines - a.totalLines) ||
+        String(a.name || '').localeCompare(String(b.name || ''), 'id')
+      );
+      if (rows.length > 50) rows.length = 50;
+    }
+
+    const ranked = rows.map((r, i) => ({ ...r, rank: i + 1 }));
+    const myIdx = uidStr ? ranked.findIndex(r => String(r.id) === uidStr) : -1;
+    const serverMyRank = Number.isFinite(Number(opts.serverMyRank)) && Number(opts.serverMyRank) > 0 ? Number(opts.serverMyRank) : null;
+    const myRank = hiddenAdmin ? null : (myIdx >= 0 ? myIdx + 1 : serverMyRank);
+    const myBest = Math.max(localBest, Number(opts.serverMyBest) || 0, myIdx >= 0 ? ranked[myIdx].bestScore : 0);
+
+    return { rows: ranked, myRank, myBest, myIdx, isHiddenAdmin: hiddenAdmin, needsResync };
+  }
+
   const Storage = {
     STATS_KEY,
     SESSION_KEY,
@@ -522,6 +587,10 @@
     </div>
     <p style="margin-top:4px;text-align:left">Skor tertinggi Blok Lysis seluruh akun CLINED</p>
     <div class="bl-myrank" id="bl-myRankBar" hidden></div>
+    <div class="bl-admin-vis" id="bl-adminVisBar" hidden>
+      <span>Akun Admin sedang disembunyikan dari Leaderboard.</span>
+      <button type="button" class="bl-admin-vis-btn" id="bl-adminShowBtn">Tampilkan Saya</button>
+    </div>
     <ol class="bl-lbl" id="bl-lbList"></ol>
     <p class="bl-lbmsg" id="bl-lbMsg" hidden></p>
     <button type="button" class="bl-btn" data-bl-close>Tutup</button>
@@ -663,15 +732,83 @@
     }
 
     /* ---------- Server Leaderboard & Per-Account Sync ---------- */
-    const LB = { rows: [], myRank: null, myBest: 0, ready: false, loading: false, err: '', lastPushedSig: '', writing: Promise.resolve(), fetchedAt: 0 };
+    const MIN_LIVE_PUSH_MS = 5000;
+    let pushTimer = 0;
+    let lastPushAt = 0;
+    let lastResyncAt = 0;
+    const LB = {
+      rows: [],
+      myRank: null,
+      myBest: 0,
+      showInLeaderboard: undefined,
+      hiddenByAdminToggle: false,
+      ready: false,
+      loading: false,
+      err: '',
+      lastPushedSig: '',
+      writing: Promise.resolve({ ok: false, skipped: true }),
+      fetchedAt: 0
+    };
 
-    function pushBest(force = false) {
-      const u = currentUser();
-      if (!u || !u.id || !navigator.onLine) return LB.writing;
+    function syncLocalHighScores() {
+      const nextBest = Math.max(stats.best || 0, best, score);
+      const nextCombo = Math.max(stats.bestCombo || 0, combo);
+      if (nextBest !== best || nextBest !== stats.best || nextCombo !== stats.bestCombo) {
+        best = nextBest;
+        stats.best = nextBest;
+        stats.bestCombo = nextCombo;
+      }
       saveStatsNow();
+    }
+
+    function applyServerLeaderboardData(d, uid) {
+      if (!d || currentUid() !== String(uid || '')) return false;
+      if (d.stats) {
+        const merged = Storage.writeStats(d.stats);
+        stats = merged;
+        best = Math.max(best, merged.best);
+      }
+      if (!Array.isArray(d.rankings)) return false;
+      LB.rows = d.rankings;
+      LB.myRank = d.myRank ?? null;
+      LB.myBest = Math.max(Number(d.myBest) || 0, best);
+      if (d.showInLeaderboard !== undefined) LB.showInLeaderboard = Boolean(d.showInLeaderboard);
+      LB.hiddenByAdminToggle = Boolean(d.hiddenByAdminToggle);
+      if (LB.myBest > best) {
+        best = LB.myBest;
+        stats.best = best;
+        saveStatsNow();
+      }
+      LB.ready = true;
+      LB.err = '';
+      LB.fetchedAt = Date.now();
+      if (!q('bl-lobby').hidden) refreshLobbyNumbers();
+      if (!q('bl-lbOv').hidden) renderLB();
+      return true;
+    }
+
+    function schedulePushBest() {
+      const u = currentUser();
+      if (!u || !u.id || !navigator.onLine) return;
+      if (pushTimer) return;
+      const wait = Math.max(600, MIN_LIVE_PUSH_MS - (Date.now() - lastPushAt));
+      pushTimer = setTimeout(() => {
+        pushTimer = 0;
+        pushBest(false);
+      }, wait);
+    }
+
+    function pushBest(force = false, opts = {}) {
+      if (force && pushTimer) {
+        clearTimeout(pushTimer);
+        pushTimer = 0;
+      }
+      const u = currentUser();
+      if (!u || !u.id || !navigator.onLine) return Promise.resolve({ ok: false, skipped: true });
+      syncLocalHighScores();
       const sig = `${u.id}|${stats.best}|${stats.games}|${stats.lines}|${stats.bestCombo}|${stats.last ?? ''}`;
-      if (!force && (stats.best <= 0 && stats.games <= 0)) return LB.writing;
-      if (!force && sig === LB.lastPushedSig) return LB.writing;
+      if (!force && (stats.best <= 0 && stats.games <= 0)) return Promise.resolve({ ok: false, skipped: true });
+      if (!force && sig === LB.lastPushedSig) return Promise.resolve({ ok: false, skipped: true });
       const payload = {
         best: stats.best,
         games: stats.games,
@@ -683,37 +820,29 @@
         clientId: window.CLINED_ONLINE_SYNC?.clientId || ''
       };
       LB.lastPushedSig = sig;
-      LB.writing = LB.writing.then(async () => {
-        const r = await fetch('/api/minigames/blok-lysis/score', {
-          method: 'POST',
-          credentials: 'same-origin',
-          cache: 'no-store',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (!r.ok) {
+      lastPushAt = Date.now();
+      LB.writing = LB.writing.catch(() => ({ ok: false })).then(async () => {
+        try {
+          const r = await fetch('/api/minigames/blok-lysis/score', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            keepalive: Boolean(opts.keepalive),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!r.ok) {
+            LB.lastPushedSig = '';
+            return { ok: false, status: r.status };
+          }
+          const d = await r.json().catch(() => null);
+          if (!d || currentUid() !== String(u.id)) return { ok: false, status: r.status };
+          applyServerLeaderboardData(d, u.id);
+          return { ok: true, status: r.status, data: d };
+        } catch {
           LB.lastPushedSig = '';
-          return;
+          return { ok: false, status: 0 };
         }
-        const d = await r.json().catch(() => null);
-        if (!d || currentUid() !== u.id) return;
-        if (d.stats) {
-          const merged = Storage.writeStats(d.stats);
-          stats = merged;
-          best = merged.best;
-        }
-        if (Array.isArray(d.rankings)) {
-          LB.rows = d.rankings;
-          LB.myRank = d.myRank ?? null;
-          LB.myBest = Math.max(Number(d.myBest) || 0, best);
-          LB.ready = true;
-          LB.err = '';
-          LB.fetchedAt = Date.now();
-          if (!q('bl-lbOv').hidden) renderLB();
-        }
-        if (!q('bl-lobby').hidden) refreshLobbyNumbers();
-      }).catch(() => {
-        LB.lastPushedSig = '';
       });
       return LB.writing;
     }
@@ -727,15 +856,22 @@
         renderLB();
         return;
       }
+      if (pushTimer) { clearTimeout(pushTimer); pushTimer = 0; }
+      syncLocalHighScores();
       LB.loading = true;
       LB.err = '';
       renderLB();
       try {
-        if (syncFirst) {
-          await Promise.allSettled([
-            pushBest(stats.best > 0 || stats.games > 0),
-            window.CLINED_ONLINE_SYNC?.sync?.({ force: true })
-          ]);
+        // Sequential push -> use returned rankings directly to avoid parallel FOR UPDATE race with /api/sync
+        if (syncFirst && (stats.best > 0 || stats.games > 0)) {
+          const pushRes = await pushBest(true);
+          if (pushRes?.ok && Array.isArray(pushRes.data?.rankings)) {
+            try { window.CLINED_ONLINE_SYNC?.sync?.(); } catch {}
+            return;
+          }
+          await window.CLINED_ONLINE_SYNC?.sync?.({ force: true })?.catch?.(() => {});
+        } else if (syncFirst) {
+          await window.CLINED_ONLINE_SYNC?.sync?.({ force: true })?.catch?.(() => {});
         }
         const r = await fetch('/api/minigames/blok-lysis/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
         if (r.status === 401) {
@@ -745,19 +881,8 @@
           throw new Error(`HTTP ${r.status}`);
         } else {
           const d = await r.json();
-          if (currentUid() !== u.id) return;
-          LB.rows = Array.isArray(d.rankings) ? d.rankings : [];
-          LB.myRank = d.myRank ?? null;
-          LB.myBest = Math.max(Number(d.myBest) || 0, best);
-          if (LB.myBest > best) {
-            best = LB.myBest;
-            stats.best = best;
-            saveStatsNow();
-            if (!q('bl-lobby').hidden) refreshLobbyNumbers();
-          }
-          LB.ready = true;
-          LB.err = '';
-          LB.fetchedAt = Date.now();
+          if (currentUid() !== String(u.id)) return;
+          applyServerLeaderboardData(d, u.id);
         }
       } catch {
         LB.err = LB.rows.length ? '' : 'Leaderboard belum bisa dimuat. Periksa koneksi lalu segarkan.';
@@ -768,9 +893,10 @@
     }
 
     function renderLB() {
-      const list = q('bl-lbList'), msg = q('bl-lbMsg'), myBar = q('bl-myRankBar');
+      const list = q('bl-lbList'), msg = q('bl-lbMsg'), myBar = q('bl-myRankBar'), adminBar = q('bl-adminVisBar');
       const u = currentUser();
       const say = t => { msg.hidden = !t; msg.textContent = t || ''; };
+      if (adminBar) adminBar.hidden = true;
       if (!u || !u.id) {
         list.innerHTML = ''; myBar.hidden = true;
         say(`Masuk akun CLINED untuk sinkronisasi & leaderboard. Skor terbaikmu: ${fmt(best)}.`);
@@ -786,41 +912,58 @@
         say(LB.err);
         return;
       }
-      const rows = LB.rows.slice();
-      if (best > 0 && !rows.some(r => r.id === u.id)) {
-        const isHiddenAdmin = u.role === 'admin' && !u.showInLeaderboard;
-        if (!isHiddenAdmin) {
-          rows.push({
-            id: u.id,
-            name: u.name || u.username || 'Kamu',
-            username: u.username || '',
-            avatarUrl: u.avatarUrl || null,
-            bestScore: best,
-            bestCombo: stats.bestCombo || 0,
-            totalLines: stats.lines || 0,
-            local: true
-          });
-          rows.sort((a, b) => (b.bestScore - a.bestScore) || (b.bestCombo - a.bestCombo));
+
+      const localBest = Math.max(best, score, stats.best || 0);
+      const rec = reconcileLeaderboardRows(
+        LB.rows,
+        u,
+        { best: localBest, bestCombo: Math.max(stats.bestCombo || 0, combo), lines: stats.lines || 0 },
+        {
+          serverMyRank: LB.myRank,
+          serverMyBest: LB.myBest,
+          showInLeaderboard: LB.showInLeaderboard,
+          hiddenByAdminToggle: LB.hiddenByAdminToggle
         }
+      );
+
+      if (rec.needsResync && !LB.loading && navigator.onLine && (Date.now() - lastResyncAt > 5000)) {
+        lastResyncAt = Date.now();
+        pushBest(true);
       }
+
+      if (adminBar && rec.isHiddenAdmin) {
+        adminBar.hidden = false;
+      }
+
+      const rows = rec.rows;
       if (!rows.length) {
-        list.innerHTML = ''; myBar.hidden = true;
+        list.innerHTML = '';
+        if (rec.isHiddenAdmin || rec.myBest > 0) {
+          myBar.hidden = false;
+          myBar.innerHTML = rec.isHiddenAdmin
+            ? `<span>Mode Admin tersembunyi</span><span>♛ ${fmt(rec.myBest)}</span>`
+            : `<span>Peringkatmu: –</span><span>♛ ${fmt(rec.myBest)}</span>`;
+        } else {
+          myBar.hidden = true;
+        }
         say('Belum ada skor tercatat. Mainkan sekarang untuk menjadi peringkat #1!');
         return;
       }
       say('');
-      const myIdx = rows.findIndex(r => r.id === u.id);
-      const shownRank = LB.myRank || (myIdx >= 0 ? myIdx + 1 : null);
-      if (shownRank || best > 0) {
+
+      if (rec.myRank || rec.myBest > 0 || rec.isHiddenAdmin) {
         myBar.hidden = false;
-        myBar.innerHTML = `<span>Peringkatmu: ${shownRank ? '#' + shownRank : '–'}</span><span>♛ ${fmt(Math.max(best, LB.myBest))}</span>`;
+        myBar.innerHTML = rec.isHiddenAdmin
+          ? `<span>Mode Admin tersembunyi</span><span>♛ ${fmt(rec.myBest)}</span>`
+          : `<span>Peringkatmu: ${rec.myRank ? '#' + rec.myRank : '–'}</span><span>♛ ${fmt(rec.myBest)}</span>`;
       } else {
         myBar.hidden = true;
       }
 
-      list.innerHTML = rows.map((r, i) => {
-        const rank = r.rank || (i + 1);
-        const isMe = r.id === u.id;
+      const uidStr = String(u.id);
+      list.innerHTML = rows.map(r => {
+        const rank = r.rank;
+        const isMe = String(r.id) === uidStr;
         const medalCls = rank <= 3 ? ' g' + rank : '';
         const ini = String(r.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
         const avHtml = r.avatarUrl
@@ -1016,7 +1159,7 @@
       tray[i] = null; if (sel === i) sel = -1;
       if (tray.every(t => !t)) dealTray(true);
       saveSessionNow();
-      if (best > prevBest && best >= 100) pushBest();
+      if (best > prevBest && best >= 100) schedulePushBest();
       if (!tray.some(t => t && anyFit(t))) {
         over = true;
         SFX.gameOver();
@@ -1169,13 +1312,28 @@
       g.save(); g.translate(sx, sy);
       scoreShown += (score - scoreShown) * .18; if (Math.abs(score - scoreShown) < .5) scoreShown = score;
       g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff';
-      g.font = `900 ${Math.round(Math.min(56, L.by * .55))}px Nunito, system-ui, sans-serif`;
+      let scoreFs = Math.round(Math.min(W <= 480 ? 42 : 56, L.by * .50));
+      g.font = `900 ${scoreFs}px Nunito, system-ui, sans-serif`;
       const sTxt = Math.round(scoreShown).toLocaleString('id-ID');
-      const sw = g.measureText(sTxt).width, mon = monitorBox(sw), sx0 = mon ? Math.min(W / 2, mon.x - 14 - sw / 2) : W / 2;
-      g.fillText(sTxt, sx0, L.by * .5 + 4);
-      const bx = sx0, byy = L.by * .5 - Math.min(56, L.by * .55) * .62 - 4;
-      g.font = '900 14px Nunito, system-ui, sans-serif'; g.fillStyle = '#ffd23f';
-      if (byy > 8) g.fillText('♛ ' + best.toLocaleString('id-ID'), bx, byy);
+      let sw = g.measureText(sTxt).width;
+      const mon = monitorBox(sw);
+      const leftSafe = W <= 480 ? 140 : 172;
+      const rightSafe = mon ? (mon.x - 10) : (W - 14);
+      const availW = Math.max(76, rightSafe - leftSafe);
+      if (sw > availW - 6) {
+        scoreFs = Math.max(22, Math.floor(scoreFs * (availW - 6) / sw));
+        g.font = `900 ${scoreFs}px Nunito, system-ui, sans-serif`;
+        sw = g.measureText(sTxt).width;
+      }
+      const preferredX = mon ? Math.min(W / 2, rightSafe - sw / 2) : W / 2;
+      const sx0 = Math.max(leftSafe + sw / 2, Math.min(rightSafe - sw / 2, preferredX));
+      g.fillText(sTxt, sx0, L.by * .5 + 6);
+      const byy = Math.max(14, L.by * .5 - scoreFs * .64 - 2);
+      g.font = '900 13.5px Nunito, system-ui, sans-serif'; g.fillStyle = '#ffd23f';
+      const bTxt = '♛ ' + best.toLocaleString('id-ID');
+      const bw = g.measureText(bTxt).width;
+      const bx = Math.max(leftSafe + bw / 2, Math.min(rightSafe - bw / 2, sx0));
+      if (byy > 8) g.fillText(bTxt, bx, byy);
 
       rr(g, L.bx - 10, L.by - 10, L.bs + 20, L.bs + 20, 20); g.fillStyle = '#06303a'; g.fill();
       rr(g, L.bx - 10, L.by - 10, L.bs + 20, L.bs + 20, 20); g.strokeStyle = 'rgba(160,240,240,.22)'; g.lineWidth = 2; g.stroke();
@@ -1383,6 +1541,38 @@
     q('bl-lbBtn').onclick = () => { SFX.unlock(); SFX.uiTap(); openOv('bl-lbOv'); fetchLeaderboard(true); };
     q('bl-overLbBtn').onclick = () => { SFX.unlock(); SFX.uiTap(); closeAll(); openOv('bl-lbOv'); fetchLeaderboard(true); };
     q('bl-lbRefreshBtn').onclick = () => { SFX.uiTap(); fetchLeaderboard(true); };
+    const adminShowBtn = q('bl-adminShowBtn');
+    if (adminShowBtn) {
+      adminShowBtn.onclick = async () => {
+        const u = currentUser();
+        if (!u || (u.role !== 'admin' && u.role !== 'developer') || adminShowBtn.disabled) return;
+        SFX.uiTap();
+        adminShowBtn.disabled = true;
+        const prevTxt = adminShowBtn.textContent;
+        adminShowBtn.textContent = 'Menyimpan…';
+        try {
+          const r = await fetch('/api/auth/leaderboard-visibility', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ enabled: true })
+          });
+          const d = await r.json().catch(() => ({}));
+          if (!r.ok) throw new Error(d.error || 'Gagal mengaktifkan tampilan leaderboard.');
+          u.showInLeaderboard = true;
+          LB.showInLeaderboard = true;
+          LB.hiddenByAdminToggle = false;
+          try { window.showToast?.('👑 Akun Admin sekarang tampil di semua Leaderboard!'); } catch {}
+          try { window.dispatchEvent(new CustomEvent('clined:auth-ready')); } catch {}
+          await fetchLeaderboard(true);
+        } catch (err) {
+          try { window.showToast?.(err.message || 'Gagal mengaktifkan tampilan leaderboard.', true); } catch {}
+        } finally {
+          adminShowBtn.disabled = false;
+          adminShowBtn.textContent = prevTxt;
+        }
+      };
+    }
     q('bl-exitMgBtn').onclick = () => {
       SFX.uiTap();
       onLeave();
@@ -1394,8 +1584,9 @@
       const uid = currentUid();
       const switched = uid !== boundUid;
       if (switched) {
+        if (pushTimer) { clearTimeout(pushTimer); pushTimer = 0; }
         boundUid = uid;
-        LB.rows = []; LB.myRank = null; LB.myBest = 0; LB.ready = false; LB.err = ''; LB.lastPushedSig = ''; LB.fetchedAt = 0;
+        LB.rows = []; LB.myRank = null; LB.myBest = 0; LB.showInLeaderboard = undefined; LB.hiddenByAdminToggle = false; LB.ready = false; LB.err = ''; LB.lastPushedSig = ''; LB.fetchedAt = 0;
         if (!loadFromStorage()) freshGame();
         scoreShown = score;
         if (isOpen()) showLobby();
@@ -1411,6 +1602,7 @@
         else if (score > 0 && !over) freshGame();
       }
       if (isOpen() && !lobby.hidden) refreshLobbyNumbers();
+      if (isOpen() && !q('bl-lbOv').hidden) renderLB();
     }
 
     window.addEventListener('clined:auth-ready', rebindAccountState);
@@ -1421,6 +1613,19 @@
     });
     window.addEventListener('online', () => { if (isOpen()) pushBest(); });
     window.addEventListener('resize', () => { if (isOpen()) layout(); });
+    window.addEventListener('pagehide', () => {
+      if (!isOpen()) return;
+      if (!over && score > 0) saveSessionNow();
+      syncLocalHighScores();
+      if (best > 0 || stats.games > 0) pushBest(false, { keepalive: true });
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && isOpen()) {
+        if (!over && score > 0) saveSessionNow();
+        syncLocalHighScores();
+        if (best > 0 || stats.games > 0) pushBest(false, { keepalive: true });
+      }
+    });
 
     function startLoop() {
       if (running) return;
@@ -1444,8 +1649,9 @@
       syncSfxButtons();
       const uid = currentUid();
       if (uid !== boundUid) {
+        if (pushTimer) { clearTimeout(pushTimer); pushTimer = 0; }
         boundUid = uid;
-        LB.rows = []; LB.myRank = null; LB.myBest = 0; LB.ready = false; LB.lastPushedSig = '';
+        LB.rows = []; LB.myRank = null; LB.myBest = 0; LB.showInLeaderboard = undefined; LB.hiddenByAdminToggle = false; LB.ready = false; LB.lastPushedSig = '';
       }
       if (!loadFromStorage()) freshGame();
       scoreShown = score;
@@ -1457,9 +1663,10 @@
 
     function onLeave() {
       stopLoop();
+      if (pushTimer) { clearTimeout(pushTimer); pushTimer = 0; }
       if (!over && score > 0) saveSessionNow();
-      saveStatsNow();
-      pushBest();
+      syncLocalHighScores();
+      pushBest(false, { keepalive: true });
       closeAll();
       try {
         document.documentElement.classList.remove('bl-open');
@@ -1488,5 +1695,5 @@
     else game.onLeave();
   });
 
-  window.CLINED_BLOK_LYSIS = { open, Storage, Dealer, SFX, mergeStatsMonotonic, sanitizeStats, isPlaying: () => !!game?.isPlaying() };
+  window.CLINED_BLOK_LYSIS = { open, Storage, Dealer, SFX, mergeStatsMonotonic, sanitizeStats, reconcileLeaderboardRows, isPlaying: () => !!game?.isPlaying() };
 })();
