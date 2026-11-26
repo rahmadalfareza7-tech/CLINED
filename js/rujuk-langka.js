@@ -32,42 +32,74 @@
       carcinoma: 1, bercak: 1, nodus: 1, lesi: 1, pupil: 1, murmur: 1, fenomena: 1, cincin: 1, garis: 1,
       papul: 1, punuk: 1, nadi: 1, ca: 1
     };
+    const STOP_FUZZY = [
+      'sindrom', 'sindroma', 'syndrome', 'penyakit', 'disease', 'musculus', 'nervus', 'saraf',
+      'arteri', 'arteria', 'tanda', 'refleks', 'virus', 'vaksin', 'bakteri', 'jamur',
+      'hormon', 'enzim', 'kanker', 'karsinoma', 'carcinoma', 'tumor', 'infeksi'
+    ];
     const LEAD = { a: 1, n: 1, v: 1 };
+
+    // Optimal String Alignment (Damerau-Levenshtein): adjacent letter swaps cost 1 edit
+    function lev(a, b, max) {
+      const la = a.length, lb = b.length;
+      if (Math.abs(la - lb) > max) return max + 1;
+      let prev2 = null, prev = [], cur = [];
+      for (let j = 0; j <= lb; j++) prev[j] = j;
+      for (let i = 1; i <= la; i++) {
+        cur = [i];
+        let best = i;
+        for (let j = 1; j <= lb; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          let v = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+          if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+            v = Math.min(v, prev2[j - 2] + 1);
+          }
+          cur[j] = v;
+          if (v < best) best = v;
+        }
+        if (best > max) return max + 1;
+        prev2 = prev;
+        prev = cur;
+      }
+      return prev[lb];
+    }
+
+    function isFuzzyStop(w) {
+      if (STOP[w]) return true;
+      if (w.length < 5) return false;
+      for (let i = 0; i < STOP_FUZZY.length; i++) {
+        const sw = STOP_FUZZY[i];
+        if (Math.abs(sw.length - w.length) <= 1 && lev(w, sw, 1) <= 1) return true;
+      }
+      return false;
+    }
 
     function norm(s) {
       const t = String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, ' ').trim();
       if (!t) return '';
-      const kept = t.split(' ').filter(w => w && !STOP[w]);
+      const raw = t.split(' ').filter(Boolean);
+      const kept = raw.length > 1 ? raw.filter(w => !isFuzzyStop(w)) : raw.filter(w => !STOP[w]);
       if (kept.length > 1 && LEAD[kept[0]] && kept.slice(1).join('').length >= 3) kept.shift();
-      return (kept.length ? kept : t.split(' ')).join(' ');
+      return (kept.length ? kept : raw).join(' ');
     }
     const compact = s => s.replace(/ /g, '');
     const sortTok = s => s.split(' ').sort().join(' ');
 
-    function lev(a, b, max) {
-      if (Math.abs(a.length - b.length) > max) return max + 1;
-      let prev = [], cur = [];
-      for (let j = 0; j <= b.length; j++) prev[j] = j;
-      for (let i = 1; i <= a.length; i++) {
-        cur = [i];
-        let best = i;
-        for (let j = 1; j <= b.length; j++) {
-          cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
-          if (cur[j] < best) best = cur[j];
-        }
-        if (best > max) return max + 1;
-        prev = cur;
-      }
-      return prev[b.length];
-    }
-    const tol = len => (len <= 4 ? 0 : len <= 7 ? 1 : len <= 12 ? 2 : 3);
-    const tolP = len => (len <= 3 ? 0 : len <= 5 ? 1 : len <= 8 ? 2 : len <= 12 ? 3 : 4);
+    // Indonesian + English + Latin medical phonetic normalizer
     function phon(c) {
-      return c.replace(/ph/g, 'f').replace(/th/g, 't').replace(/ch/g, 'k').replace(/sh/g, 's').replace(/dj/g, 'j')
-        .replace(/c(?=[eiy])/g, 's').replace(/c/g, 'k').replace(/q/g, 'k').replace(/x/g, 'ks').replace(/y/g, 'i')
-        .replace(/z/g, 's').replace(/v/g, 'f').replace(/ae|oe/g, 'e').replace(/ou/g, 'u')
-        .replace(/([bdfgjklmnprstw])h/g, '$1').replace(/(.)\1+/g, '$1').replace(/e$/, '');
+      let s = String(c || '').toLowerCase()
+        .replace(/^ps/, 's').replace(/^pn/, 'n').replace(/^pt/, 't').replace(/^kn/, 'n')
+        .replace(/sch/g, 'sk').replace(/sc(?=[eiy])/g, 's').replace(/sy/g, 's')
+        .replace(/ph/g, 'f').replace(/th/g, 't').replace(/rh/g, 'r').replace(/kh/g, 'k')
+        .replace(/gh/g, 'g').replace(/ch/g, 'k').replace(/sh/g, 's').replace(/ck/g, 'k')
+        .replace(/dj/g, 'j').replace(/qu/g, 'k')
+        .replace(/c(?=[eiy])/g, 's').replace(/c/g, 'k').replace(/q/g, 'k').replace(/x/g, 'ks')
+        .replace(/y/g, 'i').replace(/z/g, 's').replace(/v/g, 'f')
+        .replace(/ae|oe|eu/g, 'e').replace(/ou|oo/g, 'u').replace(/ei|ie/g, 'i')
+        .replace(/([bdfgjklmnprstw])h/g, '$1').replace(/(.)\1+/g, '$1');
+      if (s.length > 4) s = s.replace(/e$/, '');
+      return s;
     }
 
     function keys(patient) {
@@ -83,62 +115,160 @@
 
     function pkeys(patient) {
       if (patient._pkeys) return patient._pkeys;
-      patient._pkeys = keys(patient).map(list => {
-        const u = {};
-        list.forEach(k => { u[phon(compact(k))] = 1; });
-        return Object.keys(u);
-      });
+      patient._pkeys = keys(patient).map(list =>
+        list.map(k => {
+          const kc = compact(k);
+          const toks = k.split(' ').filter(w => w.length >= 2);
+          return { k, kc, kp: phon(kc), toks, ptoks: toks.map(phon) };
+        })
+      );
       return patient._pkeys;
     }
 
-    function correct(patient, qc) {
-      const qp = phon(qc), t = tolP(qp.length);
-      if (!t) return null;
-      let best = null, second = null;
-      pkeys(patient).forEach((list, i) => {
-        let d = t + 1;
-        list.forEach(k => { if (Math.abs(k.length - qp.length) <= t) d = Math.min(d, lev(qp, k, t)); });
-        if (d > t) return;
-        if (!best || d < best.d) { if (best && best.i !== i) second = best; best = { i, d }; }
-        else if (best.i !== i && (!second || d < second.d)) second = { i, d };
-      });
-      if (!best || (second && second.d === best.d)) return null;
-      return { index: best.i, distance: 1 + best.d, corrected: true };
+    const tolRaw = len => (len <= 3 ? 0 : len <= 7 ? 1 : len <= 11 ? 2 : len <= 16 ? 3 : Math.min(5, Math.floor(len * 0.25)));
+    const tolPhon = len => (len <= 3 ? 0 : len <= 5 ? 1 : len <= 8 ? 2 : len <= 12 ? 3 : Math.min(5, Math.floor(len * 0.28)));
+
+    function evalKey(q, qs, qc, qp, qt, qpt, entry, loose) {
+      const { k, kc, kp, ptoks } = entry;
+      if (k === q || k === qs || kc === qc) return { score: 0, sim: 1, exact: true };
+      if (qp.length >= 4 && qp === kp) return { score: 0.12, sim: 0.98, exact: false };
+
+      let best = null;
+      const keep = (score, sim) => { if (!best || score < best.score) best = { score, sim, exact: false }; };
+
+      // 1. Raw Damerau-Levenshtein
+      const minR = Math.min(qc.length, kc.length);
+      const maxR = Math.max(qc.length, kc.length);
+      const tR = loose ? Math.min(6, Math.max(1, Math.floor(minR * 0.36))) : tolRaw(minR);
+      if (tR > 0 && (' ' + k + ' ').indexOf(' ' + q + ' ') === -1) {
+        const rd = Math.min(lev(qc, kc, tR), lev(qs, k, tR));
+        if (rd <= tR) {
+          const sim = 1 - rd / maxR;
+          const okShort = minR > 4 || (rd === 1 && (qc[0] === kc[0] || (qc[0] === kc[1] && qc[1] === kc[0])));
+          if (okShort && sim >= (loose ? 0.56 : 0.72)) keep(0.25 + rd * 0.55 + (1 - sim), sim);
+        }
+      }
+
+      // 2. Phonetic Damerau-Levenshtein (handles Indo <-> Eng <-> Latin spellings)
+      const minP = Math.min(qp.length, kp.length);
+      const maxP = Math.max(qp.length, kp.length);
+      const tP = loose ? Math.min(6, Math.max(1, Math.floor(minP * 0.38))) : tolPhon(minP);
+      if (tP > 0 && minP >= 4) {
+        const pd = lev(qp, kp, tP);
+        if (pd <= tP) {
+          const psim = 1 - pd / maxP;
+          const minSim = loose ? 0.58 : (minP <= 5 ? 0.78 : 0.72);
+          const okShortP = minP > 4 || (pd === 1 && (qp[0] === kp[0] || (qp[0] === kp[1] && qp[1] === kp[0])));
+          if (okShortP && psim >= minSim) keep(0.4 + pd * 0.5 + (1 - psim), psim);
+        }
+      }
+
+      // 3. Multi-word token fuzzy match (e.g. "stafilokokus aereus", "lupus eritematos")
+      if (qpt.length >= 2 && qpt.length === ptoks.length) {
+        let sumSim = 0, allOk = true;
+        for (let t = 0; t < qpt.length; t++) {
+          const a = qpt[t], b = ptoks[t];
+          const ml = Math.min(a.length, b.length), xl = Math.max(a.length, b.length);
+          const mt = Math.max(1, Math.floor(ml * (loose ? 0.4 : 0.32)));
+          const d = lev(a, b, mt);
+          const s = 1 - d / xl;
+          if (d > mt || s < (loose ? 0.55 : 0.68)) { allOk = false; break; }
+          sumSim += s;
+        }
+        if (allOk) {
+          const avg = sumSim / qpt.length;
+          if (avg >= (loose ? 0.6 : 0.74)) keep(0.45 + (1 - avg) * 2.2, avg);
+        }
+      }
+
+      // 4. Prefix / Latin stem match (e.g. "sternokleidomastoid" -> "sternocleidomastoideus")
+      if (qp.length >= 6 && kp.length >= 6) {
+        const isPref = kp.indexOf(qp) === 0 || qp.indexOf(kp) === 0;
+        const ratio = Math.min(qp.length, kp.length) / Math.max(qp.length, kp.length);
+        if (isPref && ratio >= (loose ? 0.55 : 0.65)) keep(0.5 + (1 - ratio) * 1.4, ratio);
+      }
+
+      return best;
+    }
+
+    function rankCandidates(patient, input, loose) {
+      const q = norm(input);
+      if (!q || compact(q).length < 2) return [];
+      const qs = sortTok(q), qc = compact(q), qp = phon(qc);
+      const qt = q.split(' ').filter(w => w.length >= 2);
+      const qpt = qt.map(phon);
+      const all = pkeys(patient);
+      const ranked = [];
+      for (let i = 0; i < all.length; i++) {
+        let bestForAns = null;
+        const entries = all[i];
+        for (let j = 0; j < entries.length; j++) {
+          const r = evalKey(q, qs, qc, qp, qt, qpt, entries[j], loose);
+          if (r && (!bestForAns || r.score < bestForAns.score)) bestForAns = r;
+          if (bestForAns && bestForAns.exact) break;
+        }
+        if (bestForAns) ranked.push({ i, score: bestForAns.score, sim: bestForAns.sim, exact: bestForAns.exact });
+      }
+      ranked.sort((a, b) => (a.score - b.score) || (b.sim - a.sim));
+      return ranked;
+    }
+
+    function suggest(patient, input, limit) {
+      const lim = limit || 3;
+      const q = norm(input);
+      if (!q || compact(q).length < 4) return [];
+      const ranked = rankCandidates(patient, input, true);
+      return ranked.slice(0, lim).map(r => ({
+        index: r.i,
+        canonicalName: patient.acceptedAnswers[r.i].canonicalName,
+        sim: r.sim
+      }));
     }
 
     function match(patient, input) {
       const q = norm(input);
       if (!q || compact(q).length < 2) return null;
-      const qs = sortTok(q), qc = compact(q), ks = keys(patient);
-      let best = null;
-      for (let i = 0; i < ks.length; i++) {
-        for (let j = 0; j < ks[i].length; j++) {
-          const k = ks[i][j], kc = compact(k);
-          let d;
-          if (k === q || k === qs || kc === qc) d = 0;
-          else {
-            const t = tol(Math.min(kc.length, qc.length));
-            if (t === 0 || (' ' + k + ' ').indexOf(' ' + q + ' ') !== -1) continue;
-            d = Math.min(lev(qc, kc, t), lev(qs, k, t));
-            if (d > t) continue;
-            d = d + 0.01;
-          }
-          if (!best || d < best.distance) best = { index: i, distance: d, corrected: d > 0 };
-          if (d === 0) return best;
+      const qc = compact(q), ks = keys(patient);
+
+      // Fast ranked pass (exact + phonetic + Damerau-Levenshtein + multi-word + stem)
+      const ranked = rankCandidates(patient, input, false);
+      if (ranked.length) {
+        const best = ranked[0], second = ranked[1];
+        if (best.exact) return { index: best.i, distance: 0, corrected: false };
+        const clearWin = !second || (second.score - best.score > 0.08) || (best.sim >= 0.88 && best.score < second.score);
+        if (clearWin) return { index: best.i, distance: best.score, corrected: true };
+        return {
+          ambiguous: true,
+          suggestions: ranked.slice(0, 3).map(r => ({
+            index: r.i,
+            canonicalName: patient.acceptedAnswers[r.i].canonicalName
+          }))
+        };
+      }
+
+      // Word-prefix fallback for partial multi-word entries (e.g. "amoksisilin" -> unique prefix)
+      if (qc.length >= 5) {
+        const hits = {};
+        ks.forEach((list, i) => {
+          list.forEach(k => {
+            if (k.indexOf(q + ' ') === 0 && qc.length / compact(k).length >= 0.6) hits[i] = 1;
+          });
+        });
+        const h = Object.keys(hits);
+        if (h.length === 1) return { index: +h[0], distance: 0.5, corrected: true };
+        if (!h.length) ks.forEach((list, i) => { list.forEach(k => { if (k.indexOf(q + ' ') === 0) hits[i] = 1; }); });
+        const allH = Object.keys(hits);
+        if (allH.length > 1) {
+          return {
+            ambiguous: true,
+            suggestions: allH.slice(0, 3).map(idx => ({
+              index: +idx,
+              canonicalName: patient.acceptedAnswers[+idx].canonicalName
+            }))
+          };
         }
       }
-      if (best) return best;
-      if (qc.length < 5) return correct(patient, qc);
-      const hits = {};
-      ks.forEach((list, i) => {
-        list.forEach(k => {
-          if (k.indexOf(q + ' ') === 0 && qc.length / compact(k).length >= 0.6) hits[i] = 1;
-        });
-      });
-      const h = Object.keys(hits);
-      if (h.length === 1) return { index: +h[0], distance: 0.5 };
-      if (!h.length) ks.forEach((list, i) => { list.forEach(k => { if (k.indexOf(q + ' ') === 0) hits[i] = 1; }); });
-      return Object.keys(hits).length > 1 ? { ambiguous: true } : correct(patient, qc);
+      return null;
     }
 
     function tierFromPct(p) {
@@ -175,7 +305,7 @@
       return { tier, pts: TIERS[tier - 1].pts, share: r.share, realShare: r.realShare, realTotal: d.realTotal, firstFinder: !!r.firstFinder, dist: d };
     }
 
-    return { phon, TIERS, CUT, norm, lev, match, distribution, score, tierFromPct };
+    return { phon, TIERS, CUT, norm, lev, match, suggest, distribution, score, tierFromPct };
   })();
 
   /* ================= STORAGE & STREAK ================= */
@@ -444,6 +574,7 @@
         <span class="rl-err" id="rl-err" aria-live="polite"></span>
         <button class="rl-pass" id="rl-passBtn" type="button"><span id="rl-passT">Lewati</span> <span class="kbd">ESC</span></button>
       </div>
+      <div class="rl-sugs" id="rl-sugs" hidden aria-live="polite"></div>
     </div>
   </section>
 
@@ -839,6 +970,29 @@
       }).join('');
     }
 
+    function clearSugs() {
+      const box = q('rl-sugs');
+      if (box) { box.innerHTML = ''; box.hidden = true; }
+    }
+    function renderSugs(list, typed) {
+      const box = q('rl-sugs');
+      if (!box) return;
+      if (!list || !list.length) { clearSugs(); return; }
+      box.innerHTML = `<span>Maksud kamu:</span>` + list.map(s =>
+        `<button type="button" class="rl-sug-chip" data-rl-sug="${s.index}" data-rl-typed="${esc(typed)}">${esc(s.canonicalName)}</button>`
+      ).join('');
+      box.hidden = false;
+    }
+    q('rl-sugs').addEventListener('click', e => {
+      const btn = e.target.closest('button[data-rl-sug]');
+      if (!btn || !G || G.phase !== 'ask') return;
+      const idx = Number(btn.dataset.rlSug);
+      const typed = btn.dataset.rlTyped || q('rl-ans')?.value || '';
+      clearSugs();
+      if (Number.isInteger(idx) && idx >= 0) resolve(idx, null, typed || null);
+    });
+    q('rl-ans').addEventListener('input', clearSugs);
+
     function nextPatient() {
       if (!G) return;
       const { rec, round } = G;
@@ -853,7 +1007,7 @@
       root.classList.remove('resmode');
       squares();
       const inp = q('rl-ans'); inp.value = ''; inp.readOnly = false; q('rl-go').disabled = false;
-      q('rl-err').textContent = ''; passArm(false); q('rl-passBtn').hidden = false;
+      q('rl-err').textContent = ''; clearSugs(); passArm(false); q('rl-passBtn').hidden = false;
       Scene.reset();
       G.phase = 'ask'; G.secs = S.ext ? 45 : 30; G.deadline = performance.now() + G.secs * 1000; G.escAt = 0;
       try { inp.focus(); } catch {}
@@ -883,10 +1037,17 @@
       const p = G.round.patients[G.i], m = Engine.match(p, v);
       if (!m || m.ambiguous) {
         inp.classList.remove('rl-shake'); void inp.offsetWidth; inp.classList.add('rl-shake');
-        q('rl-err').textContent = m ? `"${v.slice(0, 28)}" terlalu umum. Lebih spesifik.` : `"${v.slice(0, 28)}" tidak ada di daftar.`;
+        const sugs = (m && Array.isArray(m.suggestions) && m.suggestions.length) ? m.suggestions : Engine.suggest(p, v, 3);
+        q('rl-err').textContent = m?.ambiguous
+          ? `"${v.slice(0, 28)}" mirip beberapa istilah — pilih di bawah atau perjelas.`
+          : sugs.length
+            ? `Ejaan "${v.slice(0, 28)}" belum pas — ketuk saran di bawah atau koreksi:`
+            : `"${v.slice(0, 28)}" tidak ada di daftar.`;
+        renderSugs(sugs, v);
         try { inp.select(); } catch {}
         return;
       }
+      clearSugs();
       resolve(m.index, null, m.corrected ? v : null);
     }
 
@@ -904,7 +1065,7 @@
     function resolve(idx, why, typed) {
       G.phase = 'res'; cancelAnimationFrame(G.raf);
       const p = G.round.patients[G.i], dist = Engine.distribution(p, {});
-      const inp = q('rl-ans'); inp.readOnly = true; q('rl-go').disabled = true; q('rl-passBtn').hidden = true; q('rl-err').textContent = '';
+      const inp = q('rl-ans'); inp.readOnly = true; q('rl-go').disabled = true; q('rl-passBtn').hidden = true; q('rl-err').textContent = ''; clearSugs();
       let left, tier = 0, color = '#ff4b5c';
       if (idx == null) {
         G.rec.a.push(null);
@@ -916,7 +1077,7 @@
         inp.value = a.canonicalName;
         const pct = `Estimasi pangsa pencarian Google: ${fmtPct(sc.share)}`;
         left = `<div class="hd"><span class="rl-badge">${t.n}</span><div><div class="tn">Dirujuk ke ${t.name}</div><div class="pts">+${sc.pts} poin · tingkat ${t.n} dari 8</div></div></div>
-          <div class="lab">Diterima sebagai</div><div class="ans">${esc(a.canonicalName)}</div>${typed ? `<div class="fix">Dikoreksi otomatis dari “${esc(typed.slice(0, 40))}”</div>` : ''}<div class="meta">${pct}</div>`;
+          <div class="lab">Diterima sebagai</div><div class="ans">${esc(a.canonicalName)}</div>${typed ? `<div class="fix">✓ Dikoreksi otomatis dari “${esc(typed.slice(0, 40))}”</div>` : ''}<div class="meta">${pct}</div>`;
       }
       const rarer = dist.rows.filter(r => r.tier >= 7 && r.i !== idx).slice(-4).reverse();
       let right = `<p class="exp">${esc(p.explanation)}</p>`;

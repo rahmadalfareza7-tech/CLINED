@@ -129,8 +129,13 @@ html.rl-open #rujukLangkaHost{width:100%!important;min-height:100dvh}
 #rujukLangkaPage .rl .rl-inrow input[readonly]{color:var(--mute)!important}
 #rujukLangkaPage .rl .rl-inrow .rl-btn{height:56px}
 #rujukLangkaPage .rl .rl-inmeta{display:flex;justify-content:space-between;gap:10px;min-height:26px;align-items:center;margin-top:8px;text-align:left}
-#rujukLangkaPage .rl .rl-err{font:800 14.5px var(--f);color:var(--r)}
-#rujukLangkaPage .rl .rl-pass{border:0;background:none;padding:0;font:900 13.5px var(--f);color:var(--mute);display:inline-flex;gap:6px;align-items:center;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}
+#rujukLangkaPage .rl .rl-err{flex:1;font:800 14px/1.35 var(--f);color:var(--r)}
+#rujukLangkaPage .rl .rl-sugs{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;justify-content:flex-start}
+#rujukLangkaPage .rl .rl-sugs span{font:800 12.5px var(--f);color:var(--mute)}
+#rujukLangkaPage .rl .rl-sug-chip{padding:5px 12px;border-radius:999px;border:2px solid #9bd7f5;border-bottom-width:3px;background:#eef8fd;color:#1d6d96;font:900 13px var(--f);transition:transform .08s,background .12s}
+#rujukLangkaPage .rl .rl-sug-chip:hover{background:#dff2fc;border-color:var(--b)}
+#rujukLangkaPage .rl .rl-sug-chip:active{transform:translateY(1px)}
+#rujukLangkaPage .rl .rl-pass{flex:none;border:0;background:none;padding:0;font:900 13.5px var(--f);color:var(--mute);display:inline-flex;gap:6px;align-items:center;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}
 #rujukLangkaPage .rl .rl-pass.arm{color:var(--r)}
 #rujukLangkaPage .rl .rl-shake{animation:rl-shk .34s}
 @keyframes rl-shk{20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}

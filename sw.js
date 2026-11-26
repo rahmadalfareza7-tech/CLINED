@@ -1,4 +1,4 @@
-const SW_VERSION = 'v254-rujuk-langka-random-rounds';
+const SW_VERSION = 'v255-rujuk-langka-smart-autocorrect';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',

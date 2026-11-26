@@ -257,9 +257,9 @@ test('App wiring: Mini Games Hub card, view section, lazy bundle, BUSY_VIEWS, us
   assert.match(appHtml, /id="rujukLangkaPage"/);
   assert.match(appHtml, /id="rujukLangkaHost"/);
   assert.match(lazyJs, /rujukLangka:\s*\{/);
-  assert.match(lazyJs, /css\/rujuk-langka\.css\?v=2/);
+  assert.match(lazyJs, /css\/rujuk-langka\.css\?v=3/);
   assert.match(lazyJs, /js\/rujuk-langka-data\.js\?v=1/);
-  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=2/);
+  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=3/);
   assert.match(lazyJs, /showRujukLangkaLoadingUI/);
   assert.match(lazyJs, /data-open-rujuk-langka/);
   assert.match(updJs, /'rujukLangkaPage'/);
@@ -270,6 +270,52 @@ test('App wiring: Mini Games Hub card, view section, lazy bundle, BUSY_VIEWS, us
   assert.match(swJs, /\.\/css\/rujuk-langka\.css/);
   assert.match(swJs, /\.\/js\/rujuk-langka-data\.js/);
   assert.match(swJs, /\.\/js\/rujuk-langka\.js/);
+});
+
+test('Smart medical autocorrect handles transpositions, Indo/Eng/Latin phonetics, fuzzy prefixes, multi-word typos, stems, and rejects gibberish', () => {
+  const { DATA, RL } = loadRujukLangka();
+  const findPrompt = id => DATA.rounds.flatMap(r => r.patients).find(p => p.id === id);
+  const expectAuto = (promptId, typed, expectedCanonical) => {
+    const p = findPrompt(promptId);
+    const m = RL.Engine.match(p, typed);
+    assert.ok(m && !m.ambiguous, `Expected "${typed}" in ${promptId} to auto-match "${expectedCanonical}", got ${JSON.stringify(m)}`);
+    assert.equal(p.acceptedAnswers[m.index].canonicalName, expectedCanonical, `Expected "${typed}" -> "${expectedCanonical}"`);
+    assert.equal(m.corrected, true, `Expected "${typed}" to be flagged as corrected`);
+  };
+
+  // Adjacent letter transpositions (Damerau-Levenshtein)
+  expectAuto('C6', 'paracetmaol', 'Parasetamol');
+  expectAuto('C6', 'ibuporfen', 'Ibuprofen');
+  expectAuto('A2', 'amlodpiin', 'Amlodipin');
+  expectAuto('C3', 'metfomrin', 'Metformin');
+
+  // Indonesian <-> English <-> Latin medical phonetic typos & multi-word misspellings
+  expectAuto('C1', 'stafilokokus aereus', 'Staphylococcus aureus');
+  expectAuto('C1', 'streptokokus piogenis', 'Streptococcus pyogenes');
+  expectAuto('A3', 'eskerisia koli', 'Escherichia coli');
+  expectAuto('A5', 'amoksicilin', 'Amoksisilin');
+  expectAuto('A5', 'siprofloksacin', 'Siprofloksasin');
+  expectAuto('A5', 'ceftriaksone', 'Seftriakson');
+  expectAuto('A6', 'miastenia grafis', 'Miastenia gravis');
+  expectAuto('D1', 'alzeimer', 'Penyakit Alzheimer');
+  expectAuto('A6', 'guilan bare', 'Sindrom Guillain-Barré');
+  expectAuto('C4', 'babinsky', 'Tanda Babinski');
+
+  // Typoed medical stopword prefix ("nerfus", "sindorm")
+  expectAuto('B1', 'nerfus fagus', 'Nervus vagus');
+  expectAuto('D7', 'sindorm marfn', 'Sindrom Marfan');
+
+  // Stem / truncated Latin ending
+  expectAuto('A1', 'sternokleidomastoid', 'Sternocleidomastoideus');
+
+  // Gibberish / unrelated words must NOT falsely autocorrect
+  assert.equal(RL.Engine.match(findPrompt('A5'), 'asdfghjkl'), null);
+  assert.equal(RL.Engine.match(findPrompt('A5'), 'kucing'), null);
+  assert.equal(RL.Engine.match(findPrompt('B3'), 'xyz'), null);
+
+  // Near-miss suggest() returns helpful candidates for bigger typos
+  const sugs = RL.Engine.suggest(findPrompt('A5'), 'amoksisilxxx', 3);
+  assert.ok(sugs.length >= 1 && sugs.some(s => s.canonicalName === 'Amoksisilin'), `Expected Amoksisilin in suggestions, got ${JSON.stringify(sugs)}`);
 });
 
 test('RoundGen produces non-patterned daily rounds (0 consecutive-day overlap, no 4-day cycle) and fresh random rounds', () => {
