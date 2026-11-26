@@ -300,55 +300,90 @@
   </aside>
 
   <section class="screen igd-screen-lobby" id="igd-title">
+    <div class="igd-lobby-fx" aria-hidden="true">
+      <div class="igd-fx-glow red"></div>
+      <div class="igd-fx-glow cyan"></div>
+      <svg class="igd-fx-ecg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0 70 H210 L230 70 L244 26 L258 104 L274 52 L288 70 H540 L560 70 L574 22 L588 108 L604 50 L618 70 H880 L900 70 L914 26 L928 104 L944 52 L958 70 H1200" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
     <div class="folder igd-lobby">
       <header class="igd-lobby-top">
         <div class="igd-lobby-left">
           <button type="button" class="mini-btn igd-back-home" data-act="exit" title="Kembali ke Beranda CLINED">‹ Beranda CLINED</button>
         </div>
-        <span class="igd-lobby-tag"><i class="beacon-dot"></i> RSUD MELATI HUSADA · SHIFT JAGA III (MALAM)</span>
+        <span class="igd-lobby-tag"><i class="beacon-dot"></i> RSUD MELATI HUSADA · SHIFT JAGA III (21.00 – 07.00 WIB)</span>
         <div class="igd-lobby-tools">
           <button type="button" class="mini-btn igd-tool-btn" data-act="book" title="Buka Panduan Obat &amp; Pedoman Klinis">Panduan (85 Obat) <kbd>B</kbd></button>
           <button type="button" class="mini-btn igd-tool-btn btn-calc" data-act="calc" title="Buka Kalkulator GFR, IMT, &amp; Pediatrik">Kalkulator <kbd>K</kbd></button>
           <button type="button" class="mini-btn igd-tool-btn" data-act="mute" id="igd-lobby-mute" title="Nyalakan atau matikan efek suara">Suara: nyala</button>
         </div>
       </header>
-      <div class="igd-lobby-hero">
-        <div class="cast" id="igd-cast"></div>
-        <h1 class="igd-lobby-title">MEJA JAGA <em>IGD</em></h1>
-        <p class="byline">RSUD MELATI HUSADA · DOKTER JAGA TRIASE · BY <b>CLINED</b></p>
-        <p class="igd-lead">Lampu IGD menyala benderang di tengah sunyinya malam. Dari loket triase hingga meja periksa, ketelitianmu adalah benteng terakhir keselamatan pasien. Periksa identitas di loket, telaah resep &amp; dosis obat SKDI (5 menit/berkas), waspadai interaksi obat berbahaya di jam-jam rawan kantuk, lalu tetapkan putusan: <b>TOLAK</b> atau <b>ACC</b>.</p>
-      </div>
-      <div class="igd-stats-bar" id="igd-stats"></div>
-      <div class="igd-resume-slot" id="igd-resume" hidden></div>
-      <div class="igd-section-head">
-        <h3>Pilih Shift Malam Jaga</h3>
-        <span class="igd-section-sub">Tiap malam menghadirkan jenis dokumen &amp; tantangan klinis baru</span>
-      </div>
-      <div class="nights" id="igd-nights"></div>
-      <div class="igd-options-bar">
-        <label class="igd-opt"><input type="checkbox" id="igd-relax"> Mode santai (tanpa batas timer per berkas)</label>
-      </div>
-      <div class="igd-guide-box">
-        <h4>Cara Bermain Singkat</h4>
-        <div class="igd-guide-grid">
-          <div class="igd-guide-step">
-            <span class="step-num">1</span>
-            <b>Periksa Identitas Pasien</b>
-            <p>Bandingkan foto wajah di loket triase, nama, tanggal lahir, dan alamat di KTP / KIA / Gelang dengan berkas.</p>
+
+      <div class="igd-lobby-stage">
+        <div class="igd-hero-panel">
+          <div class="igd-lobby-diorama">
+            <div class="igd-diorama-top">
+              <span class="igd-diorama-sign"><i></i> UGD 24 JAM · LOKET TRIASE</span>
+              <span class="igd-diorama-live">ECG 78 BPM</span>
+            </div>
+            <div class="cast" id="igd-cast"></div>
+            <div class="igd-diorama-ledge"><span>DR. JAGA MALAM</span><span>SKDI DOKTER UMUM</span></div>
           </div>
-          <div class="igd-guide-step">
-            <span class="step-num">2</span>
-            <b>Cek Klinis &amp; Pedoman</b>
-            <p>Buka Panduan Obat (85 obat SKDI) atau Kalkulator. Waspadai dosis &times;10, satuan tertukar, alergi, &amp; interaksi obat.</p>
+
+          <div class="igd-lobby-hero">
+            <span class="igd-hero-stamp acc" aria-hidden="true">ACC</span>
+            <span class="igd-hero-stamp tolak" aria-hidden="true">TOLAK</span>
+            <p class="byline">SIMULASI KLINIS TRIASE · BY <b>CLINED</b></p>
+            <h1 class="igd-lobby-title">MEJA JAGA <em>IGD</em></h1>
+            <p class="igd-lead">Lampu IGD menyala di tengah sunyinya malam. Verifikasi identitas pasien di loket, telaah resep &amp; dosis SKDI dalam 5 menit/berkas, lalu jatuhkan stempel: <b>TOLAK</b> atau <b>ACC</b>.</p>
           </div>
-          <div class="igd-guide-step">
-            <span class="step-num">3</span>
-            <b>Sorot &amp; Putuskan Berkas</b>
-            <p>Gunakan stabilo merah jika ada kesalahan. Beri cap <b>TOLAK</b> (T) jika ada kekeliruan, atau <b>ACC</b> (A) jika aman.</p>
+
+          <div class="igd-resume-slot" id="igd-resume" hidden></div>
+          <div class="igd-stats-bar" id="igd-stats"></div>
+        </div>
+
+        <div class="igd-mission-panel">
+          <div class="igd-section-head">
+            <div>
+              <span class="igd-panel-kicker">PAPAN PENUGASAN SHIFT</span>
+              <h3>Pilih Shift Malam Jaga</h3>
+            </div>
+            <label class="igd-opt igd-opt-pill" title="Matikan batas waktu 5 menit per berkas">
+              <input type="checkbox" id="igd-relax">
+              <span>Mode Santai</span>
+            </label>
+          </div>
+
+          <div class="nights" id="igd-nights"></div>
+
+          <div class="igd-guide-box">
+            <h4>Prosedur Triase Cepat</h4>
+            <div class="igd-guide-grid">
+              <div class="igd-guide-step">
+                <span class="step-num">1</span>
+                <b>Cek Identitas</b>
+                <p>Cocokkan wajah di loket dengan KTP/KIA, nama, tanggal lahir, &amp; gelang pasien.</p>
+              </div>
+              <div class="igd-guide-step">
+                <span class="step-num">2</span>
+                <b>Telaah Klinis</b>
+                <p>Cek alergi, dosis &times;10, satuan mg/g, interaksi obat, &amp; hasil lab di Panduan.</p>
+              </div>
+              <div class="igd-guide-step">
+                <span class="step-num">3</span>
+                <b>Sorot &amp; Cap</b>
+                <p>Stabilo baris salah lalu cap <b>TOLAK</b> (T), atau cap <b>ACC</b> (A) jika aman.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="igd-lobby-bottom">
+            <p class="fine">Pintasan: <kbd>P</kbd> Lup &middot; <kbd>T</kbd> Tolak &middot; <kbd>A</kbd> ACC &middot; <kbd>B</kbd> Panduan &middot; <kbd>K</kbd> Kalkulator &middot; <kbd>R</kbd> Rapikan &middot; <kbd>Enter</kbd> Lanjut<br>Simulasi edukasi SKDI terverifikasi &mdash; bukan pengganti pedoman klinis resmi.</p>
           </div>
         </div>
       </div>
-      <p class="fine">Game edukasi dengan kasus klinis SKDI terverifikasi yang disederhanakan. Bukan pengganti pedoman klinis resmi atau keputusan tenaga medis.<br>Pintasan: <b>P</b> periksa identitas &middot; <b>T</b> tolak &middot; <b>A</b> ACC &middot; <b>B</b> panduan obat &middot; <b>K</b> kalkulator &middot; <b>R</b> rapikan meja &middot; <b>Enter</b> lanjut.</p>
+
       <div class="igd-lobby-foot">
         <button type="button" class="igd-btn igd-btn-ghost igd-title-exit" data-act="exit">‹ Kembali ke Beranda CLINED</button>
       </div>
@@ -1108,11 +1143,12 @@
       E.resume.innerHTML = `
         <div class="igd-quick-start">
           <div class="igd-quick-text">
-            <b>Siap bertugas di Meja Jaga IGD?</b>
-            <small>Mulai shift jaga berikutnya atau pilih malam jaga di bawah.</small>
+            <span class="igd-quick-kicker">SHIFT BERIKUTNYA SIAP</span>
+            <b>${nightName(nextNight)} · ${NIGHTS[nextNight].title}</b>
+            <small>Klik mulai untuk masuk loket triase, atau pilih malam lain di kanan.</small>
           </div>
           <button type="button" class="igd-btn igd-btn-start" data-act="memo" data-n="${nextNight}">
-            ▶ Mulai Jaga (${nightName(nextNight)})
+            ▶ MULAI JAGA
           </button>
         </div>`;
       return;
@@ -1120,8 +1156,8 @@
     E.resume.hidden = false;
     E.resume.innerHTML = `<div class="igd-resume-card">
       <div class="igd-resume-head">
-        <span class="igd-resume-tag">Shift Jaga Aktif Tersimpan</span>
-        <span class="igd-resume-badge">Bisa Dilanjutkan</span>
+        <span class="igd-resume-tag">● SHIFT AKTIF TERSIMPAN</span>
+        <span class="igd-resume-badge">SIAP DILANJUTKAN</span>
       </div>
       <div class="igd-resume-body">
         <div class="igd-resume-info">
@@ -1133,22 +1169,36 @@
           </div>
         </div>
         <div class="igd-resume-actions">
-          <button type="button" class="igd-btn igd-btn-resume" data-act="resume">▶ Lanjutkan Shift</button>
+          <button type="button" class="igd-btn igd-btn-resume" data-act="resume">▶ LANJUTKAN</button>
           <button type="button" class="mini-btn igd-btn-discard" data-act="discard" title="Hapus progres shift ini untuk mulai dari awal">Hapus</button>
         </div>
       </div>
     </div>`;
   }
   const NIGHT_HOURS = [null, '21.00 WIB · Awal Shift', '23.30 WIB · Verifikasi KTP', '01.15 WIB · Gelang Pasien', '03.00 WIB · Jam Rawan & Lab', '04.45 WIB · Jelang Subuh', '02.30 WIB · GRAVEYARD SHIFT'];
+  const NIGHT_ICONS = [null, '📋', '🪪', '🏷️', '🧪', '🏥', '🚨'];
   function renderNights(){
     renderStats();
     renderResume();
     E.nights.innerHTML = NIGHTS.slice(1, HARD).map((N, i) => {
       const n = i + 1, lock = false, best = PROG.best[n], done = PROG.done[n];
+      const cnt = N.mix.reduce((s, [, c]) => s + c, 0);
       return `<button class="night${lock ? ' locked' : ''}${done ? ' done' : ''}" ${lock ? 'disabled' : `data-act="memo" data-n="${n}"`}>
-        <small class="night-time">${NIGHT_HOURS[n]}</small><b>Malam ${n}</b><span>${N.title}</span><em>${lock ? 'Terkunci' : best ? 'Rekor ' + best : 'Belum dimainkan'}</em></button>`;
+        <div class="night-head"><small class="night-time">${NIGHT_HOURS[n]}</small><span class="night-ico" aria-hidden="true">${NIGHT_ICONS[n]}</span></div>
+        <div class="night-main"><b>Malam ${n}</b><span>${N.title}</span></div>
+        <div class="night-foot"><em>${lock ? 'Terkunci' : best ? '★ Rekor ' + best : cnt + ' berkas · Siap'}</em><span class="night-go">${done ? 'ULANG ›' : 'MAIN ›'}</span></div>
+      </button>`;
     }).join('') + `<button class="night hard${PROG.done[HARD] ? ' done' : ''}" data-act="memo" data-n="${HARD}">
-        <small class="night-time">${NIGHT_HOURS[HARD]}</small><b>MODE SULIT</b><span>Generator kasus acak SKDI · 10 berkas · ${fmtLimit(NIGHTS[HARD].limit)}</span><em>${PROG.best[HARD] ? 'Rekor ' + PROG.best[HARD] : 'Belum dimainkan'}</em></button>`;
+        <div class="night-hard-left">
+          <small class="night-time">${NIGHT_ICONS[HARD]} ${NIGHT_HOURS[HARD]}</small>
+          <b>MODE SULIT · SEMUA DIACAK</b>
+          <span>Generator kasus acak SKDI tanpa batas · 10 berkas · ${fmtLimit(NIGHTS[HARD].limit)}/berkas</span>
+        </div>
+        <div class="night-hard-right">
+          <em>${PROG.best[HARD] ? '★ Rekor ' + PROG.best[HARD] : 'Tantangan Akhir'}</em>
+          <span class="night-go">GAS ›</span>
+        </div>
+      </button>`;
   }
   function showMemo(n){
     const N = NIGHTS[n];
@@ -1251,17 +1301,17 @@
       let b = 720; vis().forEach(c => { b = Math.max(b, c.offsetTop + c.offsetHeight + 40); }); sf.style.minHeight = b + 'px';
     }
     function pack(){
-      const W = sf.clientWidth, H = sf.clientHeight, G = 14, M = 12, s = new Map(), placed = [];
+      const W = sf.clientWidth, H = sf.clientHeight, G = 12, M = 10, s = new Map(), placed = [];
       const ov = (a, b) => Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
       const cost = r => placed.reduce((t, p) => {
         if (p.c === E.paper){                       // bagian bawah berkas (tanda tangan/stempel) boleh tertutup
-          const foot = {x:p.x, y:p.y + p.h - 160, w:p.w, h:160}, top = {x:p.x, y:p.y, w:p.w, h:p.h - 160};
+          const foot = {x:p.x, y:p.y + p.h - 130, w:p.w, h:130}, top = {x:p.x, y:p.y, w:p.w, h:p.h - 130};
           return t + ov(r, foot) * .4 + ov(r, top) * 6;
         }
         const wgt = (p.c === E.chart || p.c === E.idcard) ? 12 : p.c === E.gelang ? 4 : 2;
         return t + ov(r, p) * wgt;
       }, 0);
-      [E.chart, E.paper, E.idcard, E.gelang, E.jkn, E.lab].filter(c => !c.hidden).forEach(c => {
+      [E.chart, E.paper, E.idcard, E.lab, E.gelang, E.jkn].filter(c => !c.hidden).forEach(c => {
         const w = c.offsetWidth, h = c.offsetHeight;
         let xs = [M, W - M - w, ...placed.map(p => p.x + p.w + G), ...placed.map(p => p.x)].filter(x => x >= M && x + w <= W - M + 1);
         if (!xs.length) xs = [Math.max(M, W - M - w)];
@@ -1305,6 +1355,7 @@
     const setWide = () => sf.classList.toggle('wide', free() && !FIT.on && sf.clientWidth >= 1100);
     function layout(){
       if (!free()) return;
+      sf.scrollTop = 0;
       setWide();
       const s = slots();
       vis().forEach(c => { place(c, ...s.get(c)); c.dataset.placed = '1'; c.style.zIndex = ZBASE.get(c); });
@@ -1334,7 +1385,7 @@
         drag.moved = true; c.classList.add('dragging'); root.classList.add('is-dragging');
       }
       e.preventDefault();
-      const W = sf.clientWidth, H = sf.clientHeight;
+      const W = sf.clientWidth, H = Math.max(sf.clientHeight, sf.scrollHeight);
       place(c, Math.min(Math.max(drag.l + dx, 90 - c.offsetWidth), W - 90), Math.min(Math.max(drag.t + dy, 0), H - 60));
       redrawLink();
     });
@@ -1362,7 +1413,7 @@
     });
     return {
       apply, layout, fit,
-      reset(){ z = 10; cards.forEach(c => { delete c.dataset.placed; c.style.zIndex = ''; }); },
+      reset(){ z = 10; sf.scrollTop = 0; cards.forEach(c => { delete c.dataset.placed; c.style.zIndex = ''; }); },
       front(c){ if (z > 400){ z = 10; cards.forEach(x => { if (!x.hidden) x.style.zIndex = ZBASE.get(x); }); } c.style.zIndex = ++z; }
     };
   })();
@@ -1384,6 +1435,7 @@
       const targetLn = root.querySelector(`.ln[data-id="${restoreHl}"]`);
       if (targetLn) targetLn.classList.add('hl'); else S.hl = null;
     }
+    E.mat.scrollTop = 0;
     DESK.apply(); syncHint(); hud(); startTimer(opts && opts.remMs);
     if (S.i > 0 && !FIT.on){ const bt = q('.booth').getBoundingClientRect().top; if (bt < -40 || bt > window.innerHeight * .6) q('.booth').scrollIntoView({behavior:'smooth', block:'start'}); }
   }
@@ -1455,6 +1507,9 @@
     E.acc.disabled = E.tolak.disabled = true;
     root.classList.remove('can-mark');
     const zone = q('#igd-zone');
+    if (zone && E.mat.scrollHeight > E.mat.clientHeight + 4) {
+      try { zone.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch {}
+    }
     const x = 38 + Math.random()*24, y = 42 + Math.random()*16;
     const rot = (Math.random()*14 - 7).toFixed(1) + 'deg';
     const hd = document.createElement('div');
@@ -1586,7 +1641,11 @@
   }
 
   renderNights();
-  q('#igd-cast').innerHTML = ['Ny. Dewi Lestari','Tn. Slamet Riyadi','An. Raka Pratama'].map(n => portrait(APPEAR[n].look,'happy')).join('');
+  q('#igd-cast').innerHTML = [
+    portrait(APPEAR['Ny. Dewi Lestari'].look, 'happy'),
+    portrait(BOSS, 'happy'),
+    portrait(APPEAR['An. Raka Pratama'].look, 'happy')
+  ].join('');
 
   /* ================= EVENT ================= */
   const markLine = e => {

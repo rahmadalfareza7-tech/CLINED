@@ -486,12 +486,12 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(appHtml, /id="mejaJagaIgdPage"/);
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
-  assert.match(appHtml, /js\/update-notice\.js\?v=15/);
-  assert.match(appHtml, /js\/lazy-loader\.js\?v=37/);
-  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=11/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=16/);
+  assert.match(appHtml, /js\/lazy-loader\.js\?v=38/);
+  assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=12/);
   assert.match(lazyJs, /js\/meja-jaga-igd-data\.js\?v=3/);
   assert.match(lazyJs, /js\/meja-jaga-igd-gen\.js\?v=1/);
-  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=12/);
+  assert.match(lazyJs, /js\/meja-jaga-igd\.js\?v=13/);
   assert.match(lazyJs, /id\s*=\s*'igdStudyToolBtn'/);
   assert.match(updJs, /'mejaJagaIgdPage'/);
   assert.match(syncJs, /'clined_igd_v2'/);
@@ -503,6 +503,9 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(igdJs, /id="igd-resume"/);
   assert.match(igdJs, /id="igd-stats"/);
   assert.match(igdJs, /igd-lobby-top/);
+  assert.match(igdJs, /igd-lobby-stage/);
+  assert.match(igdJs, /igd-lobby-diorama/);
+  assert.match(igdJs, /igd-fx-ecg/);
   assert.match(igdJs, /igd-guide-box/);
   assert.match(igdJs, /igd-hud-back/);
   assert.match(igdJs, /data-act="exit"/);
@@ -511,7 +514,7 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(igdJs, /showMenu\(\)/);
   assert.match(igdJs, /FIT\.disable\(\)/);
 
-  // Atmosfer & Vibes Malam IGD (Shift Jaga Malam 21.00-07.00 WIB)
+  // Atmosfer & Vibes Malam IGD (Shift Jaga Malam 21.00-07.00 WIB) & uncropped fit desk
   assert.match(igdJs, /hud-night-badge/);
   assert.match(igdJs, /b-amb-sign/);
   assert.match(igdJs, /b-coffee/);
@@ -519,6 +522,8 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(igdCss, /\.b-amb-sign/);
   assert.match(igdCss, /\.b-coffee/);
   assert.match(igdCss, /\.surface\{[^}]*radial-gradient/);
+  assert.match(igdCss, /\.igd\.fit \.hud\{[^}]*flex-wrap:nowrap/);
+  assert.match(igdCss, /\.igd\.fit \.surface\{[^}]*overflow-y:auto/);
 
   // Panduan Lengkap / Calculator drawer opens cleanly above Game Beranda screen
   assert.match(igdCss, /\.book\{position:absolute;z-index:160/);
@@ -527,5 +532,5 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
-  assert.equal(swVer, 'v248-meja-jaga-igd-contrast-stamps');
+  assert.equal(swVer, 'v249-meja-jaga-igd-lobby-fit');
 });

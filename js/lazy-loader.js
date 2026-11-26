@@ -44,8 +44,8 @@
       scripts: ['js/kedkel-summary-data.js?v=4', 'js/kedkel-summary.js?v=8']
     },
     igd: {
-      styles: ['css/meja-jaga-igd.css?v=11'],
-      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=12']
+      styles: ['css/meja-jaga-igd.css?v=12'],
+      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=13']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],

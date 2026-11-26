@@ -1,4 +1,4 @@
-const SW_VERSION = 'v248-meja-jaga-igd-contrast-stamps';
+const SW_VERSION = 'v249-meja-jaga-igd-lobby-fit';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
