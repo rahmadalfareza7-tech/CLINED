@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
-<link rel="stylesheet" href="css/style.css?v=bank-progress-3">
+<link rel="stylesheet" href="css/style.css?v=bank-progress-4">
 <link rel="stylesheet" href="css/polish.css?v=1">
 <link rel="stylesheet" href="css/clinical-quest.css?v=4">
 <link rel="stylesheet" href="css/clined-ui-fixes.css?v=2">
@@ -190,6 +190,16 @@
         <span class="exam-launch-icon">UPI</span>
       </button>
     </div>
+    <button type="button" class="cbt-launch-banner" id="openCbtTryoutBtn" data-open-cbt-tryout aria-label="Buka Simulasi CBT Tryout Berwaktu Ketat">
+      <span class="cbt-launch-lead">
+        <span class="cbt-launch-ico" aria-hidden="true">🩺</span>
+        <span class="cbt-launch-text">
+          <b>Simulasi CBT / Tryout Berwaktu Ketat</b>
+          <small>Timer ketat ala UAB/UKMPPD · Zero spoiler · Rapor kelemahan organ</small>
+        </span>
+      </span>
+      <span class="cbt-launch-pill">CBT</span>
+    </button>
   </section>
 
   <div class="home-quick-row" id="homeQuickRow">
@@ -224,6 +234,7 @@
       <span class="menu-section-arrow ui-arrow ui-arrow-caret" aria-hidden="true">⌃</span>
     </button>
     <div class="menu-grid menu-section-content" id="menuSectionContent">
+      <button class="secondary menu-item" id="cbtMenuBtn" type="button" data-open-cbt-tryout><span class="menu-icon">🩺</span><span>Simulasi CBT Tryout</span></button>
       <button class="secondary menu-item" id="bookmarksBtn"><span class="menu-icon">🔖</span><span>Soal Bookmark</span></button>
       <button class="secondary menu-item" id="historyBtn"><span class="menu-icon">📊</span><span>Riwayat Skor</span></button>
       <button class="secondary menu-item" id="wrongBtn"><span class="menu-icon">❌</span><span>Soal yang Sering Salah</span></button>
@@ -244,6 +255,17 @@
     <span class="feedback-icon">📝</span>
     <span class="feedback-content"><strong>Pesan &amp; Kesan</strong></span>
   </a>
+
+  <aside class="app-legal-footer" aria-label="Disclaimer Medis dan Kebijakan Privasi">
+    <div>⚖️ <strong>Edukasi Medis:</strong> Konten latihan soal, resep, kalkulator klinis, nilai normal lab, dan simulasi IGD di CLINED hanya untuk pembelajaran mahasiswa kedokteran dan bukan pengganti keputusan klinis maupun diagnosis pasien.</div>
+    <div class="app-legal-links">
+      <a href="legal.html#disclaimer" target="_blank" rel="noopener">Disclaimer Medis</a>
+      <span aria-hidden="true">·</span>
+      <a href="legal.html#privasi" target="_blank" rel="noopener">Kebijakan Privasi</a>
+      <span aria-hidden="true">·</span>
+      <a href="legal.html#syarat" target="_blank" rel="noopener">Syarat &amp; Ketentuan</a>
+    </div>
+  </aside>
 </section>
 
 <section id="accountPage" class="view account-page-view">
@@ -295,6 +317,16 @@
       </div>
       <input id="importAccountFile" type="file" accept="application/json,.json" hidden>
       <small class="account-data-note">Restore hanya memulihkan data aplikasi dan profil lokal yang aman.</small>
+    </div>
+    <div class="app-legal-footer">
+      <div>🔒 <strong>Privasi &amp; Hak Akun:</strong> Password di-hash menggunakan <code>scrypt</code>, sesi memakai cookie <code>HttpOnly</code>, dan tombol <strong>Hapus akun</strong> menghapus seluruh data akun secara permanen.</div>
+      <div class="app-legal-links">
+        <a href="legal.html#privasi" target="_blank" rel="noopener">Kebijakan Privasi</a>
+        <span aria-hidden="true">·</span>
+        <a href="legal.html#disclaimer" target="_blank" rel="noopener">Disclaimer Medis</a>
+        <span aria-hidden="true">·</span>
+        <a href="legal.html#syarat" target="_blank" rel="noopener">Syarat &amp; Ketentuan</a>
+      </div>
     </div>
 
   </div>
@@ -1155,11 +1187,24 @@
   <div id="blokLysisHost"></div>
 </section>
 
+<!-- SIMULASI CBT / TRYOUT BERWAKTU KETAT (dimuat lazy: css/cbt-tryout.css + js/cbt-tryout.js) -->
+<section id="cbtTryoutPage" class="view exam-page-view cbt-tryout-page">
+  <div class="exam-page-header">
+    <button class="back-link" type="button" data-home>‹ Beranda</button>
+    <div>
+      <div class="eyebrow">CLINED • SIMULASI UJIAN KETAT</div>
+      <h2>🩺 Simulasi CBT / Tryout</h2>
+      <p>Mode ujian berwaktu ketat ala UAB &amp; UKMPPD — pembahasan baru terbuka setelah submit beserta rapor kelemahan per sistem organ.</p>
+    </div>
+  </div>
+  <div id="cbtTryoutHost"></div>
+</section>
+
 <!-- LEADERBOARD PAGE -->
 <section id="leaderboardPage" class="view exam-page-view">
   <div class="exam-page-header">
     <button class="back-link" id="backFromLeaderboard" type="button">‹ Beranda</button>
-    <div><div class="eyebrow">CLINED • KOMPETISI</div><h2>🏆 Papan Peringkat</h2><p>XP mingguan dimulai setiap Senin. Kerjakan soal sebanyak mungkin!</p></div>
+    <div><div class="eyebrow">CLINED • KOMPETISI</div><h2>🏆 Papan Peringkat</h2><p>XP mingguan dimulai setiap Senin. Kerjakan soal &amp; mini games sebanyak mungkin!</p></div>
   </div>
   <div class="card nested-card leaderboard-tabs-card">
     <div id="adminLeaderboardToggleBox" class="admin-lb-toggle-box" hidden>
@@ -1178,6 +1223,8 @@
       <button class="lb-tab" data-lb-tab="alltime" role="tab" aria-selected="false">All Time</button>
       <button class="lb-tab" data-lb-tab="gladiator" role="tab" aria-selected="false">⚔️ Gladiator</button>
       <button class="lb-tab" data-lb-tab="blok_lysis" role="tab" aria-selected="false">🧬 Blok Lysis</button>
+      <button class="lb-tab" data-lb-tab="igd" role="tab" aria-selected="false">🏥 Meja Jaga IGD</button>
+      <button class="lb-tab" data-lb-tab="rujuk_langka" role="tab" aria-selected="false">🚑 Rujuk Langka</button>
     </div>
     <div id="leaderboardBlockBar" class="lb-block-bar" hidden>
       <label for="leaderboardBlockSelect">Pilih Blok:</label>
@@ -1369,11 +1416,11 @@
 <script src="js/error-monitor.js?v=1"></script>
 <script src="js/online-guard.js?v=1"></script>
 <script src="js/ui-dialogs.js?v=1"></script>
-<script src="js/update-notice.js?v=27"></script>
+<script src="js/update-notice.js?v=28"></script>
 <script src="js/report-question.js?v=1"></script>
 <script src="js/photo-store.js?v=1"></script>
 <script src="js/photo-compress.js?v=2"></script>
-<script src="js/online-sync.js?v=22"></script>
+<script src="js/online-sync.js?v=23"></script>
 <script src="js/ability-classifier.js?v=1"></script>
 <script src="js/champion-tags.js?v=1"></script>
 <script src="js/kedkel-2026-materi.js?v=3"></script>
@@ -1382,7 +1429,7 @@
 <script src="js/content-manager.js?v=27"></script>
 <script src="js/question-bank-engine.js?v=static-banks-v4"></script>
 <script src="js/inline-boot.js?v=5"></script>
-<script src="js/new-features.js?v=23"></script>
+<script src="js/new-features.js?v=24"></script>
 <script src="js/clinical-quest.js?v=18"></script>
 <script src="js/floating-nav.js?v=1"></script>
 
@@ -1403,8 +1450,8 @@
 <script src="js/insights.js?v=3"></script>
 <script src="js/glossary-match.js?v=1"></script>
 <script src="js/glossary.js?v=5"></script>
-<script src="js/usage.js?v=6"></script>
-<script src="js/lazy-loader.js?v=48"></script>
+<script src="js/usage.js?v=7"></script>
+<script src="js/lazy-loader.js?v=49"></script>
 <script src="js/pwa-install.js?v=2"></script>
 </body>
 </html>

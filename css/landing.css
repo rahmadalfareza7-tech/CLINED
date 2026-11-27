@@ -374,3 +374,18 @@ h2{font-size:clamp(27px,6.6vw,44px)}
 
 .btn-pwa-dl{background:var(--blue,#1cb0f6);box-shadow:0 4px 0 var(--blue-d,#0b84c0);color:#fff}
 .btn-pwa-dl[hidden]{display:none!important}
+
+/* Mini Games & Arena Showcase Slides */
+.mg-showcase,.arena-cards{display:grid;gap:12px}
+.mg-pill,.ac-row{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:16px;background:var(--card);border:2px solid var(--line);box-shadow:0 3px 0 var(--line-d)}
+.mg-pill span,.ac-row span{font-size:26px;flex:none}
+.mg-pill b,.ac-row b{display:block;font-size:15px;font-weight:900}
+.mg-pill small,.ac-row small{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-top:2px}
+.mg-p1{border-color:var(--red)}
+.mg-p2{border-color:var(--blue)}
+.mg-p3{border-color:var(--green)}
+.ac-row em{margin-left:auto;font-style:normal;font-size:11px;font-weight:900;padding:4px 9px;border-radius:999px;background:color-mix(in srgb,var(--yellow) 26%,var(--surface));color:var(--text);border:1.5px solid var(--yellow-d);white-space:nowrap}
+.legal-foot-links{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;font-size:12px;font-weight:800;color:var(--muted)}
+.legal-foot-links a{color:var(--blue-d);text-decoration:none}
+.legal-foot-links a:hover{text-decoration:underline}
+

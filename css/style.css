@@ -2981,27 +2981,134 @@ textarea{line-height:1.4}
   }
 }
 
-/* Materi PPT: lebih lebar hanya ketika Ninja Nerd tidak tersedia */
-.external-material-grid:not(:has(a[aria-label="Buka NINJA NERD"])) > a.materi-button[aria-label="Buka MATERI PPT"] {
-  width: 60% !important;
-  max-width: 480px !important;
-  flex: 0 0 60% !important;
-  align-self: center !important;
-}
-
-
 /* Materi PPT: 60% hanya jika Ninja Nerd tidak tersedia */
 .external-material-grid:not(:has(> a[aria-label="Buka NINJA NERD"])) {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
-.external-material-grid:not(:has(> a[aria-label="Buka NINJA NERD"])) > a[aria-label="Buka MATERI PPT"] {
-  width: 60% !important;
-  max-width: 480px !important;
-  min-width: 0 !important;
-  flex: 0 0 auto !important;
-  align-self: center !important;
+.external-material-grid:not(:has(> a[aria-label="Buka NINJA NERD"])) > a.materi-button[aria-label="Buka MATERI PPT"] {
+  width: 60%;
+  max-width: 480px;
+  min-width: 0;
+  flex: 0 0 auto;
+  align-self: center;
 }
+
+/* Simulasi CBT Launcher Banner on Home */
+.cbt-launch-banner {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(13, 148, 136, 0.32);
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.12), rgba(2, 132, 199, 0.12));
+  color: var(--text, #0f172a);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.cbt-launch-banner:hover {
+  transform: translateY(-1px);
+  border-color: #0d9488;
+}
+
+.cbt-launch-lead {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.cbt-launch-ico {
+  font-size: 1.45rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.cbt-launch-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cbt-launch-text b {
+  font-size: 0.92rem;
+  font-weight: 900;
+}
+
+.cbt-launch-text small {
+  font-size: 0.76rem;
+  color: var(--muted, #475569);
+}
+
+.cbt-launch-pill {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #0d9488;
+  color: #ffffff;
+}
+
+body.dark .cbt-launch-banner {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.18), rgba(56, 189, 248, 0.14));
+  border-color: rgba(45, 212, 191, 0.35);
+  color: #f1f5f9;
+}
+
+body.dark .cbt-launch-text small {
+  color: #94a3b8;
+}
+
+/* In-app Legal & Medical Disclaimer Footer */
+.app-legal-footer {
+  margin-top: 12px;
+  padding: 13px 15px;
+  border-radius: 16px;
+  border: 1px solid var(--border, rgba(148, 163, 184, 0.28));
+  background: rgba(148, 163, 184, 0.08);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--muted, #475569);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.app-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+}
+
+.app-legal-links a {
+  color: #0d9488;
+  text-decoration: none;
+}
+
+.app-legal-links a:hover {
+  text-decoration: underline;
+}
+
+body.dark .app-legal-footer {
+  background: rgba(30, 41, 59, 0.55);
+  border-color: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+}
+
+body.dark .app-legal-links a {
+  color: #2dd4bf;
+}
+

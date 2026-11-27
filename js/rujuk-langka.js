@@ -1115,6 +1115,20 @@
 
     function finish() {
       const rec = G.rec; rec.done = true; rec.started = -1; save();
+      if (G.archive !== 'practice') {
+        try {
+          const me = typeof window.authCurrentUser === 'function' ? window.authCurrentUser() : null;
+          if (me && me.id && navigator.onLine) {
+            fetch('/api/minigames/rujuk-langka/score', {
+              method: 'POST',
+              credentials: 'same-origin',
+              cache: 'no-store',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(S)
+            }).catch(() => {});
+          }
+        } catch {}
+      }
       const xpRes = awardXP(G.date, rec, G.archive);
       const { date, archive } = G; G = null;
       summary(date, archive, xpRes);

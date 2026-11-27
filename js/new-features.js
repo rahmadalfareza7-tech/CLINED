@@ -42,7 +42,7 @@ window.CLINED_Leaderboard = (function () {
   async function load() {
     const listEl = document.getElementById('leaderboardList');
     if (!listEl) return;
-    if (lbTab === 'block' || lbTab === 'gladiator' || lbTab === 'blok_lysis') return render(listEl, lbTab);
+    if (lbTab === 'block' || lbTab === 'gladiator' || lbTab === 'blok_lysis' || lbTab === 'igd' || lbTab === 'rujuk_langka') return render(listEl, lbTab);
     listEl.innerHTML = '<div class="leaderboard-loading">Memuat…</div>';
     try {
       const data = await fetchLeaderboard(true);
@@ -245,6 +245,302 @@ window.CLINED_Leaderboard = (function () {
     }
   }
 
+  function readLocalIgdSummary() {
+    try {
+      const raw = localStorage.getItem('clined_igd_v2');
+      if (!raw) return { rawObj: null, totalBest: 0, bestNightScore: 0, nightsDone: 0, solvedCases: 0, runsPlayed: 0 };
+      const p = JSON.parse(raw);
+      let totalBest = 0, bestNightScore = 0;
+      if (p?.best && typeof p.best === 'object') {
+        for (const [k, v] of Object.entries(p.best)) {
+          if (!/^[1-6]$/.test(String(k))) continue;
+          const sc = Math.max(0, Math.floor(Number(v) || 0));
+          totalBest += sc;
+          if (sc > bestNightScore) bestNightScore = sc;
+        }
+      }
+      const nightsDone = p?.done && typeof p.done === 'object'
+        ? Object.entries(p.done).filter(([k, v]) => /^[1-6]$/.test(String(k)) && Boolean(v)).length
+        : 0;
+      const solvedCases = p?.solved && typeof p.solved === 'object'
+        ? Object.values(p.solved).filter(Boolean).length
+        : 0;
+      const runsPlayed = Math.max(0, Math.floor(Number(p?.runs) || 0));
+      return { rawObj: p, totalBest, bestNightScore, nightsDone, solvedCases, runsPlayed };
+    } catch {
+      return { rawObj: null, totalBest: 0, bestNightScore: 0, nightsDone: 0, solvedCases: 0, runsPlayed: 0 };
+    }
+  }
+
+  async function renderIgdLeaderboard(listEl) {
+    listEl.innerHTML = '<div class="leaderboard-loading">Menyinkronkan &amp; memuat Peringkat Meja Jaga IGD…</div>';
+    try {
+      const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      const local = readLocalIgdSummary();
+      let d = null;
+
+      if (me && me.id && navigator.onLine && local.rawObj && (local.totalBest > 0 || local.solvedCases > 0)) {
+        try {
+          const pr = await fetch('/api/minigames/igd/score', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(local.rawObj)
+          });
+          if (pr.status === 401) {
+            if (lbTab === 'igd') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Meja Jaga IGD.</div>';
+            return;
+          }
+          if (pr.ok) {
+            const pd = await pr.json().catch(() => null);
+            if (pd && Array.isArray(pd.rankings)) d = pd;
+          }
+        } catch {}
+      }
+
+      if (!d) {
+        await window.CLINED_ONLINE_SYNC?.sync?.({ force: true })?.catch?.(() => {});
+        const r = await fetch('/api/minigames/igd/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
+        if (r.status === 401) {
+          if (lbTab === 'igd') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Meja Jaga IGD.</div>';
+          return;
+        }
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        d = await r.json();
+      }
+
+      if (lbTab !== 'igd') return;
+      const meId = d.me || me?.id || '';
+      const isAdminLike = Boolean(me && (me.role === 'admin' || me.role === 'developer'));
+      const isHiddenAdmin = Boolean(d.hiddenByAdminToggle || (isAdminLike && d.showInLeaderboard === false) || (isAdminLike && d.showInLeaderboard === undefined && !me.showInLeaderboard));
+      let rows = (Array.isArray(d.rankings) ? d.rankings : []).map(row => ({
+        ...row,
+        totalBest: Number(row.totalBest ?? row.bestScore) || 0,
+        bestNightScore: Number(row.bestNightScore) || 0,
+        nightsDone: Number(row.nightsDone) || 0,
+        solvedCases: Number(row.solvedCases) || 0
+      }));
+
+      if (me && meId && !isHiddenAdmin && local.totalBest > 0) {
+        const uidStr = String(meId);
+        const idx = rows.findIndex(row => String(row.id) === uidStr);
+        if (idx >= 0) {
+          rows[idx] = {
+            ...rows[idx],
+            totalBest: Math.max(rows[idx].totalBest, local.totalBest),
+            bestNightScore: Math.max(rows[idx].bestNightScore, local.bestNightScore),
+            nightsDone: Math.max(rows[idx].nightsDone, local.nightsDone),
+            solvedCases: Math.max(rows[idx].solvedCases, local.solvedCases)
+          };
+        } else if (rows.length < 50 || local.totalBest >= (rows[rows.length - 1]?.totalBest || 0)) {
+          rows.push({
+            id: meId,
+            name: me.name || me.username || 'Kamu',
+            username: me.username || '',
+            avatarUrl: me.avatarUrl || '',
+            avatarDeco: me.avatarDeco || '',
+            bannerUrl: me.bannerUrl || '',
+            nameColor: me.nameColor || '',
+            xp100k: Boolean(me.xp100k),
+            championBlocks: me.championBlocks || [],
+            totalBest: local.totalBest,
+            bestNightScore: local.bestNightScore,
+            nightsDone: local.nightsDone,
+            solvedCases: local.solvedCases
+          });
+        }
+        rows.sort((a, b) =>
+          (b.totalBest - a.totalBest) ||
+          (b.solvedCases - a.solvedCases) ||
+          (b.nightsDone - a.nightsDone) ||
+          (b.bestNightScore - a.bestNightScore) ||
+          String(a.name || '').localeCompare(String(b.name || ''), 'id')
+        );
+        if (rows.length > 50) rows.length = 50;
+      }
+
+      const lbAv = row => {
+        const ini = String(row.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+        return `<span class="lb-av${row.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${row.avatarUrl ? `<img class="lb-av-img" src="${escHtml(row.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}${row.avatarDeco ? `<img class="avatar-deco-img" src="${escHtml(row.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
+      };
+      const hiddenHint = isHiddenAdmin
+        ? `<div class="leaderboard-loading" style="margin-bottom:8px;padding:10px 12px;border-radius:12px;background:rgba(255,210,63,.12);border:1px solid rgba(255,210,63,.35)">👑 Mode Admin tersembunyi aktif — aktifkan sakelar <b>Tampil di Leaderboard</b> di atas agar skor IGD 🏥 ${Math.max(local.totalBest, Number(d.myBest) || 0).toLocaleString('id')} ikut masuk peringkat.</div>`
+        : '';
+      const uidStr = String(meId || '');
+      const listHtml = rows.map((row, i) => {
+        const rank = i + 1;
+        const isMe = uidStr && String(row.id) === uidStr;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+        const bg = row.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${escHtml(row.bannerUrl)}')" aria-hidden="true"></span>` : '';
+        const nc = row.nameColor ? ` data-name-color="${escHtml(row.nameColor)}"` : '';
+        const xpBadge = row.xp100k ? ' <em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+        const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(row.championBlocks, { compact: true, max: 2 }) || '';
+        const metaParts = [`@${row.username}`];
+        if (row.solvedCases > 0) metaParts.push(`${row.solvedCases} kasus`);
+        if (row.nightsDone > 0) metaParts.push(`${row.nightsDone} malam`);
+        return `<div class="leaderboard-row${isMe ? ' leaderboard-me' : ''}${row.bannerUrl ? ' has-banner' : ''}">
+          ${bg}
+          <span class="lb-rank">${medal}</span>
+          ${lbAv(row)}
+          <div class="lb-user">
+            <b${nc}>${escHtml(row.name)}</b>${xpBadge}${champBadges ? ' ' + champBadges : ''}
+            <small>${escHtml(metaParts.join(' · '))}</small>
+          </div>
+          <span class="lb-xp">🏥 ${row.totalBest.toLocaleString('id')}</span>
+        </div>`;
+      }).join('');
+      listEl.innerHTML = hiddenHint + (listHtml || '<div class="leaderboard-loading">Belum ada skor Meja Jaga IGD. Mainkan shift malam di Mini Games dan jadilah #1!</div>');
+    } catch {
+      if (lbTab === 'igd') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat Meja Jaga IGD. Masuk akun dulu.</div>';
+    }
+  }
+
+  function readLocalRujukSummary() {
+    try {
+      const raw = localStorage.getItem('clined_rujuk_langka_v1') || localStorage.getItem('rujuklangka:v2');
+      if (!raw) return { rawObj: null, bestScore: 0, totalScore: 0, roundsDone: 0 };
+      const obj = JSON.parse(raw);
+      let bestScore = 0, totalScore = 0, roundsDone = 0;
+      for (const bKey of ['scored', 'archive']) {
+        const bucket = obj?.[bKey];
+        if (!bucket || typeof bucket !== 'object') continue;
+        for (const rec of Object.values(bucket)) {
+          if (!rec || typeof rec !== 'object') continue;
+          const sc = Math.max(0, Math.floor(Number(rec.score ?? rec.total) || 0));
+          if (sc > bestScore) bestScore = sc;
+          if (rec.done || sc > 0) {
+            totalScore += sc;
+            roundsDone++;
+          }
+        }
+      }
+      return { rawObj: obj, bestScore, totalScore: Math.max(totalScore, bestScore), roundsDone };
+    } catch {
+      return { rawObj: null, bestScore: 0, totalScore: 0, roundsDone: 0 };
+    }
+  }
+
+  async function renderRujukLeaderboard(listEl) {
+    listEl.innerHTML = '<div class="leaderboard-loading">Menyinkronkan &amp; memuat Peringkat Rujuk Langka…</div>';
+    try {
+      const me = typeof authCurrentUser === 'function' ? authCurrentUser() : null;
+      const local = readLocalRujukSummary();
+      let d = null;
+
+      if (me && me.id && navigator.onLine && local.rawObj && (local.bestScore > 0 || local.roundsDone > 0)) {
+        try {
+          const pr = await fetch('/api/minigames/rujuk-langka/score', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(local.rawObj)
+          });
+          if (pr.status === 401) {
+            if (lbTab === 'rujuk_langka') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Rujuk Langka.</div>';
+            return;
+          }
+          if (pr.ok) {
+            const pd = await pr.json().catch(() => null);
+            if (pd && Array.isArray(pd.rankings)) d = pd;
+          }
+        } catch {}
+      }
+
+      if (!d) {
+        await window.CLINED_ONLINE_SYNC?.sync?.({ force: true })?.catch?.(() => {});
+        const r = await fetch('/api/minigames/rujuk-langka/leaderboard', { credentials: 'same-origin', cache: 'no-store' });
+        if (r.status === 401) {
+          if (lbTab === 'rujuk_langka') listEl.innerHTML = '<div class="leaderboard-loading">Masuk akun dulu untuk melihat peringkat Rujuk Langka.</div>';
+          return;
+        }
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        d = await r.json();
+      }
+
+      if (lbTab !== 'rujuk_langka') return;
+      const meId = d.me || me?.id || '';
+      const isAdminLike = Boolean(me && (me.role === 'admin' || me.role === 'developer'));
+      const isHiddenAdmin = Boolean(d.hiddenByAdminToggle || (isAdminLike && d.showInLeaderboard === false) || (isAdminLike && d.showInLeaderboard === undefined && !me.showInLeaderboard));
+      let rows = (Array.isArray(d.rankings) ? d.rankings : []).map(row => ({
+        ...row,
+        bestScore: Number(row.bestScore) || 0,
+        totalScore: Number(row.totalScore) || 0,
+        roundsDone: Number(row.roundsDone) || 0
+      }));
+
+      if (me && meId && !isHiddenAdmin && local.bestScore > 0) {
+        const uidStr = String(meId);
+        const idx = rows.findIndex(row => String(row.id) === uidStr);
+        if (idx >= 0) {
+          rows[idx] = {
+            ...rows[idx],
+            bestScore: Math.max(rows[idx].bestScore, local.bestScore),
+            totalScore: Math.max(rows[idx].totalScore, local.totalScore),
+            roundsDone: Math.max(rows[idx].roundsDone, local.roundsDone)
+          };
+        } else if (rows.length < 50 || local.bestScore >= (rows[rows.length - 1]?.bestScore || 0)) {
+          rows.push({
+            id: meId,
+            name: me.name || me.username || 'Kamu',
+            username: me.username || '',
+            avatarUrl: me.avatarUrl || '',
+            avatarDeco: me.avatarDeco || '',
+            bannerUrl: me.bannerUrl || '',
+            nameColor: me.nameColor || '',
+            xp100k: Boolean(me.xp100k),
+            championBlocks: me.championBlocks || [],
+            bestScore: local.bestScore,
+            totalScore: local.totalScore,
+            roundsDone: local.roundsDone
+          });
+        }
+        rows.sort((a, b) =>
+          (b.bestScore - a.bestScore) ||
+          (b.totalScore - a.totalScore) ||
+          (b.roundsDone - a.roundsDone) ||
+          String(a.name || '').localeCompare(String(b.name || ''), 'id')
+        );
+        if (rows.length > 50) rows.length = 50;
+      }
+
+      const lbAv = row => {
+        const ini = String(row.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+        return `<span class="lb-av${row.avatarDeco ? ' has-deco' : ''}" aria-hidden="true">${row.avatarUrl ? `<img class="lb-av-img" src="${escHtml(row.avatarUrl)}" alt="" loading="lazy">` : escHtml(ini)}${row.avatarDeco ? `<img class="avatar-deco-img" src="${escHtml(row.avatarDeco)}" alt="" loading="lazy">` : ''}</span>`;
+      };
+      const hiddenHint = isHiddenAdmin
+        ? `<div class="leaderboard-loading" style="margin-bottom:8px;padding:10px 12px;border-radius:12px;background:rgba(255,210,63,.12);border:1px solid rgba(255,210,63,.35)">👑 Mode Admin tersembunyi aktif — aktifkan sakelar <b>Tampil di Leaderboard</b> di atas agar skor Rujuk Langka 🚑 ${Math.max(local.bestScore, Number(d.myBest) || 0).toLocaleString('id')} ikut masuk peringkat.</div>`
+        : '';
+      const uidStr = String(meId || '');
+      const listHtml = rows.map((row, i) => {
+        const rank = i + 1;
+        const isMe = uidStr && String(row.id) === uidStr;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+        const bg = row.bannerUrl ? `<span class="chat-row-bg" style="background-image:url('${escHtml(row.bannerUrl)}')" aria-hidden="true"></span>` : '';
+        const nc = row.nameColor ? ` data-name-color="${escHtml(row.nameColor)}"` : '';
+        const xpBadge = row.xp100k ? ' <em class="chat-badge b-xp100k compact" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
+        const champBadges = window.CLINED_CHAMPIONS?.renderBadges?.(row.championBlocks, { compact: true, max: 2 }) || '';
+        const metaParts = [`@${row.username}`];
+        if (row.totalScore > 0) metaParts.push(`Total ${row.totalScore.toLocaleString('id')} poin`);
+        if (row.roundsDone > 0) metaParts.push(`${row.roundsDone} ronde`);
+        return `<div class="leaderboard-row${isMe ? ' leaderboard-me' : ''}${row.bannerUrl ? ' has-banner' : ''}">
+          ${bg}
+          <span class="lb-rank">${medal}</span>
+          ${lbAv(row)}
+          <div class="lb-user">
+            <b${nc}>${escHtml(row.name)}</b>${xpBadge}${champBadges ? ' ' + champBadges : ''}
+            <small>${escHtml(metaParts.join(' · '))}</small>
+          </div>
+          <span class="lb-xp">🚑 ${row.bestScore.toLocaleString('id')}</span>
+        </div>`;
+      }).join('');
+      listEl.innerHTML = hiddenHint + (listHtml || '<div class="leaderboard-loading">Belum ada skor Rujuk Langka. Selesaikan 1 ronde harian/arsip di Mini Games dan jadilah #1!</div>');
+    } catch {
+      if (lbTab === 'rujuk_langka') listEl.innerHTML = '<div class="leaderboard-loading">Gagal memuat peringkat Rujuk Langka. Masuk akun dulu.</div>';
+    }
+  }
+
   function renderRows(listEl, rows, meId, getXp, emptyMsg) {
     const lbAv = r => {
       const ini = String(r.name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
@@ -277,6 +573,8 @@ window.CLINED_Leaderboard = (function () {
     if (blockBar) blockBar.hidden = tab !== 'block';
     if (tab === 'gladiator') return renderGladiator(listEl);
     if (tab === 'blok_lysis') return renderBlokLysis(listEl);
+    if (tab === 'igd') return renderIgdLeaderboard(listEl);
+    if (tab === 'rujuk_langka') return renderRujukLeaderboard(listEl);
     if (tab === 'block') return renderBlockLeaderboard(listEl);
     if (!lbData) return load();
     const rankings = tab === 'alltime'
@@ -346,7 +644,7 @@ window.CLINED_Leaderboard = (function () {
     if (lbl) lbl.textContent = on ? 'ON' : 'OFF';
     if (sub) {
       sub.textContent = on
-        ? 'Aktif • Akun Admin ikut muncul di Weekly, Per BLOK, All Time, Gladiator & Blok Lysis'
+        ? 'Aktif • Akun Admin ikut muncul di Weekly, Per BLOK, All Time, Gladiator & Mini Games'
         : 'Nonaktif • Akun Admin disembunyikan dari semua papan peringkat';
     }
   }

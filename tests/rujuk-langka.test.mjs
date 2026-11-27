@@ -280,7 +280,7 @@ test('App wiring: Mini Games Hub card, view section, lazy bundle, BUSY_VIEWS, us
   assert.match(lazyJs, /rujukLangka:\s*\{/);
   assert.match(lazyJs, /css\/rujuk-langka\.css\?v=3/);
   assert.match(lazyJs, /js\/rujuk-langka-data\.js\?v=2/);
-  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=4/);
+  assert.match(lazyJs, /js\/rujuk-langka\.js\?v=5/);
   assert.match(lazyJs, /showRujukLangkaLoadingUI/);
   assert.match(lazyJs, /data-open-rujuk-langka/);
   assert.match(updJs, /'rujukLangkaPage'/);

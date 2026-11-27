@@ -78,6 +78,18 @@
       p.runs += 1;
       p.at = Date.now();
       Progress.write(p);
+      try {
+        const me = typeof window.authCurrentUser === 'function' ? window.authCurrentUser() : null;
+        if (me && me.id && navigator.onLine) {
+          fetch('/api/minigames/igd/score', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(p)
+          }).catch(() => {});
+        }
+      } catch (e) {}
       return { p, prev, isBest, newIds, newlyClearedNight };
     }
   };

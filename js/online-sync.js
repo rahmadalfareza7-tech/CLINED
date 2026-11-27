@@ -50,6 +50,7 @@
     'clined_rujuk_langka_v1',
     'clined_blok_lysis_v1',
     'clined_blok_lysis_session_v1',
+    'clined_cbt_tryout_v1',
     'clined_kedkel_summary_done_v2',
     'clined_kedkel_summary_star_v2',
     'clined_unlocked_achievements_v1',
@@ -1124,6 +1125,29 @@
         const sStart = Number(srv.startedAt) || st;
         const win = (lStart !== sStart ? lStart > sStart : lt > st) ? loc : srv;
         return { value: JSON.stringify(win), dirty: !jsonDeepEqual(win, srv) };
+      }
+      if (key === 'clined_cbt_tryout_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object' && !Array.isArray(loc) && !Array.isArray(srv)) {
+        if (jsonDeepEqual(loc, srv)) return { value: JSON.stringify(srv), dirty: false };
+        const byId = new Map();
+        const addRuns = arr => {
+          if (!Array.isArray(arr)) return;
+          for (const r of arr) {
+            if (!r || typeof r !== 'object') continue;
+            const id = String(r.id || r.at || '');
+            if (!id) continue;
+            const prev = byId.get(id);
+            if (!prev || (Number(r.at) || 0) >= (Number(prev.at) || 0)) byId.set(id, r);
+          }
+        };
+        addRuns(srv.runs);
+        addRuns(loc.runs);
+        const runs = [...byId.values()].sort((a, b) => (Number(b.at) || 0) - (Number(a.at) || 0)).slice(0, 40);
+        const merged = {
+          runs,
+          bestPct: Math.max(Number(loc.bestPct) || 0, Number(srv.bestPct) || 0, ...runs.map(r => Number(r.pct) || 0)),
+          updatedAt: Math.max(Number(loc.updatedAt) || 0, Number(srv.updatedAt) || 0)
+        };
+        return { value: JSON.stringify(merged), dirty: !jsonDeepEqual(merged, srv) };
       }
       if (key === 'clined_xp_daily_refs_v1' && loc && srv && typeof loc === 'object' && typeof srv === 'object') {
         if (loc.day && loc.day === srv.day) {

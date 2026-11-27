@@ -27,9 +27,9 @@ test('Online-only revision: zero offline availability claims & graceful online-o
 });
 
 test('Strict CSP hardening: zero inline scripts/styles/handlers in HTML and script-src self without unsafe-inline', () => {
-  for (const file of ['app.html', 'index.html']) {
+  for (const file of ['app.html', 'index.html', 'legal.html']) {
     const html = readRel(file);
-    assert.equal([...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>/gi)].length, 0, `${file} must have zero inline <script>`);
+    assert.equal([...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type=["']application\/ld\+json["'])[^>]*>/gi)].length, 0, `${file} must have zero executable inline <script>`);
     assert.equal([...html.matchAll(/<style\b[^>]*>/gi)].length, 0, `${file} must have zero inline <style>`);
     assert.equal([...html.matchAll(/\son(?:click|change|input|submit|keydown|keyup|load|error)\s*=/gi)].length, 0, `${file} must have zero inline on*= handlers`);
   }

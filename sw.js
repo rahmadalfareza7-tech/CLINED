@@ -1,9 +1,11 @@
-const SW_VERSION = 'v260-online-only-hardening-ci';
+const SW_VERSION = 'v261-legal-cbt-minigames-lb-seo';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
   './index.html',
+  './legal.html',
   './css/landing.css',
+  './css/legal.css',
   './css/polish.css',
   './css/design-system.css',
   './css/desktop.css',
@@ -17,6 +19,7 @@ const CORE = [
   './css/meja-jaga-igd.css',
   './css/rujuk-langka.css',
   './css/blok-lysis.css',
+  './css/cbt-tryout.css',
   './js/error-monitor.js',
   './js/online-guard.js',
   './js/floating-nav.js',
@@ -38,6 +41,7 @@ const CORE = [
   './js/rujuk-langka-data.js',
   './js/rujuk-langka.js',
   './js/blok-lysis.js',
+  './js/cbt-tryout.js',
   './js/latihan-materi.js',
   './js/onboarding.js',
   './js/userbank-parser.js',

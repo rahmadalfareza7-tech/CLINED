@@ -56,17 +56,22 @@
     igd: {
       appendEnd: true,
       styles: ['css/meja-jaga-igd.css?v=14'],
-      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=15']
+      scripts: ['js/meja-jaga-igd-data.js?v=3', 'js/meja-jaga-igd-gen.js?v=1', 'js/meja-jaga-igd.js?v=16']
     },
     rujukLangka: {
       appendEnd: true,
       styles: ['css/rujuk-langka.css?v=3'],
-      scripts: ['js/rujuk-langka-data.js?v=2', 'js/rujuk-langka.js?v=4']
+      scripts: ['js/rujuk-langka-data.js?v=2', 'js/rujuk-langka.js?v=5']
     },
     blokLysis: {
       appendEnd: true,
       styles: ['css/blok-lysis.css?v=3'],
       scripts: ['js/blok-lysis.js?v=3']
+    },
+    cbtTryout: {
+      appendEnd: true,
+      styles: ['css/cbt-tryout.css?v=1'],
+      scripts: ['js/cbt-tryout.js?v=1']
     },
     admin: {
       styles: ['css/admin-people.css?v=5'],
@@ -283,6 +288,26 @@
       }
     };
   }
+  if (!window.CLINED_CBT_TRYOUT) {
+    window.CLINED_CBT_TRYOUT = {
+      open: () => {
+        try {
+          const page = document.getElementById('cbtTryoutPage');
+          if (page && !page.classList.contains('active')) {
+            window.show?.('cbtTryoutPage', { force: true });
+            window.scrollTo(0, 0);
+          }
+          const host = document.getElementById('cbtTryoutHost');
+          if (host && !host.querySelector('.cbt-root')) {
+            host.innerHTML = '<div class="card" style="text-align:center;padding:34px 20px"><div style="font-size:2rem;margin-bottom:6px">🩺</div><b>Membuka Simulasi CBT Berwaktu Ketat…</b></div>';
+          }
+        } catch {}
+        return load('cbtTryout')
+          .then(() => window.CLINED_CBT_TRYOUT?.open?.())
+          .catch(e => window.showToast?.(e?.message || 'Gagal memuat Simulasi CBT.', true));
+      }
+    };
+  }
   if (!window.CLINED_MEDCALC) {
     window.CLINED_MEDCALC = {
       open: (tab = 'peds') => load('medcalc').then(() => window.CLINED_MEDCALC?.open?.(tab)).catch(e => window.showToast?.(e.message, true)),
@@ -411,12 +436,17 @@
   }
 
   document.addEventListener('click', e => {
-    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd], [data-open-rujuk-langka], [data-open-blok-lysis], [data-open-minigames]');
+    const btn = e.target.closest?.('button, [data-open-medcalc], [data-open-igd], [data-open-rujuk-langka], [data-open-blok-lysis], [data-open-cbt-tryout], [data-open-minigames]');
     if (!btn) return;
     if (btn.id === 'miniGamesBtn' || btn.dataset.openMinigames != null) {
       e.preventDefault();
       syncMiniGamesHub();
       try { window.show?.('miniGamesPage'); window.scrollTo(0, 0); } catch {}
+      return;
+    }
+    if (btn.id === 'cbtMenuBtn' || btn.id === 'openCbtTryoutBtn' || btn.dataset.openCbtTryout != null) {
+      e.preventDefault();
+      window.CLINED_CBT_TRYOUT.open();
       return;
     }
     if (btn.id === 'igdMenuBtn' || btn.id === 'igdStudyToolBtn' || btn.dataset.openIgd != null) {
@@ -490,6 +520,9 @@
     }
     if (e.detail === 'blokLysisPage' && !loaded.has('blokLysis') && !pending.has('blokLysis')) {
       window.CLINED_BLOK_LYSIS.open();
+    }
+    if (e.detail === 'cbtTryoutPage' && !loaded.has('cbtTryout') && !pending.has('cbtTryout')) {
+      window.CLINED_CBT_TRYOUT.open();
     }
     if (e.detail === 'blokKedkelPage') {
       load('resep').catch(() => {});

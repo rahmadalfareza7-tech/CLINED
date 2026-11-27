@@ -68,15 +68,19 @@ if (runAll || args.has('--css')) {
     const imp = (clean.match(/!important/g) || []).length;
     totalImportant += imp;
   }
-  ok(`CSS brace-balance check passed (${cssFiles.length} files, ${totalImportant} !important declarations tracked)`);
+  const MAX_IMPORTANT = 6750;
+  if (totalImportant > MAX_IMPORTANT) {
+    fail(`CSS !important debt exceeded ceiling (${totalImportant} > ${MAX_IMPORTANT})`);
+  }
+  ok(`CSS brace-balance & debt ceiling check passed (${cssFiles.length} files, ${totalImportant}/${MAX_IMPORTANT} !important)`);
 }
 
 if (runAll || args.has('--csp')) {
-  for (const htmlName of ['app.html', 'index.html']) {
+  for (const htmlName of ['app.html', 'index.html', 'legal.html']) {
     const html = fs.readFileSync(path.join(ROOT, htmlName), 'utf8');
-    const inlineScripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>/gi)];
+    const inlineScripts = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type=["']application\/ld\+json["'])[^>]*>/gi)];
     if (inlineScripts.length > 0) {
-      fail(`${htmlName} contains ${inlineScripts.length} inline <script> tag(s) (violates strict CSP script-src 'self')`);
+      fail(`${htmlName} contains ${inlineScripts.length} executable inline <script> tag(s) (violates strict CSP script-src 'self')`);
     }
     const inlineStyles = [...html.matchAll(/<style\b[^>]*>/gi)];
     if (inlineStyles.length > 0) {
