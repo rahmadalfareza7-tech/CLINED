@@ -109,7 +109,7 @@ html,body{overflow-x:hidden}
 #floatingDashboardNav .floating-nav-item{position:relative!important;z-index:3!important;pointer-events:auto!important;cursor:pointer!important;touch-action:manipulation!important;}
 #floatingDashboardNav .floating-nav-slider{z-index:1!important;pointer-events:none!important;}
 
-.study-room-members{max-height:150px;overflow:auto}.study-room-toolbar{align-items:center}.study-room-code{font-size:15px}.study-room-join{grid-template-columns:1fr}.study-room-card{padding:15px}}
+.study-room-members{max-height:150px;overflow:auto}.study-room-toolbar{align-items:center}.study-room-code{font-size:15px}.study-room-join{grid-template-columns:1fr}.study-room-card{padding:15px}
 
 .admin-materials-section{margin-top:16px;padding-top:16px;border-top:1px solid rgba(0,0,0,.08)}
 .admin-material-actions{display:flex;gap:10px;flex-wrap:wrap}

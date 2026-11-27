@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { handleRequest } from './lib/app.mjs';
+import { headers as securityHeaders } from './lib/http.mjs';
 
 const root = resolve(process.env.PUBLIC_DIR || '.'), port = Number(process.env.PORT || 3000), host = process.env.HOST || '0.0.0.0';
 const mime = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2','.woff':'font/woff','.webmanifest':'application/manifest+json'};
@@ -18,7 +19,12 @@ async function staticFile(req,res){
   if(!file.startsWith(root+sep))return res.writeHead(404).end();
   const ext=extname(file).toLowerCase();
   const noCache=['.html','.js','.mjs','.css','.webmanifest'].includes(ext);
-  try{const content=await readFile(file);res.writeHead(200,{'Content-Type':mime[ext]||'application/octet-stream','Cache-Control':noCache?'no-store, no-cache, must-revalidate':'public, max-age=3600'});res.end(req.method==='GET'?content:undefined);}
+  try{
+    const content=await readFile(file);
+    securityHeaders(res);
+    res.writeHead(200,{'Content-Type':mime[ext]||'application/octet-stream','Cache-Control':noCache?'no-store, no-cache, must-revalidate':'public, max-age=3600'});
+    res.end(req.method==='GET'?content:undefined);
+  }
   catch{res.writeHead(404).end();}
 }
 

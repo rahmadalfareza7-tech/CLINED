@@ -311,7 +311,7 @@
     const selDir = activeSearch ? activeSearch.selectionDirection : undefined;
     if (activeSearch) S.q = activeSearch.value;
 
-    body().innerHTML = `${S.offline ? '<div class="ml-note">📡 Mode offline • menampilkan data terakhir yang tersimpan.</div>' : ''}
+    body().innerHTML = `${S.offline ? '<div class="ml-note">📡 Koneksi internet terputus • menampilkan cache sementara, sambungkan internet untuk melanjutkan.</div>' : ''}
       <div class="ml-hero"><span class="ml-hero-icon">📝</span><div><b>${packs.length} materi • ${totalQ} soal</b><small>Jawab, lihat pembahasan tiap pilihan, kumpulkan XP.</small></div></div>
       <div class="ml-toolbar">
         <div class="ml-search"><span class="ml-search-ico" aria-hidden="true">🔍</span><input type="search" id="mlSearch" class="ml-search-input" placeholder="Cari materi…" value="${esc(S.q)}" autocomplete="off" enterkeyhint="search" aria-label="Cari materi"><button type="button" class="ml-search-clear" data-ml-clear aria-label="Hapus pencarian" hidden>✕</button></div>

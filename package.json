@@ -1,8 +1,8 @@
 {
   "name": "clined",
-  "version": "37.1.0",
+  "version": "38.0.0",
   "private": true,
-  "description": "CLINED Clinical Education — delta sync and network efficiency hardening; chat removed.",
+  "description": "CLINED Clinical Education — online medical learning platform with real-time account sync, strict CSP, persistent rate limiting, and telemetry.",
   "type": "module",
   "scripts": {
     "start": "node local-server.mjs",
@@ -11,6 +11,10 @@
     "db:seed": "node db/seed-question-banks.mjs",
     "admin:create": "node db/create-admin.mjs",
     "validate:banks": "node tools/validate-banks.mjs",
+    "check:syntax": "node tools/check-quality.mjs --syntax",
+    "check:css": "node tools/check-quality.mjs --css",
+    "check:csp": "node tools/check-quality.mjs --csp",
+    "check:all": "node tools/check-quality.mjs --all",
     "test": "node --test"
   },
   "engines": {

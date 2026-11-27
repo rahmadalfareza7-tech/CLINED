@@ -49,7 +49,7 @@ Pendaftaran akun (signup) hanya membutuhkan **nama, username, dan password** —
 
 Atur `DATABASE_URL`, `DATABASE_SSL` bila diperlukan, `ADMIN_EMAILS`, dan `AUTH_COOKIE_SECURE=true`. Jalankan migrasi sebelum aplikasi baru menerima traffic. Health check tersedia pada `/api/health`.
 
-Password di-hash pada server; browser hanya menerima cookie sesi `HttpOnly`. State belajar yang relevan tetap tersedia di perangkat saat offline dan dikirim melalui antrean idempotent ketika koneksi kembali.
+Password di-hash pada server menggunakan `scrypt`; browser hanya menerima cookie sesi `HttpOnly`. CLINED dirancang sebagai aplikasi web **online** yang membutuhkan koneksi internet — antrean sinkronisasi lokal hanya berfungsi menjaga progres bila koneksi sempat terputus sesaat.
 
 Lihat `AUDIT.md` untuk hasil audit source dan urutan migrasi yang disarankan.
 

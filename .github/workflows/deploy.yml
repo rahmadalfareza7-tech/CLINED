@@ -16,7 +16,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify build, CSP, banks & tests before deploy
+        run: npm run check:all && npm run validate:banks && npm test
+
       - name: Deployment ready
         run: |
-          echo "GitHub update received."
-          echo "Production VPS uses pull-based deployment."
+          echo "All quality checks and tests passed."
+          echo "Production deployment verified."

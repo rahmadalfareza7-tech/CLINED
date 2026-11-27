@@ -7,9 +7,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CLINED">
-<meta name="description" content="CLINED — Platform latihan soal klinis UAB, flashcard UPI, latihan resep, kalkulator medis, dan Clinical Dashboard untuk mahasiswa kedokteran.">
+<meta name="description" content="CLINED — Platform web online latihan soal klinis UAB, flashcard UPI, latihan resep, kalkulator medis, dan Clinical Dashboard untuk mahasiswa kedokteran.">
+<meta property="og:title" content="CLINED — Clinical Education">
+<meta property="og:description" content="Platform belajar online mahasiswa kedokteran: latihan UAB &amp; UPI, flashcard, materi blok, mini games, dan leaderboard.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="./icon-512.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preload" as="image" href="assets/clined-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
@@ -283,7 +288,7 @@
       <button class="account-action account-save" id="saveAccountBtn" type="button">Simpan perubahan</button>
     </div>
     <div class="account-data-tools">
-      <div class="account-data-tools-head"><div><b>Data &amp; Backup</b><small>Amankan progres belajar tanpa menyertakan kredensial akun.</small></div><span>OFFLINE SAFE</span></div>
+      <div class="account-data-tools-head"><div><b>Data &amp; Backup</b><small>Amankan progres belajar tanpa menyertakan kredensial akun.</small></div><span>BACKUP LOKAL</span></div>
       <div class="account-data-tools-grid">
         <button class="account-action account-export" id="exportAccountBtn" type="button">Cadangkan data</button>
         <button class="account-action account-import" id="importAccountBtn" type="button">Pulihkan data</button>
@@ -1361,8 +1366,10 @@
     </form>
   </section>
 </div>
+<script src="js/error-monitor.js?v=1"></script>
+<script src="js/online-guard.js?v=1"></script>
 <script src="js/ui-dialogs.js?v=1"></script>
-<script src="js/update-notice.js?v=26"></script>
+<script src="js/update-notice.js?v=27"></script>
 <script src="js/report-question.js?v=1"></script>
 <script src="js/photo-store.js?v=1"></script>
 <script src="js/photo-compress.js?v=2"></script>
@@ -1377,87 +1384,7 @@
 <script src="js/inline-boot.js?v=5"></script>
 <script src="js/new-features.js?v=23"></script>
 <script src="js/clinical-quest.js?v=18"></script>
-
-<script id="clined-floating-dashboard-navigation-final">
-(function(){
-  function boot(){
-    const nav=document.getElementById('floatingDashboardNav');
-    if(!nav || nav.dataset.finalNavBound==='1') return;
-    nav.dataset.finalNavBound='1';
-
-    function setActive(key){
-      nav.querySelectorAll('[data-floating-nav]').forEach(function(b){
-        b.classList.toggle('active', b.dataset.floatingNav===key);
-      });
-      const items=[...nav.querySelectorAll('[data-floating-nav]')];
-      const i=items.findIndex(b=>b.dataset.floatingNav===key);
-      nav.style.setProperty('--floating-index', String(Math.max(0,i)));
-    }
-
-    let lastNavKey='', lastNavAt=0;
-    function route(key){
-      const now=Date.now();
-      if(key===lastNavKey && now-lastNavAt<220) return;
-      lastNavKey=key; lastNavAt=now;
-
-      if(key==='chat' && window.CLINED_SOCIAL && window.CLINED_SOCIAL.openChat){
-        setActive(key);
-        try{window.CLINED_SOCIAL.openChat();}catch(e){console.warn(e);}
-        window.scrollTo(0,0);
-        return;
-      }
-
-      const target={home:'home',dashboard:'clinicalDashboard',uab:'uabPage',chat:'hubPage',account:'accountPage'}[key];
-      if(!target || !document.getElementById(target)) return;
-
-      if(typeof window.show==='function'){
-        window.show(target);
-      } else {
-        document.querySelectorAll('.view.active').forEach(v=>v.classList.remove('active'));
-        document.getElementById(target).classList.add('active');
-      }
-      setActive(key);
-      if(key==='dashboard' && typeof window.renderClinicalDashboard==='function'){
-        try{window.renderClinicalDashboard();}catch(e){console.warn(e);}
-      }
-      if(key==='uab' && typeof window.syncUabStats==='function'){
-        try{window.syncUabStats();}catch(e){console.warn(e);}
-      }
-      if(key==='account' && typeof window.renderAccount==='function'){
-        try{window.renderAccount();}catch(e){console.warn(e);}
-      }
-      window.scrollTo(0,0);
-    }
-
-    nav.addEventListener('click',function(e){
-      const btn=e.target.closest('[data-floating-nav]');
-      if(!btn || !nav.contains(btn)) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      route(btn.dataset.floatingNav);
-    },true);
-
-    nav.addEventListener('pointerup',function(e){
-      if(e.pointerType==='mouse' && e.button!==0) return;
-      const btn=e.target.closest('[data-floating-nav]');
-      if(!btn || !nav.contains(btn)) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      route(btn.dataset.floatingNav);
-    },true);
-
-    // Keep the selected item synchronized whenever the SPA router changes page.
-    window.addEventListener('clined:view-change',function(e){
-      const map={home:'home',clinicalDashboard:'dashboard',uabPage:'uab',hubPage:'chat',accountPage:'account'};
-      if(map[e.detail]) setActive(map[e.detail]);
-    });
-    setActive('home');
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
-  else boot();
-  window.addEventListener('load',boot,{once:true});
-})();
-</script>
+<script src="js/floating-nav.js?v=1"></script>
 
 <script src="js/card-collection.js?v=44"></script>
 <script src="js/latihan-materi.js?v=26"></script>

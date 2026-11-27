@@ -1,4 +1,4 @@
-const SW_VERSION = 'v259-blok-lysis-leaderboard-sync-fix';
+const SW_VERSION = 'v260-online-only-hardening-ci';
 const CACHE = 'clined-web-' + SW_VERSION;
 const CORE = [
   './app.html',
@@ -17,6 +17,9 @@ const CORE = [
   './css/meja-jaga-igd.css',
   './css/rujuk-langka.css',
   './css/blok-lysis.css',
+  './js/error-monitor.js',
+  './js/online-guard.js',
+  './js/floating-nav.js',
   './js/update-notice.js',
   './js/online-sync.js',
   './js/ability-classifier.js',
@@ -65,6 +68,12 @@ const CORE = [
   './manifest.webmanifest'
 ];
 
+const ONLINE_REQUIRED_HTML = `<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CLINED — Koneksi Internet Diperlukan</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#0f172a;color:#f8fafc;font:600 15px/1.55 system-ui,-apple-system,sans-serif;text-align:center}.card{max-width:420px;background:#1e293b;border:1px solid rgba(148,163,184,.28);border-radius:20px;padding:26px 22px;box-shadow:0 18px 40px rgba(0,0,0,.35)}h1{margin:0 0 8px;font-size:21px;color:#38bdf8}p{margin:0 0 18px;color:#cbd5e1;font-size:14px}a{display:inline-block;padding:11px 20px;border-radius:12px;background:#22c55e;color:#052e16;font-weight:800;text-decoration:none}</style>
+</head><body><main class="card"><h1>📡 Koneksi Internet Diperlukan</h1><p>CLINED adalah aplikasi belajar online dan tidak tersedia dalam mode offline. Sambungkan internet untuk membuka soal, progres akun, dan leaderboard.</p><a href="./app.html">Coba Muat Ulang</a></main></body></html>`;
+
 function fetchWithTimeout(req, opts, timeoutMs = 6000) {
   if (typeof AbortController === 'undefined') return fetch(req, opts);
   const ctrl = new AbortController();
@@ -107,41 +116,27 @@ self.addEventListener('message', e => {
   }
 });
 
-// Hanya endpoint yang benar-benar statis yang boleh masuk cache.
-// /api/content/packages SENGAJA tidak di-cache karena import/hapus soal harus
-// langsung terlihat dan datanya bergantung pada akun yang sedang login.
-// Auth, sync, dan foto SENGAJA tidak pernah di-cache (data sesi/privat per user).
-const API_CACHEABLE = [/^\/api\/health$/, /^\/api\/banks(\/[a-z0-9_-]+)?$/i];
-
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
+  // CLINED adalah aplikasi online: endpoint /api/ selalu jaringan langsung (tidak pernah disajikan dari cache offline).
   if (url.pathname.startsWith('/api/')) {
-    if (!API_CACHEABLE.some(rx => rx.test(url.pathname))) return;
     e.respondWith(
-      fetch(req).then(res => {
-        if (res.ok) {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
-        }
-        return res;
-      }).catch(() =>
-        caches.match(req).then(cached =>
-          cached || new Response(JSON.stringify({ error: 'Tidak ada koneksi dan tidak ada cache tersimpan.' }), {
-            status: 503,
-            headers: { 'Content-Type': 'application/json' }
-          })
-        )
+      fetch(req).catch(() =>
+        new Response(JSON.stringify({ error: 'CLINED membutuhkan koneksi internet. Periksa jaringanmu lalu coba lagi.' }), {
+          status: 503,
+          headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }
+        })
       )
     );
     return;
   }
 
-  // Kode aplikasi, HTML, CSS, dan manifest selalu ambil versi server terbaru tanpa HTTP disk cache.
-  // Cache hanya dipakai sebagai fallback offline/timeout agar iOS/iPadOS PWA tidak macet di layar putih.
+  // Kode aplikasi, HTML, CSS, dan manifest selalu ambil versi server terbaru (network-first).
+  // Cache shell hanya menjadi pengaman saat jaringan mobile lambat/timeout agar iOS/iPadOS PWA tidak layar putih.
   const isHtmlNav = req.mode === 'navigate' || /\.html$/i.test(url.pathname) || url.pathname === '/';
   const liveAsset = isHtmlNav || /\.(?:css|js|mjs|webmanifest)$/i.test(url.pathname) || url.pathname === '/sw.js';
   if (liveAsset) {
@@ -158,16 +153,18 @@ self.addEventListener('fetch', e => {
         const ignored = await caches.match(req, { ignoreSearch: true });
         if (ignored) return ignored;
         if (isHtmlNav) {
-          const appFallback = await caches.match('./app.html');
-          if (appFallback) return appFallback;
+          return new Response(ONLINE_REQUIRED_HTML, {
+            status: 503,
+            headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
+          });
         }
-        return new Response('Offline', { status: 503 });
+        return new Response('Koneksi internet diperlukan.', { status: 503 });
       })
     );
     return;
   }
 
-  // Gambar/font/asset besar tetap cache-first untuk pengalaman offline yang cepat.
+  // Gambar & font statis memakai cache-first agar muat halaman lebih cepat saat online.
   e.respondWith(
     caches.match(req).then(cached => cached || fetch(req).then(res => {
       if (res.ok) {
@@ -175,7 +172,7 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
       }
       return res;
-    }).catch(() => (isHtmlNav ? caches.match('./app.html') : new Response('', { status: 503 }))))
+    }).catch(() => new Response('', { status: 503 })))
   );
 });
 
