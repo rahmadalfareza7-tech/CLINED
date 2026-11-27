@@ -13,16 +13,24 @@ const privateFiles = new Set(['server.mjs','package.json','package-lock.json','d
 
 async function staticFile(req,res){
   if(!['GET','HEAD'].includes(req.method))return res.writeHead(405).end();
-  const wanted=decodeURIComponent(new URL(req.url,`http://${req.headers.host||'localhost'}`).pathname),rel=wanted==='/'?'index.html':wanted==='/app'?'app.html':wanted.replace(/^\/+/, '');
+  const wanted=decodeURIComponent(new URL(req.url,`http://${req.headers.host||'localhost'}`).pathname);
+  let rel=wanted==='/'?'index.html':wanted==='/app'?'app.html':wanted.replace(/^\/+/, '');
   if(rel.includes('..')||rel.startsWith('.')||privateFiles.has(rel.toLowerCase())||rel.startsWith('data/')||rel.startsWith('seed-data/')||rel.startsWith('banks/')||rel.startsWith('lib/')||rel.startsWith('api/')||rel.endsWith('.bak'))return res.writeHead(404).end();
-  const file=resolve(root,rel);
+  let file=resolve(root,rel);
   if(!file.startsWith(root+sep))return res.writeHead(404).end();
   const ext=extname(file).toLowerCase();
-  const noCache=['.html','.js','.mjs','.css','.webmanifest'].includes(ext);
+  const isVersionedDist=rel.startsWith('dist/') && ['.js','.css'].includes(ext);
+  const noCache=!isVersionedDist && ['.html','.js','.mjs','.css','.webmanifest'].includes(ext);
   try{
-    const content=await readFile(file);
+    let content;
+    if(rel==='app.html'){
+      try{ content=await readFile(resolve(root,'dist/app.bundle.html')); }
+      catch{ content=await readFile(file); }
+    }else{
+      content=await readFile(file);
+    }
     securityHeaders(res);
-    res.writeHead(200,{'Content-Type':mime[ext]||'application/octet-stream','Cache-Control':noCache?'no-store, no-cache, must-revalidate':'public, max-age=3600'});
+    res.writeHead(200,{'Content-Type':mime[ext]||'application/octet-stream','Cache-Control':isVersionedDist?'public, max-age=31536000, immutable':noCache?'no-store, no-cache, must-revalidate':'public, max-age=3600'});
     res.end(req.method==='GET'?content:undefined);
   }
   catch{res.writeHead(404).end();}

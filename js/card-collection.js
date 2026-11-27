@@ -145,29 +145,29 @@
 
   const CARD_CATALOG = [
     // Common (7 kartu) — Fokus Pasif: Bonus XP Latihan Soal & Resep
-    { id: 'pulmo',      name: 'PULMO',      rarity: 'common',    color: '#00c9d4', fact: 'Menukar O2 dan CO2 tiap napas (Built-in AC)',              strength: 'Hurricane',     buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-pulmo.png' },
-    { id: 'gaster',     name: 'GASTER',     rarity: 'common',    color: '#f97316', fact: 'Asam lambung pH 1.5–2 mampu melebur makanan',               strength: 'Acid Melt',     buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-gaster.png' },
-    { id: 'intestinum', name: 'INTESTINUM', rarity: 'common',    color: '#ec4899', fact: 'Panjang lekukan usus mencapai ~7 meter',                    strength: 'Super Absorb',  buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-intestinum.png' },
-    { id: 'vesica',     name: 'VESICA',     rarity: 'common',    color: '#0ea5e9', fact: 'Kandung kemih elastis penampung hingga 500 ml',             strength: 'Hydro Burst',   buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-vesica.png' },
-    { id: 'auris',      name: 'AURIS',      rarity: 'common',    color: '#0d9488', fact: 'Rumah bagi tulang terkecil tubuh (stapes) & koklea',       strength: 'Sonic Wave',    buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-auris.png' },
-    { id: 'thyroidea',  name: 'THYROIDEA',  rarity: 'common',    color: '#e11d48', fact: 'Kelenjar kupu-kupu pengatur suhu & metabolisme tubuh',     strength: 'Turbo Boost',   buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-thyroidea.png' },
-    { id: 'cutis',      name: 'CUTIS',      rarity: 'common',    color: '#ea580c', fact: 'Organ terluas & terberat pelindung seluruh tubuh',          strength: 'Armor Shield',  buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-cutis.png' },
+    { id: 'pulmo',      name: 'PULMO',      rarity: 'common',    color: '#00c9d4', fact: 'Menukar O2 dan CO2 tiap napas (Built-in AC)',              strength: 'Hurricane',     buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-pulmo.webp' },
+    { id: 'gaster',     name: 'GASTER',     rarity: 'common',    color: '#f97316', fact: 'Asam lambung pH 1.5–2 mampu melebur makanan',               strength: 'Acid Melt',     buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-gaster.webp' },
+    { id: 'intestinum', name: 'INTESTINUM', rarity: 'common',    color: '#ec4899', fact: 'Panjang lekukan usus mencapai ~7 meter',                    strength: 'Super Absorb',  buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-intestinum.webp' },
+    { id: 'vesica',     name: 'VESICA',     rarity: 'common',    color: '#0ea5e9', fact: 'Kandung kemih elastis penampung hingga 500 ml',             strength: 'Hydro Burst',   buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-vesica.webp' },
+    { id: 'auris',      name: 'AURIS',      rarity: 'common',    color: '#0d9488', fact: 'Rumah bagi tulang terkecil tubuh (stapes) & koklea',       strength: 'Sonic Wave',    buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-auris.webp' },
+    { id: 'thyroidea',  name: 'THYROIDEA',  rarity: 'common',    color: '#e11d48', fact: 'Kelenjar kupu-kupu pengatur suhu & metabolisme tubuh',     strength: 'Turbo Boost',   buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-thyroidea.webp' },
+    { id: 'cutis',      name: 'CUTIS',      rarity: 'common',    color: '#ea580c', fact: 'Organ terluas & terberat pelindung seluruh tubuh',          strength: 'Armor Shield',  buffType: 'quiz_xp',   buffBase: 2, img: 'assets/cards/card-cutis.webp' },
     // Rare (6 kartu) — Fokus Pasif: Diskon Gacha Pack + Bonus XP Duel
-    { id: 'cor',        name: 'COR',        rarity: 'rare',      color: '#e8435a', fact: 'Berdetak ~100.000 kali sehari tanpa henti',                 strength: 'Marathoner',    buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-cor.png' },
-    { id: 'hepar',      name: 'HEPAR',      rarity: 'rare',      color: '#d97706', fact: 'Satu-satunya organ dalam yang bisa beregenerasi utuh',      strength: 'Detox Shield',  buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-hepar.png' },
-    { id: 'pancreas',   name: 'PANCREAS',   rarity: 'rare',      color: '#eab308', fact: 'Penghasil insulin pengatur gula darah & enzim cerna',       strength: 'Sugar Balance', buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-pancreas.png' },
-    { id: 'ren',        name: 'REN',        rarity: 'rare',      color: '#9333ea', fact: 'Sepasang ginjal menyaring ~180 liter cairan sehari',        strength: 'Ultra Filter',  buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-ren.png' },
-    { id: 'costae',     name: 'COSTAE',     rarity: 'rare',      color: '#3b82f6', fact: '12 pasang tulang rusuk pelindung jantung & paru',           strength: 'Iron Cage',     buffType: 'duel_xp',   buffBase: 6, img: 'assets/cards/card-costae.png' },
-    { id: 'vertebra',   name: 'VERTEBRA',   rarity: 'rare',      color: '#10b981', fact: '33 ruas tulang belakang penyangga postur & medula',         strength: 'Pillar Force',  buffType: 'duel_xp',   buffBase: 6, img: 'assets/cards/card-vertebra.png' },
+    { id: 'cor',        name: 'COR',        rarity: 'rare',      color: '#e8435a', fact: 'Berdetak ~100.000 kali sehari tanpa henti',                 strength: 'Marathoner',    buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-cor.webp' },
+    { id: 'hepar',      name: 'HEPAR',      rarity: 'rare',      color: '#d97706', fact: 'Satu-satunya organ dalam yang bisa beregenerasi utuh',      strength: 'Detox Shield',  buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-hepar.webp' },
+    { id: 'pancreas',   name: 'PANCREAS',   rarity: 'rare',      color: '#eab308', fact: 'Penghasil insulin pengatur gula darah & enzim cerna',       strength: 'Sugar Balance', buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-pancreas.webp' },
+    { id: 'ren',        name: 'REN',        rarity: 'rare',      color: '#9333ea', fact: 'Sepasang ginjal menyaring ~180 liter cairan sehari',        strength: 'Ultra Filter',  buffType: 'pack_disc', buffBase: 1, img: 'assets/cards/card-ren.webp' },
+    { id: 'costae',     name: 'COSTAE',     rarity: 'rare',      color: '#3b82f6', fact: '12 pasang tulang rusuk pelindung jantung & paru',           strength: 'Iron Cage',     buffType: 'duel_xp',   buffBase: 6, img: 'assets/cards/card-costae.webp' },
+    { id: 'vertebra',   name: 'VERTEBRA',   rarity: 'rare',      color: '#10b981', fact: '33 ruas tulang belakang penyangga postur & medula',         strength: 'Pillar Force',  buffType: 'duel_xp',   buffBase: 6, img: 'assets/cards/card-vertebra.webp' },
     // Epic (5 kartu) — Fokus Pasif: Hybrid XP Soal + Booster Arena Duel
-    { id: 'cerebrum',   name: 'CEREBRUM',   rarity: 'epic',      color: '#4ade80', fact: 'Pusat kendali seluruh tubuh dengan ~86 miliar neuron',     strength: 'Telekinesis',   buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-cerebrum.png' },
-    { id: 'oculus',     name: 'OCULUS',     rarity: 'epic',      color: '#4f46e5', fact: 'Resolusi setara 576 Megapiksel & 10 juta warna',            strength: 'Laser Vision',  buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-oculus.png' },
-    { id: 'splen',      name: 'SPLEN',      rarity: 'epic',      color: '#be185d', fact: 'Markas daur ulang eritrosit & cadangan sistem imun',        strength: 'Blood Guard',   buffType: 'duel_xp',   buffBase: 8, img: 'assets/cards/card-splen.png' },
-    { id: 'uterus',     name: 'UTERUS',     rarity: 'epic',      color: '#db2777', fact: 'Organ otot super elastis tempat tumbuh kehidupan baru',     strength: 'Life Cradle',   buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-uterus.png' },
-    { id: 'neuron',     name: 'NEURON',     rarity: 'epic',      color: '#0284c7', fact: 'Menghantarkan sinyal listrik dengan kecepatan 400 km/jam',  strength: 'Thunder Bolt',  buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-neuron.png' },
+    { id: 'cerebrum',   name: 'CEREBRUM',   rarity: 'epic',      color: '#4ade80', fact: 'Pusat kendali seluruh tubuh dengan ~86 miliar neuron',     strength: 'Telekinesis',   buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-cerebrum.webp' },
+    { id: 'oculus',     name: 'OCULUS',     rarity: 'epic',      color: '#4f46e5', fact: 'Resolusi setara 576 Megapiksel & 10 juta warna',            strength: 'Laser Vision',  buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-oculus.webp' },
+    { id: 'splen',      name: 'SPLEN',      rarity: 'epic',      color: '#be185d', fact: 'Markas daur ulang eritrosit & cadangan sistem imun',        strength: 'Blood Guard',   buffType: 'duel_xp',   buffBase: 8, img: 'assets/cards/card-splen.webp' },
+    { id: 'uterus',     name: 'UTERUS',     rarity: 'epic',      color: '#db2777', fact: 'Organ otot super elastis tempat tumbuh kehidupan baru',     strength: 'Life Cradle',   buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-uterus.webp' },
+    { id: 'neuron',     name: 'NEURON',     rarity: 'epic',      color: '#0284c7', fact: 'Menghantarkan sinyal listrik dengan kecepatan 400 km/jam',  strength: 'Thunder Bolt',  buffType: 'epic_mind', buffBase: 3, img: 'assets/cards/card-neuron.webp' },
     // Legendary (2 kartu) — Fokus Pasif: All-in-One Supreme Aura (XP Soal + Duel Win + Diskon Pack + Fast Diamond)
-    { id: 'skull',      name: 'SKULL',      rarity: 'legendary', color: '#f5c97a', fact: 'Helm perang alami terkuat pelindung otak',                  strength: 'Strongest',     buffType: 'mythic_all', buffBase: 4, img: 'assets/cards/card-skull.png' },
-    { id: 'leukocytus', name: 'LEUKOCYTUS', rarity: 'legendary', color: '#7c3aed', fact: 'Pasukan elit pembasmi bakteri, virus & patogen berbahaya',  strength: 'Immunity Max',  buffType: 'mythic_all', buffBase: 4, img: 'assets/cards/card-leukocytus.png' },
+    { id: 'skull',      name: 'SKULL',      rarity: 'legendary', color: '#f5c97a', fact: 'Helm perang alami terkuat pelindung otak',                  strength: 'Strongest',     buffType: 'mythic_all', buffBase: 4, img: 'assets/cards/card-skull.webp' },
+    { id: 'leukocytus', name: 'LEUKOCYTUS', rarity: 'legendary', color: '#7c3aed', fact: 'Pasukan elit pembasmi bakteri, virus & patogen berbahaya',  strength: 'Immunity Max',  buffType: 'mythic_all', buffBase: 4, img: 'assets/cards/card-leukocytus.webp' },
   ];
   const RARITY_LABEL = { common: 'Common', rare: 'Rare', epic: 'Epic', legendary: 'Legendary' };
   const RARITY_WEIGHT = { common: 1, rare: 2, epic: 3, legendary: 4 };
@@ -861,7 +861,7 @@
     const newDecosCnt = getUnseenNewCount('deco');
     const cardsBody = `${buildEquippedBanner()}
       <div class="card-pack-card">
-        <img class="card-pack-img" src="assets/cards/fab-basket.png" alt="Organ Pack">
+        <img class="card-pack-img" src="assets/cards/fab-basket.webp" alt="Organ Pack">
         <div class="card-pack-info">
           <b>Organ Pack (${CARD_CATALOG.length} Seri Kartu)</b>
           <small>Duplikat otomatis menaikkan ★ Bintang &amp; membuka efek Hologram Foil!</small>
@@ -930,7 +930,7 @@
     const dup = card.copies > 1;
     ov.innerHTML = `<div class="pack-open-stage rarity-${card.rarity}" style="--rarity-color:${card.color}">
       <button type="button" class="pack-tap" id="packTapZone" aria-label="Ketuk untuk membuka pack">
-        <img class="pack-open-img" src="assets/cards/fab-basket.png" alt="">
+        <img class="pack-open-img" src="assets/cards/fab-basket.webp" alt="">
         <span class="pack-tap-hint">Ketuk untuk membuka</span>
       </button>
       <div class="pack-flash"></div>
@@ -1387,7 +1387,7 @@
     fab.className = 'card-shop-fab';
     fab.setAttribute('aria-label', 'Card Shop');
     const hasNew = getUnseenNewCount('all') > 0;
-    fab.innerHTML = `<span class="fab-new-badge"${hasNew ? '' : ' hidden'}>NEW</span><img class="fab-basket-img" src="assets/cards/fab-basket.png" alt="">
+    fab.innerHTML = `<span class="fab-new-badge"${hasNew ? '' : ' hidden'}>NEW</span><img class="fab-basket-img" src="assets/cards/fab-basket.webp" alt="">
       <span class="fab-dia"><span data-diamond-count>${getDia() === Infinity ? '∞' : getDia()}</span> 💎</span>`;
     document.body.appendChild(fab);
 

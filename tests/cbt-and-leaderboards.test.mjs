@@ -221,7 +221,18 @@ test('Asset bundler & minifier produces valid minified CSS + syntax-checked JS b
     assert.ok(manifest.js.minifiedBytes < manifest.js.rawBytes, 'JS should shrink after compaction');
     assert.ok(fs.existsSync(path.join(tmpDist, 'clined-core.min.css')));
     assert.ok(fs.existsSync(path.join(tmpDist, 'clined-core.min.js')));
+    assert.ok(fs.existsSync(path.join(tmpDist, 'app.bundle.html')));
     assert.ok(fs.existsSync(path.join(tmpDist, 'bundle-manifest.json')));
+
+    const bundledHtml = fs.readFileSync(path.join(tmpDist, 'app.bundle.html'), 'utf8');
+    assert.match(bundledHtml, /id="clinedDesignSystemCss"[^>]*href="dist\/clined-core\.min\.css\?v=/);
+    assert.match(bundledHtml, /src="dist\/clined-core\.min\.js\?v=/);
+    assert.equal([...bundledHtml.matchAll(/href="(?:\.\/)?css\/[^"]+"/gi)].length, 0, 'Bundled HTML must consolidate all local CSS links into 1');
+    assert.equal([...bundledHtml.matchAll(/src="(?:\.\/)?js\/[^"]+"/gi)].length, 0, 'Bundled HTML must consolidate all local JS scripts into 1');
+
+    const vercel = JSON.parse(readRel('vercel.json'));
+    assert.equal(vercel.buildCommand, 'npm run build:bundles');
+    assert.ok(vercel.rewrites?.some(r => r.source === '/app.html' && r.destination === '/dist/app.bundle.html'));
   } finally {
     fs.rmSync(tmpDist, { recursive: true, force: true });
   }

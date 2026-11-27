@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // CLINED · Zero-dependency Asset Bundler & Minifier
 // Reads core stylesheet and script load order directly from app.html,
-// emits dist/clined-core.min.css, dist/clined-core.min.js, and dist/bundle-manifest.json
-// with SHA-256 integrity hashes and raw/minified/gzip byte metrics.
+// emits dist/clined-core.min.css, dist/clined-core.min.js, dist/app.bundle.html,
+// and dist/bundle-manifest.json with SHA-256 integrity hashes and byte metrics.
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -71,6 +71,31 @@ export function compactJs(code) {
   return out.join('\n');
 }
 
+/** Replace local css/* link tags and local js/* script tags with 1 bundled CSS + 1 bundled JS tag. */
+export function buildBundledHtml(appHtml, { cssHash, jsHash }) {
+  let cssInjected = false;
+  const cssTag = `<link id="clinedDesignSystemCss" rel="stylesheet" href="dist/clined-core.min.css?v=${cssHash}">`;
+  let out = appHtml.replace(/^[ \t]*<link\b[^>]*rel=["']stylesheet["'][^>]*href=["'](?:\.\/)?css\/[^"']+["'][^>]*>\r?\n?/gim, () => {
+    if (!cssInjected) {
+      cssInjected = true;
+      return `${cssTag}\n`;
+    }
+    return '';
+  });
+
+  let jsInjected = false;
+  const jsTag = `<script src="dist/clined-core.min.js?v=${jsHash}"></script>`;
+  out = out.replace(/^[ \t]*<script\b[^>]*src=["'](?:\.\/)?js\/[^"']+["'][^>]*><\/script>\r?\n?/gim, () => {
+    if (!jsInjected) {
+      jsInjected = true;
+      return `${jsTag}\n`;
+    }
+    return '';
+  });
+
+  return out;
+}
+
 function sha256(buf) {
   return crypto.createHash('sha256').update(buf).digest('hex').slice(0, 16);
 }
@@ -93,6 +118,7 @@ export function buildBundles({ root = ROOT, dist = DIST, verifySyntax = true } =
   }
   const cssOut = cssChunks.join('\n');
   const cssBuf = Buffer.from(cssOut, 'utf8');
+  const cssHash = sha256(cssBuf);
   const cssPath = path.join(dist, 'clined-core.min.css');
   fs.writeFileSync(cssPath, cssBuf);
 
@@ -106,6 +132,7 @@ export function buildBundles({ root = ROOT, dist = DIST, verifySyntax = true } =
   }
   const jsOut = jsChunks.join('\n');
   const jsBuf = Buffer.from(jsOut, 'utf8');
+  const jsHash = sha256(jsBuf);
   const jsPath = path.join(dist, 'clined-core.min.js');
   fs.writeFileSync(jsPath, jsBuf);
 
@@ -113,8 +140,12 @@ export function buildBundles({ root = ROOT, dist = DIST, verifySyntax = true } =
     execFileSync(process.execPath, ['--check', jsPath], { stdio: 'pipe' });
   }
 
+  const bundledHtml = buildBundledHtml(appHtml, { cssHash, jsHash });
+  fs.writeFileSync(path.join(dist, 'app.bundle.html'), bundledHtml, 'utf8');
+
   const manifest = {
     generatedAt: new Date().toISOString(),
+    html: 'dist/app.bundle.html',
     css: {
       file: 'dist/clined-core.min.css',
       inputs: styles.length,
@@ -123,7 +154,7 @@ export function buildBundles({ root = ROOT, dist = DIST, verifySyntax = true } =
       minifiedBytes: cssBuf.length,
       gzipBytes: gzipSize(cssBuf),
       savingPct: cssRawBytes > 0 ? Math.round((1 - cssBuf.length / cssRawBytes) * 1000) / 10 : 0,
-      sha256: sha256(cssBuf)
+      sha256: cssHash
     },
     js: {
       file: 'dist/clined-core.min.js',
@@ -133,7 +164,7 @@ export function buildBundles({ root = ROOT, dist = DIST, verifySyntax = true } =
       minifiedBytes: jsBuf.length,
       gzipBytes: gzipSize(jsBuf),
       savingPct: jsRawBytes > 0 ? Math.round((1 - jsBuf.length / jsRawBytes) * 1000) / 10 : 0,
-      sha256: sha256(jsBuf)
+      sha256: jsHash
     }
   };
 
@@ -146,5 +177,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const kb = n => `${(n / 1024).toFixed(1)} KB`;
   console.log(`✓ CSS bundle (${m.css.inputs} files → 1): ${kb(m.css.rawBytes)} → ${kb(m.css.minifiedBytes)} min (${kb(m.css.gzipBytes)} gzip, -${m.css.savingPct}%) [${m.css.sha256}]`);
   console.log(`✓ JS  bundle (${m.js.inputs} files → 1): ${kb(m.js.rawBytes)} → ${kb(m.js.minifiedBytes)} min (${kb(m.js.gzipBytes)} gzip, -${m.js.savingPct}%) [${m.js.sha256}]`);
-  console.log(`✓ Manifest written to dist/bundle-manifest.json`);
+  console.log(`✓ Bundled HTML written to ${m.html} (59 core requests → 2)`);
 }
