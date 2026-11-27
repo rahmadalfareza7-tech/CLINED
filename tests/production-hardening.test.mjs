@@ -128,3 +128,18 @@ test('CI workflow, PWA manifest maskable icon, and OpenGraph metadata are config
   assert.match(readRel('index.html'), /property="og:title"/);
   assert.match(readRel('app.html'), /property="og:title"/);
 });
+
+test('Fast app update: SW install is non-blocking, preserves versioned ASSET_CACHE, and update-notice never sticks on cooldown', () => {
+  const swJs = readRel('sw.js');
+  const updJs = readRel('js/update-notice.js');
+
+  assert.match(swJs, /const ASSET_CACHE = 'clined-assets-v1'/);
+  assert.doesNotMatch(swJs, /CORE\.map\([\s\S]*cache:\s*'reload'/, 'SW install must NOT block on downloading all CORE files with cache:reload');
+  assert.match(swJs, /k !== CACHE && k !== ASSET_CACHE/, 'SW activate must preserve persistent ASSET_CACHE across upgrades');
+  assert.match(swJs, /url\.searchParams\.has\('v'\)/, 'SW must serve versioned ?v= assets cache-first from ASSET_CACHE');
+
+  assert.match(updJs, /DOMContentLoaded/, 'update-notice should start checking at DOMContentLoaded instead of waiting for slow window.load iframes');
+  assert.match(updJs, /cooldownRemainingMs/, 'update-notice must handle cooldown cleanly without sticking on Memperbarui aplikasi');
+  assert.match(updJs, /data-upd-now>Sekarang</, 'auto-update banner should include an instant clickable Sekarang button');
+});
+

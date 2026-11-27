@@ -496,7 +496,7 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   assert.match(appHtml, /id="mejaJagaIgdHost"/);
   assert.match(appHtml, /id="igdMenuBtn"/);
   assert.match(appHtml, /css\/motion\.css\?v=auth-layout-v7/);
-  assert.match(appHtml, /js\/update-notice\.js\?v=28/);
+  assert.match(appHtml, /js\/update-notice\.js\?v=29/);
   assert.match(appHtml, /js\/app\.js\?v=static-banks-v75/);
   assert.match(appHtml, /js\/lazy-loader\.js\?v=49/);
   assert.match(lazyJs, /css\/meja-jaga-igd\.css\?v=14/);
@@ -562,5 +562,5 @@ test('App wiring: view, menu, lazy SKDI bundle (data+gen+engine), timer HUD, Gam
   const swVer = swJs.match(/const SW_VERSION = '([^']+)'/)?.[1];
   const updVer = updJs.match(/const APP_SW_VERSION = '([^']+)'/)?.[1];
   assert.ok(swVer && updVer && swVer === updVer, `SW_VERSION (${swVer}) must match APP_SW_VERSION (${updVer})`);
-  assert.equal(swVer, 'v261-legal-cbt-minigames-lb-seo');
+  assert.equal(swVer, 'v262-fast-instant-update');
 });

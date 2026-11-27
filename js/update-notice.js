@@ -1,12 +1,12 @@
-/* CLINED — pemberitahuan "versi baru tersedia" + muat ulang otomatis saat aman (tidak sedang mengerjakan soal). */
+/* CLINED — pemberitahuan "versi baru tersedia" + muat ulang otomatis cepat & aman (tidak pernah macet). */
 (() => {
   'use strict';
   if (!('serviceWorker' in navigator)) return;
 
-  const APP_SW_VERSION = 'v261-legal-cbt-minigames-lb-seo';
+  const APP_SW_VERSION = 'v262-fast-instant-update';
   const BUSY_VIEWS = new Set(['quiz', 'duelPage', 'flashcards', 'clinicalQuestPage', 'mejaJagaIgdPage', 'rujukLangkaPage', 'blokLysisPage', 'cbtTryoutPage', 'studyTimerPage', 'userBankPage']);
   let seenController = !!navigator.serviceWorker.controller;
-  let pending = false, dismissed = false, reloading = false, banner = null, poll = null, lastCheck = 0;
+  let pending = false, dismissed = false, reloading = false, banner = null, poll = null, reloadTimer = null, lastCheck = 0;
   let detectedVersion = '';
   const watchedRegs = new WeakSet();
 
@@ -41,7 +41,7 @@
     }
     banner.innerHTML = mode === 'busy'
       ? '<span class="upd-ico" aria-hidden="true">🔄</span><span class="upd-tx">Versi baru siap</span><button type="button" class="upd-btn" data-upd-now>Muat ulang</button><button type="button" class="upd-x" data-upd-later aria-label="Nanti saja">✕</button>'
-      : '<span class="upd-ico" aria-hidden="true">🔄</span><span class="upd-tx">Memperbarui aplikasi…</span>';
+      : '<span class="upd-ico" aria-hidden="true">⚡</span><span class="upd-tx">Memperbarui aplikasi…</span><button type="button" class="upd-btn" data-upd-now>Sekarang</button>';
     requestAnimationFrame(() => banner && banner.classList.add('show'));
   }
   function hide() {
@@ -49,19 +49,34 @@
       banner.classList.remove('show');
       const b = banner;
       banner = null;
-      setTimeout(() => b.remove(), 300);
+      setTimeout(() => b.remove(), 250);
     }
   }
-  function doReload(force) {
-    if (reloading) return;
+  function cooldownRemainingMs() {
     const now = Date.now();
     const last = Number(sessionStorage.getItem('clined_upd_at') || 0);
     const lastVer = sessionStorage.getItem('clined_upd_ver') || '';
     const isDifferentVer = Boolean(detectedVersion && detectedVersion !== lastVer);
-    const minCooldown = isDifferentVer ? 8_000 : 45_000;
-    if (!force && now - last < minCooldown) return;
+    const minCooldown = isDifferentVer ? 3_000 : 30_000;
+    return Math.max(0, minCooldown - (now - last));
+  }
+  function doReload(force) {
+    if (reloading) return false;
+    const rem = force ? 0 : cooldownRemainingMs();
+    if (rem > 0) {
+      // Never leave "Memperbarui aplikasi…" stuck forever during cooldown:
+      // show actionable button immediately and retry automatically once cooldown ends.
+      if (!dismissed) render('busy');
+      clearTimeout(reloadTimer);
+      reloadTimer = setTimeout(() => { if (pending && !reloading) tick(); }, rem + 150);
+      return false;
+    }
     reloading = true;
+    clearTimeout(reloadTimer);
+    clearInterval(poll);
+    poll = null;
     try {
+      const now = Date.now();
       const v = activeView();
       if (v) sessionStorage.setItem('clined_last_view_v1', v);
       window.dispatchEvent(new Event('clined:before-sync-flush'));
@@ -70,20 +85,29 @@
       if (detectedVersion) sessionStorage.setItem('clined_upd_ver', detectedVersion);
     } catch {}
     location.reload();
+    return true;
   }
   function tick() {
     if (!pending || reloading) return;
     if (isSafe()) {
+      const rem = cooldownRemainingMs();
+      if (rem > 0) {
+        if (!dismissed) render('busy');
+        clearTimeout(reloadTimer);
+        reloadTimer = setTimeout(() => { if (pending && !reloading) tick(); }, rem + 150);
+        return;
+      }
       if (!banner || !banner.querySelector('.upd-tx')?.textContent.startsWith('Memperbarui')) render('auto');
       clearInterval(poll);
       poll = null;
-      setTimeout(() => { if (isSafe()) doReload(false); else pollStart(); }, 900);
+      clearTimeout(reloadTimer);
+      reloadTimer = setTimeout(() => { if (isSafe()) doReload(false); else pollStart(); }, 200);
     } else if (!dismissed && !banner) {
       render('busy');
     }
   }
   function pollStart() {
-    if (!poll) poll = setInterval(tick, 1200);
+    if (!poll) poll = setInterval(tick, 1000);
   }
   function onNewVersion(ver = '') {
     if (ver) detectedVersion = ver;
@@ -152,8 +176,9 @@
     } catch {}
   }
 
-  if (document.readyState === 'complete') setTimeout(() => check(true), 400);
-  else window.addEventListener('load', () => setTimeout(() => check(true), 400), { once: true });
+  // Start checking immediately when DOM is ready (do not wait for slow third-party iframes on window.load)
+  if (document.readyState !== 'loading') setTimeout(() => check(true), 50);
+  else document.addEventListener('DOMContentLoaded', () => setTimeout(() => check(true), 50), { once: true });
 
   window.addEventListener('pageshow', () => { check(true); if (pending) tick(); });
   window.addEventListener('online', () => { check(true); if (pending) tick(); });
