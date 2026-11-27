@@ -4,4 +4,4 @@ Allow: /index.html
 Allow: /legal.html
 Disallow: /api/
 
-Sitemap: /sitemap.xml
+Sitemap: https://www.clined.web.id/sitemap.xml

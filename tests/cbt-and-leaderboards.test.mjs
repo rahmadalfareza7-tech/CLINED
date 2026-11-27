@@ -175,15 +175,16 @@ test('Legal compliance, SEO files, landing showcases, and mini-games leaderboard
   assert.match(legalHtml, /scrypt/i);
 
   const robots = readRel('robots.txt');
-  assert.match(robots, /Sitemap:/);
+  assert.match(robots, /Sitemap:\s*https:\/\/www\.clined\.web\.id\/sitemap\.xml/);
   assert.match(robots, /Disallow:\s*\/api\//);
 
   const sitemap = readRel('sitemap.xml');
   assert.match(sitemap, /<urlset/);
-  assert.match(sitemap, /legal\.html/);
+  assert.match(sitemap, /https:\/\/www\.clined\.web\.id\/legal\.html/);
 
   const indexHtml = readRel('index.html');
   assert.match(indexHtml, /application\/ld\+json/);
+  assert.match(indexHtml, /https:\/\/www\.clined\.web\.id\//);
   assert.match(indexHtml, /Meja Jaga IGD/);
   assert.match(indexHtml, /Rujuk Langka/);
   assert.match(indexHtml, /Blok Lysis/);
