@@ -896,25 +896,224 @@
     </div>`;
   }
 
-  /* Confetti ringan (div, bukan canvas) untuk kartu Epic/Legendary/Star-Up. */
+  /* ══════════════ Web Audio Synthesizer (CSP Safe, Zero External Assets) ══════════════ */
+  let _packAudioCtx = null;
+  function getPackAudioCtx() {
+    try {
+      if (!_packAudioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) _packAudioCtx = new AudioCtx();
+      }
+      if (_packAudioCtx && _packAudioCtx.state === 'suspended') {
+        _packAudioCtx.resume().catch(() => {});
+      }
+      return _packAudioCtx;
+    } catch { return null; }
+  }
+
+  const PackAudio = {
+    playTear() {
+      try {
+        const ctx = getPackAudioCtx();
+        if (!ctx) return;
+        const dur = 0.16;
+        const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (data.length * 0.28));
+        }
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const bq = ctx.createBiquadFilter();
+        bq.type = 'bandpass';
+        bq.frequency.setValueAtTime(1700, ctx.currentTime);
+        bq.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + dur);
+        bq.Q.setValueAtTime(2.2, ctx.currentTime);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.32, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+        src.connect(bq);
+        bq.connect(g);
+        g.connect(ctx.destination);
+        src.start();
+      } catch {}
+    },
+    playRumble(dur = 0.5) {
+      try {
+        const ctx = getPackAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(65, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(185, ctx.currentTime + dur);
+        g.gain.setValueAtTime(0.01, ctx.currentTime);
+        g.gain.linearRampToValueAtTime(0.25, ctx.currentTime + dur * 0.82);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + dur);
+      } catch {}
+    },
+    playBlast(rarity) {
+      try {
+        const ctx = getPackAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(rarity === 'legendary' ? 145 : 115, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(34, ctx.currentTime + 0.38);
+        g.gain.setValueAtTime(0.38, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.38);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.38);
+      } catch {}
+    },
+    playWhoosh() {
+      try {
+        const ctx = getPackAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(260, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(740, ctx.currentTime + 0.22);
+        g.gain.setValueAtTime(0.12, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.22);
+      } catch {}
+    },
+    playFanfare(rarity, starUp) {
+      try {
+        const ctx = getPackAudioCtx();
+        if (!ctx) return;
+        let notes = [523.25, 659.25];
+        let step = 0.08;
+        if (rarity === 'rare') {
+          notes = [523.25, 659.25, 783.99, 1046.50];
+          step = 0.09;
+        } else if (rarity === 'epic') {
+          notes = [587.33, 739.99, 880.00, 1174.66, 1479.98];
+          step = 0.08;
+        } else if (rarity === 'legendary') {
+          notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00];
+          step = 0.075;
+        }
+        if (starUp) notes.push(notes[notes.length - 1] * 1.25);
+        notes.forEach((freq, idx) => {
+          const start = ctx.currentTime + idx * step;
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.type = (rarity === 'legendary' || rarity === 'epic') ? 'triangle' : 'sine';
+          osc.frequency.setValueAtTime(freq, start);
+          g.gain.setValueAtTime(0.001, start);
+          g.gain.linearRampToValueAtTime(0.2, start + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.001, start + (idx === notes.length - 1 ? 0.9 : 0.4));
+          osc.connect(g);
+          g.connect(ctx.destination);
+          osc.start(start);
+          osc.stop(start + (idx === notes.length - 1 ? 0.95 : 0.45));
+        });
+      } catch {}
+    }
+  };
+
+  /* Interactive 3D Gyro / Pointer Tilt Physics */
+  function attachCard3dTilt(cardElement) {
+    if (!cardElement) return () => {};
+    const tiltInner = cardElement.querySelector('.pack-card-tilt-inner') || cardElement;
+    let isMoving = false;
+
+    const onPointerMove = (e) => {
+      const rect = cardElement.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+      const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+      if (clientX == null || clientY == null) return;
+
+      const x = (clientX - rect.left) / rect.width;
+      const y = (clientY - rect.top) / rect.height;
+      const relX = Math.max(-1, Math.min(1, (x - 0.5) * 2));
+      const relY = Math.max(-1, Math.min(1, (y - 0.5) * 2));
+
+      const rotY = (relX * 16).toFixed(1);
+      const rotX = (-relY * 16).toFixed(1);
+
+      tiltInner.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03, 1.03, 1.03)`;
+      cardElement.style.setProperty('--tilt-x', relX.toFixed(2));
+      cardElement.style.setProperty('--tilt-y', relY.toFixed(2));
+      isMoving = true;
+    };
+
+    const onPointerLeave = () => {
+      if (!isMoving) return;
+      isMoving = false;
+      tiltInner.style.transform = '';
+      cardElement.style.setProperty('--tilt-x', '0');
+      cardElement.style.setProperty('--tilt-y', '0');
+    };
+
+    cardElement.addEventListener('pointermove', onPointerMove, { passive: true });
+    cardElement.addEventListener('pointerleave', onPointerLeave, { passive: true });
+    cardElement.addEventListener('touchmove', onPointerMove, { passive: true });
+    cardElement.addEventListener('touchend', onPointerLeave, { passive: true });
+
+    return () => {
+      cardElement.removeEventListener('pointermove', onPointerMove);
+      cardElement.removeEventListener('pointerleave', onPointerLeave);
+      cardElement.removeEventListener('touchmove', onPointerMove);
+      cardElement.removeEventListener('touchend', onPointerLeave);
+    };
+  }
+
+  function attachPouchTilt(pouchWrapper) {
+    if (!pouchWrapper) return () => {};
+    const pouch = pouchWrapper.querySelector('.pack-pouch') || pouchWrapper;
+    const onMove = (e) => {
+      const rect = pouchWrapper.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+      pouch.style.transform = `perspective(700px) rotateX(${(-y * 11).toFixed(1)}deg) rotateY(${(x * 11).toFixed(1)}deg) scale(1.02)`;
+    };
+    const onLeave = () => {
+      pouch.style.transform = '';
+    };
+    pouchWrapper.addEventListener('pointermove', onMove, { passive: true });
+    pouchWrapper.addEventListener('pointerleave', onLeave, { passive: true });
+    return () => {
+      pouchWrapper.removeEventListener('pointermove', onMove);
+      pouchWrapper.removeEventListener('pointerleave', onLeave);
+    };
+  }
+
+  /* Confetti meriah untuk Rare, Epic, Legendary, dan Star-Up */
   function burstConfetti(container, rarity) {
     const palettes = {
+      common: ['#34d399', '#10b981', '#a7f3d0', '#6ee7b7'],
       rare: ['#60a5fa', '#3b82f6', '#dbeafe', '#93c5fd'],
-      epic: ['#a855f7', '#7c3aed', '#e9d5ff', '#c084fc'],
-      legendary: ['#f5c97a', '#fbbf24', '#fff7cd', '#ffe08a']
+      epic: ['#c084fc', '#a855f7', '#7c3aed', '#f3e8ff'],
+      legendary: ['#fbbf24', '#f59e0b', '#fef08a', '#f43f5e', '#38bdf8']
     };
     const colors = palettes[rarity] || palettes.epic;
-    const count = rarity === 'legendary' ? 48 : 30;
+    const count = rarity === 'legendary' ? 52 : rarity === 'epic' ? 36 : 24;
     const layer = document.createElement('div');
     layer.className = 'card-confetti-layer';
     for (let i = 0; i < count; i++) {
       const p = document.createElement('i');
-      const angle = Math.random() * Math.PI * 2, dist = 70 + Math.random() * 140;
+      const angle = Math.random() * Math.PI * 2, dist = 80 + Math.random() * 150;
       p.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(0) + 'px');
-      p.style.setProperty('--dy', (Math.sin(angle) * dist - 60).toFixed(0) + 'px');
+      p.style.setProperty('--dy', (Math.sin(angle) * dist - 70).toFixed(0) + 'px');
       p.style.setProperty('--rot', (Math.random() * 720 - 360).toFixed(0) + 'deg');
       p.style.background = colors[i % colors.length];
-      p.style.animationDelay = (Math.random() * 120) + 'ms';
+      p.style.animationDelay = (Math.random() * 130) + 'ms';
       p.style.left = (46 + Math.random() * 8) + '%';
       layer.appendChild(p);
     }
@@ -928,68 +1127,222 @@
     const ov = document.createElement('div');
     ov.className = 'pack-open-overlay';
     const dup = card.copies > 1;
-    ov.innerHTML = `<div class="pack-open-stage rarity-${card.rarity}" style="--rarity-color:${card.color}">
-      <button type="button" class="pack-tap" id="packTapZone" aria-label="Ketuk untuk membuka pack">
-        <img class="pack-open-img" src="assets/cards/fab-basket.webp" alt="">
-        <span class="pack-tap-hint">Ketuk untuk membuka</span>
-      </button>
-      <div class="pack-flash"></div>
-      <div class="pack-card-flip ${card.holoClass}">
-        <div class="pack-card-rays"></div>
-        <div class="pack-card-inner">
-          <div class="pack-card-back">
-            <span class="pack-card-back-mark">CLINED</span>
-            <span class="pack-card-back-sub">CARDS</span>
-          </div>
-          <div class="pack-card-front ${card.holoClass}">
-            <img src="${card.img}" alt="${esc(card.name)}">
-            <span class="pack-card-star-overlay">★${card.star}</span>
-          </div>
-        </div>
+    const packCost = getPackCost();
+    const canBuyMore = getDia() >= packCost;
+    const rarityGlow = card.rarity === 'legendary' ? 'rgba(245, 158, 11, .55)' :
+                       card.rarity === 'epic' ? 'rgba(168, 85, 247, .48)' :
+                       card.rarity === 'rare' ? 'rgba(59, 130, 246, .42)' :
+                       'rgba(16, 185, 129, .35)';
+
+    ov.innerHTML = `
+      <div class="pack-ambient-backdrop" style="--rarity-glow:${rarityGlow}"></div>
+      <div class="pack-ambient-sparks" aria-hidden="true"></div>
+      <div class="pack-topbar">
+        <span class="pack-topbar-title">Organ Booster Pack</span>
+        <button type="button" class="pack-skip-btn" id="packSkipBtn" aria-label="Lewati animasi">Lewati ⏩</button>
       </div>
-      <div class="pack-result-info">
-        <div class="card-reveal-badges">
-          <span class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</span>
-          <span class="card-reveal-stars">${card.starsText}</span>
+      <div class="pack-open-stage rarity-${card.rarity}" style="--rarity-color:${card.color}; --rarity-glow:${rarityGlow}">
+        <!-- CENTER ARENA: POUCH & CARD SHARE EXACT COORDINATES -->
+        <div class="pack-arena">
+          <!-- STAGE 1: TACTILE BOOSTER POUCH -->
+          <div class="pack-pouch-wrapper" id="packPouchZone" role="button" tabindex="0" aria-label="Ketuk untuk merobek dan membuka pack">
+            <div class="pack-pouch">
+              <div class="pack-pouch-sheen"></div>
+              <div class="pack-pouch-top">
+                <div class="pack-pouch-crimp top"></div>
+                <div class="pack-tear-line">
+                  <span class="pack-tear-line-dash"></span>
+                  <span class="pack-tear-tag">✂ TARIK / KETUK</span>
+                  <span class="pack-tear-line-dash"></span>
+                </div>
+                <div class="pack-tear-slit"></div>
+              </div>
+              <div class="pack-pouch-body">
+                <div class="pack-pouch-badge">
+                  <div class="pack-pouch-emblem">🩺</div>
+                  <div class="pack-pouch-series">CLINED CARDS</div>
+                  <div class="pack-pouch-name">ORGAN BOOSTER</div>
+                  <div class="pack-pouch-sub">EDISI SPESIAL ANATOMI</div>
+                </div>
+              </div>
+              <div class="pack-pouch-bottom">
+                <div class="pack-pouch-bottom-text">1 KARTU MEDIS RANDOM • ★1 S/D ★5</div>
+                <div class="pack-pouch-crimp bottom"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FX: Blast & Shockwaves -->
+          <div class="pack-flash-blast" aria-hidden="true"></div>
+          <div class="pack-shockwave-ring" aria-hidden="true"></div>
+          <div class="pack-shockwave-ring secondary" aria-hidden="true"></div>
+
+          <!-- STAGE 3 & 4: 3D CARD HOLDER -->
+          <div class="pack-card-container">
+            <div class="pack-godrays" aria-hidden="true"></div>
+            <div class="pack-card-3d ${card.holoClass}" id="packRevealedCard">
+              <div class="pack-card-tilt-inner">
+                <!-- Back Face -->
+                <div class="pack-card-face pack-card-back">
+                  <div class="pack-card-back-pattern"></div>
+                  <div class="pack-card-back-sigil">
+                    <span class="sigil-icon">⚕️</span>
+                    <span class="sigil-brand">CLINED</span>
+                    <small class="sigil-sub">MEDICAL TCG</small>
+                  </div>
+                </div>
+                <!-- Front Face -->
+                <div class="pack-card-face pack-card-front ${card.holoClass}">
+                  <div class="pack-card-specular"></div>
+                  <img class="pack-card-img" src="${card.img}" alt="${esc(card.name)}">
+                  <span class="pack-card-star-tag">★${card.star}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        ${card.starUp ? `<div class="card-starup-banner">🎉 STAR-UP! Naik ke <b>★${card.star}</b> ${card.star >= 3 ? '(Hologram Foil Aktif! ✨)' : ''}</div>` : ''}
-        <h4>${esc(card.name)}</h4>
-        ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
-        <div class="card-reveal-buff-box">⚡ Efek Pasif (★${card.star}): <b>${esc(card.buff.short)}</b></div>
-        ${dup ? `<small class="card-dup-note">Duplikat ke-${card.copies} • ${card.star < 5 ? `Butuh ${nextStarThreshold(card.star)} duplikat untuk ★${card.star + 1}` : '👑 MAX AWAKENED ★5!'}</small>` : '<small class="card-dup-note">✨ Kartu Baru Terbuka!</small>'}
-        <div class="card-reveal-actions">
-          <button type="button" class="card-equip-btn" id="equipFromReveal">${getEquippedId() === card.id ? '✅ Kartu Andalan Aktif' : '🌟 Jadikan Kartu Andalan'}</button>
-          <button type="button" class="ml-next" id="closeCardReveal">Lanjut</button>
+
+        <div class="pack-tap-prompt" id="packTapPrompt">
+          <span class="pack-tap-hand">👆</span>
+          <span class="pack-tap-text">Ketuk atau usap untuk membuka</span>
         </div>
-      </div>
-    </div>`;
+
+        <!-- STAGE 5: RESULT INFO -->
+        <div class="pack-result-info">
+          <div class="card-reveal-badges">
+            <span class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</span>
+            <span class="card-reveal-stars">${card.starsText}</span>
+          </div>
+          ${card.starUp ? `<div class="card-starup-banner">🎉 STAR-UP! Naik ke <b>★${card.star}</b> ${card.star >= 3 ? '(Hologram Foil Aktif! ✨)' : ''}</div>` : ''}
+          <h4>${esc(card.name)}</h4>
+          ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
+          <div class="card-reveal-buff-box">⚡ Efek Pasif (★${card.star}): <b>${esc(card.buff.short)}</b></div>
+          ${dup ? `<small class="card-dup-note">Duplikat ke-${card.copies} • ${card.star < 5 ? `Butuh ${nextStarThreshold(card.star)} duplikat untuk ★${card.star + 1}` : '👑 MAX AWAKENED ★5!'}</small>` : '<small class="card-dup-note">✨ Kartu Baru Terbuka!</small>'}
+          <div class="card-reveal-actions">
+            <button type="button" class="card-equip-btn" id="equipFromReveal">${getEquippedId() === card.id ? '✅ Kartu Andalan Aktif' : '🌟 Jadikan Kartu Andalan'}</button>
+            ${canBuyMore ? `<button type="button" class="card-reopen-btn" id="reopenCardPack">💎 Buka Lagi (${packCost} 💎)</button>` : ''}
+            <button type="button" class="ml-next" id="closeCardReveal">Simpan ke Koleksi</button>
+          </div>
+        </div>
+      </div>`;
+
     document.body.appendChild(ov);
     requestAnimationFrame(() => ov.classList.add('show'));
 
-    const stage = ov.querySelector('.pack-open-stage');
-    const open = () => {
-      if (stage.classList.contains('phase-burst')) return;
-      stage.classList.add('phase-burst');
-      setTimeout(() => {
-        stage.classList.add('phase-flip');
-        setTimeout(() => {
-          stage.classList.add('phase-reveal');
-          if (card.rarity === 'epic' || card.rarity === 'legendary' || card.starUp) burstConfetti(stage, card.rarity);
-        }, 620);
-      }, 480);
-    };
-    ov.querySelector('#packTapZone').addEventListener('click', open);
-    setTimeout(open, 2600);
+    // Inject ambient particles
+    const sparksBox = ov.querySelector('.pack-ambient-sparks');
+    if (sparksBox) {
+      for (let i = 0; i < 18; i++) {
+        const s = document.createElement('i');
+        s.style.left = (Math.random() * 100).toFixed(1) + '%';
+        s.style.animationDelay = (Math.random() * 3.5).toFixed(2) + 's';
+        s.style.animationDuration = (2.5 + Math.random() * 2).toFixed(2) + 's';
+        sparksBox.appendChild(s);
+      }
+    }
 
-    const close = () => { ov.classList.remove('show'); setTimeout(() => { ov.remove(); showShop(); }, 200); };
-    ov.querySelector('#closeCardReveal').addEventListener('click', close);
+    const stage = ov.querySelector('.pack-open-stage');
+    const pouchZone = ov.querySelector('#packPouchZone');
+    const revealedCard = ov.querySelector('#packRevealedCard');
+    const detachPouchTilt = attachPouchTilt(pouchZone);
+    let detachCardTilt = null;
+    let opened = false;
+    let timers = [];
+
+    const openSequence = (skip = false) => {
+      if (opened) return;
+      opened = true;
+      detachPouchTilt();
+      timers.forEach(clearTimeout);
+      timers = [];
+
+      if (skip) {
+        stage.classList.remove('phase-tearing');
+        ov.classList.remove('phase-tearing');
+        stage.classList.add('phase-burst', 'phase-flip', 'phase-reveal');
+        ov.classList.add('phase-burst', 'phase-flip', 'phase-reveal');
+        burstConfetti(stage, card.rarity);
+        PackAudio.playFanfare(card.rarity, card.starUp);
+        detachCardTilt = attachCard3dTilt(revealedCard);
+        return;
+      }
+
+      // Step 1: Tear and rumble
+      stage.classList.add('phase-tearing');
+      ov.classList.add('phase-tearing');
+      PackAudio.playTear();
+      const rumbleDur = card.rarity === 'legendary' ? 0.7 : card.rarity === 'epic' ? 0.55 : 0.45;
+      PackAudio.playRumble(rumbleDur);
+
+      const tearTime = card.rarity === 'legendary' ? 680 : card.rarity === 'epic' ? 520 : 420;
+      timers.push(setTimeout(() => {
+        // Step 2: Burst & Shockwave
+        stage.classList.add('phase-burst');
+        ov.classList.add('phase-burst');
+        PackAudio.playBlast(card.rarity);
+
+        timers.push(setTimeout(() => {
+          // Step 3: Card 3D Flip
+          stage.classList.add('phase-flip');
+          ov.classList.add('phase-flip');
+          PackAudio.playWhoosh();
+
+          timers.push(setTimeout(() => {
+            // Halfway flip: play Fanfare
+            PackAudio.playFanfare(card.rarity, card.starUp);
+          }, 240));
+
+          timers.push(setTimeout(() => {
+            // Step 4: Settle & Reveal
+            stage.classList.add('phase-reveal');
+            ov.classList.add('phase-reveal');
+            burstConfetti(stage, card.rarity);
+            detachCardTilt = attachCard3dTilt(revealedCard);
+          }, 580));
+        }, 220));
+      }, tearTime));
+    };
+
+    pouchZone?.addEventListener('click', () => openSequence(false));
+    pouchZone?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSequence(false); }
+    });
+    ov.querySelector('#packSkipBtn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openSequence(true);
+    });
+
+    const close = () => {
+      timers.forEach(clearTimeout);
+      if (detachCardTilt) detachCardTilt();
+      ov.classList.remove('show');
+      setTimeout(() => { ov.remove(); showShop(); }, 200);
+    };
+
+    ov.querySelector('#closeCardReveal')?.addEventListener('click', close);
     ov.querySelector('#equipFromReveal')?.addEventListener('click', (e) => {
       setEquippedId(card.id);
       e.currentTarget.textContent = '✅ Kartu Andalan Aktif';
       e.currentTarget.classList.add('is-active');
       popDiamondToast(`🌟 ${card.name} jadi Kartu Andalan!`);
     });
-    ov.addEventListener('click', e => { if (e.target === ov && stage.classList.contains('phase-reveal')) close(); });
+    ov.querySelector('#reopenCardPack')?.addEventListener('click', () => {
+      timers.forEach(clearTimeout);
+      if (detachCardTilt) detachCardTilt();
+      ov.classList.remove('show');
+      setTimeout(() => {
+        ov.remove();
+        const nextCard = openPack();
+        if (nextCard) {
+          showReveal(nextCard);
+        } else {
+          showShop();
+        }
+      }, 150);
+    });
+    ov.addEventListener('click', (e) => {
+      if (e.target === ov && stage.classList.contains('phase-reveal')) close();
+    });
   }
 
   function showCardPreview(rawCard) {
@@ -1001,47 +1354,72 @@
     const upgCost = nextStar ? STAR_UPGRADE_COST[nextStar] : null;
     const canUpg = nextStar && getDia() >= upgCost;
     const nextCopies = nextStarThreshold(card.star);
+    const rarityGlow = card.rarity === 'legendary' ? 'rgba(245, 158, 11, .55)' :
+                       card.rarity === 'epic' ? 'rgba(168, 85, 247, .48)' :
+                       card.rarity === 'rare' ? 'rgba(59, 130, 246, .42)' :
+                       'rgba(16, 185, 129, .35)';
 
     const ov = document.createElement('div');
     ov.className = 'pack-open-overlay card-preview-overlay show';
-    ov.innerHTML = `<div class="pack-open-stage phase-reveal rarity-${card.rarity}" style="--rarity-color:${card.color}">
-      <div class="pack-card-flip ${card.holoClass}">
-        <div class="pack-card-rays"></div>
-        <div class="pack-card-inner">
-          <div class="pack-card-front ${card.holoClass}">
-            <img src="${card.img}" alt="${esc(card.name)}">
-            <span class="pack-card-star-overlay">★${card.star}</span>
+    ov.innerHTML = `
+      <div class="pack-ambient-backdrop" style="--rarity-glow:${rarityGlow}"></div>
+      <div class="pack-topbar">
+        <span class="pack-topbar-title">Inspeksi Kartu</span>
+        <button type="button" class="pack-skip-btn" id="closeCardPreviewTop" aria-label="Tutup">✕ Tutup</button>
+      </div>
+      <div class="pack-open-stage phase-reveal rarity-${card.rarity}" style="--rarity-color:${card.color}; --rarity-glow:${rarityGlow}">
+        <div class="pack-arena">
+          <div class="pack-card-container">
+            <div class="pack-godrays" aria-hidden="true"></div>
+            <div class="pack-card-3d ${card.holoClass}" id="previewCard3d">
+              <div class="pack-card-tilt-inner">
+                <div class="pack-card-face pack-card-front ${card.holoClass}">
+                  <div class="pack-card-specular"></div>
+                  <img class="pack-card-img" src="${card.img}" alt="${esc(card.name)}">
+                  <span class="pack-card-star-tag">★${card.star}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="pack-result-info">
-        <div class="card-reveal-badges">
-          <span class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</span>
-          <span class="card-reveal-stars">${card.starsText}</span>
+        <div class="pack-result-info">
+          <div class="card-reveal-badges">
+            <span class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</span>
+            <span class="card-reveal-stars">${card.starsText}</span>
+          </div>
+          <h4>${esc(card.name)}</h4>
+          ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
+          <div class="card-reveal-buff-box">
+            <div>⚡ Jurus: <b>${esc(card.strength || '-')}</b> • Dimiliki: <b>x${card.copies}</b></div>
+            <div style="margin-top:3px">🛡️ Efek Pasif (★${card.star}): <b>${esc(card.buff.short)}</b></div>
+            <small style="display:block;margin-top:2px;opacity:.85">${esc(card.buff.desc)}</small>
+          </div>
+          <small class="card-dup-note">
+            ${nextStar ? `Progres Bintang: ${card.copies}/${nextCopies} duplikat menuju ★${nextStar} ${nextStar >= 3 ? '(Efek Foil Hologram ✨)' : ''}` : '👑 BINTANG MAKSIMUM (★5 MYTHIC FOIL AKTIF)'}
+          </small>
+          <div class="card-preview-btn-stack">
+            <button type="button" class="card-equip-btn ${isEq ? 'is-active' : ''}" id="previewEquipBtn">
+              ${isEq ? '✅ Kartu Andalan Aktif (Tampil di Duel)' : '🌟 Jadikan Kartu Andalan'}
+            </button>
+            ${nextStar ? `<button type="button" class="card-starup-btn" id="previewStarUpBtn" ${canUpg ? '' : 'disabled'}>
+              ⚡ Star-Up Instan ke ★${nextStar} — 💎 ${upgCost}
+            </button>` : ''}
+            <button type="button" class="ml-next" id="closeCardPreview">Tutup</button>
+          </div>
         </div>
-        <h4>${esc(card.name)}</h4>
-        ${card.fact ? `<p>${esc(card.fact)}</p>` : ''}
-        <div class="card-reveal-buff-box">
-          <div>⚡ Jurus: <b>${esc(card.strength || '-')}</b> • Dimiliki: <b>x${card.copies}</b></div>
-          <div style="margin-top:3px">🛡️ Efek Pasif (★${card.star}): <b>${esc(card.buff.short)}</b></div>
-          <small style="display:block;margin-top:2px;opacity:.85">${esc(card.buff.desc)}</small>
-        </div>
-        <small class="card-dup-note">
-          ${nextStar ? `Progres Bintang: ${card.copies}/${nextCopies} duplikat menuju ★${nextStar} ${nextStar >= 3 ? '(Efek Foil Hologram ✨)' : ''}` : '👑 BINTANG MAKSIMUM (★5 MYTHIC FOIL AKTIF)'}
-        </small>
-        <div class="card-preview-btn-stack">
-          <button type="button" class="card-equip-btn ${isEq ? 'is-active' : ''}" id="previewEquipBtn">
-            ${isEq ? '✅ Kartu Andalan Aktif (Tampil di Duel)' : '🌟 Jadikan Kartu Andalan'}
-          </button>
-          ${nextStar ? `<button type="button" class="card-starup-btn" id="previewStarUpBtn" ${canUpg ? '' : 'disabled'}>
-            ⚡ Star-Up Instan ke ★${nextStar} — 💎 ${upgCost}
-          </button>` : ''}
-          <button type="button" class="ml-next" id="closeCardPreview">Tutup</button>
-        </div>
-      </div>
-    </div>`;
+      </div>`;
+
     document.body.appendChild(ov);
-    const close = () => { ov.classList.remove('show'); setTimeout(() => ov.remove(), 180); };
+    const cardEl = ov.querySelector('#previewCard3d');
+    const detachCardTilt = attachCard3dTilt(cardEl);
+
+    const close = () => {
+      detachCardTilt();
+      ov.classList.remove('show');
+      setTimeout(() => ov.remove(), 180);
+    };
+
+    ov.querySelector('#closeCardPreviewTop')?.addEventListener('click', close);
     ov.querySelector('#closeCardPreview')?.addEventListener('click', close);
     ov.querySelector('#previewEquipBtn')?.addEventListener('click', () => {
       setEquippedId(card.id);
@@ -1057,6 +1435,7 @@
       renderHomeShowcaseBadge();
       refreshShop();
       popDiamondToast(`🎉 ${card.name} naik ke ★${nextStar}!`);
+      PackAudio.playFanfare(card.rarity, true);
       showCardPreview(rawCard);
       const stg = document.querySelector('.card-preview-overlay .pack-open-stage');
       if (stg) burstConfetti(stg, nextStar >= 4 ? 'legendary' : 'epic');
