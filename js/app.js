@@ -4077,7 +4077,11 @@ function checkNewAchievements(opts={}){
     const raw=localStorage.getItem(ACHIEVEMENT_KEY);
     const initialized=raw!==null;
     let map={};
-    try{const parsed=JSON.parse(raw||'{}');if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed))map=parsed;}catch{}
+    try{
+      const parsed=JSON.parse(raw||'{}');
+      if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed))map=parsed;
+      else if(Array.isArray(parsed))parsed.forEach(id=>{if(id)map[id]=Date.now();});
+    }catch{}
     const newlyUnlocked=[];
     let changed=false;
     for(const a of list){
@@ -4088,7 +4092,7 @@ function checkNewAchievements(opts={}){
       }
     }
     if(!initialized || changed) set(ACHIEVEMENT_KEY,map);
-    if(newlyUnlocked.length){
+    if(newlyUnlocked.length && !opts.silent){
       achUnlockQueue.push(...newlyUnlocked);
       flushAchievementQueue();
       if($('achievementsPage')?.classList.contains('active')) renderAchievements();

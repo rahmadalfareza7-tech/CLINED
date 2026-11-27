@@ -328,7 +328,7 @@
   const getDia = () => isAdmin() ? Infinity : (parseInt(localStorage.getItem(KEY_DIA) || '0', 10) || 0);
   const setDia = v => { if (!isAdmin()) { localStorage.setItem(KEY_DIA, String(Math.max(0, v))); scheduleServerSave(); } };
   const getCards = () => { try { return JSON.parse(localStorage.getItem(KEY_CARDS) || '[]'); } catch { return []; } };
-  const addCard = card => { const c = getCards(); c.push({ id: card.id, at: Date.now() }); localStorage.setItem(KEY_CARDS, JSON.stringify(c)); scheduleServerSave(); try { window.clinedCheckAchievements?.(); } catch {} };
+  const addCard = card => { const c = getCards(); c.push({ id: card.id, at: Date.now() }); localStorage.setItem(KEY_CARDS, JSON.stringify(c)); scheduleServerSave(); try { window.clinedCheckAchievements?.({ silent: true }); } catch {} };
   const ownedCount = id => getCards().filter(c => c.id === id).length;
 
   const getStarMap = () => { try { const m = JSON.parse(localStorage.getItem(KEY_STARS) || '{}'); return m && typeof m === 'object' ? m : {}; } catch { return {}; } };
@@ -916,22 +916,25 @@
       try {
         const ctx = getPackAudioCtx();
         if (!ctx) return;
-        const dur = 0.16;
+        const dur = 0.28;
         const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
         const data = buf.getChannelData(0);
         for (let i = 0; i < data.length; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (data.length * 0.28));
+          const t = i / data.length;
+          const env = Math.sin(t * Math.PI) * (1 - 0.25 * Math.sin(t * 35));
+          const crackle = Math.random() < 0.15 ? 1.6 : 1;
+          data[i] = (Math.random() * 2 - 1) * env * crackle;
         }
         const src = ctx.createBufferSource();
         src.buffer = buf;
         const bq = ctx.createBiquadFilter();
         bq.type = 'bandpass';
-        bq.frequency.setValueAtTime(1700, ctx.currentTime);
-        bq.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + dur);
-        bq.Q.setValueAtTime(2.2, ctx.currentTime);
+        bq.frequency.setValueAtTime(2200, ctx.currentTime);
+        bq.frequency.exponentialRampToValueAtTime(360, ctx.currentTime + dur);
+        bq.Q.setValueAtTime(2.8, ctx.currentTime);
         const g = ctx.createGain();
-        g.gain.setValueAtTime(0.32, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+        g.gain.setValueAtTime(0.5, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + dur);
         src.connect(bq);
         bq.connect(g);
         g.connect(ctx.destination);
@@ -1075,22 +1078,44 @@
 
   function attachPouchTilt(pouchWrapper) {
     if (!pouchWrapper) return () => {};
+    const tiltLayer = pouchWrapper.querySelector('.pack-pouch-tilt-layer') || pouchWrapper;
     const pouch = pouchWrapper.querySelector('.pack-pouch') || pouchWrapper;
+    let isMoving = false;
+
     const onMove = (e) => {
+      isMoving = true;
       const rect = pouchWrapper.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
-      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-      pouch.style.transform = `perspective(700px) rotateX(${(-y * 11).toFixed(1)}deg) rotateY(${(x * 11).toFixed(1)}deg) scale(1.02)`;
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+      const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
+      tiltLayer.style.transform = `perspective(800px) rotateX(${(-y * 11).toFixed(1)}deg) rotateY(${(x * 11).toFixed(1)}deg) scale3d(1.02, 1.02, 1.02)`;
+      pouch.style.setProperty('--sheen-x', `${((x + 1) * 50).toFixed(0)}%`);
+      pouch.style.setProperty('--sheen-y', `${((y + 1) * 50).toFixed(0)}%`);
     };
+
     const onLeave = () => {
-      pouch.style.transform = '';
+      if (!isMoving) return;
+      isMoving = false;
+      tiltLayer.style.transform = '';
+      pouch.style.removeProperty('--sheen-x');
+      pouch.style.removeProperty('--sheen-y');
     };
+
     pouchWrapper.addEventListener('pointermove', onMove, { passive: true });
     pouchWrapper.addEventListener('pointerleave', onLeave, { passive: true });
+    pouchWrapper.addEventListener('touchmove', onMove, { passive: true });
+    pouchWrapper.addEventListener('touchend', onLeave, { passive: true });
+
     return () => {
+      tiltLayer.style.transform = '';
+      pouch.style.removeProperty('--sheen-x');
+      pouch.style.removeProperty('--sheen-y');
       pouchWrapper.removeEventListener('pointermove', onMove);
       pouchWrapper.removeEventListener('pointerleave', onLeave);
+      pouchWrapper.removeEventListener('touchmove', onMove);
+      pouchWrapper.removeEventListener('touchend', onLeave);
     };
   }
 
@@ -1144,30 +1169,47 @@
       <div class="pack-open-stage rarity-${card.rarity}" style="--rarity-color:${card.color}; --rarity-glow:${rarityGlow}">
         <!-- CENTER ARENA: POUCH & CARD SHARE EXACT COORDINATES -->
         <div class="pack-arena">
+          <!-- Floor Shadow beneath Pouch -->
+          <div class="pack-floor-shadow" aria-hidden="true"></div>
+
           <!-- STAGE 1: TACTILE BOOSTER POUCH -->
-          <div class="pack-pouch-wrapper" id="packPouchZone" role="button" tabindex="0" aria-label="Ketuk untuk merobek dan membuka pack">
-            <div class="pack-pouch">
-              <div class="pack-pouch-sheen"></div>
-              <div class="pack-pouch-top">
-                <div class="pack-pouch-crimp top"></div>
-                <div class="pack-tear-line">
-                  <span class="pack-tear-line-dash"></span>
-                  <span class="pack-tear-tag">✂ TARIK / KETUK</span>
-                  <span class="pack-tear-line-dash"></span>
+          <div class="pack-pouch-wrapper" id="packPouchZone" role="button" tabindex="0" aria-label="Sobek pack untuk membuka">
+            <div class="pack-pouch-tilt-layer" id="packPouchTiltLayer">
+              <div class="pack-pouch" id="packPouch">
+                <div class="pack-pouch-sheen" aria-hidden="true"></div>
+                <!-- TOP CAP: Rips off when torn -->
+                <div class="pack-pouch-top-cap" id="packTopCap">
+                  <div class="pack-pouch-crimp top"></div>
+                  <div class="pack-tear-strip">
+                    <span class="pack-tear-pull-tab">✂ SOBEK / KETUK</span>
+                    <span class="pack-tear-dotted-line"></span>
+                  </div>
+                  <div class="pack-tear-laser-slit"></div>
                 </div>
-                <div class="pack-tear-slit"></div>
-              </div>
-              <div class="pack-pouch-body">
-                <div class="pack-pouch-badge">
-                  <div class="pack-pouch-emblem">🩺</div>
-                  <div class="pack-pouch-series">CLINED CARDS</div>
-                  <div class="pack-pouch-name">ORGAN BOOSTER</div>
-                  <div class="pack-pouch-sub">EDISI SPESIAL ANATOMI</div>
+
+                <!-- Laser Rip Seam -->
+                <div class="pack-tear-seam" aria-hidden="true"></div>
+
+                <!-- MAIN LOWER SLEEVE -->
+                <div class="pack-pouch-main-body" id="packMainBody">
+                  <div class="pack-pouch-cavity" aria-hidden="true">
+                    <div class="pack-cavity-card-peek">
+                      <div class="pack-card-peek-sigil">⚕️</div>
+                    </div>
+                  </div>
+                  <div class="pack-pouch-body-content">
+                    <div class="pack-pouch-badge">
+                      <div class="pack-pouch-emblem">🩺</div>
+                      <div class="pack-pouch-series">CLINED CARDS</div>
+                      <div class="pack-pouch-name">ORGAN BOOSTER</div>
+                      <div class="pack-pouch-sub">EDISI SPESIAL ANATOMI</div>
+                    </div>
+                  </div>
+                  <div class="pack-pouch-bottom">
+                    <div class="pack-pouch-bottom-text">1 KARTU MEDIS RANDOM • ★1 S/D ★5</div>
+                    <div class="pack-pouch-crimp bottom"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="pack-pouch-bottom">
-                <div class="pack-pouch-bottom-text">1 KARTU MEDIS RANDOM • ★1 S/D ★5</div>
-                <div class="pack-pouch-crimp bottom"></div>
               </div>
             </div>
           </div>
@@ -1203,11 +1245,11 @@
         </div>
 
         <div class="pack-tap-prompt" id="packTapPrompt">
-          <span class="pack-tap-hand">👆</span>
-          <span class="pack-tap-text">Ketuk atau usap untuk membuka</span>
+          <span class="pack-tap-hand">✂️</span>
+          <span class="pack-tap-text">Sobek atau ketuk pack untuk membuka</span>
         </div>
 
-        <!-- STAGE 5: RESULT INFO -->
+        <!-- STAGE 5: RESULT INFO (Hidden until phase-reveal) -->
         <div class="pack-result-info">
           <div class="card-reveal-badges">
             <span class="card-reveal-rarity ${card.rarity}">${RARITY_LABEL[card.rarity]}</span>
@@ -1253,6 +1295,8 @@
       if (opened) return;
       opened = true;
       detachPouchTilt();
+      const tiltLayer = pouchZone?.querySelector('.pack-pouch-tilt-layer');
+      if (tiltLayer) tiltLayer.style.transform = '';
       timers.forEach(clearTimeout);
       timers = [];
 
@@ -1267,14 +1311,14 @@
         return;
       }
 
-      // Step 1: Tear and rumble
+      // Step 1: Tear and rip top cap off
       stage.classList.add('phase-tearing');
       ov.classList.add('phase-tearing');
       PackAudio.playTear();
       const rumbleDur = card.rarity === 'legendary' ? 0.7 : card.rarity === 'epic' ? 0.55 : 0.45;
       PackAudio.playRumble(rumbleDur);
 
-      const tearTime = card.rarity === 'legendary' ? 680 : card.rarity === 'epic' ? 520 : 420;
+      const tearTime = card.rarity === 'legendary' ? 620 : card.rarity === 'epic' ? 520 : 450;
       timers.push(setTimeout(() => {
         // Step 2: Burst & Shockwave
         stage.classList.add('phase-burst');
@@ -1302,6 +1346,17 @@
         }, 220));
       }, tearTime));
     };
+
+    let startX = 0;
+    pouchZone?.addEventListener('pointerdown', (e) => {
+      startX = e.clientX ?? 0;
+    });
+    pouchZone?.addEventListener('pointerup', (e) => {
+      const endX = e.clientX ?? 0;
+      if (Math.abs(endX - startX) > 30) {
+        openSequence(false);
+      }
+    });
 
     pouchZone?.addEventListener('click', () => openSequence(false));
     pouchZone?.addEventListener('keydown', (e) => {

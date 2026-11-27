@@ -57,6 +57,14 @@ test('mergeJsonKey unions arrays for achievements, kedkel summary, and seen cosm
   );
   assert.equal(cos.dirty, false);
   assert.deepEqual(JSON.parse(cos.value).sort(), ['banner:23-pressed-glass', 'deco:22-fallen-angel-white']);
+
+  const achObj = mergeJsonKey(
+    'clined_unlocked_achievements_v1',
+    JSON.stringify({ cards_5: 100, q_50: 200 }),
+    JSON.stringify({ first_step: 50, q_50: 200 })
+  );
+  assert.equal(achObj.dirty, true);
+  assert.deepEqual(JSON.parse(achObj.value), { first_step: 50, q_50: 200, cards_5: 100 });
 });
 
 test('mergeJsonKey deduplicates and sorts gaster_v8_history across devices', () => {

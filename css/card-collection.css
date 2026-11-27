@@ -363,24 +363,56 @@
 .pack-open-stage {
   position: relative;
   width: 100%;
-  max-width: 340px;
-  min-height: 480px;
+  max-width: 440px;
+  min-height: 440px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: auto;
-  perspective: 1100px;
-  padding: 50px 0 20px;
+  perspective: 1200px;
+  padding: 20px 0;
 }
 
 .pack-arena {
   position: relative;
-  width: 204px;
-  height: 284px;
+  width: 210px;
+  height: 298px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Ambient 3D Floor Shadow under Pouch */
+.pack-floor-shadow {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, .78) 0%, rgba(0, 0, 0, 0) 72%);
+  filter: blur(5px);
+  pointer-events: none;
+  z-index: 1;
+  animation: pack-shadow-bob 3.2s ease-in-out infinite;
+}
+@keyframes pack-shadow-bob {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: .78; }
+  50% { transform: translateX(-50%) scale(.84); opacity: .42; }
+}
+.phase-tearing .pack-floor-shadow {
+  animation: pack-shadow-shake .55s ease both;
+}
+@keyframes pack-shadow-shake {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.1); opacity: .9; }
+}
+.phase-burst .pack-floor-shadow,
+.phase-flip .pack-floor-shadow,
+.phase-reveal .pack-floor-shadow {
+  display: none;
 }
 
 /* ── Stage 1: Tactile Foil Pouch ── */
@@ -388,45 +420,61 @@
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 176px;
-  height: 254px;
+  width: 196px;
+  height: 284px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   outline: none;
   touch-action: none;
-  transition: transform .2s cubic-bezier(.2, .8, .3, 1);
   z-index: 10;
   pointer-events: auto;
 }
 .pack-pouch-wrapper:active {
-  transform: scale(.96);
+  transform: scale(.97);
 }
 .phase-tearing .pack-pouch-wrapper {
   pointer-events: none;
 }
-.phase-burst .pack-pouch-wrapper,
+.phase-burst .pack-pouch-wrapper {
+  pointer-events: none;
+  animation: packPouchDropVanish .38s ease forwards;
+}
+@keyframes packPouchDropVanish {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(50px) scale(.85); }
+}
 .phase-flip .pack-pouch-wrapper,
 .phase-reveal .pack-pouch-wrapper {
   pointer-events: none;
   display: none;
 }
 
+.pack-pouch-tilt-layer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .12s cubic-bezier(.2, .8, .3, 1);
+}
+
 .pack-pouch {
   position: relative;
-  width: 176px;
-  height: 254px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #2e1065 0%, #1e1b4b 35%, #0f172a 70%, #1e1b4b 100%);
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #3b0764 0%, #1e1b4b 32%, #0f172a 68%, #1e1b4b 100%);
   box-shadow:
-    0 18px 40px rgba(0, 0, 0, .75),
-    0 0 0 1px rgba(255, 255, 255, .16),
-    0 0 28px var(--rarity-glow, rgba(168, 85, 247, .28));
+    0 22px 50px rgba(0, 0, 0, .85),
+    0 0 0 1px rgba(255, 255, 255, .18),
+    0 0 35px var(--rarity-glow, rgba(168, 85, 247, .32)),
+    inset 0 0 24px rgba(0, 0, 0, .55),
+    inset 0 2px 4px rgba(255, 255, 255, .3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: pack-pouch-float 3.4s ease-in-out infinite;
+  animation: pack-pouch-float 3.2s ease-in-out infinite;
   transform-style: preserve-3d;
 }
 @keyframes pack-pouch-float {
@@ -437,58 +485,84 @@
 .pack-pouch-sheen {
   position: absolute;
   inset: -60%;
-  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .05) 45%, rgba(255, 255, 255, .42) 50%, rgba(255, 255, 255, .05) 55%, transparent 62%);
+  background:
+    radial-gradient(circle at var(--sheen-x, 50%) var(--sheen-y, 35%), rgba(255, 255, 255, .32) 0%, transparent 45%),
+    linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .05) 45%, rgba(255, 255, 255, .4) 50%, rgba(255, 255, 255, .05) 55%, transparent 62%);
   pointer-events: none;
-  animation: pack-sheen-sweep 4s ease-in-out infinite;
-  z-index: 3;
+  animation: pack-sheen-sweep 3.8s ease-in-out infinite;
+  z-index: 4;
 }
 @keyframes pack-sheen-sweep {
   0% { transform: translateX(-65%) translateY(-65%); }
   45%, 100% { transform: translateX(65%) translateY(65%); }
 }
 
-.pack-pouch-top, .pack-pouch-bottom {
+/* ── Top Cap: Rips & tears off completely! ── */
+.pack-pouch-top-cap {
   position: relative;
   width: 100%;
-  z-index: 2;
+  z-index: 5;
+  background: linear-gradient(180deg, #4c1d95 0%, #2e1065 100%);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  transform-origin: bottom left;
 }
-.pack-pouch-crimp {
-  width: 100%;
-  height: 14px;
-  background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .14) 0px, rgba(255, 255, 255, .14) 3px, rgba(0, 0, 0, .32) 3px, rgba(0, 0, 0, .32) 6px),
-    linear-gradient(180deg, #4c1d95, #1e1b4b);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .35), inset 0 -1px 2px rgba(0, 0, 0, .5);
+.phase-tearing .pack-pouch-top-cap {
+  animation: packCapRipOff .6s cubic-bezier(.22, 1, .36, 1) forwards;
 }
-.pack-pouch-crimp.bottom {
-  height: 12px;
+@keyframes packCapRipOff {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  20% { transform: translate(8px, -4px) rotate(3deg); opacity: 1; }
+  55% { transform: translate(45px, -24px) rotate(18deg) scale(.95); opacity: .9; }
+  100% { transform: translate(110px, -70px) rotate(38deg) scale(.8); opacity: 0; }
 }
 
-.pack-tear-line {
+.pack-pouch-crimp {
+  width: 100%;
+  height: 15px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .16) 0px, rgba(255, 255, 255, .16) 3px, rgba(0, 0, 0, .38) 3px, rgba(0, 0, 0, .38) 6px),
+    linear-gradient(180deg, #581c87, #1e1b4b);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4), inset 0 -1px 2px rgba(0, 0, 0, .6);
+}
+.pack-pouch-crimp.bottom {
+  height: 13px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.pack-tear-strip {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5px;
+  justify-content: space-between;
   padding: 3px 6px;
-  background: rgba(0, 0, 0, .45);
-  border-bottom: 1.5px dashed rgba(255, 255, 255, .32);
+  background: rgba(0, 0, 0, .55);
+  border-bottom: 2px dashed rgba(253, 224, 71, .55);
 }
-.pack-tear-line-dash {
-  flex: 1;
-  height: 1px;
-  background: rgba(255, 255, 255, .2);
-}
-.pack-tear-tag {
+.pack-tear-pull-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   font: 900 8.5px system-ui, -apple-system, sans-serif;
   letter-spacing: .08em;
   color: #fde047;
-  text-shadow: 0 1px 3px rgba(0,0,0,.6);
+  background: rgba(234, 179, 8, .25);
+  border: 1px solid rgba(234, 179, 8, .45);
+  padding: 2px 5px;
+  border-radius: 4px;
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
-.pack-tear-slit {
+.pack-tear-dotted-line {
+  flex: 1;
+  height: 1px;
+  margin-left: 6px;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .45) 0px, rgba(255, 255, 255, .45) 4px, transparent 4px, transparent 8px);
+}
+.pack-tear-laser-slit {
   position: absolute;
-  top: 100%;
+  bottom: -1px;
   left: 0;
   right: 0;
   height: 3px;
@@ -496,11 +570,107 @@
   box-shadow: 0 0 12px #fff, 0 0 24px var(--rarity-color, #a855f7);
   opacity: 0;
   transform: scaleX(0);
-  transition: transform .35s ease, opacity .25s ease;
-  z-index: 5;
+  transform-origin: left;
+  transition: transform .32s ease, opacity .2s ease;
+  z-index: 6;
+}
+.phase-tearing .pack-tear-laser-slit {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
-.pack-pouch-body {
+/* Glowing Jagged Tear Seam & Light Fissure */
+.pack-tear-seam {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #fde047, #ffffff, var(--rarity-color, #a855f7));
+  opacity: 0;
+  filter: drop-shadow(0 0 8px var(--rarity-color, #a855f7));
+  z-index: 5;
+  pointer-events: none;
+}
+.phase-tearing .pack-tear-seam {
+  opacity: 1;
+  animation: packSeamRip .5s ease forwards;
+}
+@keyframes packSeamRip {
+  0% { transform: scaleX(0); opacity: 1; }
+  50% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1.1); opacity: 0; }
+}
+
+/* ── Main Pouch Body (Lower Sleeve) ── */
+.pack-pouch-main-body {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.phase-tearing .pack-pouch-main-body {
+  animation: packBodyRumble .55s cubic-bezier(.36,.07,.19,.97) both;
+}
+@keyframes packBodyRumble {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  15% { transform: translate(-3px, 2px) rotate(-1deg); }
+  30% { transform: translate(3px, -2px) rotate(1deg); }
+  45% { transform: translate(-3px, 1px) rotate(-.8deg); }
+  60% { transform: translate(3px, 1px) rotate(.8deg); }
+  75% { transform: translate(-2px, 0); }
+  90% { transform: translate(1px, 0); }
+}
+
+/* Internal cavity with light beam and card peek */
+.pack-pouch-cavity {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 75px;
+  background: radial-gradient(circle at 50% 0%, var(--rarity-glow, rgba(168,85,247,.65)) 0%, transparent 80%);
+  z-index: 3;
+  pointer-events: none;
+}
+.pack-cavity-card-peek {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  width: 140px;
+  height: 80px;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1px solid rgba(255, 255, 255, .25);
+  border-bottom: none;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, .5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 2;
+}
+.pack-card-peek-sigil {
+  font-size: 26px;
+  opacity: .75;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.6));
+}
+.phase-tearing .pack-cavity-card-peek {
+  opacity: 1;
+  animation: cardPeekSlideUp .52s cubic-bezier(.16, 1, .3, 1) .1s forwards;
+}
+@keyframes cardPeekSlideUp {
+  0% { transform: translateX(-50%) translateY(30px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateX(-50%) translateY(-35px); opacity: 1; }
+}
+
+.pack-pouch-body-content {
   position: relative;
   flex: 1;
   display: flex;
@@ -565,12 +735,13 @@
   color: #fff;
   background: rgba(255, 255, 255, .12);
   border: 1px solid rgba(255, 255, 255, .22);
-  padding: 7px 18px;
+  padding: 8px 20px;
   border-radius: 99px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 4px 14px rgba(0,0,0,.35);
   animation: pack-prompt-pulse 1.8s ease-in-out infinite;
+  margin-top: 14px;
 }
 .pack-tap-hand {
   font-size: 15px;
@@ -584,32 +755,6 @@
   0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(0,0,0,.35); }
   50% { transform: scale(1.03); box-shadow: 0 6px 18px rgba(168,85,247,.45); }
 }
-
-/* ── Stage 2: Rip / Tearing Sequence ── */
-.phase-tearing .pack-pouch {
-  animation: pack-pouch-rumble .55s cubic-bezier(.36,.07,.19,.97) both;
-}
-@keyframes pack-pouch-rumble {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  15% { transform: translate(-3px, 2px) rotate(-1.5deg) scale(1.02); }
-  30% { transform: translate(3px, -2px) rotate(1.5deg) scale(1.04); }
-  45% { transform: translate(-4px, -1px) rotate(-2deg) scale(1.06); }
-  60% { transform: translate(4px, 1px) rotate(2deg) scale(1.07); }
-  75% { transform: translate(-3px, 2px) rotate(-1deg) scale(1.08); }
-  90% { transform: translate(2px, -1px) rotate(1deg) scale(1.09); }
-}
-.phase-tearing .pack-tear-slit {
-  opacity: 1;
-  transform: scaleX(1);
-}
-.phase-tearing .pack-pouch-top {
-  animation: pack-top-tear .55s ease .15s forwards;
-}
-@keyframes pack-top-tear {
-  0% { transform: translateY(0) rotate(0deg); }
-  40% { transform: translateY(-4px) rotate(-2deg); }
-  100% { transform: translateY(-16px) rotate(-7deg); opacity: .85; }
-}
 .phase-tearing .pack-tap-prompt,
 .phase-burst .pack-tap-prompt,
 .phase-flip .pack-tap-prompt,
@@ -620,19 +765,6 @@
 }
 
 /* ── Stage 3: Burst & Dissolve ── */
-.phase-burst .pack-pouch-wrapper {
-  animation: pack-dissolve .42s ease forwards;
-}
-@keyframes pack-dissolve {
-  0% { transform: scale(1.08); opacity: 1; filter: brightness(1.5); }
-  60% { transform: scale(1.18); opacity: .85; filter: brightness(3); }
-  100% { transform: scale(.4); opacity: 0; filter: brightness(4); }
-}
-.phase-flip .pack-pouch-wrapper,
-.phase-reveal .pack-pouch-wrapper {
-  display: none;
-}
-
 .pack-flash-blast {
   position: absolute;
   width: 90px;
@@ -853,8 +985,8 @@
 
 /* ── Stage 5: Result Information & Actions ── */
 .pack-result-info {
+  display: none;
   margin-top: 14px;
-  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
@@ -862,15 +994,19 @@
   opacity: 0;
   transform: translateY(14px);
   pointer-events: none;
-  transition: opacity .32s ease, transform .35s cubic-bezier(.2, .8, .3, 1);
   width: 100%;
   z-index: 5;
 }
 .phase-reveal .pack-result-info {
+  display: flex;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  transition-delay: .08s;
+  animation: packResultSlideUp .36s cubic-bezier(.16, 1, .3, 1) both;
+}
+@keyframes packResultSlideUp {
+  0% { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .card-reveal-badges {
