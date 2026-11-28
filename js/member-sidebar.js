@@ -99,10 +99,11 @@
 
   function memberRowHtml(u) {
     const badges = badgesForUser(u);
+    const isAdminUser = badges.includes('admin') || u.role === 'admin';
     const hasBanner = !!u.bannerUrl;
     const bannerStyle = hasBanner ? ` style="background-image:url('${esc(u.bannerUrl)}')"` : '';
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
-    const roleTag = badges.includes('admin')
+    const roleTag = isAdminUser
       ? '<span class="ms-role-tag admin">Admin</span>'
       : badges.includes('helper')
         ? '<span class="ms-role-tag helper">Helper</span>'
@@ -125,7 +126,7 @@
     const deco = u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : '';
     const title = u.isMe ? 'Buka profil kamu' : isAdmin() ? `Chat / Fitur Admin — ${u.name}` : `Chat dengan ${u.name}`;
 
-    return `<button type="button" class="ms-row${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
+    return `<button type="button" class="ms-row${isAdminUser ? ' is-admin' : ''}${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
       <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
       <span class="ms-meta">
         <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${champBadge}${roleTag}</span>
@@ -272,7 +273,8 @@
       ? `<img class="ms-av-img" src="${esc(u.avatarUrl)}" alt="">`
       : esc(ini(u.name));
     const deco = u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : '';
-    const roleTag = badges.includes('admin')
+    const isAdminUser = badges.includes('admin') || u.role === 'admin';
+    const roleTag = isAdminUser
       ? '<span class="ms-role-tag admin">Admin</span>'
       : badges.includes('helper')
         ? '<span class="ms-role-tag helper">Helper</span>'
@@ -286,7 +288,7 @@
     layer.className = 'ms-pop-layer';
     layer.innerHTML = `
       <div class="ms-pop-card" role="dialog" aria-modal="true" aria-label="Aksi Member">
-        <div class="ms-pop-hero${hasBanner ? ' has-banner' : ''}"${bannerStyle}>
+        <div class="ms-pop-hero${isAdminUser ? ' is-admin' : ''}${hasBanner ? ' has-banner' : ''}"${bannerStyle}>
           <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
           <span class="ms-meta">
             <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${roleTag}</span>
