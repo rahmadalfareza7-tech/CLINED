@@ -27,134 +27,34 @@
 .chat-row.is-admin {
   position: relative;
   overflow: visible;
-  border-color: #000000;
-  box-shadow:
-    0 0 0 1px #000000,
-    0 0 14px rgba(0, 0, 0, 0.95),
-    0 0 26px rgba(20, 12, 30, 0.85),
-    0 0 40px rgba(10, 5, 20, 0.75),
-    inset 0 0 10px rgba(0, 0, 0, 0.7);
-  animation: chat-admin-black-aura 3.2s ease-in-out infinite alternate;
+  border-color: #050507;
+  margin: 4px 0;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.55);
 }
-.chat-row.is-admin > * {
+.chat-row.is-admin > .chat-row-bg,
+.chat-row.is-admin.has-banner::before {
+  border-radius: 14px;
+}
+.chat-row.is-admin > :not(.chat-row-bg):not(.clined-fire-aura) {
   position: relative;
   z-index: 2;
 }
-.chat-row.is-admin > .chat-smoke-aura {
-  z-index: 0;
+.chat-row.is-admin > .clined-fire-aura {
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 3;
+  overflow: visible;
 }
 .chat-row.is-admin:hover {
   border-color: #000000;
-  box-shadow:
-    0 0 0 1.5px #000000,
-    0 0 18px rgba(0, 0, 0, 1),
-    0 0 34px rgba(25, 14, 40, 0.95),
-    0 0 50px rgba(15, 8, 25, 0.85),
-    inset 0 0 14px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.78);
 }
-.chat-row.is-admin:hover .chat-smoke-aura {
-  filter: brightness(1.22);
-}
-
-.chat-smoke-aura {
-  position: absolute;
-  inset: -8px;
-  border-radius: 22px;
-  pointer-events: none;
-  z-index: 0;
-  overflow: visible;
-}
-.chat-smoke-aura .smoke-cloud-1 {
-  position: absolute;
-  inset: -4px;
-  border-radius: 46% 54% 52% 48% / 48% 52% 48% 52%;
-  background: radial-gradient(ellipse at 50% 50%, #000000 38%, rgba(20, 14, 30, 0.95) 58%, rgba(140, 150, 190, 0.28) 74%, transparent 84%);
-  filter: blur(5px);
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.95);
-  animation: ms-smoke-billow-1 4.2s ease-in-out infinite alternate;
-  transform-origin: center center;
-}
-.chat-smoke-aura .smoke-cloud-2 {
-  position: absolute;
-  inset: -6px;
-  border-radius: 54% 46% 45% 55% / 52% 48% 52% 48%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.96) 32%, rgba(26, 18, 40, 0.92) 56%, rgba(175, 140, 225, 0.3) 72%, transparent 82%);
-  filter: blur(7px);
-  animation: ms-smoke-billow-2 5.8s ease-in-out infinite alternate;
-  transform-origin: center center;
-}
-.chat-smoke-aura .smoke-stream {
-  position: absolute;
-  inset: -2px;
-  border-radius: 17px;
-  background: conic-gradient(
-    from 0deg,
-    rgba(0, 0, 0, 0.95) 0deg,
-    rgba(160, 170, 210, 0.45) 45deg,
-    rgba(0, 0, 0, 0.4) 100deg,
-    rgba(0, 0, 0, 0.98) 180deg,
-    rgba(180, 140, 240, 0.48) 235deg,
-    rgba(0, 0, 0, 0.35) 290deg,
-    rgba(0, 0, 0, 0.95) 360deg
-  );
-  filter: blur(4px);
-  opacity: 0.9;
-  animation: ms-smoke-spin 6.5s linear infinite;
-}
-.chat-smoke-aura .smoke-puff {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle at 45% 45%, #000000 25%, rgba(22, 16, 32, 0.92) 55%, rgba(170, 185, 225, 0.42) 75%, transparent 88%);
-  filter: blur(3.5px);
-  pointer-events: none;
-}
-.chat-smoke-aura .puff-t1 {
-  width: 38px;
-  height: 22px;
-  top: -12px;
-  left: 20%;
-  animation: ms-smoke-float-up 3.1s ease-out infinite;
-}
-.chat-smoke-aura .puff-t2 {
-  width: 44px;
-  height: 24px;
-  top: -14px;
-  right: 25%;
-  animation: ms-smoke-float-up 3.6s ease-out infinite 1.1s;
-}
-.chat-smoke-aura .puff-b1 {
-  width: 38px;
-  height: 20px;
-  bottom: -12px;
-  left: 40%;
-  animation: ms-smoke-float-down 3.5s ease-out infinite 0.6s;
-}
-
 .chat-head.is-admin {
   position: relative;
-  overflow: visible;
   border-bottom: 2px solid #000000;
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.95),
-    0 8px 32px rgba(20, 10, 35, 0.85);
-}
-@keyframes chat-admin-black-aura {
-  0% {
-    box-shadow:
-      0 0 0 1px #000000,
-      0 0 10px rgba(0, 0, 0, 0.92),
-      0 0 20px rgba(0, 0, 0, 0.8),
-      0 0 32px rgba(20, 10, 35, 0.65),
-      inset 0 0 8px rgba(0, 0, 0, 0.6);
-  }
-  100% {
-    box-shadow:
-      0 0 0 1.5px #000000,
-      0 0 16px rgba(0, 0, 0, 1),
-      0 0 30px rgba(0, 0, 0, 0.98),
-      0 0 46px rgba(30, 12, 52, 0.85),
-      inset 0 0 12px rgba(0, 0, 0, 0.75);
-  }
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
 }
 .chat-row .soc-av { width: 48px; height: 48px; font-size: 16px; }
 .chat-who { min-width: 0; display: grid; gap: 2px; }
@@ -165,12 +65,7 @@
 .chat-meta { display: grid; justify-items: end; gap: 6px; }
 .chat-meta time { font-size: 11px; font-weight: 800; opacity: .6; }
 .chat-badge { font-style: normal; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
-.chat-badge.b-admin {
-  background: var(--warn-soft, rgba(255,150,0,.18));
-  color: var(--warn-text, #b86600);
-  border: 1px solid #000000;
-  box-shadow: 0 0 0 1px #000000, 0 0 6px rgba(0, 0, 0, 0.85), inset 0 0 3px rgba(0, 0, 0, 0.5);
-}
+.chat-badge.b-admin { background: var(--warn-soft, rgba(255,150,0,.18)); color: var(--warn-text, #b86600); }
 .chat-badge.b-helper { background: var(--sky-soft, rgba(28,176,246,.16)); color: var(--sky-text, #0b7bb3); }
 .chat-badge.b-mentor { background: var(--brand-soft, rgba(88,204,2,.18)); color: var(--ok-text, #2f7d00); }
 .chat-mini { min-height: 40px !important; padding: 0 14px !important; font-size: 13px !important; white-space: nowrap; border-radius: 12px !important; }

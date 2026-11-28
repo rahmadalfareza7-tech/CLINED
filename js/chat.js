@@ -131,8 +131,9 @@
     const xp100 = u.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
     const champs = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true, max: 2 }) || '';
     const isAdminUser = (u.badges || []).includes('admin') || u.role === 'admin';
-    const smokeAuraHtml = isAdminUser ? '<span class="chat-smoke-aura" aria-hidden="true"><span class="smoke-cloud-1"></span><span class="smoke-cloud-2"></span><span class="smoke-stream"></span><span class="smoke-puff puff-t1"></span><span class="smoke-puff puff-t2"></span><span class="smoke-puff puff-b1"></span></span>' : '';
-    return `<div class="chat-row${isAdminUser ? ' is-admin' : ''}${u.canChat ? ' open' : ''}${u.unread ? ' has-unread' : ''}${u.bannerUrl ? ' has-banner' : ''}" ${u.canChat ? `data-chat-open="${esc(u.id)}" role="button" tabindex="0"` : ''}>${smokeAuraHtml}${banner}${av(u)}
+    if (isAdminUser && typeof window.clinedEnsureBlackFireDefs === 'function') window.clinedEnsureBlackFireDefs();
+    const fireAuraHtml = isAdminUser ? '<span class="clined-fire-aura" aria-hidden="true"><span class="clined-fire-ring-b"></span><span class="clined-fire-ring-a"></span><span class="clined-fire-rise r1"></span><span class="clined-fire-rise r2"></span></span>' : '';
+    return `<div class="chat-row${isAdminUser ? ' is-admin' : ''}${u.canChat ? ' open' : ''}${u.unread ? ' has-unread' : ''}${u.bannerUrl ? ' has-banner' : ''}" ${u.canChat ? `data-chat-open="${esc(u.id)}" role="button" tabindex="0"` : ''}>${fireAuraHtml}${banner}${av(u)}
       <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${champs}${badges(u)}</div><small>${sub}</small></div>
       <div class="chat-meta">${meta}</div></div>`;
   }
@@ -154,8 +155,9 @@
     const xp100 = u.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
     const champs = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true, max: 3 }) || '';
     const isMeAdmin = me.role === 'admin' || meBadges.includes('admin');
-    const selfSmokeHtml = isMeAdmin ? '<span class="chat-smoke-aura" aria-hidden="true"><span class="smoke-cloud-1"></span><span class="smoke-cloud-2"></span><span class="smoke-stream"></span><span class="smoke-puff puff-t1"></span><span class="smoke-puff puff-t2"></span><span class="smoke-puff puff-b1"></span></span>' : '';
-    return `<div class="chat-grp"><h4>Profil Kamu</h4><div class="chat-row chat-self${isMeAdmin ? ' is-admin' : ''}${u.bannerUrl ? ' has-banner' : ''}">${selfSmokeHtml}${banner}${av(u)}
+    if (isMeAdmin && typeof window.clinedEnsureBlackFireDefs === 'function') window.clinedEnsureBlackFireDefs();
+    const selfFireHtml = isMeAdmin ? '<span class="clined-fire-aura" aria-hidden="true"><span class="clined-fire-ring-b"></span><span class="clined-fire-ring-a"></span><span class="clined-fire-rise r1"></span><span class="clined-fire-rise r2"></span></span>' : '';
+    return `<div class="chat-grp"><h4>Profil Kamu</h4><div class="chat-row chat-self${isMeAdmin ? ' is-admin' : ''}${u.bannerUrl ? ' has-banner' : ''}">${selfFireHtml}${banner}${av(u)}
       <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${champs}${badges(u)}</div><small>@${esc(u.username)} • tampil di chat</small></div>
       <div class="chat-meta"><button type="button" class="secondary chat-mini" data-chat-shop>🎨 Atur</button></div></div></div>`;
   }
