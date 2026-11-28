@@ -130,10 +130,7 @@
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
     const xp100 = u.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
     const champs = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true, max: 2 }) || '';
-    const isAdminUser = (u.badges || []).includes('admin') || u.role === 'admin';
-    if (isAdminUser && typeof window.clinedEnsureBlackFireDefs === 'function') window.clinedEnsureBlackFireDefs();
-    const fireAuraHtml = isAdminUser ? '<span class="clined-fire-aura" aria-hidden="true"><span class="clined-fire-ring-b"></span><span class="clined-fire-ring-a"></span><span class="clined-fire-rise r1"></span><span class="clined-fire-rise r2"></span></span>' : '';
-    return `<div class="chat-row${isAdminUser ? ' is-admin' : ''}${u.canChat ? ' open' : ''}${u.unread ? ' has-unread' : ''}${u.bannerUrl ? ' has-banner' : ''}" ${u.canChat ? `data-chat-open="${esc(u.id)}" role="button" tabindex="0"` : ''}>${fireAuraHtml}${banner}${av(u)}
+    return `<div class="chat-row${u.canChat ? ' open' : ''}${u.unread ? ' has-unread' : ''}${u.bannerUrl ? ' has-banner' : ''}" ${u.canChat ? `data-chat-open="${esc(u.id)}" role="button" tabindex="0"` : ''}>${banner}${av(u)}
       <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${champs}${badges(u)}</div><small>${sub}</small></div>
       <div class="chat-meta">${meta}</div></div>`;
   }
@@ -154,10 +151,7 @@
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
     const xp100 = u.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
     const champs = window.CLINED_CHAMPIONS?.renderBadges?.(u.championBlocks, { compact: true, max: 3 }) || '';
-    const isMeAdmin = me.role === 'admin' || meBadges.includes('admin');
-    if (isMeAdmin && typeof window.clinedEnsureBlackFireDefs === 'function') window.clinedEnsureBlackFireDefs();
-    const selfFireHtml = isMeAdmin ? '<span class="clined-fire-aura" aria-hidden="true"><span class="clined-fire-ring-b"></span><span class="clined-fire-ring-a"></span><span class="clined-fire-rise r1"></span><span class="clined-fire-rise r2"></span></span>' : '';
-    return `<div class="chat-grp"><h4>Profil Kamu</h4><div class="chat-row chat-self${isMeAdmin ? ' is-admin' : ''}${u.bannerUrl ? ' has-banner' : ''}">${selfFireHtml}${banner}${av(u)}
+    return `<div class="chat-grp"><h4>Profil Kamu</h4><div class="chat-row chat-self${u.bannerUrl ? ' has-banner' : ''}">${banner}${av(u)}
       <div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(u.name)}</b>${xp100}${champs}${badges(u)}</div><small>@${esc(u.username)} • tampil di chat</small></div>
       <div class="chat-meta"><button type="button" class="secondary chat-mini" data-chat-shop>🎨 Atur</button></div></div></div>`;
   }
@@ -194,8 +188,7 @@
     const nc = p.nameColor ? ` data-name-color="${esc(p.nameColor)}"` : '';
     const xp100 = p.xp100k ? '<em class="chat-badge b-xp100k" title="Pencapaian 100.000 All-Time XP">⚜️ 100K Legend</em>' : '';
     const champs = window.CLINED_CHAMPIONS?.renderBadges?.(p.championBlocks, { compact: true, max: 3 }) || '';
-    const isPeerAdmin = p.role === 'admin' || (p.badges || []).includes('admin');
-    return `<div class="card soc-card chat-card chat-thread"><div class="chat-head${isPeerAdmin ? ' is-admin' : ''}${p.bannerUrl ? ' has-banner' : ''}">${headBg}<button type="button" class="chat-back" data-chat-back aria-label="Kembali">‹</button>${av(p)}<div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(p.name)}</b>${xp100}${champs}${badges(p)}</div><small>@${esc(p.username)}${p.online ? ' • online' : ''}</small></div></div>
+    return `<div class="card soc-card chat-card chat-thread"><div class="chat-head${p.bannerUrl ? ' has-banner' : ''}">${headBg}<button type="button" class="chat-back" data-chat-back aria-label="Kembali">‹</button>${av(p)}<div class="chat-who"><div class="chat-who-top"><b${nc}>${esc(p.name)}</b>${xp100}${champs}${badges(p)}</div><small>@${esc(p.username)}${p.online ? ' • online' : ''}</small></div></div>
       <div class="chat-ttl">🕒 Pesan hilang otomatis setelah 48 jam</div>
       <div class="chat-msgs" id="chatMsgs">${T ? (msgs || '<div class="chat-empty"><span>👋</span><b>Belum ada pesan</b><small>Sapa duluan!</small></div>') : '<p class="soc-empty">Memuat…</p>'}</div>
       ${can ? `<div class="chat-compose"><textarea id="chatInput" rows="1" maxlength="1000" placeholder="Tulis pesan…" aria-label="Pesan"></textarea><button type="button" class="chat-send" data-chat-send aria-label="Kirim" disabled>➤</button></div>` : '<p class="chat-locked">Tambahkan sebagai teman dulu untuk membalas.</p>'}</div>`;

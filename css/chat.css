@@ -24,38 +24,6 @@
 .chat-row.open:active { transform: translateY(1px) scale(.995); }
 .chat-row.has-unread { border-color: rgba(28,176,246,.6); background: linear-gradient(90deg, rgba(28,176,246,.10), transparent 70%), var(--card, #fff); }
 .chat-row:not(.open) { opacity: .92; }
-.chat-row.is-admin {
-  position: relative;
-  overflow: visible;
-  border-color: #050507;
-  margin: 4px 0;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.55);
-}
-.chat-row.is-admin > .chat-row-bg,
-.chat-row.is-admin.has-banner::before {
-  border-radius: 14px;
-}
-.chat-row.is-admin > :not(.chat-row-bg):not(.clined-fire-aura) {
-  position: relative;
-  z-index: 2;
-}
-.chat-row.is-admin > .clined-fire-aura {
-  position: absolute;
-  inset: -2px;
-  border-radius: 16px;
-  pointer-events: none;
-  z-index: 3;
-  overflow: visible;
-}
-.chat-row.is-admin:hover {
-  border-color: #000000;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.78);
-}
-.chat-head.is-admin {
-  position: relative;
-  border-bottom: 2px solid #000000;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
-}
 .chat-row .soc-av { width: 48px; height: 48px; font-size: 16px; }
 .chat-who { min-width: 0; display: grid; gap: 2px; }
 .chat-who-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }

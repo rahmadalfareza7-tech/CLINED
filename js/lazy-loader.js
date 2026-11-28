@@ -493,7 +493,7 @@
 
   const SECONDARY_STYLES = [
     'css/userbank.css?v=3',
-    'css/chat.css?v=4',
+    'css/chat.css?v=5',
     'css/qcomments.css?v=2',
     'css/insights.css?v=7',
     'css/content-ergonomic.css?v=9'

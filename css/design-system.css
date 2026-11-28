@@ -1166,9 +1166,9 @@ body.dark .account-change-avatar {
   position: relative;
   overflow: hidden;
 }
-.chat-row > *:not(.chat-row-bg):not(.clined-fire-aura),
-.chat-head > *:not(.chat-row-bg):not(.clined-fire-aura),
-.account-banner-preview > *:not(.chat-row-bg):not(.clined-fire-aura) {
+.chat-row > *:not(.chat-row-bg),
+.chat-head > *:not(.chat-row-bg),
+.account-banner-preview > *:not(.chat-row-bg) {
   position: relative;
   z-index: 1;
 }

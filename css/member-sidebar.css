@@ -5,84 +5,6 @@
   display: none;
 }
 
-/* Shared Animated Black Fire Border (Amaterasu-style jagged black flames) */
-.clined-fire-defs {
-  position: fixed;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0;
-}
-.clined-fire-aura {
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 3;
-  overflow: visible;
-}
-body.dark .clined-fire-aura,
-html.dark .clined-fire-aura {
-  filter: drop-shadow(0 0 1.5px rgba(215, 205, 255, 0.48)) drop-shadow(0 0 5px rgba(110, 90, 175, 0.35));
-}
-.clined-fire-ring-a {
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  border: 3px solid #000000;
-  filter: url(#clined-black-fire-a);
-  animation: clined-fire-flicker-a 1.05s ease-in-out infinite alternate;
-}
-.clined-fire-ring-b {
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  border: 4px solid #040407;
-  filter: url(#clined-black-fire-b);
-  opacity: 0.95;
-  transform-origin: center bottom;
-  animation: clined-fire-flicker-b 0.78s ease-in-out infinite alternate;
-}
-.clined-fire-rise {
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  border-top: 4.5px solid #000000;
-  border-left: 2.5px solid #000000;
-  border-right: 2.5px solid #000000;
-  border-bottom: 2px solid #08080c;
-  filter: url(#clined-black-fire-b);
-  transform-origin: center bottom;
-  animation: clined-fire-rise-up 1.25s ease-out infinite;
-}
-.clined-fire-rise.r2 {
-  animation-delay: -0.62s;
-  filter: url(#clined-black-fire-a);
-}
-@keyframes clined-fire-flicker-a {
-  0% { opacity: 0.92; transform: translateY(0px) scale(1, 1); }
-  50% { opacity: 1; transform: translateY(-0.9px) scale(1.004, 1.022); }
-  100% { opacity: 0.88; transform: translateY(-0.2px) scale(0.998, 1.008); }
-}
-@keyframes clined-fire-flicker-b {
-  0% { opacity: 0.84; transform: translateY(-0.4px) scale(1, 1.012); }
-  100% { opacity: 1; transform: translateY(-2.2px) scale(1.008, 1.05); }
-}
-@keyframes clined-fire-rise-up {
-  0% { opacity: 0; transform: translateY(0.5px) scale(0.996, 1); }
-  28% { opacity: 0.92; transform: translateY(-2px) scale(1.005, 1.035); }
-  72% { opacity: 0.48; transform: translateY(-4.5px) scale(1.012, 1.075); }
-  100% { opacity: 0; transform: translateY(-7px) scale(1.018, 1.11); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .clined-fire-ring-a,
-  .clined-fire-ring-b,
-  .clined-fire-rise {
-    animation: none;
-  }
-}
-
 @media (min-width: 768px) {
   :root {
     --ms-w: 268px;
@@ -384,7 +306,6 @@ html.dark .clined-fire-aura {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 11px;
     background: linear-gradient(90deg, rgba(10, 14, 22, 0.72) 0%, rgba(10, 14, 22, 0.44) 62%, rgba(10, 14, 22, 0.22) 100%);
     pointer-events: none;
     z-index: 0;
@@ -393,9 +314,9 @@ html.dark .clined-fire-aura {
   .ms-row.has-banner:hover::before {
     background: linear-gradient(90deg, rgba(10, 14, 22, 0.62) 0%, rgba(10, 14, 22, 0.34) 62%, rgba(10, 14, 22, 0.16) 100%);
   }
-  .ms-row.has-banner > :not(.clined-fire-aura) {
+  .ms-row.has-banner > * {
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
   .ms-row.has-banner .ms-name:not([data-name-color]) {
     color: #ffffff;
@@ -404,50 +325,6 @@ html.dark .clined-fire-aura {
   .ms-row.has-banner .ms-sub {
     color: rgba(255, 255, 255, 0.84);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
-  }
-
-  /* Admin Member Row & Popup — Animated Black Fire Border */
-  .ms-row.is-admin {
-    position: relative;
-    overflow: visible;
-    width: calc(100% - 6px);
-    margin: 5px 3px;
-    border: 1.5px solid #050507;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.55);
-  }
-  .ms-row.is-admin > :not(.clined-fire-aura) {
-    position: relative;
-    z-index: 2;
-  }
-  .ms-row.is-admin > .clined-fire-aura {
-    position: absolute;
-    inset: -1px;
-    border-radius: 12px;
-    pointer-events: none;
-    z-index: 3;
-    overflow: visible;
-  }
-  .ms-row.is-admin:hover {
-    border-color: #000000;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.78);
-  }
-  .ms-pop-hero.is-admin {
-    position: relative;
-    overflow: visible;
-    border-bottom: 2px solid #000000;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.85);
-  }
-  .ms-pop-hero.is-admin > :not(.clined-fire-aura) {
-    position: relative;
-    z-index: 2;
-  }
-  .ms-pop-hero.is-admin > .clined-fire-aura {
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 3;
-    overflow: visible;
   }
 
   /* Avatar + Decoration + Presence Dot */

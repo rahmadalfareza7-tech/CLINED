@@ -10,16 +10,6 @@
   const ini = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || '?';
   const tabletUpMq = window.matchMedia('(min-width: 768px)');
   const dockedMq = window.matchMedia('(min-width: 1024px)');
-  const BLACK_FIRE_HTML = '<span class="clined-fire-aura" aria-hidden="true"><span class="clined-fire-ring-b"></span><span class="clined-fire-ring-a"></span><span class="clined-fire-rise r1"></span><span class="clined-fire-rise r2"></span></span>';
-
-  function ensureBlackFireDefs() {
-    if (document.getElementById('clinedBlackFireDefs') || !document.body) return;
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `<svg id="clinedBlackFireDefs" class="clined-fire-defs" aria-hidden="true"><defs><filter id="clined-black-fire-a" x="-20%" y="-65%" width="140%" height="230%" color-interpolation-filters="sRGB"><feTurbulence type="turbulence" baseFrequency="0.068 0.145" numOctaves="4" seed="4" result="turbA"><animate attributeName="baseFrequency" values="0.062 0.135;0.082 0.185;0.066 0.15;0.062 0.135" dur="1.7s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="turbA" scale="8.5" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="clined-black-fire-b" x="-25%" y="-85%" width="150%" height="260%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.092 0.185" numOctaves="4" seed="11" result="turbB"><animate attributeName="baseFrequency" values="0.084 0.165;0.112 0.228;0.09 0.19;0.084 0.165" dur="1.25s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="turbB" scale="13" xChannelSelector="G" yChannelSelector="B" result="dispB"/><feOffset in="dispB" dx="0" dy="-1.5"/></filter></defs></svg>`;
-    const svg = wrap.firstElementChild;
-    if (svg) document.body.appendChild(svg);
-  }
-  window.clinedEnsureBlackFireDefs = ensureBlackFireDefs;
 
   const S = {
     open: dockedMq.matches,
@@ -109,11 +99,10 @@
 
   function memberRowHtml(u) {
     const badges = badgesForUser(u);
-    const isAdminUser = badges.includes('admin') || u.role === 'admin';
     const hasBanner = !!u.bannerUrl;
     const bannerStyle = hasBanner ? ` style="background-image:url('${esc(u.bannerUrl)}')"` : '';
     const nc = u.nameColor ? ` data-name-color="${esc(u.nameColor)}"` : '';
-    const roleTag = isAdminUser
+    const roleTag = badges.includes('admin')
       ? '<span class="ms-role-tag admin">Admin</span>'
       : badges.includes('helper')
         ? '<span class="ms-role-tag helper">Helper</span>'
@@ -135,11 +124,8 @@
       : esc(ini(u.name));
     const deco = u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : '';
     const title = u.isMe ? 'Buka profil kamu' : isAdmin() ? `Chat / Fitur Admin — ${u.name}` : `Chat dengan ${u.name}`;
-    if (isAdminUser) ensureBlackFireDefs();
-    const fireAuraHtml = isAdminUser ? BLACK_FIRE_HTML : '';
 
-    return `<button type="button" class="ms-row${isAdminUser ? ' is-admin' : ''}${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
-      ${fireAuraHtml}
+    return `<button type="button" class="ms-row${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
       <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
       <span class="ms-meta">
         <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${champBadge}${roleTag}</span>
@@ -286,8 +272,7 @@
       ? `<img class="ms-av-img" src="${esc(u.avatarUrl)}" alt="">`
       : esc(ini(u.name));
     const deco = u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : '';
-    const isAdminUser = badges.includes('admin') || u.role === 'admin';
-    const roleTag = isAdminUser
+    const roleTag = badges.includes('admin')
       ? '<span class="ms-role-tag admin">Admin</span>'
       : badges.includes('helper')
         ? '<span class="ms-role-tag helper">Helper</span>'
@@ -299,12 +284,9 @@
 
     const layer = document.createElement('div');
     layer.className = 'ms-pop-layer';
-    if (isAdminUser) ensureBlackFireDefs();
-    const fireAuraHtml = isAdminUser ? BLACK_FIRE_HTML : '';
     layer.innerHTML = `
       <div class="ms-pop-card" role="dialog" aria-modal="true" aria-label="Aksi Member">
-        <div class="ms-pop-hero${isAdminUser ? ' is-admin' : ''}${hasBanner ? ' has-banner' : ''}"${bannerStyle}>
-          ${fireAuraHtml}
+        <div class="ms-pop-hero${hasBanner ? ' has-banner' : ''}"${bannerStyle}>
           <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
           <span class="ms-meta">
             <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${roleTag}</span>
