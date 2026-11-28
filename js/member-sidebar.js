@@ -125,8 +125,10 @@
       : esc(ini(u.name));
     const deco = u.avatarDeco ? `<img class="avatar-deco-img" src="${esc(u.avatarDeco)}" alt="">` : '';
     const title = u.isMe ? 'Buka profil kamu' : isAdmin() ? `Chat / Fitur Admin — ${u.name}` : `Chat dengan ${u.name}`;
+    const smokeAuraHtml = isAdminUser ? `<span class="ms-smoke-aura" aria-hidden="true"><span class="smoke-cloud-1"></span><span class="smoke-cloud-2"></span><span class="smoke-stream"></span><span class="smoke-puff puff-t1"></span><span class="smoke-puff puff-t2"></span><span class="smoke-puff puff-t3"></span><span class="smoke-puff puff-b1"></span><span class="smoke-puff puff-b2"></span><span class="smoke-puff puff-l1"></span><span class="smoke-puff puff-r1"></span></span>` : '';
 
     return `<button type="button" class="ms-row${isAdminUser ? ' is-admin' : ''}${hasBanner ? ' has-banner' : ''}${u.online ? '' : ' is-offline'}" data-ms-uid="${esc(u.id)}" data-ms-me="${u.isMe ? '1' : '0'}" title="${esc(title)}"${bannerStyle}>
+      ${smokeAuraHtml}
       <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
       <span class="ms-meta">
         <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${champBadge}${roleTag}</span>
@@ -286,9 +288,11 @@
 
     const layer = document.createElement('div');
     layer.className = 'ms-pop-layer';
+    const smokeAuraHtml = isAdminUser ? '<span class="ms-smoke-aura" aria-hidden="true"><span class="smoke-cloud-1"></span><span class="smoke-cloud-2"></span><span class="smoke-stream"></span></span>' : '';
     layer.innerHTML = `
       <div class="ms-pop-card" role="dialog" aria-modal="true" aria-label="Aksi Member">
         <div class="ms-pop-hero${isAdminUser ? ' is-admin' : ''}${hasBanner ? ' has-banner' : ''}"${bannerStyle}>
+          ${smokeAuraHtml}
           <span class="ms-av${u.online ? ' on' : ''}${u.avatarDeco ? ' has-deco' : ''}" style="${u.avatarUrl ? '' : `background:${hue(u.name)}`}">${avInner}${deco}</span>
           <span class="ms-meta">
             <span class="ms-name-line"><b class="ms-name"${nc}>${esc(u.name)}</b>${xpBadge}${roleTag}</span>
